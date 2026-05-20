@@ -1,0 +1,360 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import {
+  tools,
+  aggregateRating,
+  formatPrice,
+  verticalToUrl,
+  verticals,
+  type Tool,
+} from '../../../lib/data';
+
+export async function getStaticPaths() {
+  const pairs: { a: Tool; b: Tool }[] = [];
+  for (let i = 0; i < tools.length; i++) {
+    for (let j = i + 1; j < tools.length; j++) {
+      const a = tools[i];
+      const b = tools[j];
+      const sharedVertical = a.verticals.some((v) => b.verticals.includes(v));
+      if (!sharedVertical) continue;
+      const [first, second] = [a, b].sort((x, y) => x.slug.localeCompare(y.slug));
+      pairs.push({ a: first, b: second });
+    }
+  }
+  return pairs.map(({ a, b }) => ({
+    params: { pair: `${a.slug}-vs-${b.slug}` },
+    props: { a, b },
+  }));
+}
+
+interface Props {
+  a: Tool;
+  b: Tool;
+}
+
+const { a, b } = Astro.props;
+const ratingA = aggregateRating(a);
+const ratingB = aggregateRating(b);
+
+const sharedFeatures = a.key_features.filter((f) => b.key_features.includes(f));
+const onlyA = a.key_features.filter((f) => !b.key_features.includes(f));
+const onlyB = b.key_features.filter((f) => !a.key_features.includes(f));
+
+const sharedIntegrations = a.integrations.filter((f) => b.integrations.includes(f));
+const onlyAIntegrations = a.integrations.filter((f) => !b.integrations.includes(f));
+const onlyBIntegrations = b.integrations.filter((f) => !a.integrations.includes(f));
+
+const sharedVerticals = a.verticals
+  .filter((v) => b.verticals.includes(v))
+  .map((v) => verticals.find((x) => x.slug === v))
+  .filter((v): v is NonNullable<typeof v> => v !== undefined);
+
+const cheaperTool =
+  a.pricing.starting_at_usd !== null &&
+  b.pricing.starting_at_usd !== null &&
+  a.pricing.starting_at_usd !== b.pricing.starting_at_usd
+    ? a.pricing.starting_at_usd < b.pricing.starting_at_usd
+      ? a
+      : b
+    : null;
+
+const higherRated =
+  ratingA !== null && ratingB !== null && ratingA !== ratingB
+    ? ratingA > ratingB
+      ? a
+      : b
+    : null;
+
+const faqs = [
+  {
+    q: `Which is better, ${a.name} or ${b.name}?`,
+    a: `Neither is universally better — they target different buyers. ${a.best_for}. ${b.best_for}. The right pick depends on your team size, budget, and vertical.`,
+  },
+  {
+    q: `Is ${a.name} cheaper than ${b.name}?`,
+    a:
+      cheaperTool !== null
+        ? `${cheaperTool.name} has a lower starting price (${formatPrice(cheaperTool)} vs ${formatPrice(cheaperTool === a ? b : a)}). However, total cost depends on team size, features needed, and tier — see the full pricing breakdown above.`
+        : `Both ${a.name} and ${b.name} use custom pricing or have similar entry costs — request quotes from both to compare apples-to-apples for your specific team size.`,
+  },
+  {
+    q: `Can ${a.name} and ${b.name} integrate with QuickBooks?`,
+    a: `${
+      a.integrations.some((i) => i.includes('quickbooks'))
+        ? `${a.name} integrates with QuickBooks.`
+        : `${a.name} does not have a native QuickBooks integration (Zapier workaround may exist).`
+    } ${
+      b.integrations.some((i) => i.includes('quickbooks'))
+        ? `${b.name} integrates with QuickBooks.`
+        : `${b.name} does not have a native QuickBooks integration.`
+    }`,
+  },
+  {
+    q: `Do ${a.name} or ${b.name} offer a free trial?`,
+    a: `${a.name}: ${a.pricing.free_trial_days && a.pricing.free_trial_days > 0 ? `${a.pricing.free_trial_days}-day free trial` : 'no free trial advertised; demo on request'}. ${b.name}: ${b.pricing.free_trial_days && b.pricing.free_trial_days > 0 ? `${b.pricing.free_trial_days}-day free trial` : 'no free trial advertised; demo on request'}.`,
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const pageTitle = `${a.name} vs ${b.name} (2026): Side-by-Side Comparison`;
+const pageDescription = `${a.name} vs ${b.name} compared head-to-head: pricing, features, integrations, pros and cons. Independent analysis, no vendor sponsorships. Updated ${a.pricing.verified_date}.`;
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <nav class="mb-6 text-sm text-slate-500">
+      <a href="/" class="hover:text-slate-900">Home</a>
+      <span class="mx-2">/</span>
+      <a href="/tools/" class="hover:text-slate-900">Tools</a>
+      <span class="mx-2">/</span>
+      <span class="text-slate-900">{a.name} vs {b.name}</span>
+    </nav>
+
+    <header class="mb-10">
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        {a.name} vs {b.name}
+      </h1>
+      <p class="mt-4 text-lg text-slate-600">
+        Head-to-head comparison of pricing, features, integrations, and use-case fit.
+        Updated {a.pricing.verified_date}.
+      </p>
+    </header>
+
+    <section class="mb-12 grid gap-6 md:grid-cols-2">
+      {[a, b].map((t) => {
+        const r = aggregateRating(t);
+        return (
+          <div class="rounded-lg border border-slate-200 bg-white p-6">
+            <h2 class="text-2xl font-bold text-slate-900">
+              <a href={`/tools/${t.slug}/`} class="hover:text-orange-600">{t.name}</a>
+            </h2>
+            <p class="mt-2 text-sm italic text-slate-600">{t.tagline}</p>
+            <dl class="mt-4 space-y-2 text-sm">
+              <div class="flex justify-between">
+                <dt class="text-slate-500">Starting price</dt>
+                <dd class="font-semibold text-slate-900">{formatPrice(t)}</dd>
+              </div>
+              <div class="flex justify-between">
+                <dt class="text-slate-500">Aggregate rating</dt>
+                <dd class="font-semibold text-slate-900">{r !== null ? `${r.toFixed(1)} / 5` : '—'}</dd>
+              </div>
+              <div class="flex justify-between">
+                <dt class="text-slate-500">Best team size</dt>
+                <dd class="font-semibold text-slate-900">{t.best_team_size ?? '—'}</dd>
+              </div>
+              <div class="flex justify-between">
+                <dt class="text-slate-500">Free trial</dt>
+                <dd class="font-semibold text-slate-900">
+                  {t.pricing.free_trial_days && t.pricing.free_trial_days > 0 ? `${t.pricing.free_trial_days} days` : 'No'}
+                </dd>
+              </div>
+            </dl>
+            <a
+              href={t.affiliate_url.startsWith('http') ? t.affiliate_url : t.vendor_url}
+              rel="sponsored nofollow noopener"
+              target="_blank"
+              class="mt-4 inline-block rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600"
+            >
+              Visit {t.name} →
+            </a>
+          </div>
+        );
+      })}
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Quick verdict</h2>
+      <div class="rounded-lg bg-slate-50 p-6 text-slate-800">
+        <p class="mb-2">
+          <strong class="text-slate-900">{a.name}:</strong> {a.best_for}.
+        </p>
+        <p>
+          <strong class="text-slate-900">{b.name}:</strong> {b.best_for}.
+        </p>
+        {higherRated && (
+          <p class="mt-3 text-sm text-slate-600">
+            User ratings favor <strong>{higherRated.name}</strong> ({aggregateRating(higherRated)?.toFixed(1)} vs {aggregateRating(higherRated === a ? b : a)?.toFixed(1)}).
+          </p>
+        )}
+        {cheaperTool && (
+          <p class="mt-1 text-sm text-slate-600">
+            <strong>{cheaperTool.name}</strong> has a lower starting price ({formatPrice(cheaperTool)}).
+          </p>
+        )}
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Pricing side-by-side</h2>
+      <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-left text-slate-700">
+            <tr>
+              <th class="p-3 font-semibold">Tier</th>
+              <th class="p-3 font-semibold">{a.name}</th>
+              <th class="p-3 font-semibold">{b.name}</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            {[0, 1, 2, 3].map((i) => {
+              const aTier = a.pricing.tiers[i];
+              const bTier = b.pricing.tiers[i];
+              if (!aTier && !bTier) return null;
+              const aPrice = a.pricing.tier_prices_usd?.[i];
+              const bPrice = b.pricing.tier_prices_usd?.[i];
+              const fmt = (p: number | null | undefined) =>
+                p === null || p === undefined ? 'Custom' : p === 0 ? 'Free' : `$${p}/mo`;
+              return (
+                <tr>
+                  <td class="p-3 font-semibold text-slate-900">Tier {i + 1}</td>
+                  <td class="p-3 text-slate-700">{aTier ? `${aTier} — ${fmt(aPrice)}` : '—'}</td>
+                  <td class="p-3 text-slate-700">{bTier ? `${bTier} — ${fmt(bPrice)}` : '—'}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Feature comparison</h2>
+      <div class="grid gap-4 md:grid-cols-3">
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <h3 class="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-500">
+            Only in {a.name}
+          </h3>
+          {onlyA.length > 0 ? (
+            <ul class="space-y-1 text-sm text-slate-700">
+              {onlyA.map((f) => <li>+ {f.replace(/_/g, ' ')}</li>)}
+            </ul>
+          ) : (
+            <p class="text-sm text-slate-500">— No exclusive features —</p>
+          )}
+        </div>
+        <div class="rounded-lg border border-green-200 bg-green-50 p-4">
+          <h3 class="mb-2 text-sm font-semibold uppercase tracking-wider text-green-700">
+            Both have
+          </h3>
+          <ul class="space-y-1 text-sm text-green-900">
+            {sharedFeatures.map((f) => <li>✓ {f.replace(/_/g, ' ')}</li>)}
+          </ul>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <h3 class="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-500">
+            Only in {b.name}
+          </h3>
+          {onlyB.length > 0 ? (
+            <ul class="space-y-1 text-sm text-slate-700">
+              {onlyB.map((f) => <li>+ {f.replace(/_/g, ' ')}</li>)}
+            </ul>
+          ) : (
+            <p class="text-sm text-slate-500">— No exclusive features —</p>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Integrations</h2>
+      <div class="grid gap-4 md:grid-cols-3">
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <h3 class="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-500">
+            Only in {a.name}
+          </h3>
+          {onlyAIntegrations.length > 0 ? (
+            <ul class="space-y-1 text-sm text-slate-700">
+              {onlyAIntegrations.map((f) => <li>+ {f.replace(/_/g, ' ')}</li>)}
+            </ul>
+          ) : (
+            <p class="text-sm text-slate-500">— None unique —</p>
+          )}
+        </div>
+        <div class="rounded-lg border border-green-200 bg-green-50 p-4">
+          <h3 class="mb-2 text-sm font-semibold uppercase tracking-wider text-green-700">
+            Both integrate with
+          </h3>
+          {sharedIntegrations.length > 0 ? (
+            <ul class="space-y-1 text-sm text-green-900">
+              {sharedIntegrations.map((f) => <li>✓ {f.replace(/_/g, ' ')}</li>)}
+            </ul>
+          ) : (
+            <p class="text-sm text-green-700">— No common integrations —</p>
+          )}
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <h3 class="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-500">
+            Only in {b.name}
+          </h3>
+          {onlyBIntegrations.length > 0 ? (
+            <ul class="space-y-1 text-sm text-slate-700">
+              {onlyBIntegrations.map((f) => <li>+ {f.replace(/_/g, ' ')}</li>)}
+            </ul>
+          ) : (
+            <p class="text-sm text-slate-500">— None unique —</p>
+          )}
+        </div>
+      </div>
+    </section>
+
+    {sharedVerticals.length > 0 && (
+      <section class="mb-12">
+        <h2 class="mb-4 text-2xl font-bold text-slate-900">Both support these trades</h2>
+        <div class="flex flex-wrap gap-2">
+          {sharedVerticals.map((v) => (
+            <a
+              href={`/${verticalToUrl(v.slug)}/`}
+              class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 hover:border-orange-500 hover:text-orange-600"
+            >
+              Compare in {v.name} →
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="mb-12">
+      <h2 class="mb-6 text-2xl font-bold text-slate-900">Frequently asked questions</h2>
+      <div class="space-y-4">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Need a deeper look?</h2>
+      <p class="mt-2 text-slate-300">
+        See our full reviews with detailed pricing tiers, integration depth, and weaknesses.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a
+          href={`/tools/${a.slug}/`}
+          class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100"
+        >
+          Full {a.name} review →
+        </a>
+        <a
+          href={`/tools/${b.slug}/`}
+          class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100"
+        >
+          Full {b.name} review →
+        </a>
+      </div>
+    </section>
+  </article>
+</Layout>

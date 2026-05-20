@@ -17,6 +17,7 @@ export interface Tool {
   affiliate_url: string;
   tagline: string;
   verticals: string[];
+  vertical_fit?: Record<string, number>;
   pricing: ToolPricing;
   key_features: string[];
   integrations: string[];
@@ -65,6 +66,21 @@ export function aggregateRating(t: Tool): number | null {
   if (t.capterra_rating) ratings.push(t.capterra_rating);
   if (ratings.length === 0) return null;
   return ratings.reduce((a, b) => a + b, 0) / ratings.length;
+}
+
+export function verticalFitScore(t: Tool, verticalSlug: string): number {
+  return t.vertical_fit?.[verticalSlug] ?? 5;
+}
+
+export function rankToolsForVertical(verticalSlug: string): Tool[] {
+  const matched = toolsForVertical(verticalSlug);
+  return matched.sort((a, b) => {
+    const fitDiff = verticalFitScore(b, verticalSlug) - verticalFitScore(a, verticalSlug);
+    if (fitDiff !== 0) return fitDiff;
+    const rA = aggregateRating(a) ?? 0;
+    const rB = aggregateRating(b) ?? 0;
+    return rB - rA;
+  });
 }
 
 export function formatPrice(t: Tool): string {

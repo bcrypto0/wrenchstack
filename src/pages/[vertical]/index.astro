@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import {
   verticals,
-  toolsForVertical,
+  rankToolsForVertical,
   verticalToUrl,
   aggregateRating,
   formatPrice,
@@ -22,13 +22,7 @@ interface Props {
 }
 
 const { vertical } = Astro.props;
-const verticalTools: Tool[] = toolsForVertical(vertical.slug);
-
-const ranked = [...verticalTools].sort((a, b) => {
-  const ra = aggregateRating(a) ?? 0;
-  const rb = aggregateRating(b) ?? 0;
-  return rb - ra;
-});
+const ranked: Tool[] = rankToolsForVertical(vertical.slug);
 
 const topPicks = ranked.slice(0, 5);
 const verticalLower = vertical.name.toLowerCase();
