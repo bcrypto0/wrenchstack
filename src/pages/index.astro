@@ -1,0 +1,100 @@
+---
+import Layout from '../layouts/Layout.astro';
+import categories from '../data/categories.json';
+import tools from '../data/tools.json';
+
+const verticals = categories.verticals;
+const toolCount = tools.tools.length;
+---
+
+<Layout
+  title="WrenchStack — Independent software comparisons for the trades"
+  description="Compare HVAC, plumbing, electrical, roofing, and field service software. Real pricing, real feature matrices, no vendor-sponsored rankings."
+>
+  <section class="bg-gradient-to-b from-white to-slate-50">
+    <div class="mx-auto max-w-6xl px-4 py-20 md:py-28">
+      <p class="mb-4 text-sm font-semibold uppercase tracking-wider text-orange-600">
+        Independent · Data-driven · No pay-to-play
+      </p>
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-6xl">
+        The software stack for trades businesses,<br />
+        picked by data — not vendor sales pitches.
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg text-slate-600 md:text-xl">
+        Head-to-head comparisons of {toolCount}+ tools across {verticals.length} trades.
+        Real pricing. Real feature matrices. Updated quarterly. Affiliate-supported,
+        never sponsored.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a
+          href="/hvac/"
+          class="rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800"
+        >
+          Browse HVAC software →
+        </a>
+        <a
+          href="/tools/"
+          class="rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:border-slate-400"
+        >
+          See all tools
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 py-16">
+    <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Pick your trade</h2>
+    <p class="mb-8 text-slate-600">
+      Each vertical has its own ranked picks, pricing comparisons, and feature matrices.
+    </p>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {verticals.map((v) => (
+        <a
+          href={`/${v.slug.replace(/_/g, '-')}/`}
+          class="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-slate-400 hover:shadow-sm"
+        >
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-slate-900 group-hover:text-orange-600">
+              {v.name}
+            </h3>
+            <span class="text-slate-400 group-hover:text-orange-600">→</span>
+          </div>
+          <p class="mt-1 text-sm text-slate-500">
+            Search volume: {v.search_volume_estimate} · Buyer intent: {v.buyer_intent}
+          </p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="bg-slate-100">
+    <div class="mx-auto max-w-6xl px-4 py-16">
+      <h2 class="mb-8 text-2xl font-bold tracking-tight text-slate-900">
+        Why WrenchStack
+      </h2>
+      <div class="grid gap-6 md:grid-cols-3">
+        <div class="rounded-lg bg-white p-6">
+          <h3 class="mb-1 font-semibold text-slate-900">Real pricing</h3>
+          <p class="text-sm text-slate-600">
+            Every tier verified within 90 days. No "contact sales" walls hidden behind
+            vague comparisons.
+          </p>
+        </div>
+        <div class="rounded-lg bg-white p-6">
+          <h3 class="mb-1 font-semibold text-slate-900">No vendor bias</h3>
+          <p class="text-sm text-slate-600">
+            Rankings are data-driven across pricing, features, integrations, and aggregated
+            review data. Affiliate payouts don't move the order.
+          </p>
+        </div>
+        <div class="rounded-lg bg-white p-6">
+          <h3 class="mb-1 font-semibold text-slate-900">Built by trades, for trades</h3>
+          <p class="text-sm text-slate-600">
+            Every page is built around how contractors actually buy — by team size, by use
+            case, by integration needs — not by generic SaaS taxonomy.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

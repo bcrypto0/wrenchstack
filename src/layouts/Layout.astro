@@ -1,0 +1,103 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  noindex?: boolean;
+}
+
+const { title, description, canonical, ogImage, noindex = false } = Astro.props;
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
+const ogImageUrl = ogImage ?? new URL('/og-default.png', Astro.site).toString();
+const fullTitle = title.endsWith('WrenchStack') ? title : `${title} | WrenchStack`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:site_name" content="WrenchStack" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <link rel="preconnect" href="https://plausible.io" />
+  </head>
+  <body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
+    <header class="border-b border-slate-200 bg-white">
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+        <a href="/" class="flex items-center gap-2 text-xl font-bold tracking-tight text-slate-900">
+          <span class="text-orange-500">🔧</span>
+          WrenchStack
+        </a>
+        <nav class="hidden gap-6 text-sm font-medium text-slate-600 md:flex">
+          <a href="/hvac/" class="hover:text-slate-900">HVAC</a>
+          <a href="/plumbing/" class="hover:text-slate-900">Plumbing</a>
+          <a href="/electrical/" class="hover:text-slate-900">Electrical</a>
+          <a href="/tools/" class="hover:text-slate-900">All tools</a>
+          <a href="/compare/" class="hover:text-slate-900">Compare</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="mt-24 border-t border-slate-200 bg-white">
+      <div class="mx-auto max-w-6xl px-4 py-10 text-sm text-slate-600">
+        <div class="grid gap-8 md:grid-cols-3">
+          <div>
+            <div class="mb-2 font-semibold text-slate-900">WrenchStack</div>
+            <p class="text-slate-600">
+              Independent software comparisons for trades and field-service businesses.
+              We earn affiliate commissions when you sign up through our links — but our
+              rankings are data-driven, not pay-to-play.
+            </p>
+          </div>
+          <div>
+            <div class="mb-2 font-semibold text-slate-900">By trade</div>
+            <ul class="space-y-1">
+              <li><a href="/hvac/" class="hover:text-slate-900">HVAC software</a></li>
+              <li><a href="/plumbing/" class="hover:text-slate-900">Plumbing software</a></li>
+              <li><a href="/electrical/" class="hover:text-slate-900">Electrical software</a></li>
+              <li><a href="/roofing/" class="hover:text-slate-900">Roofing software</a></li>
+              <li><a href="/landscaping/" class="hover:text-slate-900">Landscaping software</a></li>
+            </ul>
+          </div>
+          <div>
+            <div class="mb-2 font-semibold text-slate-900">About</div>
+            <ul class="space-y-1">
+              <li><a href="/methodology/" class="hover:text-slate-900">How we rank</a></li>
+              <li><a href="/disclosure/" class="hover:text-slate-900">Affiliate disclosure</a></li>
+              <li><a href="/privacy/" class="hover:text-slate-900">Privacy</a></li>
+              <li><a href="/contact/" class="hover:text-slate-900">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="mt-8 border-t border-slate-200 pt-4 text-xs text-slate-500">
+          © {new Date().getFullYear()} WrenchStack. Independent comparisons for the trades.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

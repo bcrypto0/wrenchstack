@@ -1,0 +1,98 @@
+{
+  "_schema_note": "Each tool entry should populate every field for SEO. Pricing is verified-as-of date. Refresh quarterly via scripts/update_data.py.",
+  "_verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control", "pool_service", "locksmith", "garage_door", "appliance_repair", "handyman"],
+  "tools": [
+    {
+      "slug": "jobber",
+      "name": "Jobber",
+      "vendor_url": "https://getjobber.com",
+      "affiliate_url": "TBD_FROM_AFFILIATE_DASHBOARD",
+      "tagline": "Field service management for service businesses",
+      "verticals": ["hvac", "plumbing", "electrical", "landscaping", "cleaning", "handyman"],
+      "pricing": {
+        "starting_at_usd": 39,
+        "tiers": ["Core", "Connect", "Grow", "Plus"],
+        "tier_prices_usd": [39, 119, 199, 399],
+        "verified_date": "2026-05-20"
+      },
+      "key_features": ["scheduling", "invoicing", "client_portal", "quotes", "team_management", "online_booking", "automated_followup"],
+      "integrations": ["quickbooks", "stripe", "zapier", "google_calendar", "mailchimp"],
+      "best_for": "Small-to-mid trades businesses (1-30 employees) wanting modern UX",
+      "weaknesses": "Limited for enterprise; no inventory management at lower tiers"
+    },
+    {
+      "slug": "housecall-pro",
+      "name": "Housecall Pro",
+      "vendor_url": "https://housecallpro.com",
+      "affiliate_url": "TBD_FROM_AFFILIATE_DASHBOARD",
+      "tagline": "All-in-one platform for home service pros",
+      "verticals": ["hvac", "plumbing", "electrical", "cleaning", "handyman", "appliance_repair"],
+      "pricing": {
+        "starting_at_usd": 65,
+        "tiers": ["Basic", "Essentials", "MAX"],
+        "tier_prices_usd": [65, 169, 399],
+        "verified_date": "2026-05-20"
+      },
+      "key_features": ["scheduling", "dispatching", "invoicing", "estimates", "credit_card_processing", "consumer_financing", "marketing_automation"],
+      "integrations": ["quickbooks", "zapier", "google_local_services", "mailchimp"],
+      "best_for": "Service businesses wanting integrated payment processing and consumer financing",
+      "weaknesses": "Payment processing fees are baked in; UX can feel cluttered"
+    },
+    {
+      "slug": "servicetitan",
+      "name": "ServiceTitan",
+      "vendor_url": "https://servicetitan.com",
+      "affiliate_url": "TBD_FROM_AFFILIATE_DASHBOARD",
+      "tagline": "All-in-one software for the trades",
+      "verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "garage_door"],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": ["Starter", "Essentials", "The Works"],
+        "tier_prices_usd": null,
+        "pricing_note": "Custom quote only; estimates from users $300-800/mo per user",
+        "verified_date": "2026-05-20"
+      },
+      "key_features": ["call_booking", "dispatching", "marketing_attribution", "inventory", "payroll", "membership_management", "pricebook_pro"],
+      "integrations": ["quickbooks", "sage", "google_ads", "facebook", "mailchimp", "twilio"],
+      "best_for": "Enterprise trades businesses ($1M+ revenue, 10+ technicians)",
+      "weaknesses": "Expensive; long implementation; steep learning curve"
+    },
+    {
+      "slug": "workiz",
+      "name": "Workiz",
+      "vendor_url": "https://workiz.com",
+      "affiliate_url": "TBD_FROM_AFFILIATE_DASHBOARD",
+      "tagline": "Field service software for service pros",
+      "verticals": ["locksmith", "garage_door", "appliance_repair", "hvac", "plumbing", "cleaning", "handyman"],
+      "pricing": {
+        "starting_at_usd": 65,
+        "tiers": ["Lite", "Standard", "Pro", "Ultimate"],
+        "tier_prices_usd": [65, 169, 299, null],
+        "verified_date": "2026-05-20"
+      },
+      "key_features": ["scheduling", "dispatching", "invoicing", "phone_system", "call_masking", "online_booking", "marketing_automation"],
+      "integrations": ["quickbooks", "stripe", "zapier", "google_local_services"],
+      "best_for": "On-demand service businesses (locksmiths, garage door, junk removal)",
+      "weaknesses": "Less polished than Jobber/Housecall Pro for traditional trades"
+    },
+    {
+      "slug": "fieldedge",
+      "name": "FieldEdge",
+      "vendor_url": "https://fieldedge.com",
+      "affiliate_url": "TBD_FROM_AFFILIATE_DASHBOARD",
+      "tagline": "Service management software for HVAC, plumbing, electrical",
+      "verticals": ["hvac", "plumbing", "electrical"],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": ["Select", "Premier", "Elite"],
+        "tier_prices_usd": null,
+        "pricing_note": "Custom quote; user reports $100-200/user/mo",
+        "verified_date": "2026-05-20"
+      },
+      "key_features": ["dispatching", "quickbooks_integration", "mobile_app", "agreements", "flat_rate_pricing", "kpi_dashboards"],
+      "integrations": ["quickbooks_desktop", "quickbooks_online"],
+      "best_for": "Mid-size HVAC/plumbing/electrical with deep QuickBooks integration needs",
+      "weaknesses": "QuickBooks-centric; less modern UI than competitors"
+    }
+  ]
+}
