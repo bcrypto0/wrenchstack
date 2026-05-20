@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { verticals, verticalToUrl } from '../lib/data';
+---
+
+<Layout
+  title="Page not found — WrenchStack"
+  description="The page you're looking for doesn't exist. Browse our software comparisons by trade instead."
+  noindex={true}
+>
+  <section class="mx-auto max-w-3xl px-4 py-20 text-center">
+    <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">404</p>
+    <h1 class="mt-2 text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+      That page doesn't exist
+    </h1>
+    <p class="mt-4 text-lg text-slate-600">
+      The link you followed may be broken, or the page may have been moved. Try one of
+      these instead.
+    </p>
+
+    <div class="mt-10">
+      <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-500">
+        Browse by trade
+      </h2>
+      <div class="flex flex-wrap justify-center gap-2">
+        {verticals.map((v) => (
+          <a
+            href={`/${verticalToUrl(v.slug)}/`}
+            class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 hover:border-orange-500 hover:text-orange-600"
+          >
+            {v.name}
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <div class="mt-10 flex justify-center gap-3">
+      <a
+        href="/"
+        class="rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+      >
+        ← Back to homepage
+      </a>
+      <a
+        href="/tools/"
+        class="rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:border-slate-400"
+      >
+        Browse all tools
+      </a>
+    </div>
+  </section>
+</Layout>
