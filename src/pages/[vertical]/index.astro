@@ -1,0 +1,280 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import {
+  verticals,
+  toolsForVertical,
+  verticalToUrl,
+  aggregateRating,
+  formatPrice,
+  type Vertical,
+  type Tool,
+} from '../../lib/data';
+
+export async function getStaticPaths() {
+  return verticals.map((v) => ({
+    params: { vertical: verticalToUrl(v.slug) },
+    props: { vertical: v },
+  }));
+}
+
+interface Props {
+  vertical: Vertical;
+}
+
+const { vertical } = Astro.props;
+const verticalTools: Tool[] = toolsForVertical(vertical.slug);
+
+const ranked = [...verticalTools].sort((a, b) => {
+  const ra = aggregateRating(a) ?? 0;
+  const rb = aggregateRating(b) ?? 0;
+  return rb - ra;
+});
+
+const topPicks = ranked.slice(0, 5);
+const verticalLower = vertical.name.toLowerCase();
+
+const faqs = [
+  {
+    q: `What is the best ${verticalLower} software in 2026?`,
+    a: `Based on our independent analysis of pricing, features, integrations, and aggregated G2/Capterra ratings, the top three options are ${topPicks
+      .slice(0, 3)
+      .map((t) => t.name)
+      .join(', ')}. The right pick depends on your team size and budget — see the buyer's guide below for size-specific recommendations.`,
+  },
+  {
+    q: `How much does ${verticalLower} software cost?`,
+    a: `Entry-level tools start around $39/month (Jobber) to $65/month (Housecall Pro). Mid-tier platforms like Service Fusion charge flat per-company rates around $195-400/month with unlimited users. Enterprise platforms like ServiceTitan and BuildOps are custom-quoted but typically run $250-800 per user per month, plus 3-6 month implementations.`,
+  },
+  {
+    q: `What is the cheapest ${verticalLower} software?`,
+    a: `Joist offers a free tier and a $13/month Pro plan, making it the cheapest legitimate option — but it's quote-and-invoice only, with no scheduling or dispatching. For full FSM features at the low end, Jobber Core ($39/mo) is the best value. Connecteam offers a genuinely free tier for teams under 10.`,
+  },
+  {
+    q: `Is ${vertical.name === 'HVAC' ? 'ServiceTitan' : topPicks[0]?.name ?? 'this software'} worth it?`,
+    a: vertical.name === 'HVAC'
+      ? `ServiceTitan is worth it for established HVAC businesses doing $1M+ revenue with 10+ technicians where the reporting depth, marketing attribution, and pricebook automation pay for the higher cost. For smaller shops, Jobber or Housecall Pro deliver 80% of the value at 20% of the cost.`
+      : `It depends on your team size and revenue. Read our detailed reviews below for the team-size breakpoints where each option starts paying for itself.`,
+  },
+  {
+    q: `Can I integrate ${verticalLower} software with QuickBooks?`,
+    a: `Yes — every major tool on this list integrates with QuickBooks. The integration depth varies: FieldEdge and Knowify offer the deepest QuickBooks integration (two-way sync, real-time job costing). Jobber, Housecall Pro, and Service Fusion offer solid one-way sync. Always confirm whether you need QuickBooks Online or QuickBooks Desktop support — they're not interchangeable.`,
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const pageTitle = `Best ${vertical.name} Software 2026: Independent Comparison`;
+const pageDescription = `Compare the ${ranked.length} best ${verticalLower} software options for 2026. Real pricing, real feature matrices, no vendor-sponsored rankings. Updated quarterly.`;
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(faqSchema)}
+  />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <nav class="mb-6 text-sm text-slate-500">
+      <a href="/" class="hover:text-slate-900">Home</a>
+      <span class="mx-2">/</span>
+      <span class="text-slate-900">{vertical.name}</span>
+    </nav>
+
+    <header class="mb-10">
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        Best {vertical.name} Software in 2026
+      </h1>
+      <p class="mt-4 text-lg text-slate-600">
+        An independent comparison of {ranked.length} platforms for {verticalLower} businesses,
+        ranked by aggregated G2 + Capterra ratings, pricing transparency, integration depth,
+        and feature coverage. Last verified: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}.
+      </p>
+      <p class="mt-3 text-sm text-slate-500">
+        <strong>Affiliate disclosure:</strong> we earn commissions on some signups through links
+        on this page. Our rankings are data-driven; payouts don't move the order.
+        <a href="/methodology/" class="underline hover:text-slate-900">See our methodology →</a>
+      </p>
+    </header>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Top picks at a glance</h2>
+      <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-left text-slate-700">
+            <tr>
+              <th class="p-3 font-semibold">Rank</th>
+              <th class="p-3 font-semibold">Tool</th>
+              <th class="p-3 font-semibold">Starting price</th>
+              <th class="p-3 font-semibold">Best for</th>
+              <th class="p-3 font-semibold">Rating</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            {topPicks.map((t, i) => {
+              const r = aggregateRating(t);
+              return (
+                <tr class="hover:bg-slate-50">
+                  <td class="p-3 font-bold text-slate-900">#{i + 1}</td>
+                  <td class="p-3">
+                    <a href={`/tools/${t.slug}/`} class="font-semibold text-slate-900 hover:text-orange-600">
+                      {t.name}
+                    </a>
+                  </td>
+                  <td class="p-3 text-slate-700">{formatPrice(t)}</td>
+                  <td class="p-3 text-slate-600">{t.best_team_size ?? '—'} techs</td>
+                  <td class="p-3 text-slate-700">{r !== null ? `${r.toFixed(1)} / 5` : '—'}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mb-12 prose prose-slate max-w-none">
+      <h2>Why {verticalLower} businesses need specialized software</h2>
+      <p>
+        Running a {verticalLower} business without dedicated software in 2026 means losing money
+        in three predictable ways: missed calls become missed jobs, paper invoices delay payment
+        by 30+ days, and unscheduled drive time eats 15–25% of technician hours. Field service
+        management (FSM) software addresses all three at once.
+      </p>
+      <p>
+        The category has matured enough that even the lowest-priced options ($39–65/month per
+        user) include scheduling, dispatching, invoicing, mobile apps, customer portals, and
+        payment processing. The decision today isn't <em>whether</em> to adopt FSM software —
+        it's <em>which platform fits your team size and operating model.</em>
+      </p>
+      <p>
+        We've organized this guide around the three sizing brackets where the right answer
+        actually changes: <strong>solo (1–3 techs)</strong>, <strong>growing (4–15 techs)</strong>,
+        and <strong>established (15+ techs)</strong>. Skip to the bracket that matches your
+        business.
+      </p>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-6 text-2xl font-bold text-slate-900">Detailed reviews</h2>
+      <div class="space-y-10">
+        {topPicks.map((t, i) => {
+          const rating = aggregateRating(t);
+          return (
+            <div class="rounded-lg border border-slate-200 bg-white p-6">
+              <div class="mb-3 flex flex-wrap items-baseline justify-between gap-3">
+                <h3 class="text-2xl font-bold text-slate-900">
+                  <span class="text-orange-500">#{i + 1}</span>{' '}
+                  <a href={`/tools/${t.slug}/`} class="hover:text-orange-600">{t.name}</a>
+                </h3>
+                <div class="text-sm text-slate-500">
+                  {rating !== null && <span class="font-semibold text-slate-700">{rating.toFixed(1)} / 5</span>}
+                  {t.founded && <span> · Founded {t.founded}</span>}
+                </div>
+              </div>
+              <p class="mb-4 italic text-slate-600">{t.tagline}</p>
+
+              <dl class="grid gap-3 text-sm md:grid-cols-2">
+                <div>
+                  <dt class="font-semibold text-slate-900">Starting price</dt>
+                  <dd class="text-slate-700">{formatPrice(t)}</dd>
+                </div>
+                <div>
+                  <dt class="font-semibold text-slate-900">Best for</dt>
+                  <dd class="text-slate-700">{t.best_for}</dd>
+                </div>
+                <div>
+                  <dt class="font-semibold text-slate-900">Key features</dt>
+                  <dd class="text-slate-700">{t.key_features.slice(0, 6).map((f) => f.replace(/_/g, ' ')).join(' · ')}</dd>
+                </div>
+                <div>
+                  <dt class="font-semibold text-slate-900">Integrations</dt>
+                  <dd class="text-slate-700">{t.integrations.map((i) => i.replace(/_/g, ' ')).join(' · ')}</dd>
+                </div>
+                <div class="md:col-span-2">
+                  <dt class="font-semibold text-slate-900">Watch out for</dt>
+                  <dd class="text-slate-700">{t.weaknesses}</dd>
+                </div>
+              </dl>
+
+              <div class="mt-5 flex flex-wrap gap-3">
+                <a
+                  href={t.affiliate_url.startsWith('http') ? t.affiliate_url : t.vendor_url}
+                  rel="sponsored nofollow noopener"
+                  target="_blank"
+                  class="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600"
+                >
+                  Visit {t.name} →
+                </a>
+                <a
+                  href={`/tools/${t.slug}/`}
+                  class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:border-slate-400"
+                >
+                  Full review
+                </a>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+
+    <section class="mb-12 prose prose-slate max-w-none">
+      <h2>How to choose the right {verticalLower} software</h2>
+      <h3>If you're solo or have 1–3 techs</h3>
+      <p>
+        Start with <strong>Jobber Core ($39/mo)</strong> or <strong>Joist Pro ($13/mo)</strong>.
+        Joist is the cheapest legitimate option but only handles estimates and invoices — no
+        scheduling. If you need to schedule jobs across days, go Jobber. Don't pay for
+        enterprise features you won't touch.
+      </p>
+      <h3>If you have 4–15 techs and are growing</h3>
+      <p>
+        This is where <strong>Housecall Pro Essentials</strong> ($169/mo), <strong>Jobber Connect</strong>{' '}
+        ($119/mo), and <strong>Service Fusion Starter</strong> ($195/mo, unlimited users) compete
+        head-to-head. Service Fusion wins on per-user economics once you cross ~6 techs because
+        the others charge per user. Housecall Pro wins if you want consumer financing baked in.
+        Jobber wins on UX polish.
+      </p>
+      <h3>If you have 15+ techs or do $1M+ annual revenue</h3>
+      <p>
+        Look at <strong>ServiceTitan</strong> (residential, all-in-one), <strong>FieldEdge</strong>{' '}
+        (mid-size, QuickBooks-heavy), or <strong>BuildOps</strong> (commercial-only). Plan for a
+        3–6 month implementation. Get pricing in writing — these are custom-quoted and the spread
+        is wide.
+      </p>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-6 text-2xl font-bold text-slate-900">Frequently asked questions</h2>
+      <div class="space-y-4">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-12 rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Ready to compare side-by-side?</h2>
+      <p class="mt-2 text-slate-300">
+        Build a custom comparison of any two tools on this list — pricing, features, integrations,
+        and ratings shown head-to-head.
+      </p>
+      <a
+        href="/compare/"
+        class="mt-4 inline-block rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600"
+      >
+        Open the comparison tool →
+      </a>
+    </section>
+  </article>
+</Layout>
