@@ -1,0 +1,88 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="How we rank trades software — WrenchStack methodology"
+  description="WrenchStack's ranking methodology. How we score tools, how often we update, and why our affiliate payouts don't move the order."
+>
+  <article class="mx-auto max-w-3xl px-4 py-12 prose prose-slate">
+    <h1>How we rank trades software</h1>
+
+    <p>
+      WrenchStack rankings combine four data sources, weighted equally. Affiliate payouts
+      are <em>not</em> a factor — the ranking algorithm has no knowledge of which tools pay
+      us or how much.
+    </p>
+
+    <h2>What we measure</h2>
+
+    <h3>1. Aggregated user ratings (25%)</h3>
+    <p>
+      We average G2 and Capterra ratings for each tool. Where one platform lacks coverage,
+      we use only the available platform. Ratings under 100 reviews are weighted at half.
+    </p>
+
+    <h3>2. Pricing transparency (25%)</h3>
+    <p>
+      Tools with public pricing across all tiers score higher than tools requiring sales
+      calls. Hidden pricing is a negative signal that costs SMB buyers time and creates
+      anchoring problems during demos.
+    </p>
+
+    <h3>3. Integration depth (25%)</h3>
+    <p>
+      We count integrations across QuickBooks, payment processors, marketing platforms, and
+      industry-specific tools (Angi, Google Local Services, Procore). One-way sync counts;
+      two-way sync scores higher. Native integrations beat Zapier-only.
+    </p>
+
+    <h3>4. Feature coverage for declared use case (25%)</h3>
+    <p>
+      Each tool declares its target team size and vertical mix. We score how well it covers
+      the must-have features for that segment. A tool optimized for solo contractors isn't
+      penalized for lacking enterprise reporting.
+    </p>
+
+    <h2>What we don't measure</h2>
+
+    <ul>
+      <li>Affiliate commission rate</li>
+      <li>Whether we have a partnership at all</li>
+      <li>Vendor sponsorships (we don't accept them)</li>
+      <li>Marketing budgets, social media presence, founder fame</li>
+    </ul>
+
+    <h2>How often we update</h2>
+
+    <p>
+      Pricing: verified quarterly. Each tool entry has a <code>verified_date</code> field
+      and we re-verify any tier older than 90 days before publishing on a new page.
+    </p>
+
+    <p>
+      Features and integrations: re-checked twice yearly per tool, plus on major product
+      updates (we monitor vendor changelogs and announcements).
+    </p>
+
+    <p>
+      Ratings: pulled fresh from G2 and Capterra at each quarterly review.
+    </p>
+
+    <h2>Our editorial policy on errors</h2>
+
+    <p>
+      If we publish something wrong about a tool — pricing, feature claim, weakness — we
+      correct it within 48 hours of confirmation. Contact us at the link in the footer.
+      We don't quietly edit; corrections show a <code>corrected on YYYY-MM-DD</code> note.
+    </p>
+
+    <h2>Why we publish this</h2>
+
+    <p>
+      Most "best of" content is either vendor-produced (biased toward whoever paid) or
+      content-mill generic (no original analysis). We want buyers to know exactly what
+      went into our ranking so they can decide whether to trust it for their own decision.
+    </p>
+  </article>
+</Layout>
