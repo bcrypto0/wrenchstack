@@ -1,0 +1,143 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { tools, verticals } from '../lib/data';
+---
+
+<Layout
+  title="About WrenchStack — Independent software comparisons for the trades"
+  description="WrenchStack is an independent directory comparing field service and trades software. Learn how we work, who we are, and why our rankings aren't for sale."
+>
+  <article class="mx-auto max-w-3xl px-4 py-12 prose prose-slate">
+    <h1>About WrenchStack</h1>
+
+    <p class="lead text-xl text-slate-700">
+      WrenchStack is an independent software comparison directory for trades and
+      field-service businesses. We help HVAC, plumbing, electrical, roofing,
+      landscaping, cleaning, and contractor businesses pick the right software for
+      their team — without wading through vendor sales pitches or generic "best of"
+      listicles.
+    </p>
+
+    <h2>What we do</h2>
+
+    <p>
+      We track <strong>{tools.length}+ field service management platforms</strong> across
+      <strong>{verticals.length} trades verticals</strong> and produce three kinds of content:
+    </p>
+
+    <ul>
+      <li><strong>Tool reviews</strong> — every platform gets a dedicated page with verified pricing tiers, key features, integrations, and the use cases where it actually shines (and where it doesn't).</li>
+      <li><strong>Head-to-head comparisons</strong> — side-by-side breakdowns of pricing, feature overlap, and integration depth between any two tools your team is evaluating.</li>
+      <li><strong>Vertical buyer guides</strong> — ranked picks for each trade, sized by team count (solo, 4-15 techs, 15+ techs) and use case (residential, commercial, QuickBooks-heavy, etc.).</li>
+    </ul>
+
+    <p>
+      Everything is published openly. There's no email gate, no "request a quote" funnel
+      capturing your details, no popup demanding your email before you can read.
+    </p>
+
+    <h2>Why we exist</h2>
+
+    <p>
+      The first time you Google "best HVAC software" or "Jobber vs Housecall Pro," you'll
+      land on one of three things:
+    </p>
+
+    <ol>
+      <li>A vendor blog (Workiz, BuildOps, ServiceTitan) that "compares" competitors but conveniently ranks itself #1.</li>
+      <li>A generic SaaS directory (Capterra, G2) that lists 200+ products with little structured guidance on which fits which business.</li>
+      <li>A content-mill article with five paragraphs of fluff and no real data.</li>
+    </ol>
+
+    <p>
+      None of those help a contractor making a $5,000–$50,000 software decision. We built
+      WrenchStack to be the resource we wished existed: <strong>structured, data-driven,
+      independently ranked, and brutally specific about which tool fits which business.</strong>
+    </p>
+
+    <h2>How we make money</h2>
+
+    <p>
+      We earn affiliate commissions when readers sign up to a software platform through one of
+      our tracked links. The vendor pays us a referral fee — you pay nothing extra; the
+      commission comes from the vendor's customer-acquisition budget.
+    </p>
+
+    <p>
+      <strong>Our rankings are NOT influenced by which tools pay us, or how much.</strong> The ranking
+      algorithm has no knowledge of commission rates. Read our full
+      <a href="/methodology/">methodology</a> and <a href="/disclosure/">affiliate disclosure</a>
+      for the specifics.
+    </p>
+
+    <p>
+      We don't accept paid sponsorships, "featured tool" placements, sponsored review slots,
+      or any other pay-for-rank arrangement. Vendors do not see our reviews before publication.
+      When the data says a tool we earn no commission from is the right pick, we say so.
+    </p>
+
+    <h2>Who runs WrenchStack</h2>
+
+    <p>
+      WrenchStack is built and operated by <strong>Bilal Elhomsi</strong>, an entrepreneur with
+      15+ years of experience in business development, operations, and consulting across
+      hospitality, retail, and technology. The site is a solo operation — every review,
+      ranking, and comparison comes from one independent operator, not a team of paid content
+      writers.
+    </p>
+
+    <p>
+      We're based in Saudi Arabia, but our editorial focus is exclusively on the North
+      American field service software market — that's where the most competitive product
+      ecosystem exists and where most of our readers are buying software.
+    </p>
+
+    <h2>How we verify data</h2>
+
+    <p>
+      Every pricing tier on the site carries a <code>verified_date</code> — we re-check pricing
+      quarterly by visiting each vendor's public pricing page and (where applicable)
+      requesting current quotes via their sales channels. When a vendor changes pricing, we
+      update within 30 days.
+    </p>
+
+    <p>
+      Feature data comes from vendor documentation, public product demos, and aggregated user
+      feedback on G2 and Capterra. We do not fabricate user quotes, screenshots, or
+      testimonials.
+    </p>
+
+    <h2>Editorial corrections</h2>
+
+    <p>
+      If we publish something wrong — pricing, feature claim, weakness — we correct it within
+      48 hours of confirmation. Corrections are noted on the page with a <code>corrected on
+      YYYY-MM-DD</code> stamp, not silently edited.
+    </p>
+
+    <p>
+      If you're a vendor representative and spot an error about your product, email us — we'll
+      fix it quickly and fairly. We don't need you to threaten to remove your affiliate program;
+      accurate data benefits everyone.
+    </p>
+
+    <h2>Contact</h2>
+
+    <p>
+      For corrections, partnership inquiries, vendor outreach, or media:<br />
+      <strong>Email:</strong> <a href="mailto:bcrypto.eth@gmail.com">bcrypto.eth@gmail.com</a>
+    </p>
+
+    <p>
+      For affiliate program managers wanting to partner with us, please include in your first
+      message: program name, commission structure, payout terms, and tracking platform
+      (PartnerStack, Impact, direct, etc.).
+    </p>
+
+    <hr />
+
+    <p class="text-sm text-slate-500">
+      <strong>Last updated:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+    </p>
+  </article>
+</Layout>
