@@ -1,18 +1,66 @@
 ---
 import '../styles/global.css';
 
+export interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
 interface Props {
   title: string;
   description: string;
   canonical?: string;
   ogImage?: string;
   noindex?: boolean;
+  breadcrumbs?: BreadcrumbItem[];
 }
 
-const { title, description, canonical, ogImage, noindex = false } = Astro.props;
+const { title, description, canonical, ogImage, noindex = false, breadcrumbs } = Astro.props;
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
-const ogImageUrl = ogImage ?? new URL('/og-default.png', Astro.site).toString();
+const ogImageUrl = ogImage ?? new URL('/og-default.svg', Astro.site).toString();
 const fullTitle = title.endsWith('WrenchStack') ? title : `${title} | WrenchStack`;
+const isHomepage = Astro.url.pathname === '/';
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'WrenchStack',
+  url: 'https://wrenchstack.com',
+  logo: 'https://wrenchstack.com/logo.svg',
+  description: 'Independent software comparison directory for trades and field-service businesses.',
+  founder: {
+    '@type': 'Person',
+    name: 'Bilal Elhomsi',
+  },
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'editorial',
+    email: 'bcrypto.eth@gmail.com',
+  },
+};
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'WrenchStack',
+  url: 'https://wrenchstack.com',
+  description: 'Independent software comparisons for HVAC, plumbing, electrical, roofing, contractors, landscaping, and other trades.',
+  publisher: {
+    '@type': 'Organization',
+    name: 'WrenchStack',
+  },
+};
+
+const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbs.map((b, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: b.name,
+    item: b.url.startsWith('http') ? b.url : new URL(b.url, Astro.site).toString(),
+  })),
+} : null;
 ---
 
 <!doctype html>
@@ -40,6 +88,10 @@ const fullTitle = title.endsWith('WrenchStack') ? title : `${title} | WrenchStac
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
 
+    {isHomepage && <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />}
+    {isHomepage && <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />}
+    {breadcrumbSchema && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />}
+
     <link rel="preconnect" href="https://plausible.io" />
   </head>
   <body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
@@ -54,6 +106,7 @@ const fullTitle = title.endsWith('WrenchStack') ? title : `${title} | WrenchStac
           <a href="/electrical/" class="hover:text-slate-900">Electrical</a>
           <a href="/tools/" class="hover:text-slate-900">All tools</a>
           <a href="/compare/" class="hover:text-slate-900">Compare</a>
+          <a href="/best-software-for/" class="hover:text-slate-900">Guides</a>
         </nav>
       </div>
     </header>
@@ -64,7 +117,7 @@ const fullTitle = title.endsWith('WrenchStack') ? title : `${title} | WrenchStac
 
     <footer class="mt-24 border-t border-slate-200 bg-white">
       <div class="mx-auto max-w-6xl px-4 py-10 text-sm text-slate-600">
-        <div class="grid gap-8 md:grid-cols-3">
+        <div class="grid gap-8 md:grid-cols-4">
           <div>
             <div class="mb-2 font-semibold text-slate-900">WrenchStack</div>
             <p class="text-slate-600">
@@ -76,11 +129,22 @@ const fullTitle = title.endsWith('WrenchStack') ? title : `${title} | WrenchStac
           <div>
             <div class="mb-2 font-semibold text-slate-900">By trade</div>
             <ul class="space-y-1">
-              <li><a href="/hvac/" class="hover:text-slate-900">HVAC software</a></li>
-              <li><a href="/plumbing/" class="hover:text-slate-900">Plumbing software</a></li>
-              <li><a href="/electrical/" class="hover:text-slate-900">Electrical software</a></li>
-              <li><a href="/roofing/" class="hover:text-slate-900">Roofing software</a></li>
-              <li><a href="/landscaping/" class="hover:text-slate-900">Landscaping software</a></li>
+              <li><a href="/hvac/" class="hover:text-slate-900">HVAC</a></li>
+              <li><a href="/plumbing/" class="hover:text-slate-900">Plumbing</a></li>
+              <li><a href="/electrical/" class="hover:text-slate-900">Electrical</a></li>
+              <li><a href="/roofing/" class="hover:text-slate-900">Roofing</a></li>
+              <li><a href="/landscaping/" class="hover:text-slate-900">Landscaping</a></li>
+              <li><a href="/cleaning/" class="hover:text-slate-900">Cleaning</a></li>
+              <li><a href="/pest-control/" class="hover:text-slate-900">Pest control</a></li>
+            </ul>
+          </div>
+          <div>
+            <div class="mb-2 font-semibold text-slate-900">Browse</div>
+            <ul class="space-y-1">
+              <li><a href="/tools/" class="hover:text-slate-900">All tools</a></li>
+              <li><a href="/compare/" class="hover:text-slate-900">Compare two tools</a></li>
+              <li><a href="/best-software-for/" class="hover:text-slate-900">Buyer guides</a></li>
+              <li><a href="/pricing/" class="hover:text-slate-900">Pricing comparison</a></li>
             </ul>
           </div>
           <div>

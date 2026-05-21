@@ -57,10 +57,42 @@ const productSchema = {
 
 const pageTitle = `${tool.name} Review (2026): Pricing, Features, Pros & Cons`;
 const pageDescription = `Independent review of ${tool.name}. ${tool.tagline}. Real pricing tiers, key features, integrations, and honest weaknesses. Updated 2026.`;
+
+const reviewSchema = rating !== null ? {
+  '@context': 'https://schema.org',
+  '@type': 'Review',
+  itemReviewed: {
+    '@type': 'SoftwareApplication',
+    name: tool.name,
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Web, iOS, Android',
+  },
+  reviewRating: {
+    '@type': 'Rating',
+    ratingValue: rating.toFixed(1),
+    bestRating: '5',
+  },
+  author: {
+    '@type': 'Organization',
+    name: 'WrenchStack',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'WrenchStack',
+  },
+  reviewBody: `${tool.tagline}. Best for: ${tool.best_for}. Watch out for: ${tool.weaknesses}`,
+} : null;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Tools', url: '/tools/' },
+  { name: tool.name, url: `/tools/${tool.slug}/` },
+];
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
   <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
+  {reviewSchema && <script type="application/ld+json" set:html={JSON.stringify(reviewSchema)} />}
 
   <article class="mx-auto max-w-4xl px-4 py-12">
     <nav class="mb-6 text-sm text-slate-500">

@@ -76,9 +76,16 @@ const faqSchema = {
 
 const pageTitle = `${tool.name} Alternatives (2026): 8 Best Options Compared`;
 const pageDescription = `The best alternatives to ${tool.name} in 2026, ranked by vertical fit and user ratings. Pricing, features, and use-case fit for each option.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Tools', url: '/tools/' },
+  { name: tool.name, url: `/tools/${tool.slug}/` },
+  { name: 'Alternatives', url: `/tools/${tool.slug}/alternatives/` },
+];
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <article class="mx-auto max-w-4xl px-4 py-12">

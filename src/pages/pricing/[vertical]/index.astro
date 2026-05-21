@@ -75,9 +75,15 @@ const faqSchema = {
 
 const pageTitle = `${vertical.name} Software Pricing 2026: ${verticalTools.length} Tools Compared`;
 const pageDescription = `Real ${verticalLower} software pricing for ${verticalTools.length} platforms. Every tier verified, no hidden fees, sorted cheapest first. Updated quarterly.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Pricing', url: '/pricing/' },
+  { name: `${vertical.name} pricing`, url: `/pricing/${verticalToUrl(vertical.slug)}/` },
+];
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <article class="mx-auto max-w-5xl px-4 py-12">

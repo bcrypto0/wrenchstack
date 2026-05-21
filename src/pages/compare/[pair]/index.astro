@@ -107,9 +107,15 @@ const faqSchema = {
 
 const pageTitle = `${a.name} vs ${b.name} (2026): Side-by-Side Comparison`;
 const pageDescription = `${a.name} vs ${b.name} compared head-to-head: pricing, features, integrations, pros and cons. Independent analysis, no vendor sponsorships. Updated ${a.pricing.verified_date}.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Compare', url: '/compare/' },
+  { name: `${a.name} vs ${b.name}`, url: `/compare/${a.slug}-vs-${b.slug}/` },
+];
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <article class="mx-auto max-w-5xl px-4 py-12">

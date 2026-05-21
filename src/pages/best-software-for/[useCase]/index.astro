@@ -91,10 +91,33 @@ const faqSchema = {
     acceptedAnswer: { '@type': 'Answer', text: f.a },
   })),
 };
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: useCase.h1,
+  itemListElement: picks.map((t, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'SoftwareApplication',
+      name: t.name,
+      applicationCategory: 'BusinessApplication',
+      url: `https://wrenchstack.com/tools/${t.slug}/`,
+    },
+  })),
+};
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Buyer Guides', url: '/best-software-for/' },
+  { name: useCase.h1, url: `/best-software-for/${useCase.slug}/` },
+];
 ---
 
-<Layout title={useCase.h1} description={useCase.meta_description}>
+<Layout title={useCase.h1} description={useCase.meta_description} breadcrumbs={breadcrumbs}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
 
   <article class="mx-auto max-w-4xl px-4 py-12">
     <nav class="mb-6 text-sm text-slate-500">
