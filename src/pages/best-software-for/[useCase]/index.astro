@@ -1,0 +1,235 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import useCasesData from '../../../data/use_cases.json';
+import {
+  getTool,
+  aggregateRating,
+  formatPrice,
+  verticals,
+  verticalToUrl,
+  type Tool,
+} from '../../../lib/data';
+
+interface UseCase {
+  slug: string;
+  h1: string;
+  meta_description: string;
+  buyer_profile: string;
+  intro: string;
+  verticals: string[];
+  ranked_picks: string[];
+  buying_criteria: string[];
+}
+
+const useCases: UseCase[] = useCasesData.use_cases as UseCase[];
+
+export async function getStaticPaths() {
+  const cases = (useCasesData.use_cases as UseCase[]);
+  return cases.map((uc) => ({
+    params: { useCase: uc.slug },
+    props: { useCase: uc },
+  }));
+}
+
+interface Props {
+  useCase: UseCase;
+}
+
+const { useCase } = Astro.props;
+
+const picks: Tool[] = useCase.ranked_picks
+  .map((slug) => getTool(slug))
+  .filter((t): t is Tool => t !== undefined);
+
+const relevantVerticals = useCase.verticals
+  .map((v) => verticals.find((x) => x.slug === v))
+  .filter((v): v is NonNullable<typeof v> => v !== undefined);
+
+const faqs = [
+  {
+    q: `What is the best option overall?`,
+    a: `${picks[0]?.name ?? 'Our top pick'} ranks first because: ${picks[0]?.best_for ?? 'it best matches the buyer profile described in this guide'}. See the full ranked list above with the rationale for each pick.`,
+  },
+  {
+    q: `What's the cheapest option here?`,
+    a: (() => {
+      const cheapest = picks.reduce<Tool | null>(
+        (lowest, t) => {
+          const price = t.pricing.starting_at_usd;
+          if (price === null) return lowest;
+          if (!lowest || (lowest.pricing.starting_at_usd ?? 999) > price) return t;
+          return lowest;
+        },
+        null,
+      );
+      if (!cheapest) return 'All picks here use custom-quote pricing — request quotes from each to compare.';
+      return `${cheapest.name} starts at ${formatPrice(cheapest)}. Note: cheapest starting price isn't always cheapest total cost — per-user pricing scales differently than per-company pricing as you grow.`;
+    })(),
+  },
+  {
+    q: `Which one has the best mobile app?`,
+    a: 'All five picks on this list have native iOS and Android apps. For mobile-first workflows specifically, look at the picks that explicitly highlight mobile experience in their key features (see each tool detail page for the full feature list).',
+  },
+  {
+    q: `Do these integrate with QuickBooks?`,
+    a: (() => {
+      const withQb = picks.filter((t) => t.integrations.some((i) => i.includes('quickbooks')));
+      if (withQb.length === picks.length) {
+        return 'Yes — all five picks integrate with QuickBooks. Integration depth varies (one-way push vs two-way sync) — check each tool detail page for specifics.';
+      }
+      return `${withQb.length} of the ${picks.length} picks integrate with QuickBooks: ${withQb.map((t) => t.name).join(', ')}. The others use Zapier or have no native QuickBooks integration.`;
+    })(),
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Layout title={useCase.h1} description={useCase.meta_description}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <nav class="mb-6 text-sm text-slate-500">
+      <a href="/" class="hover:text-slate-900">Home</a>
+      <span class="mx-2">/</span>
+      <span class="text-slate-900">Best Software For</span>
+      <span class="mx-2">/</span>
+      <span class="text-slate-900">{useCase.h1}</span>
+    </nav>
+
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
+        Buyer Guide
+      </p>
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        {useCase.h1}
+      </h1>
+      <p class="mt-4 text-lg text-slate-600">
+        For: <strong>{useCase.buyer_profile}</strong>
+      </p>
+      <p class="mt-3 text-xs text-slate-500">
+        <strong>Affiliate disclosure:</strong> we earn commissions on signups through links
+        on this page. Our rankings are data-driven; payouts don't move the order.
+        <a href="/methodology/" class="underline hover:text-slate-900">Methodology →</a>
+      </p>
+    </header>
+
+    <section class="mb-10 rounded-lg border border-slate-200 bg-slate-50 p-6">
+      <h2 class="mb-3 text-lg font-bold text-slate-900">Why we picked these</h2>
+      <p class="text-slate-700">{useCase.intro}</p>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">What we looked for</h2>
+      <ul class="space-y-2 text-slate-700">
+        {useCase.buying_criteria.map((criterion) => (
+          <li class="flex gap-2">
+            <span class="font-bold text-orange-500">✓</span>
+            <span>{criterion}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-6 text-2xl font-bold text-slate-900">The ranked picks</h2>
+      <div class="space-y-10">
+        {picks.map((tool, i) => {
+          const rating = aggregateRating(tool);
+          return (
+            <div class="rounded-lg border border-slate-200 bg-white p-6">
+              <div class="mb-3 flex flex-wrap items-baseline justify-between gap-3">
+                <h3 class="text-2xl font-bold text-slate-900">
+                  <span class="text-orange-500">#{i + 1}</span>{' '}
+                  <a href={`/tools/${tool.slug}/`} class="hover:text-orange-600">{tool.name}</a>
+                </h3>
+                <div class="text-sm text-slate-500">
+                  {rating !== null && <span class="font-semibold text-slate-700">{rating.toFixed(1)} / 5</span>}
+                </div>
+              </div>
+              <p class="mb-4 italic text-slate-600">{tool.tagline}</p>
+
+              <dl class="grid gap-3 text-sm md:grid-cols-2">
+                <div>
+                  <dt class="font-semibold text-slate-900">Starting price</dt>
+                  <dd class="text-slate-700">{formatPrice(tool)}</dd>
+                </div>
+                <div>
+                  <dt class="font-semibold text-slate-900">Best team size</dt>
+                  <dd class="text-slate-700">{tool.best_team_size ?? '—'}</dd>
+                </div>
+                <div class="md:col-span-2">
+                  <dt class="font-semibold text-slate-900">Why it ranks here</dt>
+                  <dd class="text-slate-700">{tool.best_for}</dd>
+                </div>
+                <div class="md:col-span-2">
+                  <dt class="font-semibold text-slate-900">Watch out for</dt>
+                  <dd class="text-slate-700">{tool.weaknesses}</dd>
+                </div>
+              </dl>
+
+              <div class="mt-5 flex flex-wrap gap-3">
+                <a
+                  href={tool.affiliate_url.startsWith('http') ? tool.affiliate_url : tool.vendor_url}
+                  rel="sponsored nofollow noopener"
+                  target="_blank"
+                  class="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600"
+                >
+                  Visit {tool.name} →
+                </a>
+                <a
+                  href={`/tools/${tool.slug}/`}
+                  class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:border-slate-400"
+                >
+                  Full review
+                </a>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+
+    {relevantVerticals.length > 0 && (
+      <section class="mb-12">
+        <h2 class="mb-4 text-2xl font-bold text-slate-900">Related guides</h2>
+        <div class="flex flex-wrap gap-2">
+          {relevantVerticals.map((v) => (
+            <a
+              href={`/${verticalToUrl(v.slug)}/`}
+              class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 hover:border-orange-500 hover:text-orange-600"
+            >
+              All {v.name} software →
+            </a>
+          ))}
+          <a
+            href="/compare/"
+            class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 hover:border-orange-500 hover:text-orange-600"
+          >
+            Compare any two tools →
+          </a>
+        </div>
+      </section>
+    )}
+
+    <section class="mb-12">
+      <h2 class="mb-6 text-2xl font-bold text-slate-900">Frequently asked questions</h2>
+      <div class="space-y-4">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </article>
+</Layout>

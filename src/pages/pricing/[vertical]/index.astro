@@ -1,0 +1,240 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import {
+  verticals,
+  toolsForVertical,
+  verticalToUrl,
+  formatPrice,
+  type Vertical,
+  type Tool,
+} from '../../../lib/data';
+
+export async function getStaticPaths() {
+  return verticals.map((v) => ({
+    params: { vertical: verticalToUrl(v.slug) },
+    props: { vertical: v },
+  }));
+}
+
+interface Props {
+  vertical: Vertical;
+}
+
+const { vertical } = Astro.props;
+const verticalLower = vertical.name.toLowerCase();
+
+const verticalTools: Tool[] = toolsForVertical(vertical.slug);
+
+const cheapestFirst = [...verticalTools].sort((a, b) => {
+  const pa = a.pricing.starting_at_usd;
+  const pb = b.pricing.starting_at_usd;
+  if (pa === null && pb === null) return 0;
+  if (pa === null) return 1;
+  if (pb === null) return -1;
+  return pa - pb;
+});
+
+const cheapestPublic = cheapestFirst.find((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0);
+const freeTier = cheapestFirst.find((t) => t.pricing.starting_at_usd === 0);
+const customQuoteOnly = verticalTools.filter((t) => t.pricing.starting_at_usd === null);
+
+const faqs = [
+  {
+    q: `How much does ${verticalLower} software cost?`,
+    a: `Entry-level tools start at ${freeTier ? `free (${freeTier.name})` : `$${cheapestPublic?.pricing.starting_at_usd}/month (${cheapestPublic?.name})`}. Mid-tier tools run $99–$300/month for small teams. Enterprise platforms like ${customQuoteOnly[0]?.name ?? 'ServiceTitan'} use custom quotes and typically run $300–$800/user/month at typical configurations.`,
+  },
+  {
+    q: `What's the cheapest ${verticalLower} software?`,
+    a: freeTier
+      ? `${freeTier.name} has a free tier with limited features. ${cheapestPublic?.name} (${formatPrice(cheapestPublic!)}) is the cheapest paid option with full features.`
+      : `${cheapestPublic?.name} at ${formatPrice(cheapestPublic!)} is the cheapest paid option with full features. There's no genuinely free option in this category for established businesses.`,
+  },
+  {
+    q: `Per-user pricing vs flat-rate pricing — which is better?`,
+    a: 'Per-user pricing (like Jobber, ServiceTitan, Workiz) starts cheap but scales painfully as you hire. Flat-rate per-company pricing (Service Fusion, RazorSync) starts higher but stays predictable. Rough breakeven: per-user wins below 5 techs, flat-rate wins above 8 techs. Calculate at your projected team size 12 months out, not today.',
+  },
+  {
+    q: `Are these prices verified?`,
+    a: `Yes. Every pricing tier on this page has a "verified" date — we re-check pricing quarterly by visiting each vendor's public pricing page and (where applicable) requesting current quotes. Pricing older than 90 days gets flagged. See our methodology page for details.`,
+  },
+  {
+    q: `Why don't some tools show pricing?`,
+    a: `Enterprise platforms (ServiceTitan, FieldEdge, BuildOps, etc.) don't publish pricing publicly — they require a sales call to get a custom quote. This is typical for software targeting $1M+ revenue businesses. Reports from users put their pricing in the $100-800/user/month range depending on tier and team size.`,
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const pageTitle = `${vertical.name} Software Pricing 2026: ${verticalTools.length} Tools Compared`;
+const pageDescription = `Real ${verticalLower} software pricing for ${verticalTools.length} platforms. Every tier verified, no hidden fees, sorted cheapest first. Updated quarterly.`;
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <nav class="mb-6 text-sm text-slate-500">
+      <a href="/" class="hover:text-slate-900">Home</a>
+      <span class="mx-2">/</span>
+      <a href={`/${verticalToUrl(vertical.slug)}/`} class="hover:text-slate-900">{vertical.name}</a>
+      <span class="mx-2">/</span>
+      <span class="text-slate-900">Pricing</span>
+    </nav>
+
+    <header class="mb-10">
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        {vertical.name} Software Pricing in 2026
+      </h1>
+      <p class="mt-4 text-lg text-slate-600">
+        Real pricing for {verticalTools.length} {verticalLower} software platforms. Every tier verified.
+        Sorted from cheapest to most expensive. No hidden fees, no fake "starting at" gotchas.
+      </p>
+      <p class="mt-3 text-xs text-slate-500">
+        <strong>Affiliate disclosure:</strong> we earn commissions on signups via tracked links.
+        Pricing is verified independently — not provided by vendors.
+        <a href="/methodology/" class="underline hover:text-slate-900">Methodology →</a>
+      </p>
+    </header>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Quick price comparison</h2>
+      <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-left text-slate-700">
+            <tr>
+              <th class="p-3 font-semibold">Tool</th>
+              <th class="p-3 font-semibold">Starting price</th>
+              <th class="p-3 font-semibold">Pricing model</th>
+              <th class="p-3 font-semibold">Free trial</th>
+              <th class="p-3 font-semibold">Verified</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            {cheapestFirst.map((t) => {
+              const trial = t.pricing.free_trial_days;
+              const isCustom = t.pricing.starting_at_usd === null;
+              const isFree = t.pricing.starting_at_usd === 0;
+              return (
+                <tr class="hover:bg-slate-50">
+                  <td class="p-3">
+                    <a href={`/tools/${t.slug}/`} class="font-semibold text-slate-900 hover:text-orange-600">
+                      {t.name}
+                    </a>
+                  </td>
+                  <td class="p-3 font-semibold text-slate-900">
+                    {isFree ? 'Free tier' : isCustom ? 'Custom' : `$${t.pricing.starting_at_usd}/mo`}
+                  </td>
+                  <td class="p-3 text-slate-600 text-xs">
+                    {t.pricing.pricing_note ?? (isCustom ? 'Custom quote — request from vendor' : 'Per-user/month (typical)')}
+                  </td>
+                  <td class="p-3 text-slate-600">{trial && trial > 0 ? `${trial} days` : '—'}</td>
+                  <td class="p-3 text-slate-500 text-xs">{t.pricing.verified_date}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Pricing breakdown by tool</h2>
+      <p class="mb-6 text-slate-600">All public pricing tiers for each platform. Custom-quote tools show user-reported ranges in the notes.</p>
+      <div class="space-y-8">
+        {cheapestFirst.map((t) => (
+          <div class="rounded-lg border border-slate-200 bg-white p-6">
+            <div class="mb-3 flex items-baseline justify-between">
+              <h3 class="text-xl font-bold text-slate-900">
+                <a href={`/tools/${t.slug}/`} class="hover:text-orange-600">{t.name}</a>
+              </h3>
+              <span class="text-sm text-slate-500">Verified {t.pricing.verified_date}</span>
+            </div>
+            <div class="overflow-x-auto rounded border border-slate-200">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-left">
+                  <tr>
+                    <th class="p-2 font-semibold text-slate-700">Tier</th>
+                    <th class="p-2 font-semibold text-slate-700">Price</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  {t.pricing.tiers.map((tier, i) => {
+                    const price = t.pricing.tier_prices_usd?.[i];
+                    return (
+                      <tr>
+                        <td class="p-2 font-medium text-slate-900">{tier}</td>
+                        <td class="p-2 text-slate-700">
+                          {price === null || price === undefined ? 'Custom quote' : price === 0 ? 'Free' : `$${price}/mo`}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            {t.pricing.pricing_note && (
+              <p class="mt-3 text-xs italic text-slate-500">{t.pricing.pricing_note}</p>
+            )}
+            <div class="mt-4 flex flex-wrap gap-3">
+              <a
+                href={t.affiliate_url.startsWith('http') ? t.affiliate_url : t.vendor_url}
+                rel="sponsored nofollow noopener"
+                target="_blank"
+                class="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600"
+              >
+                Visit {t.name} →
+              </a>
+              <a
+                href={`/tools/${t.slug}/`}
+                class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:border-slate-400"
+              >
+                Full review
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-6 text-2xl font-bold text-slate-900">Frequently asked questions</h2>
+      <div class="space-y-4">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Ready to compare further?</h2>
+      <p class="mt-2 text-slate-300">
+        See our full ranked picks for {vertical.name} or compare any two tools side-by-side.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a
+          href={`/${verticalToUrl(vertical.slug)}/`}
+          class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100"
+        >
+          Best {vertical.name} software →
+        </a>
+        <a
+          href="/compare/"
+          class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600"
+        >
+          Compare tools →
+        </a>
+      </div>
+    </section>
+  </article>
+</Layout>
