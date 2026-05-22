@@ -1,88 +1,111 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Methodology', url: '/methodology/' },
+];
 ---
 
 <Layout
-  title="How we rank trades software — WrenchStack methodology"
-  description="WrenchStack's ranking methodology. How we score tools, how often we update, and why our affiliate payouts don't move the order."
+  title="How rankings work — WrenchStack methodology"
+  description="The WrenchStack Score combines vertical fit, user ratings, pricing transparency, and feature depth into a single 0–10 score. Here's how the math works."
+  breadcrumbs={breadcrumbs}
 >
   <article class="mx-auto max-w-3xl px-4 py-12 prose prose-slate">
-    <h1>How we rank trades software</h1>
+    <h1>How rankings work</h1>
 
     <p>
-      WrenchStack rankings combine four data sources, weighted equally. Affiliate payouts
-      are <em>not</em> a factor — the ranking algorithm has no knowledge of which tools pay
-      us or how much.
+      Every tool in our directory carries a <strong>WrenchStack Score</strong> on a 0–10 scale.
+      The score is calculated from five weighted factors and is the primary input to where a
+      tool ranks on vertical landing pages and buyer guides.
     </p>
 
-    <h2>What we measure</h2>
+    <h2>The WrenchStack Score formula</h2>
 
-    <h3>1. Aggregated user ratings (25%)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Factor</th>
+          <th>Weight</th>
+          <th>What it measures</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Vertical fit</strong></td>
+          <td>40%</td>
+          <td>How well the tool is built for the specific trade being searched (HVAC, plumbing, roofing, etc.). Scored 1–10 per vertical based on feature coverage, customer base, and the tool's own positioning.</td>
+        </tr>
+        <tr>
+          <td><strong>Aggregated user ratings</strong></td>
+          <td>30%</td>
+          <td>Averaged G2 + Capterra ratings, normalized to a 0–10 scale.</td>
+        </tr>
+        <tr>
+          <td><strong>Pricing transparency</strong></td>
+          <td>10%</td>
+          <td>Tools with public tier pricing score 10. Tools requiring sales calls for any number score 5. Tools with free tiers get a bonus.</td>
+        </tr>
+        <tr>
+          <td><strong>Feature depth</strong></td>
+          <td>10%</td>
+          <td>Count of meaningful features the tool ships, capped at 10. Generic feature stuffing doesn't help; coverage of the must-have features for the declared use case does.</td>
+        </tr>
+        <tr>
+          <td><strong>Integration coverage</strong></td>
+          <td>10%</td>
+          <td>Count of native integrations with adjacent tools (QuickBooks, Stripe, Zapier, payment processors, marketing platforms). Capped at 10.</td>
+        </tr>
+      </tbody>
+    </table>
+
     <p>
-      We average G2 and Capterra ratings for each tool. Where one platform lacks coverage,
-      we use only the available platform. Ratings under 100 reviews are weighted at half.
+      The final score is the weighted sum, rounded to one decimal place. Tools scoring 9.0+ get
+      a dark-green badge; 8.0–8.9 light green; 7.0–7.9 orange; 6.0–6.9 light orange; below 6 gray.
     </p>
-
-    <h3>2. Pricing transparency (25%)</h3>
-    <p>
-      Tools with public pricing across all tiers score higher than tools requiring sales
-      calls. Hidden pricing is a negative signal that costs SMB buyers time and creates
-      anchoring problems during demos.
-    </p>
-
-    <h3>3. Integration depth (25%)</h3>
-    <p>
-      We count integrations across QuickBooks, payment processors, marketing platforms, and
-      industry-specific tools (Angi, Google Local Services, Procore). One-way sync counts;
-      two-way sync scores higher. Native integrations beat Zapier-only.
-    </p>
-
-    <h3>4. Feature coverage for declared use case (25%)</h3>
-    <p>
-      Each tool declares its target team size and vertical mix. We score how well it covers
-      the must-have features for that segment. A tool optimized for solo contractors isn't
-      penalized for lacking enterprise reporting.
-    </p>
-
-    <h2>What we don't measure</h2>
-
-    <ul>
-      <li>Affiliate commission rate</li>
-      <li>Whether we have a partnership at all</li>
-      <li>Vendor sponsorships (we don't accept them)</li>
-      <li>Marketing budgets, social media presence, founder fame</li>
-    </ul>
 
     <h2>How often we update</h2>
 
     <p>
-      Pricing: verified quarterly. Each tool entry has a <code>verified_date</code> field
-      and we re-verify any tier older than 90 days before publishing on a new page.
+      <strong>Pricing</strong> is verified quarterly. Each tool entry carries a verified date —
+      tiers older than 90 days are flagged and re-verified before the page is published.
     </p>
 
     <p>
-      Features and integrations: re-checked twice yearly per tool, plus on major product
-      updates (we monitor vendor changelogs and announcements).
+      <strong>Features and integrations</strong> are re-checked twice yearly, plus on major
+      product updates (we monitor vendor changelogs and release notes).
     </p>
 
     <p>
-      Ratings: pulled fresh from G2 and Capterra at each quarterly review.
+      <strong>User ratings</strong> are pulled fresh from G2 and Capterra at each quarterly review.
     </p>
 
-    <h2>Our editorial policy on errors</h2>
+    <h2>Editorial corrections</h2>
 
     <p>
-      If we publish something wrong about a tool — pricing, feature claim, weakness — we
-      correct it within 48 hours of confirmation. Contact us at the link in the footer.
-      We don't quietly edit; corrections show a <code>corrected on YYYY-MM-DD</code> note.
+      If we publish something wrong about a tool — pricing, feature claim, weakness — we correct
+      it within 48 hours of confirmation. Corrections are noted on the page with a dated stamp,
+      never silently edited.
     </p>
 
-    <h2>Why we publish this</h2>
+    <p>
+      If you're a vendor and spot an error about your product, email <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a> with
+      the specific page URL and what's wrong. We fix and credit corrections fairly.
+    </p>
+
+    <h2>The data behind rankings</h2>
 
     <p>
-      Most "best of" content is either vendor-produced (biased toward whoever paid) or
-      content-mill generic (no original analysis). We want buyers to know exactly what
-      went into our ranking so they can decide whether to trust it for their own decision.
+      Pricing tier data comes from public vendor pricing pages. Feature lists come from vendor
+      documentation, product demos, and aggregated user feedback on G2 and Capterra. Integration
+      data comes from official vendor integration directories and Zapier marketplace listings.
+    </p>
+
+    <p>
+      Where vendors don't publish pricing publicly (typical for enterprise tools like ServiceTitan,
+      BuildOps, and FieldEdge), we cite user-reported pricing ranges from public sources rather
+      than custom-quoted figures.
     </p>
   </article>
 </Layout>

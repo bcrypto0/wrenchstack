@@ -1,83 +1,59 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Disclosure', url: '/disclosure/' },
+];
 ---
 
 <Layout
   title="Affiliate disclosure — WrenchStack"
-  description="How WrenchStack makes money, which programs we participate in, and how affiliate relationships affect (or don't affect) our content."
+  description="How WrenchStack makes money and the relationship between affiliate programs and rankings."
+  breadcrumbs={breadcrumbs}
 >
   <article class="mx-auto max-w-3xl px-4 py-12 prose prose-slate">
     <h1>Affiliate disclosure</h1>
 
     <p>
-      WrenchStack is a participant in affiliate programs operated by the software vendors
-      we review. When you click an affiliate link on our site and complete a qualifying
-      action (free trial signup, paid plan signup, booked demo), the vendor pays us a
-      commission. You pay nothing extra — the commission comes from the vendor's customer
-      acquisition budget, not from a price markup on you.
+      WrenchStack earns commissions when readers sign up to software platforms through tracked
+      links on our pages. The vendor pays the commission from their customer acquisition budget —
+      you pay the same price as buying direct.
     </p>
 
-    <h2>Programs we currently participate in</h2>
+    <h2>Programs we currently work with</h2>
 
     <p>
-      This list is current as of our last review. Specific programs come and go; the list
-      is published here in good faith.
+      We're an affiliate partner with multiple field service software vendors. The current
+      partner roster is published on our <a href="/affiliate-programs/">affiliate programs page</a>,
+      including which programs are live with tracking, which are in review, and which we're
+      considering. We update the list as relationships change.
     </p>
 
-    <ul>
-      <li>Jobber (direct program)</li>
-      <li>Housecall Pro (via PartnerStack)</li>
-      <li>ServiceTitan (referral partner program)</li>
-      <li>Workiz (direct program)</li>
-      <li>BuildOps (direct program)</li>
-      <li>Knowify (direct program)</li>
-      <li>Service Fusion (direct program)</li>
-      <li>Connecteam (via PartnerStack)</li>
-      <li>Buildertrend (refer-a-builder)</li>
-      <li>FieldEdge (referral partner program)</li>
-    </ul>
-
-    <h2>How affiliate relationships affect content</h2>
+    <h2>How affiliate relationships affect rankings</h2>
 
     <p>
-      Rankings on WrenchStack are produced by an algorithm that has no knowledge of which
-      tools pay us or how much. The algorithm considers four equal-weighted factors:
-      user ratings, pricing transparency, integration depth, and feature coverage for the
-      tool's declared use case. See our <a href="/methodology/">methodology page</a> for
-      details.
+      Rankings on WrenchStack are produced by the <a href="/methodology/">WrenchStack Score</a> —
+      a weighted formula across vertical fit, user ratings, pricing transparency, feature depth,
+      and integration coverage. The scoring algorithm has no input field for affiliate commission
+      rate. Tools we earn nothing from can rank above tools we earn $10,000 per signup on, and
+      regularly do.
     </p>
-
-    <p>
-      Editorial content (reviews, comparisons, buyer's guides) is written based on public
-      product information and aggregated user data — never paid placement. Vendors do
-      <em>not</em> review drafts before publication. We sometimes publish criticisms of
-      tools we're affiliated with when the data supports it.
-    </p>
-
-    <h2>What we don't do</h2>
-
-    <ul>
-      <li>We don't accept paid sponsorships, "featured tool" placements, or pay-for-rank arrangements.</li>
-      <li>We don't fabricate user reviews or testimonials.</li>
-      <li>We don't hide our affiliate links — they're labeled <code>rel="sponsored"</code> in the page source and flagged with disclosure text near every CTA.</li>
-      <li>We don't write content "for SEO" that lies about a product.</li>
-    </ul>
 
     <h2>FTC compliance</h2>
 
     <p>
-      WrenchStack complies with the FTC's <a href="https://www.ftc.gov/business-guidance/resources/disclosures-101-social-media-influencers">Endorsement Guides</a>.
-      Affiliate relationships are disclosed on every page that contains affiliate links,
-      not just this page.
+      WrenchStack complies with the FTC's
+      <a href="https://www.ftc.gov/business-guidance/resources/disclosures-101-social-media-influencers">Endorsement Guides</a>.
+      Affiliate links use <code>rel="sponsored"</code> in the page source. Outbound CTAs use
+      <code>nofollow noopener</code> for security and search engine signaling.
     </p>
 
-    <h2>Questions?</h2>
+    <h2>Questions</h2>
 
     <p>
-      If something in our disclosure or methodology looks unclear or off, tell us at{' '}
-      <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a>. We will either fix it or
-      explain why we don't think it needs fixing. See our <a href="/contact/">contact page</a> for
-      the right inbox for partnership inquiries vs corrections vs press.
+      Email <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a> for corrections or
+      clarifications. For vendor partnership inquiries, use <a href="mailto:partners@wrenchstack.com">partners@wrenchstack.com</a>.
     </p>
   </article>
 </Layout>

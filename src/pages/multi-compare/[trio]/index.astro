@@ -35,7 +35,7 @@ const [a, b, c] = trioTools;
 
 const titleStr = `${a.name} vs ${b.name} vs ${c.name}`;
 const pageTitle = `${titleStr} (2026): 3-Way Comparison`;
-const pageDescription = `${a.name} vs ${b.name} vs ${c.name} compared side-by-side: pricing, features, integrations, and use-case fit. Independent analysis, updated 2026.`;
+const pageDescription = `${a.name} vs ${b.name} vs ${c.name} compared side-by-side: pricing, features, integrations, and use-case fit. Updated 2026.`;
 
 // Find best fit by category
 const allRated = trioTools.map(t => ({ tool: t, score: wrenchStackScore(t) })).sort((x, y) => y.score - x.score);

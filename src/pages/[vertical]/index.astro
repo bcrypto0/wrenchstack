@@ -40,7 +40,7 @@ const verticalLower = vertical.name.toLowerCase();
 const faqs = [
   {
     q: `What is the best ${verticalLower} software in 2026?`,
-    a: `Based on our independent analysis of pricing, features, integrations, and aggregated G2/Capterra ratings, the top three options are ${topPicks
+    a: `Based on our analysis of pricing, features, integrations, and aggregated G2/Capterra ratings, the top three options are ${topPicks
       .slice(0, 3)
       .map((t) => t.name)
       .join(', ')}. The right pick depends on your team size and budget — see the buyer's guide below for size-specific recommendations.`,
@@ -75,8 +75,8 @@ const faqSchema = {
   })),
 };
 
-const pageTitle = `Best ${vertical.name} Software 2026: Independent Comparison`;
-const pageDescription = `Compare the ${ranked.length} best ${verticalLower} software options for 2026. Real pricing, real feature matrices, no vendor-sponsored rankings. Updated quarterly.`;
+const pageTitle = `Best ${vertical.name} Software 2026: Compared and Ranked`;
+const pageDescription = `Compare the ${ranked.length} best ${verticalLower} software options for 2026. Verified pricing, full feature matrices, head-to-head comparisons. Updated quarterly.`;
 
 const itemListSchema = {
   '@context': 'https://schema.org',
