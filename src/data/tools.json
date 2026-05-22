@@ -1,6 +1,20 @@
 {
   "_schema_note": "Each tool entry should populate every field for SEO. Pricing is verified-as-of date. Refresh quarterly. Where verification was uncertain we flag with pricing_note.",
-  "_verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control", "pool_service", "locksmith", "garage_door", "appliance_repair", "handyman"],
+  "_verticals": [
+    "hvac",
+    "plumbing",
+    "electrical",
+    "roofing",
+    "general_contractor",
+    "landscaping",
+    "cleaning",
+    "pest_control",
+    "pool_service",
+    "locksmith",
+    "garage_door",
+    "appliance_repair",
+    "handyman"
+  ],
   "tools": [
     {
       "slug": "jobber",
@@ -8,15 +22,64 @@
       "vendor_url": "https://getjobber.com",
       "affiliate_url": "TBD_FROM_AFFILIATE_DASHBOARD",
       "tagline": "Field service management for growing service businesses",
-      "verticals": ["hvac", "plumbing", "electrical", "landscaping", "cleaning", "handyman"],
-      "pricing": { "starting_at_usd": 39, "tiers": ["Core", "Connect", "Grow", "Plus"], "tier_prices_usd": [39, 119, 199, 399], "verified_date": "2026-05-20", "free_trial_days": 14 },
-      "key_features": ["scheduling", "invoicing", "client_portal", "quotes", "team_management", "online_booking", "automated_followup", "two_way_texting"],
-      "integrations": ["quickbooks", "stripe", "zapier", "google_calendar", "mailchimp", "google_local_services"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "landscaping",
+        "cleaning",
+        "handyman"
+      ],
+      "pricing": {
+        "starting_at_usd": 39,
+        "tiers": [
+          "Core",
+          "Connect",
+          "Grow",
+          "Plus"
+        ],
+        "tier_prices_usd": [
+          39,
+          119,
+          199,
+          399
+        ],
+        "verified_date": "2026-05-20",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "scheduling",
+        "invoicing",
+        "client_portal",
+        "quotes",
+        "team_management",
+        "online_booking",
+        "automated_followup",
+        "two_way_texting"
+      ],
+      "integrations": [
+        "quickbooks",
+        "stripe",
+        "zapier",
+        "google_calendar",
+        "mailchimp",
+        "google_local_services"
+      ],
       "best_for": "Small-to-mid trades businesses (1-30 employees) wanting modern UX with strong CRM",
       "best_team_size": "1-30",
       "weaknesses": "Limited for enterprise; no inventory management at lower tiers; no built-in phone system",
-      "g2_rating": 4.5, "capterra_rating": 4.5, "founded": 2011, "headquartered": "Edmonton, Canada",
-      "vertical_fit": { "hvac": 9, "plumbing": 9, "electrical": 9, "landscaping": 10, "cleaning": 9, "handyman": 9 }
+      "g2_rating": 4.5,
+      "capterra_rating": 4.5,
+      "founded": 2011,
+      "headquartered": "Edmonton, Canada",
+      "vertical_fit": {
+        "hvac": 9,
+        "plumbing": 9,
+        "electrical": 9,
+        "landscaping": 10,
+        "cleaning": 9,
+        "handyman": 9
+      }
     },
     {
       "slug": "housecall-pro",
@@ -24,15 +87,61 @@
       "vendor_url": "https://housecallpro.com",
       "affiliate_url": "TBD_FROM_AFFILIATE_DASHBOARD",
       "tagline": "All-in-one platform for home service pros",
-      "verticals": ["hvac", "plumbing", "electrical", "cleaning", "handyman", "appliance_repair"],
-      "pricing": { "starting_at_usd": 65, "tiers": ["Basic", "Essentials", "MAX"], "tier_prices_usd": [65, 169, 399], "verified_date": "2026-05-20", "free_trial_days": 14 },
-      "key_features": ["scheduling", "dispatching", "invoicing", "estimates", "credit_card_processing", "consumer_financing", "marketing_automation", "instapay"],
-      "integrations": ["quickbooks", "zapier", "google_local_services", "mailchimp", "review_management"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "cleaning",
+        "handyman",
+        "appliance_repair"
+      ],
+      "pricing": {
+        "starting_at_usd": 65,
+        "tiers": [
+          "Basic",
+          "Essentials",
+          "MAX"
+        ],
+        "tier_prices_usd": [
+          65,
+          169,
+          399
+        ],
+        "verified_date": "2026-05-20",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "scheduling",
+        "dispatching",
+        "invoicing",
+        "estimates",
+        "credit_card_processing",
+        "consumer_financing",
+        "marketing_automation",
+        "instapay"
+      ],
+      "integrations": [
+        "quickbooks",
+        "zapier",
+        "google_local_services",
+        "mailchimp",
+        "review_management"
+      ],
       "best_for": "Service businesses wanting integrated payment processing and consumer financing without bolt-ons",
       "best_team_size": "2-20",
       "weaknesses": "Payment processing fees baked in; UX can feel cluttered with newer features",
-      "g2_rating": 4.4, "capterra_rating": 4.7, "founded": 2013, "headquartered": "San Diego, USA",
-      "vertical_fit": { "hvac": 10, "plumbing": 10, "electrical": 9, "cleaning": 8, "handyman": 8, "appliance_repair": 8 }
+      "g2_rating": 4.4,
+      "capterra_rating": 4.7,
+      "founded": 2013,
+      "headquartered": "San Diego, USA",
+      "vertical_fit": {
+        "hvac": 10,
+        "plumbing": 10,
+        "electrical": 9,
+        "cleaning": 8,
+        "handyman": 8,
+        "appliance_repair": 8
+      }
     },
     {
       "slug": "servicetitan",
@@ -40,15 +149,60 @@
       "vendor_url": "https://servicetitan.com",
       "affiliate_url": "https://join.servicetitan.com/mzTUTlC",
       "tagline": "All-in-one software for the trades",
-      "verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "garage_door"],
-      "pricing": { "starting_at_usd": null, "tiers": ["Starter", "Essentials", "The Works"], "tier_prices_usd": null, "pricing_note": "Custom quote only; user reports $300-800/mo per user", "verified_date": "2026-05-20", "free_trial_days": 0 },
-      "key_features": ["call_booking", "dispatching", "marketing_attribution", "inventory", "payroll", "membership_management", "pricebook_pro", "ai_dispatcher"],
-      "integrations": ["quickbooks", "sage", "google_ads", "facebook", "mailchimp", "twilio", "salesforce"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "roofing",
+        "general_contractor",
+        "garage_door"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Starter",
+          "Essentials",
+          "The Works"
+        ],
+        "tier_prices_usd": null,
+        "pricing_note": "Custom quote only; user reports $300-800/mo per user",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 0
+      },
+      "key_features": [
+        "call_booking",
+        "dispatching",
+        "marketing_attribution",
+        "inventory",
+        "payroll",
+        "membership_management",
+        "pricebook_pro",
+        "ai_dispatcher"
+      ],
+      "integrations": [
+        "quickbooks",
+        "sage",
+        "google_ads",
+        "facebook",
+        "mailchimp",
+        "twilio",
+        "salesforce"
+      ],
       "best_for": "Enterprise trades businesses ($1M+ revenue, 10+ technicians) wanting depth and reporting",
       "best_team_size": "10+",
       "weaknesses": "Expensive; long implementation (3-6 months); steep learning curve; no transparent pricing",
-      "g2_rating": 4.5, "capterra_rating": 4.3, "founded": 2012, "headquartered": "Glendale, USA",
-      "vertical_fit": { "hvac": 10, "plumbing": 10, "electrical": 10, "roofing": 9, "general_contractor": 8, "garage_door": 9 }
+      "g2_rating": 4.5,
+      "capterra_rating": 4.3,
+      "founded": 2012,
+      "headquartered": "Glendale, USA",
+      "vertical_fit": {
+        "hvac": 10,
+        "plumbing": 10,
+        "electrical": 10,
+        "roofing": 9,
+        "general_contractor": 8,
+        "garage_door": 9
+      }
     },
     {
       "slug": "workiz",
@@ -56,15 +210,65 @@
       "vendor_url": "https://workiz.com",
       "affiliate_url": "https://partner.workiz.com/wrenchstack",
       "tagline": "Field service software for on-demand service pros",
-      "verticals": ["locksmith", "garage_door", "appliance_repair", "hvac", "plumbing", "cleaning", "handyman"],
-      "pricing": { "starting_at_usd": 65, "tiers": ["Lite", "Standard", "Pro", "Ultimate"], "tier_prices_usd": [65, 169, 299, null], "verified_date": "2026-05-20", "free_trial_days": 14 },
-      "key_features": ["scheduling", "dispatching", "invoicing", "phone_system", "call_masking", "online_booking", "marketing_automation", "ai_phone_agent"],
-      "integrations": ["quickbooks", "stripe", "zapier", "google_local_services", "angi"],
+      "verticals": [
+        "locksmith",
+        "garage_door",
+        "appliance_repair",
+        "hvac",
+        "plumbing",
+        "cleaning",
+        "handyman"
+      ],
+      "pricing": {
+        "starting_at_usd": 65,
+        "tiers": [
+          "Lite",
+          "Standard",
+          "Pro",
+          "Ultimate"
+        ],
+        "tier_prices_usd": [
+          65,
+          169,
+          299,
+          null
+        ],
+        "verified_date": "2026-05-20",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "scheduling",
+        "dispatching",
+        "invoicing",
+        "phone_system",
+        "call_masking",
+        "online_booking",
+        "marketing_automation",
+        "ai_phone_agent"
+      ],
+      "integrations": [
+        "quickbooks",
+        "stripe",
+        "zapier",
+        "google_local_services",
+        "angi"
+      ],
       "best_for": "On-demand service businesses (locksmiths, garage door, junk removal, appliance repair)",
       "best_team_size": "1-15",
       "weaknesses": "Less polished than Jobber/Housecall Pro for traditional residential trades",
-      "g2_rating": 4.5, "capterra_rating": 4.5, "founded": 2015, "headquartered": "San Diego, USA",
-      "vertical_fit": { "locksmith": 10, "garage_door": 10, "appliance_repair": 10, "hvac": 8, "plumbing": 8, "cleaning": 7, "handyman": 8 }
+      "g2_rating": 4.5,
+      "capterra_rating": 4.5,
+      "founded": 2015,
+      "headquartered": "San Diego, USA",
+      "vertical_fit": {
+        "locksmith": 10,
+        "garage_door": 10,
+        "appliance_repair": 10,
+        "hvac": 8,
+        "plumbing": 8,
+        "cleaning": 7,
+        "handyman": 8
+      }
     },
     {
       "slug": "fieldedge",
@@ -72,15 +276,48 @@
       "vendor_url": "https://fieldedge.com",
       "affiliate_url": "TBD_FROM_AFFILIATE_DASHBOARD",
       "tagline": "Service management built for HVAC, plumbing, and electrical",
-      "verticals": ["hvac", "plumbing", "electrical"],
-      "pricing": { "starting_at_usd": null, "tiers": ["Select", "Premier", "Elite"], "tier_prices_usd": null, "pricing_note": "Custom quote; user reports $100-200/user/mo", "verified_date": "2026-05-20", "free_trial_days": 0 },
-      "key_features": ["dispatching", "quickbooks_integration", "mobile_app", "agreements", "flat_rate_pricing", "kpi_dashboards", "performance_pay"],
-      "integrations": ["quickbooks_desktop", "quickbooks_online"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Select",
+          "Premier",
+          "Elite"
+        ],
+        "tier_prices_usd": null,
+        "pricing_note": "Custom quote; user reports $100-200/user/mo",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 0
+      },
+      "key_features": [
+        "dispatching",
+        "quickbooks_integration",
+        "mobile_app",
+        "agreements",
+        "flat_rate_pricing",
+        "kpi_dashboards",
+        "performance_pay"
+      ],
+      "integrations": [
+        "quickbooks_desktop",
+        "quickbooks_online"
+      ],
       "best_for": "Mid-size HVAC/plumbing/electrical with deep QuickBooks integration needs",
       "best_team_size": "5-30",
       "weaknesses": "QuickBooks-centric; less modern UI than competitors; no transparent pricing",
-      "g2_rating": 4.2, "capterra_rating": 4.2, "founded": 2017, "headquartered": "Fort Myers, USA",
-      "vertical_fit": { "hvac": 9, "plumbing": 9, "electrical": 9 }
+      "g2_rating": 4.2,
+      "capterra_rating": 4.2,
+      "founded": 2017,
+      "headquartered": "Fort Myers, USA",
+      "vertical_fit": {
+        "hvac": 9,
+        "plumbing": 9,
+        "electrical": 9
+      }
     },
     {
       "slug": "servicetrade",
@@ -88,15 +325,56 @@
       "vendor_url": "https://servicetrade.com",
       "affiliate_url": "TBD",
       "tagline": "Commercial service contractor platform",
-      "verticals": ["hvac", "plumbing", "electrical", "roofing"],
-      "pricing": { "starting_at_usd": 89, "tiers": ["Select", "Premium", "Enterprise"], "tier_prices_usd": [89, 119, null], "pricing_note": "Per technician per month; Enterprise is custom-quoted", "verified_date": "2026-05-20", "free_trial_days": 0 },
-      "key_features": ["dispatching", "service_agreements", "deficiency_tracking", "customer_portal", "asset_tracking", "online_invoicing", "estimate_to_invoice"],
-      "integrations": ["quickbooks", "sage_intacct", "netsuite", "zapier"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "roofing"
+      ],
+      "pricing": {
+        "starting_at_usd": 89,
+        "tiers": [
+          "Select",
+          "Premium",
+          "Enterprise"
+        ],
+        "tier_prices_usd": [
+          89,
+          119,
+          null
+        ],
+        "pricing_note": "Per technician per month; Enterprise is custom-quoted",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 0
+      },
+      "key_features": [
+        "dispatching",
+        "service_agreements",
+        "deficiency_tracking",
+        "customer_portal",
+        "asset_tracking",
+        "online_invoicing",
+        "estimate_to_invoice"
+      ],
+      "integrations": [
+        "quickbooks",
+        "sage_intacct",
+        "netsuite",
+        "zapier"
+      ],
       "best_for": "Commercial HVAC/refrigeration/fire-life-safety contractors with recurring service agreements",
       "best_team_size": "10-100",
       "weaknesses": "Not designed for residential; learning curve for non-commercial teams",
-      "g2_rating": 4.3, "capterra_rating": 4.6, "founded": 2012, "headquartered": "Durham, USA",
-      "vertical_fit": { "hvac": 9, "plumbing": 8, "electrical": 8, "roofing": 7 }
+      "g2_rating": 4.3,
+      "capterra_rating": 4.6,
+      "founded": 2012,
+      "headquartered": "Durham, USA",
+      "vertical_fit": {
+        "hvac": 9,
+        "plumbing": 8,
+        "electrical": 8,
+        "roofing": 7
+      }
     },
     {
       "slug": "servicefusion",
@@ -104,47 +382,170 @@
       "vendor_url": "https://servicefusion.com",
       "affiliate_url": "https://referrals.servicefusion.com/l/1BCRYPTO94/",
       "tagline": "All-in-one field service software",
-      "verticals": ["hvac", "plumbing", "electrical", "appliance_repair", "handyman"],
-      "pricing": { "starting_at_usd": 195, "tiers": ["Starter", "Plus", "Pro"], "tier_prices_usd": [195, 298, 398], "pricing_note": "Flat per-company pricing — unlimited users at every tier", "verified_date": "2026-05-20", "free_trial_days": 0 },
-      "key_features": ["scheduling", "dispatching", "invoicing", "gps_tracking", "voip_phone", "esignature", "inventory", "unlimited_users"],
-      "integrations": ["quickbooks_desktop", "quickbooks_online", "fleetmatics"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "appliance_repair",
+        "handyman"
+      ],
+      "pricing": {
+        "starting_at_usd": 195,
+        "tiers": [
+          "Starter",
+          "Plus",
+          "Pro"
+        ],
+        "tier_prices_usd": [
+          195,
+          298,
+          398
+        ],
+        "pricing_note": "Flat per-company pricing — unlimited users at every tier",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 0
+      },
+      "key_features": [
+        "scheduling",
+        "dispatching",
+        "invoicing",
+        "gps_tracking",
+        "voip_phone",
+        "esignature",
+        "inventory",
+        "unlimited_users"
+      ],
+      "integrations": [
+        "quickbooks_desktop",
+        "quickbooks_online",
+        "fleetmatics"
+      ],
       "best_for": "Mid-size shops wanting unlimited users at flat pricing (no per-seat surprises as you grow)",
       "best_team_size": "5-50",
       "weaknesses": "Higher entry price than per-user competitors; UI feels dated compared to Jobber/Housecall Pro",
-      "g2_rating": 4.3, "capterra_rating": 4.3, "founded": 2014, "headquartered": "Irving, USA",
-      "vertical_fit": { "hvac": 9, "plumbing": 9, "electrical": 9, "appliance_repair": 8, "handyman": 7 }
+      "g2_rating": 4.3,
+      "capterra_rating": 4.3,
+      "founded": 2014,
+      "headquartered": "Irving, USA",
+      "vertical_fit": {
+        "hvac": 9,
+        "plumbing": 9,
+        "electrical": 9,
+        "appliance_repair": 8,
+        "handyman": 7
+      }
     },
     {
       "slug": "buildops",
       "name": "BuildOps",
       "vendor_url": "https://buildops.com",
-      "affiliate_url": "https://buildops.com/lp/refer/",
+      "affiliate_url": "TBD",
       "tagline": "All-in-one platform for commercial subcontractors",
-      "verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor"],
-      "pricing": { "starting_at_usd": null, "tiers": ["Service", "Project", "Combined"], "tier_prices_usd": null, "pricing_note": "Custom quote; reports of $250-400/user/mo at typical configurations", "verified_date": "2026-05-20", "free_trial_days": 0 },
-      "key_features": ["dispatching", "service_agreements", "project_management", "ai_voice_agent", "quickbooks_integration", "inventory", "compliance_tracking"],
-      "integrations": ["quickbooks", "sage", "procore", "viewpoint"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "roofing",
+        "general_contractor"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Service",
+          "Project",
+          "Combined"
+        ],
+        "tier_prices_usd": null,
+        "pricing_note": "Custom quote; reports of $250-400/user/mo at typical configurations",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 0
+      },
+      "key_features": [
+        "dispatching",
+        "service_agreements",
+        "project_management",
+        "ai_voice_agent",
+        "quickbooks_integration",
+        "inventory",
+        "compliance_tracking"
+      ],
+      "integrations": [
+        "quickbooks",
+        "sage",
+        "procore",
+        "viewpoint"
+      ],
       "best_for": "Commercial mechanical/electrical/plumbing contractors with $5M+ revenue running both service and project work",
       "best_team_size": "20-200",
       "weaknesses": "Commercial-only — not built for residential. Expensive. Implementation requires 4-8 weeks.",
-      "g2_rating": 4.4, "capterra_rating": 4.5, "founded": 2018, "headquartered": "Los Angeles, USA",
-      "vertical_fit": { "hvac": 8, "plumbing": 8, "electrical": 8, "roofing": 7, "general_contractor": 7 }
+      "g2_rating": 4.4,
+      "capterra_rating": 4.5,
+      "founded": 2018,
+      "headquartered": "Los Angeles, USA",
+      "vertical_fit": {
+        "hvac": 8,
+        "plumbing": 8,
+        "electrical": 8,
+        "roofing": 7,
+        "general_contractor": 7
+      }
     },
     {
       "slug": "knowify",
       "name": "Knowify",
       "vendor_url": "https://knowify.com",
-      "affiliate_url": "https://knowify.com/referral-program/",
+      "affiliate_url": "TBD",
       "tagline": "Construction and contractor management built on QuickBooks",
-      "verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor"],
-      "pricing": { "starting_at_usd": 186, "tiers": ["Essentials", "Advanced", "Premium"], "tier_prices_usd": [186, 312, 583], "verified_date": "2026-05-20", "free_trial_days": 14 },
-      "key_features": ["job_costing", "change_orders", "aia_billing", "scheduling", "time_tracking", "quickbooks_sync_two_way", "purchase_orders"],
-      "integrations": ["quickbooks_desktop", "quickbooks_online", "stripe"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "roofing",
+        "general_contractor"
+      ],
+      "pricing": {
+        "starting_at_usd": 186,
+        "tiers": [
+          "Essentials",
+          "Advanced",
+          "Premium"
+        ],
+        "tier_prices_usd": [
+          186,
+          312,
+          583
+        ],
+        "verified_date": "2026-05-20",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "job_costing",
+        "change_orders",
+        "aia_billing",
+        "scheduling",
+        "time_tracking",
+        "quickbooks_sync_two_way",
+        "purchase_orders"
+      ],
+      "integrations": [
+        "quickbooks_desktop",
+        "quickbooks_online",
+        "stripe"
+      ],
       "best_for": "Small-to-mid contractors deep on QuickBooks who need AIA billing and change orders",
       "best_team_size": "5-50",
       "weaknesses": "QuickBooks-required; limited mobile app; UI feels engineering-driven not contractor-driven",
-      "g2_rating": 4.4, "capterra_rating": 4.5, "founded": 2013, "headquartered": "New York, USA",
-      "vertical_fit": { "general_contractor": 9, "roofing": 8, "hvac": 6, "plumbing": 6, "electrical": 6 }
+      "g2_rating": 4.4,
+      "capterra_rating": 4.5,
+      "founded": 2013,
+      "headquartered": "New York, USA",
+      "vertical_fit": {
+        "general_contractor": 9,
+        "roofing": 8,
+        "hvac": 6,
+        "plumbing": 6,
+        "electrical": 6
+      }
     },
     {
       "slug": "joist",
@@ -152,47 +553,179 @@
       "vendor_url": "https://joist.com",
       "affiliate_url": "TBD",
       "tagline": "Estimating and invoicing app for solo contractors",
-      "verticals": ["hvac", "plumbing", "electrical", "handyman", "roofing", "general_contractor"],
-      "pricing": { "starting_at_usd": 0, "tiers": ["Free", "Pro", "Pro+"], "tier_prices_usd": [0, 13, 26], "pricing_note": "Free tier is genuinely free with limited features; Pro at $13/mo is the lowest entry of any tool on this list", "verified_date": "2026-05-20", "free_trial_days": 30 },
-      "key_features": ["estimates", "invoicing", "credit_card_payments", "client_signatures", "photo_attachments"],
-      "integrations": ["quickbooks_online", "intuit_payments"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "handyman",
+        "roofing",
+        "general_contractor"
+      ],
+      "pricing": {
+        "starting_at_usd": 0,
+        "tiers": [
+          "Free",
+          "Pro",
+          "Pro+"
+        ],
+        "tier_prices_usd": [
+          0,
+          13,
+          26
+        ],
+        "pricing_note": "Free tier is genuinely free with limited features; Pro at $13/mo is the lowest entry of any tool on this list",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 30
+      },
+      "key_features": [
+        "estimates",
+        "invoicing",
+        "credit_card_payments",
+        "client_signatures",
+        "photo_attachments"
+      ],
+      "integrations": [
+        "quickbooks_online",
+        "intuit_payments"
+      ],
       "best_for": "Solo contractors and small 1-2 person operations needing only estimates and invoicing",
       "best_team_size": "1-3",
       "weaknesses": "No scheduling, no dispatching, no team management — quote-and-invoice only. Outgrown quickly past 3 techs.",
-      "g2_rating": 4.5, "capterra_rating": 4.5, "founded": 2011, "headquartered": "Toronto, Canada",
-      "vertical_fit": { "handyman": 8, "general_contractor": 6, "roofing": 6, "hvac": 4, "plumbing": 4, "electrical": 4 }
+      "g2_rating": 4.5,
+      "capterra_rating": 4.5,
+      "founded": 2011,
+      "headquartered": "Toronto, Canada",
+      "vertical_fit": {
+        "handyman": 8,
+        "general_contractor": 6,
+        "roofing": 6,
+        "hvac": 4,
+        "plumbing": 4,
+        "electrical": 4
+      }
     },
     {
       "slug": "connecteam",
       "name": "Connecteam",
       "vendor_url": "https://connecteam.com",
-      "affiliate_url": "https://market.partnerstack.com/page/connecteam",
+      "affiliate_url": "TBD",
       "tagline": "All-in-one workforce management for deskless teams",
-      "verticals": ["hvac", "plumbing", "electrical", "landscaping", "cleaning", "handyman"],
-      "pricing": { "starting_at_usd": 0, "tiers": ["Free (up to 10 users)", "Basic", "Advanced", "Expert"], "tier_prices_usd": [0, 35, 59, 119], "pricing_note": "Pricing is for first 30 users; scales up after. Free tier is genuinely useful for sub-10-user teams.", "verified_date": "2026-05-20", "free_trial_days": 14 },
-      "key_features": ["scheduling", "time_tracking", "team_chat", "checklists", "training", "gps_tracking", "geofencing"],
-      "integrations": ["quickbooks_online", "gusto", "paychex", "zapier"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "landscaping",
+        "cleaning",
+        "handyman"
+      ],
+      "pricing": {
+        "starting_at_usd": 0,
+        "tiers": [
+          "Free (up to 10 users)",
+          "Basic",
+          "Advanced",
+          "Expert"
+        ],
+        "tier_prices_usd": [
+          0,
+          35,
+          59,
+          119
+        ],
+        "pricing_note": "Pricing is for first 30 users; scales up after. Free tier is genuinely useful for sub-10-user teams.",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "scheduling",
+        "time_tracking",
+        "team_chat",
+        "checklists",
+        "training",
+        "gps_tracking",
+        "geofencing"
+      ],
+      "integrations": [
+        "quickbooks_online",
+        "gusto",
+        "paychex",
+        "zapier"
+      ],
       "best_for": "Teams of 10-100 deskless workers needing time tracking + communication + scheduling in one app",
       "best_team_size": "10-100",
       "weaknesses": "Not a full FSM — no quotes, no invoicing, no customer portal. Pair with Jobber/Housecall for full stack.",
-      "g2_rating": 4.6, "capterra_rating": 4.7, "founded": 2016, "headquartered": "Tel Aviv, Israel",
-      "vertical_fit": { "hvac": 5, "plumbing": 5, "electrical": 5, "landscaping": 7, "cleaning": 8, "handyman": 6 }
+      "g2_rating": 4.6,
+      "capterra_rating": 4.7,
+      "founded": 2016,
+      "headquartered": "Tel Aviv, Israel",
+      "vertical_fit": {
+        "hvac": 5,
+        "plumbing": 5,
+        "electrical": 5,
+        "landscaping": 7,
+        "cleaning": 8,
+        "handyman": 6
+      }
     },
     {
       "slug": "buildertrend",
       "name": "Buildertrend",
       "vendor_url": "https://buildertrend.com",
-      "affiliate_url": "https://share.buildertrend.com/",
+      "affiliate_url": "TBD",
       "tagline": "Construction project management for builders and remodelers",
-      "verticals": ["general_contractor", "roofing", "hvac", "plumbing", "electrical"],
-      "pricing": { "starting_at_usd": 199, "tiers": ["Essential", "Advanced", "Complete"], "tier_prices_usd": [199, 499, 799], "pricing_note": "Annual contracts only; first 2 months often discounted in promos", "verified_date": "2026-05-20", "free_trial_days": 0 },
-      "key_features": ["project_management", "scheduling", "selections", "change_orders", "client_portal", "subcontractor_management", "daily_logs", "rfi_management"],
-      "integrations": ["quickbooks", "xero", "the_home_depot", "lowes"],
+      "verticals": [
+        "general_contractor",
+        "roofing",
+        "hvac",
+        "plumbing",
+        "electrical"
+      ],
+      "pricing": {
+        "starting_at_usd": 199,
+        "tiers": [
+          "Essential",
+          "Advanced",
+          "Complete"
+        ],
+        "tier_prices_usd": [
+          199,
+          499,
+          799
+        ],
+        "pricing_note": "Annual contracts only; first 2 months often discounted in promos",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 0
+      },
+      "key_features": [
+        "project_management",
+        "scheduling",
+        "selections",
+        "change_orders",
+        "client_portal",
+        "subcontractor_management",
+        "daily_logs",
+        "rfi_management"
+      ],
+      "integrations": [
+        "quickbooks",
+        "xero",
+        "the_home_depot",
+        "lowes"
+      ],
       "best_for": "Custom home builders, remodelers, and specialty contractors running multi-month projects",
       "best_team_size": "5-100",
       "weaknesses": "Annual contracts (no monthly option); steep learning curve; overkill for pure service work",
-      "g2_rating": 4.3, "capterra_rating": 4.5, "founded": 2006, "headquartered": "Omaha, USA",
-      "vertical_fit": { "general_contractor": 10, "roofing": 8, "hvac": 6, "plumbing": 6, "electrical": 6 }
+      "g2_rating": 4.3,
+      "capterra_rating": 4.5,
+      "founded": 2006,
+      "headquartered": "Omaha, USA",
+      "vertical_fit": {
+        "general_contractor": 10,
+        "roofing": 8,
+        "hvac": 6,
+        "plumbing": 6,
+        "electrical": 6
+      }
     },
     {
       "slug": "mhelpdesk",
@@ -200,15 +733,59 @@
       "vendor_url": "https://mhelpdesk.com",
       "affiliate_url": "TBD",
       "tagline": "Field service software for small businesses",
-      "verticals": ["hvac", "plumbing", "electrical", "cleaning", "handyman", "appliance_repair"],
-      "pricing": { "starting_at_usd": 169, "tiers": ["Small Office", "Standard", "Premium"], "tier_prices_usd": [169, 269, null], "pricing_note": "Annual pricing; user reports per-user fees add up quickly", "verified_date": "2026-05-20", "free_trial_days": 14 },
-      "key_features": ["scheduling", "dispatching", "invoicing", "estimates", "customer_portal", "inventory", "recurring_jobs"],
-      "integrations": ["quickbooks_desktop", "quickbooks_online", "google_calendar"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "cleaning",
+        "handyman",
+        "appliance_repair"
+      ],
+      "pricing": {
+        "starting_at_usd": 169,
+        "tiers": [
+          "Small Office",
+          "Standard",
+          "Premium"
+        ],
+        "tier_prices_usd": [
+          169,
+          269,
+          null
+        ],
+        "pricing_note": "Annual pricing; user reports per-user fees add up quickly",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "scheduling",
+        "dispatching",
+        "invoicing",
+        "estimates",
+        "customer_portal",
+        "inventory",
+        "recurring_jobs"
+      ],
+      "integrations": [
+        "quickbooks_desktop",
+        "quickbooks_online",
+        "google_calendar"
+      ],
       "best_for": "Small home-service shops needing QuickBooks-tight FSM at mid pricing",
       "best_team_size": "3-25",
       "weaknesses": "UI feels dated; mobile app lags competitors; per-user pricing scales painfully",
-      "g2_rating": 4.0, "capterra_rating": 4.3, "founded": 2007, "headquartered": "Vienna, USA",
-      "vertical_fit": { "hvac": 7, "plumbing": 7, "electrical": 7, "cleaning": 7, "handyman": 7, "appliance_repair": 7 }
+      "g2_rating": 4,
+      "capterra_rating": 4.3,
+      "founded": 2007,
+      "headquartered": "Vienna, USA",
+      "vertical_fit": {
+        "hvac": 7,
+        "plumbing": 7,
+        "electrical": 7,
+        "cleaning": 7,
+        "handyman": 7,
+        "appliance_repair": 7
+      }
     },
     {
       "slug": "synchroteam",
@@ -216,15 +793,57 @@
       "vendor_url": "https://synchroteam.com",
       "affiliate_url": "TBD",
       "tagline": "Global field service management — multi-language, multi-currency",
-      "verticals": ["hvac", "plumbing", "electrical", "cleaning", "pest_control", "appliance_repair"],
-      "pricing": { "starting_at_usd": 28, "tiers": ["Per user/month"], "tier_prices_usd": [28], "pricing_note": "Per-user/month; minimum users may apply", "verified_date": "2026-05-20", "free_trial_days": 14 },
-      "key_features": ["scheduling", "dispatching", "gps_tracking", "invoicing", "customer_database", "reporting", "multi_language"],
-      "integrations": ["quickbooks", "xero", "freshbooks", "zapier", "sage"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "cleaning",
+        "pest_control",
+        "appliance_repair"
+      ],
+      "pricing": {
+        "starting_at_usd": 28,
+        "tiers": [
+          "Per user/month"
+        ],
+        "tier_prices_usd": [
+          28
+        ],
+        "pricing_note": "Per-user/month; minimum users may apply",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "scheduling",
+        "dispatching",
+        "gps_tracking",
+        "invoicing",
+        "customer_database",
+        "reporting",
+        "multi_language"
+      ],
+      "integrations": [
+        "quickbooks",
+        "xero",
+        "freshbooks",
+        "zapier",
+        "sage"
+      ],
       "best_for": "Service businesses with international clients or multi-language teams",
       "best_team_size": "5-50",
       "weaknesses": "Less polished US-centric UX; phone support not 24/7",
-      "g2_rating": 4.4, "capterra_rating": 4.5, "founded": 2007, "headquartered": "Paris, France",
-      "vertical_fit": { "hvac": 7, "plumbing": 7, "electrical": 7, "cleaning": 7, "pest_control": 7, "appliance_repair": 7 }
+      "g2_rating": 4.4,
+      "capterra_rating": 4.5,
+      "founded": 2007,
+      "headquartered": "Paris, France",
+      "vertical_fit": {
+        "hvac": 7,
+        "plumbing": 7,
+        "electrical": 7,
+        "cleaning": 7,
+        "pest_control": 7,
+        "appliance_repair": 7
+      }
     },
     {
       "slug": "fieldpulse",
@@ -232,15 +851,62 @@
       "vendor_url": "https://fieldpulse.com",
       "affiliate_url": "TBD",
       "tagline": "All-in-one platform for service contractors",
-      "verticals": ["hvac", "plumbing", "electrical", "garage_door", "appliance_repair", "handyman"],
-      "pricing": { "starting_at_usd": 99, "tiers": ["Essentials", "Plus", "Pro"], "tier_prices_usd": [99, 199, 299], "pricing_note": "Per user/month on annual; monthly available at higher rate", "verified_date": "2026-05-20", "free_trial_days": 14 },
-      "key_features": ["scheduling", "dispatching", "invoicing", "estimates", "customer_portal", "team_chat", "inventory", "online_booking"],
-      "integrations": ["quickbooks", "stripe", "zapier", "google_calendar", "mailchimp"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "garage_door",
+        "appliance_repair",
+        "handyman"
+      ],
+      "pricing": {
+        "starting_at_usd": 99,
+        "tiers": [
+          "Essentials",
+          "Plus",
+          "Pro"
+        ],
+        "tier_prices_usd": [
+          99,
+          199,
+          299
+        ],
+        "pricing_note": "Per user/month on annual; monthly available at higher rate",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "scheduling",
+        "dispatching",
+        "invoicing",
+        "estimates",
+        "customer_portal",
+        "team_chat",
+        "inventory",
+        "online_booking"
+      ],
+      "integrations": [
+        "quickbooks",
+        "stripe",
+        "zapier",
+        "google_calendar",
+        "mailchimp"
+      ],
       "best_for": "Growing service businesses wanting modern UI without enterprise pricing",
       "best_team_size": "3-30",
       "weaknesses": "Newer brand — smaller user community, fewer third-party guides; phone support limited at lower tier",
-      "g2_rating": 4.6, "capterra_rating": 4.7, "founded": 2017, "headquartered": "Dallas, USA",
-      "vertical_fit": { "hvac": 8, "plumbing": 8, "electrical": 8, "garage_door": 8, "appliance_repair": 8, "handyman": 8 }
+      "g2_rating": 4.6,
+      "capterra_rating": 4.7,
+      "founded": 2017,
+      "headquartered": "Dallas, USA",
+      "vertical_fit": {
+        "hvac": 8,
+        "plumbing": 8,
+        "electrical": 8,
+        "garage_door": 8,
+        "appliance_repair": 8,
+        "handyman": 8
+      }
     },
     {
       "slug": "smart-service",
@@ -248,15 +914,51 @@
       "vendor_url": "https://smartservice.com",
       "affiliate_url": "TBD",
       "tagline": "QuickBooks-integrated scheduling and dispatch for service businesses",
-      "verticals": ["hvac", "plumbing", "electrical", "pest_control", "appliance_repair"],
-      "pricing": { "starting_at_usd": null, "tiers": ["Standard", "Plus", "Premier"], "tier_prices_usd": null, "pricing_note": "Custom quote only; reports $79-149/user/mo plus QuickBooks license", "verified_date": "2026-05-20", "free_trial_days": 0 },
-      "key_features": ["scheduling", "dispatching", "quickbooks_sync_realtime", "mobile_app", "service_agreements", "route_optimization"],
-      "integrations": ["quickbooks_desktop", "quickbooks_enterprise"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "pest_control",
+        "appliance_repair"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Standard",
+          "Plus",
+          "Premier"
+        ],
+        "tier_prices_usd": null,
+        "pricing_note": "Custom quote only; reports $79-149/user/mo plus QuickBooks license",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 0
+      },
+      "key_features": [
+        "scheduling",
+        "dispatching",
+        "quickbooks_sync_realtime",
+        "mobile_app",
+        "service_agreements",
+        "route_optimization"
+      ],
+      "integrations": [
+        "quickbooks_desktop",
+        "quickbooks_enterprise"
+      ],
       "best_for": "HVAC/plumbing shops that already live in QuickBooks Desktop and want a tightly-bound dispatcher",
       "best_team_size": "3-25",
       "weaknesses": "QuickBooks Desktop required (not Online); dated UI; no public pricing",
-      "g2_rating": 4.3, "capterra_rating": 4.3, "founded": 1996, "headquartered": "Bohemia, USA",
-      "vertical_fit": { "hvac": 8, "plumbing": 8, "electrical": 7, "pest_control": 7, "appliance_repair": 7 }
+      "g2_rating": 4.3,
+      "capterra_rating": 4.3,
+      "founded": 1996,
+      "headquartered": "Bohemia, USA",
+      "vertical_fit": {
+        "hvac": 8,
+        "plumbing": 8,
+        "electrical": 7,
+        "pest_control": 7,
+        "appliance_repair": 7
+      }
     },
     {
       "slug": "servsuite",
@@ -264,15 +966,47 @@
       "vendor_url": "https://workwave.com/pest-control-software",
       "affiliate_url": "TBD",
       "tagline": "Pest control software with route optimization (WorkWave)",
-      "verticals": ["pest_control", "landscaping"],
-      "pricing": { "starting_at_usd": null, "tiers": ["Standard", "Pro", "Enterprise"], "tier_prices_usd": null, "pricing_note": "Custom quote; reports $129+/user/mo", "verified_date": "2026-05-20", "free_trial_days": 0 },
-      "key_features": ["route_optimization", "service_agreements", "chemical_tracking", "regulatory_compliance", "scheduling", "billing", "customer_portal"],
-      "integrations": ["quickbooks", "sentricon", "fieldroutes"],
+      "verticals": [
+        "pest_control",
+        "landscaping"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Standard",
+          "Pro",
+          "Enterprise"
+        ],
+        "tier_prices_usd": null,
+        "pricing_note": "Custom quote; reports $129+/user/mo",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 0
+      },
+      "key_features": [
+        "route_optimization",
+        "service_agreements",
+        "chemical_tracking",
+        "regulatory_compliance",
+        "scheduling",
+        "billing",
+        "customer_portal"
+      ],
+      "integrations": [
+        "quickbooks",
+        "sentricon",
+        "fieldroutes"
+      ],
       "best_for": "Established pest control operators with route optimization and chemical tracking needs",
       "best_team_size": "5-100",
       "weaknesses": "Custom-quoted pricing makes comparison hard; implementation can be lengthy",
-      "g2_rating": 4.0, "capterra_rating": 4.1, "founded": 1996, "headquartered": "Holmdel, USA",
-      "vertical_fit": { "pest_control": 10, "landscaping": 7 }
+      "g2_rating": 4,
+      "capterra_rating": 4.1,
+      "founded": 1996,
+      "headquartered": "Holmdel, USA",
+      "vertical_fit": {
+        "pest_control": 10,
+        "landscaping": 7
+      }
     },
     {
       "slug": "gorilladesk",
@@ -280,15 +1014,56 @@
       "vendor_url": "https://gorilladesk.com",
       "affiliate_url": "TBD",
       "tagline": "Affordable software for pest control, lawn care, and home services",
-      "verticals": ["pest_control", "landscaping", "cleaning", "pool_service"],
-      "pricing": { "starting_at_usd": 49, "tiers": ["Basic", "Pro", "Premium"], "tier_prices_usd": [49, 89, 149], "pricing_note": "Per user/month; annual discount available", "verified_date": "2026-05-20", "free_trial_days": 14 },
-      "key_features": ["scheduling", "routing", "automated_invoicing", "credit_card_processing", "esignature", "customer_portal", "chemical_logs"],
-      "integrations": ["quickbooks_online", "stripe", "mailchimp", "zapier"],
+      "verticals": [
+        "pest_control",
+        "landscaping",
+        "cleaning",
+        "pool_service"
+      ],
+      "pricing": {
+        "starting_at_usd": 49,
+        "tiers": [
+          "Basic",
+          "Pro",
+          "Premium"
+        ],
+        "tier_prices_usd": [
+          49,
+          89,
+          149
+        ],
+        "pricing_note": "Per user/month; annual discount available",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "scheduling",
+        "routing",
+        "automated_invoicing",
+        "credit_card_processing",
+        "esignature",
+        "customer_portal",
+        "chemical_logs"
+      ],
+      "integrations": [
+        "quickbooks_online",
+        "stripe",
+        "mailchimp",
+        "zapier"
+      ],
       "best_for": "Small-to-mid pest control and lawn care businesses (3-15 techs) wanting clean UX at fair prices",
       "best_team_size": "1-20",
       "weaknesses": "Less depth than ServSuite/FieldRoutes for enterprise pest control; weaker B2B/commercial workflows",
-      "g2_rating": 4.7, "capterra_rating": 4.8, "founded": 2014, "headquartered": "St. Petersburg, USA",
-      "vertical_fit": { "pest_control": 10, "landscaping": 8, "cleaning": 7, "pool_service": 8 }
+      "g2_rating": 4.7,
+      "capterra_rating": 4.8,
+      "founded": 2014,
+      "headquartered": "St. Petersburg, USA",
+      "vertical_fit": {
+        "pest_control": 10,
+        "landscaping": 8,
+        "cleaning": 7,
+        "pool_service": 8
+      }
     },
     {
       "slug": "service-autopilot",
@@ -296,15 +1071,58 @@
       "vendor_url": "https://serviceautopilot.com",
       "affiliate_url": "TBD",
       "tagline": "Business management for lawn care, landscaping, and cleaning",
-      "verticals": ["landscaping", "cleaning", "pest_control", "pool_service"],
-      "pricing": { "starting_at_usd": 49, "tiers": ["Startup", "Pro", "Pro Plus", "Elite"], "tier_prices_usd": [49, 109, 199, null], "pricing_note": "Most tiers per-user; Elite is custom-quoted", "verified_date": "2026-05-20", "free_trial_days": 0 },
-      "key_features": ["routing", "scheduling", "estimates", "automated_billing", "client_portal", "two_way_chat", "snow_route_optimization"],
-      "integrations": ["quickbooks", "stripe", "twilio", "real_green_compatible"],
+      "verticals": [
+        "landscaping",
+        "cleaning",
+        "pest_control",
+        "pool_service"
+      ],
+      "pricing": {
+        "starting_at_usd": 49,
+        "tiers": [
+          "Startup",
+          "Pro",
+          "Pro Plus",
+          "Elite"
+        ],
+        "tier_prices_usd": [
+          49,
+          109,
+          199,
+          null
+        ],
+        "pricing_note": "Most tiers per-user; Elite is custom-quoted",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 0
+      },
+      "key_features": [
+        "routing",
+        "scheduling",
+        "estimates",
+        "automated_billing",
+        "client_portal",
+        "two_way_chat",
+        "snow_route_optimization"
+      ],
+      "integrations": [
+        "quickbooks",
+        "stripe",
+        "twilio",
+        "real_green_compatible"
+      ],
       "best_for": "Lawn care, landscaping, and cleaning operators 5-50 employees wanting deep routing and snow capability",
       "best_team_size": "5-50",
       "weaknesses": "Specifically built for green industry — overkill for non-routing trades; learning curve",
-      "g2_rating": 4.2, "capterra_rating": 4.4, "founded": 2008, "headquartered": "Dallas, USA",
-      "vertical_fit": { "landscaping": 10, "cleaning": 8, "pest_control": 7, "pool_service": 7 }
+      "g2_rating": 4.2,
+      "capterra_rating": 4.4,
+      "founded": 2008,
+      "headquartered": "Dallas, USA",
+      "vertical_fit": {
+        "landscaping": 10,
+        "cleaning": 8,
+        "pest_control": 7,
+        "pool_service": 7
+      }
     },
     {
       "slug": "aspire",
@@ -312,15 +1130,47 @@
       "vendor_url": "https://youraspire.com",
       "affiliate_url": "TBD",
       "tagline": "Commercial landscape and snow management ERP",
-      "verticals": ["landscaping"],
-      "pricing": { "starting_at_usd": null, "tiers": ["Aspire One", "Aspire Pro", "Enterprise"], "tier_prices_usd": null, "pricing_note": "Custom quote; reports $300-600/user/mo at typical configurations", "verified_date": "2026-05-20", "free_trial_days": 0 },
-      "key_features": ["job_costing", "estimating", "scheduling", "crew_management", "purchasing", "fleet_management", "snow_management", "reporting"],
-      "integrations": ["quickbooks", "sage", "real_green", "fleetio"],
+      "verticals": [
+        "landscaping"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Aspire One",
+          "Aspire Pro",
+          "Enterprise"
+        ],
+        "tier_prices_usd": null,
+        "pricing_note": "Custom quote; reports $300-600/user/mo at typical configurations",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 0
+      },
+      "key_features": [
+        "job_costing",
+        "estimating",
+        "scheduling",
+        "crew_management",
+        "purchasing",
+        "fleet_management",
+        "snow_management",
+        "reporting"
+      ],
+      "integrations": [
+        "quickbooks",
+        "sage",
+        "real_green",
+        "fleetio"
+      ],
       "best_for": "Commercial landscape and snow companies $3M+ revenue with crew-based operations",
       "best_team_size": "20-500",
       "weaknesses": "Commercial-focused (not residential); expensive; long implementation (3-6 months)",
-      "g2_rating": 4.4, "capterra_rating": 4.5, "founded": 2007, "headquartered": "Chesterfield, USA",
-      "vertical_fit": { "landscaping": 10 }
+      "g2_rating": 4.4,
+      "capterra_rating": 4.5,
+      "founded": 2007,
+      "headquartered": "Chesterfield, USA",
+      "vertical_fit": {
+        "landscaping": 10
+      }
     },
     {
       "slug": "realgreen",
@@ -328,15 +1178,47 @@
       "vendor_url": "https://realgreen.com",
       "affiliate_url": "TBD",
       "tagline": "Lawn care and landscape business management (WorkWave)",
-      "verticals": ["landscaping", "pest_control"],
-      "pricing": { "starting_at_usd": null, "tiers": ["Service Assistant", "RealGreen", "Premium"], "tier_prices_usd": null, "pricing_note": "Custom quote; reports per-user pricing plus modules", "verified_date": "2026-05-20", "free_trial_days": 0 },
-      "key_features": ["routing", "scheduling", "automated_billing", "marketing_automation", "lead_management", "service_calendar", "mobile_estimates"],
-      "integrations": ["quickbooks", "stripe", "mailchimp"],
+      "verticals": [
+        "landscaping",
+        "pest_control"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Service Assistant",
+          "RealGreen",
+          "Premium"
+        ],
+        "tier_prices_usd": null,
+        "pricing_note": "Custom quote; reports per-user pricing plus modules",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 0
+      },
+      "key_features": [
+        "routing",
+        "scheduling",
+        "automated_billing",
+        "marketing_automation",
+        "lead_management",
+        "service_calendar",
+        "mobile_estimates"
+      ],
+      "integrations": [
+        "quickbooks",
+        "stripe",
+        "mailchimp"
+      ],
       "best_for": "Mid-to-large residential lawn care companies wanting integrated marketing + ops",
       "best_team_size": "10-100",
       "weaknesses": "Custom pricing makes comparison difficult; legacy UI patterns in some modules",
-      "g2_rating": 4.1, "capterra_rating": 4.4, "founded": 1984, "headquartered": "Walled Lake, USA",
-      "vertical_fit": { "landscaping": 10, "pest_control": 8 }
+      "g2_rating": 4.1,
+      "capterra_rating": 4.4,
+      "founded": 1984,
+      "headquartered": "Walled Lake, USA",
+      "vertical_fit": {
+        "landscaping": 10,
+        "pest_control": 8
+      }
     },
     {
       "slug": "razorsync",
@@ -344,15 +1226,61 @@
       "vendor_url": "https://razorsync.com",
       "affiliate_url": "TBD",
       "tagline": "Field service management for service businesses",
-      "verticals": ["hvac", "plumbing", "electrical", "cleaning", "handyman", "appliance_repair"],
-      "pricing": { "starting_at_usd": 90, "tiers": ["Solo", "Team", "Pro", "Enterprise"], "tier_prices_usd": [90, 175, 360, null], "pricing_note": "Per company (not per user) at most tiers", "verified_date": "2026-05-20", "free_trial_days": 14 },
-      "key_features": ["scheduling", "dispatching", "invoicing", "gps_tracking", "estimates", "customer_history", "quickbooks_sync"],
-      "integrations": ["quickbooks_desktop", "quickbooks_online", "stripe"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "cleaning",
+        "handyman",
+        "appliance_repair"
+      ],
+      "pricing": {
+        "starting_at_usd": 90,
+        "tiers": [
+          "Solo",
+          "Team",
+          "Pro",
+          "Enterprise"
+        ],
+        "tier_prices_usd": [
+          90,
+          175,
+          360,
+          null
+        ],
+        "pricing_note": "Per company (not per user) at most tiers",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "scheduling",
+        "dispatching",
+        "invoicing",
+        "gps_tracking",
+        "estimates",
+        "customer_history",
+        "quickbooks_sync"
+      ],
+      "integrations": [
+        "quickbooks_desktop",
+        "quickbooks_online",
+        "stripe"
+      ],
       "best_for": "Small-to-mid service businesses wanting per-company (not per-user) FSM pricing",
       "best_team_size": "1-20",
       "weaknesses": "UI feels mid-2010s; fewer modern features (no AI, no online booking) than newer competitors",
-      "g2_rating": 4.2, "capterra_rating": 4.3, "founded": 2010, "headquartered": "Bloomington, USA",
-      "vertical_fit": { "hvac": 7, "plumbing": 7, "electrical": 7, "cleaning": 7, "handyman": 7, "appliance_repair": 7 }
+      "g2_rating": 4.2,
+      "capterra_rating": 4.3,
+      "founded": 2010,
+      "headquartered": "Bloomington, USA",
+      "vertical_fit": {
+        "hvac": 7,
+        "plumbing": 7,
+        "electrical": 7,
+        "cleaning": 7,
+        "handyman": 7,
+        "appliance_repair": 7
+      }
     },
     {
       "slug": "tradify",
@@ -360,15 +1288,55 @@
       "vendor_url": "https://tradifyhq.com",
       "affiliate_url": "TBD",
       "tagline": "Job management for trade businesses (UK/AU/NZ-rooted)",
-      "verticals": ["hvac", "plumbing", "electrical", "handyman", "general_contractor"],
-      "pricing": { "starting_at_usd": 36, "tiers": ["Per user/month"], "tier_prices_usd": [36], "pricing_note": "Single tier per-user; volume discounts past 5 users", "verified_date": "2026-05-20", "free_trial_days": 14 },
-      "key_features": ["quotes", "invoicing", "scheduling", "time_tracking", "job_management", "purchase_orders", "mobile_app"],
-      "integrations": ["xero", "quickbooks_online", "myob", "stripe", "gocardless"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "handyman",
+        "general_contractor"
+      ],
+      "pricing": {
+        "starting_at_usd": 36,
+        "tiers": [
+          "Per user/month"
+        ],
+        "tier_prices_usd": [
+          36
+        ],
+        "pricing_note": "Single tier per-user; volume discounts past 5 users",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "quotes",
+        "invoicing",
+        "scheduling",
+        "time_tracking",
+        "job_management",
+        "purchase_orders",
+        "mobile_app"
+      ],
+      "integrations": [
+        "xero",
+        "quickbooks_online",
+        "myob",
+        "stripe",
+        "gocardless"
+      ],
       "best_for": "1-10 person trade businesses needing quote-to-invoice flow at a low price point",
       "best_team_size": "1-10",
       "weaknesses": "UK/AU-rooted (US payroll integrations weaker); no advanced dispatching for larger teams",
-      "g2_rating": 4.6, "capterra_rating": 4.7, "founded": 2009, "headquartered": "Auckland, New Zealand",
-      "vertical_fit": { "hvac": 7, "plumbing": 7, "electrical": 7, "handyman": 7, "general_contractor": 6 }
+      "g2_rating": 4.6,
+      "capterra_rating": 4.7,
+      "founded": 2009,
+      "headquartered": "Auckland, New Zealand",
+      "vertical_fit": {
+        "hvac": 7,
+        "plumbing": 7,
+        "electrical": 7,
+        "handyman": 7,
+        "general_contractor": 6
+      }
     },
     {
       "slug": "bigchange",
@@ -376,15 +1344,54 @@
       "vendor_url": "https://bigchange.com",
       "affiliate_url": "TBD",
       "tagline": "JobWatch field service platform (UK-rooted, expanding globally)",
-      "verticals": ["hvac", "plumbing", "electrical", "landscaping", "general_contractor"],
-      "pricing": { "starting_at_usd": null, "tiers": ["Starter", "Pro", "Enterprise"], "tier_prices_usd": null, "pricing_note": "Custom quote; pricing public for UK only — US contact required", "verified_date": "2026-05-20", "free_trial_days": 0 },
-      "key_features": ["scheduling", "dispatching", "vehicle_tracking", "stock_control", "quoting", "invoicing", "ai_assistant"],
-      "integrations": ["xero", "sage", "quickbooks", "salesforce"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "landscaping",
+        "general_contractor"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Starter",
+          "Pro",
+          "Enterprise"
+        ],
+        "tier_prices_usd": null,
+        "pricing_note": "Custom quote; pricing public for UK only — US contact required",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 0
+      },
+      "key_features": [
+        "scheduling",
+        "dispatching",
+        "vehicle_tracking",
+        "stock_control",
+        "quoting",
+        "invoicing",
+        "ai_assistant"
+      ],
+      "integrations": [
+        "xero",
+        "sage",
+        "quickbooks",
+        "salesforce"
+      ],
       "best_for": "Mid-large field service organizations 25+ techs running mixed fleet + service operations",
       "best_team_size": "25-500",
       "weaknesses": "Heavy on UK/EU market; longer implementation; opaque US pricing",
-      "g2_rating": 4.4, "capterra_rating": 4.5, "founded": 2014, "headquartered": "Leeds, UK",
-      "vertical_fit": { "hvac": 7, "plumbing": 7, "electrical": 7, "landscaping": 7, "general_contractor": 7 }
+      "g2_rating": 4.4,
+      "capterra_rating": 4.5,
+      "founded": 2014,
+      "headquartered": "Leeds, UK",
+      "vertical_fit": {
+        "hvac": 7,
+        "plumbing": 7,
+        "electrical": 7,
+        "landscaping": 7,
+        "general_contractor": 7
+      }
     },
     {
       "slug": "fieldcomplete",
@@ -392,15 +1399,59 @@
       "vendor_url": "https://fieldcomplete.com",
       "affiliate_url": "TBD",
       "tagline": "Service management with built-in marketplace for subcontractors",
-      "verticals": ["hvac", "plumbing", "electrical", "roofing", "garage_door", "appliance_repair"],
-      "pricing": { "starting_at_usd": 39, "tiers": ["Basic", "Pro", "Enterprise"], "tier_prices_usd": [39, 79, null], "pricing_note": "Per user/month; Enterprise custom-quoted", "verified_date": "2026-05-20", "free_trial_days": 14 },
-      "key_features": ["scheduling", "dispatching", "invoicing", "estimates", "subcontractor_marketplace", "white_label_portal", "automated_routing"],
-      "integrations": ["quickbooks", "stripe", "google_calendar"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "roofing",
+        "garage_door",
+        "appliance_repair"
+      ],
+      "pricing": {
+        "starting_at_usd": 39,
+        "tiers": [
+          "Basic",
+          "Pro",
+          "Enterprise"
+        ],
+        "tier_prices_usd": [
+          39,
+          79,
+          null
+        ],
+        "pricing_note": "Per user/month; Enterprise custom-quoted",
+        "verified_date": "2026-05-20",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "scheduling",
+        "dispatching",
+        "invoicing",
+        "estimates",
+        "subcontractor_marketplace",
+        "white_label_portal",
+        "automated_routing"
+      ],
+      "integrations": [
+        "quickbooks",
+        "stripe",
+        "google_calendar"
+      ],
       "best_for": "Service businesses that subcontract work — built-in marketplace finds and dispatches verified subs",
       "best_team_size": "3-50",
       "weaknesses": "Smaller user base; sub-marketplace feature isn't useful for everyone",
-      "g2_rating": 4.5, "capterra_rating": 4.6, "founded": 2018, "headquartered": "Atlanta, USA",
-      "vertical_fit": { "hvac": 7, "plumbing": 7, "electrical": 7, "roofing": 7, "garage_door": 7, "appliance_repair": 7 }
+      "g2_rating": 4.5,
+      "capterra_rating": 4.6,
+      "founded": 2018,
+      "headquartered": "Atlanta, USA",
+      "vertical_fit": {
+        "hvac": 7,
+        "plumbing": 7,
+        "electrical": 7,
+        "roofing": 7,
+        "garage_door": 7,
+        "appliance_repair": 7
+      }
     },
     {
       "slug": "acculynx",
@@ -408,15 +1459,49 @@
       "vendor_url": "https://acculynx.com",
       "affiliate_url": "TBD",
       "tagline": "All-in-one CRM and project management for roofing contractors",
-      "verticals": ["roofing", "general_contractor"],
-      "pricing": { "starting_at_usd": null, "tiers": ["Standard", "Pro", "Enterprise"], "tier_prices_usd": null, "pricing_note": "Custom quote; user reports $169-499/user/mo at typical configurations", "verified_date": "2026-05-21", "free_trial_days": 0 },
-      "key_features": ["roofing_crm", "job_tracking", "aerial_measurements", "supplier_integration", "production_management", "insurance_xactimate_integration", "labor_management"],
-      "integrations": ["quickbooks", "eagleview", "xactimate", "stripe", "company_cam"],
+      "verticals": [
+        "roofing",
+        "general_contractor"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Standard",
+          "Pro",
+          "Enterprise"
+        ],
+        "tier_prices_usd": null,
+        "pricing_note": "Custom quote; user reports $169-499/user/mo at typical configurations",
+        "verified_date": "2026-05-21",
+        "free_trial_days": 0
+      },
+      "key_features": [
+        "roofing_crm",
+        "job_tracking",
+        "aerial_measurements",
+        "supplier_integration",
+        "production_management",
+        "insurance_xactimate_integration",
+        "labor_management"
+      ],
+      "integrations": [
+        "quickbooks",
+        "eagleview",
+        "xactimate",
+        "stripe",
+        "company_cam"
+      ],
       "best_for": "Established roofing companies (5-100 employees) running insurance claims and storm restoration work",
       "best_team_size": "5-100",
       "weaknesses": "Roofing-specific, not for general trades; expensive; long implementation; no transparent pricing",
-      "g2_rating": 4.4, "capterra_rating": 4.6, "founded": 2008, "headquartered": "Beloit, USA",
-      "vertical_fit": { "roofing": 10, "general_contractor": 6 }
+      "g2_rating": 4.4,
+      "capterra_rating": 4.6,
+      "founded": 2008,
+      "headquartered": "Beloit, USA",
+      "vertical_fit": {
+        "roofing": 10,
+        "general_contractor": 6
+      }
     },
     {
       "slug": "jobnimbus",
@@ -424,15 +1509,63 @@
       "vendor_url": "https://jobnimbus.com",
       "affiliate_url": "TBD",
       "tagline": "CRM and project management for contractors",
-      "verticals": ["roofing", "general_contractor", "hvac", "plumbing", "electrical", "handyman"],
-      "pricing": { "starting_at_usd": 25, "tiers": ["Standard", "Pro", "Plus"], "tier_prices_usd": [25, 75, 175], "pricing_note": "Per user/month; volume discounts available", "verified_date": "2026-05-21", "free_trial_days": 14 },
-      "key_features": ["crm", "job_tracking", "estimates", "invoicing", "scheduling", "mobile_app", "document_management", "two_way_texting"],
-      "integrations": ["quickbooks", "eagleview", "stripe", "zapier", "company_cam", "google_calendar"],
+      "verticals": [
+        "roofing",
+        "general_contractor",
+        "hvac",
+        "plumbing",
+        "electrical",
+        "handyman"
+      ],
+      "pricing": {
+        "starting_at_usd": 25,
+        "tiers": [
+          "Standard",
+          "Pro",
+          "Plus"
+        ],
+        "tier_prices_usd": [
+          25,
+          75,
+          175
+        ],
+        "pricing_note": "Per user/month; volume discounts available",
+        "verified_date": "2026-05-21",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "crm",
+        "job_tracking",
+        "estimates",
+        "invoicing",
+        "scheduling",
+        "mobile_app",
+        "document_management",
+        "two_way_texting"
+      ],
+      "integrations": [
+        "quickbooks",
+        "eagleview",
+        "stripe",
+        "zapier",
+        "company_cam",
+        "google_calendar"
+      ],
       "best_for": "Roofing and restoration contractors 3-50 employees wanting roofing-friendly CRM at non-enterprise pricing",
       "best_team_size": "3-50",
       "weaknesses": "UI can feel busy; reporting is shallow compared to enterprise tools",
-      "g2_rating": 4.5, "capterra_rating": 4.7, "founded": 2014, "headquartered": "Lehi, USA",
-      "vertical_fit": { "roofing": 9, "general_contractor": 8, "hvac": 7, "plumbing": 7, "electrical": 7, "handyman": 7 }
+      "g2_rating": 4.5,
+      "capterra_rating": 4.7,
+      "founded": 2014,
+      "headquartered": "Lehi, USA",
+      "vertical_fit": {
+        "roofing": 9,
+        "general_contractor": 8,
+        "hvac": 7,
+        "plumbing": 7,
+        "electrical": 7,
+        "handyman": 7
+      }
     },
     {
       "slug": "fieldroutes",
@@ -440,15 +1573,48 @@
       "vendor_url": "https://fieldroutes.com",
       "affiliate_url": "TBD",
       "tagline": "Cloud-based field service software for pest control and lawn care (WorkWave)",
-      "verticals": ["pest_control", "landscaping"],
-      "pricing": { "starting_at_usd": null, "tiers": ["Essentials", "Pro", "Enterprise"], "tier_prices_usd": null, "pricing_note": "Custom quote; reports $99-199/user/mo", "verified_date": "2026-05-21", "free_trial_days": 0 },
-      "key_features": ["route_optimization", "automated_billing", "customer_portal", "chemical_tracking", "recurring_services", "ai_phone_agent", "marketing_automation"],
-      "integrations": ["quickbooks", "stripe", "twilio", "fieldroutes_marketing"],
+      "verticals": [
+        "pest_control",
+        "landscaping"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Essentials",
+          "Pro",
+          "Enterprise"
+        ],
+        "tier_prices_usd": null,
+        "pricing_note": "Custom quote; reports $99-199/user/mo",
+        "verified_date": "2026-05-21",
+        "free_trial_days": 0
+      },
+      "key_features": [
+        "route_optimization",
+        "automated_billing",
+        "customer_portal",
+        "chemical_tracking",
+        "recurring_services",
+        "ai_phone_agent",
+        "marketing_automation"
+      ],
+      "integrations": [
+        "quickbooks",
+        "stripe",
+        "twilio",
+        "fieldroutes_marketing"
+      ],
       "best_for": "Mid-to-large pest control and lawn care companies (10-200 techs) running recurring service routes",
       "best_team_size": "10-200",
       "weaknesses": "Custom-quoted pricing; designed for pest/lawn specifically — overkill for general FSM",
-      "g2_rating": 4.3, "capterra_rating": 4.4, "founded": 2012, "headquartered": "McKinney, USA",
-      "vertical_fit": { "pest_control": 10, "landscaping": 9 }
+      "g2_rating": 4.3,
+      "capterra_rating": 4.4,
+      "founded": 2012,
+      "headquartered": "McKinney, USA",
+      "vertical_fit": {
+        "pest_control": 10,
+        "landscaping": 9
+      }
     },
     {
       "slug": "pestpac",
@@ -456,15 +1622,44 @@
       "vendor_url": "https://workwave.com/pestpac",
       "affiliate_url": "TBD",
       "tagline": "Established pest control management software (WorkWave)",
-      "verticals": ["pest_control"],
-      "pricing": { "starting_at_usd": null, "tiers": ["Standard", "Enterprise"], "tier_prices_usd": null, "pricing_note": "Custom quote", "verified_date": "2026-05-21", "free_trial_days": 0 },
-      "key_features": ["scheduling", "billing", "chemical_tracking", "service_agreements", "marketing_module", "mobile_app", "reporting"],
-      "integrations": ["quickbooks", "stripe", "sentricon"],
+      "verticals": [
+        "pest_control"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Standard",
+          "Enterprise"
+        ],
+        "tier_prices_usd": null,
+        "pricing_note": "Custom quote",
+        "verified_date": "2026-05-21",
+        "free_trial_days": 0
+      },
+      "key_features": [
+        "scheduling",
+        "billing",
+        "chemical_tracking",
+        "service_agreements",
+        "marketing_module",
+        "mobile_app",
+        "reporting"
+      ],
+      "integrations": [
+        "quickbooks",
+        "stripe",
+        "sentricon"
+      ],
       "best_for": "Long-established pest control operators (often 50+ employee shops) wanting deep industry-specific features",
       "best_team_size": "20-500",
       "weaknesses": "Legacy UI in places; cloud transition still in progress for some modules",
-      "g2_rating": 4.0, "capterra_rating": 4.2, "founded": 1981, "headquartered": "Holmdel, USA",
-      "vertical_fit": { "pest_control": 9 }
+      "g2_rating": 4,
+      "capterra_rating": 4.2,
+      "founded": 1981,
+      "headquartered": "Holmdel, USA",
+      "vertical_fit": {
+        "pest_control": 9
+      }
     },
     {
       "slug": "zenmaid",
@@ -472,15 +1667,49 @@
       "vendor_url": "https://zenmaid.com",
       "affiliate_url": "TBD",
       "tagline": "Scheduling and operations software built exclusively for cleaning companies",
-      "verticals": ["cleaning"],
-      "pricing": { "starting_at_usd": 58, "tiers": ["Solo", "Team", "Premium"], "tier_prices_usd": [58, 116, 174], "pricing_note": "Annual pricing per month; monthly available at higher rate", "verified_date": "2026-05-21", "free_trial_days": 14 },
-      "key_features": ["recurring_scheduling", "customer_portal", "team_messaging", "automated_reminders", "marketing_automation", "esignature"],
-      "integrations": ["quickbooks", "stripe", "mailchimp", "zapier"],
+      "verticals": [
+        "cleaning"
+      ],
+      "pricing": {
+        "starting_at_usd": 58,
+        "tiers": [
+          "Solo",
+          "Team",
+          "Premium"
+        ],
+        "tier_prices_usd": [
+          58,
+          116,
+          174
+        ],
+        "pricing_note": "Annual pricing per month; monthly available at higher rate",
+        "verified_date": "2026-05-21",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "recurring_scheduling",
+        "customer_portal",
+        "team_messaging",
+        "automated_reminders",
+        "marketing_automation",
+        "esignature"
+      ],
+      "integrations": [
+        "quickbooks",
+        "stripe",
+        "mailchimp",
+        "zapier"
+      ],
       "best_for": "Residential cleaning businesses (1-30 cleaners) wanting cleaning-specific workflows",
       "best_team_size": "1-30",
       "weaknesses": "Cleaning-specific only; thin features for commercial janitorial",
-      "g2_rating": 4.7, "capterra_rating": 4.8, "founded": 2013, "headquartered": "Remote (USA)",
-      "vertical_fit": { "cleaning": 10 }
+      "g2_rating": 4.7,
+      "capterra_rating": 4.8,
+      "founded": 2013,
+      "headquartered": "Remote (USA)",
+      "vertical_fit": {
+        "cleaning": 10
+      }
     },
     {
       "slug": "jobtread",
@@ -488,15 +1717,59 @@
       "vendor_url": "https://jobtread.com",
       "affiliate_url": "TBD",
       "tagline": "Modern construction project management software",
-      "verticals": ["general_contractor", "roofing", "hvac", "plumbing", "electrical"],
-      "pricing": { "starting_at_usd": 159, "tiers": ["Standard", "Pro", "Enterprise"], "tier_prices_usd": [159, 329, null], "pricing_note": "Per company per month; unlimited users on standard plans", "verified_date": "2026-05-21", "free_trial_days": 14 },
-      "key_features": ["job_costing", "scheduling", "estimates", "change_orders", "client_portal", "vendor_management", "purchase_orders", "selection_management"],
-      "integrations": ["quickbooks_online", "stripe", "the_home_depot", "lowes"],
+      "verticals": [
+        "general_contractor",
+        "roofing",
+        "hvac",
+        "plumbing",
+        "electrical"
+      ],
+      "pricing": {
+        "starting_at_usd": 159,
+        "tiers": [
+          "Standard",
+          "Pro",
+          "Enterprise"
+        ],
+        "tier_prices_usd": [
+          159,
+          329,
+          null
+        ],
+        "pricing_note": "Per company per month; unlimited users on standard plans",
+        "verified_date": "2026-05-21",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "job_costing",
+        "scheduling",
+        "estimates",
+        "change_orders",
+        "client_portal",
+        "vendor_management",
+        "purchase_orders",
+        "selection_management"
+      ],
+      "integrations": [
+        "quickbooks_online",
+        "stripe",
+        "the_home_depot",
+        "lowes"
+      ],
       "best_for": "Custom home builders and remodelers 3-30 employees wanting modern UX without enterprise pricing",
       "best_team_size": "3-30",
       "weaknesses": "Less established than Buildertrend; smaller user community",
-      "g2_rating": 4.7, "capterra_rating": 4.8, "founded": 2019, "headquartered": "Dallas, USA",
-      "vertical_fit": { "general_contractor": 9, "roofing": 8, "hvac": 6, "plumbing": 6, "electrical": 6 }
+      "g2_rating": 4.7,
+      "capterra_rating": 4.8,
+      "founded": 2019,
+      "headquartered": "Dallas, USA",
+      "vertical_fit": {
+        "general_contractor": 9,
+        "roofing": 8,
+        "hvac": 6,
+        "plumbing": 6,
+        "electrical": 6
+      }
     },
     {
       "slug": "houzz-pro",
@@ -504,15 +1777,54 @@
       "vendor_url": "https://houzz.com/pro",
       "affiliate_url": "TBD",
       "tagline": "Marketing and business management for home professionals",
-      "verticals": ["general_contractor", "roofing", "landscaping"],
-      "pricing": { "starting_at_usd": 85, "tiers": ["Starter", "Essential", "Pro"], "tier_prices_usd": [85, 199, 399], "pricing_note": "Per company per month; Pro tier includes more lead-gen credits", "verified_date": "2026-05-21", "free_trial_days": 30 },
-      "key_features": ["lead_generation", "project_management", "estimates", "invoicing", "client_dashboard", "3d_renderings", "website_builder", "marketing_tools"],
-      "integrations": ["quickbooks", "stripe", "google_calendar"],
+      "verticals": [
+        "general_contractor",
+        "roofing",
+        "landscaping"
+      ],
+      "pricing": {
+        "starting_at_usd": 85,
+        "tiers": [
+          "Starter",
+          "Essential",
+          "Pro"
+        ],
+        "tier_prices_usd": [
+          85,
+          199,
+          399
+        ],
+        "pricing_note": "Per company per month; Pro tier includes more lead-gen credits",
+        "verified_date": "2026-05-21",
+        "free_trial_days": 30
+      },
+      "key_features": [
+        "lead_generation",
+        "project_management",
+        "estimates",
+        "invoicing",
+        "client_dashboard",
+        "3d_renderings",
+        "website_builder",
+        "marketing_tools"
+      ],
+      "integrations": [
+        "quickbooks",
+        "stripe",
+        "google_calendar"
+      ],
       "best_for": "Remodelers, designers, and home professionals wanting marketing/lead-gen bundled with project management",
       "best_team_size": "1-25",
       "weaknesses": "Bundles lead-gen marketplace with software; not a pure FSM; lead quality from Houzz varies",
-      "g2_rating": 4.3, "capterra_rating": 4.3, "founded": 2009, "headquartered": "Palo Alto, USA",
-      "vertical_fit": { "general_contractor": 8, "roofing": 7, "landscaping": 6 }
+      "g2_rating": 4.3,
+      "capterra_rating": 4.3,
+      "founded": 2009,
+      "headquartered": "Palo Alto, USA",
+      "vertical_fit": {
+        "general_contractor": 8,
+        "roofing": 7,
+        "landscaping": 6
+      }
     },
     {
       "slug": "method-crm",
@@ -520,15 +1832,59 @@
       "vendor_url": "https://method.me",
       "affiliate_url": "TBD",
       "tagline": "QuickBooks-native CRM and workflow automation",
-      "verticals": ["hvac", "plumbing", "electrical", "general_contractor", "handyman"],
-      "pricing": { "starting_at_usd": 25, "tiers": ["Contact Management", "CRM Pro", "CRM Enterprise"], "tier_prices_usd": [25, 49, 74], "pricing_note": "Per user/month; requires QuickBooks", "verified_date": "2026-05-21", "free_trial_days": 30 },
-      "key_features": ["quickbooks_native_sync", "crm", "workflow_automation", "customer_portal", "estimates", "field_app", "custom_fields"],
-      "integrations": ["quickbooks_desktop", "quickbooks_online", "google_calendar", "outlook", "gmail"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "general_contractor",
+        "handyman"
+      ],
+      "pricing": {
+        "starting_at_usd": 25,
+        "tiers": [
+          "Contact Management",
+          "CRM Pro",
+          "CRM Enterprise"
+        ],
+        "tier_prices_usd": [
+          25,
+          49,
+          74
+        ],
+        "pricing_note": "Per user/month; requires QuickBooks",
+        "verified_date": "2026-05-21",
+        "free_trial_days": 30
+      },
+      "key_features": [
+        "quickbooks_native_sync",
+        "crm",
+        "workflow_automation",
+        "customer_portal",
+        "estimates",
+        "field_app",
+        "custom_fields"
+      ],
+      "integrations": [
+        "quickbooks_desktop",
+        "quickbooks_online",
+        "google_calendar",
+        "outlook",
+        "gmail"
+      ],
       "best_for": "Contractors deeply embedded in QuickBooks needing a CRM that doesn't fight QB",
       "best_team_size": "2-50",
       "weaknesses": "QuickBooks-required; not a full FSM (no dispatch optimization); CRM-first",
-      "g2_rating": 4.4, "capterra_rating": 4.1, "founded": 2010, "headquartered": "Toronto, Canada",
-      "vertical_fit": { "hvac": 6, "plumbing": 6, "electrical": 6, "general_contractor": 6, "handyman": 6 }
+      "g2_rating": 4.4,
+      "capterra_rating": 4.1,
+      "founded": 2010,
+      "headquartered": "Toronto, Canada",
+      "vertical_fit": {
+        "hvac": 6,
+        "plumbing": 6,
+        "electrical": 6,
+        "general_contractor": 6,
+        "handyman": 6
+      }
     },
     {
       "slug": "simpro",
@@ -536,15 +1892,54 @@
       "vendor_url": "https://simprogroup.com",
       "affiliate_url": "TBD",
       "tagline": "End-to-end software for commercial trade businesses",
-      "verticals": ["hvac", "plumbing", "electrical", "general_contractor"],
-      "pricing": { "starting_at_usd": null, "tiers": ["Essentials", "Growth", "Connect"], "tier_prices_usd": null, "pricing_note": "Custom quote; reports per-user pricing $40-100/mo", "verified_date": "2026-05-21", "free_trial_days": 0 },
-      "key_features": ["job_management", "estimating", "scheduling", "service_agreements", "asset_management", "stock_management", "purchase_orders", "project_management"],
-      "integrations": ["quickbooks", "xero", "sage", "stripe", "salesforce"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "general_contractor"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Essentials",
+          "Growth",
+          "Connect"
+        ],
+        "tier_prices_usd": null,
+        "pricing_note": "Custom quote; reports per-user pricing $40-100/mo",
+        "verified_date": "2026-05-21",
+        "free_trial_days": 0
+      },
+      "key_features": [
+        "job_management",
+        "estimating",
+        "scheduling",
+        "service_agreements",
+        "asset_management",
+        "stock_management",
+        "purchase_orders",
+        "project_management"
+      ],
+      "integrations": [
+        "quickbooks",
+        "xero",
+        "sage",
+        "stripe",
+        "salesforce"
+      ],
       "best_for": "Commercial HVAC/electrical/plumbing contractors 10-200 employees mixing project and service work",
       "best_team_size": "10-200",
       "weaknesses": "Originally Australian; US market presence still growing; learning curve",
-      "g2_rating": 4.2, "capterra_rating": 4.1, "founded": 2002, "headquartered": "Brisbane, Australia",
-      "vertical_fit": { "hvac": 8, "plumbing": 8, "electrical": 8, "general_contractor": 7 }
+      "g2_rating": 4.2,
+      "capterra_rating": 4.1,
+      "founded": 2002,
+      "headquartered": "Brisbane, Australia",
+      "vertical_fit": {
+        "hvac": 8,
+        "plumbing": 8,
+        "electrical": 8,
+        "general_contractor": 7
+      }
     },
     {
       "slug": "commusoft",
@@ -552,15 +1947,54 @@
       "vendor_url": "https://commusoft.us",
       "affiliate_url": "TBD",
       "tagline": "All-in-one field service software for residential and commercial trades",
-      "verticals": ["hvac", "plumbing", "electrical"],
-      "pricing": { "starting_at_usd": 49, "tiers": ["Connect", "Advance", "Pro"], "tier_prices_usd": [49, 119, 199], "pricing_note": "Per user/month", "verified_date": "2026-05-21", "free_trial_days": 14 },
-      "key_features": ["scheduling", "invoicing", "service_agreements", "asset_tracking", "engineer_app", "customer_portal", "boiler_servicing_modules"],
-      "integrations": ["quickbooks", "xero", "stripe", "twilio"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical"
+      ],
+      "pricing": {
+        "starting_at_usd": 49,
+        "tiers": [
+          "Connect",
+          "Advance",
+          "Pro"
+        ],
+        "tier_prices_usd": [
+          49,
+          119,
+          199
+        ],
+        "pricing_note": "Per user/month",
+        "verified_date": "2026-05-21",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "scheduling",
+        "invoicing",
+        "service_agreements",
+        "asset_tracking",
+        "engineer_app",
+        "customer_portal",
+        "boiler_servicing_modules"
+      ],
+      "integrations": [
+        "quickbooks",
+        "xero",
+        "stripe",
+        "twilio"
+      ],
       "best_for": "HVAC and plumbing companies serving both residential and light-commercial wanting strong service-agreement workflows",
       "best_team_size": "5-50",
       "weaknesses": "UK-rooted product; US-specific integrations (e.g., Angi, Google Local Services) limited",
-      "g2_rating": 4.3, "capterra_rating": 4.4, "founded": 1993, "headquartered": "London, UK / New York, USA",
-      "vertical_fit": { "hvac": 8, "plumbing": 8, "electrical": 7 }
+      "g2_rating": 4.3,
+      "capterra_rating": 4.4,
+      "founded": 1993,
+      "headquartered": "London, UK / New York, USA",
+      "vertical_fit": {
+        "hvac": 8,
+        "plumbing": 8,
+        "electrical": 7
+      }
     },
     {
       "slug": "skimmer",
@@ -568,15 +2002,48 @@
       "vendor_url": "https://getskimmer.com",
       "affiliate_url": "TBD",
       "tagline": "Modern pool service management software",
-      "verticals": ["pool_service"],
-      "pricing": { "starting_at_usd": 49, "tiers": ["Starter", "Pro", "Premium"], "tier_prices_usd": [49, 99, 179], "pricing_note": "Per company per month; unlimited techs on Pro and Premium", "verified_date": "2026-05-21", "free_trial_days": 30 },
-      "key_features": ["route_optimization", "chemical_readings", "billing_automation", "customer_communications", "photo_attachments", "service_history"],
-      "integrations": ["quickbooks_online", "stripe", "zapier"],
+      "verticals": [
+        "pool_service"
+      ],
+      "pricing": {
+        "starting_at_usd": 49,
+        "tiers": [
+          "Starter",
+          "Pro",
+          "Premium"
+        ],
+        "tier_prices_usd": [
+          49,
+          99,
+          179
+        ],
+        "pricing_note": "Per company per month; unlimited techs on Pro and Premium",
+        "verified_date": "2026-05-21",
+        "free_trial_days": 30
+      },
+      "key_features": [
+        "route_optimization",
+        "chemical_readings",
+        "billing_automation",
+        "customer_communications",
+        "photo_attachments",
+        "service_history"
+      ],
+      "integrations": [
+        "quickbooks_online",
+        "stripe",
+        "zapier"
+      ],
       "best_for": "Pool service operators 1-50 routes wanting purpose-built pool workflows (chemical logs, recurring routes)",
       "best_team_size": "1-50",
       "weaknesses": "Pool-specific only; not useful for general trades",
-      "g2_rating": 4.7, "capterra_rating": 4.8, "founded": 2017, "headquartered": "Tampa, USA",
-      "vertical_fit": { "pool_service": 10 }
+      "g2_rating": 4.7,
+      "capterra_rating": 4.8,
+      "founded": 2017,
+      "headquartered": "Tampa, USA",
+      "vertical_fit": {
+        "pool_service": 10
+      }
     },
     {
       "slug": "vonigo",
@@ -584,15 +2051,56 @@
       "vendor_url": "https://vonigo.com",
       "affiliate_url": "TBD",
       "tagline": "Configurable field service software for franchises and multi-location businesses",
-      "verticals": ["cleaning", "pest_control", "appliance_repair", "handyman"],
-      "pricing": { "starting_at_usd": 98, "tiers": ["Pro", "Premium", "Enterprise"], "tier_prices_usd": [98, 119, null], "pricing_note": "Per user/month minimum; Enterprise custom-quoted", "verified_date": "2026-05-21", "free_trial_days": 0 },
-      "key_features": ["online_booking", "franchise_management", "scheduling", "invoicing", "marketing", "multi_location", "reporting"],
-      "integrations": ["quickbooks", "stripe", "zapier", "google_local_services"],
+      "verticals": [
+        "cleaning",
+        "pest_control",
+        "appliance_repair",
+        "handyman"
+      ],
+      "pricing": {
+        "starting_at_usd": 98,
+        "tiers": [
+          "Pro",
+          "Premium",
+          "Enterprise"
+        ],
+        "tier_prices_usd": [
+          98,
+          119,
+          null
+        ],
+        "pricing_note": "Per user/month minimum; Enterprise custom-quoted",
+        "verified_date": "2026-05-21",
+        "free_trial_days": 0
+      },
+      "key_features": [
+        "online_booking",
+        "franchise_management",
+        "scheduling",
+        "invoicing",
+        "marketing",
+        "multi_location",
+        "reporting"
+      ],
+      "integrations": [
+        "quickbooks",
+        "stripe",
+        "zapier",
+        "google_local_services"
+      ],
       "best_for": "Franchise networks and multi-location service businesses needing centralized control with location-level autonomy",
       "best_team_size": "10-500",
       "weaknesses": "Configurable means more setup work; per-user pricing scales painfully at large team sizes",
-      "g2_rating": 4.4, "capterra_rating": 4.5, "founded": 2009, "headquartered": "Vancouver, Canada",
-      "vertical_fit": { "cleaning": 8, "pest_control": 7, "appliance_repair": 7, "handyman": 7 }
+      "g2_rating": 4.4,
+      "capterra_rating": 4.5,
+      "founded": 2009,
+      "headquartered": "Vancouver, Canada",
+      "vertical_fit": {
+        "cleaning": 8,
+        "pest_control": 7,
+        "appliance_repair": 7,
+        "handyman": 7
+      }
     },
     {
       "slug": "servicem8",
@@ -600,15 +2108,61 @@
       "vendor_url": "https://servicem8.com",
       "affiliate_url": "TBD",
       "tagline": "Job management app for small service businesses (Apple-only)",
-      "verticals": ["hvac", "plumbing", "electrical", "handyman", "garage_door", "appliance_repair"],
-      "pricing": { "starting_at_usd": 19, "tiers": ["Starter", "Growing", "Premium"], "tier_prices_usd": [19, 49, 149], "pricing_note": "Per company per month; based on job volume not user count", "verified_date": "2026-05-21", "free_trial_days": 14 },
-      "key_features": ["scheduling", "invoicing", "quotes", "online_booking", "form_automation", "stripe_integration", "ios_only_apps"],
-      "integrations": ["quickbooks_online", "xero", "stripe", "zapier", "myob"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "handyman",
+        "garage_door",
+        "appliance_repair"
+      ],
+      "pricing": {
+        "starting_at_usd": 19,
+        "tiers": [
+          "Starter",
+          "Growing",
+          "Premium"
+        ],
+        "tier_prices_usd": [
+          19,
+          49,
+          149
+        ],
+        "pricing_note": "Per company per month; based on job volume not user count",
+        "verified_date": "2026-05-21",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "scheduling",
+        "invoicing",
+        "quotes",
+        "online_booking",
+        "form_automation",
+        "stripe_integration",
+        "ios_only_apps"
+      ],
+      "integrations": [
+        "quickbooks_online",
+        "xero",
+        "stripe",
+        "zapier",
+        "myob"
+      ],
       "best_for": "Small Apple-using trade businesses 1-15 employees wanting job-count-based pricing",
       "best_team_size": "1-15",
       "weaknesses": "iOS/macOS only — no Android support. Job-count pricing surprises high-volume shops",
-      "g2_rating": 4.6, "capterra_rating": 4.7, "founded": 2010, "headquartered": "Gold Coast, Australia",
-      "vertical_fit": { "hvac": 7, "plumbing": 7, "electrical": 7, "handyman": 7, "garage_door": 7, "appliance_repair": 7 }
+      "g2_rating": 4.6,
+      "capterra_rating": 4.7,
+      "founded": 2010,
+      "headquartered": "Gold Coast, Australia",
+      "vertical_fit": {
+        "hvac": 7,
+        "plumbing": 7,
+        "electrical": 7,
+        "handyman": 7,
+        "garage_door": 7,
+        "appliance_repair": 7
+      }
     },
     {
       "slug": "powered-now",
@@ -616,15 +2170,58 @@
       "vendor_url": "https://powerednow.com",
       "affiliate_url": "TBD",
       "tagline": "Quotes, invoices, and job management for UK trade businesses",
-      "verticals": ["hvac", "plumbing", "electrical", "handyman", "general_contractor"],
-      "pricing": { "starting_at_usd": 36, "tiers": ["Starter", "Pro", "Premium"], "tier_prices_usd": [36, 60, 96], "pricing_note": "Per user/month (~GBP 29-79); USD approximate", "verified_date": "2026-05-21", "free_trial_days": 14 },
-      "key_features": ["quotes", "invoicing", "scheduling", "expenses", "esignature", "form_templates", "team_tracking"],
-      "integrations": ["xero", "quickbooks", "stripe", "gocardless"],
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "handyman",
+        "general_contractor"
+      ],
+      "pricing": {
+        "starting_at_usd": 36,
+        "tiers": [
+          "Starter",
+          "Pro",
+          "Premium"
+        ],
+        "tier_prices_usd": [
+          36,
+          60,
+          96
+        ],
+        "pricing_note": "Per user/month (~GBP 29-79); USD approximate",
+        "verified_date": "2026-05-21",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "quotes",
+        "invoicing",
+        "scheduling",
+        "expenses",
+        "esignature",
+        "form_templates",
+        "team_tracking"
+      ],
+      "integrations": [
+        "xero",
+        "quickbooks",
+        "stripe",
+        "gocardless"
+      ],
       "best_for": "UK/Ireland small trade businesses 1-10 employees needing simple quote-to-invoice flow",
       "best_team_size": "1-10",
       "weaknesses": "UK-focused — US payroll/tax integrations weak; smaller US user community",
-      "g2_rating": 4.5, "capterra_rating": 4.7, "founded": 2014, "headquartered": "Stratford-upon-Avon, UK",
-      "vertical_fit": { "hvac": 6, "plumbing": 6, "electrical": 6, "handyman": 6, "general_contractor": 5 }
+      "g2_rating": 4.5,
+      "capterra_rating": 4.7,
+      "founded": 2014,
+      "headquartered": "Stratford-upon-Avon, UK",
+      "vertical_fit": {
+        "hvac": 6,
+        "plumbing": 6,
+        "electrical": 6,
+        "handyman": 6,
+        "general_contractor": 5
+      }
     }
   ]
 }
