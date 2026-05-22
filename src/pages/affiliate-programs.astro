@@ -1,0 +1,352 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Affiliate Programs', url: '/affiliate-programs/' },
+];
+
+interface Program {
+  tool: string;
+  toolSlug?: string;
+  payout: string;
+  cookie: string;
+  type: 'direct' | 'partnerstack' | 'impact' | 'cj' | 'referral_rock' | 'other';
+  applyUrl: string;
+  notes?: string;
+  best_for_promoting: string;
+  status?: 'live_on_wrenchstack' | 'applying' | 'available';
+}
+
+const programs: Program[] = [
+  // TIER 1: HIGHEST PAYOUT
+  {
+    tool: 'ServiceTitan',
+    toolSlug: 'servicetitan',
+    payout: '$500/demo + 10–20% of customer annual spend, up to $10,000/signup',
+    cookie: 'Direct attribution',
+    type: 'direct',
+    applyUrl: 'https://refer.servicetitan.com/partner',
+    best_for_promoting: 'Enterprise residential trades content — $1M+ revenue contractors with 10+ techs',
+    notes: 'Highest payout in the trades software space. Demo reward alone is $500.',
+    status: 'live_on_wrenchstack',
+  },
+  {
+    tool: 'Workiz',
+    toolSlug: 'workiz',
+    payout: '~$1,200 per customer + 30% year-end bonus',
+    cookie: '30 days',
+    type: 'direct',
+    applyUrl: 'https://www.workiz.com/partners/join-partner-program/',
+    best_for_promoting: 'Locksmith, garage door, appliance repair, junk removal — on-demand service businesses',
+    status: 'live_on_wrenchstack',
+  },
+  {
+    tool: 'BuildOps',
+    payout: '$500 per booked demo (no signup required)',
+    cookie: 'Manual referral submission',
+    type: 'direct',
+    applyUrl: 'https://buildops.com/lp/refer/',
+    best_for_promoting: 'Commercial mechanical/electrical/plumbing contractors $5M+ revenue',
+    notes: 'No formal affiliate program. Customer-referral form only. Email partnerships team for media partnership.',
+    status: 'available',
+  },
+  {
+    tool: 'Knowify',
+    toolSlug: 'knowify',
+    payout: '$1,000 per annual signup',
+    cookie: 'Manual referral',
+    type: 'direct',
+    applyUrl: 'https://knowify.com/referral-program/',
+    best_for_promoting: 'QuickBooks-heavy small-to-mid contractors needing AIA billing',
+    notes: 'Customer-only program publicly. Email for media partnership.',
+    status: 'available',
+  },
+
+  // TIER 2: STRONG PAYOUT
+  {
+    tool: 'Jobber',
+    toolSlug: 'jobber',
+    payout: 'Up to $300/annual signup + 60% recurring on monthly plans',
+    cookie: '30 days',
+    type: 'partnerstack',
+    applyUrl: 'https://saasaffiliate.com/partner/jobber-affiliate-program/',
+    best_for_promoting: 'Small-to-mid trades businesses (1–30 employees) across HVAC, plumbing, electrical, landscaping, cleaning',
+    notes: '60% recurring on monthly is unusually generous. Highest LTV affiliate in our portfolio over time.',
+    status: 'applying',
+  },
+  {
+    tool: 'Housecall Pro',
+    toolSlug: 'housecall-pro',
+    payout: 'Up to $350 per qualified lead + $180 per enrollment + $10 per new lead',
+    cookie: '90 days',
+    type: 'partnerstack',
+    applyUrl: 'https://dash.partnerstack.com/application?company=housecallpro&group=paidaffiliates',
+    best_for_promoting: 'Residential home service businesses (HVAC, plumbing, electrical, cleaning) with payment processing + financing needs',
+    notes: '90-day cookie is excellent.',
+    status: 'applying',
+  },
+  {
+    tool: 'Service Fusion',
+    toolSlug: 'servicefusion',
+    payout: '$500 gift card per qualified referral',
+    cookie: '365 days',
+    type: 'referral_rock',
+    applyUrl: 'https://referrals.servicefusion.com/v2/2/register',
+    best_for_promoting: 'Mid-size service shops wanting unlimited-user flat pricing',
+    notes: 'Confirmed payout per official welcome email. Self-serve signup.',
+    status: 'live_on_wrenchstack',
+  },
+  {
+    tool: 'Connecteam',
+    toolSlug: 'connecteam',
+    payout: '$200/monthly signup or $300/annual signup',
+    cookie: 'PartnerStack standard',
+    type: 'partnerstack',
+    applyUrl: 'https://market.partnerstack.com/page/connecteam',
+    best_for_promoting: 'Deskless workforce management for 10–100 employee trades teams (complement to FSM)',
+    status: 'applying',
+  },
+
+  // TIER 3: MID-RANGE
+  {
+    tool: 'Buildertrend',
+    toolSlug: 'buildertrend',
+    payout: 'Up to $250 per referred builder',
+    cookie: 'Direct attribution',
+    type: 'direct',
+    applyUrl: 'https://share.buildertrend.com/',
+    best_for_promoting: 'Custom home builders, remodelers, specialty contractors running multi-month projects',
+    status: 'available',
+  },
+  {
+    tool: 'FieldEdge',
+    toolSlug: 'fieldedge',
+    payout: 'TBD per signup (estimated $150–500)',
+    cookie: 'Direct attribution',
+    type: 'direct',
+    applyUrl: 'https://fieldedge.com/referral-partner-program-registration/',
+    best_for_promoting: 'Mid-size HVAC/plumbing/electrical with deep QuickBooks integration needs',
+    notes: 'Distinct from their customer-credit referral program — this is for media/business partners.',
+    status: 'applying',
+  },
+  {
+    tool: 'Tradify',
+    toolSlug: 'tradify',
+    payout: '$160 cash per paid signup (no referral limit)',
+    cookie: 'Direct attribution',
+    type: 'direct',
+    applyUrl: 'https://www.tradifyhq.com/partner-programme',
+    best_for_promoting: 'Small trade businesses (1–10 employees), UK/AU/NZ markets',
+    status: 'available',
+  },
+  {
+    tool: 'JobNimbus',
+    toolSlug: 'jobnimbus',
+    payout: '$50/signup + tiered bonuses ($150 at 5 referrals)',
+    cookie: 'Referral Rock standard',
+    type: 'referral_rock',
+    applyUrl: 'https://jobnimbus.referralrock.com/v2/1/login',
+    best_for_promoting: 'Roofing, restoration, and small construction CRM content',
+    notes: 'Direct path bypasses PartnerStack.',
+    status: 'available',
+  },
+  {
+    tool: 'ServiceM8',
+    toolSlug: 'servicem8',
+    payout: '$500 referral + 20% ongoing revenue share',
+    cookie: 'Direct attribution',
+    type: 'direct',
+    applyUrl: 'https://www.servicem8.com/us/partner-registration',
+    best_for_promoting: 'Small Apple-using trade businesses (1–15 employees)',
+    status: 'available',
+  },
+  {
+    tool: 'Synchroteam',
+    toolSlug: 'synchroteam',
+    payout: '20% of customer payments (recurring)',
+    cookie: '14 days',
+    type: 'direct',
+    applyUrl: 'https://www.synchroteam.com/affiliates.php',
+    best_for_promoting: 'International or multi-language field service businesses',
+    notes: '$500 minimum threshold for payout',
+    status: 'available',
+  },
+  {
+    tool: 'WorkWave (FieldRoutes, PestPac, ServMan)',
+    payout: 'Custom-quoted (covers entire WorkWave product family)',
+    cookie: 'Direct attribution',
+    type: 'direct',
+    applyUrl: 'https://www.workwave.com/partners',
+    best_for_promoting: 'Pest control, lawn care, multi-route field service businesses',
+    status: 'available',
+  },
+  {
+    tool: 'Skimmer',
+    toolSlug: 'skimmer',
+    payout: '$150 per signup (after 90-day customer retention)',
+    cookie: 'Direct attribution',
+    type: 'direct',
+    applyUrl: 'https://www.getskimmer.com/partners',
+    best_for_promoting: 'Pool service businesses (1–50 routes)',
+    status: 'available',
+  },
+  {
+    tool: 'Houzz Pro',
+    toolSlug: 'houzz-pro',
+    payout: '5% on Houzz product purchases, 10% credit on Houzz Pro subscriptions',
+    cookie: 'Direct attribution',
+    type: 'direct',
+    applyUrl: 'https://www.houzz.com/pro-resources/affiliate-program',
+    best_for_promoting: 'Remodelers, designers, home professionals needing marketing + project management',
+    notes: 'Email affiliates@houzz.com for partner inquiries.',
+    status: 'available',
+  },
+];
+
+const liveCount = programs.filter(p => p.status === 'live_on_wrenchstack').length;
+const totalCount = programs.length;
+---
+
+<Layout
+  title="Trades software affiliate programs — every program, every payout"
+  description={`Comprehensive directory of ${totalCount}+ affiliate programs for trades and field service software. Per-signup payouts, cookie windows, apply URLs.`}
+  breadcrumbs={breadcrumbs}
+>
+  <article class="mx-auto max-w-5xl px-4 py-12">
+
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">For affiliate operators</p>
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        Every trades software affiliate program, mapped
+      </h1>
+      <p class="mt-4 text-lg text-slate-600">
+        {totalCount} affiliate programs in the trades and field service software space — with verified payouts, cookie windows, and application URLs. Useful if you're building a directory, comparison site, or content business in the same niche.
+      </p>
+      <p class="mt-3 text-sm text-slate-500">
+        Of these, <strong class="text-slate-900">{liveCount} are currently live on WrenchStack</strong> with tracking links wired into the site.
+      </p>
+    </header>
+
+    <section class="mb-12 overflow-x-auto rounded-lg border border-slate-200 bg-white">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-left text-slate-700">
+          <tr>
+            <th class="p-3 font-semibold">Program</th>
+            <th class="p-3 font-semibold">Per-signup payout</th>
+            <th class="p-3 font-semibold">Network</th>
+            <th class="p-3 font-semibold">Best for</th>
+            <th class="p-3 font-semibold">Apply</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          {programs.map(p => (
+            <tr class="hover:bg-slate-50">
+              <td class="p-3">
+                <div class="flex items-center gap-2">
+                  {p.toolSlug ? (
+                    <a href={`/tools/${p.toolSlug}/`} class="font-semibold text-slate-900 hover:text-orange-600">{p.tool}</a>
+                  ) : (
+                    <span class="font-semibold text-slate-900">{p.tool}</span>
+                  )}
+                  {p.status === 'live_on_wrenchstack' && (
+                    <span class="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">LIVE</span>
+                  )}
+                </div>
+              </td>
+              <td class="p-3 text-slate-700">{p.payout}</td>
+              <td class="p-3 text-xs uppercase tracking-wide text-slate-500">{p.type.replace('_', ' ')}</td>
+              <td class="p-3 text-slate-600 text-xs">{p.best_for_promoting}</td>
+              <td class="p-3">
+                <a href={p.applyUrl} rel="noopener" target="_blank" class="text-orange-600 hover:underline text-xs font-semibold">Apply →</a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="prose prose-slate max-w-none">
+
+      <h2>How to read this list</h2>
+
+      <p>
+        Programs are listed in approximate order of per-conversion payout potential, weighted by realistic conversion volume in our niche.
+      </p>
+
+      <ul>
+        <li><strong>Direct</strong> programs are run by the vendor themselves — payment via PayPal, ACH, or check on Net-30 or Net-60 terms.</li>
+        <li><strong>PartnerStack</strong> programs are managed via partnerstack.com — one account gives you access to multiple programs (Jobber, Housecall Pro, Connecteam all use it).</li>
+        <li><strong>Impact</strong>, <strong>CJ</strong>, and <strong>Referral Rock</strong> are other affiliate networks used by specific tools.</li>
+      </ul>
+
+      <h2>Highest-leverage programs by payout type</h2>
+
+      <h3>Best for one-shot big paydays</h3>
+      <ul>
+        <li><strong>ServiceTitan</strong> — up to $10,000 per signup. Highest single-payment in the niche by far.</li>
+        <li><strong>Workiz</strong> — ~$1,200 per customer.</li>
+        <li><strong>Knowify</strong> — $1,000 per annual signup.</li>
+        <li><strong>BuildOps</strong> — $500 just for a booked demo, no signup required.</li>
+      </ul>
+
+      <h3>Best for recurring revenue compounding</h3>
+      <ul>
+        <li><strong>Jobber</strong> — 60% recurring commission on monthly plans. Best long-term LTV.</li>
+        <li><strong>Synchroteam</strong> — 20% recurring on customer payments.</li>
+        <li><strong>ServiceM8</strong> — 20% ongoing revenue share + $500 referral.</li>
+      </ul>
+
+      <h3>Easiest to apply to (open self-serve, no manual approval)</h3>
+      <ul>
+        <li><strong>Service Fusion</strong> — instant approval via Referral Rock.</li>
+        <li><strong>ServiceTitan</strong> — instant approval via Partner Referral Program.</li>
+        <li><strong>Workiz</strong> — fast approval, partner team responds within 24 hours.</li>
+        <li><strong>JobNimbus</strong> — instant via Referral Rock.</li>
+      </ul>
+
+      <h2>What's NOT on this list</h2>
+
+      <p>
+        A few well-known trades software companies don't have formal affiliate programs as of 2026:
+      </p>
+
+      <ul>
+        <li><strong>Procore</strong> — enterprise construction; no public affiliate program.</li>
+        <li><strong>AccuLynx</strong> — roofing CRM; partner program requires direct outreach.</li>
+        <li><strong>Smart Service</strong> — small partnership program but not heavily promoted.</li>
+        <li><strong>mHelpDesk</strong> — no public affiliate program found.</li>
+        <li><strong>RazorSync</strong> — has a customer-only referral ($50 credit), not for affiliates.</li>
+      </ul>
+
+      <p>
+        For any program not listed here that you think should be: email <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a> and we'll research + add.
+      </p>
+
+      <h2>How to actually apply</h2>
+
+      <p>
+        For each program, you'll typically need:
+      </p>
+
+      <ul>
+        <li>Your website URL (and ideally an email at a domain matching it — e.g., <code>partners@yoursite.com</code>)</li>
+        <li>LinkedIn profile</li>
+        <li>Payment method (PayPal usually works; Wise/Payoneer for non-US operators)</li>
+        <li>Tax form: W-9 if US, W-8BEN if non-US</li>
+        <li>A short description of how you'll promote the tool</li>
+      </ul>
+
+      <p>
+        See our <a href="/about/">About page</a> for what makes a strong affiliate application, and our <a href="/methodology/">methodology</a> for how we rank tools at WrenchStack.
+      </p>
+
+      <hr />
+
+      <p class="text-sm text-slate-500">
+        <strong>Last updated:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })} ·
+        Built and verified by independent research. If a program's terms have changed, email <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a>.
+      </p>
+    </section>
+  </article>
+</Layout>

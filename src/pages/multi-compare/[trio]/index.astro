@@ -1,0 +1,250 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import triosData from '../../../data/trios.json';
+import {
+  getTool,
+  aggregateRating,
+  formatPrice,
+  wrenchStackScore,
+  type Tool,
+} from '../../../lib/data';
+import WrenchScore from '../../../components/WrenchScore.astro';
+import ToolLogo from '../../../components/ToolLogo.astro';
+
+export async function getStaticPaths() {
+  return triosData.trios.flatMap(def => {
+    // Sort alphabetically for canonical URL — dedupe pages identical-up-to-order
+    const sorted = [...def.slugs].sort();
+    const tools = sorted.map(slug => getTool(slug));
+    if (tools.some(t => !t)) return [];
+    const slugUrl = sorted.join('-vs-');
+    return [{
+      params: { trio: slugUrl },
+      props: { tools: tools as Tool[], category: def.category },
+    }];
+  });
+}
+
+interface Props {
+  tools: Tool[];
+  category: string;
+}
+
+const { tools: trioTools, category } = Astro.props;
+const [a, b, c] = trioTools;
+
+const titleStr = `${a.name} vs ${b.name} vs ${c.name}`;
+const pageTitle = `${titleStr} (2026): 3-Way Comparison`;
+const pageDescription = `${a.name} vs ${b.name} vs ${c.name} compared side-by-side: pricing, features, integrations, and use-case fit. Independent analysis, updated 2026.`;
+
+// Find best fit by category
+const allRated = trioTools.map(t => ({ tool: t, score: wrenchStackScore(t) })).sort((x, y) => y.score - x.score);
+const winner = allRated[0].tool;
+
+const cheapest = trioTools.reduce((lowest, t) => {
+  if (t.pricing.starting_at_usd === null) return lowest;
+  if (!lowest || (lowest.pricing.starting_at_usd ?? 999) > t.pricing.starting_at_usd) return t;
+  return lowest;
+}, null as Tool | null);
+
+const sharedFeatures = a.key_features.filter(f => b.key_features.includes(f) && c.key_features.includes(f));
+const sharedIntegrations = a.integrations.filter(i => b.integrations.includes(i) && c.integrations.includes(i));
+
+const faqs = [
+  {
+    q: `Which is best — ${a.name}, ${b.name}, or ${c.name}?`,
+    a: `Based on our WrenchStack Score, ${winner.name} ranks highest of the three for ${category.toLowerCase()}. But "best" depends on your specific buyer profile — see the side-by-side comparison above and read each tool's full review for the nuances.`,
+  },
+  {
+    q: `What's the cheapest of the three?`,
+    a: cheapest
+      ? `${cheapest.name} starts at ${formatPrice(cheapest)}, the lowest entry point of these three. Note: cheapest starting price isn't always cheapest total cost. Per-user pricing scales differently than per-company pricing as team size grows.`
+      : `All three use custom-quote pricing — request quotes from each for accurate apples-to-apples comparison.`,
+  },
+  {
+    q: `Do they all integrate with QuickBooks?`,
+    a: (() => {
+      const withQb = trioTools.filter(t => t.integrations.some(i => i.includes('quickbooks')));
+      if (withQb.length === 3) return 'Yes — all three integrate with QuickBooks. Depth varies (one-way push vs two-way sync, Online vs Desktop support). Check each tool detail page for specifics.';
+      return `${withQb.length} of the 3 integrate with QuickBooks: ${withQb.map(t => t.name).join(', ')}.`;
+    })(),
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(f => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const trioUrl = trioTools.map(t => t.slug).sort().join('-vs-');
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Multi-tool comparisons', url: '/multi-compare/' },
+  { name: titleStr, url: `/multi-compare/${trioUrl}/` },
+];
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-5xl px-4 py-12">
+
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">3-way comparison · {category}</p>
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        {a.name} vs {b.name} vs {c.name}
+      </h1>
+      <p class="mt-4 text-lg text-slate-600">
+        Three popular field service platforms compared side-by-side. Pricing, feature overlap, integration depth, and which fits which buyer.
+      </p>
+    </header>
+
+    <section class="mb-12 grid gap-4 md:grid-cols-3">
+      {trioTools.map((t) => {
+        const score = wrenchStackScore(t);
+        const r = aggregateRating(t);
+        return (
+          <div class="rounded-lg border border-slate-200 bg-white p-5">
+            <div class="mb-3 flex items-center gap-3">
+              <ToolLogo tool={t} size={40} />
+              <div class="flex-1">
+                <h2 class="text-lg font-bold text-slate-900">
+                  <a href={`/tools/${t.slug}/`} class="hover:text-orange-600">{t.name}</a>
+                </h2>
+                <p class="text-xs italic text-slate-500">{t.tagline}</p>
+              </div>
+            </div>
+            <div class="mb-3">
+              <WrenchScore score={score} size="sm" />
+            </div>
+            <dl class="space-y-1 text-sm">
+              <div class="flex justify-between">
+                <dt class="text-slate-500">Starting price</dt>
+                <dd class="font-semibold text-slate-900">{formatPrice(t)}</dd>
+              </div>
+              <div class="flex justify-between">
+                <dt class="text-slate-500">User rating</dt>
+                <dd class="font-semibold text-slate-900">{r !== null ? `${r.toFixed(1)} / 5` : '—'}</dd>
+              </div>
+              <div class="flex justify-between">
+                <dt class="text-slate-500">Best team size</dt>
+                <dd class="font-semibold text-slate-900">{t.best_team_size ?? '—'}</dd>
+              </div>
+              <div class="flex justify-between">
+                <dt class="text-slate-500">Free trial</dt>
+                <dd class="font-semibold text-slate-900">{t.pricing.free_trial_days && t.pricing.free_trial_days > 0 ? `${t.pricing.free_trial_days} days` : 'No'}</dd>
+              </div>
+            </dl>
+            <a
+              href={t.affiliate_url.startsWith('http') ? t.affiliate_url : t.vendor_url}
+              rel="sponsored nofollow noopener"
+              target="_blank"
+              class="mt-4 block w-full rounded-md bg-orange-500 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-orange-600"
+            >
+              Visit {t.name} →
+            </a>
+          </div>
+        );
+      })}
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Pricing side-by-side</h2>
+      <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-left text-slate-700">
+            <tr>
+              <th class="p-3 font-semibold">Tier</th>
+              {trioTools.map(t => <th class="p-3 font-semibold">{t.name}</th>)}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            {[0, 1, 2, 3].map(i => {
+              const tiers = trioTools.map(t => t.pricing.tiers[i]);
+              if (tiers.every(t => !t)) return null;
+              const prices = trioTools.map(t => t.pricing.tier_prices_usd?.[i]);
+              const fmt = (p: number | null | undefined) =>
+                p === null || p === undefined ? 'Custom' : p === 0 ? 'Free' : `$${p}/mo`;
+              return (
+                <tr>
+                  <td class="p-3 font-semibold text-slate-900">Tier {i + 1}</td>
+                  {trioTools.map((t, j) => (
+                    <td class="p-3 text-slate-700">{tiers[j] ? `${tiers[j]} — ${fmt(prices[j])}` : '—'}</td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Features all three have</h2>
+      {sharedFeatures.length > 0 ? (
+        <div class="flex flex-wrap gap-2">
+          {sharedFeatures.map(f => (
+            <span class="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-900">
+              ✓ {f.replace(/_/g, ' ')}
+            </span>
+          ))}
+        </div>
+      ) : (
+        <p class="text-slate-600">No features are present in all three — these tools serve different buyer profiles.</p>
+      )}
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Common integrations</h2>
+      {sharedIntegrations.length > 0 ? (
+        <div class="flex flex-wrap gap-2">
+          {sharedIntegrations.map(i => (
+            <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-sm font-medium text-slate-700">
+              {i.replace(/_/g, ' ')}
+            </span>
+          ))}
+        </div>
+      ) : (
+        <p class="text-slate-600">No integrations are common across all three.</p>
+      )}
+    </section>
+
+    <section class="mb-12 prose prose-slate max-w-none">
+      <h2>Which to pick</h2>
+
+      {trioTools.map(t => (
+        <div>
+          <h3>Pick {t.name} if</h3>
+          <p>{t.best_for}</p>
+          <p><strong>Watch out for:</strong> {t.weaknesses}</p>
+        </div>
+      ))}
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-6 text-2xl font-bold text-slate-900">Frequently asked questions</h2>
+      <div class="space-y-4">
+        {faqs.map(f => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Need a deeper dive?</h2>
+      <p class="mt-2 text-slate-300">See our full reviews of each, take the matching quiz, or compare any two head-to-head.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/quiz/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Take the matching quiz →</a>
+        <a href="/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">All comparisons</a>
+      </div>
+    </section>
+  </article>
+</Layout>

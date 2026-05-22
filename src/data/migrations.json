@@ -1,0 +1,20 @@
+{
+  "_note": "Migration paths between trades software tools. Used by /migrate/from-X-to-Y/ pages.",
+  "migrations": [
+    { "from": "jobber", "to": "servicetitan", "reason": "outgrew_small_business", "intent": "Scaling residential service business past 10 techs" },
+    { "from": "jobber", "to": "housecall-pro", "reason": "lateral_features", "intent": "Want consumer financing and integrated payments" },
+    { "from": "housecall-pro", "to": "servicetitan", "reason": "enterprise_growth", "intent": "Past $1M revenue, need deeper reporting" },
+    { "from": "housecall-pro", "to": "jobber", "reason": "simpler_ux", "intent": "Want cleaner UX with fewer baked-in features" },
+    { "from": "joist", "to": "jobber", "reason": "grew_past_solo", "intent": "Outgrew quote-and-invoice only, need scheduling" },
+    { "from": "joist", "to": "housecall-pro", "reason": "grew_past_solo_with_payments", "intent": "Need integrated payment processing" },
+    { "from": "servicefusion", "to": "servicetitan", "reason": "enterprise_growth", "intent": "Need deeper reporting and marketing attribution" },
+    { "from": "fieldedge", "to": "servicetitan", "reason": "modern_ui", "intent": "Want a modern UI and broader marketing tools" },
+    { "from": "workiz", "to": "jobber", "reason": "broader_coverage", "intent": "Need more polished features beyond on-demand workflows" },
+    { "from": "workiz", "to": "housecall-pro", "reason": "home_services_polish", "intent": "Moving from on-demand to traditional home services" },
+    { "from": "mhelpdesk", "to": "housecall-pro", "reason": "modernization", "intent": "Tired of dated UI and mobile app limitations" },
+    { "from": "razorsync", "to": "jobber", "reason": "modernization", "intent": "Want modern UX and active product development" },
+    { "from": "servicefusion", "to": "fieldedge", "reason": "quickbooks_depth", "intent": "Need deeper QuickBooks integration for accounting" },
+    { "from": "jobber", "to": "servicefusion", "reason": "unlimited_users", "intent": "Hitting per-user cost ceiling, want flat per-company pricing" },
+    { "from": "housecall-pro", "to": "servicefusion", "reason": "unlimited_users", "intent": "Scaling team but paying per-user is expensive" }
+  ]
+}
