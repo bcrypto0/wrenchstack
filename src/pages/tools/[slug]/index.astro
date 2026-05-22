@@ -7,8 +7,13 @@ import {
   formatPrice,
   verticalToUrl,
   verticals,
+  wrenchStackScore,
+  readingTimeMinutes,
   type Tool,
 } from '../../../lib/data';
+import Byline from '../../../components/Byline.astro';
+import WrenchScore from '../../../components/WrenchScore.astro';
+import ToolLogo from '../../../components/ToolLogo.astro';
 
 export async function getStaticPaths() {
   return tools.map((t) => ({
@@ -104,10 +109,17 @@ const breadcrumbs = [
     </nav>
 
     <header class="mb-10">
-      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
-        {tool.name} Review
-      </h1>
-      <p class="mt-4 text-lg italic text-slate-600">{tool.tagline}</p>
+      <div class="mb-4 flex items-start gap-4">
+        <ToolLogo tool={tool} size={64} />
+        <div class="flex-1">
+          <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+            {tool.name} Review
+          </h1>
+          <p class="mt-2 text-lg italic text-slate-600">{tool.tagline}</p>
+        </div>
+        <WrenchScore score={wrenchStackScore(tool)} size="lg" />
+      </div>
+      <Byline updatedDate={tool.pricing.verified_date} readingMinutes={readingTimeMinutes(1800)} />
 
       <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-600">
         {rating !== null && (

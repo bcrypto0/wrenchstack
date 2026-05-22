@@ -1,0 +1,31 @@
+---
+interface Props {
+  score: number;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const { score, size = 'md' } = Astro.props;
+const colorClass =
+  score >= 9 ? 'bg-emerald-500 text-white' :
+  score >= 8 ? 'bg-emerald-400 text-white' :
+  score >= 7 ? 'bg-orange-500 text-white' :
+  score >= 6 ? 'bg-orange-400 text-white' :
+  'bg-slate-400 text-white';
+
+const sizeClass =
+  size === 'sm' ? 'h-8 w-8 text-xs' :
+  size === 'lg' ? 'h-14 w-14 text-lg' :
+  'h-11 w-11 text-sm';
+---
+
+<div class={`inline-flex items-center gap-2`}>
+  <div class={`inline-flex flex-col items-center justify-center rounded-full font-bold leading-none ${colorClass} ${sizeClass}`}>
+    <span>{score.toFixed(1)}</span>
+    {size !== 'sm' && <span class="text-[8px] font-semibold uppercase opacity-80 mt-0.5">/10</span>}
+  </div>
+  {size !== 'sm' && (
+    <span class="text-xs text-slate-500">
+      WrenchStack<br/>Score
+    </span>
+  )}
+</div>

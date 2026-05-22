@@ -6,9 +6,14 @@ import {
   verticalToUrl,
   aggregateRating,
   formatPrice,
+  wrenchStackScore,
+  readingTimeMinutes,
   type Vertical,
   type Tool,
 } from '../../lib/data';
+import Byline from '../../components/Byline.astro';
+import WrenchScore from '../../components/WrenchScore.astro';
+import ToolLogo from '../../components/ToolLogo.astro';
 
 export async function getStaticPaths() {
   return verticals.map((v) => ({
@@ -23,6 +28,11 @@ interface Props {
 
 const { vertical } = Astro.props;
 const ranked: Tool[] = rankToolsForVertical(vertical.slug);
+
+// Compute most recent verified date across tools shown
+const verifiedDates = ranked.map(t => t.pricing.verified_date).sort();
+const lastVerifiedDate = verifiedDates[verifiedDates.length - 1] ?? new Date().toISOString().slice(0, 10);
+const estimatedReadingMin = readingTimeMinutes(2500); // approx page word count
 
 const topPicks = ranked.slice(0, 5);
 const verticalLower = vertical.name.toLowerCase();
@@ -106,10 +116,9 @@ const breadcrumbs = [
         Best {vertical.name} Software in 2026
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        An independent comparison of {ranked.length} platforms for {verticalLower} businesses,
-        ranked by aggregated G2 + Capterra ratings, pricing transparency, integration depth,
-        and feature coverage. Last verified: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}.
+        A comparison of {ranked.length} platforms for {verticalLower} businesses, ranked by vertical fit, user ratings, pricing transparency, and feature depth.
       </p>
+      <Byline updatedDate={lastVerifiedDate} readingMinutes={estimatedReadingMin} />
     </header>
 
     <section class="mb-12">
@@ -118,23 +127,29 @@ const breadcrumbs = [
         <table class="w-full text-sm">
           <thead class="bg-slate-50 text-left text-slate-700">
             <tr>
-              <th class="p-3 font-semibold">Rank</th>
+              <th class="p-3 font-semibold">#</th>
               <th class="p-3 font-semibold">Tool</th>
+              <th class="p-3 font-semibold">Score</th>
               <th class="p-3 font-semibold">Starting price</th>
               <th class="p-3 font-semibold">Best for</th>
-              <th class="p-3 font-semibold">Rating</th>
+              <th class="p-3 font-semibold">User rating</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
             {topPicks.map((t, i) => {
               const r = aggregateRating(t);
+              const score = wrenchStackScore(t, vertical.slug);
               return (
                 <tr class="hover:bg-slate-50">
                   <td class="p-3 font-bold text-slate-900">#{i + 1}</td>
                   <td class="p-3">
-                    <a href={`/tools/${t.slug}/`} class="font-semibold text-slate-900 hover:text-orange-600">
-                      {t.name}
+                    <a href={`/tools/${t.slug}/`} class="flex items-center gap-3 hover:text-orange-600">
+                      <ToolLogo tool={t} size={32} />
+                      <span class="font-semibold text-slate-900">{t.name}</span>
                     </a>
+                  </td>
+                  <td class="p-3">
+                    <WrenchScore score={score} size="sm" />
                   </td>
                   <td class="p-3 text-slate-700">{formatPrice(t)}</td>
                   <td class="p-3 text-slate-600">{t.best_team_size ?? '—'} techs</td>
@@ -145,6 +160,10 @@ const breadcrumbs = [
           </tbody>
         </table>
       </div>
+      <p class="mt-2 text-xs text-slate-500">
+        Score combines vertical fit (40%), aggregated G2 + Capterra ratings (30%), pricing transparency (10%), feature depth (10%), and integration coverage (10%).
+        <a href="/methodology/" class="underline hover:text-slate-700">Full methodology →</a>
+      </p>
     </section>
 
     <section class="mb-12 prose prose-slate max-w-none">
@@ -174,17 +193,23 @@ const breadcrumbs = [
       <div class="space-y-10">
         {topPicks.map((t, i) => {
           const rating = aggregateRating(t);
+          const score = wrenchStackScore(t, vertical.slug);
           return (
             <div class="rounded-lg border border-slate-200 bg-white p-6">
-              <div class="mb-3 flex flex-wrap items-baseline justify-between gap-3">
-                <h3 class="text-2xl font-bold text-slate-900">
-                  <span class="text-orange-500">#{i + 1}</span>{' '}
-                  <a href={`/tools/${t.slug}/`} class="hover:text-orange-600">{t.name}</a>
-                </h3>
-                <div class="text-sm text-slate-500">
-                  {rating !== null && <span class="font-semibold text-slate-700">{rating.toFixed(1)} / 5</span>}
-                  {t.founded && <span> · Founded {t.founded}</span>}
+              <div class="mb-3 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <ToolLogo tool={t} size={48} />
+                  <h3 class="text-2xl font-bold text-slate-900">
+                    <span class="text-orange-500">#{i + 1}</span>{' '}
+                    <a href={`/tools/${t.slug}/`} class="hover:text-orange-600">{t.name}</a>
+                  </h3>
                 </div>
+                <WrenchScore score={score} size="md" />
+              </div>
+              <div class="mb-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
+                {rating !== null && <span><span class="font-semibold text-slate-700">{rating.toFixed(1)} / 5</span> user rating</span>}
+                {t.founded && <span>Founded {t.founded}</span>}
+                {t.headquartered && <span>{t.headquartered}</span>}
               </div>
               <p class="mb-4 italic text-slate-600">{t.tagline}</p>
 

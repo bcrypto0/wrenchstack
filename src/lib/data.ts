@@ -89,3 +89,38 @@ export function formatPrice(t: Tool): string {
   if (p.starting_at_usd === 0) return 'Free tier available';
   return `From $${p.starting_at_usd}/mo`;
 }
+
+export function wrenchStackScore(t: Tool, verticalSlug?: string): number {
+  // Composite editorial score 0-10
+  // 40% vertical fit, 30% aggregate user rating, 10% pricing transparency,
+  // 10% feature richness, 10% integration richness.
+  const fit = verticalSlug ? verticalFitScore(t, verticalSlug) : 7;
+  const rating = aggregateRating(t);
+  const ratingNormalized = rating !== null ? rating * 2 : 5;
+  const transparency = t.pricing.starting_at_usd !== null ? 10 : 5;
+  const featureScore = Math.min(t.key_features.length, 10);
+  const integrationScore = Math.min(t.integrations.length, 10);
+
+  const score =
+    fit * 0.4 +
+    ratingNormalized * 0.3 +
+    transparency * 0.1 +
+    featureScore * 0.1 +
+    integrationScore * 0.1;
+
+  return Math.min(10, Math.round(score * 10) / 10);
+}
+
+export function getLogoUrl(t: Tool, size = 64): string {
+  // Use Clearbit Logo API (free, no auth required) with the vendor's domain.
+  try {
+    const url = new URL(t.vendor_url);
+    return `https://logo.clearbit.com/${url.hostname}?size=${size}`;
+  } catch {
+    return '';
+  }
+}
+
+export function readingTimeMinutes(wordCount: number): number {
+  return Math.max(1, Math.round(wordCount / 220));
+}

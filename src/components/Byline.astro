@@ -1,0 +1,31 @@
+---
+interface Props {
+  updatedDate?: string;
+  readingMinutes?: number;
+}
+
+const { updatedDate, readingMinutes } = Astro.props;
+const formattedDate = updatedDate
+  ? new Date(updatedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  : null;
+---
+
+<div class="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 border-y border-slate-200 py-3 text-sm text-slate-500">
+  <div class="flex items-center gap-2">
+    <span class="flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-xs font-bold text-white">BE</span>
+    <span>
+      <span class="font-semibold text-slate-700">By Bilal Elhomsi</span>
+      <span class="hidden sm:inline"> · Editor, WrenchStack</span>
+    </span>
+  </div>
+  {formattedDate && (
+    <span class="hidden sm:inline">·</span>
+    <span>Last updated <time>{formattedDate}</time></span>
+  )}
+  {readingMinutes && (
+    <span class="hidden sm:inline">·</span>
+    <span>{readingMinutes} min read</span>
+  )}
+  <span class="hidden sm:inline">·</span>
+  <a href="/methodology/" class="hover:text-slate-900 hover:underline">How we rank</a>
+</div>
