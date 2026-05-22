@@ -9,23 +9,26 @@ const useCaseCount = (useCasesData.use_cases as unknown[]).length;
 const verifiedDates = tools.map(t => t.pricing.verified_date).sort();
 const oldestVerified = verifiedDates[0];
 const newestVerified = verifiedDates[verifiedDates.length - 1];
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'About', url: '/about/' },
+];
 ---
 
 <Layout
-  title="About WrenchStack — The independent trades software directory"
-  description="WrenchStack is the only fully independent, affiliate-funded directory comparing field service software for HVAC, plumbing, electrical, roofing, and other trades. Here's how it works and why it exists."
+  title="About WrenchStack"
+  description="WrenchStack is the trades software directory — built specifically for HVAC, plumbing, electrical, roofing, and other field service businesses shopping for software."
+  breadcrumbs={breadcrumbs}
 >
   <article class="mx-auto max-w-3xl px-4 py-12">
 
     <header class="mb-12">
-      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">About WrenchStack</p>
       <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
-        The trades software directory we wished existed — so we built it.
+        The trades software directory built for buyers, not vendors.
       </h1>
       <p class="mt-6 text-xl text-slate-700 leading-relaxed">
-        WrenchStack is an <strong>independent comparison directory</strong> for field service and trades software.
-        We track {toolCount}+ platforms across {verticalCount} verticals, publish data-driven rankings,
-        and earn affiliate commissions when readers sign up. <strong>Rankings are not for sale.</strong>
+        WrenchStack helps trades and field service businesses pick the right software — through deep product reviews, side-by-side comparisons, and buyer guides organized by team size and use case.
       </p>
     </header>
 
@@ -46,245 +49,83 @@ const newestVerified = verifiedDates[verifiedDates.length - 1];
 
     <section class="prose prose-slate max-w-none">
 
-      <h2>Why this exists</h2>
+      <h2>Why we built this</h2>
 
       <p>
-        Search "best HVAC software" right now. You'll land in one of three places, and all three fail
-        the contractor making a real software decision:
+        Picking field service software is a $5,000–$50,000+ annual decision for most trades businesses — and the existing research landscape doesn't serve contractors well. Horizontal SaaS directories list hundreds of generic products without team-size or vertical-specific guidance. Vendor blogs rank themselves first in every comparison. AI-generated content mills publish vague listicles with no real data.
       </p>
-
-      <ol>
-        <li>
-          <strong>Vendor blogs masquerading as comparisons.</strong> Workyard's "best HVAC software"
-          guide ranks Workyard at #1. ServiceTitan's "best for tradies" guide ranks ServiceTitan #1.
-          FieldBoss's? Same. These aren't comparisons. They're sales pages with extra steps.
-        </li>
-        <li>
-          <strong>Generic SaaS aggregators</strong> like Capterra and G2. Massive databases of every
-          piece of business software ever made — 260+ products in just the HVAC category. No real
-          guidance on which fits a 4-person plumbing shop vs a 30-tech commercial mechanical contractor.
-        </li>
-        <li>
-          <strong>Content-mill articles.</strong> Five paragraphs of fluff, padding text, lists of
-          tools without any pricing comparison, no head-to-head feature analysis. Written for SEO,
-          not for the buyer.
-        </li>
-      </ol>
 
       <p>
-        None of those help a contractor making a $5,000-$50,000-per-year software decision. So we built
-        the resource we wished existed: <strong>independent, data-driven, brutally specific about
-        which tool fits which business, and structurally optimized for the questions buyers actually ask.</strong>
+        WrenchStack exists because contractors deserve a research resource built for them: <strong>trades-specific, structurally deep, and engineered around the questions buyers actually ask</strong> — by team size, by vertical, by integration needs, by use case.
       </p>
 
-      <h2>What makes us different</h2>
-
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>WrenchStack</th>
-            <th>Capterra / G2</th>
-            <th>Vendor blogs</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Trades-only focus</strong></td>
-            <td>✅</td>
-            <td>❌ Generic SaaS</td>
-            <td>⚠️ Single vendor</td>
-          </tr>
-          <tr>
-            <td><strong>Rankings independent of payouts</strong></td>
-            <td>✅</td>
-            <td>⚠️ "Sponsored" placements</td>
-            <td>❌ Always #1</td>
-          </tr>
-          <tr>
-            <td><strong>Verified pricing with date stamps</strong></td>
-            <td>✅</td>
-            <td>⚠️ Often outdated</td>
-            <td>❌ Usually hidden</td>
-          </tr>
-          <tr>
-            <td><strong>Head-to-head comparison pages</strong></td>
-            <td>✅ ~480 pairs</td>
-            <td>⚠️ Limited</td>
-            <td>❌ Only vs self</td>
-          </tr>
-          <tr>
-            <td><strong>Specific buyer-guide pages</strong></td>
-            <td>✅ ({useCaseCount} guides)</td>
-            <td>⚠️ Generic</td>
-            <td>❌ One use case</td>
-          </tr>
-          <tr>
-            <td><strong>No email gate to read</strong></td>
-            <td>✅</td>
-            <td>❌ Login required</td>
-            <td>⚠️ Often gated</td>
-          </tr>
-          <tr>
-            <td><strong>Vendors review content before publish</strong></td>
-            <td>❌ Never</td>
-            <td>⚠️ Influence rankings</td>
-            <td>✅ They wrote it</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>How we rank</h2>
-
-      <p>
-        Four equally-weighted factors. The ranking algorithm has <strong>zero knowledge</strong> of which
-        tools we earn commissions from or how much they pay.
-      </p>
-
-      <ol>
-        <li><strong>Aggregated user ratings</strong> — averaged G2 + Capterra scores</li>
-        <li><strong>Pricing transparency</strong> — tools with public pricing rank above "contact sales" black boxes</li>
-        <li><strong>Integration depth</strong> — QuickBooks, payment processors, marketing tools, industry-specific integrations</li>
-        <li><strong>Feature coverage for declared use case</strong> — solo-contractor tools don't get penalized for lacking enterprise reporting; enterprise tools don't get praised for solo-friendly features they don't have</li>
-      </ol>
-
-      <p>
-        Read the full ranking algorithm and audit trail on the <a href="/methodology/">methodology page</a>.
-      </p>
-
-      <h2>Editorial commitments — in writing</h2>
+      <h2>What we publish</h2>
 
       <ul>
-        <li>
-          <strong>We do not accept paid placements.</strong> No vendor can buy a higher ranking, a
-          "featured" badge, or sponsored content. Period.
-        </li>
-        <li>
-          <strong>Vendors do not see drafts.</strong> Tools learn about our coverage of them when
-          everyone else does — when it publishes.
-        </li>
-        <li>
-          <strong>We fact-check pricing quarterly.</strong> Every tier has a verified date.
-          Pricing data on this site ranges from {oldestVerified} to {newestVerified}.
-        </li>
-        <li>
-          <strong>We publish criticism even of affiliate partners.</strong> When the data says a
-          tool we earn no commission from is the right pick, we say so. ServiceTitan pays us up to
-          $10,000 per signup, but if you're a solo contractor we'll still recommend Jobber.
-        </li>
-        <li>
-          <strong>We correct errors within 48 hours.</strong> Mistakes are noted on the page with a
-          dated correction stamp — never silently edited.
-        </li>
-        <li>
-          <strong>We don't fabricate user reviews or testimonials.</strong> Direct user quotes, when
-          we use them, are sourced from public reviews on G2, Capterra, or vendor case studies — never
-          invented.
-        </li>
+        <li><strong><a href="/tools/">{toolCount}+ tool reviews</a></strong> — every major field service platform with verified pricing, feature lists, integration depth, and honest weaknesses.</li>
+        <li><strong><a href="/compare/">~480 head-to-head comparisons</a></strong> — side-by-side breakdowns for any two tools that share a vertical.</li>
+        <li><strong>{verticalCount} vertical landing pages</strong> — ranked picks for HVAC, plumbing, electrical, roofing, landscaping, cleaning, pest control, contractors, and more.</li>
+        <li><strong><a href="/best-software-for/">{useCaseCount} buyer guides</a></strong> — picks for solo contractors, growing teams, QuickBooks-heavy shops, insurance restoration roofers, snow-management landscapers, and other concrete buyer profiles.</li>
+        <li><strong><a href="/pricing/">Pricing comparison pages</a></strong> for every vertical — sorted cheapest first, every tier visible.</li>
+        <li><strong><a href="/quiz/">An interactive matching quiz</a></strong> — 5 questions, returns the 3 platforms that fit your business best.</li>
+        <li><strong><a href="/roi-calculator/">An ROI calculator</a></strong> — plug in your team size and see realistic payback math.</li>
       </ul>
+
+      <h2>How rankings work</h2>
+
+      <p>
+        Every tool in our directory carries a <strong>WrenchStack Score (0–10)</strong> calculated from four weighted factors:
+      </p>
+
+      <ul>
+        <li><strong>Vertical fit (40%)</strong> — how well the tool is built for the specific trade you're searching</li>
+        <li><strong>Aggregated user ratings (30%)</strong> — averaged G2 + Capterra scores</li>
+        <li><strong>Pricing transparency (10%)</strong> — public tier pricing beats "contact sales" black boxes</li>
+        <li><strong>Feature depth + integration coverage (20%)</strong> — does the tool actually do the work, and does it connect to the tools you already use</li>
+      </ul>
+
+      <p>
+        Full breakdown on the <a href="/methodology/">methodology page</a>.
+      </p>
 
       <h2>Who runs WrenchStack</h2>
 
       <p>
-        Built and operated by <strong>Bilal Elhomsi</strong>, an entrepreneur with 15+ years of operating
-        experience in business development, growth strategy, and consulting across hospitality, retail,
-        and technology ventures. WrenchStack is a solo operation — every review, comparison, ranking,
-        and buyer guide on this site is written by one independent operator, not a paid content team.
+        WrenchStack is built and operated by <strong>Bilal Elhomsi</strong>, an entrepreneur with 15+ years of operating experience across hospitality, retail, and technology ventures. The site is a solo operation — every review, comparison, ranking, and buyer guide is written by one independent operator.
       </p>
 
       <p>
-        That's intentional. Content teams optimize for word count and editorial calendar; one operator
-        optimizes for being right.
-      </p>
-
-      <p>
-        We're based in Saudi Arabia. Our editorial focus is the North American field service software
-        market exclusively — that's where the most competitive product ecosystem exists, where most
-        software dollars get spent, and where most of our readers buy.
+        We're based in Saudi Arabia, with editorial focus on the North American field service software market — where the most competitive product ecosystem exists and where most of our readers buy.
       </p>
 
       <h2>How we make money</h2>
 
       <p>
-        Affiliate commissions. When a contractor lands on WrenchStack, reads a comparison, and signs up
-        to a software platform through one of our tracked links, the vendor pays us a referral fee
-        (typically $50-$10,000 per signup depending on the platform).
+        Affiliate commissions. When you sign up to a software platform through one of our tracked links, the vendor pays us a referral fee from their customer acquisition budget. <strong>You pay the same price as buying direct</strong> — there's no markup.
       </p>
 
       <p>
-        <strong>You pay nothing extra.</strong> The commission comes from the vendor's customer-acquisition
-        budget — the same money they'd otherwise spend on Google Ads or sales reps. Buying through
-        WrenchStack's link is the exact same price as buying direct, except some of the marketing budget
-        flows to the people who helped you find the right tool.
+        Read the full breakdown on the <a href="/disclosure/">affiliate disclosure page</a>.
       </p>
-
-      <p>
-        We are <strong>not</strong> funded by:
-      </p>
-
-      <ul>
-        <li>Display advertising (no banners, no Google Ads on pages)</li>
-        <li>Sponsored content (no "in partnership with" articles)</li>
-        <li>Featured-tool placements (no "vendor of the month" sections)</li>
-        <li>Lead-resale (we don't capture your email and sell it)</li>
-        <li>Email gates (everything on the site is readable without signing up)</li>
-      </ul>
-
-      <p>
-        We earn when our recommendations help. Read the full breakdown on the
-        <a href="/disclosure/">affiliate disclosure</a> page.
-      </p>
-
-      <h2>What you'll find here</h2>
-
-      <ul>
-        <li><strong><a href="/tools/">{toolCount}+ tool reviews</a></strong> — every major field service platform, with verified pricing, feature lists, integrations, and weaknesses</li>
-        <li><strong><a href="/compare/">~480 head-to-head comparisons</a></strong> — side-by-side breakdowns of any two tools that share a vertical</li>
-        <li><strong>{verticalCount} vertical landing pages</strong> — best HVAC, plumbing, electrical, roofing, landscaping, cleaning, pest control, and more</li>
-        <li><strong><a href="/best-software-for/">{useCaseCount} buyer guides</a></strong> — picks specific to solo contractors, growing teams, QuickBooks-heavy shops, insurance restoration roofers, snow-management landscapers, and other concrete buyer profiles</li>
-        <li><strong><a href="/pricing/">Pricing comparison pages</a></strong> for every vertical — sorted cheapest first, every tier visible</li>
-        <li><strong>Tool alternatives pages</strong> — when a specific tool doesn't fit, here's what does instead</li>
-      </ul>
 
       <h2 id="contact">Contact</h2>
 
-      <p>
-        Different inboxes for different reasons — pick the right one for fastest response.
-      </p>
-
       <ul>
-        <li>
-          <strong>General / corrections:</strong>{' '}
-          <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a>
-        </li>
-        <li>
-          <strong>Affiliate program partnerships:</strong>{' '}
-          <a href="mailto:partners@wrenchstack.com">partners@wrenchstack.com</a>
-        </li>
-        <li>
-          <strong>Press / media:</strong>{' '}
-          <a href="mailto:press@wrenchstack.com">press@wrenchstack.com</a>
-        </li>
+        <li><strong>General / corrections:</strong> <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a></li>
+        <li><strong>Affiliate program partnerships:</strong> <a href="mailto:partners@wrenchstack.com">partners@wrenchstack.com</a></li>
+        <li><strong>Press / media:</strong> <a href="mailto:press@wrenchstack.com">press@wrenchstack.com</a></li>
       </ul>
 
       <p>
-        Full contact details and what we do (and don't) respond to on the{' '}
-        <a href="/contact/">contact page</a>.
-      </p>
-
-      <p>
-        If you're a vendor and spot an error about your product on our site, email us — we'll fix it
-        within 48 hours, no escalation needed. We don't need you to threaten to pull your affiliate
-        program; accurate data benefits everyone.
+        See the <a href="/contact/">contact page</a> for the right inbox by topic.
       </p>
 
       <hr />
 
       <p class="text-sm text-slate-500">
-        <strong>Site launched:</strong> May 2026<br />
-        <strong>Most recent update:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}<br />
-        <strong>Pricing data verified:</strong> {oldestVerified} to {newestVerified}<br />
-        <strong>Domain:</strong> wrenchstack.com (registered May 2026)
+        <strong>Site launched:</strong> May 2026 ·
+        <strong>Pricing data verified:</strong> {oldestVerified} to {newestVerified} ·
+        <strong>Last update:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
       </p>
 
     </section>
