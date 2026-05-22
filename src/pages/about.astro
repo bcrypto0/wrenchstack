@@ -6,9 +6,6 @@ import useCasesData from '../data/use_cases.json';
 const toolCount = tools.length;
 const verticalCount = verticals.length;
 const useCaseCount = (useCasesData.use_cases as unknown[]).length;
-const verifiedDates = tools.map(t => t.pricing.verified_date).sort();
-const oldestVerified = verifiedDates[0];
-const newestVerified = verifiedDates[verifiedDates.length - 1];
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -118,14 +115,6 @@ const breadcrumbs = [
 
       <p>
         See the <a href="/contact/">contact page</a> for the right inbox by topic.
-      </p>
-
-      <hr />
-
-      <p class="text-sm text-slate-500">
-        <strong>Site launched:</strong> May 2026 ·
-        <strong>Pricing data verified:</strong> {oldestVerified} to {newestVerified} ·
-        <strong>Last update:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
       </p>
 
     </section>
