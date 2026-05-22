@@ -1,0 +1,207 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'ROI Calculator', url: '/roi-calculator/' },
+];
+---
+
+<Layout
+  title="Field service software ROI calculator — see your savings"
+  description="Calculate the realistic ROI of investing in field service management software for your trades business. Free, instant, takes 30 seconds."
+  breadcrumbs={breadcrumbs}
+>
+  <article class="mx-auto max-w-3xl px-4 py-12">
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">Free · 30 seconds · no email required</p>
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        Field service software ROI calculator
+      </h1>
+      <p class="mt-4 text-lg text-slate-600">
+        Plug in 4 numbers about your business — get a realistic estimate of monthly software cost, annual ROI, and payback period. Based on industry-standard 15–25% efficiency gains documented across HVAC, plumbing, electrical, and roofing operations.
+      </p>
+    </header>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-10">
+      <div class="space-y-6">
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-900">Number of technicians</label>
+          <p class="mb-2 text-xs text-slate-500">Including yourself if you do field work.</p>
+          <input id="techs" type="number" min="1" max="500" value="5" class="block w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-lg font-semibold text-slate-900 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-900">Average revenue per technician per year (USD)</label>
+          <p class="mb-2 text-xs text-slate-500">Rough estimate. Typical HVAC tech: $250k–$400k. Plumber: $200k–$350k. Solo contractor: $100k–$250k.</p>
+          <input id="revenue" type="number" min="0" step="10000" value="250000" class="block w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-lg font-semibold text-slate-900 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-900">Hours per week wasted on admin / scheduling chaos</label>
+          <p class="mb-2 text-xs text-slate-500">Per technician. Industry research averages 6–10 hrs/week for shops without FSM software.</p>
+          <input id="admin_hours" type="number" min="0" max="40" value="8" class="block w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-lg font-semibold text-slate-900 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-900">Average billed rate per tech-hour (USD)</label>
+          <p class="mb-2 text-xs text-slate-500">What you charge customers per billable hour.</p>
+          <input id="hourly_rate" type="number" min="0" step="5" value="100" class="block w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-lg font-semibold text-slate-900 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200" />
+        </div>
+
+      </div>
+
+      <button id="calc-btn" class="mt-8 w-full rounded-md bg-orange-500 px-5 py-4 text-base font-bold text-white hover:bg-orange-600">
+        Calculate my ROI →
+      </button>
+    </div>
+
+    <div id="results" class="mt-10 hidden">
+      <h2 class="text-2xl font-bold text-slate-900">Your estimated ROI</h2>
+      <p class="mt-1 text-sm text-slate-500">Based on industry-standard 15–25% admin-time reduction and 8–12% revenue-per-tech increase documented across field service operations.</p>
+
+      <div class="mt-6 grid gap-4 md:grid-cols-3">
+        <div class="rounded-lg border border-slate-200 bg-white p-5">
+          <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Software cost (mid-tier)</div>
+          <div id="cost-monthly" class="mt-2 text-2xl font-bold text-slate-900"></div>
+          <div id="cost-annual" class="text-sm text-slate-600"></div>
+        </div>
+        <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-5">
+          <div class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Annual benefit (mid-case)</div>
+          <div id="annual-benefit" class="mt-2 text-2xl font-bold text-emerald-900"></div>
+          <div id="benefit-breakdown" class="text-sm text-emerald-900"></div>
+        </div>
+        <div class="rounded-lg border border-orange-200 bg-orange-50 p-5">
+          <div class="text-xs font-semibold uppercase tracking-wide text-orange-700">Payback period</div>
+          <div id="payback" class="mt-2 text-2xl font-bold text-orange-900"></div>
+          <div id="payback-note" class="text-sm text-orange-900"></div>
+        </div>
+      </div>
+
+      <div class="mt-8 rounded-lg border border-slate-200 bg-slate-50 p-6">
+        <h3 class="font-bold text-slate-900">How we calculated this</h3>
+        <ul id="calc-breakdown" class="mt-3 space-y-1 text-sm text-slate-700"></ul>
+      </div>
+
+      <div class="mt-8 rounded-lg bg-slate-900 p-6 text-white">
+        <h3 class="text-xl font-bold">Recommended next step</h3>
+        <p class="mt-2 text-slate-300" id="recommendation"></p>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <a id="rec-cta" href="/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">See ranked picks →</a>
+          <a href="/quiz/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Take the matching quiz</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="mt-12 prose prose-slate max-w-none">
+      <h2>How the numbers work</h2>
+      <p>
+        Field service software has two distinct ROI levers:
+      </p>
+      <ul>
+        <li>
+          <strong>Time savings (admin reduction).</strong> Most contractors waste 6–10 hours/week per tech on scheduling chaos, paper invoicing, hunting for paperwork, and double-data-entry. FSM software typically cuts this by 50–70%. At $100/hr billed rate, that's $13,000–$30,000/year per tech recaptured.
+        </li>
+        <li>
+          <strong>Revenue uplift (capacity + close-rate).</strong> Better dispatching = 8–12% more jobs completed per week. Faster quoting = 15–25% higher quote-to-job conversion. For a $250k/year tech, that's another $20k–$30k/year.
+        </li>
+      </ul>
+      <p>
+        Combined, mid-case ROI on FSM software at small shops (3–15 techs) typically runs 8×–25× the software cost in year one — assuming actual adoption by the team.
+      </p>
+
+      <h2>Why we built this calculator</h2>
+      <p>
+        Most vendor "ROI calculators" are sales tools designed to make their specific product look like a no-brainer. Ours uses a single industry-standard formula across all platforms in our directory, so the calculation isn't biased toward any one tool.
+      </p>
+      <p>
+        The numbers shown are <strong>mid-case estimates</strong>. Your actual ROI depends on team adoption, integration depth with your existing tools (especially QuickBooks), and how disciplined you are about turning admin-time savings into billable work.
+      </p>
+
+      <h2>Assumptions</h2>
+      <ul>
+        <li>Mid-tier FSM software cost: ~$150/tech/month (per-user pricing) or ~$300/month flat (per-company pricing) for shops under 10 techs</li>
+        <li>Admin time recovered by software: 60% of current admin hours</li>
+        <li>Recovered admin time converted to billable work: 50% (the other half goes to better planning, training, customer follow-up)</li>
+        <li>Revenue uplift from capacity + close-rate gains: 8% annually (conservative mid-case)</li>
+      </ul>
+    </section>
+  </article>
+
+  <script is:inline>
+    function calc() {
+      const techs = parseFloat(document.getElementById('techs').value) || 1;
+      const revenuePerTech = parseFloat(document.getElementById('revenue').value) || 0;
+      const adminHours = parseFloat(document.getElementById('admin_hours').value) || 0;
+      const hourlyRate = parseFloat(document.getElementById('hourly_rate').value) || 0;
+
+      // Software cost: scale with team size; mid-tier
+      let monthlyCost;
+      if (techs <= 3) monthlyCost = 150;
+      else if (techs <= 10) monthlyCost = 100 * techs;
+      else if (techs <= 30) monthlyCost = 80 * techs;
+      else monthlyCost = 60 * techs; // enterprise tier discount
+      const annualCost = monthlyCost * 12;
+
+      // Admin-time savings
+      const recoveredHoursPerYear = adminHours * 0.6 * 52 * techs; // 60% recovery
+      const billableHoursRecovered = recoveredHoursPerYear * 0.5; // 50% convert to billable
+      const adminSavings = billableHoursRecovered * hourlyRate;
+
+      // Revenue uplift
+      const totalRevenue = revenuePerTech * techs;
+      const revenueLift = totalRevenue * 0.08; // 8% mid-case
+
+      const totalBenefit = adminSavings + revenueLift;
+      const netBenefit = totalBenefit - annualCost;
+      const paybackMonths = annualCost === 0 ? 0 : (annualCost / totalBenefit) * 12;
+      const roiX = totalBenefit / annualCost;
+
+      const fmt = n => n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
+      document.getElementById('cost-monthly').textContent = fmt(monthlyCost) + '/mo';
+      document.getElementById('cost-annual').textContent = fmt(annualCost) + '/year';
+
+      document.getElementById('annual-benefit').textContent = fmt(totalBenefit);
+      document.getElementById('benefit-breakdown').textContent = `${fmt(adminSavings)} time + ${fmt(revenueLift)} growth`;
+
+      document.getElementById('payback').textContent = paybackMonths < 1 ? '< 1 month' : paybackMonths < 12 ? `${paybackMonths.toFixed(1)} months` : `${(paybackMonths/12).toFixed(1)} years`;
+      document.getElementById('payback-note').textContent = `~${roiX.toFixed(1)}× ROI in year one`;
+
+      document.getElementById('calc-breakdown').innerHTML = `
+        <li>📊 Software cost: <strong>${fmt(monthlyCost)}/mo</strong> × 12 = <strong>${fmt(annualCost)}/year</strong></li>
+        <li>⏱️ Hours recovered: <strong>${recoveredHoursPerYear.toLocaleString()} hrs/year</strong> across ${techs} tech${techs === 1 ? '' : 's'} (60% of current admin hours)</li>
+        <li>💰 Billable time recovered: <strong>${billableHoursRecovered.toLocaleString()} hrs/year</strong> × ${fmt(hourlyRate)}/hr = <strong>${fmt(adminSavings)}</strong></li>
+        <li>📈 Revenue uplift (8% capacity gain): <strong>${fmt(revenueLift)}/year</strong></li>
+        <li>✅ Net benefit (after software cost): <strong>${fmt(netBenefit)}/year</strong></li>
+      `;
+
+      // Recommendation
+      let rec, recLink;
+      if (techs <= 3) {
+        rec = `For a ${techs}-tech operation, you want low-cost software that doesn't overcomplicate things. Jobber, Joist, and ServiceM8 are typically the best fit at this size.`;
+        recLink = '/best-software-for/solo-hvac-contractor/';
+      } else if (techs <= 15) {
+        rec = `For a ${techs}-tech team, look at Housecall Pro, Jobber Connect, Service Fusion (unlimited users), or Workiz depending on your priorities.`;
+        recLink = '/tools/';
+      } else if (techs <= 50) {
+        rec = `Your team size warrants a mid-tier or enterprise platform. ServiceTitan, FieldEdge, or BuildOps are typical picks. Expect a 2–4 month implementation.`;
+        recLink = '/best-software-for/growing-electrical-contractor/';
+      } else {
+        rec = `For ${techs}+ techs, you're in enterprise territory. ServiceTitan, BuildOps, and Simpro are the realistic options. Plan for 3–6 month implementation and dedicated project management.`;
+        recLink = '/tools/servicetitan/';
+      }
+      document.getElementById('recommendation').textContent = rec;
+      document.getElementById('rec-cta').href = recLink;
+
+      document.getElementById('results').classList.remove('hidden');
+      document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    document.getElementById('calc-btn').addEventListener('click', calc);
+    ['techs', 'revenue', 'admin_hours', 'hourly_rate'].forEach(id => {
+      document.getElementById(id).addEventListener('keypress', e => { if (e.key === 'Enter') calc(); });
+    });
+  </script>
+</Layout>

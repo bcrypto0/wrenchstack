@@ -1,0 +1,347 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { tools, verticals, getLogoUrl } from '../lib/data';
+
+const toolsForQuiz = tools.map(t => ({
+  slug: t.slug,
+  name: t.name,
+  tagline: t.tagline,
+  starting_at_usd: t.pricing.starting_at_usd,
+  pricing_label: t.pricing.starting_at_usd === null ? 'Custom' : t.pricing.starting_at_usd === 0 ? 'Free' : `$${t.pricing.starting_at_usd}/mo`,
+  verticals: t.verticals,
+  vertical_fit: t.vertical_fit ?? {},
+  best_team_size: t.best_team_size ?? '',
+  key_features: t.key_features,
+  integrations: t.integrations,
+  affiliate_url: t.affiliate_url.startsWith('http') ? t.affiliate_url : t.vendor_url,
+  free_trial_days: t.pricing.free_trial_days ?? 0,
+  logo: getLogoUrl(t, 96),
+}));
+
+const verticalsForQuiz = verticals.map(v => ({ slug: v.slug, name: v.name }));
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Quiz', url: '/quiz/' },
+];
+---
+
+<Layout
+  title="Find your trades software match — interactive quiz"
+  description="Answer 5 questions and get a ranked list of the 3 field service platforms that best fit your business. Free, takes 60 seconds."
+  breadcrumbs={breadcrumbs}
+>
+  <article class="mx-auto max-w-3xl px-4 py-12">
+    <header class="mb-10 text-center">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">5 questions · 60 seconds · free</p>
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        Find your software match
+      </h1>
+      <p class="mt-4 text-lg text-slate-600">
+        Answer 5 quick questions about your business — we'll rank the 3 platforms
+        that fit best from our database of {tools.length} tools.
+      </p>
+    </header>
+
+    <div id="quiz-root" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-10">
+      <!-- progress -->
+      <div class="mb-8">
+        <div class="mb-2 flex justify-between text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <span id="step-label">Question 1 of 5</span>
+          <span id="progress-label">20%</span>
+        </div>
+        <div class="h-2 overflow-hidden rounded-full bg-slate-100">
+          <div id="progress-bar" class="h-full bg-orange-500 transition-all" style="width: 20%"></div>
+        </div>
+      </div>
+
+      <!-- question container -->
+      <div id="question-container"></div>
+
+      <!-- navigation -->
+      <div class="mt-8 flex justify-between gap-3">
+        <button id="back-btn" class="rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:border-slate-400 disabled:opacity-40 disabled:cursor-not-allowed">← Back</button>
+        <button id="next-btn" class="rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed">Next →</button>
+      </div>
+    </div>
+
+    <p class="mt-6 text-center text-xs text-slate-500">
+      No email required. No data collected. The whole thing runs in your browser.
+    </p>
+  </article>
+
+  <script is:inline define:vars={{ toolsForQuiz, verticalsForQuiz }}>
+    const tools = toolsForQuiz;
+    const verticals = verticalsForQuiz;
+
+    const questions = [
+      {
+        id: 'vertical',
+        title: 'What trade are you in?',
+        subtitle: 'Pick the one that best describes your primary business.',
+        type: 'single',
+        options: verticals.map(v => ({ value: v.slug, label: v.name })),
+      },
+      {
+        id: 'team_size',
+        title: 'How big is your team?',
+        subtitle: 'Including yourself and any technicians, office staff, etc.',
+        type: 'single',
+        options: [
+          { value: 'solo', label: 'Just me (solo)' },
+          { value: 'small', label: '2–5 people' },
+          { value: 'growing', label: '6–15 people' },
+          { value: 'established', label: '16–50 people' },
+          { value: 'enterprise', label: '50+ people' },
+        ],
+      },
+      {
+        id: 'budget',
+        title: "What's your monthly software budget?",
+        subtitle: 'Per company, all-in. We use this to filter what fits.',
+        type: 'single',
+        options: [
+          { value: 'min', label: 'Under $50/mo' },
+          { value: 'low', label: '$50–$150/mo' },
+          { value: 'mid', label: '$150–$400/mo' },
+          { value: 'high', label: '$400–$1,000/mo' },
+          { value: 'enterprise', label: '$1,000+/mo (open to custom quote)' },
+        ],
+      },
+      {
+        id: 'priority',
+        title: "What's your #1 priority?",
+        subtitle: 'Which one of these matters MOST in your daily ops?',
+        type: 'single',
+        options: [
+          { value: 'scheduling', label: 'Scheduling & dispatching' },
+          { value: 'invoicing', label: 'Quotes & invoicing' },
+          { value: 'payments', label: 'Payment processing' },
+          { value: 'team', label: 'Team coordination & time tracking' },
+          { value: 'all_in_one', label: 'Everything in one platform' },
+        ],
+      },
+      {
+        id: 'integration',
+        title: 'Which integration is most important?',
+        subtitle: 'Pick "no preference" if integrations aren\'t a dealbreaker.',
+        type: 'single',
+        options: [
+          { value: 'quickbooks', label: 'QuickBooks (Online or Desktop)' },
+          { value: 'stripe', label: 'Stripe / payment processor' },
+          { value: 'zapier', label: 'Zapier (connect to anything)' },
+          { value: 'google', label: 'Google Calendar / Local Services' },
+          { value: 'none', label: 'No preference' },
+        ],
+      },
+    ];
+
+    let step = 0;
+    const answers = {};
+
+    const container = document.getElementById('question-container');
+    const nextBtn = document.getElementById('next-btn');
+    const backBtn = document.getElementById('back-btn');
+    const stepLabel = document.getElementById('step-label');
+    const progressLabel = document.getElementById('progress-label');
+    const progressBar = document.getElementById('progress-bar');
+
+    function render() {
+      backBtn.disabled = step === 0;
+      const isLastQ = step === questions.length - 1;
+      const isResults = step >= questions.length;
+
+      if (isResults) {
+        renderResults();
+        return;
+      }
+
+      const q = questions[step];
+      const selected = answers[q.id];
+      stepLabel.textContent = `Question ${step + 1} of ${questions.length}`;
+      const pct = Math.round(((step + 1) / (questions.length + 1)) * 100);
+      progressLabel.textContent = pct + '%';
+      progressBar.style.width = pct + '%';
+      nextBtn.textContent = isLastQ ? 'See my matches →' : 'Next →';
+      nextBtn.disabled = !selected;
+
+      const opts = q.options.map(o => `
+        <label class="block cursor-pointer">
+          <input type="radio" name="opt" value="${o.value}" ${selected === o.value ? 'checked' : ''} class="peer sr-only" />
+          <div class="rounded-lg border-2 border-slate-200 bg-white p-4 transition peer-checked:border-orange-500 peer-checked:bg-orange-50 hover:border-slate-300">
+            <span class="text-base font-medium text-slate-900">${o.label}</span>
+          </div>
+        </label>
+      `).join('');
+
+      container.innerHTML = `
+        <h2 class="text-2xl font-bold text-slate-900">${q.title}</h2>
+        <p class="mt-1 text-slate-600">${q.subtitle}</p>
+        <div class="mt-6 grid gap-3 sm:grid-cols-2">${opts}</div>
+      `;
+
+      container.querySelectorAll('input[type=radio]').forEach(input => {
+        input.addEventListener('change', e => {
+          answers[q.id] = e.target.value;
+          nextBtn.disabled = false;
+        });
+      });
+    }
+
+    function rankToolsForAnswers() {
+      const v = answers.vertical;
+      const size = answers.team_size;
+      const budget = answers.budget;
+      const priority = answers.priority;
+      const integration = answers.integration;
+
+      const budgetCaps = { min: 50, low: 150, mid: 400, high: 1000, enterprise: 9999 };
+      const cap = budgetCaps[budget] ?? 9999;
+
+      const priorityFeatureMap = {
+        scheduling: ['scheduling', 'dispatching'],
+        invoicing: ['invoicing', 'quotes', 'estimates'],
+        payments: ['credit_card_processing', 'consumer_financing', 'instapay', 'payment_processing'],
+        team: ['team_management', 'gps_tracking', 'time_tracking', 'team_chat'],
+        all_in_one: [],
+      };
+
+      const integrationMap = {
+        quickbooks: ['quickbooks', 'quickbooks_online', 'quickbooks_desktop'],
+        stripe: ['stripe'],
+        zapier: ['zapier'],
+        google: ['google_calendar', 'google_local_services'],
+        none: [],
+      };
+
+      const wantedFeatures = priorityFeatureMap[priority] ?? [];
+      const wantedIntegrations = integrationMap[integration] ?? [];
+
+      const scored = tools
+        .filter(t => t.verticals.includes(v))
+        .map(t => {
+          let score = 0;
+
+          // vertical fit (most important)
+          score += (t.vertical_fit[v] ?? 5) * 4;
+
+          // team size match
+          const sizeMatchScore = scoreTeamSizeMatch(size, t.best_team_size);
+          score += sizeMatchScore * 2;
+
+          // budget fit
+          const priceValue = t.starting_at_usd;
+          if (budget === 'enterprise') {
+            // Enterprise budget: prefer custom-quoted enterprise tools, also accept any
+            if (priceValue === null) score += 10;
+            else if (priceValue >= 400) score += 8;
+            else score += 4;
+          } else if (priceValue === null) {
+            // Custom-quote tool: only fits 'enterprise' budget well
+            score += budget === 'high' ? 3 : 0;
+          } else if (priceValue <= cap) {
+            score += 8;
+          } else {
+            score += 0;
+          }
+
+          // feature match
+          if (wantedFeatures.length > 0) {
+            const matches = wantedFeatures.filter(f => t.key_features.includes(f)).length;
+            score += matches * 2;
+          }
+
+          // integration match
+          if (wantedIntegrations.length > 0) {
+            const matches = wantedIntegrations.filter(i => t.integrations.some(ti => ti.includes(i.split('_')[0]))).length;
+            score += matches * 3;
+          }
+
+          return { ...t, _matchScore: score };
+        })
+        .sort((a, b) => b._matchScore - a._matchScore);
+
+      return scored.slice(0, 3);
+    }
+
+    function scoreTeamSizeMatch(answerSize, toolBestSize) {
+      if (!toolBestSize) return 5;
+      const lower = toolBestSize.split('-')[0].replace(/\D/g, '');
+      const upper = toolBestSize.split('-')[1]?.replace(/\D/g, '') ?? '999';
+      const lowerN = parseInt(lower) || 1;
+      const upperN = parseInt(upper) || 999;
+      const answerRanges = { solo: 1, small: 4, growing: 10, established: 30, enterprise: 75 };
+      const ans = answerRanges[answerSize] ?? 10;
+      if (ans >= lowerN && ans <= upperN) return 10;
+      if (ans >= lowerN * 0.5 && ans <= upperN * 1.5) return 7;
+      return 3;
+    }
+
+    function renderResults() {
+      const results = rankToolsForAnswers();
+      stepLabel.textContent = 'Your matches';
+      progressLabel.textContent = 'Done';
+      progressBar.style.width = '100%';
+      nextBtn.style.display = 'none';
+      backBtn.textContent = '← Retake';
+      backBtn.disabled = false;
+
+      const verticalName = verticals.find(v => v.slug === answers.vertical)?.name ?? answers.vertical;
+
+      const items = results.map((t, i) => `
+        <div class="rounded-lg border border-slate-200 bg-white p-5">
+          <div class="mb-3 flex items-center gap-3">
+            <img src="${t.logo}" alt="${t.name} logo" width="48" height="48" class="h-12 w-12 rounded-lg bg-slate-100 object-contain" onerror="this.style.display='none'" />
+            <div class="flex-1">
+              <div class="text-xs font-bold uppercase tracking-wide text-orange-600">Match #${i + 1}</div>
+              <h3 class="text-xl font-bold text-slate-900">${t.name}</h3>
+            </div>
+          </div>
+          <p class="mb-3 text-sm italic text-slate-600">${t.tagline}</p>
+          <div class="grid gap-1 text-xs text-slate-500">
+            <div><span class="font-semibold text-slate-700">Starting price:</span> ${t.pricing_label}</div>
+            <div><span class="font-semibold text-slate-700">Best team size:</span> ${t.best_team_size || '—'}</div>
+            ${t.free_trial_days > 0 ? `<div><span class="font-semibold text-slate-700">Free trial:</span> ${t.free_trial_days} days</div>` : ''}
+          </div>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <a href="${t.affiliate_url}" rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-4 py-2 text-xs font-semibold text-white hover:bg-orange-600">Visit ${t.name} →</a>
+            <a href="/tools/${t.slug}/" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-900 hover:border-slate-400">Full review</a>
+          </div>
+        </div>
+      `).join('');
+
+      container.innerHTML = `
+        <div class="mb-6 rounded-lg bg-orange-50 border border-orange-200 p-4 text-sm text-slate-700">
+          <strong>Your profile:</strong> ${verticalName}, ${answers.team_size} team, ${answers.budget} budget, prioritizing ${answers.priority.replace(/_/g, ' ')}, ${answers.integration === 'none' ? 'no integration preference' : answers.integration + ' integration'}.
+        </div>
+        <div class="space-y-4">
+          ${results.length > 0 ? items : '<p class="text-slate-600">No matches found for that combination. Try retaking with a different vertical or budget.</p>'}
+        </div>
+        <div class="mt-8 rounded-lg bg-slate-50 p-5 text-sm text-slate-600">
+          <strong class="text-slate-900">Want more options?</strong>
+          See all <a href="/${answers.vertical.replace(/_/g, '-')}/" class="text-orange-600 underline">${verticalName} software ranked</a>, or
+          <a href="/compare/" class="text-orange-600 underline">compare any two tools side-by-side</a>.
+        </div>
+      `;
+    }
+
+    nextBtn.addEventListener('click', () => {
+      step += 1;
+      render();
+    });
+    backBtn.addEventListener('click', () => {
+      if (step >= questions.length) {
+        // Retake from start
+        step = 0;
+        Object.keys(answers).forEach(k => delete answers[k]);
+        nextBtn.style.display = '';
+        backBtn.textContent = '← Back';
+      } else {
+        step = Math.max(0, step - 1);
+      }
+      render();
+    });
+
+    render();
+  </script>
+</Layout>

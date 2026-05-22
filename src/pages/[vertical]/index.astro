@@ -32,7 +32,7 @@ const ranked: Tool[] = rankToolsForVertical(vertical.slug);
 // Compute most recent verified date across tools shown
 const verifiedDates = ranked.map(t => t.pricing.verified_date).sort();
 const lastVerifiedDate = verifiedDates[verifiedDates.length - 1] ?? new Date().toISOString().slice(0, 10);
-const estimatedReadingMin = readingTimeMinutes(2500); // approx page word count
+const estimatedReadingMin = readingTimeMinutes(4500); // approx page word count after content expansion
 
 const topPicks = ranked.slice(0, 5);
 const verticalLower = vertical.name.toLowerCase();
@@ -300,6 +300,116 @@ const breadcrumbs = [
         3–6 month implementation. Get pricing in writing — these are custom-quoted and the spread
         is wide.
       </p>
+
+      <h2>Common mistakes {verticalLower} businesses make picking software</h2>
+
+      <h3>1. Buying for where you are, not where you'll be in 18 months</h3>
+      <p>
+        The most expensive mistake we see: solo contractors pick Joist or a free tier, grow to
+        5 techs in 8 months, and discover their software has no dispatching or team management.
+        The migration to a real FSM platform mid-growth is brutal — historical job data, customer
+        history, and recurring service agreements often don't transfer cleanly.
+        <strong>Buy software for your team size 12-18 months out, not today.</strong>
+      </p>
+
+      <h3>2. Underestimating implementation time</h3>
+      <p>
+        Vendors quote "you'll be live in 2 weeks." Reality for a real shop with existing customer
+        data, recurring contracts, and a team that needs training: <strong>4-12 weeks</strong> for
+        mid-tier platforms like Housecall Pro or Jobber, and <strong>3-6 months</strong> for
+        enterprise platforms like ServiceTitan or BuildOps. Plan accordingly. Don't sign a contract
+        that locks you into a go-live date you can't realistically hit.
+      </p>
+
+      <h3>3. Skipping the QuickBooks integration deep-dive</h3>
+      <p>
+        QuickBooks integration is the make-or-break feature most {verticalLower} businesses overlook
+        until it's too late. Things to verify before signing:
+      </p>
+      <ul>
+        <li><strong>QuickBooks Desktop vs Online support</strong> — some tools only support one. If your accountant is on Desktop, FieldEdge or Knowify is a safer bet than Method:CRM (which prefers Online).</li>
+        <li><strong>Sync direction</strong> — one-way push (FSM → QuickBooks) vs two-way sync. Two-way matters if your accountant adjusts entries in QB.</li>
+        <li><strong>Sync frequency</strong> — real-time (FieldEdge, Smart Service) vs nightly batches (most others). Matters less if you reconcile weekly, matters a lot if you reconcile daily.</li>
+        <li><strong>Customer record merge behavior</strong> — what happens when a customer exists in both systems with slightly different addresses. Some tools merge intelligently, some create duplicates.</li>
+      </ul>
+
+      <h3>4. Over-indexing on price at the entry tier</h3>
+      <p>
+        The lowest tier of any FSM platform is usually missing critical features (no dispatch
+        optimization, no automated reminders, no recurring service tracking). Going up one tier
+        often adds the features that actually justify the software vs your current spreadsheet.
+        Compare the tier you'd realistically use, not the marketing "starting at" price.
+      </p>
+
+      <h3>5. Ignoring the team-adoption tax</h3>
+      <p>
+        Software ROI requires the team to actually use it. The slickest UI doesn't help if your
+        senior tech refuses to enter job notes in the app. Before committing, get your 2-3 most
+        software-resistant team members on a 30-min demo. If they push back hard on basic workflows,
+        keep shopping.
+      </p>
+
+      <h2>Implementation timeline — what to actually expect</h2>
+
+      <p>
+        Skip the vendor-promised "2-week go-live" fantasy. Here's the realistic timeline based on
+        what we've seen with {verticalLower} businesses across our directory:
+      </p>
+
+      <ul>
+        <li><strong>Week 1-2:</strong> Account setup, basic configuration, schedule data import (customers, recurring service agreements). Don't try to import historical job data yet.</li>
+        <li><strong>Week 2-4:</strong> Train office staff on dispatching + invoicing workflows. Set up QuickBooks integration. Run parallel (old system + new system) for 2-4 weeks.</li>
+        <li><strong>Week 4-8:</strong> Train field techs on mobile app. Address adoption resistance. Refine workflow based on real usage.</li>
+        <li><strong>Week 8-12:</strong> Cut over fully. Decommission old system. Build first automation workflows (recurring billing, follow-up reminders).</li>
+        <li><strong>Month 3-6:</strong> Optimization phase. Add advanced features (marketing automation, customer financing, KPI dashboards). This is where ROI compounds.</li>
+      </ul>
+
+      <p>
+        Enterprise platforms (ServiceTitan, BuildOps, FieldEdge enterprise tier) add another
+        2-3 months because they require deeper data migration, custom pricebook setup, and
+        sometimes custom integration work.
+      </p>
+
+      <h2>Glossary — terms used in this guide</h2>
+
+      <dl class="not-prose grid gap-3 text-sm">
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <dt class="font-semibold text-slate-900">FSM (Field Service Management)</dt>
+          <dd class="text-slate-600">Umbrella category for software that manages dispatching, scheduling, invoicing, and customer communication for businesses with technicians in the field. Used interchangeably with "field service software."</dd>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <dt class="font-semibold text-slate-900">Dispatching</dt>
+          <dd class="text-slate-600">The process of assigning jobs to specific technicians based on skill, location, and availability. Good dispatch software minimizes drive time and matches tech certifications to job requirements automatically.</dd>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <dt class="font-semibold text-slate-900">Service agreement</dt>
+          <dd class="text-slate-600">A recurring contract where customers pay annually or monthly for scheduled maintenance + priority service. Common in HVAC and commercial plumbing. Strong service-agreement support is critical for shops with 20%+ recurring revenue.</dd>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <dt class="font-semibold text-slate-900">Pricebook</dt>
+          <dd class="text-slate-600">A standardized catalog of services and prices used to generate quotes consistently across techs. Pricebook automation (ServiceTitan's "Pricebook Pro," Housecall Pro's flat-rate pricing) ensures techs charge the right price every time.</dd>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <dt class="font-semibold text-slate-900">Flat-rate pricing</dt>
+          <dd class="text-slate-600">Quoting the same price for the same job regardless of how long it takes. Standard in residential trades. Requires a pricebook. Opposite of time-and-materials billing.</dd>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <dt class="font-semibold text-slate-900">AIA billing</dt>
+          <dd class="text-slate-600">An invoicing standard used in commercial construction and large contracting projects. Progress-based billing tied to project milestones. If you do commercial work, your software needs to support this — generic FSM tools usually don't.</dd>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <dt class="font-semibold text-slate-900">Two-way QuickBooks sync</dt>
+          <dd class="text-slate-600">Real-time bidirectional data flow between FSM software and QuickBooks. Changes in either system propagate to the other. Critical if your accountant makes adjustments directly in QB.</dd>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <dt class="font-semibold text-slate-900">Consumer financing</dt>
+          <dd class="text-slate-600">In-app financing offers (Wisetack, GreenSky, Synchrony) that let customers pay over time for large repairs. Closes 20-40% more high-ticket jobs in HVAC, roofing, plumbing. Housecall Pro and ServiceTitan have it natively.</dd>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <dt class="font-semibold text-slate-900">GLS (Google Local Services Ads)</dt>
+          <dd class="text-slate-600">Google's "Local Services" ad placement (with the green check). FSM platforms with native GLS integration auto-attribute booked jobs to specific ads, making it easier to measure ROI. Housecall Pro and Workiz lead here.</dd>
+        </div>
+      </dl>
     </section>
 
     <section class="mb-12">
