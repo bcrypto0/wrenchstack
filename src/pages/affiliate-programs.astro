@@ -15,7 +15,7 @@ interface Program {
   applyUrl: string;
   notes?: string;
   best_for_promoting: string;
-  status?: 'live_on_wrenchstack' | 'applying' | 'available';
+  status?: 'live_on_wrenchstack' | 'applying' | 'available' | 'not_viable';
 }
 
 const programs: Program[] = [
@@ -48,8 +48,8 @@ const programs: Program[] = [
     type: 'direct',
     applyUrl: 'https://buildops.com/lp/refer/',
     best_for_promoting: 'Commercial mechanical/electrical/plumbing contractors $5M+ revenue',
-    notes: 'No formal affiliate program. Customer-referral form only. Email partnerships team for media partnership.',
-    status: 'available',
+    notes: 'Customer-referral form only — eligibility restricted to existing BuildOps customers. Direct partnerships outreach to partners@buildops.com bounced. Verified not viable 2026-05-22.',
+    status: 'not_viable',
   },
   {
     tool: 'Knowify',
@@ -59,8 +59,8 @@ const programs: Program[] = [
     type: 'direct',
     applyUrl: 'https://knowify.com/referral-program/',
     best_for_promoting: 'QuickBooks-heavy small-to-mid contractors needing AIA billing',
-    notes: 'Customer-only program publicly. Email for media partnership.',
-    status: 'available',
+    notes: 'Customer-only referral program. Direct outreach to info@knowify.com produced no partnership track. Verified not viable 2026-05-22.',
+    status: 'not_viable',
   },
 
   // TIER 2: STRONG PAYOUT
@@ -83,8 +83,8 @@ const programs: Program[] = [
     type: 'partnerstack',
     applyUrl: 'https://dash.partnerstack.com/application?company=housecallpro&group=paidaffiliates',
     best_for_promoting: 'Residential home service businesses (HVAC, plumbing, electrical, cleaning) with payment processing + financing needs',
-    notes: '90-day cookie is excellent.',
-    status: 'applying',
+    notes: 'PartnerStack application explicitly rejected May 2026. Plan to reapply with traffic data after 90 days of organic traffic.',
+    status: 'not_viable',
   },
   {
     tool: 'Service Fusion',
@@ -117,7 +117,8 @@ const programs: Program[] = [
     type: 'direct',
     applyUrl: 'https://share.buildertrend.com/',
     best_for_promoting: 'Custom home builders, remodelers, specialty contractors running multi-month projects',
-    status: 'available',
+    notes: 'Customer-to-customer referral only ("Share your love for Buildertrend with fellow builders"). Email submission via hello@wrenchstack.com returned "You are not eligible to participate." Verified not viable 2026-05-23.',
+    status: 'not_viable',
   },
   {
     tool: 'FieldEdge',
@@ -138,7 +139,8 @@ const programs: Program[] = [
     type: 'direct',
     applyUrl: 'https://www.tradifyhq.com/partner-programme',
     best_for_promoting: 'Small trade businesses (1–10 employees), UK/AU/NZ markets',
-    status: 'available',
+    notes: 'Application submitted 2026-05-23. Awaiting confirmation email + partner portal access.',
+    status: 'applying',
   },
   {
     tool: 'JobNimbus',
@@ -148,8 +150,8 @@ const programs: Program[] = [
     type: 'referral_rock',
     applyUrl: 'https://jobnimbus.referralrock.com/v2/1/login',
     best_for_promoting: 'Roofing, restoration, and small construction CRM content',
-    notes: 'Direct path bypasses PartnerStack.',
-    status: 'available',
+    notes: 'Program explicitly restricted to "active JobNimbus users." Verified not viable 2026-05-23.',
+    status: 'not_viable',
   },
   {
     tool: 'ServiceM8',
@@ -159,7 +161,8 @@ const programs: Program[] = [
     type: 'direct',
     applyUrl: 'https://www.servicem8.com/us/partner-registration',
     best_for_promoting: 'Small Apple-using trade businesses (1–15 employees)',
-    status: 'available',
+    notes: 'Implementation/consultant partner program requiring $99/year membership + certification course. Lead flow goes FROM ServiceM8 TO certified partners (consultant model), not partner→ServiceM8 (affiliate model). Not an affiliate fit. Verified 2026-05-24.',
+    status: 'not_viable',
   },
   {
     tool: 'Synchroteam',
@@ -169,8 +172,8 @@ const programs: Program[] = [
     type: 'direct',
     applyUrl: 'https://www.synchroteam.com/affiliates.php',
     best_for_promoting: 'International or multi-language field service businesses',
-    notes: '$500 minimum threshold for payout',
-    status: 'available',
+    notes: 'Application submitted 2026-05-23. Program explicitly welcomes bloggers + content publishers. $500 minimum threshold for payout.',
+    status: 'applying',
   },
   {
     tool: 'WorkWave (FieldRoutes, PestPac, ServMan)',
@@ -179,7 +182,8 @@ const programs: Program[] = [
     type: 'direct',
     applyUrl: 'https://www.workwave.com/partners',
     best_for_promoting: 'Pest control, lawn care, multi-route field service businesses',
-    status: 'available',
+    notes: 'Application submitted 2026-05-23 for the Referral tier (commission for customer referrals; WorkWave handles onboarding + support).',
+    status: 'applying',
   },
   {
     tool: 'Skimmer',
@@ -189,7 +193,8 @@ const programs: Program[] = [
     type: 'direct',
     applyUrl: 'https://www.getskimmer.com/partners',
     best_for_promoting: 'Pool service businesses (1–50 routes)',
-    status: 'available',
+    notes: 'No public affiliate program page. Cold email sent to niki@getskimmer.com 2026-05-24.',
+    status: 'applying',
   },
   {
     tool: 'Houzz Pro',
@@ -199,12 +204,14 @@ const programs: Program[] = [
     type: 'direct',
     applyUrl: 'https://www.houzz.com/pro-resources/affiliate-program',
     best_for_promoting: 'Remodelers, designers, home professionals needing marketing + project management',
-    notes: 'Email affiliates@houzz.com for partner inquiries.',
-    status: 'available',
+    notes: 'Public affiliate program page redirects to Pro-customer login wall. Effectively requires existing Houzz Pro subscription before joining. Verified 2026-05-23.',
+    status: 'not_viable',
   },
 ];
 
 const liveCount = programs.filter(p => p.status === 'live_on_wrenchstack').length;
+const applyingCount = programs.filter(p => p.status === 'applying').length;
+const notViableCount = programs.filter(p => p.status === 'not_viable').length;
 const totalCount = programs.length;
 ---
 
@@ -224,7 +231,9 @@ const totalCount = programs.length;
         {totalCount} affiliate programs in the trades and field service software space — with verified payouts, cookie windows, and application URLs. Useful if you're building a directory, comparison site, or content business in the same niche.
       </p>
       <p class="mt-3 text-sm text-slate-500">
-        Of these, <strong class="text-slate-900">{liveCount} are currently live on WrenchStack</strong> with tracking links wired into the site.
+        Of these: <strong class="text-emerald-700">{liveCount} live on WrenchStack</strong> with tracking links wired into the site
+        · <strong class="text-blue-700">{applyingCount} applications submitted</strong>, awaiting review
+        · <strong class="text-slate-700">{notViableCount} verified not viable</strong> for external publishers (customer-only, certification-gated, or rejected — see notes column for each).
       </p>
     </header>
 
@@ -241,9 +250,9 @@ const totalCount = programs.length;
         </thead>
         <tbody class="divide-y divide-slate-100">
           {programs.map(p => (
-            <tr class="hover:bg-slate-50">
-              <td class="p-3">
-                <div class="flex items-center gap-2">
+            <tr class={`hover:bg-slate-50 ${p.status === 'not_viable' ? 'opacity-60' : ''}`}>
+              <td class="p-3 align-top">
+                <div class="flex flex-wrap items-center gap-2">
                   {p.toolSlug ? (
                     <a href={`/tools/${p.toolSlug}/`} class="font-semibold text-slate-900 hover:text-orange-600">{p.tool}</a>
                   ) : (
@@ -252,12 +261,21 @@ const totalCount = programs.length;
                   {p.status === 'live_on_wrenchstack' && (
                     <span class="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">LIVE</span>
                   )}
+                  {p.status === 'applying' && (
+                    <span class="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">APPLIED</span>
+                  )}
+                  {p.status === 'not_viable' && (
+                    <span class="rounded-full bg-slate-200 px-2 py-0.5 text-xs font-medium text-slate-600">NOT VIABLE</span>
+                  )}
                 </div>
+                {p.notes && (
+                  <p class="mt-1 text-xs text-slate-500 leading-snug">{p.notes}</p>
+                )}
               </td>
-              <td class="p-3 text-slate-700">{p.payout}</td>
-              <td class="p-3 text-xs uppercase tracking-wide text-slate-500">{p.type.replace('_', ' ')}</td>
-              <td class="p-3 text-slate-600 text-xs">{p.best_for_promoting}</td>
-              <td class="p-3">
+              <td class="p-3 align-top text-slate-700">{p.payout}</td>
+              <td class="p-3 align-top text-xs uppercase tracking-wide text-slate-500">{p.type.replace('_', ' ')}</td>
+              <td class="p-3 align-top text-slate-600 text-xs">{p.best_for_promoting}</td>
+              <td class="p-3 align-top">
                 <a href={p.applyUrl} rel="noopener" target="_blank" class="text-orange-600 hover:underline text-xs font-semibold">Apply →</a>
               </td>
             </tr>
@@ -294,7 +312,6 @@ const totalCount = programs.length;
       <ul>
         <li><strong>Jobber</strong> — 60% recurring commission on monthly plans. Best long-term LTV.</li>
         <li><strong>Synchroteam</strong> — 20% recurring on customer payments.</li>
-        <li><strong>ServiceM8</strong> — 20% ongoing revenue share + $500 referral.</li>
       </ul>
 
       <h3>Easiest to apply to (open self-serve, no manual approval)</h3>
@@ -302,7 +319,7 @@ const totalCount = programs.length;
         <li><strong>Service Fusion</strong> — instant approval via Referral Rock.</li>
         <li><strong>ServiceTitan</strong> — instant approval via Partner Referral Program.</li>
         <li><strong>Workiz</strong> — fast approval, partner team responds within 24 hours.</li>
-        <li><strong>JobNimbus</strong> — instant via Referral Rock.</li>
+        <li><strong>Synchroteam</strong> — short form, explicitly invites bloggers + content publishers, monthly PayPal payouts.</li>
       </ul>
 
       <h2>What's NOT on this list</h2>
