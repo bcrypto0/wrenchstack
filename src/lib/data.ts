@@ -10,6 +10,16 @@ export interface ToolPricing {
   free_trial_days?: number;
 }
 
+export interface ProConItem {
+  title: string;
+  explanation: string;
+}
+
+export interface ToolFaq {
+  q: string;
+  a: string;
+}
+
 export interface Tool {
   slug: string;
   name: string;
@@ -28,6 +38,14 @@ export interface Tool {
   capterra_rating?: number;
   founded?: number;
   headquartered?: string;
+  // --- Phase 2 custom content (optional; per-tool deep content for
+  // flagship tools that get full reviews. Template falls back to
+  // generated content when these are absent.) ---
+  long_description?: string;        // 200-300 word product narrative
+  pros_detail?: ProConItem[];        // 5-7 detailed pros with explanations
+  cons_detail?: ProConItem[];        // 5-7 detailed cons with explanations
+  implementation_notes?: string;    // 150-250 word tool-specific implementation detail
+  tool_faqs?: ToolFaq[];             // 5+ tool-specific FAQs
 }
 
 export interface Vertical {

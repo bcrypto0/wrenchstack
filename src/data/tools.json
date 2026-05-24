@@ -202,7 +202,87 @@
         "roofing": 9,
         "general_contractor": 8,
         "garage_door": 9
-      }
+      },
+      "long_description": "ServiceTitan is the dominant enterprise platform for residential trades — HVAC, plumbing, electrical, garage door, and roofing — and has effectively become the default choice for established contractors doing $1M+ in annual revenue. Founded in 2012 by Ara Mahdessian and Vahe Kuzoyan after watching their fathers struggle with paper-based dispatching, the company has scaled to power roughly 12,000 contractors across North America, with the average customer doing $7M+ in trackable revenue through the platform.\n\nWhat sets ServiceTitan apart isn't any single feature — it's the integrated depth. Most FSM platforms cover scheduling, dispatching, and invoicing. ServiceTitan layers on Pricebook Pro (a dynamic flat-rate pricing engine that updates with material costs), a built-in marketing automation suite with call attribution down to the ad keyword, an AI dispatcher that recommends technician assignments based on skill and historical close rate, deep payroll and commission management, in-app consumer financing (FinanceIt + Wisetack), and an executive reporting layer used by private-equity-backed contractors for KPI tracking.\n\nThe trade-off is significant: pricing is custom-quoted and lands in the $300-800 per user per month range (user-reported) with mandatory implementation fees starting around $5,000. The 3-6 month go-live timeline assumes you have a dedicated office admin running the project. For shops under $1M revenue or with fewer than 10 technicians, the ROI math rarely works — Jobber or Housecall Pro deliver 70% of the value at 15-20% of the cost.",
+      "pros_detail": [
+        {
+          "title": "Marketing attribution down to the ad keyword",
+          "explanation": "ServiceTitan's call-tracking integration with Google Ads, Facebook, and inbound channels attributes every booked job back to the specific ad that drove the call. This lets you calculate true cost-per-job by source and shift budget between channels with real data — a capability that's nearly impossible to replicate with Jobber + Google Ads alone without expensive third-party tools."
+        },
+        {
+          "title": "Pricebook Pro automates flat-rate pricing",
+          "explanation": "Every job gets the same price for the same work regardless of which technician runs it. Pricebook Pro updates pricing automatically when material costs change, generates upsell suggestions on-screen during tech visits, and ensures techs don't undercharge under customer pressure. Conservatively adds 8-15% to average ticket on residential service work."
+        },
+        {
+          "title": "AI dispatcher with skill and history matching",
+          "explanation": "The dispatching engine recommends the optimal tech for each call based on certifications, historical close rate on that job type, current location, and drive time. Especially valuable for shops running 10+ techs where manual dispatching becomes a bottleneck during peak hours."
+        },
+        {
+          "title": "Deep membership and maintenance plan management",
+          "explanation": "Recurring maintenance plans (the service agreements that generate 20-40% of revenue for mature HVAC shops) get first-class treatment — automated billing, renewal reminders, technician notifications when a member calls, plan-level pricing differentiation. Most competitors treat memberships as an afterthought."
+        },
+        {
+          "title": "Built-in consumer financing (FinanceIt + Wisetack)",
+          "explanation": "In-app financing offers for high-ticket repairs (replacements, full system installs). Closes 25-40% more $5K+ tickets in HVAC by giving customers monthly payment options at the moment of decision rather than after they've slept on it."
+        },
+        {
+          "title": "Executive-grade reporting built for PE-backed shops",
+          "explanation": "Private equity has been rolling up HVAC and plumbing contractors aggressively since 2022. ServiceTitan's reporting layer is built for the KPIs those investors care about — close rate by tech, revenue per truck, gross margin by service category, customer LTV. If you're planning to sell or have outside investors, this matters."
+        },
+        {
+          "title": "Largest implementation partner ecosystem in the category",
+          "explanation": "Because of ServiceTitan's market dominance, there are hundreds of certified implementation consultants. Easier to find someone with experience setting up your specific vertical (commercial HVAC vs residential plumbing) than with any competitor."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Pricing is custom-quoted with no public floor",
+          "explanation": "Expect $300-800 per user per month based on user reports, plus a mandatory implementation fee starting around $5,000 and ranging to $25,000+ for larger deployments. The lack of transparency makes it impossible to budget without going through their sales process."
+        },
+        {
+          "title": "3-6 month implementation requires dedicated admin time",
+          "explanation": "Real go-live with all the features working (Pricebook Pro, marketing attribution, financing, payroll) takes a full quarter minimum. You need a dedicated office admin or operations manager who can spend 10-20 hours a week on the project for the duration."
+        },
+        {
+          "title": "Steep learning curve for field technicians",
+          "explanation": "The mobile app does a lot — work orders, parts ordering, time tracking, customer communication, payment collection. Techs accustomed to paper tickets or simpler apps like Jobber or Housecall Pro often resist initially. Budget extra time for adoption resistance."
+        },
+        {
+          "title": "Overkill for shops under $1M revenue or 10 techs",
+          "explanation": "At smaller scales, you'll pay enterprise pricing for features your team won't fully use. The ROI math doesn't work below $1M revenue — Jobber or Housecall Pro deliver 70% of the value at 15-20% of the cost."
+        },
+        {
+          "title": "Commercial work is supported but not specialized",
+          "explanation": "ServiceTitan is built for residential. If you're 50%+ commercial mechanical or commercial HVAC, BuildOps is purpose-built for that work and handles project tracking, sub-contractor management, and progress billing better."
+        },
+        {
+          "title": "Contract terms favor ServiceTitan",
+          "explanation": "Annual contracts with auto-renewal. Mid-contract feature additions can come with new fees. Read the contract carefully before signing — multi-year commitments are common but reduce your leverage if the product direction changes or you outgrow it."
+        }
+      ],
+      "implementation_notes": "Plan for 3-6 months from contract signing to fully operational. ServiceTitan assigns you a dedicated implementation manager who walks you through the phased rollout, but the speed depends entirely on how much internal capacity you have to dedicate. Weeks 1-4: data migration — customer records, equipment history, recurring service agreements, and historical work orders all need cleanup and import (most shops discover their existing data is messier than they thought). Weeks 4-8: Pricebook setup, where ServiceTitan's value compounds — most shops bring in a Pricebook Pro consultant ($3,000-8,000) to accelerate this; skipping it means you're not using the platform's biggest revenue lever. Weeks 8-16: office staff training and parallel run, where dispatchers and CSRs learn the new system while the old system stays running. Marketing attribution (Google Ads, call tracking) gets configured during this window. Weeks 16-24: field tech rollout in waves, typically tech-comfortable techs first, then the rest. Field adoption resistance is the biggest risk to schedule — don't cut over the old system until every tech is using the mobile app for active work.",
+      "tool_faqs": [
+        {
+          "q": "Is ServiceTitan worth $300-800 per user per month?",
+          "a": "At $1M+ annual revenue with 10+ technicians, yes. The marketing attribution alone often pays for the platform — being able to shift Google Ads budget between high-converting and low-converting campaigns based on real booked-job data typically improves customer acquisition cost by 20-30%. Pricebook Pro adds 8-15% to average ticket. Financing closes 25-40% more high-ticket jobs. Under $1M revenue, the ROI math doesn't work — Jobber ($39-399/mo) delivers 70% of the value at 15-20% of the cost."
+        },
+        {
+          "q": "How long is the contract?",
+          "a": "Standard contracts are annual with auto-renewal. Multi-year contracts (2-3 years) are common and come with discounted pricing but reduce your leverage if the product direction changes or you outgrow it. Always negotiate cancellation terms and price-lock provisions before signing, and confirm what triggers automatic fee increases."
+        },
+        {
+          "q": "Can ServiceTitan replace my existing accounting software?",
+          "a": "No — ServiceTitan integrates with QuickBooks and Sage for accounting but isn't an accounting platform itself. Most shops continue using QuickBooks for general ledger, accounts payable, and tax reporting while ServiceTitan handles billing, invoicing, and accounts receivable. The integration is bidirectional and well-maintained."
+        },
+        {
+          "q": "What's the difference between ServiceTitan and BuildOps?",
+          "a": "Both serve residential and commercial trades but with different priorities. ServiceTitan is residential-first with deep features for inbound calls, marketing attribution, and consumer financing. BuildOps is commercial-first with deeper project tracking, sub-contractor management, and progress billing. If you're 50%+ residential service work, ServiceTitan fits better. If you're 50%+ commercial mechanical or commercial HVAC, BuildOps is the right choice."
+        },
+        {
+          "q": "Can I try ServiceTitan before signing a contract?",
+          "a": "No free trial — you'll need to go through their sales process, which starts with a 30-60 minute discovery call to assess fit. Ask for a guided demo with your real data (or sample data from a similar-sized shop) rather than just a generic product tour. Talk to current customers in your vertical and team size — ServiceTitan can connect you with reference contractors."
+        }
+      ]
     },
     {
       "slug": "workiz",
