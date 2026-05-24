@@ -28,6 +28,23 @@ interface Props {
 
 const { tool } = Astro.props;
 const rating = aggregateRating(tool);
+const startingPrice = tool.pricing.starting_at_usd;
+const hasPublicPricing = startingPrice !== null;
+const isFree = startingPrice === 0;
+const isEnterprise = !hasPublicPricing || (startingPrice !== null && startingPrice >= 250);
+const isMidTier = hasPublicPricing && startingPrice !== null && startingPrice >= 100 && startingPrice < 250;
+const isEntryTier = hasPublicPricing && startingPrice !== null && startingPrice < 100;
+const hasFreeTrial = (tool.pricing.free_trial_days ?? 0) > 0;
+const hasQuickBooks = tool.integrations.some((i) => i.includes('quickbooks'));
+const hasStripe = tool.integrations.some((i) => i.includes('stripe'));
+const hasZapier = tool.integrations.some((i) => i.includes('zapier'));
+
+// Top verticals where this tool fits best (≥8/10)
+const strongVerticals = Object.entries(tool.vertical_fit ?? {})
+  .filter(([_, score]) => score >= 8)
+  .sort(([, a], [, b]) => (b as number) - (a as number))
+  .map(([slug]) => verticals.find((v) => v.slug === slug)?.name)
+  .filter((n): n is string => !!n);
 
 const competitorsInSameVertical: Tool[] = tool.verticals
   .flatMap((v) => toolsForVertical(v))
@@ -35,9 +52,247 @@ const competitorsInSameVertical: Tool[] = tool.verticals
   .sort((a, b) => (aggregateRating(b) ?? 0) - (aggregateRating(a) ?? 0))
   .slice(0, 4);
 
+const topCompetitor = competitorsInSameVertical[0];
+
 const verticalsForThisTool = tool.verticals
   .map((v) => verticals.find((x) => x.slug === v))
   .filter((v): v is NonNullable<typeof v> => v !== undefined);
+
+// --- PRICING ANALYSIS NARRATIVE ---
+function pricingAnalysis(): string {
+  const tierCount = tool.pricing.tiers.length;
+  const topPrice = tool.pricing.tier_prices_usd?.[tierCount - 1];
+
+  if (!hasPublicPricing) {
+    return `${tool.name} uses custom-quoted pricing — typical for enterprise field service platforms where deployment includes data migration, training, and pricebook setup. Expect a 30-60 minute discovery call before getting a number, and the spread between quoted figures can be wide depending on your team size, vertical, and feature requirements. Always get quotes in writing and confirm what's included (number of users, integrations, support tier) before signing.`;
+  }
+
+  if (isFree) {
+    return `${tool.name} offers a genuinely free tier — uncommon in this category. The free tier typically covers the basics (quoting, invoicing, sometimes scheduling) but lacks the multi-user team management, automation, and reporting depth that paid tiers add. Use it to evaluate the UX before committing, but plan to upgrade once you cross 2-3 users or need recurring service tracking.`;
+  }
+
+  const tierLadder = tool.pricing.tiers.join(' → ');
+  const valueBracket = isEntryTier
+    ? 'budget-friendly entry tier'
+    : isMidTier
+    ? 'mid-tier'
+    : 'premium';
+
+  return `${tool.name} starts at $${startingPrice}/mo on the ${tool.pricing.tiers[0]} tier${
+    topPrice && typeof topPrice === 'number' && topPrice > 0
+      ? ` and scales to $${topPrice}/mo on ${tool.pricing.tiers[tierCount - 1]}`
+      : ''
+  }. The ${tierLadder} ladder places it in the ${valueBracket} segment of the FSM market. ${
+    isEntryTier
+      ? `At this price point you're getting core scheduling, invoicing, and a mobile app — but expect to upgrade once you need advanced features like dispatch optimization, automated reminders, or recurring-service contracts.`
+      : isMidTier
+      ? `At this tier you'll typically get the full FSM feature set — scheduling, dispatching, invoicing, customer portal, and most automation. The jump from entry to this tier is usually where the software starts paying for itself.`
+      : `At this tier you're paying for enterprise-grade reporting, custom workflows, dedicated account management, and integration depth. Justified for established shops ($1M+ revenue, 10+ techs); overkill for smaller teams.`
+  }${hasFreeTrial ? ` ${tool.pricing.free_trial_days}-day free trial available — no credit card typically required.` : ` No public free trial — demo required to evaluate.`}`;
+}
+
+// --- PROS (DETAILED, TEMPLATED FROM EXISTING DATA) ---
+function getPros(): string[] {
+  const pros: string[] = [];
+
+  // Vertical fit pros
+  if (strongVerticals.length > 0) {
+    pros.push(
+      `**Strong vertical fit for ${strongVerticals.slice(0, 3).join(', ')}${
+        strongVerticals.length > 3 ? ` and ${strongVerticals.length - 3} more` : ''
+      }** — ${tool.name} is purpose-built for these trades, not a generic FSM repurposed.`,
+    );
+  }
+
+  // Pricing transparency
+  if (hasPublicPricing) {
+    pros.push(
+      `**Transparent public pricing** — every tier price is published, so you can budget without a sales call. Unusual at the enterprise end of the market.`,
+    );
+  }
+
+  // QuickBooks integration
+  if (hasQuickBooks) {
+    pros.push(
+      `**Native QuickBooks integration** — bidirectional sync for customers, invoices, and payments. Critical for keeping the books reconciled without manual exports.`,
+    );
+  }
+
+  // Stripe/payments
+  if (hasStripe) {
+    pros.push(
+      `**Built-in payments via Stripe** — collect deposits, invoices, and recurring billing in-app without juggling a separate payment processor.`,
+    );
+  }
+
+  // Free trial
+  if (hasFreeTrial) {
+    pros.push(
+      `**${tool.pricing.free_trial_days}-day free trial** — long enough to actually run a few jobs through the system before committing.`,
+    );
+  } else if (isFree) {
+    pros.push(`**Free tier available** — you can evaluate the core workflow with zero financial risk.`);
+  }
+
+  // Strong user ratings
+  if (rating !== null && rating >= 4.4) {
+    pros.push(
+      `**${rating.toFixed(1)} / 5 aggregate user rating** (averaged across G2 + Capterra) — strong indicator of post-purchase satisfaction.`,
+    );
+  }
+
+  // Zapier
+  if (hasZapier) {
+    pros.push(
+      `**Zapier integration** — connect ${tool.name} to 5,000+ apps without custom development. Useful for stitching together marketing, accounting, and ops tools you already use.`,
+    );
+  }
+
+  // Feature breadth
+  if (tool.key_features.length >= 7) {
+    pros.push(
+      `**Broad feature coverage** — ${tool.key_features.length} core capabilities including ${tool.key_features
+        .slice(0, 4)
+        .map((f) => f.replace(/_/g, ' '))
+        .join(', ')}.`,
+    );
+  }
+
+  // Founded maturity
+  if (tool.founded && tool.founded <= 2018) {
+    pros.push(
+      `**${2026 - tool.founded} years of product maturity** — founded in ${tool.founded}. Less risk of bankruptcy, missing features, or unstable APIs vs a 2-year-old startup.`,
+    );
+  }
+
+  return pros.slice(0, 7);
+}
+
+// --- CONS (DETAILED) ---
+function getCons(): string[] {
+  const cons: string[] = [];
+
+  // Parse existing weaknesses string into bullets (split on ';' or '.')
+  if (tool.weaknesses) {
+    const parsed = tool.weaknesses
+      .split(/[;.]\s*/)
+      .map((s) => s.trim())
+      .filter((s) => s.length > 5);
+    parsed.forEach((w) => {
+      // Capitalize first letter
+      cons.push(w.charAt(0).toUpperCase() + w.slice(1));
+    });
+  }
+
+  // No public pricing
+  if (!hasPublicPricing) {
+    cons.push(
+      `**No public pricing** — every quote requires a sales call. Hard to comparison-shop without committing time to a demo.`,
+    );
+  }
+
+  // No free trial
+  if (!hasFreeTrial && !isFree) {
+    cons.push(`**No free trial** — must commit to a paid plan or schedule a demo to evaluate.`);
+  }
+
+  // Missing QuickBooks
+  if (!hasQuickBooks) {
+    cons.push(
+      `**No native QuickBooks integration** — accounting sync requires Zapier or manual exports, which adds friction for QuickBooks-heavy shops.`,
+    );
+  }
+
+  // Lower vertical fit warning
+  const weakVerticals = Object.entries(tool.vertical_fit ?? {})
+    .filter(([_, score]) => score < 7 && score > 0)
+    .map(([slug]) => verticals.find((v) => v.slug === slug)?.name)
+    .filter((n): n is string => !!n);
+  if (weakVerticals.length > 0) {
+    cons.push(
+      `**Weaker fit for ${weakVerticals.slice(0, 3).join(', ')}** — possible but not the strongest option in those verticals. Check vertical-specific alternatives if you're in those trades.`,
+    );
+  }
+
+  return cons.slice(0, 7);
+}
+
+// --- IMPLEMENTATION TIMELINE ---
+function implementationTimeline(): { headline: string; detail: string } {
+  if (isEnterprise) {
+    return {
+      headline: '3–6 months for full deployment',
+      detail: `Enterprise platforms like ${tool.name} require deeper data migration (customer history, recurring service agreements, custom pricebooks), staff training on advanced workflows, and often custom integration work. Plan for a 30-60 minute discovery call, then a dedicated implementation manager who guides setup over 12-24 weeks. Don't sign a contract that locks you into a go-live date you can't realistically hit.`,
+    };
+  }
+  if (isMidTier) {
+    return {
+      headline: '4–8 weeks to be fully operational',
+      detail: `Mid-tier platforms typically have a self-serve setup wizard for the basics, with optional paid onboarding for $500-2,000. Plan to spend the first 2 weeks importing customer data and configuring basic workflows, then 2-4 weeks running parallel (old system + new system) before cutting over fully. Field tech training is usually the longest-tail item — budget extra time for adoption resistance.`,
+    };
+  }
+  return {
+    headline: '1–3 weeks for a small team',
+    detail: `Entry-tier FSM platforms are designed for self-service onboarding. You can typically be running real jobs through the system within a week — import customers (or build from scratch), configure your services and pricing, and start scheduling. The bigger time sink is usually adapting your existing workflow rather than the software setup itself.`,
+  };
+}
+
+// --- FAQs (TEMPLATED PER TOOL) ---
+function getFaqs(): { q: string; a: string }[] {
+  const faqs: { q: string; a: string }[] = [];
+
+  // 1. Worth the money
+  faqs.push({
+    q: `Is ${tool.name} worth the money?`,
+    a: `${tool.name} is worth it if you fit the target profile: ${tool.best_for}. ${
+      isEnterprise
+        ? `At enterprise pricing, the ROI math requires established revenue ($1M+) and a team large enough to absorb the implementation overhead.`
+        : isMidTier
+        ? `At mid-tier pricing ($${startingPrice}+/mo), you typically recoup the cost within 2-3 months from faster invoicing, fewer missed appointments, and reduced manual scheduling.`
+        : `At entry-tier pricing ($${startingPrice}/mo), the ROI is usually quick — one prevented missed appointment per month covers the cost.`
+    } If you're outside the target profile, alternatives below are likely a better fit.`,
+  });
+
+  // 2. QuickBooks integration
+  faqs.push({
+    q: `Does ${tool.name} integrate with QuickBooks?`,
+    a: hasQuickBooks
+      ? `Yes — ${tool.name} integrates natively with QuickBooks. The sync covers customers, invoices, and payments. Always confirm whether you need QuickBooks Online or Desktop support before signing — they're not interchangeable across all FSM tools.`
+      : `No — ${tool.name} does not have a native QuickBooks integration. You can typically bridge via Zapier (manual setup) or export/import CSVs (manual ongoing), but this adds friction for QuickBooks-heavy shops. If deep QuickBooks integration is critical, consider FieldEdge or Knowify instead.`,
+  });
+
+  // 3. Free trial
+  faqs.push({
+    q: `Does ${tool.name} offer a free trial?`,
+    a: hasFreeTrial
+      ? `Yes — ${tool.name} offers a ${tool.pricing.free_trial_days}-day free trial. No credit card is typically required to start. Use the trial to actually run a few jobs end-to-end (schedule → dispatch → invoice → payment) rather than just clicking around the UI.`
+      : isFree
+      ? `${tool.name} offers a free tier you can use indefinitely. The free tier covers core workflows but lacks the multi-user team features, automation, and reporting depth that paid tiers add.`
+      : `No — ${tool.name} does not offer a free trial. You'll need to schedule a demo with their sales team to evaluate. Ask for a sandbox or guided walkthrough with your real data to get a meaningful sense of fit.`,
+  });
+
+  // 4. Implementation time
+  const timeline = implementationTimeline();
+  faqs.push({
+    q: `How long does ${tool.name} implementation take?`,
+    a: `${timeline.headline}. ${timeline.detail.split('.').slice(0, 2).join('.')}.`,
+  });
+
+  // 5. Alternative
+  if (topCompetitor) {
+    faqs.push({
+      q: `What's the best alternative to ${tool.name}?`,
+      a: `The closest alternative in the same trades is ${topCompetitor.name} (${formatPrice(topCompetitor)}). ${topCompetitor.best_for}. See our full ${tool.name} vs ${topCompetitor.name} comparison for a side-by-side breakdown.`,
+    });
+  }
+
+  return faqs;
+}
+
+const prosList = getPros();
+const consList = getCons();
+const faqsList = getFaqs();
+const timeline = implementationTimeline();
 
 const productSchema = {
   '@context': 'https://schema.org',
@@ -60,8 +315,18 @@ const productSchema = {
   }),
 };
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqsList.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
 const pageTitle = `${tool.name} Review (2026): Pricing, Features, Pros & Cons`;
-const pageDescription = `${tool.name} review: pricing tiers, key features, integrations, and honest weaknesses. ${tool.tagline}. Updated 2026.`;
+const pageDescription = `${tool.name} review: pricing tiers, key features, pros and cons, integrations, and honest weaknesses. ${tool.tagline}. Updated 2026.`;
 
 const reviewSchema = rating !== null ? {
   '@context': 'https://schema.org',
@@ -98,6 +363,7 @@ const breadcrumbs = [
 <Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
   <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
   {reviewSchema && <script type="application/ld+json" set:html={JSON.stringify(reviewSchema)} />}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <article class="mx-auto max-w-4xl px-4 py-12">
     <nav class="mb-6 text-sm text-slate-500">
@@ -119,7 +385,7 @@ const breadcrumbs = [
         </div>
         <WrenchScore score={wrenchStackScore(tool)} size="lg" />
       </div>
-      <Byline updatedDate={tool.pricing.verified_date} readingMinutes={readingTimeMinutes(1800)} />
+      <Byline updatedDate={tool.pricing.verified_date} readingMinutes={readingTimeMinutes(1600)} />
 
       <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-600">
         {rating !== null && (
@@ -142,14 +408,24 @@ const breadcrumbs = [
         >
           Visit {tool.name} →
         </a>
-        {tool.pricing.free_trial_days && tool.pricing.free_trial_days > 0 && (
+        {hasFreeTrial && (
           <span class="rounded-md border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700">
             {tool.pricing.free_trial_days}-day free trial
           </span>
         )}
       </div>
-
     </header>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
+      <p class="text-slate-700">
+        <strong class="text-slate-900">{tool.name}</strong> is best for {tool.best_for}.
+        Pricing {hasPublicPricing ? `starts at $${startingPrice}/mo` : 'is custom-quoted (sales call required)'}.
+        {strongVerticals.length > 0 && ` Strongest fit: ${strongVerticals.slice(0, 3).join(', ')}.`}
+        {rating !== null && ` ${rating.toFixed(1)} / 5 aggregate user rating.`}
+        {hasFreeTrial && ` ${tool.pricing.free_trial_days}-day free trial available.`}
+      </p>
+    </section>
 
     <section class="mb-10">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Pricing</h2>
@@ -181,6 +457,9 @@ const breadcrumbs = [
       {tool.pricing.pricing_note && (
         <p class="mt-3 text-sm italic text-slate-500">{tool.pricing.pricing_note}</p>
       )}
+      <p class="mt-4 text-slate-700 leading-relaxed">
+        {pricingAnalysis()}
+      </p>
       <p class="mt-2 text-xs text-slate-400">
         Pricing verified {tool.pricing.verified_date}. Vendors change pricing without notice;
         verify with {tool.name} before purchasing.
@@ -209,14 +488,49 @@ const breadcrumbs = [
       </div>
     </section>
 
-    <section class="mb-10 grid gap-6 md:grid-cols-2">
-      <div class="rounded-lg border border-green-200 bg-green-50 p-5">
-        <h3 class="mb-2 font-bold text-green-900">Best for</h3>
-        <p class="text-sm text-green-900">{tool.best_for}</p>
+    <section class="mb-10">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Pros</h2>
+      <ul class="space-y-3">
+        {prosList.map((p) => (
+          <li class="flex gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
+            <span class="font-bold text-emerald-700">+</span>
+            <span set:html={p.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')} />
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Cons</h2>
+      <ul class="space-y-3">
+        {consList.map((c) => (
+          <li class="flex gap-3 rounded-lg border border-orange-200 bg-orange-50 p-4 text-sm text-orange-900">
+            <span class="font-bold text-orange-700">−</span>
+            <span set:html={c.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')} />
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Implementation timeline</h2>
+      <div class="rounded-lg border border-slate-200 bg-white p-6">
+        <p class="mb-2 text-lg font-semibold text-slate-900">{timeline.headline}</p>
+        <p class="text-slate-700 leading-relaxed">{timeline.detail}</p>
       </div>
-      <div class="rounded-lg border border-orange-200 bg-orange-50 p-5">
-        <h3 class="mb-2 font-bold text-orange-900">Watch out for</h3>
-        <p class="text-sm text-orange-900">{tool.weaknesses}</p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Best for / Watch out for</h2>
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="rounded-lg border border-green-200 bg-green-50 p-5">
+          <h3 class="mb-2 font-bold text-green-900">Best for</h3>
+          <p class="text-sm text-green-900">{tool.best_for}</p>
+        </div>
+        <div class="rounded-lg border border-orange-200 bg-orange-50 p-5">
+          <h3 class="mb-2 font-bold text-orange-900">Watch out for</h3>
+          <p class="text-sm text-orange-900">{tool.weaknesses}</p>
+        </div>
       </div>
     </section>
 
@@ -252,11 +566,25 @@ const breadcrumbs = [
       </section>
     )}
 
+    <section class="mb-10">
+      <h2 class="mb-6 text-2xl font-bold text-slate-900">Frequently asked questions</h2>
+      <div class="space-y-4">
+        {faqsList.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Ready to try {tool.name}?</h2>
       <p class="mt-2 text-slate-300">
-        {tool.pricing.free_trial_days && tool.pricing.free_trial_days > 0
+        {hasFreeTrial
           ? `${tool.pricing.free_trial_days}-day free trial. No credit card required to start.`
+          : isFree
+          ? 'Free tier available — no credit card required.'
           : 'Get a custom quote — pricing is not public.'}
       </p>
       <a
