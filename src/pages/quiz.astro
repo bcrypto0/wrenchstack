@@ -24,6 +24,39 @@ const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Quiz', url: '/quiz/' },
 ];
+
+const quizFaqs = [
+  {
+    q: 'How does the matching quiz work?',
+    a: `The quiz uses your answers (trade, team size, budget, priority, integration need) to score every tool in our database against your profile. Each tool gets a weighted score based on vertical fit (most important), team-size match, budget fit, feature priority match, and integration match. The 3 highest-scoring tools are your matches. All scoring runs in your browser — no data is sent to us or any third party.`,
+  },
+  {
+    q: 'Are the matches affiliate-influenced?',
+    a: 'No. The scoring formula is the same for every tool regardless of whether we have an affiliate partnership with them. Tools we earn nothing from rank above tools we have partnerships with whenever the buyer profile fits better. See our methodology page for the full scoring rationale.',
+  },
+  {
+    q: 'What if none of the 3 matches feel right?',
+    a: `Take the quiz again with different answers (especially budget or priority — those are the strongest filters). Or browse the full ${tools.length}-tool directory by vertical. Or compare any two tools side-by-side via the comparison directory.`,
+  },
+  {
+    q: 'Why only 5 questions?',
+    a: 'Most software-selection guidance treats this as a 20-question process. In practice, 5 questions (trade / team size / budget / top priority / key integration) capture 80%+ of the signal needed to surface 3 strong matches. The remaining 20% gets resolved by reading the full reviews of the matches.',
+  },
+  {
+    q: 'How accurate is the team-size match?',
+    a: 'We score team-size based on each tool\'s stated "best team size" range. Perfect match scores highest; tools whose range overlaps yours partially still score reasonably. Tools whose range is far from yours (e.g., enterprise platform for a solo operator) score low so they rarely surface as top matches.',
+  },
+];
+
+const quizFaqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: quizFaqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
 ---
 
 <Layout
@@ -31,6 +64,7 @@ const breadcrumbs = [
   description="Answer 5 questions and get a ranked list of the 3 field service platforms that best fit your business. Free, takes 60 seconds."
   breadcrumbs={breadcrumbs}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(quizFaqSchema)} />
   <article class="mx-auto max-w-3xl px-4 py-12">
     <header class="mb-10 text-center">
       <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">5 questions · 60 seconds · free</p>
@@ -68,6 +102,36 @@ const breadcrumbs = [
     <p class="mt-6 text-center text-xs text-slate-500">
       No email required. No data collected. The whole thing runs in your browser.
     </p>
+
+    <section class="mt-16">
+      <h2 class="mb-6 text-2xl font-bold text-slate-900">How the quiz works</h2>
+      <div class="space-y-4">
+        {quizFaqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-12 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-lg font-bold text-slate-900">Other ways to find your software</h2>
+      <div class="grid gap-3 sm:grid-cols-3 text-sm">
+        <a href="/best-software-for/" class="rounded-lg bg-white p-4 hover:shadow-sm">
+          <div class="font-semibold text-slate-900">Buyer guides →</div>
+          <div class="mt-1 text-xs text-slate-600">Pre-built picks for specific buyer profiles</div>
+        </a>
+        <a href="/roi-calculator/" class="rounded-lg bg-white p-4 hover:shadow-sm">
+          <div class="font-semibold text-slate-900">ROI calculator →</div>
+          <div class="mt-1 text-xs text-slate-600">Estimate payback period for your team size</div>
+        </a>
+        <a href="/features/" class="rounded-lg bg-white p-4 hover:shadow-sm">
+          <div class="font-semibold text-slate-900">Browse by feature →</div>
+          <div class="mt-1 text-xs text-slate-600">Filter tools by specific capabilities</div>
+        </a>
+      </div>
+    </section>
   </article>
 
   <script is:inline define:vars={{ toolsForQuiz, verticalsForQuiz }}>

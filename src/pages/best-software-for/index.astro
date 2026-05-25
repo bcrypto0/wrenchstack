@@ -11,38 +11,137 @@ interface UseCase {
 
 const useCases: UseCase[] = useCasesData.use_cases as UseCase[];
 
+// Categorize guides by primary buyer signal (trade-specific vs. team-size-specific vs. integration/specialty)
+function categorizeGuide(slug: string): 'trade' | 'team_size' | 'specialty' {
+  if (slug.includes('quickbooks')) return 'specialty';
+  if (slug.includes('insurance') || slug.includes('snow-management')) return 'specialty';
+  if (slug.includes('solo') || slug.includes('small') || slug.includes('growing')) return 'team_size';
+  return 'trade';
+}
+
+const tradeGuides = useCases.filter((uc) => categorizeGuide(uc.slug) === 'trade');
+const teamSizeGuides = useCases.filter((uc) => categorizeGuide(uc.slug) === 'team_size');
+const specialtyGuides = useCases.filter((uc) => categorizeGuide(uc.slug) === 'specialty');
+
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Buyer Guides', url: '/best-software-for/' },
 ];
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Trades software buyer guides',
+  numberOfItems: useCases.length,
+  itemListElement: useCases.map((uc, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: uc.h1,
+    url: `https://wrenchstack.com/best-software-for/${uc.slug}/`,
+  })),
+};
 ---
 
 <Layout
-  title="Best Software For — WrenchStack buyer guides"
-  description={`${useCases.length} buyer-specific software guides for trades and field-service businesses. Find the right pick for your exact situation.`}
+  title={`Best software for trades — ${useCases.length} buyer-specific guides`}
+  description={`${useCases.length} buyer-specific software guides for trades and field-service businesses. Each guide ranks 5 tools that actually fit the profile — by team size, vertical, or specific need.`}
   breadcrumbs={breadcrumbs}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+
   <section class="mx-auto max-w-5xl px-4 py-12">
-    <header class="mb-8">
-      <h1 class="text-4xl font-bold tracking-tight text-slate-900">Buyer guides</h1>
-      <p class="mt-3 max-w-2xl text-lg text-slate-600">
-        Software picks for specific buyer situations — by team size, vertical, and use case.
-        Each guide ranks 5 tools that actually fit the profile, with the rationale for why.
+    <header class="mb-10">
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        Buyer guides for trades software
+      </h1>
+      <p class="mt-4 max-w-3xl text-lg text-slate-600">
+        Software picks for specific buyer situations — by team size, vertical, or specific operational need. Each guide ranks 5 tools that actually fit the profile, with the rationale for why and the trade-off analysis between them.
+      </p>
+      <p class="mt-3 text-sm text-slate-500">
+        Not sure which guide fits? Take the <a href="/quiz/" class="text-orange-600 hover:underline">60-second matching quiz</a> for ranked picks tailored to your situation.
       </p>
     </header>
 
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {useCases.map((uc) => (
-        <a
-          href={`/best-software-for/${uc.slug}/`}
-          class="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-slate-400 hover:shadow-sm"
-        >
-          <h3 class="text-lg font-semibold text-slate-900 group-hover:text-orange-600">
-            {uc.h1}
-          </h3>
-          <p class="mt-1 text-sm text-slate-500">{uc.buyer_profile}</p>
+    <section class="mb-12">
+      <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">By trade + scale</h2>
+      <p class="mb-6 text-slate-600">
+        Guides combining a specific trade (HVAC, plumbing, cleaning, etc.) with operational scale — the most common buyer situation.
+      </p>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {tradeGuides.map((uc) => (
+          <a
+            href={`/best-software-for/${uc.slug}/`}
+            class="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm"
+          >
+            <h3 class="text-base font-semibold text-slate-900 group-hover:text-orange-600 leading-tight">
+              {uc.h1}
+            </h3>
+            <p class="mt-2 text-xs text-slate-500 leading-snug">{uc.buyer_profile}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    {teamSizeGuides.length > 0 && (
+      <section class="mb-12">
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">By team size</h2>
+        <p class="mb-6 text-slate-600">
+          Guides focused on a specific team-size bracket where the right software changes — solo operators, small teams, growing operations.
+        </p>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {teamSizeGuides.map((uc) => (
+            <a
+              href={`/best-software-for/${uc.slug}/`}
+              class="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm"
+            >
+              <h3 class="text-base font-semibold text-slate-900 group-hover:text-orange-600 leading-tight">
+                {uc.h1}
+              </h3>
+              <p class="mt-2 text-xs text-slate-500 leading-snug">{uc.buyer_profile}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {specialtyGuides.length > 0 && (
+      <section class="mb-12">
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">By specialty need</h2>
+        <p class="mb-6 text-slate-600">
+          Guides focused on a specific must-have — QuickBooks integration depth, insurance restoration workflow, snow management, etc.
+        </p>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {specialtyGuides.map((uc) => (
+            <a
+              href={`/best-software-for/${uc.slug}/`}
+              class="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm"
+            >
+              <h3 class="text-base font-semibold text-slate-900 group-hover:text-orange-600 leading-tight">
+                {uc.h1}
+              </h3>
+              <p class="mt-2 text-xs text-slate-500 leading-snug">{uc.buyer_profile}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="mt-12 rounded-lg bg-slate-50 p-8">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Other ways to find your software</h2>
+      <div class="grid gap-4 sm:grid-cols-3">
+        <a href="/quiz/" class="group rounded-lg bg-white p-5 hover:shadow-sm">
+          <h3 class="font-semibold text-slate-900 group-hover:text-orange-600">Matching quiz →</h3>
+          <p class="mt-1 text-sm text-slate-600">5 questions, 3 ranked picks in 60 seconds</p>
         </a>
-      ))}
-    </div>
+        <a href="/roi-calculator/" class="group rounded-lg bg-white p-5 hover:shadow-sm">
+          <h3 class="font-semibold text-slate-900 group-hover:text-orange-600">ROI calculator →</h3>
+          <p class="mt-1 text-sm text-slate-600">Estimate payback period for your team size</p>
+        </a>
+        <a href="/features/" class="group rounded-lg bg-white p-5 hover:shadow-sm">
+          <h3 class="font-semibold text-slate-900 group-hover:text-orange-600">Browse by feature →</h3>
+          <p class="mt-1 text-sm text-slate-600">Filter by specific capabilities (QB, AI dispatch, financing)</p>
+        </a>
+      </div>
+    </section>
   </section>
 </Layout>

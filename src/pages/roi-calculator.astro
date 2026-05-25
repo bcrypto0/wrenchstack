@@ -5,6 +5,39 @@ const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'ROI Calculator', url: '/roi-calculator/' },
 ];
+
+const roiFaqs = [
+  {
+    q: 'How realistic are the ROI numbers shown?',
+    a: 'The numbers shown are mid-case estimates using industry-standard assumptions: 15-25% admin-time reduction (documented across FSM deployments), 8-12% revenue uplift from better dispatching and quote-to-close conversion (also industry-standard), and conservative software-cost estimates. Your actual ROI depends on team adoption, integration depth (especially QuickBooks), and how disciplined you are about converting recovered admin time into billable work.',
+  },
+  {
+    q: 'Why does the calculator assume 60% admin-time reduction?',
+    a: 'Independent FSM-deployment surveys (BizPilot, FSM Reports) consistently find 50-70% admin-time reduction post-deployment for shops moving from spreadsheet/paper workflows to modern FSM software. We use 60% as a conservative mid-case. Heavy QuickBooks-integrated shops sometimes see 75%+ reduction; shops without strong office processes see less.',
+  },
+  {
+    q: 'Why does the calculator assume only 50% of recovered admin time converts to billable work?',
+    a: 'Pure time-recovery math (60% admin saved → all of it converts to billable) overstates real-world ROI. In practice, recovered admin time gets split between: more billable work (50%), better planning and customer follow-up (30%), and slower-paced or higher-quality work (20%). The 50% conversion figure matches what shops actually report seeing in cash terms.',
+  },
+  {
+    q: 'What about the 8% revenue uplift assumption?',
+    a: 'Better dispatching captures 8-12% more jobs (less drive time, more daily appointments). Faster quoting closes 15-25% more high-ticket deals at the moment of decision. We use 8% combined as a conservative mid-case — actual numbers vary by trade (HVAC consumer financing pushes this higher; pure scheduled-recurring services like pest control see less of this lift since revenue is contract-bound, not capacity-bound).',
+  },
+  {
+    q: 'Should I trust this for a software-purchase decision?',
+    a: 'For directional ROI sizing, yes. For a precise business-case spreadsheet, layer in your specific software vendor quote (use this as the cost input), your specific team adoption assumptions, and your specific revenue mix (service vs install vs recurring contracts). The calculator gives you a defensible starting estimate; a real business case requires shop-specific refinement.',
+  },
+];
+
+const roiFaqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: roiFaqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
 ---
 
 <Layout
@@ -12,6 +45,7 @@ const breadcrumbs = [
   description="Calculate the realistic ROI of investing in field service management software for your trades business. Free, instant, takes 30 seconds."
   breadcrumbs={breadcrumbs}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(roiFaqSchema)} />
   <article class="mx-auto max-w-3xl px-4 py-12">
     <header class="mb-10">
       <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">Free · 30 seconds · no email required</p>
@@ -94,6 +128,18 @@ const breadcrumbs = [
       </div>
     </div>
 
+    <section class="mt-12">
+      <h2 class="mb-6 text-2xl font-bold text-slate-900">Frequently asked questions</h2>
+      <div class="space-y-4">
+        {roiFaqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
     <section class="mt-12 prose prose-slate max-w-none">
       <h2>How the numbers work</h2>
       <p>
@@ -174,23 +220,28 @@ const breadcrumbs = [
         <li>✅ Net benefit (after software cost): <strong>${fmt(netBenefit)}/year</strong></li>
       `;
 
-      // Recommendation
-      let rec, recLink;
+      // Recommendation — links to flagship reviews + buyer guides
+      let rec, recLink, recLabel;
       if (techs <= 3) {
-        rec = `For a ${techs}-tech operation, you want low-cost software that doesn't overcomplicate things. Jobber, Joist, and ServiceM8 are typically the best fit at this size.`;
+        rec = `For a ${techs}-tech operation, you want low-cost software that doesn't overcomplicate things. Jobber Core, Joist, ServiceM8 (Apple-only), and Markate's free tier are typically the best fit at this size. See our solo-contractor buyer guide for ranked picks.`;
         recLink = '/best-software-for/solo-hvac-contractor/';
+        recLabel = 'See solo-contractor guide →';
       } else if (techs <= 15) {
-        rec = `For a ${techs}-tech team, look at Housecall Pro, Jobber Connect, Service Fusion (unlimited users), or Workiz depending on your priorities.`;
-        recLink = '/tools/';
+        rec = `For a ${techs}-tech team, look at Housecall Pro Essentials, Jobber Connect, Service Fusion (unlimited users — meaningfully cheaper past 6-8 techs), or FieldEdge (best for QuickBooks Desktop shops). The right pick depends on whether consumer financing, multi-vertical fit, or QB integration matters most.`;
+        recLink = '/best-software-for/small-plumbing-team/';
+        recLabel = 'See small-team guide →';
       } else if (techs <= 50) {
-        rec = `Your team size warrants a mid-tier or enterprise platform. ServiceTitan, FieldEdge, or BuildOps are typical picks. Expect a 2–4 month implementation.`;
+        rec = `Your team size warrants a mid-tier or enterprise platform. ServiceTitan (residential service leader), FieldEdge (mid-tier HVAC/plumbing/electrical), or BuildOps (commercial MEP) are typical picks. Expect a 2-4 month implementation with dedicated office-staff project management.`;
         recLink = '/best-software-for/growing-electrical-contractor/';
+        recLabel = 'See growing-team guide →';
       } else {
-        rec = `For ${techs}+ techs, you're in enterprise territory. ServiceTitan, BuildOps, and Simpro are the realistic options. Plan for 3–6 month implementation and dedicated project management.`;
+        rec = `For ${techs}+ techs, you're in enterprise territory. ServiceTitan dominates residential trades at this scale; BuildOps for commercial MEP; Procore for commercial GC work. Plan for 3-6 month implementation, dedicated project management, and $5K-$50K implementation fees on top of monthly licensing.`;
         recLink = '/tools/servicetitan/';
+        recLabel = 'See ServiceTitan review →';
       }
       document.getElementById('recommendation').textContent = rec;
       document.getElementById('rec-cta').href = recLink;
+      document.getElementById('rec-cta').textContent = recLabel;
 
       document.getElementById('results').classList.remove('hidden');
       document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
