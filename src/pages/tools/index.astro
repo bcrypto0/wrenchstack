@@ -1,51 +1,185 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { tools, aggregateRating, formatPrice } from '../../lib/data';
+import { tools, verticals, aggregateRating, formatPrice, verticalToUrl, type Tool } from '../../lib/data';
 
-const sorted = [...tools].sort((a, b) => (aggregateRating(b) ?? 0) - (aggregateRating(a) ?? 0));
+// Flagship tools = those with deep custom content (long_description). 15 tools as of 2026-05-26.
+const flagshipTools = tools
+  .filter((t) => !!(t as Tool & { long_description?: string }).long_description)
+  .sort((a, b) => (aggregateRating(b) ?? 0) - (aggregateRating(a) ?? 0));
+
+// All tools alphabetical
+const allAlphabetical = [...tools].sort((a, b) => a.name.localeCompare(b.name));
+
+// All tools sorted by aggregate rating (for the by-rating section)
+const allByRating = [...tools].sort((a, b) => (aggregateRating(b) ?? 0) - (aggregateRating(a) ?? 0));
+
+// Tools grouped by vertical (for "Browse by trade")
+const toolsByVertical = verticals.map((v) => ({
+  vertical: v,
+  tools: tools
+    .filter((t) => t.verticals.includes(v.slug))
+    .sort((a, b) => (aggregateRating(b) ?? 0) - (aggregateRating(a) ?? 0)),
+}));
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'All tools', url: '/tools/' },
 ];
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Trades software tools',
+  numberOfItems: tools.length,
+  itemListElement: allByRating.slice(0, 25).map((t, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'SoftwareApplication',
+      name: t.name,
+      applicationCategory: 'BusinessApplication',
+      url: `https://wrenchstack.com/tools/${t.slug}/`,
+    },
+  })),
+};
 ---
 
 <Layout
-  title="All field service software tools — WrenchStack"
-  description={`Compare ${tools.length}+ field service and trades software tools side-by-side. Pricing, features, integrations, and ratings — all in one place.`}
+  title={`All ${tools.length} trades software tools — compare every platform`}
+  description={`Browse every field service and trades software platform in our directory. ${tools.length} tools across ${verticals.length} trades, ranked by pricing, features, and user ratings. Includes ${flagshipTools.length} flagship reviews with deep editorial coverage.`}
   breadcrumbs={breadcrumbs}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+
   <section class="mx-auto max-w-6xl px-4 py-12">
-    <header class="mb-8">
-      <h1 class="text-4xl font-bold tracking-tight text-slate-900">All tools we track</h1>
-      <p class="mt-3 max-w-2xl text-lg text-slate-600">
-        Every field service and trades software tool in our database, sorted by aggregated G2 +
-        Capterra ratings. Click any tool for our full review.
+    <header class="mb-10">
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        All {tools.length} trades software tools
+      </h1>
+      <p class="mt-4 max-w-3xl text-lg text-slate-600">
+        Every field service and trades software platform we track — sorted by user ratings, organized by trade, and featuring deep editorial reviews of the {flagshipTools.length} most-searched tools.
       </p>
+      <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500">
+        <span><span class="font-bold text-slate-900">{tools.length}</span> tools tracked</span>
+        <span class="text-slate-300">·</span>
+        <span><span class="font-bold text-slate-900">{flagshipTools.length}</span> flagship reviews</span>
+        <span class="text-slate-300">·</span>
+        <span><span class="font-bold text-slate-900">{verticals.length}</span> trades covered</span>
+      </div>
     </header>
 
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {sorted.map((t) => {
-        const r = aggregateRating(t);
-        return (
-          <a
-            href={`/tools/${t.slug}/`}
-            class="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-slate-400 hover:shadow-sm"
-          >
-            <div class="flex items-baseline justify-between">
-              <h3 class="text-lg font-semibold text-slate-900 group-hover:text-orange-600">
-                {t.name}
+    <nav class="mb-12 rounded-lg border border-slate-200 bg-slate-50 p-4">
+      <div class="text-sm font-semibold text-slate-700">Jump to:</div>
+      <div class="mt-2 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+        <a href="#flagship" class="text-orange-600 hover:underline">Flagship reviews ({flagshipTools.length})</a>
+        <span class="text-slate-300">·</span>
+        <a href="#by-trade" class="text-orange-600 hover:underline">Browse by trade</a>
+        <span class="text-slate-300">·</span>
+        <a href="#all-tools" class="text-orange-600 hover:underline">All tools (alphabetical)</a>
+      </div>
+    </nav>
+
+    <section id="flagship" class="mb-16 scroll-mt-8">
+      <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Flagship reviews</h2>
+      <p class="mb-6 text-slate-600">
+        These {flagshipTools.length} tools have our deepest editorial coverage — 1,400-1,700 word reviews with custom narrative, detailed pros/cons, implementation timelines, and tool-specific FAQs. Cover all major trade-software segments.
+      </p>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {flagshipTools.map((t) => {
+          const r = aggregateRating(t);
+          return (
+            <a
+              href={`/tools/${t.slug}/`}
+              class="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm"
+            >
+              <div class="flex items-baseline justify-between">
+                <h3 class="text-lg font-semibold text-slate-900 group-hover:text-orange-600">
+                  {t.name}
+                </h3>
+                {r !== null && (
+                  <span class="text-sm font-semibold text-slate-700">{r.toFixed(1)}</span>
+                )}
+              </div>
+              <p class="mt-1 text-sm text-slate-500 leading-snug">{t.tagline}</p>
+              <p class="mt-3 text-sm font-medium text-slate-700">{formatPrice(t)}</p>
+              <p class="mt-1 text-xs text-slate-500">Best for: {t.best_for.slice(0, 80)}{t.best_for.length > 80 ? '…' : ''}</p>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+
+    <section id="by-trade" class="mb-16 scroll-mt-8">
+      <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Browse by trade</h2>
+      <p class="mb-6 text-slate-600">
+        Tools grouped by the trades they serve. Most platforms cover multiple trades — they'll appear in each relevant section. Sorted by user rating within each trade.
+      </p>
+      <div class="space-y-10">
+        {toolsByVertical.map(({ vertical, tools: verticalTools }) => (
+          <div>
+            <div class="mb-4 flex items-baseline justify-between border-b border-slate-200 pb-2">
+              <h3 class="text-xl font-bold text-slate-900">
+                <a href={`/${verticalToUrl(vertical.slug)}/`} class="hover:text-orange-600">
+                  {vertical.name}
+                </a>
               </h3>
-              {r !== null && (
-                <span class="text-sm font-semibold text-slate-700">{r.toFixed(1)}</span>
-              )}
+              <span class="text-sm text-slate-500">{verticalTools.length} tools</span>
             </div>
-            <p class="mt-1 text-sm text-slate-500">{t.tagline}</p>
-            <p class="mt-3 text-sm font-medium text-slate-700">{formatPrice(t)}</p>
-            <p class="mt-1 text-xs text-slate-500">{t.best_team_size ?? '—'} techs · {t.verticals.length} trades</p>
-          </a>
-        );
-      })}
-    </div>
+            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {verticalTools.slice(0, 9).map((t) => {
+                const r = aggregateRating(t);
+                return (
+                  <a
+                    href={`/tools/${t.slug}/`}
+                    class="group rounded-lg border border-slate-200 bg-white p-3 transition hover:border-slate-400"
+                  >
+                    <div class="flex items-baseline justify-between">
+                      <div class="font-semibold text-slate-900 group-hover:text-orange-600">{t.name}</div>
+                      {r !== null && (
+                        <span class="text-xs font-medium text-slate-500">{r.toFixed(1)}</span>
+                      )}
+                    </div>
+                    <div class="mt-0.5 text-xs text-slate-500">{formatPrice(t)}</div>
+                  </a>
+                );
+              })}
+            </div>
+            {verticalTools.length > 9 && (
+              <div class="mt-3 text-sm">
+                <a href={`/${verticalToUrl(vertical.slug)}/`} class="text-orange-600 hover:underline">
+                  See all {verticalTools.length} {vertical.name.toLowerCase()} tools →
+                </a>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section id="all-tools" class="mb-12 scroll-mt-8">
+      <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">All tools (alphabetical)</h2>
+      <p class="mb-6 text-slate-600">
+        Every tool in the directory in A-Z order. Use ⌘F / Ctrl+F to find a specific tool by name.
+      </p>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {allAlphabetical.map((t) => {
+          const r = aggregateRating(t);
+          return (
+            <a
+              href={`/tools/${t.slug}/`}
+              class="group rounded-lg border border-slate-200 bg-white p-3 transition hover:border-slate-400"
+            >
+              <div class="flex items-baseline justify-between">
+                <div class="font-semibold text-slate-900 group-hover:text-orange-600">{t.name}</div>
+                {r !== null && (
+                  <span class="text-xs font-medium text-slate-500">{r.toFixed(1)}</span>
+                )}
+              </div>
+              <div class="mt-0.5 text-xs text-slate-500">{formatPrice(t)}</div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
   </section>
 </Layout>
