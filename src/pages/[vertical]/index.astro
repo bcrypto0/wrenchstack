@@ -37,7 +37,15 @@ const estimatedReadingMin = readingTimeMinutes(4500); // approx page word count 
 const topPicks = ranked.slice(0, 5);
 const verticalLower = vertical.name.toLowerCase();
 
-const faqs = [
+// Phase 3 custom content flags — use deep content when present
+const hasIndustryContext = !!vertical.industry_context;
+const hasBuyingPersonas = !!vertical.buying_personas;
+const hasFeaturePriorities = !!vertical.feature_priorities;
+const hasRegulatoryNotes = !!vertical.regulatory_notes;
+const hasSeasonality = !!vertical.seasonality;
+const hasCustomFaqs = (vertical.vertical_faqs?.length ?? 0) > 0;
+
+const templatedFaqs = [
   {
     q: `What is the best ${verticalLower} software in 2026?`,
     a: `Based on our analysis of pricing, features, integrations, and aggregated G2/Capterra ratings, the top three options are ${topPicks
@@ -64,6 +72,8 @@ const faqs = [
     a: `Yes — every major tool on this list integrates with QuickBooks. The integration depth varies: FieldEdge and Knowify offer the deepest QuickBooks integration (two-way sync, real-time job costing). Jobber, Housecall Pro, and Service Fusion offer solid one-way sync. Always confirm whether you need QuickBooks Online or QuickBooks Desktop support — they're not interchangeable.`,
   },
 ];
+
+const faqs = hasCustomFaqs ? vertical.vertical_faqs! : templatedFaqs;
 
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -188,6 +198,20 @@ const breadcrumbs = [
       </p>
     </section>
 
+    {hasIndustryContext && (
+      <section class="mb-12 prose prose-slate max-w-none">
+        <h2>The {vertical.name} software market</h2>
+        <div set:html={vertical.industry_context!.split('\n\n').map(p => `<p>${p}</p>`).join('')} />
+      </section>
+    )}
+
+    {hasBuyingPersonas && (
+      <section class="mb-12 prose prose-slate max-w-none">
+        <h2>Who buys {verticalLower} software (and why it matters)</h2>
+        <div set:html={vertical.buying_personas!.split('\n\n').map(p => `<p>${p}</p>`).join('')} />
+      </section>
+    )}
+
     <section class="mb-12">
       <h2 class="mb-6 text-2xl font-bold text-slate-900">Detailed reviews</h2>
       <div class="space-y-10">
@@ -257,6 +281,20 @@ const breadcrumbs = [
         })}
       </div>
     </section>
+
+    {hasFeaturePriorities && (
+      <section class="mb-12 prose prose-slate max-w-none">
+        <h2>Which features matter most for {verticalLower} businesses</h2>
+        <div set:html={vertical.feature_priorities!.split('\n\n').map(p => `<p>${p}</p>`).join('')} />
+      </section>
+    )}
+
+    {hasSeasonality && (
+      <section class="mb-12 prose prose-slate max-w-none">
+        <h2>Seasonal patterns that shape {verticalLower} software needs</h2>
+        <div set:html={vertical.seasonality!.split('\n\n').map(p => `<p>${p}</p>`).join('')} />
+      </section>
+    )}
 
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Dig deeper into {vertical.name} software</h2>
@@ -369,6 +407,13 @@ const breadcrumbs = [
         2-3 months because they require deeper data migration, custom pricebook setup, and
         sometimes custom integration work.
       </p>
+
+      {hasRegulatoryNotes && (
+        <>
+          <h2>Regulatory considerations for {verticalLower} software</h2>
+          <div set:html={vertical.regulatory_notes!.split('\n\n').map(p => `<p>${p}</p>`).join('')} />
+        </>
+      )}
 
       <h2>Glossary — terms used in this guide</h2>
 

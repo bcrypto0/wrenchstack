@@ -53,6 +53,15 @@ export interface Vertical {
   name: string;
   search_volume_estimate: string;
   buyer_intent: string;
+  // --- Phase 3 custom content (optional; per-vertical deep content
+  // for flagship verticals. Template falls back to generated content
+  // when these are absent.) ---
+  industry_context?: string;     // 300-400 word industry overview
+  buying_personas?: string;      // 200-300 word buyer profiles
+  feature_priorities?: string;   // 200-300 word feature priorities for this trade
+  regulatory_notes?: string;     // 100-200 word industry compliance/certifications
+  seasonality?: string;          // 100-150 word seasonal patterns
+  vertical_faqs?: ToolFaq[];     // 5+ vertical-specific FAQs (replaces generic templated ones)
 }
 
 export const tools: Tool[] = toolsData.tools as Tool[];
