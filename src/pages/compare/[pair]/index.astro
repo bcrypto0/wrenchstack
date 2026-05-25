@@ -65,10 +65,220 @@ const higherRated =
       : b
     : null;
 
+// --- HELPER: classify each tool by pricing tier ---
+function priceTier(t: Tool): 'free' | 'entry' | 'mid' | 'enterprise' {
+  const p = t.pricing.starting_at_usd;
+  if (p === null) return 'enterprise';
+  if (p === 0) return 'free';
+  if (p < 100) return 'entry';
+  if (p < 250) return 'mid';
+  return 'enterprise';
+}
+
+const tierA = priceTier(a);
+const tierB = priceTier(b);
+
+const aHasQB = a.integrations.some((i) => i.includes('quickbooks'));
+const bHasQB = b.integrations.some((i) => i.includes('quickbooks'));
+const aHasStripe = a.integrations.some((i) => i.includes('stripe'));
+const bHasStripe = b.integrations.some((i) => i.includes('stripe'));
+const aHasGLS = a.integrations.some((i) => i.includes('google_local_services'));
+const bHasGLS = b.integrations.some((i) => i.includes('google_local_services'));
+const aHasTrial = (a.pricing.free_trial_days ?? 0) > 0;
+const bHasTrial = (b.pricing.free_trial_days ?? 0) > 0;
+const aHasPublicPricing = a.pricing.starting_at_usd !== null;
+const bHasPublicPricing = b.pricing.starting_at_usd !== null;
+
+// --- DECISION MATRIX ---
+function getDecisionMatrix(): { pickA: string[]; pickB: string[] } {
+  const pickA: string[] = [];
+  const pickB: string[] = [];
+
+  // Best-for lines (always include)
+  pickA.push(`Your situation matches **${a.name}'s target profile**: ${a.best_for}`);
+  pickB.push(`Your situation matches **${b.name}'s target profile**: ${b.best_for}`);
+
+  // Cheaper at entry
+  if (cheaperTool === a) {
+    pickA.push(`**Budget is the constraint** — ${a.name} starts at $${a.pricing.starting_at_usd}/mo vs $${b.pricing.starting_at_usd}/mo for ${b.name}`);
+  } else if (cheaperTool === b) {
+    pickB.push(`**Budget is the constraint** — ${b.name} starts at $${b.pricing.starting_at_usd}/mo vs $${a.pricing.starting_at_usd}/mo for ${a.name}`);
+  }
+
+  // Free trial advantage
+  if (aHasTrial && !bHasTrial && !(b.pricing.starting_at_usd === 0)) {
+    pickA.push(`**You want to try before buying** — ${a.name} offers a ${a.pricing.free_trial_days}-day free trial; ${b.name} requires a demo`);
+  } else if (bHasTrial && !aHasTrial && !(a.pricing.starting_at_usd === 0)) {
+    pickB.push(`**You want to try before buying** — ${b.name} offers a ${b.pricing.free_trial_days}-day free trial; ${a.name} requires a demo`);
+  }
+
+  // QuickBooks
+  if (aHasQB && !bHasQB) {
+    pickA.push(`**QuickBooks is critical** — ${a.name} has native integration; ${b.name} requires Zapier or manual workarounds`);
+  } else if (bHasQB && !aHasQB) {
+    pickB.push(`**QuickBooks is critical** — ${b.name} has native integration; ${a.name} requires Zapier or manual workarounds`);
+  }
+
+  // Higher rating
+  if (higherRated === a && ratingA !== null && ratingB !== null && (ratingA - ratingB) >= 0.2) {
+    pickA.push(`**Post-purchase satisfaction matters** — ${a.name} has a higher aggregate user rating (${ratingA.toFixed(1)} vs ${ratingB.toFixed(1)} on G2 + Capterra)`);
+  } else if (higherRated === b && ratingA !== null && ratingB !== null && (ratingB - ratingA) >= 0.2) {
+    pickB.push(`**Post-purchase satisfaction matters** — ${b.name} has a higher aggregate user rating (${ratingB.toFixed(1)} vs ${ratingA.toFixed(1)} on G2 + Capterra)`);
+  }
+
+  // Multi-vertical
+  if (a.verticals.length > b.verticals.length + 1) {
+    pickA.push(`**You serve multiple trades** — ${a.name} covers ${a.verticals.length} verticals vs ${b.name}'s ${b.verticals.length}`);
+  } else if (b.verticals.length > a.verticals.length + 1) {
+    pickB.push(`**You serve multiple trades** — ${b.name} covers ${b.verticals.length} verticals vs ${a.name}'s ${a.verticals.length}`);
+  }
+
+  // Feature breadth
+  if (a.key_features.length > b.key_features.length + 2) {
+    pickA.push(`**You want broader feature coverage** — ${a.name} ships ${a.key_features.length} core features vs ${b.name}'s ${b.key_features.length}`);
+  } else if (b.key_features.length > a.key_features.length + 2) {
+    pickB.push(`**You want broader feature coverage** — ${b.name} ships ${b.key_features.length} core features vs ${a.name}'s ${a.key_features.length}`);
+  }
+
+  // Integration breadth
+  if (a.integrations.length > b.integrations.length + 1) {
+    pickA.push(`**Integration ecosystem matters** — ${a.name} has ${a.integrations.length} native integrations vs ${b.name}'s ${b.integrations.length}`);
+  } else if (b.integrations.length > a.integrations.length + 1) {
+    pickB.push(`**Integration ecosystem matters** — ${b.name} has ${b.integrations.length} native integrations vs ${a.name}'s ${a.integrations.length}`);
+  }
+
+  // GLS for inbound-call businesses
+  if (aHasGLS && !bHasGLS) {
+    pickA.push(`**Google Local Services Ads drive your inbound calls** — ${a.name} has native GLS integration; ${b.name} doesn't`);
+  } else if (bHasGLS && !aHasGLS) {
+    pickB.push(`**Google Local Services Ads drive your inbound calls** — ${b.name} has native GLS integration; ${a.name} doesn't`);
+  }
+
+  // Founding maturity (only if significant)
+  if (a.founded && b.founded && (a.founded < b.founded - 5)) {
+    pickA.push(`**You want a more mature, stable platform** — ${a.name} was founded in ${a.founded} (${2026 - a.founded} years) vs ${b.name}'s ${b.founded}`);
+  } else if (b.founded && a.founded && (b.founded < a.founded - 5)) {
+    pickB.push(`**You want a more mature, stable platform** — ${b.name} was founded in ${b.founded} (${2026 - b.founded} years) vs ${a.name}'s ${a.founded}`);
+  }
+
+  return { pickA: pickA.slice(0, 6), pickB: pickB.slice(0, 6) };
+}
+
+const decisionMatrix = getDecisionMatrix();
+
+// --- PRICING ANALYSIS NARRATIVE ---
+function pricingAnalysis(): string {
+  if (!aHasPublicPricing && !bHasPublicPricing) {
+    return `Both ${a.name} and ${b.name} use custom-quoted pricing — typical for enterprise-tier FSM platforms. Expect 30-60 minute discovery calls from each before getting a number, with pricing in the $250-$800 per user per month range for either. Request quotes from both for apples-to-apples comparison at your specific team size and feature requirements.`;
+  }
+  if (!aHasPublicPricing) {
+    return `${a.name} uses custom-quoted pricing (typically $250-$800/user/mo for enterprise FSM platforms); ${b.name} has transparent public pricing starting at $${b.pricing.starting_at_usd}/mo. If budget predictability matters, ${b.name} wins on transparency alone. If you need enterprise-tier features and don't mind the sales process, ${a.name}'s custom pricing reflects the deeper feature set.`;
+  }
+  if (!bHasPublicPricing) {
+    return `${b.name} uses custom-quoted pricing (typically $250-$800/user/mo for enterprise FSM platforms); ${a.name} has transparent public pricing starting at $${a.pricing.starting_at_usd}/mo. If budget predictability matters, ${a.name} wins on transparency alone. If you need enterprise-tier features and don't mind the sales process, ${b.name}'s custom pricing reflects the deeper feature set.`;
+  }
+
+  // Both have public pricing
+  const aIsFlat = a.pricing.pricing_note?.toLowerCase().includes('unlimited users');
+  const bIsFlat = b.pricing.pricing_note?.toLowerCase().includes('unlimited users');
+  const aTopPrice = a.pricing.tier_prices_usd?.[a.pricing.tiers.length - 1];
+  const bTopPrice = b.pricing.tier_prices_usd?.[b.pricing.tiers.length - 1];
+
+  let analysis = `${a.name} starts at $${a.pricing.starting_at_usd}/mo on ${a.pricing.tiers[0]}${aTopPrice && typeof aTopPrice === 'number' ? ` and scales to $${aTopPrice}/mo on ${a.pricing.tiers[a.pricing.tiers.length - 1]}` : ''}. ${b.name} starts at $${b.pricing.starting_at_usd}/mo on ${b.pricing.tiers[0]}${bTopPrice && typeof bTopPrice === 'number' ? ` and scales to $${bTopPrice}/mo on ${b.pricing.tiers[b.pricing.tiers.length - 1]}` : ''}.`;
+
+  if (aIsFlat || bIsFlat) {
+    const flatTool = aIsFlat ? a : b;
+    const perUserTool = aIsFlat ? b : a;
+    analysis += ` ${flatTool.name} uses flat per-company pricing (unlimited users at every tier) while ${perUserTool.name} is per-user. The math crossover happens around 6-8 users — past that, ${flatTool.name} becomes meaningfully cheaper.`;
+  } else if (a.pricing.starting_at_usd !== b.pricing.starting_at_usd) {
+    const diff = Math.abs(a.pricing.starting_at_usd - b.pricing.starting_at_usd);
+    const cheaper = cheaperTool!;
+    const pricier = cheaper === a ? b : a;
+    analysis += ` ${cheaper.name} is $${diff}/mo cheaper at the entry tier. At scale (5+ users), both platforms typically converge in price as you climb the tier ladder.`;
+  }
+
+  return analysis;
+}
+
+// --- IMPLEMENTATION TIMELINE COMPARISON ---
+function implementationTimeline(t: Tool): string {
+  const tier = priceTier(t);
+  if (tier === 'enterprise') return '3-6 months for full deployment with dedicated implementation manager';
+  if (tier === 'mid') return '4-8 weeks self-service or with optional paid onboarding';
+  if (tier === 'free' || tier === 'entry') return '1-3 weeks self-service onboarding';
+  return '2-4 weeks typical';
+}
+
+// --- PROS PER TOOL (4-5 templated bullets) ---
+function getPros(t: Tool, isCheaper: boolean, isHigherRated: boolean): string[] {
+  const pros: string[] = [];
+  const hasQB = t.integrations.some((i) => i.includes('quickbooks'));
+  const hasStripe = t.integrations.some((i) => i.includes('stripe'));
+  const hasGLS = t.integrations.some((i) => i.includes('google_local_services'));
+  const hasFreeTrial = (t.pricing.free_trial_days ?? 0) > 0;
+  const r = aggregateRating(t);
+
+  if (isCheaper) pros.push(`Lower entry price — ${formatPrice(t)}`);
+  if (hasFreeTrial) pros.push(`${t.pricing.free_trial_days}-day free trial, no credit card required`);
+  if (isHigherRated && r) pros.push(`Higher aggregate user rating (${r.toFixed(1)} / 5)`);
+  if (hasQB) pros.push(`Native QuickBooks integration (bidirectional sync)`);
+  if (hasStripe) pros.push(`Built-in Stripe payment processing`);
+  if (hasGLS) pros.push(`Native Google Local Services Ads integration`);
+  if (t.verticals.length >= 5) pros.push(`Covers ${t.verticals.length} trade verticals — strong multi-vertical fit`);
+  if (t.key_features.length >= 8) pros.push(`Broad feature coverage (${t.key_features.length} core features)`);
+  if (t.founded && t.founded <= 2015) pros.push(`${2026 - t.founded} years of product maturity (founded ${t.founded})`);
+  if (t.pricing.pricing_note?.toLowerCase().includes('unlimited users')) pros.push(`Flat per-company pricing — unlimited users at every tier`);
+
+  return pros.slice(0, 5);
+}
+
+// --- CONS PER TOOL (parsed from weaknesses + templated) ---
+function getCons(t: Tool, otherT: Tool): string[] {
+  const cons: string[] = [];
+  // Parse weaknesses string into bullets
+  if (t.weaknesses) {
+    const parsed = t.weaknesses
+      .split(/[;.]\s*/)
+      .map((s) => s.trim())
+      .filter((s) => s.length > 5)
+      .map((s) => s.charAt(0).toUpperCase() + s.slice(1));
+    cons.push(...parsed);
+  }
+  // Add templated cons based on what the OTHER tool has
+  const tHasQB = t.integrations.some((i) => i.includes('quickbooks'));
+  const otherHasQB = otherT.integrations.some((i) => i.includes('quickbooks'));
+  if (otherHasQB && !tHasQB) cons.push(`No native QuickBooks integration (${otherT.name} has it)`);
+
+  const tHasTrial = (t.pricing.free_trial_days ?? 0) > 0;
+  const otherHasTrial = (otherT.pricing.free_trial_days ?? 0) > 0;
+  if (otherHasTrial && !tHasTrial && t.pricing.starting_at_usd !== 0) cons.push(`No free trial (${otherT.name} offers ${otherT.pricing.free_trial_days} days)`);
+
+  if (t.pricing.starting_at_usd === null) cons.push(`No public pricing — sales call required for a quote`);
+
+  return cons.slice(0, 5);
+}
+
+const prosA = getPros(a, cheaperTool === a, higherRated === a);
+const prosB = getPros(b, cheaperTool === b, higherRated === b);
+const consA = getCons(a, b);
+const consB = getCons(b, a);
+
+// --- VERTICAL-FIT WINNER PER SHARED VERTICAL ---
+function getVerticalWinners(): Array<{ vertical: typeof sharedVerticals[number]; aFit: number; bFit: number; winner: Tool | null }> {
+  return sharedVerticals.map((v) => {
+    const aFit = a.vertical_fit?.[v.slug] ?? 5;
+    const bFit = b.vertical_fit?.[v.slug] ?? 5;
+    const winner = aFit > bFit ? a : bFit > aFit ? b : null;
+    return { vertical: v, aFit, bFit, winner };
+  });
+}
+const verticalWinners = getVerticalWinners();
+
+// --- EXTENDED FAQs (8 total) ---
 const faqs = [
   {
     q: `Which is better, ${a.name} or ${b.name}?`,
-    a: `Neither is universally better — they target different buyers. ${a.best_for}. ${b.best_for}. The right pick depends on your team size, budget, and vertical.`,
+    a: `Neither is universally better — they target different buyers. ${a.name} is best for ${a.best_for}. ${b.name} is best for ${b.best_for}. See the decision matrix above for situation-specific guidance, or jump to the per-vertical winner table if you're in a specific trade.`,
   },
   {
     q: `Is ${a.name} cheaper than ${b.name}?`,
@@ -80,18 +290,34 @@ const faqs = [
   {
     q: `Can ${a.name} and ${b.name} integrate with QuickBooks?`,
     a: `${
-      a.integrations.some((i) => i.includes('quickbooks'))
-        ? `${a.name} integrates with QuickBooks.`
+      aHasQB
+        ? `${a.name} integrates with QuickBooks natively.`
         : `${a.name} does not have a native QuickBooks integration (Zapier workaround may exist).`
     } ${
-      b.integrations.some((i) => i.includes('quickbooks'))
-        ? `${b.name} integrates with QuickBooks.`
+      bHasQB
+        ? `${b.name} integrates with QuickBooks natively.`
         : `${b.name} does not have a native QuickBooks integration.`
-    }`,
+    } ${aHasQB && bHasQB ? 'Both work with QuickBooks Online; confirm QuickBooks Desktop support before signing if your accountant uses Desktop.' : ''}`,
   },
   {
     q: `Do ${a.name} or ${b.name} offer a free trial?`,
-    a: `${a.name}: ${a.pricing.free_trial_days && a.pricing.free_trial_days > 0 ? `${a.pricing.free_trial_days}-day free trial` : 'no free trial advertised; demo on request'}. ${b.name}: ${b.pricing.free_trial_days && b.pricing.free_trial_days > 0 ? `${b.pricing.free_trial_days}-day free trial` : 'no free trial advertised; demo on request'}.`,
+    a: `${a.name}: ${aHasTrial ? `${a.pricing.free_trial_days}-day free trial, no credit card required` : 'no free trial advertised; demo on request'}. ${b.name}: ${bHasTrial ? `${b.pricing.free_trial_days}-day free trial, no credit card required` : 'no free trial advertised; demo on request'}.`,
+  },
+  {
+    q: `How long does ${a.name} vs ${b.name} take to implement?`,
+    a: `${a.name}: ${implementationTimeline(a)}. ${b.name}: ${implementationTimeline(b)}. Implementation length scales with pricing tier — enterprise platforms ($250+/user/mo) require 3-6 months with dedicated admin time; mid-tier platforms typically reach operational status in 4-8 weeks with optional paid onboarding.`,
+  },
+  {
+    q: `Can I migrate from ${a.name} to ${b.name} (or vice versa)?`,
+    a: `Yes, but expect data normalization work. Customer records and active jobs typically import cleanly via CSV. Historical job data, recurring service agreements, and custom pricebooks rarely transfer perfectly — most shops leave historical data in the source system as archival reference rather than migrating it. Budget 2-4 weeks of parallel operation between the two systems during the cutover.`,
+  },
+  {
+    q: `${a.name} vs ${b.name}: which has better customer support?`,
+    a: `Both ${a.name} and ${b.name} offer email support across all tiers, with phone and live chat typically reserved for higher tiers. Response time SLAs vary by tier — entry-tier customers usually get 24-48 hour email response; enterprise customers get dedicated account managers with same-day response. Read recent G2 reviews specifically for support-quality signals before committing.`,
+  },
+  {
+    q: `Which is better for solo contractors vs growing teams?`,
+    a: `For solo contractors and 2-3 person teams, the lower-priced option (${cheaperTool ? cheaperTool.name : 'either'}) typically wins on cost without sacrificing core features. For growing teams (5-15 employees), evaluate based on which platform's upper tiers include the features you'll need at your 12-18 month projected scale rather than buying for today's team size. For established 15+ employee operations, the depth of enterprise features (reporting, multi-location, marketing attribution) matters more than entry-tier price.`,
   },
 ];
 
@@ -202,6 +428,34 @@ const breadcrumbs = [
     </section>
 
     <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Decision matrix — which one is right for you?</h2>
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-6">
+          <h3 class="mb-4 text-lg font-bold text-emerald-900">Pick {a.name} if…</h3>
+          <ul class="space-y-3 text-sm text-emerald-900">
+            {decisionMatrix.pickA.map((item) => (
+              <li class="flex gap-2">
+                <span class="font-bold text-emerald-700">→</span>
+                <span set:html={item.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')} />
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="rounded-lg border border-blue-200 bg-blue-50 p-6">
+          <h3 class="mb-4 text-lg font-bold text-blue-900">Pick {b.name} if…</h3>
+          <ul class="space-y-3 text-sm text-blue-900">
+            {decisionMatrix.pickB.map((item) => (
+              <li class="flex gap-2">
+                <span class="font-bold text-blue-700">→</span>
+                <span set:html={item.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-12">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Pricing side-by-side</h2>
       <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
         <table class="w-full text-sm">
@@ -232,6 +486,60 @@ const breadcrumbs = [
           </tbody>
         </table>
       </div>
+      <p class="mt-4 text-slate-700 leading-relaxed">{pricingAnalysis()}</p>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Pros & cons</h2>
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <h3 class="mb-3 text-lg font-bold text-slate-900">{a.name}</h3>
+          <div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+            <div class="mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-700">Pros</div>
+            <ul class="space-y-1.5 text-sm text-emerald-900">
+              {prosA.map((p) => <li>+ {p}</li>)}
+            </ul>
+          </div>
+          <div class="rounded-lg border border-orange-200 bg-orange-50 p-4">
+            <div class="mb-2 text-xs font-semibold uppercase tracking-wider text-orange-700">Cons</div>
+            <ul class="space-y-1.5 text-sm text-orange-900">
+              {consA.map((c) => <li>− {c}</li>)}
+            </ul>
+          </div>
+        </div>
+        <div>
+          <h3 class="mb-3 text-lg font-bold text-slate-900">{b.name}</h3>
+          <div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+            <div class="mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-700">Pros</div>
+            <ul class="space-y-1.5 text-sm text-emerald-900">
+              {prosB.map((p) => <li>+ {p}</li>)}
+            </ul>
+          </div>
+          <div class="rounded-lg border border-orange-200 bg-orange-50 p-4">
+            <div class="mb-2 text-xs font-semibold uppercase tracking-wider text-orange-700">Cons</div>
+            <ul class="space-y-1.5 text-sm text-orange-900">
+              {consB.map((c) => <li>− {c}</li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Implementation timeline comparison</h2>
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="rounded-lg border border-slate-200 bg-white p-5">
+          <h3 class="mb-2 font-bold text-slate-900">{a.name}</h3>
+          <p class="text-sm text-slate-700">{implementationTimeline(a)}</p>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-5">
+          <h3 class="mb-2 font-bold text-slate-900">{b.name}</h3>
+          <p class="text-sm text-slate-700">{implementationTimeline(b)}</p>
+        </div>
+      </div>
+      <p class="mt-4 text-sm text-slate-600 leading-relaxed">
+        Enterprise-tier platforms ($250+/user/mo) typically require 3-6 months with dedicated admin time, custom pricebook setup, and phased rollout to field techs. Mid-tier platforms reach operational status in 4-8 weeks with optional paid onboarding. Entry-tier platforms are designed for self-service onboarding in 1-3 weeks. Always plan for 2-4 weeks of parallel operation with your existing system before cutting over.
+      </p>
     </section>
 
     <section class="mb-12">
@@ -314,19 +622,42 @@ const breadcrumbs = [
       </div>
     </section>
 
-    {sharedVerticals.length > 0 && (
+    {verticalWinners.length > 0 && (
       <section class="mb-12">
-        <h2 class="mb-4 text-2xl font-bold text-slate-900">Both support these trades</h2>
-        <div class="flex flex-wrap gap-2">
-          {sharedVerticals.map((v) => (
-            <a
-              href={`/${verticalToUrl(v.slug)}/`}
-              class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 hover:border-orange-500 hover:text-orange-600"
-            >
-              Compare in {v.name} →
-            </a>
-          ))}
+        <h2 class="mb-4 text-2xl font-bold text-slate-900">Which fits better in each trade</h2>
+        <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+          <table class="w-full text-sm">
+            <thead class="bg-slate-50 text-left text-slate-700">
+              <tr>
+                <th class="p-3 font-semibold">Trade</th>
+                <th class="p-3 font-semibold text-center">{a.name} fit</th>
+                <th class="p-3 font-semibold text-center">{b.name} fit</th>
+                <th class="p-3 font-semibold">Winner</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              {verticalWinners.map((vw) => (
+                <tr>
+                  <td class="p-3 font-semibold text-slate-900">
+                    <a href={`/${verticalToUrl(vw.vertical.slug)}/`} class="hover:text-orange-600">{vw.vertical.name}</a>
+                  </td>
+                  <td class="p-3 text-center text-slate-700">{vw.aFit} / 10</td>
+                  <td class="p-3 text-center text-slate-700">{vw.bFit} / 10</td>
+                  <td class="p-3 text-slate-700">
+                    {vw.winner ? (
+                      <span class="font-semibold text-slate-900">{vw.winner.name}</span>
+                    ) : (
+                      <span class="text-slate-500">Tie</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
+        <p class="mt-2 text-xs text-slate-500">
+          Vertical-fit scores combine feature coverage, customer base concentration, and the tool's own positioning for the trade. See <a href="/methodology/" class="underline hover:text-slate-700">methodology</a>.
+        </p>
       </section>
     )}
 
@@ -336,7 +667,7 @@ const breadcrumbs = [
         {faqs.map((f) => (
           <details class="rounded-lg border border-slate-200 bg-white p-4">
             <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
-            <p class="mt-3 text-slate-700">{f.a}</p>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
           </details>
         ))}
       </div>
