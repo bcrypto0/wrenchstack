@@ -1093,7 +1093,79 @@
         "hvac": 6,
         "plumbing": 6,
         "electrical": 6
-      }
+      },
+      "long_description": "Knowify is a construction project management platform built around deep QuickBooks integration, designed for general contractors, remodelers, and trade subcontractors who run QuickBooks as their accounting backbone. Founded in 2014 in New York, the company has carved out its market position by serving the QB-heavy construction segment — operators who want construction-specific project management features without abandoning their existing QuickBooks workflow.\n\nQuickBooks integration is the central differentiator. Knowify does real-time bidirectional sync with both QuickBooks Online and QuickBooks Desktop, handling change orders, time tracking, AIA progress billing, purchase orders, and sub-contractor payments. Most competitors offer one-way sync with QuickBooks Online and weaker Desktop support; Knowify made deep bidirectional integration their primary value proposition.\n\nThe product handles the full construction workflow: project setup with budgets and schedules, change order management with customer signature capture, AIA G702/G703 progress billing, sub-contractor coordination including PO and payment tracking with lien waiver management, time tracking with job costing, customer portal for project visibility, and material takeoff integration.\n\nPricing is per-company tier: Starter $186/mo (1-3 active jobs), Pro $279/mo (unlimited jobs + advanced features), Premier $367/mo (multi-currency, multi-entity for larger operations). Unlimited users at every tier. This pricing model favors operations with 5+ team members where flat per-company pricing beats per-user competitors.\n\nThe trade-off: Knowify is less polished than Buildertrend (which dominates residential remodeling) and has a smaller user community. For QuickBooks-heavy construction operations, the deeper QB integration justifies the lower polish. Best for residential remodelers, trade sub-contractors, and small commercial GCs ($1M-$10M revenue) running QuickBooks as their accounting platform.",
+      "pros_detail": [
+        {
+          "title": "Deepest QuickBooks integration in construction project management",
+          "explanation": "Real-time bidirectional sync with both QuickBooks Online and Desktop. Handles change orders, AIA billing, purchase orders, sub payments, time tracking with job costing. Most competitors are QB Online-focused with weak Desktop support."
+        },
+        {
+          "title": "AIA G702/G703 progress billing",
+          "explanation": "Generates AIA-format pay applications from project schedule of values, tracks lien waivers from subs, reconciles approved billing against actual completion. Saves real time vs spreadsheet-based AIA workflows on commercial-style projects."
+        },
+        {
+          "title": "Change order workflow with signature capture",
+          "explanation": "Captures change orders with customer signature, integrates with project budget, updates remaining milestone payments. Critical for residential remodeling where change orders are the source of most owner-contractor disputes."
+        },
+        {
+          "title": "Sub-contractor coordination with lien waiver tracking",
+          "explanation": "Sub profile management, PO creation, payment tracking, lien waiver collection. Less deep than Procore but matched to residential and small commercial scale."
+        },
+        {
+          "title": "Unlimited users at every tier",
+          "explanation": "Flat per-company pricing ($186-$367/mo) means a 20-user team pays the same as a 5-user team. Past 5-6 users, Knowify becomes meaningfully cheaper than per-user competitors."
+        },
+        {
+          "title": "Time tracking with real-time job costing",
+          "explanation": "Field time tracking integrated with project budgets. Real-time job profitability visibility. Critical for understanding project margins before completion — a real differentiator vs spreadsheet-based job costing."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Less polished than Buildertrend",
+          "explanation": "UI shows less design refinement than Buildertrend's modern interface. Functional but visually older. Buildertrend wins on client portal polish for custom home work specifically."
+        },
+        {
+          "title": "Smaller user community",
+          "explanation": "6,000-8,000 customers vs Buildertrend's hundreds of thousands. Fewer YouTube tutorials, less Reddit/Facebook content, smaller knowledge base for self-service learning."
+        },
+        {
+          "title": "Per-tier pricing tiers based on active job count",
+          "explanation": "Starter limited to 3 active jobs; growing operations need to upgrade based on project volume rather than feature needs. Less flexible than tier upgrades based on features alone."
+        },
+        {
+          "title": "Customer portal less developed than Buildertrend",
+          "explanation": "For residential custom home work where homeowner-facing portal matters (selections management, schedule visibility, photo updates), Buildertrend's portal is more refined."
+        },
+        {
+          "title": "Limited integration ecosystem outside QuickBooks",
+          "explanation": "Strong QB integration but fewer integrations with other construction-specific tools (Hover for measurements, Beacon for materials, Bluebeam for documents) compared to Procore or Buildertrend."
+        }
+      ],
+      "implementation_notes": "Plan for 2-6 weeks for full operational rollout. Knowify offers self-service onboarding with optional paid setup ($1,500-$5,000) for larger deployments. Realistic timeline for a mid-size residential GC or trade sub-contractor (5-20 employees): Weeks 1-2 account setup, QuickBooks integration configuration (Online or Desktop — the QB integration is the most critical setup item, get this right before going live), customer and active project data import. Weeks 2-4 office staff training on project setup, change order workflows, AIA progress billing if doing commercial-style projects, sub-contractor management. Weeks 4-6 field crew training on time tracking mobile app, first project goes live with full workflow, parallel run with existing system. For shops migrating from spreadsheet-based or QuickBooks-only operations, the change management lift concentrates on adopting structured project management workflows that QB doesn't enforce. For shops migrating from Buildertrend or Procore, the data import handles customers and active projects cleanly; historical project data typically stays in source system as archive.",
+      "tool_faqs": [
+        {
+          "q": "Should I use Knowify or Buildertrend for residential remodeling?",
+          "a": "Depends on what matters more. Buildertrend wins for custom home builders prioritizing homeowner-facing client portal and selections management. Knowify wins for QuickBooks-heavy operations where deep bidirectional QB integration (especially Desktop) saves real accounting work. Many operations could use either; the QB Desktop dependence is the strongest tiebreaker for Knowify."
+        },
+        {
+          "q": "Does Knowify replace QuickBooks?",
+          "a": "No — Knowify integrates deeply with QuickBooks (Online and Desktop) for accounting. Knowify handles project management, change orders, time tracking, and AIA progress billing; QuickBooks handles GL, AP, payroll, and tax. The integration is bidirectional and well-maintained — this is Knowify's main value vs competitors."
+        },
+        {
+          "q": "How does Knowify handle commercial GC work?",
+          "a": "Knowify handles small commercial GC work (single-trade subs, light commercial projects under $1M) reasonably well — AIA progress billing, sub coordination, change orders all work. For large commercial GC work ($5M+ projects, complex multi-trade coordination, BIM requirements), Procore is the better fit. Most Knowify customers are residential remodelers and trade sub-contractors."
+        },
+        {
+          "q": "What's the active-job limit on the Starter tier?",
+          "a": "3 active jobs at $186/mo. Pro tier ($279/mo) is unlimited active jobs plus advanced features (custom pricing, advanced reporting). Most growing operations upgrade from Starter to Pro within 6-12 months as project volume grows."
+        },
+        {
+          "q": "Can I track time directly in QuickBooks instead of Knowify?",
+          "a": "You can but you'll lose the job-costing visibility that Knowify provides. Knowify's value is connecting field time tracking to specific project budgets in real-time. QuickBooks Time (formerly TSheets) handles time tracking but doesn't have the project management context. Most Knowify customers use Knowify time tracking and rely on the QB sync for payroll processing."
+        }
+      ]
     },
     {
       "slug": "joist",
@@ -1213,7 +1285,79 @@
         "landscaping": 7,
         "cleaning": 8,
         "handyman": 6
-      }
+      },
+      "long_description": "Connecteam is a workforce management platform built specifically for deskless teams — the 80% of workers who don't sit at desks all day. Founded in 2014 in Tel Aviv, the company has scaled to serve 36,000+ companies and 700,000+ users across construction, retail, hospitality, healthcare, and trades. Unlike traditional FSM tools that focus on customer-facing workflows (dispatching, invoicing, customer portal), Connecteam focuses on employee-facing workflows (time clock, scheduling, internal communication, training, compliance documents).\n\nFor trades businesses, Connecteam fills a specific gap that pure FSM platforms (Jobber, Housecall Pro, ServiceTitan) don't address well: managing the team itself. Time clock with GPS verification ensures techs are where they say they are; shift scheduling with availability collection handles the complexity of rotating crews; in-app chat and announcements keep teams informed without endless WhatsApp groups; onboarding workflows train new hires on safety and procedures; compliance document storage keeps certifications and licenses organized.\n\nThe pricing model is a significant differentiator. Free tier supports up to 10 users with most core features. Paid tiers ($29-$99 per month per company — NOT per user) include up to 30 users at the Operations tier and unlimited users at Expert. Past about 15 users, Connecteam becomes meaningfully cheaper than per-user competitors for the same workforce management functionality.\n\nThe trade-off: Connecteam isn't a full FSM. Most trades shops run it ALONGSIDE their primary FSM (Jobber, Housecall Pro, etc.) — Connecteam for team management, FSM for customer workflows. Best for deskless trades teams of 10-100 employees wanting better workforce management than spreadsheets without paying per-user pricing.",
+      "pros_detail": [
+        {
+          "title": "Free tier for up to 10 users",
+          "explanation": "Genuinely usable free tier with time clock, basic scheduling, chat, and document storage. Most paid platforms gate these features behind expensive tiers. Solo operators and small teams may never need to upgrade."
+        },
+        {
+          "title": "Flat per-company pricing — unique in workforce management",
+          "explanation": "Operations tier ($49/mo) includes up to 30 users; Expert tier ($99/mo) includes unlimited. Past 15-20 users, Connecteam becomes meaningfully cheaper than per-user alternatives (When I Work, Deputy) for workforce management."
+        },
+        {
+          "title": "GPS-verified time clock",
+          "explanation": "Techs clock in/out from job sites with GPS verification. Reduces time-theft (clocking in from home, not the job site) and dispute resolution. Critical for trades shops with hourly field workers."
+        },
+        {
+          "title": "In-app chat and announcements",
+          "explanation": "Replaces WhatsApp/SMS groups for team communication. Searchable history, file sharing, channel organization. Keeps work communication separate from personal phones and creates audit trail."
+        },
+        {
+          "title": "Training and onboarding workflows",
+          "explanation": "Built-in training modules for safety procedures, equipment use, customer service standards. New hire onboarding paths track completion automatically. Useful for shops with frequent turnover or new-hire compliance requirements."
+        },
+        {
+          "title": "Compliance document storage with expiration alerts",
+          "explanation": "Centralized storage for tech certifications, licenses, vehicle docs, safety training records. Notifications when documents are expiring. Important for OSHA compliance, EPA Section 608 tracking, state licensing audits."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Not a full FSM",
+          "explanation": "No customer scheduling, no dispatching, no invoicing, no customer portal. Trades shops run Connecteam ALONGSIDE primary FSM (Jobber, Housecall Pro), not as a replacement. Two-platform overhead."
+        },
+        {
+          "title": "Multi-vertical generic focus",
+          "explanation": "Built for deskless workers across many industries (retail, hospitality, healthcare, construction). Trade-specific workflows (work orders, equipment tracking, pricebook) aren't here. Use trade-specific FSM for those."
+        },
+        {
+          "title": "Scheduling lacks dispatching intelligence",
+          "explanation": "Shift scheduling is basic — assign techs to time blocks. Doesn't optimize routes, match skills to jobs, or handle on-demand dispatch like Workiz or ServiceTitan. Use a real FSM for dispatch."
+        },
+        {
+          "title": "PartnerStack-managed affiliate program",
+          "explanation": "Connecteam's affiliate program runs through PartnerStack network rather than direct. Adds friction for publishers but simplifies tracking once approved through PartnerStack."
+        },
+        {
+          "title": "UI can feel cluttered with many modules",
+          "explanation": "Lots of modules in the platform (time clock + scheduling + chat + training + forms + documents + payroll). Can feel like a Swiss army knife. Some teams find this overwhelming compared to focused tools."
+        }
+      ],
+      "implementation_notes": "Plan for 1-3 weeks for self-service onboarding. Connecteam offers paid setup ($500-$2,000) for larger deployments. Realistic timeline for a mid-size trades shop (10-30 employees): Week 1 invite team members to the app, import existing time tracking and scheduling data if available, configure basic time clock with GPS verification settings. Week 1-2 train field techs on the mobile app — most adoption resistance is 'another app' complaints, frame as REPLACING WhatsApp groups not adding to them. Week 2-3 configure scheduling templates matching your typical week structure, set up training/onboarding workflows for new hires, build chat channels for team communication. Most operations are fully running within 3 weeks. For larger deployments (50+ employees with complex shift patterns, multi-location operations, custom compliance requirements), paid implementation services accelerate setup. Common integration setup: payroll integration for time clock data export to QuickBooks Payroll, ADP, or Gusto.",
+      "tool_faqs": [
+        {
+          "q": "Can Connecteam replace Jobber or Housecall Pro?",
+          "a": "No — Connecteam is workforce management, not field service management. It handles the EMPLOYEE side (time clock, scheduling, chat, training, compliance) but lacks the CUSTOMER side (scheduling, dispatching, invoicing, customer portal). Most trades shops run Connecteam alongside their primary FSM. They solve different problems."
+        },
+        {
+          "q": "When does Connecteam's pricing become cheaper than per-user alternatives?",
+          "a": "Around 15-20 users. Below that, per-user platforms (When I Work, Deputy, ServiceTitan workforce module) can be cheaper. Past 20 users, Connecteam's flat $49-$99/mo becomes meaningfully cheaper. At 50+ employees, Connecteam is one of the cheapest legitimate workforce management options."
+        },
+        {
+          "q": "How does GPS-verified time clock work?",
+          "a": "Techs clock in/out from the mobile app; Connecteam captures GPS coordinates at clock-in/out. Settings can require techs to be within a geofence of an assigned job site before clocking in, or just record location as evidence. Reduces time-theft and helps dispute resolution."
+        },
+        {
+          "q": "Is Connecteam's free tier really free?",
+          "a": "Yes — up to 10 users with most core features (time clock, basic scheduling, chat, document storage). Some advanced features (advanced reporting, integrations, training modules) require paid tier. The free tier is genuinely usable for solo operators and small teams; many shops never need to upgrade."
+        },
+        {
+          "q": "How does Connecteam compare to When I Work or Deputy?",
+          "a": "Similar workforce management focus but Connecteam is more comprehensive (chat, training, documents, compliance) while When I Work and Deputy focus more narrowly on scheduling. Connecteam's pricing model (flat per-company) tends to be cheaper than per-user When I Work / Deputy past 15+ employees."
+        }
+      ]
     },
     {
       "slug": "buildertrend",
@@ -1794,7 +1938,79 @@
       "headquartered": "Chesterfield, USA",
       "vertical_fit": {
         "landscaping": 10
-      }
+      },
+      "long_description": "Aspire is the dominant project management platform for commercial landscaping and snow services operations, serving the largest landscape construction and maintenance companies in North America. Founded as a commercial landscaping specialty platform and acquired by ServiceTitan in 2023, Aspire has been positioned as ServiceTitan's gateway into the commercial landscaping market — bringing ServiceTitan's executive reporting, marketing attribution, and PE-grade financial features to a vertical that historically lacked sophisticated software.\n\nThe product is built specifically for commercial landscaping operations serving HOAs, office parks, retail centers, and large multi-property commercial accounts. Features include multi-property route optimization (a single account often has 20-50 properties under one contract), crew time tracking with property-level start/stop, equipment maintenance scheduling, snow plowing dispatch with event-triggered workflows, AIA-style progress billing for landscape construction projects, executive reporting for KPIs across multi-state operations, and CRM features for managing the long sales cycles typical of commercial landscaping.\n\nPricing is custom-quoted but lands in enterprise tier — user-reported $400-$800 per user per month with implementation fees $15K-$50K. The ServiceTitan acquisition has driven price increases as Aspire moves toward ServiceTitan's pricing model.\n\nThe trade-off: Aspire is enterprise-only positioning. For residential landscaping operations (most landscape businesses), Aspire is overkill — Service Autopilot, LMN, or even Jobber fit smaller residential operations better. Best for commercial landscaping operations $5M+ revenue, multi-region operators, and PE-backed landscape companies needing the executive reporting and multi-entity management features that smaller competitors don't offer.",
+      "pros_detail": [
+        {
+          "title": "Dominant commercial landscaping platform",
+          "explanation": "Used by the largest commercial landscape operators in North America. Network effects matter — sub-contractors and equipment vendors increasingly expect customers to be on Aspire. Strongest commercial landscape software in the market."
+        },
+        {
+          "title": "Multi-property routing for commercial accounts",
+          "explanation": "Optimized for HOA and office-park accounts where a single contract covers 20-50 properties. Routes crews efficiently across multi-property days; tracks property-level service quality. General FSM tools can't match this depth for commercial landscape work."
+        },
+        {
+          "title": "Snow plowing workflows",
+          "explanation": "Event-triggered dispatch for snow plow operations, per-push and per-inch billing, mobile workflow for snow crew dispatching during storms. Critical for northern-market operators with significant winter snow revenue."
+        },
+        {
+          "title": "ServiceTitan-backed financial features",
+          "explanation": "Since the 2023 acquisition, Aspire has integrated ServiceTitan's executive reporting, marketing attribution, and PE-grade financial features. Critical for PE-backed roll-up operators consolidating regional landscape companies."
+        },
+        {
+          "title": "Equipment maintenance tracking",
+          "explanation": "Track mower, truck, and equipment maintenance schedules; cost allocation across jobs; downtime tracking. Important for operations with significant equipment investment in commercial landscaping work."
+        },
+        {
+          "title": "Crew time tracking with property-level detail",
+          "explanation": "Time tracking at the property level (not just per job) provides accurate profitability by account. Critical for renegotiating commercial contracts based on actual time costs."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Enterprise-only positioning",
+          "explanation": "Custom-quoted $400-$800/user/mo with $15K-$50K implementation fees. Wrong fit for residential landscaping (Service Autopilot, LMN, or Jobber fit better) or small commercial operations under $1M revenue."
+        },
+        {
+          "title": "Long implementation timeline",
+          "explanation": "3-6 months for full deployment with dedicated implementation manager. Requires significant internal capacity to migrate from existing systems and train staff on commercial-scale workflows."
+        },
+        {
+          "title": "ServiceTitan acquisition driving price increases",
+          "explanation": "Pricing has trended up since the 2023 acquisition as Aspire integrates into ServiceTitan's enterprise pricing model. Smaller operations may be priced out over time."
+        },
+        {
+          "title": "UI inherited from earlier era",
+          "explanation": "Aspire's interface shows its longer history with less design refinement than newer entrants. Functional and feature-deep but not visually impressive. May take field crew training to adopt."
+        },
+        {
+          "title": "Smaller user community than ServiceTitan or Buildertrend",
+          "explanation": "Commercial landscaping is a smaller market than residential trades or general construction. Fewer YouTube tutorials, smaller knowledge base for self-service learning."
+        }
+      ],
+      "implementation_notes": "Plan for 3-6 months from contract signing to fully operational. Aspire assigns a dedicated implementation manager who guides phased rollout. Realistic timeline for a mid-size commercial landscaping operator (15-50 employees, multi-region commercial accounts): Weeks 1-4 system configuration, user setup, customer/property data import — map multi-property commercial accounts to Aspire's account hierarchy; import equipment lists with maintenance schedules; configure crew structures. Weeks 4-12 office staff training on multi-property routing, crew time tracking at property level, AIA progress billing for landscape construction, executive reporting setup. Weeks 12-20 field crew training on mobile time tracking and property-level workflows; first contracts go live with full workflow. Weeks 20-24 snow plowing workflow setup if applicable (event-triggered dispatch is significantly different from regular maintenance routing); financial integration with accounting (QuickBooks, Sage); executive reporting dashboards. For shops migrating from spreadsheet-based or smaller landscape platforms (LMN, Service Autopilot), the data migration is more complex than residential FSM migrations because of multi-property account structures. Plan for extended parallel run during transition.",
+      "tool_faqs": [
+        {
+          "q": "Is Aspire worth $400-$800 per user per month?",
+          "a": "At $5M+ commercial landscaping revenue with multi-region operations or PE backing, yes. The multi-property routing, executive reporting, and ServiceTitan-backed financial features earn back the cost through operational efficiency and KPI visibility. Below $3M revenue or for residential-focused operations, Service Autopilot, LMN, or even Jobber are better fits."
+        },
+        {
+          "q": "How did the ServiceTitan acquisition affect Aspire?",
+          "a": "ServiceTitan acquired Aspire in 2023 to enter the commercial landscaping market. Since then, Aspire has integrated ServiceTitan's executive reporting, marketing attribution, and financial features. Pricing has trended up. The product itself remains commercial-landscaping focused; ServiceTitan didn't pivot Aspire into residential."
+        },
+        {
+          "q": "Can Aspire handle residential landscaping?",
+          "a": "Aspire works for residential landscaping but is positioned and priced for commercial operations. For residential-focused operations, Service Autopilot or LMN are better-fit (lower cost, more residential-specific features). Operations doing both commercial + residential typically run Aspire for commercial and a separate platform for residential."
+        },
+        {
+          "q": "How does Aspire handle snow plowing?",
+          "a": "Aspire has dedicated snow plowing workflows: event-triggered dispatch for storm response, per-push/per-inch billing, mobile workflow for snow crew dispatching during active storms. Important for northern-market commercial landscape operators where snow plowing generates 20-40% of annual revenue."
+        },
+        {
+          "q": "What's the difference between Aspire and Service Autopilot?",
+          "a": "Aspire is enterprise commercial landscaping ($400-$800/user/mo); Service Autopilot is mid-market residential + commercial landscaping ($59-$497/mo with various tiers). They serve different segments — Aspire for commercial operations at scale, Service Autopilot for residential-focused or mixed operations at smaller scale."
+        }
+      ]
     },
     {
       "slug": "realgreen",
@@ -2261,7 +2477,79 @@
         "plumbing": 7,
         "electrical": 7,
         "handyman": 7
-      }
+      },
+      "long_description": "JobNimbus is a CRM and project management platform for roofing, restoration, and general construction contractors. Founded in 2012 in Lehi, Utah, the company has scaled to 12,000+ customers serving primarily residential roofing operations plus adjacent restoration work (water damage, fire damage, mold remediation) and general construction CRM needs.\n\nJobNimbus competes most directly with AccuLynx for residential roofing software — both handle the insurance restoration workflow, photo documentation, and door-to-door sales workflows that roofing operators need. The key differentiator: JobNimbus has broader vertical coverage. Where AccuLynx is pure residential roofing specialty, JobNimbus also handles restoration work, general construction CRM, and adjacent service businesses. Operations doing roofing PLUS restoration or storm cleanup find JobNimbus a better single-platform answer.\n\nThe product covers the full project workflow: lead capture (with web forms, third-party lead-gen integration, and door-to-door sales workflows), CRM with detailed contact history, project management with task automation, invoice and payment processing, structured photo documentation, and Xactimate integration for insurance restoration work. JobNimbus's strength relative to AccuLynx is the more modern UI and broader feature set; AccuLynx's strength is deeper roofing-specific features (aerial measurement integrations, material supplier integrations).\n\nPricing is per-user typically $35-$75/mo depending on tier and team size. JobNimbus has a customer-only referral program (existing customers refer other contractors for credit) but no formal external publisher affiliate program — external content sites can't earn affiliate commissions through standard channels.\n\nBest for roofing + restoration operators wanting broader CRM/project management than pure roofing specialty tools. Wrong fit for commercial roofing (use BuildOps) or pure non-storm retail roofing (Jobber Plus works fine).",
+      "pros_detail": [
+        {
+          "title": "Broader vertical coverage than AccuLynx",
+          "explanation": "Roofing + restoration + general construction CRM in one platform. Operations doing roofing PLUS restoration work (water damage, fire damage) get a single platform vs running two tools. Useful for multi-disciplinary restoration operators."
+        },
+        {
+          "title": "Modern UI vs older roofing platforms",
+          "explanation": "More refined interface than AccuLynx; feels more like 2020s SaaS than 2008-era contractor software. Faster learning curve for office staff without roofing background."
+        },
+        {
+          "title": "Xactimate integration for insurance restoration",
+          "explanation": "Native integration for importing Xactimate estimates, comparing against project estimates, managing supplements. Less mature than AccuLynx but covers core use cases for insurance restoration workflow."
+        },
+        {
+          "title": "Strong CRM with task automation",
+          "explanation": "Detailed contact history, automated follow-up sequences for unsold quotes, sales pipeline management. Better CRM than typical FSM tools that treat customers as just job records — useful for restoration operators with longer sales cycles."
+        },
+        {
+          "title": "Door-to-door sales workflows",
+          "explanation": "Mobile-first workflow for sales reps walking neighborhoods post-storm: damage photos, signed agreements at the door, automatic lead handoff to project managers. Essential for storm-chaser operations."
+        },
+        {
+          "title": "Web form lead capture and third-party lead-gen integration",
+          "explanation": "Captures website leads automatically into the CRM, integrates with Angi Leads, HomeAdvisor, and other lead sources for unified lead intake. Reduces manual data entry from multiple lead sources."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Less mature insurance workflow than AccuLynx",
+          "explanation": "Xactimate integration works but supplements management and claim status tracking aren't as polished. For pure residential storm restoration where the insurance workflow is the primary value, AccuLynx wins."
+        },
+        {
+          "title": "Smaller integration ecosystem for roofing-specific tools",
+          "explanation": "Fewer native integrations with aerial measurement (Hover, EagleView) and material suppliers (Beacon Pro+, ABC) than AccuLynx. Roofing operations relying heavily on these may prefer AccuLynx."
+        },
+        {
+          "title": "Per-user pricing scales with team size",
+          "explanation": "$35-$75/user/mo adds up quickly past 10 users. At 20+ users, flat-pricing alternatives may be cheaper. Compare carefully against AccuLynx's custom-quoted pricing for your team size."
+        },
+        {
+          "title": "Customer-only referral program — no external affiliate",
+          "explanation": "JobNimbus has a customer-only referral program (existing customers refer other contractors for credit) but no formal external publisher affiliate program. External content sites can't earn affiliate commissions through standard channels."
+        },
+        {
+          "title": "Multi-vertical breadth comes at depth cost",
+          "explanation": "Because JobNimbus serves multiple verticals (roofing + restoration + general construction), some vertical-specific features are less deep than specialty competitors. Trade-off for the broader coverage."
+        }
+      ],
+      "implementation_notes": "Plan for 4-8 weeks for full operational rollout. JobNimbus offers guided onboarding included in subscription with optional paid acceleration packages. Realistic timeline for a mid-size residential roofing + restoration operation (8-25 employees): Weeks 1-2 account setup, customer/contact data import from existing CRM, integration configuration (Xactimate for insurance work, Hover for measurements if doing aerial, QuickBooks for accounting). Weeks 2-4 office staff training on CRM workflow, insurance restoration workflow (Xactimate import, supplements), and task automation setup. Weeks 4-6 field crew training on mobile app — damage documentation, work-in-progress documentation, completed work documentation. Weeks 6-8 sales rep training (especially D2D for storm-chasers) on mobile workflow for damage capture and signed agreements; full cutover from old system. For shops migrating from AccuLynx, the data migration is straightforward (similar data models). For shops migrating from spreadsheet-based or general CRM tools, change management on the structured insurance workflow takes longer.",
+      "tool_faqs": [
+        {
+          "q": "Should I use JobNimbus or AccuLynx for residential roofing?",
+          "a": "Both are strong choices. AccuLynx has deeper roofing-specialty features (aerial measurement integrations, material supplier ordering, commission tracking) and more mature insurance restoration workflow. JobNimbus has broader vertical coverage (roofing + restoration + general construction), more modern UI, and stronger CRM features. Pick AccuLynx for pure residential roofing specialty; pick JobNimbus for roofing + restoration work or shops valuing CRM depth."
+        },
+        {
+          "q": "Can JobNimbus handle commercial roofing?",
+          "a": "Not well. JobNimbus is residential-focused like AccuLynx. Commercial roofing (flat roof, low-slope, single-ply membrane) is project-based and needs commercial GC software (BuildOps, Procore) with proper progress billing and sub-contractor management."
+        },
+        {
+          "q": "How does JobNimbus pricing compare to AccuLynx?",
+          "a": "JobNimbus has published per-user pricing ($35-$75/user/mo); AccuLynx is custom-quoted (typically $150-$300/user/mo). JobNimbus is meaningfully cheaper for small operations but converges with AccuLynx at higher team sizes when including AccuLynx's deeper roofing-specific features."
+        },
+        {
+          "q": "Does JobNimbus have an affiliate program?",
+          "a": "No external publisher affiliate program. JobNimbus has a customer-only referral program (existing customers refer other contractors for credit) but external content sites and review directories can't earn affiliate commissions through standard channels."
+        },
+        {
+          "q": "How does JobNimbus handle restoration work alongside roofing?",
+          "a": "Restoration (water damage, fire damage, mold remediation) uses similar project-based workflows to roofing — photo documentation, insurance claim coordination, multi-step project management. JobNimbus's multi-vertical design means restoration work uses the same CRM, project management, and photo workflows as roofing. Operations doing both don't need two platforms."
+        }
+      ]
     },
     {
       "slug": "fieldroutes",
@@ -2858,7 +3146,83 @@
         "handyman": 7,
         "garage_door": 7,
         "appliance_repair": 7
-      }
+      },
+      "long_description": "ServiceM8 is a field service management platform built exclusively for the Apple ecosystem — Mac, iPhone, and iPad only, no Android, no Windows. Founded in 2010 in Brisbane, Australia, the company has carved out a specific market position: small-to-mid trades businesses (1-15 employees typically) who prefer Apple devices and want polished UX that matches the iOS/macOS experience rather than the older interfaces of cross-platform FSM tools.\n\nThe Apple-only constraint is the central differentiator. ServiceM8 leverages native iOS/macOS capabilities (notifications, camera, GPS, calendar integration, voice memos) more deeply than cross-platform alternatives can. The mobile app feels more native; the macOS app integrates with Calendar, Contacts, and other system apps; the entire experience matches Apple ecosystem conventions.\n\nPricing uses an unusual flat per-company model: free tier with 20 service calls/mo limit, then $59-$329/mo based on call volume (not user count). Unlimited users at every paid tier. This makes ServiceM8 cheaper than per-user competitors past 4-5 users — a meaningful differentiator for established small operations.\n\nServiceM8 also runs a Partner Program ($99/year membership + certification course required) that's structured as an implementation/consultant program rather than a publisher affiliate program. Independent operators or consulting firms can become certified partners and get listed in ServiceM8's customer-facing partner directory.\n\nThe trade-off: Apple-only is a hard constraint. If you have ANY Android users on your team — including office staff or non-tech employees using their personal phones — ServiceM8 doesn't fit. For all-Apple shops, the polish and call-volume pricing are genuine advantages. Best for small-to-mid trades operations (1-15 techs) committed to the Apple ecosystem.",
+      "pros_detail": [
+        {
+          "title": "Apple ecosystem polish",
+          "explanation": "Native iOS and macOS apps that leverage system capabilities (camera, GPS, calendar, contacts, notifications) more deeply than cross-platform alternatives. UX feels native rather than ported. Particularly nice for shops where techs already use iPhones personally."
+        },
+        {
+          "title": "Flat per-company pricing with unlimited users",
+          "explanation": "$59-$329/mo based on service call volume, not user count. Past 4-5 users, ServiceM8 becomes meaningfully cheaper than per-user competitors. Past 10+ users, one of the cheapest credible FSM options."
+        },
+        {
+          "title": "Free tier with 20 service calls/month",
+          "explanation": "Genuinely usable free tier for solo operators just starting out. Sufficient for a 1-2 person shop doing 10-20 jobs per month. Most paid platforms gate basic features behind paid tiers."
+        },
+        {
+          "title": "Strong call-handling workflow",
+          "explanation": "Native iOS phone integration captures incoming calls with caller ID lookup, creates job records automatically, dispatches with mobile-first workflow. Faster than typing in customer info from a desktop CRM."
+        },
+        {
+          "title": "Quote-to-invoice flow optimized for speed",
+          "explanation": "Mobile quoting on iPad/iPhone with templates, e-signature capture, instant conversion to invoice on job completion. Designed for techs who don't want to spend office time on paperwork."
+        },
+        {
+          "title": "Multi-currency and multi-region support",
+          "explanation": "Founded in Australia, supports AU/NZ/UK/US/CA markets natively with appropriate tax handling, currency, and address formats. Better international support than US-only competitors."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Apple-only — no Android or Windows",
+          "explanation": "Hard constraint. If you have ANY Android users on your team (office staff, non-tech employees using personal phones for work), ServiceM8 doesn't fit. Significant filter on potential customers."
+        },
+        {
+          "title": "Implementation/consultant partner program, not affiliate",
+          "explanation": "ServiceM8's Partner Program requires $99/year membership + certification course. Structured for consultants who implement ServiceM8 for end customers rather than external publishers earning commissions on referrals."
+        },
+        {
+          "title": "Call-volume pricing can be unpredictable",
+          "explanation": "Higher tiers based on monthly service call volume, not flat. Busy summer months can push you into higher-tier pricing temporarily; quiet winter months reduce cost. Budgeting is harder than flat-tier pricing."
+        },
+        {
+          "title": "Smaller integration ecosystem than US-focused competitors",
+          "explanation": "Australian-headquartered means QuickBooks integration is solid but not as deep as US-focused FSM tools. Limited integration with US-specific tools (Google Local Services Ads, FinanceIt consumer financing)."
+        },
+        {
+          "title": "Less feature breadth than ServiceTitan or Jobber",
+          "explanation": "Built for smaller operations (1-15 techs typically). Enterprise features (deep marketing attribution, executive reporting, multi-location management) are limited or absent."
+        },
+        {
+          "title": "Smaller US user community",
+          "explanation": "Most popular in Australia/NZ/UK; growing US presence. Fewer YouTube tutorials, smaller Reddit/Facebook communities for self-service learning vs Jobber or Housecall Pro."
+        }
+      ],
+      "implementation_notes": "Plan for 1-3 weeks for self-service onboarding. ServiceM8 is designed for fast setup — Apple ecosystem polish includes onboarding flow. Realistic timeline for a small trades operation (1-5 techs, all-Apple): Week 1 download iOS/macOS apps, import customer data (CSV or Contacts sync), configure services and pricing, connect QuickBooks if applicable. Week 1-2 train field techs on the iOS app — minimal training needed if techs are comfortable with iOS apps. Week 2-3 run parallel with existing system, refine workflows based on actual usage. For all-Apple shops, the implementation lift is minimal compared to cross-platform alternatives that require explicit device-handling decisions. The bigger consideration is making sure ALL team members have Apple devices before committing — adopting ServiceM8 and then needing an Android-using team member is a hard problem.",
+      "tool_faqs": [
+        {
+          "q": "Why is ServiceM8 Apple-only?",
+          "a": "ServiceM8's bet from founding was that depth on one platform beats breadth across many platforms. Apple-only lets them leverage native iOS/macOS capabilities (notifications, calendar, contacts, camera, GPS) more deeply than cross-platform alternatives. The trade-off is excluding any shop with Android users. For all-Apple shops, the polish is genuine; for mixed-device shops, ServiceM8 doesn't fit."
+        },
+        {
+          "q": "Is ServiceM8 worth the $99/year Partner Program fee?",
+          "a": "Only if you're implementing ServiceM8 for end customers as a consultant. The Partner Program is structured for consultants and bookkeepers who set up ServiceM8 for clients (similar to QuickBooks ProAdvisor or HubSpot Solutions Partner programs). For external publishers or affiliate sites, the Partner Program doesn't offer affiliate commission structures — it's a different kind of program."
+        },
+        {
+          "q": "How does ServiceM8 pricing compare to Jobber?",
+          "a": "ServiceM8's flat per-company pricing ($59-$329/mo, unlimited users) becomes cheaper than Jobber's per-tier pricing past 4-5 users. At 10+ users, ServiceM8 is meaningfully cheaper for similar functionality. Below 4 users, Jobber's $39/mo Core tier can be cheaper for very small operations."
+        },
+        {
+          "q": "Does ServiceM8 work for HVAC or plumbing shops?",
+          "a": "Yes, for small all-Apple HVAC and plumbing operations (1-15 techs). The trade-specific features (pricebook flat-rate pricing, maintenance plan management) are less deep than ServiceTitan or FieldEdge but adequate for shops not needing those features. For shops with maintenance plan revenue 20%+ of total, ServiceTitan or FieldEdge fit better."
+        },
+        {
+          "q": "Can ServiceM8 handle commercial work?",
+          "a": "Light commercial yes (commercial HVAC service, commercial plumbing service for small properties). Heavy commercial (project-based work, sub-contractor management, AIA progress billing) needs BuildOps or Procore. ServiceM8 is primarily residential-focused."
+        }
+      ]
     },
     {
       "slug": "powered-now",
