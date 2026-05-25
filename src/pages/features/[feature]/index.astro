@@ -1,0 +1,269 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import featuresData from '../../../data/features.json';
+import {
+  tools,
+  verticals,
+  aggregateRating,
+  formatPrice,
+  verticalToUrl,
+  readingTimeMinutes,
+  type Tool,
+} from '../../../lib/data';
+import Byline from '../../../components/Byline.astro';
+
+interface FeatureData {
+  name: string;
+  definition: string;
+  description: string;
+  why_matters: string;
+  buying_tips: string;
+  related_features: string[];
+  best_for_verticals: string[];
+  faqs: { q: string; a: string }[];
+}
+
+function featureToUrl(slug: string): string {
+  return slug.replace(/_/g, '-');
+}
+
+function urlToFeature(url: string): string {
+  return url.replace(/-/g, '_');
+}
+
+export async function getStaticPaths() {
+  const features = (featuresData as { features: Record<string, unknown> }).features;
+  return Object.keys(features).map((slug) => ({
+    params: { feature: slug.replace(/_/g, '-') },
+    props: { featureSlug: slug },
+  }));
+}
+
+interface Props {
+  featureSlug: string;
+}
+
+const { featureSlug } = Astro.props;
+const features = (featuresData as { features: Record<string, FeatureData> }).features;
+const feature = features[featureSlug];
+
+// Find all tools that have this feature in their key_features array.
+const toolsWithFeature: Tool[] = tools
+  .filter((t) => t.key_features.includes(featureSlug))
+  .sort((a, b) => (aggregateRating(b) ?? 0) - (aggregateRating(a) ?? 0));
+
+// Notable tools WITHOUT this feature (to surface comparison context).
+// Only show 5 high-rating tools that lack it.
+const toolsWithoutFeature: Tool[] = tools
+  .filter((t) => !t.key_features.includes(featureSlug))
+  .filter((t) => (aggregateRating(t) ?? 0) >= 4.4)
+  .sort((a, b) => (aggregateRating(b) ?? 0) - (aggregateRating(a) ?? 0))
+  .slice(0, 5);
+
+// Related features for cross-linking.
+const relatedFeatures = feature.related_features
+  .map((slug) => ({ slug, data: features[slug] }))
+  .filter((r): r is { slug: string; data: FeatureData } => !!r.data);
+
+// Best-for verticals for cross-linking.
+const bestForVerticals = feature.best_for_verticals
+  .map((slug) => verticals.find((v) => v.slug === slug))
+  .filter((v): v is NonNullable<typeof v> => !!v);
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: feature.faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const pageTitle = `${feature.name} in trades software (2026): which tools have it`;
+const pageDescription = `${feature.definition} Compare ${toolsWithFeature.length} trades software platforms with ${feature.name.toLowerCase()} features.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Features', url: '/features/' },
+  { name: feature.name, url: `/features/${featureToUrl(featureSlug)}/` },
+];
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <nav class="mb-6 text-sm text-slate-500">
+      <a href="/" class="hover:text-slate-900">Home</a>
+      <span class="mx-2">/</span>
+      <a href="/features/" class="hover:text-slate-900">Features</a>
+      <span class="mx-2">/</span>
+      <span class="text-slate-900">{feature.name}</span>
+    </nav>
+
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">Feature</p>
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        {feature.name} in trades software
+      </h1>
+      <p class="mt-4 text-lg text-slate-600">
+        {feature.definition}
+      </p>
+      <Byline readingMinutes={readingTimeMinutes(1200)} />
+    </header>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-lg font-bold text-slate-900">Quick summary</h2>
+      <ul class="space-y-2 text-sm text-slate-700">
+        <li>
+          <strong>What it is:</strong> {feature.definition}
+        </li>
+        <li>
+          <strong>Tools with this feature:</strong> {toolsWithFeature.length} of {tools.length} in our directory
+        </li>
+        {bestForVerticals.length > 0 && (
+          <li>
+            <strong>Matters most for:</strong> {bestForVerticals.map((v) => v.name).join(', ')}
+          </li>
+        )}
+      </ul>
+    </section>
+
+    <section class="mb-12 prose prose-slate max-w-none">
+      <h2>What is {feature.name.toLowerCase()} in trades software?</h2>
+      <p>{feature.description}</p>
+
+      <h2>Why {feature.name.toLowerCase()} matters</h2>
+      <p>{feature.why_matters}</p>
+
+      <h2>How to evaluate {feature.name.toLowerCase()} when buying</h2>
+      <p>{feature.buying_tips}</p>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">
+        Tools with {feature.name.toLowerCase()} ({toolsWithFeature.length})
+      </h2>
+      {toolsWithFeature.length === 0 ? (
+        <div class="rounded-lg border border-slate-200 bg-white p-6 text-slate-600">
+          No tools in our directory list this feature in their key features. This may indicate a niche feature or one that's typically marketed differently — check individual tool reviews for details.
+        </div>
+      ) : (
+        <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+          <table class="w-full text-sm">
+            <thead class="bg-slate-50 text-left text-slate-700">
+              <tr>
+                <th class="p-3 font-semibold">Tool</th>
+                <th class="p-3 font-semibold">Starting price</th>
+                <th class="p-3 font-semibold">User rating</th>
+                <th class="p-3 font-semibold">Best for</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              {toolsWithFeature.map((t) => {
+                const r = aggregateRating(t);
+                return (
+                  <tr class="hover:bg-slate-50">
+                    <td class="p-3">
+                      <a href={`/tools/${t.slug}/`} class="font-semibold text-slate-900 hover:text-orange-600">{t.name}</a>
+                    </td>
+                    <td class="p-3 text-slate-700">{formatPrice(t)}</td>
+                    <td class="p-3 text-slate-700">{r !== null ? `${r.toFixed(1)} / 5` : '—'}</td>
+                    <td class="p-3 text-slate-600 text-xs">{t.best_for}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </section>
+
+    {toolsWithoutFeature.length > 0 && (
+      <section class="mb-12">
+        <h2 class="mb-4 text-2xl font-bold text-slate-900">
+          High-rated tools that don't have {feature.name.toLowerCase()}
+        </h2>
+        <p class="mb-4 text-sm text-slate-600">
+          These platforms have strong user ratings but don't list {feature.name.toLowerCase()} as a core feature. If you need this capability, consider alternatives above — or evaluate whether you actually need it for your operation.
+        </p>
+        <div class="grid gap-3 sm:grid-cols-2">
+          {toolsWithoutFeature.map((t) => {
+            const r = aggregateRating(t);
+            return (
+              <a
+                href={`/tools/${t.slug}/`}
+                class="group rounded-lg border border-slate-200 bg-white p-4 hover:border-slate-400"
+              >
+                <div class="font-semibold text-slate-900 group-hover:text-orange-600">{t.name}</div>
+                <div class="mt-1 text-xs text-slate-500">
+                  {r !== null ? `${r.toFixed(1)} / 5 rating` : '—'} · {formatPrice(t)}
+                </div>
+                <div class="mt-2 text-xs text-slate-500">{t.tagline}</div>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
+    {relatedFeatures.length > 0 && (
+      <section class="mb-12">
+        <h2 class="mb-4 text-2xl font-bold text-slate-900">Related features</h2>
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {relatedFeatures.map(({ slug, data }) => (
+            <a
+              href={`/features/${featureToUrl(slug)}/`}
+              class="group rounded-lg border border-slate-200 bg-white p-4 hover:border-slate-400"
+            >
+              <div class="font-semibold text-slate-900 group-hover:text-orange-600">{data.name}</div>
+              <div class="mt-1 text-xs text-slate-500">{data.definition}</div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {bestForVerticals.length > 0 && (
+      <section class="mb-12">
+        <h2 class="mb-4 text-2xl font-bold text-slate-900">Trades where {feature.name.toLowerCase()} matters most</h2>
+        <div class="flex flex-wrap gap-2">
+          {bestForVerticals.map((v) => (
+            <a
+              href={`/${verticalToUrl(v.slug)}/`}
+              class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 hover:border-orange-500 hover:text-orange-600"
+            >
+              {v.name} →
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="mb-12">
+      <h2 class="mb-6 text-2xl font-bold text-slate-900">Frequently asked questions</h2>
+      <div class="space-y-4">
+        {feature.faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Browse more features</h2>
+      <p class="mt-2 text-slate-300">
+        See the full list of trades software features and which tools have them.
+      </p>
+      <a
+        href="/features/"
+        class="mt-4 inline-block rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600"
+      >
+        All features →
+      </a>
+    </section>
+  </article>
+</Layout>

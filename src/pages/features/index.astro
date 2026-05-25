@@ -1,0 +1,149 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import featuresData from '../../data/features.json';
+import { tools } from '../../lib/data';
+
+interface FeatureData {
+  name: string;
+  definition: string;
+  description: string;
+  why_matters: string;
+  buying_tips: string;
+  related_features: string[];
+  best_for_verticals: string[];
+  faqs: { q: string; a: string }[];
+}
+
+const features = (featuresData as { features: Record<string, FeatureData> }).features;
+
+function featureToUrl(slug: string): string {
+  return slug.replace(/_/g, '-');
+}
+
+// Build list with tool count per feature.
+const featureList = Object.entries(features).map(([slug, data]) => {
+  const toolCount = tools.filter((t) => t.key_features.includes(slug)).length;
+  return { slug, data, toolCount };
+});
+
+// Group features by "common" (10+ tools), "specialty" (3-9 tools), and "niche" (<3 tools).
+const common = featureList.filter((f) => f.toolCount >= 10);
+const specialty = featureList.filter((f) => f.toolCount >= 3 && f.toolCount < 10);
+const niche = featureList.filter((f) => f.toolCount < 3);
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Features', url: '/features/' },
+];
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Trades software features',
+  itemListElement: featureList.map((f, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: f.data.name,
+    url: `https://wrenchstack.com/features/${featureToUrl(f.slug)}/`,
+  })),
+};
+---
+
+<Layout
+  title="Trades software features — browse by capability"
+  description={`Compare ${featureList.length} trades software features across ${tools.length} platforms. Find tools by the specific capabilities your business needs.`}
+  breadcrumbs={breadcrumbs}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+
+  <article class="mx-auto max-w-5xl px-4 py-12">
+
+    <header class="mb-10">
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        Browse trades software by feature
+      </h1>
+      <p class="mt-4 text-lg text-slate-600">
+        {featureList.length} core features across {tools.length} trades software platforms. Find the tools that have the specific capabilities your business needs.
+      </p>
+    </header>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Common features ({common.length})</h2>
+      <p class="mb-4 text-sm text-slate-600">
+        Available across most major FSM platforms. Table-stakes capabilities for any trades software in 2026.
+      </p>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {common.map(({ slug, data, toolCount }) => (
+          <a
+            href={`/features/${featureToUrl(slug)}/`}
+            class="group rounded-lg border border-slate-200 bg-white p-5 hover:border-orange-400"
+          >
+            <div class="mb-1 flex items-start justify-between gap-2">
+              <h3 class="font-bold text-slate-900 group-hover:text-orange-600">{data.name}</h3>
+              <span class="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700 shrink-0">{toolCount} tools</span>
+            </div>
+            <p class="text-sm text-slate-600 leading-snug">{data.definition}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    {specialty.length > 0 && (
+      <section class="mb-12">
+        <h2 class="mb-4 text-2xl font-bold text-slate-900">Specialty features ({specialty.length})</h2>
+        <p class="mb-4 text-sm text-slate-600">
+          Available on some platforms but not all. Often the deciding factor when choosing between similarly-rated tools.
+        </p>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {specialty.map(({ slug, data, toolCount }) => (
+            <a
+              href={`/features/${featureToUrl(slug)}/`}
+              class="group rounded-lg border border-slate-200 bg-white p-5 hover:border-orange-400"
+            >
+              <div class="mb-1 flex items-start justify-between gap-2">
+                <h3 class="font-bold text-slate-900 group-hover:text-orange-600">{data.name}</h3>
+                <span class="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700 shrink-0">{toolCount} tools</span>
+              </div>
+              <p class="text-sm text-slate-600 leading-snug">{data.definition}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {niche.length > 0 && (
+      <section class="mb-12">
+        <h2 class="mb-4 text-2xl font-bold text-slate-900">Niche features ({niche.length})</h2>
+        <p class="mb-4 text-sm text-slate-600">
+          Available on a small number of platforms. Often differentiators for specific use cases (commercial scale, AI-first operations, vertical specialization).
+        </p>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {niche.map(({ slug, data, toolCount }) => (
+            <a
+              href={`/features/${featureToUrl(slug)}/`}
+              class="group rounded-lg border border-slate-200 bg-white p-5 hover:border-orange-400"
+            >
+              <div class="mb-1 flex items-start justify-between gap-2">
+                <h3 class="font-bold text-slate-900 group-hover:text-orange-600">{data.name}</h3>
+                <span class="rounded-full bg-slate-200 px-2 py-0.5 text-xs font-medium text-slate-700 shrink-0">{toolCount} tools</span>
+              </div>
+              <p class="text-sm text-slate-600 leading-snug">{data.definition}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="mb-12 rounded-lg bg-slate-50 p-8">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">How to use this index</h2>
+      <div class="prose prose-slate max-w-none">
+        <p>
+          Each feature page shows which tools in our directory have that specific capability, alongside high-rated tools that don't. Useful when you have a specific must-have feature (QuickBooks integration, AI dispatcher, consumer financing) and need to filter the directory accordingly.
+        </p>
+        <p>
+          For shops still scoping requirements, start with the <a href="/quiz/">matching quiz</a> — answer 5 questions, get 3 ranked picks. For comparing two specific tools head-to-head, see our <a href="/compare/">comparison directory</a>.
+        </p>
+      </div>
+    </section>
+  </article>
+</Layout>
