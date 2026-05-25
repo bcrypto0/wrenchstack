@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import featuresData from '../../../data/features.json';
 import {
   tools,
   toolsForVertical,
@@ -11,6 +12,12 @@ import {
   readingTimeMinutes,
   type Tool,
 } from '../../../lib/data';
+
+// Set of feature slugs that have dedicated landing pages
+const featurePageSlugs = new Set(Object.keys((featuresData as { features: Record<string, unknown> }).features));
+function featureToUrl(slug: string): string {
+  return slug.replace(/_/g, '-');
+}
 import Byline from '../../../components/Byline.astro';
 import WrenchScore from '../../../components/WrenchScore.astro';
 import ToolLogo from '../../../components/ToolLogo.astro';
@@ -484,11 +491,20 @@ const breadcrumbs = [
     <section class="mb-10">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Key features</h2>
       <div class="flex flex-wrap gap-2">
-        {tool.key_features.map((f) => (
-          <span class="rounded-full border border-slate-200 bg-white px-3 py-1 text-sm text-slate-700">
-            {f.replace(/_/g, ' ')}
-          </span>
-        ))}
+        {tool.key_features.map((f) =>
+          featurePageSlugs.has(f) ? (
+            <a
+              href={`/features/${featureToUrl(f)}/`}
+              class="rounded-full border border-slate-200 bg-white px-3 py-1 text-sm text-slate-700 hover:border-orange-500 hover:text-orange-600"
+            >
+              {f.replace(/_/g, ' ')}
+            </a>
+          ) : (
+            <span class="rounded-full border border-slate-200 bg-white px-3 py-1 text-sm text-slate-700">
+              {f.replace(/_/g, ' ')}
+            </span>
+          )
+        )}
       </div>
     </section>
 
