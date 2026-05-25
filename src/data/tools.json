@@ -79,7 +79,87 @@
         "landscaping": 10,
         "cleaning": 9,
         "handyman": 9
-      }
+      },
+      "long_description": "Jobber is the most-used field service management platform for small-to-mid trades businesses in North America, serving 250,000+ contractors across 50+ countries since launching in 2011 from Edmonton, Canada. The product targets the underserved gap between paper-based operations (where most independent contractors still live) and enterprise platforms like ServiceTitan or BuildOps (which are overkill until you cross $1M revenue).\n\nWhat's made Jobber dominant in its segment isn't any unique feature — it's the consistent execution on UX. The mobile app is genuinely the best in the category for field techs to actually use day-to-day; the client portal is clean enough that homeowners actually log in to it; the quoting flow takes minutes instead of the hour-plus that competitor products require. Jobber has won the \"best vibes\" battle for years, which matters more than spec sheets when you're trying to get a non-technical 5-person crew adopted.\n\nThe four-tier pricing structure (Core $39 → Connect $119 → Grow $199 → Plus $399) maps to common growth inflection points: Core for solo, Connect when you hire your first office staffer, Grow when you add a second technician, Plus when you cross 5+ techs and need real reporting. Most shops grow into the $119 tier within 6 months of starting. The big trade-off vs Housecall Pro is the lack of built-in consumer financing — Jobber outsources that to third-party integrations rather than embedding Wisetack natively.",
+      "pros_detail": [
+        {
+          "title": "Best mobile app UX in the category",
+          "explanation": "Field techs adopt Jobber without resistance because the app is fast, intuitive, and respects their workflow. Less training time, fewer \"I forgot to log it\" excuses, and faster adoption ROI than any competitor in the price band."
+        },
+        {
+          "title": "Strong multi-vertical fit",
+          "explanation": "Unlike specialty tools (Workiz for on-demand, ServiceTitan for residential trades), Jobber works equally well for HVAC, plumbing, electrical, landscaping, cleaning, and handyman. Easy to recommend without worrying about vertical mismatch."
+        },
+        {
+          "title": "Generous 14-day free trial with no credit card",
+          "explanation": "Run real jobs through Jobber during the trial. No credit card required to start. Use the trial seriously — schedule 5-10 jobs, send invoices, collect payments, and judge based on actual workflow rather than UI clicks."
+        },
+        {
+          "title": "Solid QuickBooks integration (Online + Desktop)",
+          "explanation": "Native two-way sync for customers and invoices, supports both QuickBooks Online and Desktop. Works smoothly with the most common accounting setup for trades shops under $5M revenue."
+        },
+        {
+          "title": "Transparent public pricing",
+          "explanation": "Every tier price is published with full feature comparison. No sales-call gate. You can self-serve the entire purchase decision without ever talking to a rep — rare in the FSM market."
+        },
+        {
+          "title": "Modern API + Zapier integration",
+          "explanation": "Connect Jobber to 5,000+ apps via Zapier without custom development. Useful for stitching together marketing automation, accounting, and lead-source attribution tools that aren't built in."
+        },
+        {
+          "title": "Strong online booking + automated follow-ups",
+          "explanation": "Customers book directly from your website with real-time availability. Automated follow-up sequences (post-job reviews, repeat service reminders) included at the Connect tier and up — drives meaningful repeat business over time."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "No native consumer financing",
+          "explanation": "Big-ticket HVAC replacements and roofing jobs convert significantly better with in-app financing offers. Jobber relies on third-party integrations (Wisetack, GreenSky, Synchrony bolt-ons) rather than embedding natively like Housecall Pro does. Costs you closed deals on high-ticket repairs."
+        },
+        {
+          "title": "No built-in phone system",
+          "explanation": "Workiz and ServiceTitan have native VoIP for call recording, call masking, and dispatcher routing. Jobber requires third-party integration (Twilio, RingCentral) which adds setup complexity and another monthly fee."
+        },
+        {
+          "title": "Limited at enterprise scale",
+          "explanation": "Plus tier ($399/mo) caps at 30 users and lacks the deep custom reporting, multi-location management, and advanced permissions that enterprise shops need. If you're 30+ techs, Jobber starts feeling thin — graduate to ServiceTitan or BuildOps."
+        },
+        {
+          "title": "No inventory management at lower tiers",
+          "explanation": "Inventory tracking only appears at Grow ($199) and Plus ($399). If you carry meaningful parts inventory and are still on Core or Connect, you'll feel the gap quickly."
+        },
+        {
+          "title": "Per-tier user limits force tier upgrades",
+          "explanation": "Core: 1 user. Connect: 7 users. Grow: 15 users. Plus: 30 users. As you grow, the forcing function isn't features — it's user seats, which can push you to a higher tier faster than expected."
+        },
+        {
+          "title": "Reporting depth less than enterprise platforms",
+          "explanation": "Plus tier reporting covers the basics (revenue by tech, job profitability, A/R aging) but lacks the multi-dimensional pivot tables and BI integrations that ServiceTitan offers. Fine for shops under $2M revenue, limiting above that."
+        }
+      ],
+      "implementation_notes": "Jobber is designed for self-service onboarding — most small shops are running real jobs within a week of signing up. The setup flow walks you through importing customers (CSV upload or QuickBooks sync), configuring services and prices, and connecting payment processing. Plan to spend the first week importing data and configuring basics, then 2-3 weeks running parallel before fully cutting over. Field tech training is usually the longest item but takes hours, not weeks — most techs are productive on the mobile app within a single shift. For shops migrating from a legacy FSM platform (Smart Service, mHelpDesk, RazorSync), budget extra time for data normalization — historical job data and recurring service agreements rarely transfer cleanly without manual cleanup. Optional paid onboarding ($1,000-2,500) is available if you want hand-holding through QuickBooks integration setup or want help building automation workflows.",
+      "tool_faqs": [
+        {
+          "q": "Should I pick Jobber or Housecall Pro?",
+          "a": "It depends on your business mix. Jobber wins for landscaping, cleaning, handyman, and any multi-vertical shop because of broader vertical coverage and better UX. Housecall Pro wins for residential HVAC/plumbing/electrical shops that want built-in consumer financing (Wisetack), payment processing, and Google Local Services integration as core platform features rather than bolt-ons. Both are excellent — pick based on which gaps matter more for your specific business."
+        },
+        {
+          "q": "Does Jobber have a free trial?",
+          "a": "Yes — 14 days, no credit card required to start. Use the trial to run real jobs through the system end-to-end (schedule → dispatch → invoice → payment) rather than just clicking around the UI. Most shops can make a confident go/no-go decision within a week."
+        },
+        {
+          "q": "What tier should I start on?",
+          "a": "Most solo contractors start on Core ($39/mo) and outgrow it within 6 months when they hire their first office person or second tech. The jump to Connect ($119/mo) adds team management, automation, and two-way texting — features that justify the price for any shop with 2+ people. Don't pay for Grow or Plus features until you actually need them."
+        },
+        {
+          "q": "Can Jobber replace QuickBooks?",
+          "a": "No — Jobber integrates with QuickBooks (Online + Desktop) but isn't an accounting platform. You'll continue using QuickBooks for general ledger, accounts payable, and tax filings. Jobber handles invoicing and accounts receivable, with bidirectional sync to keep both systems in agreement."
+        },
+        {
+          "q": "How does Jobber handle recurring service agreements?",
+          "a": "Recurring jobs and visits are supported across all tiers, but deeper service-agreement management (auto-renewal, membership tiers, renewal reminders) is best at Grow and Plus. If you're an HVAC shop with 20%+ recurring revenue from maintenance contracts, the recurring-job support is solid but won't match ServiceTitan's purpose-built membership management — manageable trade-off given Jobber's lower cost."
+        }
+      ]
     },
     {
       "slug": "housecall-pro",
@@ -141,7 +221,91 @@
         "cleaning": 8,
         "handyman": 8,
         "appliance_repair": 8
-      }
+      },
+      "long_description": "Housecall Pro is the second-largest FSM platform serving small-to-mid residential trades, with about 35,000 customers concentrated in HVAC, plumbing, electrical, and cleaning. Founded in 2013 in San Diego, the product has carved out its position by going deeper on consumer-facing features than competitors — built-in payment processing, embedded consumer financing through Wisetack, native Google Local Services Ads integration, and one of the strongest automated review-request systems in the category.\n\nThe pitch to contractors is essentially \"we handle the commerce stack for you.\" Where Jobber requires you to bolt on Stripe + Wisetack + Mailchimp + Google Ads, Housecall Pro packages those into the platform. For shops that don't want to manage 6 vendor relationships, that integration premium is real.\n\nThree pricing tiers (Basic $65 → Essentials $169 → MAX $499) with the value cliff between Basic and Essentials being substantial — Basic lacks team management, automated marketing, and most reporting. MAX adds advanced reporting, custom workflows, and revenue rules but the per-user price gets expensive quickly past 5-10 users. The biggest trade-off vs Jobber is UX polish — Housecall Pro's interface can feel cluttered as features were layered over the years, while Jobber maintained a cleaner design discipline.\n\nHousecall Pro is the right pick for residential HVAC/plumbing/electrical shops that want consumer financing baked in (closes 25-40% more $5K+ tickets) and don't want to manage payment processing as a separate vendor. It's the wrong pick for landscapers, cleaners, and multi-vertical shops where Jobber's broader fit matters more.",
+      "pros_detail": [
+        {
+          "title": "Built-in consumer financing via Wisetack",
+          "explanation": "In-app financing offers for high-ticket repairs (HVAC replacements, full roofing jobs). Closes 25-40% more $5K+ tickets by giving customers monthly payment options at the moment of decision. Jobber and Workiz rely on third-party integrations for this — Housecall Pro embeds it natively."
+        },
+        {
+          "title": "Native Google Local Services Ads integration",
+          "explanation": "Direct integration with Google Local Services Ads attributes booked jobs back to specific ads with the green-check badge. Most competitors require manual call tracking or third-party tools to do this."
+        },
+        {
+          "title": "Payment processing baked in (Housecall Pro Pay)",
+          "explanation": "Process credit cards in-app with rates competitive with Stripe/Square. Instant payouts available (extra fee). No separate payment processor account or PCI compliance overhead."
+        },
+        {
+          "title": "Strongest automated review-request system in the category",
+          "explanation": "Automated SMS + email asks for Google/Yelp reviews after job completion. Strongest review-pump automation in the FSM market. Real impact on local SEO over time."
+        },
+        {
+          "title": "Online booking with real-time availability",
+          "explanation": "Customers self-book on your website with real-time technician availability. Customer portal includes appointment history, past invoices, and service membership management — meaningful repeat-business driver."
+        },
+        {
+          "title": "14-day free trial with no credit card",
+          "explanation": "Run real jobs through the system end-to-end before committing. No credit card required to start. Use the trial seriously rather than just clicking around."
+        },
+        {
+          "title": "Unusually strong post-purchase satisfaction (4.7/5 Capterra)",
+          "explanation": "Higher Capterra rating than most competitors indicates the product delivers on its promises once you're past the initial learning curve. Suggests low buyer's regret risk."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Payment processing fees are baked in",
+          "explanation": "Housecall Pro Pay rates are competitive but not the cheapest option (typically 2.59% + $0.30 per transaction). If you process $100K+/mo in card payments, you'd save 20-40 basis points using a standalone Stripe or Adyen account."
+        },
+        {
+          "title": "UX can feel cluttered with newer features",
+          "explanation": "As Housecall Pro added features over the years (financing, marketing, reporting, online booking), the interface accumulated more entry points and less hierarchy than Jobber. Slightly steeper learning curve for office staff."
+        },
+        {
+          "title": "Weaker QuickBooks Desktop support",
+          "explanation": "QuickBooks Online integration is solid, but Desktop support is limited (one-way sync only, no real-time updates). If your accountant runs Desktop, FieldEdge or Knowify is a better fit."
+        },
+        {
+          "title": "Smaller integration ecosystem than Jobber",
+          "explanation": "Fewer Zapier templates, less third-party support for common trade-specific add-ons. Most of what you need is in the core platform, but custom integrations require more work."
+        },
+        {
+          "title": "MAX tier per-user price gets expensive",
+          "explanation": "At MAX ($499/mo base) you're paying enterprise-tier pricing per user. Past 5-10 users on MAX, the math starts to favor a flat-rate competitor like Service Fusion."
+        },
+        {
+          "title": "No native commercial work support",
+          "explanation": "Housecall Pro is residential-first. Commercial mechanical, commercial HVAC, and project-based contracting work fits awkwardly. BuildOps or ServiceTitan handles commercial work better."
+        },
+        {
+          "title": "Less polished mobile app than Jobber",
+          "explanation": "The mobile app has more features but is occasionally glitchy under poor cellular signal. Field tech adoption is generally good but slightly more friction than Jobber."
+        }
+      ],
+      "implementation_notes": "Housecall Pro offers self-service onboarding plus optional paid setup (Quick Start $999, Pro Setup $1,999, White Glove $3,999) depending on how much hand-holding you want. Self-service for a small shop (2-5 techs) typically reaches operational status within 1-2 weeks: import customers from QuickBooks or CSV, configure your services and price book, set up payment processing (1-2 business days for approval), and train field techs on the mobile app. Plan 2-3 weeks of parallel operation with your existing system before fully cutting over. The bigger implementation lift comes from configuring the consumer financing (Wisetack approval can take 5-7 business days), Google Local Services integration (requires Google verification), and setting up automated review request flows. For shops migrating from Jobber, Housecall Pro's import flow handles customer and active job data cleanly — historical job data is typically left in the old system as archival reference rather than migrated.",
+      "tool_faqs": [
+        {
+          "q": "Is Housecall Pro better than Jobber for HVAC?",
+          "a": "For residential HVAC specifically, Housecall Pro has an edge because consumer financing is built in (closes more replacement jobs), Google Local Services integration is native, and automated review collection drives stronger long-term local SEO. Jobber's UX is cleaner and the mobile app is more polished, but lacks those commerce-focused features. If you're 80%+ HVAC service work and want maximum revenue per call, Housecall Pro. If you're multi-vertical or value field tech adoption ease, Jobber."
+        },
+        {
+          "q": "What's included in Housecall Pro Pay?",
+          "a": "In-app credit card processing (2.59% + $0.30 typical), instant payouts (extra fee), recurring billing for memberships, and ACH support. Rates are competitive but not the cheapest — if you process $100K+/month in card payments, a standalone Stripe or Adyen account could save 20-40 basis points."
+        },
+        {
+          "q": "Does Housecall Pro work for commercial trade work?",
+          "a": "Not well. Housecall Pro is residential-first and lacks the deeper project tracking, sub-contractor management, progress billing, and AIA support that commercial work requires. If you're 50%+ commercial mechanical or commercial HVAC, look at BuildOps or ServiceTitan instead."
+        },
+        {
+          "q": "How long is the contract?",
+          "a": "Month-to-month at all tiers. Annual contracts get a discount (typically 10-15% off). No long-term commitment required. Cancellation is straightforward through the account settings — no calling required."
+        },
+        {
+          "q": "What happens if I outgrow Housecall Pro?",
+          "a": "At ~$2M revenue / 15-20 techs you'll start hitting the limits of MAX tier reporting and need either deeper BI tooling or migration to ServiceTitan / BuildOps (residential / commercial respectively). The Housecall Pro → ServiceTitan migration path is well-trodden — many ServiceTitan customers came from Housecall Pro."
+        }
+      ]
     },
     {
       "slug": "servicetitan",
@@ -348,7 +512,87 @@
         "plumbing": 8,
         "cleaning": 7,
         "handyman": 8
-      }
+      },
+      "long_description": "Workiz is the only major FSM platform built explicitly for on-demand service businesses — locksmiths, garage door companies, junk removal operators, appliance repair shops — rather than the scheduled-recurring service model most platforms assume. Founded in 2015 in San Diego, the product treats inbound calls as the central workflow rather than calendar appointments, which fundamentally changes how the software is structured.\n\nWorkiz's bet is that on-demand service requires fundamentally different software. When a customer locks themselves out of their car, they call now, they want service in 30 minutes, and the conversion happens on the first phone call — there's no quote-and-callback cycle, no scheduling 3 weeks out, no maintenance plan to upsell. The platform is built around that reality: a native phone system with caller ID lookup, AI dispatcher that routes calls to the closest available tech, click-to-call from any customer record, SMS-first communication, and Google Local Services + Angi integration baked in.\n\nFour pricing tiers (Lite $65 → Standard $169 → Pro $299 → Ultimate custom) put Workiz in roughly the same price band as Housecall Pro at the lower tiers but with the AI phone agent feature appearing at higher tiers — AI answers calls, qualifies leads, and books jobs without human intervention, the most aggressive call-handling automation on the market. The trade-off: for scheduled-recurring service businesses (commercial HVAC service agreements, recurring landscaping maintenance), Workiz's model is awkward — Jobber or ServiceTitan handle that work better.",
+      "pros_detail": [
+        {
+          "title": "Built specifically for on-demand service businesses",
+          "explanation": "Locksmiths, garage door companies, junk removal, appliance repair — Workiz is the only major FSM platform purpose-built for businesses where customers call NOW and need service today, not 2 weeks out. The dispatch workflow assumes this model rather than fighting it."
+        },
+        {
+          "title": "Native phone system with caller ID lookup",
+          "explanation": "When a customer calls, their record (history, past jobs, address, service preferences) appears on screen automatically. No clicking around CRM during the call. Faster bookings, better customer experience, fewer dropped opportunities."
+        },
+        {
+          "title": "AI dispatcher routes calls to the closest available tech",
+          "explanation": "The AI evaluates each call against current tech locations, skills, and availability, then routes to the optimal tech without human intervention. Especially valuable for shops running 5-15 techs across a metro area."
+        },
+        {
+          "title": "AI phone agent at higher tiers",
+          "explanation": "Workiz's most aggressive feature: an AI that answers calls, qualifies leads, and books jobs without human intervention. Useful for after-hours coverage or peak call times when human dispatchers are overwhelmed. No competitor offers this natively."
+        },
+        {
+          "title": "Native Google Local Services + Angi integration",
+          "explanation": "Direct integration with Google Local Services Ads and Angi for lead attribution and automated lead intake. Critical for on-demand verticals (locksmith, garage door) that depend heavily on these channels for customer acquisition."
+        },
+        {
+          "title": "Click-to-call from any customer or job record",
+          "explanation": "One-click dialing from the platform, with automatic call recording and notes attached to the customer record. Streamlines the back-and-forth of on-demand service."
+        },
+        {
+          "title": "14-day free trial with no credit card required",
+          "explanation": "Use the trial seriously — set up your team, route test calls through the AI dispatcher, and run a few real jobs end-to-end before committing."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Not ideal for scheduled-recurring service businesses",
+          "explanation": "Workiz assumes inbound-call-driven work. For HVAC shops with maintenance plans, commercial service agreements, or any business model where jobs are scheduled weeks out, the platform fights you. Use Jobber or ServiceTitan instead."
+        },
+        {
+          "title": "Less polished UX than Jobber or Housecall Pro for traditional trades",
+          "explanation": "In residential HVAC/plumbing/electrical contexts (where Workiz also markets), the interface feels less refined than competitors who've focused on those verticals for longer."
+        },
+        {
+          "title": "Smaller integration ecosystem",
+          "explanation": "Fewer Zapier templates, less third-party support. The core platform covers most needs, but custom integrations are harder than with Jobber."
+        },
+        {
+          "title": "AI features sit at higher tiers",
+          "explanation": "The AI phone agent and most-aggressive AI dispatcher capabilities require Pro tier ($299/mo) or above. Lower tiers get the core platform but miss the differentiated AI features."
+        },
+        {
+          "title": "Smaller user community",
+          "explanation": "Fewer YouTube tutorials, less third-party content, smaller user-driven knowledge base than Jobber/Housecall Pro. Self-service learning takes more effort."
+        },
+        {
+          "title": "Per-user pricing scales quickly",
+          "explanation": "Like most competitors, Workiz charges per user above base tiers. For a 10+ tech operation, the monthly cost adds up faster than a flat-pricing alternative like Service Fusion."
+        }
+      ],
+      "implementation_notes": "Workiz is designed for fast self-service onboarding — most on-demand shops are routing live calls through the platform within 3-5 days of signing up. The setup flow: port your existing phone number (1-2 business days for porting), configure the AI dispatcher routing rules, connect Google Local Services or Angi accounts, and train your dispatchers on the inbound call workflow. Field tech training is minimal — the mobile app is straightforward for accepting jobs and updating status. The biggest implementation lift is on the call-handling side: configuring the AI dispatcher to match your dispatch logic, setting up call recording and quality scoring, and integrating with any existing call tracking you use. For shops migrating from a traditional FSM platform (Jobber, Housecall Pro) to Workiz, the historical customer data imports cleanly, but you'll need to reconfigure your business model assumptions — Workiz treats calls as the unit of work rather than scheduled jobs.",
+      "tool_faqs": [
+        {
+          "q": "Is Workiz only for locksmiths?",
+          "a": "No, but it's optimized for on-demand service businesses generally — locksmiths, garage door, junk removal, appliance repair, mobile mechanic, emergency plumbing. Anywhere customers call NOW and want service today, not weeks out. For scheduled-recurring service (commercial HVAC maintenance, residential service agreements), use Jobber or ServiceTitan instead — those models fit Workiz poorly."
+        },
+        {
+          "q": "What's the AI phone agent and how much does it cost?",
+          "a": "The AI phone agent answers inbound calls, qualifies leads, and books jobs without human intervention. Available at Pro tier ($299/mo) and Ultimate (custom-quoted). Useful for after-hours coverage or peak call times when human dispatchers are overwhelmed. No competitor offers this natively at any tier."
+        },
+        {
+          "q": "Can Workiz replace my CSR team?",
+          "a": "Partially — the AI phone agent can handle simple inbound bookings (locked out of car, garage door won't open, common appliance repair calls) for after-hours or peak overflow. For complex calls, custom quotes, or first-time customer onboarding, human CSRs are still better. Most shops use AI for overflow + after-hours, humans for primary business hours."
+        },
+        {
+          "q": "Does Workiz work for HVAC or plumbing?",
+          "a": "Workiz markets to HVAC and plumbing, but its on-demand-first design fits emergency-only HVAC/plumbing better than recurring service work. If you do mostly maintenance plans and scheduled tune-ups, Jobber or ServiceTitan are better fits. If you do mostly emergency calls (24/7 plumbing, emergency HVAC), Workiz's call-handling features shine."
+        },
+        {
+          "q": "How does Workiz handle Google Local Services Ads?",
+          "a": "Native integration: leads from Google Local Services flow directly into Workiz as new jobs, with call recording, lead source attribution, and customer details auto-populated. Booked-job conversion tracking flows back to Google for ad optimization. Best Google Local Services integration in the FSM category."
+        }
+      ]
     },
     {
       "slug": "fieldedge",
@@ -513,7 +757,83 @@
         "electrical": 9,
         "appliance_repair": 8,
         "handyman": 7
-      }
+      },
+      "long_description": "Service Fusion's entire pitch is built around one differentiator: flat per-company pricing with unlimited users at every tier. Where every competitor charges per-user (Jobber: 1/7/15/30 user caps, Housecall Pro: per-user fees at higher tiers, ServiceTitan: $300-800 per user per month), Service Fusion charges $195/$295/$398 per month total regardless of whether you have 4 techs or 40. Founded in 2014 in Irving, TX and serving roughly 6,000 mid-size service contractors, the company has built its entire market position around this pricing model.\n\nThe math gets interesting fast. A 15-tech shop running Jobber Plus pays $399/mo and is capped at 30 users. A 15-tech shop running Housecall Pro MAX pays $399/mo base plus per-user fees (~$300/mo additional). A 15-tech shop running Service Fusion Plus pays $295/mo total. Past about 6-8 users, Service Fusion becomes meaningfully cheaper. At 20+ users, it's the cheapest credible FSM option on the market.\n\nThe trade-off: Service Fusion's UX feels dated compared to Jobber and Housecall Pro. The interface was built in an earlier era of web design and updates have been incremental rather than the periodic ground-up rebuilds competitors have done. Functionally it's complete — full scheduling, dispatching, invoicing, GPS tracking, VoIP, e-signatures, inventory — but it doesn't feel as polished. For shops where field tech adoption is the bottleneck, Jobber wins. For shops where the per-seat math is the bottleneck, Service Fusion wins.",
+      "pros_detail": [
+        {
+          "title": "Unlimited users at flat pricing — unique in the category",
+          "explanation": "The only major FSM platform that doesn't charge per-user. A 20-tech shop pays the same monthly fee as a 4-tech shop. Past about 6-8 users, becomes meaningfully cheaper than every per-user competitor. At 20+ users, the cheapest credible FSM option on the market."
+        },
+        {
+          "title": "Native QuickBooks Desktop + Online integration",
+          "explanation": "Solid bidirectional sync with both QuickBooks Desktop and QuickBooks Online. Critical for QB-heavy shops whose accountants run Desktop — a real differentiator vs Housecall Pro (weaker Desktop support)."
+        },
+        {
+          "title": "Built-in VoIP phone system",
+          "explanation": "Native phone system with caller ID lookup, call recording, and click-to-call from any customer record. No third-party phone vendor required. Saves $30-100/month vs adding RingCentral or similar."
+        },
+        {
+          "title": "Full feature set at the entry tier",
+          "explanation": "Unlike competitors who gate features behind higher tiers, Service Fusion's Starter ($195) includes scheduling, dispatching, invoicing, GPS tracking, VoIP, and inventory. Plus and Pro add reporting depth and integrations rather than core features."
+        },
+        {
+          "title": "E-signature collection built in",
+          "explanation": "Customers sign quotes and work orders directly on the tech's mobile device. No separate DocuSign integration required. Useful for shops doing higher-ticket work where signed authorization matters."
+        },
+        {
+          "title": "GPS tracking + dispatch route optimization",
+          "explanation": "Real-time tech location tracking with route optimization for the day. Saves drive time and helps dispatchers reassign jobs on the fly when delays happen."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "UI feels dated compared to Jobber and Housecall Pro",
+          "explanation": "The interface was built in an earlier era and updates have been incremental rather than ground-up rebuilds. Functionally complete but visually less polished than competitors. Field tech adoption may take slightly more training time."
+        },
+        {
+          "title": "Higher entry price than per-user competitors",
+          "explanation": "Starter ($195/mo) is more than triple Jobber Core ($39). The flat-pricing math only pays off at 6+ users. For solo or 2-3 tech shops, Jobber and Housecall Pro are cheaper. Service Fusion makes sense once you have 6+ users."
+        },
+        {
+          "title": "Smaller user community and ecosystem",
+          "explanation": "6,000 customers vs Jobber's 250,000+ means fewer YouTube tutorials, less Reddit discussion, and a smaller knowledge base of community-shared workflows for self-service learning."
+        },
+        {
+          "title": "Limited consumer financing integration",
+          "explanation": "Unlike Housecall Pro's native Wisetack embedding, Service Fusion relies on third-party financing integrations that are less seamless. Costs you some closed deals on high-ticket repairs ($5K+ HVAC replacements, full re-roofs)."
+        },
+        {
+          "title": "Mobile app less refined than competitors",
+          "explanation": "The mobile app works but doesn't have the same UX polish as Jobber or Housecall Pro. Field tech adoption may take slightly more training time and have more resistance from non-tech-savvy techs."
+        },
+        {
+          "title": "No free trial available",
+          "explanation": "Service Fusion requires a demo to evaluate — you can request a guided walkthrough but can't self-serve a trial like with Jobber or Housecall Pro. Lengthens the evaluation cycle by 1-2 weeks."
+        }
+      ],
+      "implementation_notes": "Service Fusion offers guided onboarding included in your subscription — a dedicated onboarding specialist walks you through setup over the first 30-60 days. Typical timeline: week 1, account configuration and customer/data import (CSV or QuickBooks sync); weeks 2-3, configuring your services, pricing, and workflows; weeks 3-4, training office staff on dispatching and invoicing workflows; weeks 4-6, training field techs on the mobile app and running parallel with your existing system; weeks 6-8, full cutover. For shops migrating from another FSM platform, the existing-data import handles customers and active jobs cleanly — historical job data is typically left in the source system as archival reference. The biggest implementation lift is usually integrating VoIP (porting your existing phone numbers, which takes 1-2 business days) and configuring QuickBooks sync (typically 2-3 hours of guided configuration to match your chart of accounts).",
+      "tool_faqs": [
+        {
+          "q": "When does Service Fusion become cheaper than Jobber or Housecall Pro?",
+          "a": "Around 6-8 users. Below that, per-user platforms (Jobber Core $39, Housecall Pro Basic $65) are cheaper. Above 8 users, Service Fusion's flat $195-398 starts winning. At 15+ users, Service Fusion is meaningfully cheaper. At 20+ users, it's the cheapest credible FSM option on the market."
+        },
+        {
+          "q": "Does Service Fusion work for solo contractors?",
+          "a": "Technically yes, but the math doesn't favor it. At $195/mo for Starter, you're paying 5x what Jobber Core costs ($39/mo) and not getting per-user value back. Solo contractors and 2-3 tech shops are better served by Jobber or Housecall Pro. Service Fusion makes sense once you have 6+ users."
+        },
+        {
+          "q": "Is the QuickBooks Desktop integration solid?",
+          "a": "Yes — Service Fusion supports both QuickBooks Desktop and QuickBooks Online with bidirectional sync. This is a real differentiator vs Housecall Pro (weaker Desktop support) and is critical for QB-heavy shops whose accountants run Desktop."
+        },
+        {
+          "q": "Can I add unlimited techs without paying more?",
+          "a": "Yes — that's the entire pricing differentiator. Add as many users as you want at every tier without paying per-seat fees. Plus and Pro tier upgrades are about reporting depth and integrations, not user count. A 50-tech shop pays the same as a 5-tech shop at any given tier."
+        },
+        {
+          "q": "How does Service Fusion compare to ServiceTitan?",
+          "a": "They serve different segments. ServiceTitan is enterprise-tier ($300-800/user/mo + implementation fees) for $1M+ revenue shops wanting deep marketing attribution, Pricebook Pro, and PE-grade reporting. Service Fusion is mid-market ($195-398/mo total) for shops wanting strong core FSM features at a price that scales with users. Different products, different buyers."
+        }
+      ]
     },
     {
       "slug": "buildops",
