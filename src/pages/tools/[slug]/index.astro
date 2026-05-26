@@ -436,6 +436,25 @@ const breadcrumbs = [
       </div>
     </header>
 
+    <nav class="mb-8 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
+      <div class="text-xs font-semibold uppercase tracking-wider text-slate-700">Jump to</div>
+      <div class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-sm">
+        <a href="#pricing" class="text-orange-600 hover:underline">Pricing</a>
+        <span class="text-slate-300">·</span>
+        <a href="#features" class="text-orange-600 hover:underline">Features</a>
+        <span class="text-slate-300">·</span>
+        <a href="#pros" class="text-orange-600 hover:underline">Pros</a>
+        <span class="text-slate-300">·</span>
+        <a href="#cons" class="text-orange-600 hover:underline">Cons</a>
+        <span class="text-slate-300">·</span>
+        <a href="#implementation" class="text-orange-600 hover:underline">Implementation</a>
+        <span class="text-slate-300">·</span>
+        <a href="#alternatives" class="text-orange-600 hover:underline">Alternatives</a>
+        <span class="text-slate-300">·</span>
+        <a href="#faqs" class="text-orange-600 hover:underline">FAQs</a>
+      </div>
+    </nav>
+
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700">
@@ -454,7 +473,7 @@ const breadcrumbs = [
       </section>
     )}
 
-    <section class="mb-10">
+    <section id="pricing" class="mb-10 scroll-mt-8">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Pricing</h2>
       <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
         <table class="w-full text-sm">
@@ -538,7 +557,7 @@ const breadcrumbs = [
       </div>
     </section>
 
-    <section class="mb-10">
+    <section id="features" class="mb-10 scroll-mt-8">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Key features</h2>
       <div class="flex flex-wrap gap-2">
         {tool.key_features.map((f) =>
@@ -569,7 +588,7 @@ const breadcrumbs = [
       </div>
     </section>
 
-    <section class="mb-10">
+    <section id="pros" class="mb-10 scroll-mt-8">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Pros</h2>
       <ul class="space-y-3">
         {hasCustomPros
@@ -588,7 +607,7 @@ const breadcrumbs = [
       </ul>
     </section>
 
-    <section class="mb-10">
+    <section id="cons" class="mb-10 scroll-mt-8">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Cons</h2>
       <ul class="space-y-3">
         {hasCustomCons
@@ -607,7 +626,7 @@ const breadcrumbs = [
       </ul>
     </section>
 
-    <section class="mb-10">
+    <section id="implementation" class="mb-10 scroll-mt-8">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Implementation timeline</h2>
       <div class="rounded-lg border border-slate-200 bg-white p-6">
         <p class="mb-2 text-lg font-semibold text-slate-900">{timeline.headline}</p>
@@ -644,7 +663,7 @@ const breadcrumbs = [
     </section>
 
     {smartAlts.length > 0 && (
-      <section class="mb-10">
+      <section id="alternatives" class="mb-10 scroll-mt-8">
         <h2 class="mb-2 text-2xl font-bold text-slate-900">Top alternatives to {tool.name}</h2>
         <p class="mb-5 text-sm text-slate-500">
           Matched by vertical fit, price tier, and team size — not just rating.
@@ -679,7 +698,7 @@ const breadcrumbs = [
       </section>
     )}
 
-    <section class="mb-10">
+    <section id="faqs" class="mb-10 scroll-mt-8">
       <h2 class="mb-6 text-2xl font-bold text-slate-900">Frequently asked questions</h2>
       <div class="space-y-4">
         {faqsList.map((f) => (
