@@ -1,0 +1,307 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Glossary', url: '/glossary/' },
+];
+
+interface GlossaryTerm {
+  term: string;
+  slug: string;
+  definition: string;
+  example?: string;
+}
+
+interface GlossaryCategory {
+  name: string;
+  description: string;
+  terms: GlossaryTerm[];
+}
+
+const categories: GlossaryCategory[] = [
+  {
+    name: 'Software categories',
+    description: 'The big buckets of software that show up in trades directories.',
+    terms: [
+      {
+        term: 'FSM',
+        slug: 'fsm',
+        definition: 'Field Service Management software. The general category for tools that handle scheduling, dispatching, invoicing, and customer communication for service businesses. ServiceTitan, Jobber, Housecall Pro, Workiz are all FSM.',
+        example: 'You need FSM if your business sends technicians to customer locations.',
+      },
+      {
+        term: 'CMMS',
+        slug: 'cmms',
+        definition: 'Computerized Maintenance Management System. Software for internal facility maintenance teams that track work orders, preventive maintenance schedules, and asset inventories. UpKeep, MaintainX, Limble are CMMS. CMMS is NOT a substitute for FSM — different software for different jobs.',
+        example: 'A hospital facility manager uses a CMMS. An HVAC contractor visiting that hospital uses an FSM.',
+      },
+      {
+        term: 'Construction PM',
+        slug: 'construction-pm',
+        definition: 'Construction Project Management software. Built around projects (rather than recurring service jobs) — handles selections, change orders, vendor coordination, and job costing for custom home builders, remodelers, and general contractors. Buildertrend, JobTread, Procore are construction PM.',
+      },
+      {
+        term: 'CRM',
+        slug: 'crm',
+        definition: 'Customer Relationship Management. Tools focused on tracking leads, deals, and customer history. Many FSM platforms bundle CRM features in. Standalone CRM in trades (Method:CRM, MarketSharp) typically integrates with the FSM or accounting system rather than replacing it.',
+      },
+      {
+        term: 'Estimating software',
+        slug: 'estimating',
+        definition: 'Tools focused narrowly on quoting and invoicing, without the broader scheduling/dispatching layer. Joist is the canonical example. Often the first software a solo contractor adopts before outgrowing it and migrating to full FSM.',
+      },
+    ],
+  },
+  {
+    name: 'Pricing concepts',
+    description: 'How field service software is priced and the gotchas to watch for.',
+    terms: [
+      {
+        term: 'Per-user pricing',
+        slug: 'per-user-pricing',
+        definition: 'Subscription scales with the number of users (techs + office staff). $79 per user per month at 10 users = $790 per month. Most FSM (ServiceTitan, FieldEdge, Housecall Pro standard tiers) is per-user.',
+        example: 'A 20-tech operation on ServiceTitan at $400/user/mo pays $8,000/month for software alone.',
+      },
+      {
+        term: 'Per-company pricing',
+        slug: 'per-company-pricing',
+        definition: 'Flat monthly fee regardless of how many users access the platform. Jobber Connect ($169/mo), Housecall Pro flat-rate plans, Skimmer, JobTread use this model. Decisively cheaper at scale (5+ users) vs per-user equivalents.',
+        example: 'Skimmer Pro at $99/month covers unlimited pool techs. A 10-tech operation pays the same $99 as a 1-tech operation.',
+      },
+      {
+        term: 'Custom-quoted pricing',
+        slug: 'custom-quoted',
+        definition: 'Vendor doesn\'t publish prices; you have to schedule a discovery call to get a number. Typical for enterprise platforms (ServiceTitan, BuildOps, FieldEdge, Procore, FieldRoutes). Pricing varies significantly by team size and module selection. We cite user-reported ranges instead of fake vendor numbers.',
+      },
+      {
+        term: 'Free tier vs free trial',
+        slug: 'free-tier-vs-trial',
+        definition: 'Free tier = usable indefinitely with limited features. Free trial = full features for 14-30 days then you pay or lose access. Joist has a real free tier; most FSM has free trials only.',
+      },
+      {
+        term: 'Implementation fee',
+        slug: 'implementation-fee',
+        definition: 'One-time charge to set up your account, import customer data, configure workflows, and train staff. $0 for self-service (entry-tier), $500-$2,000 for mid-tier guided onboarding, $5,000-$50,000 for enterprise platforms. Often more expensive than 6 months of subscription.',
+        example: 'ServiceTitan implementation reportedly costs $15K-$30K plus 8-12 weeks of dedicated implementation manager time.',
+      },
+      {
+        term: 'Parallel run',
+        slug: 'parallel-run',
+        definition: 'Running both old and new systems simultaneously during a software migration to reduce cutover risk. Typically 2-4 weeks. Costs an extra month of paying both subscriptions but prevents jobs and invoices from falling through during transition.',
+      },
+    ],
+  },
+  {
+    name: 'Workflow features',
+    description: 'The actual capabilities you compare across tools.',
+    terms: [
+      {
+        term: 'Dispatching',
+        slug: 'dispatching',
+        definition: 'Assigning specific techs to specific jobs and routing them in real time. Different from scheduling: scheduling is when, dispatching is who. Heavy-duty dispatching includes drag-and-drop reassignment, GPS-aware nearest-tech routing, and emergency call insertion.',
+      },
+      {
+        term: 'Scheduling',
+        slug: 'scheduling',
+        definition: 'Setting when jobs happen — calendar view, recurring service intervals, customer-preferred time windows. Every FSM has scheduling; depth varies (recurring contracts, multi-day jobs, etc.).',
+      },
+      {
+        term: 'Service agreement',
+        slug: 'service-agreement',
+        definition: 'Recurring maintenance contract with scheduled visits (quarterly HVAC tune-ups, monthly pest treatments). FSM platforms model these as first-class objects with auto-generated work orders. Commercial mechanical contractors generate 50-70% of revenue from service agreements.',
+      },
+      {
+        term: 'Pricebook',
+        slug: 'pricebook',
+        definition: 'The catalog of services and parts your business sells, with prices. Modern pricebooks support good-better-best options at the point of quote (the technique that lifts close rates and average ticket). ServiceTitan, Coolfront, and Profit Rhino specialize in pricebook depth.',
+      },
+      {
+        term: 'Customer portal',
+        slug: 'customer-portal',
+        definition: 'Web interface where customers self-serve appointment booking, invoice viewing, payment, and service history. Reduces office-staff phone load significantly. Commercial portals look different — they\'re built for facility managers with multi-property dashboards, not residential homeowners.',
+      },
+      {
+        term: 'Route optimization',
+        slug: 'route-optimization',
+        definition: 'Algorithm that orders the day\'s stops to minimize drive time. Critical for high-density route businesses (pool service, pest control, lawn care). FieldRoutes, OptimoRoute, Service Autopilot are route-optimization specialists.',
+      },
+      {
+        term: 'Two-way SMS',
+        slug: 'two-way-sms',
+        definition: 'Customers can text the business and the business can text back, with the conversation logged against the customer record. Reduces office-staff call load. Standard on mid-tier+ FSM.',
+      },
+      {
+        term: 'Membership program',
+        slug: 'membership-program',
+        definition: 'Recurring-billing customer plans (monthly or annual) bundling preventive maintenance and priority service. Lifts customer LTV significantly. ServiceTitan and Housecall Pro have strong membership tooling; many smaller FSM have it as an afterthought.',
+      },
+      {
+        term: 'Consumer financing',
+        slug: 'consumer-financing',
+        definition: 'Letting residential customers finance large repair/install tickets at the point of sale (GreenSky, Synchrony, Wisetack integrations). Lifts average ticket 30-60% for HVAC system replacements. Tier-1 differentiator for high-ticket trades.',
+      },
+      {
+        term: 'AIA billing',
+        slug: 'aia-billing',
+        definition: 'Industry-standard progress billing format used in commercial construction. AIA G702 and G703 forms break a project down by completion percentage and bill incrementally as work progresses. If you do commercial construction, you need software that supports AIA billing (Simpro, Procore, Sage 300 CRE).',
+      },
+      {
+        term: 'Selection management',
+        slug: 'selection-management',
+        definition: 'Tracking client decisions on materials, finishes, fixtures, and appliances throughout a build or remodel. Custom home builders have 50-200 selections per project. Buildertrend and JobTread specialize in selection management.',
+      },
+      {
+        term: 'Change orders',
+        slug: 'change-orders',
+        definition: 'Formal documentation of scope changes during a project (add a new outlet, upgrade the countertop), with associated cost and timeline impact. Construction PM software tracks these as first-class objects.',
+      },
+      {
+        term: 'Chemical tracking',
+        slug: 'chemical-tracking',
+        definition: 'Logging chemical applications (pesticide, pool chemicals, lawn treatments) with quantities, locations, and dates for regulatory compliance reporting. Required by most state pesticide regulatory agencies and EPA. FieldRoutes, PestPac, GorillaDesk, Skimmer all support it.',
+      },
+      {
+        term: 'Asset tracking',
+        slug: 'asset-tracking',
+        definition: 'Equipment-level records with service history, warranties, photos, and condition. Critical for commercial facility maintenance (a hospital has thousands of pieces of equipment, each with its own service schedule). Different from inventory which is about stock counts.',
+      },
+      {
+        term: 'Preventive maintenance',
+        slug: 'preventive-maintenance',
+        definition: 'Scheduled inspections and servicing to prevent failures rather than fix them after they break. CMMS platforms organize all activity around PM schedules. FSM platforms support PM as part of service agreements.',
+      },
+    ],
+  },
+  {
+    name: 'Integrations',
+    description: 'The other tools your FSM has to talk to.',
+    terms: [
+      {
+        term: 'QuickBooks Online vs Desktop',
+        slug: 'qbo-vs-desktop',
+        definition: 'Two completely different products from Intuit. QuickBooks Desktop is the legacy installed software (some operators are still on it for the deeper inventory/job-costing features). QuickBooks Online is the cloud version. Most modern FSM integrates with QuickBooks Online; far fewer with Desktop. If you\'re on Desktop, your FSM choices narrow significantly — FieldEdge is the classic Desktop-friendly option.',
+      },
+      {
+        term: 'Xero',
+        slug: 'xero',
+        definition: 'Cloud accounting platform dominant in New Zealand, Australia, and the UK. Tradify, Simpro, BigChange have deep Xero integration. In the US, QuickBooks is more common, but Xero is growing.',
+      },
+      {
+        term: 'Stripe',
+        slug: 'stripe',
+        definition: 'Payment processor for credit card payments via FSM. Most modern FSM integrates with Stripe for in-app invoice payment, recurring billing, and one-time charges. Processing fees are typically 2.59%-2.99% + $0.30 per transaction passed through.',
+      },
+      {
+        term: 'Zapier',
+        slug: 'zapier',
+        definition: 'Workflow automation platform that connects FSM to thousands of other tools without code. The escape hatch when your FSM doesn\'t have a native integration with a specific tool. Works but adds latency and complexity vs native.',
+      },
+      {
+        term: 'Google Local Services Ads (LSA)',
+        slug: 'lsa',
+        definition: 'Google\'s pay-per-lead advertising program for service businesses, shown above regular search results. Generates inbound calls/leads at $40-$150 each depending on trade. FSM tools that integrate with LSA can auto-route leads to the correct technician or location. Critical for franchise networks.',
+      },
+      {
+        term: 'Sage Intacct / NetSuite',
+        slug: 'sage-intacct-netsuite',
+        definition: 'Enterprise accounting platforms used by larger commercial contractors instead of QuickBooks. Few FSM integrate with these (ServiceTrade, Simpro, Procore are the main ones). If your accounting team uses one of these, your FSM options narrow.',
+      },
+    ],
+  },
+  {
+    name: 'Buyer concepts',
+    description: 'Vocabulary you need when evaluating, switching, or scaling FSM.',
+    terms: [
+      {
+        term: 'Migration',
+        slug: 'migration',
+        definition: 'The 4-12 week project of moving from one FSM to another. Includes data export from old system, import to new system, integration rebuilding, staff training, and parallel-run cutover. The hardest part is usually rebuilding recurring service agreements and custom pricebooks.',
+        example: 'See our migration guides for the most common switching paths.',
+      },
+      {
+        term: 'Vendor lockout',
+        slug: 'vendor-lockout',
+        definition: 'Risk that you lose access to your customer data after canceling. Always export everything you need (customer records, historical invoices, photos, integrations) BEFORE the final cancellation. Some vendors restrict export options once you\'ve cancelled.',
+      },
+      {
+        term: 'Implementation manager',
+        slug: 'implementation-manager',
+        definition: 'Dedicated vendor employee assigned to guide your onboarding (typical for mid-tier and enterprise platforms). Different from sales rep — the IM owns success of your deployment over 4-12 weeks. Good IMs are the difference between a 6-week deployment and a 6-month one.',
+      },
+      {
+        term: 'Adoption resistance',
+        slug: 'adoption-resistance',
+        definition: 'Field techs not using the new software because they prefer the old way (paper, text messages, the prior system). The single biggest project risk in any FSM migration. Mitigated by mandatory adoption deadlines, training time built into pay, and visible buy-in from owners.',
+      },
+      {
+        term: 'Verified date',
+        slug: 'verified-date',
+        definition: 'The date WrenchStack last re-checked a tool\'s pricing against the vendor\'s public page. Stamped on every tool review and comparison. Pricing older than 90 days gets a yellow freshness pill; older than 180 days gets red. See our methodology page for the full process.',
+      },
+      {
+        term: 'WrenchStack Score',
+        slug: 'wrenchstack-score',
+        definition: 'Our 0-10 editorial score per tool, computed from vertical fit (40%), aggregated user ratings (30%), pricing transparency (10%), feature depth (10%), and integration coverage (10%). See the methodology page for the full formula and data sources.',
+      },
+    ],
+  },
+];
+
+// Flatten for the searchable A-Z index at the top
+const allTerms = categories
+  .flatMap((c) => c.terms.map((t) => ({ ...t, category: c.name })))
+  .sort((a, b) => a.term.localeCompare(b.term));
+---
+
+<Layout
+  title="Trades software glossary — FSM, CMMS, AIA billing, dispatching, and more"
+  description={`Plain-English definitions for ${allTerms.length} field service and trades software terms — FSM, CMMS, dispatching, AIA billing, pricebook, parallel run, and everything else you'll see in tool reviews and pricing pages.`}
+  breadcrumbs={breadcrumbs}
+>
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-10">
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        Trades software glossary
+      </h1>
+      <p class="mt-4 max-w-3xl text-lg text-slate-600">
+        Plain-English definitions for {allTerms.length} field service and trades software terms — the vocabulary you'll see in tool reviews, comparison pages, and vendor sales calls. Everything organized by category, with examples.
+      </p>
+    </header>
+
+    <nav class="mb-10 rounded-lg border border-slate-200 bg-slate-50 p-4">
+      <div class="text-sm font-semibold text-slate-700">Jump to category:</div>
+      <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm">
+        {categories.map((c, i) => (
+          <a href={`#${c.name.toLowerCase().replace(/\s+/g, '-')}`} class="text-orange-600 hover:underline">
+            {c.name}
+          </a>
+        ))}
+      </div>
+    </nav>
+
+    {categories.map((category) => (
+      <section id={category.name.toLowerCase().replace(/\s+/g, '-')} class="mb-12 scroll-mt-8">
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">{category.name}</h2>
+        <p class="mb-6 text-slate-600">{category.description}</p>
+        <dl class="space-y-6">
+          {category.terms.map((t) => (
+            <div id={t.slug} class="scroll-mt-8 border-l-2 border-orange-200 pl-4">
+              <dt class="mb-1 text-lg font-semibold text-slate-900">{t.term}</dt>
+              <dd class="text-slate-700 leading-relaxed">{t.definition}</dd>
+              {t.example && (
+                <dd class="mt-2 text-sm italic text-slate-500">{t.example}</dd>
+              )}
+            </div>
+          ))}
+        </dl>
+      </section>
+    ))}
+
+    <section class="mt-12 rounded-lg bg-slate-50 p-6 text-sm text-slate-600">
+      <p>
+        Missing a term? Email <a href="mailto:hello@wrenchstack.com" class="text-orange-600 hover:underline">hello@wrenchstack.com</a> with the term and we'll add it. We update the glossary monthly as vendor naming changes and new categories emerge.
+      </p>
+    </section>
+  </article>
+</Layout>
