@@ -11,6 +11,7 @@ import {
   wrenchStackScore,
   readingTimeMinutes,
   linkifyTools,
+  smartAlternatives,
   type Tool,
 } from '../../../lib/data';
 
@@ -54,13 +55,11 @@ const strongVerticals = Object.entries(tool.vertical_fit ?? {})
   .map(([slug]) => verticals.find((v) => v.slug === slug)?.name)
   .filter((n): n is string => !!n);
 
-const competitorsInSameVertical: Tool[] = tool.verticals
-  .flatMap((v) => toolsForVertical(v))
-  .filter((t, i, arr) => t.slug !== tool.slug && arr.findIndex((x) => x.slug === t.slug) === i)
-  .sort((a, b) => (aggregateRating(b) ?? 0) - (aggregateRating(a) ?? 0))
-  .slice(0, 4);
-
-const topCompetitor = competitorsInSameVertical[0];
+// Smart alternatives: type-compatible + vertical-fit + price-tier matched.
+// Replaces the previous rating-only sort that surfaced CMMS tools as
+// alternatives to FSM platforms on every page.
+const smartAlts = smartAlternatives(tool, 6);
+const topCompetitor: Tool | undefined = smartAlts[0]?.tool;
 
 const verticalsForThisTool = tool.verticals
   .map((v) => verticals.find((x) => x.slug === v))
@@ -594,20 +593,35 @@ const breadcrumbs = [
       </div>
     </section>
 
-    {competitorsInSameVertical.length > 0 && (
+    {smartAlts.length > 0 && (
       <section class="mb-10">
-        <h2 class="mb-4 text-2xl font-bold text-slate-900">Top alternatives to {tool.name}</h2>
+        <h2 class="mb-2 text-2xl font-bold text-slate-900">Top alternatives to {tool.name}</h2>
+        <p class="mb-5 text-sm text-slate-500">
+          Matched by vertical fit, price tier, and team size — not just rating.
+        </p>
         <div class="grid gap-4 sm:grid-cols-2">
-          {competitorsInSameVertical.map((c) => (
-            <a
-              href={`/tools/${c.slug}/`}
-              class="group rounded-lg border border-slate-200 bg-white p-4 hover:border-slate-400"
-            >
-              <div class="font-semibold text-slate-900 group-hover:text-orange-600">{c.name}</div>
-              <div class="mt-1 text-sm text-slate-500">{formatPrice(c)}</div>
-              <div class="mt-2 text-xs text-slate-500">{c.tagline}</div>
-            </a>
-          ))}
+          {smartAlts.map(({ tool: c, reason }) => {
+            const rating = aggregateRating(c);
+            return (
+              <a
+                href={`/tools/${c.slug}/`}
+                class="group rounded-lg border border-slate-200 bg-white p-4 transition hover:border-orange-300 hover:shadow-sm"
+              >
+                <div class="flex items-start justify-between gap-3">
+                  <div class="font-semibold text-slate-900 group-hover:text-orange-600">{c.name}</div>
+                  {rating !== null && (
+                    <span class="shrink-0 text-xs font-medium text-slate-500">{rating.toFixed(1)} ★</span>
+                  )}
+                </div>
+                <div class="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs text-slate-500">
+                  <span>{formatPrice(c)}</span>
+                  {c.best_team_size && <span>Team {c.best_team_size}</span>}
+                </div>
+                <p class="mt-2 text-sm text-slate-700 leading-snug">{reason}</p>
+                <div class="mt-2 text-xs italic text-slate-400">{c.tagline}</div>
+              </a>
+            );
+          })}
         </div>
       </section>
     )}

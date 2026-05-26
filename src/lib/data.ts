@@ -152,6 +152,305 @@ export function readingTimeMinutes(wordCount: number): number {
   return Math.max(1, Math.round(wordCount / 220));
 }
 
+// --- Smart alternatives: replace the rating-only sort that previously
+// surfaced MaintainX/Limble (CMMS tools) as "alternatives" to FSM tools
+// like ServiceTitan and Jobber on every page. The new ranking factors in
+// (1) tool-type compatibility (FSM vs CMMS vs construction PM), (2) price
+// tier proximity, (3) shared vertical fit strength, and (4) team-size
+// bucket overlap — with rating as a tiebreaker, not the primary signal.
+
+export type ToolType = 'fsm' | 'cmms' | 'construction_pm' | 'estimating' | 'crm' | 'specialty' | 'unknown';
+export type PriceTier = 'free' | 'entry' | 'mid' | 'enterprise';
+export type TeamSizeBucket = 'solo' | 'small' | 'mid' | 'large';
+
+// Customer-facing FSM signature features. A tool with these is dispatch /
+// scheduling / billing software customers see — i.e. real FSM.
+const FSM_CORE_FEATURES = new Set([
+  'scheduling',
+  'dispatching',
+  'invoicing',
+  'invoice_automation',
+  'automated_billing',
+  'billing_automation',
+  'online_invoicing',
+  'estimates',
+  'estimating',
+  'quoting',
+  'quotes',
+  'mobile_quoting',
+  'customer_portal',
+  'job_management',
+  'job_costing',
+  'recurring_scheduling',
+  'route_optimization',
+  'recurring_services',
+]);
+
+// CMMS / internal-maintenance signature features. Tools dominated by
+// these are facility maintenance platforms, not FSM.
+const CMMS_FEATURES = new Set([
+  'preventive_maintenance',
+  'asset_management',
+  'asset_tracking',
+  'qr_codes',
+  'procedures',
+  'incident_tracking',
+  'work_orders',
+]);
+
+// Construction PM signature features.
+const CONSTRUCTION_PM_FEATURES = new Set([
+  'selection_management',
+  'change_orders',
+  'aia_billing',
+  'submittals',
+  'rfi_management',
+  'punchlist',
+  'daily_logs',
+  'drawings',
+]);
+
+export function toolType(t: Tool): ToolType {
+  const features = t.key_features ?? [];
+  const fsmHits = features.filter((f) => FSM_CORE_FEATURES.has(f)).length;
+  const cmmsHits = features.filter((f) => CMMS_FEATURES.has(f)).length;
+  const constructionHits = features.filter((f) => CONSTRUCTION_PM_FEATURES.has(f)).length;
+
+  // CMMS dominance: 2+ CMMS-only features AND no customer-facing FSM signal
+  if (cmmsHits >= 2 && fsmHits === 0) return 'cmms';
+
+  // Construction PM dominance: selection/change-order/AIA features present
+  // AND construction or roofing vertical present
+  if (constructionHits >= 2 && fsmHits <= 2) return 'construction_pm';
+
+  // FSM dominance: 3+ customer-facing FSM features
+  if (fsmHits >= 3) return 'fsm';
+
+  // Estimating-only specialty (low feature count, has estimating)
+  if (features.length <= 5 && features.some((f) => f.includes('estim') || f.includes('quot'))) {
+    return 'estimating';
+  }
+
+  return 'unknown';
+}
+
+export function priceTier(t: Tool): PriceTier {
+  const p = t.pricing.starting_at_usd;
+  if (p === null) return 'enterprise';
+  if (p === 0) return 'free';
+  if (p < 100) return 'entry';
+  if (p < 250) return 'mid';
+  return 'enterprise';
+}
+
+export function teamSizeBucket(t: Tool): TeamSizeBucket {
+  const ts = t.best_team_size ?? '';
+  const match = ts.match(/(\d+)-(\d+)/);
+  if (!match) {
+    // Fall back to a small operation if unspecified
+    return 'small';
+  }
+  const max = parseInt(match[2], 10);
+  if (max <= 3) return 'solo';
+  if (max <= 15) return 'small';
+  if (max <= 50) return 'mid';
+  return 'large';
+}
+
+const PRICE_TIER_ORDER: PriceTier[] = ['free', 'entry', 'mid', 'enterprise'];
+const TEAM_BUCKET_ORDER: TeamSizeBucket[] = ['solo', 'small', 'mid', 'large'];
+
+export interface ScoredAlternative {
+  tool: Tool;
+  score: number;
+  reason: string;
+}
+
+function typesCompatible(sourceType: ToolType, candType: ToolType): boolean {
+  // Same type is always compatible
+  if (sourceType === candType) return true;
+  // CMMS source: only suggest other CMMS. (Unknown specialty tools like
+  // SafetyCulture/Connecteam/OptimoRoute share verticals but aren't real
+  // CMMS alternatives.)
+  if (sourceType === 'cmms') {
+    return candType === 'cmms';
+  }
+  // FSM source: exclude pure CMMS (the original bug); allow construction PM
+  // for GC trades; allow estimating since people upgrade from Joist to Jobber;
+  // allow unknown specialty (some are credible alts like Coolfront for HVAC).
+  if (sourceType === 'fsm') {
+    return candType !== 'cmms';
+  }
+  // Construction PM: allow FSM (some construction operators switch to FSM);
+  // exclude CMMS.
+  if (sourceType === 'construction_pm') {
+    return candType !== 'cmms';
+  }
+  // Estimating specialty source: allow FSM (people upgrade from Joist to Jobber).
+  if (sourceType === 'estimating') {
+    return candType !== 'cmms';
+  }
+  // Unknown source: permissive, but exclude CMMS as a safety net
+  if (sourceType === 'unknown') {
+    return candType !== 'cmms';
+  }
+  return true;
+}
+
+function buildAlternativeRationale(source: Tool, alt: Tool): string {
+  const fragments: string[] = [];
+  const sourceTier = priceTier(source);
+  const altTier = priceTier(alt);
+  const sourceTierIdx = PRICE_TIER_ORDER.indexOf(sourceTier);
+  const altTierIdx = PRICE_TIER_ORDER.indexOf(altTier);
+  const altPrice = alt.pricing.starting_at_usd;
+
+  // 1. Pricing relationship
+  if (altTier === 'free' && sourceTier !== 'free') {
+    fragments.push('Has a free tier');
+  } else if (altTierIdx < sourceTierIdx) {
+    if (altPrice !== null && altPrice > 0) {
+      fragments.push(`Cheaper at $${altPrice}/mo`);
+    } else {
+      fragments.push('Lower-tier alternative');
+    }
+  } else if (altTierIdx > sourceTierIdx) {
+    fragments.push('Enterprise-tier upgrade path');
+  } else if (sourceTier === 'mid' || sourceTier === 'entry') {
+    fragments.push('Similar price point');
+  }
+
+  // 2. Vertical specialty advantage
+  const sourceVerticals = source.verticals;
+  const sharedStrong = sourceVerticals.filter((v) => {
+    const sFit = source.vertical_fit?.[v] ?? 5;
+    const aFit = alt.vertical_fit?.[v] ?? 5;
+    return aFit >= 9 && aFit > sFit;
+  });
+  if (sharedStrong.length > 0) {
+    const vName = verticals.find((v) => v.slug === sharedStrong[0])?.name ?? sharedStrong[0];
+    fragments.push(`stronger ${vName.toLowerCase()} specialty fit`);
+  } else {
+    // Check for shared strong fit (both ≥8)
+    const sharedFit = sourceVerticals.filter((v) => {
+      const sFit = source.vertical_fit?.[v] ?? 5;
+      const aFit = alt.vertical_fit?.[v] ?? 5;
+      return sFit >= 8 && aFit >= 8;
+    });
+    if (sharedFit.length > 0) {
+      const vName = verticals.find((v) => v.slug === sharedFit[0])?.name ?? sharedFit[0];
+      fragments.push(`also strong for ${vName.toLowerCase()}`);
+    }
+  }
+
+  // 3. Rating boost
+  const altRating = aggregateRating(alt);
+  if (altRating !== null && altRating >= 4.7) {
+    fragments.push(`top-rated (${altRating.toFixed(1)}/5)`);
+  }
+
+  // 4. Free trial advantage
+  const altTrial = alt.pricing.free_trial_days ?? 0;
+  const srcTrial = source.pricing.free_trial_days ?? 0;
+  if (altTrial > 0 && srcTrial === 0) {
+    fragments.push(`${altTrial}-day free trial`);
+  }
+
+  if (fragments.length === 0) {
+    return alt.best_for;
+  }
+
+  // Capitalize first fragment
+  const joined = fragments[0].charAt(0).toUpperCase() + fragments[0].slice(1) +
+    (fragments.length > 1 ? `; ${fragments.slice(1).join('; ')}` : '') + '.';
+  return joined;
+}
+
+// Same-type bonus prevents construction-PM and specialty tools from
+// out-ranking real FSM-to-FSM matches when vertical overlap is high.
+const TYPE_MATCH_BONUS = 2.0;
+// Penalty for unknown / specialty tools when source is a definite type;
+// they can still surface if no better candidates exist, but they don't
+// out-rank real category matches.
+const TYPE_MISMATCH_PENALTY = 1.0;
+
+export function smartAlternatives(t: Tool, n: number = 6): ScoredAlternative[] {
+  const sourceType = toolType(t);
+  const sourceTier = priceTier(t);
+  const sourceBucket = teamSizeBucket(t);
+  const sourceTierIdx = PRICE_TIER_ORDER.indexOf(sourceTier);
+  const sourceBucketIdx = TEAM_BUCKET_ORDER.indexOf(sourceBucket);
+
+  // Filter candidates
+  const candidates = tools.filter((c) => {
+    if (c.slug === t.slug) return false;
+    // Must share at least one vertical
+    if (!c.verticals.some((v) => t.verticals.includes(v))) return false;
+    // Tool-type compatibility check
+    if (!typesCompatible(sourceType, toolType(c))) return false;
+    return true;
+  });
+
+  const scored: ScoredAlternative[] = candidates.map((c) => {
+    // 1. Vertical fit overlap (max 10): count verticals where BOTH source and
+    // candidate have meaningful fit (≥7). This rewards broad overlap (e.g.
+    // Jobber vs Housecall Pro sharing 10 verticals at 7+) over narrow
+    // specialty matches (e.g. Jobber vs ZenMaid sharing 1 vertical at 10).
+    let strongOverlapCount = 0;
+    let weakOverlapCount = 0;
+    for (const v of t.verticals) {
+      if (!c.verticals.includes(v)) continue;
+      const tFit = t.vertical_fit?.[v] ?? 5;
+      const cFit = c.vertical_fit?.[v] ?? 5;
+      if (tFit >= 7 && cFit >= 7) strongOverlapCount++;
+      else if (tFit >= 5 && cFit >= 5) weakOverlapCount++;
+    }
+    // Strong overlap worth 2 points each (capped at 10), weak worth 0.5
+    const vfNormalized = Math.min(10, strongOverlapCount * 2 + weakOverlapCount * 0.5);
+
+    // 2. Price tier proximity (max 10): same tier = 10, 1 away = 5, 2+ = 0
+    const candTierIdx = PRICE_TIER_ORDER.indexOf(priceTier(c));
+    const tierDistance = Math.abs(sourceTierIdx - candTierIdx);
+    const tierScore = Math.max(0, 10 - tierDistance * 5);
+
+    // 3. Team size proximity (max 10): same = 10, 1 away = 7, 2 = 4, 3+ = 0
+    const candBucketIdx = TEAM_BUCKET_ORDER.indexOf(teamSizeBucket(c));
+    const bucketDistance = Math.abs(sourceBucketIdx - candBucketIdx);
+    const bucketScore = Math.max(0, 10 - bucketDistance * 3);
+
+    // 4. Rating (max 10)
+    const rating = aggregateRating(c) ?? 3.5;
+    const ratingScore = rating * 2;
+
+    // Composite: 40% vertical fit + 30% tier + 15% team size + 15% rating
+    let score =
+      vfNormalized * 0.4 +
+      tierScore * 0.3 +
+      bucketScore * 0.15 +
+      ratingScore * 0.15;
+
+    // Type-match bonus / penalty: same category wins ties; specialty tools
+    // penalized when source is a definite type.
+    const candType = toolType(c);
+    if (sourceType !== 'unknown' && candType !== 'unknown') {
+      if (sourceType === candType) {
+        score += TYPE_MATCH_BONUS;
+      } else {
+        score -= TYPE_MISMATCH_PENALTY;
+      }
+    } else if (sourceType !== 'unknown' && candType === 'unknown') {
+      // Specialty tools surfacing as alternatives to definite-type sources
+      // get a penalty so real category matches win.
+      score -= TYPE_MISMATCH_PENALTY;
+    }
+
+    const reason = buildAlternativeRationale(t, c);
+    return { tool: c, score, reason };
+  });
+
+  return scored.sort((a, b) => b.score - a.score).slice(0, n);
+}
+
 // --- Cross-link audit: convert competitor tool name mentions in prose
 // into clickable links to /tools/<slug>/. Used in the tool review template
 // to make every Phase 2 narrative section discoverable to crawlers and
