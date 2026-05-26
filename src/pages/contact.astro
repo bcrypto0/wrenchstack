@@ -5,28 +5,116 @@ const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Contact', url: '/contact/' },
 ];
+
+const inboxes = [
+  {
+    address: 'hello@wrenchstack.com',
+    role: 'General inquiries, corrections, suggestions',
+    detail: 'Pricing changed and we missed it? Feature claim looks wrong? Glossary term missing? Editorial question? This is the inbox.',
+    sla: 'Corrections within 48 hours of verification. General questions within 5 business days.',
+  },
+  {
+    address: 'partners@wrenchstack.com',
+    role: 'Vendor partnerships, affiliate programs',
+    detail: 'Software vendors interested in partnership with WrenchStack. We are selective — we only run affiliate links for tools we would recommend to readers without a commission.',
+    sla: 'Reply within 5 business days. Application review typically 2-3 weeks.',
+  },
+  {
+    address: 'press@wrenchstack.com',
+    role: 'Press, media, syndication, interviews',
+    detail: 'Journalists, podcasters, industry publications interested in commenting on trades software market trends, methodology, or data points published on WrenchStack.',
+    sla: 'Reply within 3 business days. Bilal handles all press personally.',
+  },
+  {
+    address: 'bilal@wrenchstack.com',
+    role: 'Direct to founder',
+    detail: 'Best for substantive editorial questions, methodology disputes, ranking complaints that have not been resolved via hello@. I read every message personally.',
+    sla: 'Best-effort reply within 5 business days. Substantive replies on complex disputes take longer.',
+  },
+];
+
+const policies = [
+  {
+    title: 'Editorial corrections',
+    text: 'We correct verified factual errors within 48 hours. Corrections get a dated note on the affected page, not silent edits. If you have published a price change and our page still shows the old number, email hello@ with the URL and the new figure.',
+  },
+  {
+    title: 'Ranking disputes',
+    text: 'If you believe your product ranks lower than the WrenchStack Score formula should produce, send a detailed argument citing specific factor inputs (vertical fit, user ratings, pricing transparency, feature depth, integration coverage). We respond on the merits, not the sales pressure.',
+  },
+  {
+    title: 'Removal requests',
+    text: 'We do not remove tools from the directory at vendor request. We do correct factual errors. If you want your product removed from comparison pages and best-of lists, you would need to demonstrate the listing materially misrepresents the product after we have already attempted correction.',
+  },
+  {
+    title: 'Off-record briefings',
+    text: 'We accept off-record context from vendors — pricing changes coming in 60 days, roadmap items, customer-base claims. We do not promise to publish or omit anything based on off-record briefings. The on-record published version of the truth is what readers see.',
+  },
+];
 ---
 
 <Layout
-  title="Contact WrenchStack"
-  description="Get in touch with WrenchStack. Email addresses for general inquiries, partnerships, and press."
+  title="Contact WrenchStack — inboxes, response times, editorial policies"
+  description="Four inboxes for different types of inquiries — corrections, partnerships, press, and direct-to-founder. Published response times. Editorial policies on corrections, ranking disputes, removal requests, and off-record briefings."
   breadcrumbs={breadcrumbs}
 >
-  <article class="mx-auto max-w-2xl px-4 py-16">
-    <h1 class="text-4xl font-bold tracking-tight text-slate-900">Contact</h1>
+  <article class="mx-auto max-w-3xl px-4 py-12">
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">Contact</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        Get in touch
+      </h1>
+      <p class="mt-4 text-lg text-slate-600">
+        Four inboxes for different types of inquiries, each with a published response time. Pick the right one and we'll route correctly.
+      </p>
+    </header>
 
-    <div class="mt-8 space-y-3 text-lg text-slate-700">
+    <section class="mb-12 space-y-4">
+      {inboxes.map((i) => (
+        <div class="rounded-lg border border-slate-200 bg-white p-5">
+          <a
+            href={`mailto:${i.address}`}
+            class="text-lg font-semibold text-orange-600 hover:underline"
+          >
+            {i.address}
+          </a>
+          <div class="mt-1 text-sm font-medium text-slate-700">{i.role}</div>
+          <p class="mt-2 text-sm text-slate-700 leading-relaxed">{i.detail}</p>
+          <p class="mt-2 text-xs text-slate-500">
+            <strong>Response time:</strong> {i.sla}
+          </p>
+        </div>
+      ))}
+    </section>
+
+    <section class="prose prose-slate max-w-none">
+      <h2>Editorial policies</h2>
       <p>
-        <a href="mailto:hello@wrenchstack.com" class="font-semibold text-orange-600 hover:underline">hello@wrenchstack.com</a>
+        These are the explicit rules we follow when handling inbound. Publishing them means you can hold us accountable to them.
       </p>
+
+      {policies.map((p) => (
+        <div class="not-prose mb-4 rounded-lg border-l-2 border-orange-300 bg-white py-3 pl-4 pr-3">
+          <div class="mb-1 font-semibold text-slate-900">{p.title}</div>
+          <p class="text-sm text-slate-700 leading-relaxed">{p.text}</p>
+        </div>
+      ))}
+
+      <h2>Mailing address</h2>
       <p>
-        <a href="mailto:partners@wrenchstack.com" class="font-semibold text-orange-600 hover:underline">partners@wrenchstack.com</a>
-        <span class="text-sm text-slate-500"> · affiliate program inquiries</span>
+        We are a remote-first operation. We do not maintain a physical mailing address and ask that you use email for everything. For legal correspondence requiring a postal address, email <a href="mailto:bilal@wrenchstack.com">bilal@wrenchstack.com</a> and we will provide one.
       </p>
+
+      <h2>Social media</h2>
       <p>
-        <a href="mailto:press@wrenchstack.com" class="font-semibold text-orange-600 hover:underline">press@wrenchstack.com</a>
-        <span class="text-sm text-slate-500"> · media</span>
+        We do not currently maintain official social media accounts. We may add LinkedIn and X presence in 2026; until then, email is the only verified channel for reaching WrenchStack. Anyone claiming to represent WrenchStack on social media without a confirmation email trail from one of the four addresses above is not us.
       </p>
-    </div>
+    </section>
+
+    <section class="mt-12 rounded-lg bg-slate-50 p-6 text-sm text-slate-600">
+      <p>
+        Looking for ranking methodology or affiliate disclosure? See the <a href="/methodology/" class="text-orange-600 hover:underline">methodology page</a> for the full WrenchStack Score formula and per-tool affiliate status ledger.
+      </p>
+    </section>
   </article>
 </Layout>

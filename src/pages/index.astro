@@ -3,7 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import categories from '../data/categories.json';
 import toolsData from '../data/tools.json';
 import featuresData from '../data/features.json';
-import { tools, toolsForVertical, freshnessStats } from '../lib/data';
+import { tools, toolsForVertical, freshnessStats, daysSinceVerified, aggregateRating, formatPrice } from '../lib/data';
+import FreshnessBadge from '../components/FreshnessBadge.astro';
 
 const verticals = categories.verticals;
 const toolCount = tools.length;
@@ -24,6 +25,12 @@ const formattedLastVerified = new Date(lastVerifiedDate).toLocaleDateString('en-
 // attack on competitors' staleness (Capterra ServiceTitan profile last
 // updated Aug 2025 = 9 months stale at time of this writing).
 const freshness = freshnessStats();
+
+// 6 most-recently-verified tools (lowest days-since-verified). Surfaces
+// our freshness discipline directly on the homepage.
+const recentlyVerified = [...tools]
+  .sort((a, b) => daysSinceVerified(a) - daysSinceVerified(b))
+  .slice(0, 6);
 
 // Tool count per vertical (for the "Pick your trade" cards)
 const verticalsWithCounts = verticals.map((v) => ({
@@ -112,6 +119,38 @@ function featureToUrl(slug: string): string {
         >
           See all tools
         </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white">
+    <div class="mx-auto max-w-6xl px-4 py-12">
+      <div class="mb-6 flex flex-wrap items-baseline justify-between gap-2">
+        <h2 class="text-2xl font-bold tracking-tight text-slate-900">Recently verified pricing</h2>
+        <a href="/methodology/" class="text-sm font-medium text-orange-600 hover:underline">How we verify →</a>
+      </div>
+      <p class="mb-6 text-slate-600">
+        We re-check pricing quarterly. These are the tools we've verified most recently — every price you see has a date stamp underneath. Capterra's ServiceTitan profile, by comparison, is dated August 2025.
+      </p>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {recentlyVerified.map((t) => {
+          const r = aggregateRating(t);
+          return (
+            <a
+              href={`/tools/${t.slug}/`}
+              class="group rounded-lg border border-slate-200 bg-white p-4 transition hover:border-orange-400 hover:shadow-sm"
+            >
+              <div class="flex items-baseline justify-between gap-2">
+                <div class="font-semibold text-slate-900 group-hover:text-orange-600">{t.name}</div>
+                {r !== null && <span class="text-xs font-medium text-slate-500">{r.toFixed(1)} ★</span>}
+              </div>
+              <div class="mt-1 text-xs text-slate-500">{formatPrice(t)}</div>
+              <div class="mt-2 border-t border-slate-100 pt-2">
+                <FreshnessBadge tool={t} variant="compact" />
+              </div>
+            </a>
+          );
+        })}
       </div>
     </div>
   </section>
