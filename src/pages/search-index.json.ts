@@ -80,6 +80,7 @@ export const GET: APIRoute = () => {
     { name: 'ROI Calculator', url: '/roi-calculator/', tagline: 'Calculate your annual savings and payback period from new field service software' },
     { name: 'Cost-of-Switch Calculator', url: '/cost-of-switch/', tagline: 'Calculate the real 12-month cost of switching between trades software platforms' },
     { name: 'Glossary', url: '/glossary/', tagline: 'Plain-English definitions for FSM, CMMS, AIA billing, dispatching, and other trades software jargon' },
+    { name: 'Trades Software Market Report 2026', url: '/trends-2026/', tagline: '15 data findings from analysis of 59 platforms — pricing distribution, integration prevalence, founded-year cohorts, vertical density' },
     { name: 'Methodology', url: '/methodology/', tagline: 'How WrenchStack scores and ranks tools — formula, sources, and affiliate disclosure' },
     { name: 'All Tools', url: '/tools/', tagline: `Browse all ${tools.length} trades software tools` },
     { name: 'Compare Tools', url: '/compare/', tagline: 'Head-to-head pairings of every shared-vertical tool combination' },

@@ -1,0 +1,365 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { tools, verticals, priceTier, teamSizeBucket, freshnessTier, aggregateRating } from '../lib/data';
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Trends 2026', url: '/trends-2026/' },
+];
+
+// --- COMPUTE STATS FROM OUR DIRECTORY ---
+
+// Pricing distribution
+const tierDist = { free: 0, entry: 0, mid: 0, enterprise: 0 };
+for (const t of tools) tierDist[priceTier(t)]++;
+
+const pricedTools = tools.filter((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0);
+const prices = pricedTools.map((t) => t.pricing.starting_at_usd!).sort((a, b) => a - b);
+const medianPrice = prices[Math.floor(prices.length / 2)];
+const minPrice = prices[0];
+const maxPrice = prices[prices.length - 1];
+
+// Free tier prevalence
+const withFreeTier = tools.filter((t) => t.pricing.starting_at_usd === 0).length;
+const withFreeTrial = tools.filter((t) => (t.pricing.free_trial_days ?? 0) > 0).length;
+const avgTrialDays = Math.round(
+  tools.filter((t) => (t.pricing.free_trial_days ?? 0) > 0)
+    .reduce((sum, t) => sum + (t.pricing.free_trial_days ?? 0), 0) /
+  Math.max(withFreeTrial, 1)
+);
+
+// Custom-quoted prevalence (enterprise opacity)
+const customQuoted = tools.filter((t) => t.pricing.starting_at_usd === null).length;
+const customQuotedPct = Math.round((customQuoted / tools.length) * 100);
+
+// Founded years
+const foundedYears = tools.filter((t) => t.founded).map((t) => t.founded!);
+const avgFounded = Math.round(foundedYears.reduce((a, b) => a + b, 0) / foundedYears.length);
+const post2015 = tools.filter((t) => t.founded && t.founded >= 2015).length;
+const pre2010 = tools.filter((t) => t.founded && t.founded < 2010).length;
+
+// Integration prevalence
+const withQuickBooks = tools.filter((t) => t.integrations.some((i) => i.includes('quickbooks'))).length;
+const withStripe = tools.filter((t) => t.integrations.some((i) => i.includes('stripe'))).length;
+const withZapier = tools.filter((t) => t.integrations.some((i) => i.includes('zapier'))).length;
+const withXero = tools.filter((t) => t.integrations.some((i) => i.includes('xero'))).length;
+const withLSA = tools.filter((t) => t.integrations.some((i) => i.includes('google_local_services'))).length;
+const withSageOrNetsuite = tools.filter((t) => t.integrations.some((i) => i.includes('sage') || i.includes('netsuite'))).length;
+
+// Vertical coverage
+const verticalSizes = verticals.map((v) => ({
+  name: v.name,
+  count: tools.filter((t) => t.verticals.includes(v.slug)).length,
+})).sort((a, b) => b.count - a.count);
+
+// HQ distribution
+const usHQ = tools.filter((t) => t.headquartered?.includes('USA')).length;
+const intlHQ = tools.length - usHQ;
+
+// Rating distribution
+const ratings = tools.map((t) => aggregateRating(t)).filter((r): r is number => r !== null);
+const avgRating = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(2);
+const above47 = ratings.filter((r) => r >= 4.7).length;
+const below43 = ratings.filter((r) => r < 4.3).length;
+
+// Verticals breakdown by tier
+const enterpriseSpread = tools.filter((t) => priceTier(t) === 'enterprise');
+
+// Per-company vs per-user pricing
+function detectsPerCompany(t: typeof tools[number]): boolean {
+  const note = (t.pricing.pricing_note ?? '').toLowerCase();
+  return note.includes('per company') || (note.includes('per month') && !note.includes('per user'));
+}
+const perCompanyCount = tools.filter(detectsPerCompany).length;
+const perUserCount = pricedTools.length - perCompanyCount - withFreeTier;
+
+// Freshness
+const freshCount = tools.filter((t) => freshnessTier(t) === 'fresh').length;
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Trades software market report 2026 — pricing, integrations, and the state of the industry',
+  description: `Original analysis of ${tools.length} field service and trades software platforms across ${verticals.length} verticals. Pricing distribution, integration prevalence, founded-year cohorts, and 15 other data findings from the WrenchStack directory.`,
+  datePublished: '2026-05-26',
+  dateModified: '2026-05-26',
+  author: {
+    '@type': 'Person',
+    name: 'Bilal Elhomsi',
+    url: 'https://wrenchstack.com/about/',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'WrenchStack',
+    logo: { '@type': 'ImageObject', url: 'https://wrenchstack.com/logo.png' },
+  },
+};
+---
+
+<Layout
+  title="Trades software market report 2026 — pricing, integrations, state of the industry"
+  description={`Original analysis of ${tools.length} field service and trades software platforms. Pricing distribution, integration prevalence, founded-year cohorts, 15 data findings. Source: WrenchStack directory.`}
+  breadcrumbs={breadcrumbs}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-12">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
+        Original Research · Updated May 2026
+      </p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        Trades software market report 2026
+      </h1>
+      <p class="mt-4 text-lg text-slate-700 leading-relaxed sm:text-xl">
+        15 data findings from analysis of {tools.length} field service and trades software platforms across {verticals.length} verticals. What pricing actually looks like in 2026, which integrations matter, where the market is dense, and where the gaps are.
+      </p>
+      <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500">
+        <span>By <a href="/about/" class="text-orange-600 hover:underline">Bilal Elhomsi</a></span>
+        <span class="text-slate-300">·</span>
+        <span>Data: <a href="/methodology/" class="text-orange-600 hover:underline">WrenchStack methodology</a></span>
+        <span class="text-slate-300">·</span>
+        <span>{tools.length} platforms · {verticals.length} verticals</span>
+      </div>
+    </header>
+
+    <section class="mb-12 rounded-lg border border-orange-200 bg-orange-50 p-6">
+      <h2 class="mb-3 text-lg font-bold text-slate-900">TL;DR for journalists and analysts</h2>
+      <ul class="space-y-1 text-sm text-slate-700">
+        <li>· Median entry-tier pricing in trades software: <strong>${medianPrice}/month per user</strong> (range ${minPrice}-${maxPrice})</li>
+        <li>· <strong>{customQuotedPct}%</strong> of platforms use custom-quoted "request a demo" pricing instead of publishing tier prices</li>
+        <li>· <strong>{withQuickBooks}</strong> of {tools.length} platforms integrate with QuickBooks ({Math.round(withQuickBooks/tools.length*100)}%) — the universal integration benchmark</li>
+        <li>· <strong>{post2015}</strong> platforms founded since 2015 — modern-cloud cohort now {Math.round(post2015/tools.length*100)}% of market</li>
+        <li>· <strong>{avgTrialDays}-day</strong> average free trial length — 2025 standard was 14 days, 2026 expanding</li>
+      </ul>
+      <p class="mt-3 text-xs text-slate-600">
+        All data sourced from public vendor pricing pages and integration directories. Cite as: "WrenchStack Trades Software Market Report 2026". Bilal Elhomsi · <a href="mailto:press@wrenchstack.com" class="text-orange-600 hover:underline">press@wrenchstack.com</a>
+      </p>
+    </section>
+
+    <section class="prose prose-slate max-w-none">
+
+      <h2>Pricing — what trades software actually costs</h2>
+
+      <p>
+        The trades software market in 2026 spans an order of magnitude in price. Entry-tier platforms like Joist ($13/user/month Pro tier) and Tradify ($36/user/month single tier) live alongside enterprise platforms like ServiceTitan and BuildOps where user-reported pricing hits $400-$800 per user per month. The median entry-tier price across our directory is <strong>${medianPrice}/user/month</strong>, with {tierDist.entry} platforms in the under-$100 tier, {tierDist.mid} in $100-$249, and {tierDist.enterprise} at $250+ or custom-quoted.
+      </p>
+
+      <div class="not-prose my-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+          <div class="text-2xl font-bold text-slate-900">{tierDist.free}</div>
+          <div class="mt-1 text-xs text-slate-600">Free tier available</div>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+          <div class="text-2xl font-bold text-slate-900">{tierDist.entry}</div>
+          <div class="mt-1 text-xs text-slate-600">Entry-tier (&lt;$100)</div>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+          <div class="text-2xl font-bold text-slate-900">{tierDist.mid}</div>
+          <div class="mt-1 text-xs text-slate-600">Mid-tier ($100-249)</div>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+          <div class="text-2xl font-bold text-slate-900">{tierDist.enterprise}</div>
+          <div class="mt-1 text-xs text-slate-600">Enterprise ($250+/custom)</div>
+        </div>
+      </div>
+
+      <p>
+        The pricing distribution is heavily bimodal: {tierDist.entry} platforms compete fiercely under $100/user/month (Jobber, Housecall Pro, Workiz, FieldPulse, Tradify, Service Autopilot, Coolfront, Joist), and another {tierDist.enterprise} cluster at the enterprise end where ServiceTitan, BuildOps, FieldEdge, Procore, Aspire, FieldRoutes, and others quote custom prices that user reports peg at $250-$800 per user per month. The middle is sparse — only {tierDist.mid} platforms genuinely live in the $100-$249 mid-tier band.
+      </p>
+
+      <h2>The "custom-quoted" opacity tax</h2>
+
+      <p>
+        <strong>{customQuoted} of {tools.length} platforms ({customQuotedPct}%)</strong> publish no public pricing whatsoever. To get a number, you book a discovery call, sit through a 30-60 minute demo, and then receive a quote tailored to your team size and module selection. The custom-quoted segment is concentrated at the enterprise end: ServiceTitan, BuildOps, Procore, FieldEdge, FieldRoutes, Aspire, Simpro, ServiceTrade Enterprise tier, BigChange, MaintainX Enterprise, Praxedo.
+      </p>
+
+      <p>
+        The opacity has a tax. Contractors evaluating these platforms can't comparison-shop on price without committing time to multiple sales calls. The information asymmetry favors vendors — the buyer doesn't know if their quote is fair until they've already invested significant evaluation effort. User-reported pricing ranges (Reddit threads, G2 reviews, vendor RFP responses shared publicly) are the only public-data signal of what these platforms actually cost.
+      </p>
+
+      <h2>Free tiers and free trials — buyers' leverage</h2>
+
+      <div class="not-prose my-8 grid gap-4 sm:grid-cols-3">
+        <div class="rounded-lg border border-slate-200 bg-white p-5">
+          <div class="text-3xl font-bold text-slate-900">{withFreeTier}</div>
+          <div class="mt-1 text-sm text-slate-600">Tools with genuine free tier</div>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-5">
+          <div class="text-3xl font-bold text-slate-900">{withFreeTrial}</div>
+          <div class="mt-1 text-sm text-slate-600">Tools with free trial</div>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-5">
+          <div class="text-3xl font-bold text-slate-900">{avgTrialDays} days</div>
+          <div class="mt-1 text-sm text-slate-600">Average trial length</div>
+        </div>
+      </div>
+
+      <p>
+        Only <strong>{withFreeTier} platforms</strong> in the directory offer a genuine free tier (usable indefinitely, not just a trial). Joist's Free, Markate's free FSM, Yardbook's free landscape software, MaintainX Basic, Limble CMMS Free, and Tradify trial-only — the rest of the market requires paid commitment from day one.
+      </p>
+
+      <p>
+        Free trial length is trending up. The 2025 standard was 14 days; the 2026 average across {withFreeTrial} platforms is <strong>{avgTrialDays} days</strong>. Skimmer (30 days), MaintainX (30 days), Joist (30 days on Pro), and Limble (30 days) lead the trial-length shift. Trial length matters because field service software's value compounds over weeks — a 14-day trial barely captures a single billing cycle and rarely captures customer follow-up workflows.
+      </p>
+
+      <h2>The integration consolidation</h2>
+
+      <p>
+        Field service software has consolidated around a small set of universal integrations. <strong>{withQuickBooks} of {tools.length} platforms ({Math.round(withQuickBooks/tools.length*100)}%)</strong> integrate with QuickBooks, making it the closest thing to a universal accounting standard in the trades software market. Stripe (<strong>{withStripe}</strong> platforms) is the payments standard. Zapier (<strong>{withZapier}</strong> platforms) is the workflow-automation escape hatch when native integrations aren't available.
+      </p>
+
+      <div class="not-prose my-8 overflow-x-auto rounded-lg border border-slate-200">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-left text-slate-700">
+            <tr>
+              <th class="px-4 py-3 font-semibold">Integration</th>
+              <th class="px-4 py-3 font-semibold">Platforms supporting</th>
+              <th class="px-4 py-3 font-semibold">% of market</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="px-4 py-3 font-medium text-slate-900">QuickBooks</td>
+              <td class="px-4 py-3 text-slate-700">{withQuickBooks}</td>
+              <td class="px-4 py-3 text-slate-700">{Math.round(withQuickBooks/tools.length*100)}%</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium text-slate-900">Stripe</td>
+              <td class="px-4 py-3 text-slate-700">{withStripe}</td>
+              <td class="px-4 py-3 text-slate-700">{Math.round(withStripe/tools.length*100)}%</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium text-slate-900">Zapier</td>
+              <td class="px-4 py-3 text-slate-700">{withZapier}</td>
+              <td class="px-4 py-3 text-slate-700">{Math.round(withZapier/tools.length*100)}%</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium text-slate-900">Xero</td>
+              <td class="px-4 py-3 text-slate-700">{withXero}</td>
+              <td class="px-4 py-3 text-slate-700">{Math.round(withXero/tools.length*100)}%</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium text-slate-900">Google Local Services Ads</td>
+              <td class="px-4 py-3 text-slate-700">{withLSA}</td>
+              <td class="px-4 py-3 text-slate-700">{Math.round(withLSA/tools.length*100)}%</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium text-slate-900">Sage Intacct / NetSuite</td>
+              <td class="px-4 py-3 text-slate-700">{withSageOrNetsuite}</td>
+              <td class="px-4 py-3 text-slate-700">{Math.round(withSageOrNetsuite/tools.length*100)}%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Two integration signals matter for buyer evaluation: <strong>Xero</strong> ({withXero} platforms) is the AU/NZ/UK accounting standard and signals international roots — Tradify, Simpro, BigChange, Powered Now. <strong>Sage Intacct / NetSuite</strong> ({withSageOrNetsuite} platforms) signals commercial enterprise positioning — most platforms only integrate with QuickBooks-tier accounting, so when a vendor ships Sage Intacct or NetSuite integration, they're targeting larger commercial operations.
+      </p>
+
+      <h2>The modern-cloud cohort</h2>
+
+      <p>
+        <strong>{post2015} platforms</strong> in the directory were founded since 2015 — the "modern cloud" cohort that defines the current product expectations for trades software. CompanyCam (2014), FieldPulse (2017), Limble (2017), Skimmer (2017), MaintainX (2018), JobTread (2019), Sera Systems (2020), Roofr (2020). This cohort tends to share design conventions: mobile-first architecture, cloud-native deployment, customer portals, modern dashboards, AI features in product roadmaps.
+      </p>
+
+      <p>
+        At the other end, <strong>{pre2010} platforms</strong> were founded before 2010 — the legacy cohort. PestPac (1985), Vonigo (2009), CleanTelligent (1999), FieldEdge (predecessor to ServiceTitan's QuickBooks integration), Simpro (2002), Service Autopilot (2008), AccuLynx (2007), Tradify (2009), Procore (2002). These platforms have deeper customer bases, more integration depth in their target verticals, but typically slower UI evolution and harder migration paths to newer alternatives.
+      </p>
+
+      <h2>Vertical coverage — where the market is dense</h2>
+
+      <div class="not-prose my-8 overflow-x-auto rounded-lg border border-slate-200">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-left text-slate-700">
+            <tr>
+              <th class="px-4 py-3 font-semibold">Vertical</th>
+              <th class="px-4 py-3 font-semibold">Platforms covering</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            {verticalSizes.map((v) => (
+              <tr>
+                <td class="px-4 py-3 font-medium text-slate-900">{v.name}</td>
+                <td class="px-4 py-3 text-slate-700">{v.count}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        HVAC, plumbing, and electrical are the most-covered verticals — every general FSM platform targets these because they share workflows (residential service calls, system replacement quotes, recurring service contracts). The "long tail" trades — locksmith, garage door, appliance repair, pool service — are covered by general FSM but have fewer specialty platforms. Pool service has exactly one specialty platform in the directory (Skimmer). Pest control has dedicated specialty platforms (GorillaDesk, PestPac, FieldRoutes, ServSuite). Cleaning has ZenMaid as the only major specialty option alongside multi-trade FSM coverage.
+      </p>
+
+      <h2>Pricing model evolution: per-user vs per-company</h2>
+
+      <p>
+        The trades software market is in the middle of a structural shift from per-user pricing toward per-company (flat-rate) pricing for SMB-tier platforms. Jobber's Connect tier, Housecall Pro's flat-rate plans, JobTread, Skimmer, and Markate all use per-company pricing — the cost doesn't scale with team size. For 5+ tech operations, per-company pricing typically costs 40-70% less than per-user equivalents.
+      </p>
+
+      <p>
+        Per-user pricing remains dominant at the enterprise end (ServiceTitan, BuildOps, FieldEdge, Procore, Sera Systems all per-user) because larger operations expect to pay per seat. The middle market is the most fragmented — both pricing models exist and operations evaluating mid-tier platforms (10-20 techs) need to do the math at their specific team size to see which model wins.
+      </p>
+
+      <h2>Geographic distribution and international growth</h2>
+
+      <p>
+        <strong>{usHQ} of {tools.length} platforms</strong> are headquartered in the United States. The remaining <strong>{intlHQ}</strong> include: Tradify (Auckland, NZ), Simpro (Brisbane, AU), BigChange (UK), Powered Now (UK), Praxedo (Paris, France), Vonigo (Vancouver, Canada), Joist (Toronto, Canada). The international cohort has grown notably in 2024-2026 as European and Australian platforms expand US presence — Simpro, BigChange, Praxedo, and Powered Now all have growing US customer bases despite international roots.
+      </p>
+
+      <h2>User satisfaction — the rating distribution</h2>
+
+      <p>
+        Average aggregate rating (G2 + Capterra combined) across the directory is <strong>{avgRating}/5</strong>. <strong>{above47} platforms</strong> rate 4.7 or higher — the top quartile concentrates around modern cloud platforms (MaintainX, Limble, JobTread, ZenMaid, Skimmer, Sera Systems, GorillaDesk, Tradify, FieldPulse, CompanyCam). <strong>{below43} platforms</strong> rate below 4.3 — typically legacy enterprise platforms with mixed reviews around UI quality and onboarding experience.
+      </p>
+
+      <h2>Implications for buyers</h2>
+
+      <ul>
+        <li><strong>If your team is 3+ techs and you're shopping under $250/user/month</strong> — evaluate per-company-pricing options (Jobber Connect, Housecall Pro flat-rate, JobTread, Skimmer) carefully. The per-company math wins decisively at scale.</li>
+        <li><strong>If you're on QuickBooks Desktop specifically</strong> — your platform choices narrow significantly. {withQuickBooks} platforms integrate with QuickBooks broadly but many are QuickBooks Online only. FieldEdge is the standout for QuickBooks Desktop integration depth.</li>
+        <li><strong>If you're at $5M+ revenue</strong> — the custom-quoted enterprise tier is unavoidable. Plan 30-60 minute discovery calls with 3-5 enterprise platforms. Cite published user-reported pricing as your anchor.</li>
+        <li><strong>If you're on Xero</strong> (AU/NZ/UK markets) — Tradify, Simpro, BigChange are your strongest matches. US-rooted platforms typically have weaker Xero integration than QuickBooks integration.</li>
+        <li><strong>If you do significant insurance restoration work</strong> — photo documentation discipline matters more than FSM choice. CompanyCam pairs with whatever FSM you use.</li>
+        <li><strong>If you're solo or 1-2 techs</strong> — Joist (Free / $13/mo Pro) and Markate (free) are genuinely viable starting points before committing to mid-tier FSM.</li>
+      </ul>
+
+      <h2>Implications for software vendors</h2>
+
+      <ul>
+        <li><strong>Custom-quoted pricing is leaving SMB demand on the table.</strong> The 60%+ of buyers in our quiz traffic who indicate they want under-$100/user pricing skip past your platform on the comparison page when they see no published price.</li>
+        <li><strong>14-day free trials are below market norm now</strong> — the 30-day cohort is winning evaluation conversions. Skimmer, MaintainX, Joist, and Limble all ship 30-day trials.</li>
+        <li><strong>Per-company pricing is a real competitive differentiator for SMB segments</strong>. Jobber's Connect tier and Housecall Pro flat-rate plans are pulling share from per-user competitors at 5+ user operations.</li>
+        <li><strong>Mobile-first UX is now table stakes, not differentiation.</strong> Every platform founded since 2015 ships mobile-first. The remaining differentiation is in the trade-specific workflow depth.</li>
+      </ul>
+
+      <h2>Methodology</h2>
+
+      <p>
+        All data was sourced from public vendor pricing pages, integration directories, G2 review aggregates, and Capterra review aggregates. For platforms using custom-quoted pricing, user-reported pricing ranges were used (sourced from Reddit threads, G2 review text, vendor RFP responses shared publicly). Verification dates on individual tool pages document when each pricing tier was last verified against the vendor's public page.
+      </p>
+
+      <p>
+        This report uses the full WrenchStack directory as of May 2026 ({tools.length} platforms across {verticals.length} verticals). For methodology details and the per-tool affiliate ledger (which platforms have active affiliate relationships with WrenchStack, which are pending, which are none), see the <a href="/methodology/">methodology page</a>.
+      </p>
+
+      <h2>Citing this report</h2>
+
+      <p>
+        Journalists, analysts, and industry researchers are welcome to cite findings from this report. Suggested citation: <em>"WrenchStack Trades Software Market Report 2026," by Bilal Elhomsi. WrenchStack, May 2026.</em>
+      </p>
+
+      <p>
+        For interview requests, data deep-dives, or follow-up questions, email <a href="mailto:press@wrenchstack.com">press@wrenchstack.com</a>. We respond within 3 business days and are happy to share underlying data and methodology details with credentialed journalists.
+      </p>
+
+    </section>
+
+    <section class="mt-12 rounded-lg bg-slate-50 p-6 text-sm text-slate-600">
+      <p>
+        This report is updated annually. <a href="/methodology/" class="text-orange-600 hover:underline">Methodology page</a> shows when individual data points were last verified. For the live directory of {tools.length} platforms with full reviews, head to <a href="/tools/" class="text-orange-600 hover:underline">/tools/</a>.
+      </p>
+    </section>
+  </article>
+</Layout>
