@@ -1,0 +1,416 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { tools, priceTier, type Tool } from '../lib/data';
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Cost of switch calculator', url: '/cost-of-switch/' },
+];
+
+// Tool data passed to client-side JS. Strip down to the fields the
+// calculator actually needs to keep the payload small.
+const calculatorTools = tools.map((t) => ({
+  slug: t.slug,
+  name: t.name,
+  startingPrice: t.pricing.starting_at_usd,
+  tier: priceTier(t),
+  pricingNote: t.pricing.pricing_note ?? '',
+  bestTeamSize: t.best_team_size ?? '',
+}));
+
+const faqs = [
+  {
+    q: 'How do you estimate the implementation cost for the new tool?',
+    a: 'Implementation fees are tier-based estimates from observed deployments: entry-tier tools (under $100/user/mo) typically have $0-500 self-service setup; mid-tier tools ($100-249/user/mo) cost $500-2,000 with optional paid onboarding; enterprise tools ($250+/user/mo or custom-quoted) commonly hit $5,000-50,000 in implementation, with $15,000 a defensible mid-case. The calculator uses $0 / $1,500 / $15,000 as the defaults for entry / mid / enterprise. You can override if you have a real vendor quote.',
+  },
+  {
+    q: 'Why include a parallel-run month?',
+    a: 'Most field service shops run both the old and new systems in parallel for 2-4 weeks during cutover. The calculator assumes one full month of dual subscription. Skipping this is possible but operationally risky — invoices and jobs can fall through the cracks during a hard cutover.',
+  },
+  {
+    q: 'What does "training cost" actually include?',
+    a: 'It includes the wage cost of techs and office staff during product training. We assume 8 hours per tech at a $50/hour fully-burdened rate, plus 60 hours of office-staff transition work at $35/hour. This is what real shops report — it is not the same as "implementation fee" which is the vendor charging you.',
+  },
+  {
+    q: 'How accurate is the break-even calculation?',
+    a: 'It is a directional estimate, not a P&L line. The calculator divides total switching cost by monthly savings (or shows "never" if the new tool costs more). Real break-even depends on adoption pace, integration delays, and whether you actually convert recovered admin time into billable work. For comparing two specific switch options, the math is solid; for a precise business case, use a real spreadsheet.',
+  },
+  {
+    q: 'What if the new tool costs more per month?',
+    a: 'You are paying a premium for features, support, or scale. The calculator will show negative monthly savings and break-even "never on price alone" — meaning the switch only pays back through revenue uplift, not cost savings. Most enterprise FSM upgrades fall in this category: ServiceTitan does not save you money over Jobber, it earns you more money. Pair this calculator with the ROI calculator to see the revenue side.',
+  },
+  {
+    q: 'Why does flat-rate pricing show "1 user" math?',
+    a: 'Some tools (Jobber Connect tier, Housecall Pro plans, Skimmer, JobTread) charge per company instead of per user. For those tools the monthly cost does not scale with team size. The calculator detects "per company" or "flat" in the pricing notes and uses the published price as-is. If a vendor changed to per-user since we last verified, the math will be wrong — override the monthly cost field with your real quote.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Layout
+  title="Cost of switch calculator — what does switching field service software actually cost?"
+  description="Switching between trades software platforms is a 4-12 week project with real costs beyond just the new subscription. Plug in your current tool, target tool, and team size to see the 12-month total cost of switching."
+  breadcrumbs={breadcrumbs}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
+        Free · live calculation · no email required
+      </p>
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        Cost of switching field service software
+      </h1>
+      <p class="mt-4 text-lg text-slate-600">
+        Switching between trades software platforms is a 4-12 week project with real costs beyond just the new subscription — implementation fees, training time, parallel-run dual subscriptions, and lost productivity during transition. Plug in your current tool, target tool, and team size; see the realistic 12-month total cost.
+      </p>
+    </header>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-10">
+      <form id="cos-form" class="space-y-6">
+        <div class="grid gap-6 md:grid-cols-2">
+          <div>
+            <label for="from-tool" class="mb-2 block text-sm font-semibold text-slate-900">
+              Current tool (switching FROM)
+            </label>
+            <select
+              id="from-tool"
+              class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+            >
+              <option value="">— Select your current tool —</option>
+              {calculatorTools.map((t) => (
+                <option value={t.slug}>{t.name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label for="to-tool" class="mb-2 block text-sm font-semibold text-slate-900">
+              Target tool (switching TO)
+            </label>
+            <select
+              id="to-tool"
+              class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+            >
+              <option value="">— Select target tool —</option>
+              {calculatorTools.map((t) => (
+                <option value={t.slug}>{t.name}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-3">
+          <div>
+            <label for="techs" class="mb-2 block text-sm font-semibold text-slate-900">
+              Number of techs
+            </label>
+            <input
+              id="techs"
+              type="number"
+              value="5"
+              min="1"
+              max="500"
+              class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+            />
+          </div>
+          <div>
+            <label for="current-cost" class="mb-2 block text-sm font-semibold text-slate-900">
+              Current monthly cost ($)
+            </label>
+            <input
+              id="current-cost"
+              type="number"
+              placeholder="auto"
+              min="0"
+              class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+            />
+            <p class="mt-1 text-xs text-slate-500">Override if your actual bill differs from published pricing.</p>
+          </div>
+          <div>
+            <label for="impl-fee" class="mb-2 block text-sm font-semibold text-slate-900">
+              Target implementation fee ($)
+            </label>
+            <input
+              id="impl-fee"
+              type="number"
+              placeholder="auto"
+              min="0"
+              class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+            />
+            <p class="mt-1 text-xs text-slate-500">Override if you have a real vendor quote.</p>
+          </div>
+        </div>
+      </form>
+
+      <div id="cos-output" class="mt-8 hidden">
+        <!-- populated by JS -->
+      </div>
+
+      <div id="cos-prompt" class="mt-8 rounded-md bg-slate-50 p-6 text-center text-sm text-slate-500">
+        Pick a current tool and a target tool above to calculate.
+      </div>
+    </div>
+
+    <section class="mt-12 prose prose-slate max-w-none">
+      <h2>What the calculator includes</h2>
+
+      <p>
+        Switching field service software is not just "cancel the old subscription, start the new one." Real cost components include:
+      </p>
+
+      <ul>
+        <li><strong>New subscription cost</strong> for the target tool, scaled by team size if per-user.</li>
+        <li><strong>Implementation fee</strong> — what the vendor charges to set up your account. Tier-based estimate: $0 for entry-tier self-service, $1,500 for mid-tier, $15,000 for enterprise. Override if you have a quote.</li>
+        <li><strong>Training cost</strong> — wages of techs and office staff during product training. Default assumption: 8 hours per tech at $50/hour fully-burdened, plus 60 office-staff hours at $35/hour.</li>
+        <li><strong>Parallel-run cost</strong> — one extra month of paying both subscriptions during cutover. Most shops run both for 2-4 weeks; skipping this is operationally risky.</li>
+        <li><strong>Net monthly savings</strong> (or premium) — the recurring difference between old and new subscription, post-cutover.</li>
+        <li><strong>Break-even month</strong> — when monthly savings cover the total switching cost. Shows "never on price alone" if the new tool is more expensive.</li>
+      </ul>
+
+      <h2>What the calculator does not include</h2>
+
+      <ul>
+        <li><strong>Revenue uplift</strong> from better dispatching, faster quoting, or improved customer experience. Use the <a href="/roi-calculator/">ROI calculator</a> for the revenue side.</li>
+        <li><strong>Integration migration costs</strong> if you need to rebuild custom integrations.</li>
+        <li><strong>Data migration consulting</strong> if you're hiring help to move from one system to another.</li>
+        <li><strong>Productivity lost</strong> during adoption — staff are slower for 2-4 weeks while learning the new system.</li>
+      </ul>
+
+      <p>
+        For most shops, the cost-of-switch math is the conservative case. The revenue uplift (in the ROI calculator) is usually the bigger number — but it's also the less certain one, because it depends on team adoption and execution.
+      </p>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="mb-6 text-2xl font-bold tracking-tight text-slate-900">FAQ</h2>
+      <div class="space-y-4">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-12 rounded-lg bg-slate-50 p-6 text-sm text-slate-600">
+      <p>
+        Need to evaluate the new tool's fit first? Take the
+        <a href="/quiz/" class="text-orange-600 hover:underline">60-second matching quiz</a>
+        for ranked picks, or run the
+        <a href="/roi-calculator/" class="text-orange-600 hover:underline">ROI calculator</a>
+        to estimate revenue uplift.
+      </p>
+    </section>
+  </article>
+
+  <script define:vars={{ toolData: calculatorTools }}>
+    const tools = toolData;
+    const fromSelect = document.getElementById('from-tool');
+    const toSelect = document.getElementById('to-tool');
+    const techsInput = document.getElementById('techs');
+    const currentCostInput = document.getElementById('current-cost');
+    const implFeeInput = document.getElementById('impl-fee');
+    const outputDiv = document.getElementById('cos-output');
+    const promptDiv = document.getElementById('cos-prompt');
+
+    // Implementation fee defaults by tier
+    const IMPL_FEE_BY_TIER = {
+      free: 0,
+      entry: 500,
+      mid: 1500,
+      enterprise: 15000,
+    };
+    const TRAINING_HOURS_PER_TECH = 8;
+    const TECH_RATE_PER_HOUR = 50;
+    const OFFICE_HOURS = 60;
+    const OFFICE_RATE_PER_HOUR = 35;
+
+    // Pre-fill from URL params: ?from=jobber&to=servicetitan
+    const params = new URLSearchParams(window.location.search);
+    const fromParam = params.get('from');
+    const toParam = params.get('to');
+    if (fromParam && tools.some((t) => t.slug === fromParam)) fromSelect.value = fromParam;
+    if (toParam && tools.some((t) => t.slug === toParam)) toSelect.value = toParam;
+
+    function findTool(slug) {
+      return tools.find((t) => t.slug === slug);
+    }
+
+    function isFlatRate(t) {
+      const note = (t.pricingNote || '').toLowerCase();
+      return note.includes('per company') || note.includes('per month') && !note.includes('per user');
+    }
+
+    function monthlyCostOf(t, techs) {
+      if (t.startingPrice === null || t.startingPrice === undefined) {
+        // Custom-quoted enterprise; use $400/user/mo as the mid-case fallback
+        return 400 * techs;
+      }
+      if (t.startingPrice === 0) return 0;
+      if (isFlatRate(t)) return t.startingPrice;
+      return t.startingPrice * techs;
+    }
+
+    function formatCurrency(n) {
+      return '$' + Math.round(n).toLocaleString('en-US');
+    }
+
+    function calculate() {
+      const fromSlug = fromSelect.value;
+      const toSlug = toSelect.value;
+      if (!fromSlug || !toSlug) {
+        outputDiv.classList.add('hidden');
+        promptDiv.classList.remove('hidden');
+        return;
+      }
+      if (fromSlug === toSlug) {
+        outputDiv.classList.remove('hidden');
+        promptDiv.classList.add('hidden');
+        outputDiv.innerHTML = '<div class="rounded-md border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">You picked the same tool for both. Please choose different current and target tools.</div>';
+        return;
+      }
+
+      const fromTool = findTool(fromSlug);
+      const toTool = findTool(toSlug);
+      const techs = parseInt(techsInput.value, 10) || 5;
+
+      const fromMonthly = parseInt(currentCostInput.value, 10) || monthlyCostOf(fromTool, techs);
+      const toMonthly = monthlyCostOf(toTool, techs);
+
+      const implFee = parseInt(implFeeInput.value, 10);
+      const targetImplFee = !isNaN(implFee) && implFee >= 0 ? implFee : IMPL_FEE_BY_TIER[toTool.tier];
+
+      const trainingCost = techs * TRAINING_HOURS_PER_TECH * TECH_RATE_PER_HOUR + OFFICE_HOURS * OFFICE_RATE_PER_HOUR;
+      const parallelRunCost = fromMonthly; // one extra month of source subscription
+
+      const totalSwitchingCost = targetImplFee + trainingCost + parallelRunCost;
+      const monthlySavings = fromMonthly - toMonthly;
+      const annualDelta = monthlySavings * 12;
+
+      const fromTCO12 = fromMonthly * 12;
+      const toTCO12 = toMonthly * 12 + totalSwitchingCost;
+      const netDelta12 = toTCO12 - fromTCO12;
+
+      let breakEvenLabel;
+      if (monthlySavings <= 0) {
+        breakEvenLabel = 'Never on price alone — new tool costs the same or more';
+      } else {
+        const months = Math.ceil(totalSwitchingCost / monthlySavings);
+        if (months > 60) breakEvenLabel = months + ' months (>5 years — likely not worth on cost alone)';
+        else breakEvenLabel = months + ' month' + (months === 1 ? '' : 's');
+      }
+
+      let recommendation;
+      let recommendationStyle;
+      if (monthlySavings > 0 && totalSwitchingCost / monthlySavings <= 18) {
+        recommendation = 'Switching pays back within 18 months on pure cost savings — favorable.';
+        recommendationStyle = 'border-emerald-200 bg-emerald-50 text-emerald-900';
+      } else if (monthlySavings > 0) {
+        recommendation = 'Switching saves money long-term but break-even takes over 18 months. Consider revenue-uplift case (ROI calculator) before committing.';
+        recommendationStyle = 'border-amber-200 bg-amber-50 text-amber-900';
+      } else if (monthlySavings === 0) {
+        recommendation = 'No monthly savings — new tool costs the same. Only switch if features or fit are materially better. Use the ROI calculator to size revenue uplift.';
+        recommendationStyle = 'border-amber-200 bg-amber-50 text-amber-900';
+      } else {
+        const premium = -monthlySavings;
+        recommendation = 'New tool costs ' + formatCurrency(premium) + '/mo more. Switching only makes sense if revenue uplift offsets the premium. Check the ROI calculator.';
+        recommendationStyle = 'border-rose-200 bg-rose-50 text-rose-900';
+      }
+
+      outputDiv.classList.remove('hidden');
+      promptDiv.classList.add('hidden');
+
+      outputDiv.innerHTML = `
+        <h2 class="mb-4 text-2xl font-bold text-slate-900">Your switching cost: ${fromTool.name} → ${toTool.name}</h2>
+        <p class="mb-6 text-sm text-slate-500">At ${techs} tech${techs === 1 ? '' : 's'}.</p>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="rounded-lg border border-slate-200 bg-white p-4">
+            <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">${fromTool.name} 12-mo cost</div>
+            <div class="mt-2 text-2xl font-bold text-slate-900">${formatCurrency(fromTCO12)}</div>
+            <div class="mt-1 text-xs text-slate-500">${formatCurrency(fromMonthly)}/mo × 12 months</div>
+          </div>
+          <div class="rounded-lg border ${netDelta12 > 0 ? 'border-rose-200 bg-rose-50' : 'border-emerald-200 bg-emerald-50'} p-4">
+            <div class="text-xs font-semibold uppercase tracking-wider ${netDelta12 > 0 ? 'text-rose-700' : 'text-emerald-700'}">${toTool.name} 12-mo total</div>
+            <div class="mt-2 text-2xl font-bold ${netDelta12 > 0 ? 'text-rose-900' : 'text-emerald-900'}">${formatCurrency(toTCO12)}</div>
+            <div class="mt-1 text-xs ${netDelta12 > 0 ? 'text-rose-700' : 'text-emerald-700'}">${formatCurrency(toMonthly)}/mo × 12 + ${formatCurrency(totalSwitchingCost)} switching cost</div>
+          </div>
+        </div>
+
+        <div class="mt-6 rounded-lg border ${recommendationStyle} p-4 text-sm">
+          <strong class="block mb-1">Net 12-month difference: ${formatCurrency(Math.abs(netDelta12))} ${netDelta12 > 0 ? 'more' : 'less'}</strong>
+          ${recommendation}
+        </div>
+
+        <h3 class="mt-8 mb-3 text-lg font-bold text-slate-900">Switching cost breakdown</h3>
+        <table class="w-full text-sm">
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="py-2 text-slate-700">${toTool.name} implementation fee</td>
+              <td class="py-2 text-right font-medium text-slate-900">${formatCurrency(targetImplFee)}</td>
+            </tr>
+            <tr>
+              <td class="py-2 text-slate-700">Training cost (${techs} techs × ${TRAINING_HOURS_PER_TECH}h + ${OFFICE_HOURS}h office)</td>
+              <td class="py-2 text-right font-medium text-slate-900">${formatCurrency(trainingCost)}</td>
+            </tr>
+            <tr>
+              <td class="py-2 text-slate-700">Parallel-run (1 month of ${fromTool.name})</td>
+              <td class="py-2 text-right font-medium text-slate-900">${formatCurrency(parallelRunCost)}</td>
+            </tr>
+            <tr class="font-bold">
+              <td class="pt-3 text-slate-900">Total switching cost</td>
+              <td class="pt-3 text-right text-slate-900">${formatCurrency(totalSwitchingCost)}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 class="mt-8 mb-3 text-lg font-bold text-slate-900">Recurring cost change</h3>
+        <table class="w-full text-sm">
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="py-2 text-slate-700">${fromTool.name} monthly</td>
+              <td class="py-2 text-right font-medium text-slate-900">${formatCurrency(fromMonthly)}</td>
+            </tr>
+            <tr>
+              <td class="py-2 text-slate-700">${toTool.name} monthly</td>
+              <td class="py-2 text-right font-medium text-slate-900">${formatCurrency(toMonthly)}</td>
+            </tr>
+            <tr class="font-bold">
+              <td class="pt-3 text-slate-900">Monthly ${monthlySavings >= 0 ? 'savings' : 'premium'}</td>
+              <td class="pt-3 text-right ${monthlySavings >= 0 ? 'text-emerald-700' : 'text-rose-700'}">${formatCurrency(Math.abs(monthlySavings))}</td>
+            </tr>
+            <tr class="font-bold">
+              <td class="py-2 text-slate-900">Annual ${annualDelta >= 0 ? 'savings' : 'premium'}</td>
+              <td class="py-2 text-right ${annualDelta >= 0 ? 'text-emerald-700' : 'text-rose-700'}">${formatCurrency(Math.abs(annualDelta))}</td>
+            </tr>
+            <tr class="font-bold">
+              <td class="py-2 text-slate-900">Break-even month</td>
+              <td class="py-2 text-right text-slate-900">${breakEvenLabel}</td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+    }
+
+    fromSelect.addEventListener('change', calculate);
+    toSelect.addEventListener('change', calculate);
+    techsInput.addEventListener('input', calculate);
+    currentCostInput.addEventListener('input', calculate);
+    implFeeInput.addEventListener('input', calculate);
+
+    // Run once on load in case URL params pre-filled
+    calculate();
+  </script>
+</Layout>

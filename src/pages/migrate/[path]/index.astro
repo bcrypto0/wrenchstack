@@ -137,6 +137,21 @@ const faqSchema = {
       <p class="mt-4 text-lg text-slate-600">
         For: <strong>{intent}.</strong> Realistic timeline, what to expect, what data transfers cleanly, and what to watch out for.
       </p>
+
+      <div class="mt-6 rounded-lg border border-orange-200 bg-orange-50 p-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div class="font-semibold text-slate-900">Calculate the real 12-month cost</div>
+            <div class="text-sm text-slate-700">Subscription delta + implementation + training + parallel run, for your team size.</div>
+          </div>
+          <a
+            href={`/cost-of-switch/?from=${fromTool.slug}&to=${toTool.slug}`}
+            class="shrink-0 rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600"
+          >
+            Calculate switch cost →
+          </a>
+        </div>
+      </div>
     </header>
 
     <section class="mb-12 grid gap-4 md:grid-cols-2">
