@@ -1,10 +1,74 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { tools } from '../lib/data';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Methodology', url: '/methodology/' },
 ];
+
+// Build affiliate-status table from the live tools.json. The data rule
+// is: affiliate_url is "TBD" until we have a confirmed tracked URL from
+// the vendor; only then does it get replaced with a real http URL.
+type AffiliateStatus = 'Active' | 'Pending' | 'None';
+
+interface ToolStatus {
+  slug: string;
+  name: string;
+  status: AffiliateStatus;
+  note: string;
+}
+
+function classifyAffiliate(t: typeof tools[number]): ToolStatus {
+  const url = t.affiliate_url;
+  if (!url || url === '') {
+    return {
+      slug: t.slug,
+      name: t.name,
+      status: 'None',
+      note: 'No affiliate program currently active.',
+    };
+  }
+  if (url === 'TBD') {
+    return {
+      slug: t.slug,
+      name: t.name,
+      status: 'Pending',
+      note: 'Application submitted or tracking URL not yet confirmed.',
+    };
+  }
+  if (url.startsWith('http')) {
+    return {
+      slug: t.slug,
+      name: t.name,
+      status: 'Active',
+      note: 'WrenchStack may earn a commission on signups from this link.',
+    };
+  }
+  return {
+    slug: t.slug,
+    name: t.name,
+    status: 'None',
+    note: 'No affiliate program currently active.',
+  };
+}
+
+const toolStatuses = tools
+  .map(classifyAffiliate)
+  .sort((a, b) => {
+    // Active first, then Pending, then None; alphabetical within each
+    const order: AffiliateStatus[] = ['Active', 'Pending', 'None'];
+    const aIdx = order.indexOf(a.status);
+    const bIdx = order.indexOf(b.status);
+    if (aIdx !== bIdx) return aIdx - bIdx;
+    return a.name.localeCompare(b.name);
+  });
+
+const counts = {
+  Active: toolStatuses.filter((t) => t.status === 'Active').length,
+  Pending: toolStatuses.filter((t) => t.status === 'Pending').length,
+  None: toolStatuses.filter((t) => t.status === 'None').length,
+};
 ---
 
 <Layout
@@ -106,6 +170,134 @@ const breadcrumbs = [
       Where vendors don't publish pricing publicly (typical for enterprise tools like ServiceTitan,
       BuildOps, and FieldEdge), we cite user-reported pricing ranges from public sources rather
       than custom-quoted figures.
+    </p>
+
+    <h2 id="how-we-make-money">How we make money</h2>
+
+    <p>
+      WrenchStack is reader-supported. When you click a "Visit [Tool]" button on a tool review,
+      <strong>we sometimes earn an affiliate commission</strong> if you sign up for that tool —
+      but only when the vendor has approved us into their affiliate program. We never get paid
+      for placement, for ranking, or for inclusion in the directory. Vendors cannot buy a higher
+      WrenchStack Score, a different spot in a "best of" list, or a softer tone in a review.
+    </p>
+
+    <p class="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm not-prose">
+      <strong class="text-emerald-900">Affiliate status doesn't affect ranking.</strong>
+      The WrenchStack Score (vertical fit + user ratings + pricing transparency + features +
+      integrations) is computed the same way for every tool, whether we have an active affiliate
+      relationship, a pending application, or no commercial relationship at all.
+    </p>
+
+    <h3>Per-tool affiliate ledger ({tools.length} tools)</h3>
+
+    <p>
+      Full transparency. Here's where every tool in the directory stands on affiliate status today:
+    </p>
+
+    <ul class="not-prose grid grid-cols-2 gap-3 text-sm md:grid-cols-3">
+      <li class="rounded-lg bg-emerald-50 px-3 py-2 ring-1 ring-emerald-200">
+        <span class="font-semibold text-emerald-900">Active:</span>
+        <span class="text-emerald-700">{counts.Active} {counts.Active === 1 ? 'tool' : 'tools'}</span>
+      </li>
+      <li class="rounded-lg bg-amber-50 px-3 py-2 ring-1 ring-amber-200">
+        <span class="font-semibold text-amber-900">Pending:</span>
+        <span class="text-amber-700">{counts.Pending} {counts.Pending === 1 ? 'tool' : 'tools'}</span>
+      </li>
+      <li class="rounded-lg bg-slate-50 px-3 py-2 ring-1 ring-slate-200">
+        <span class="font-semibold text-slate-900">None:</span>
+        <span class="text-slate-700">{counts.None} {counts.None === 1 ? 'tool' : 'tools'}</span>
+      </li>
+    </ul>
+
+    <table class="not-prose mt-6 w-full text-sm">
+      <thead>
+        <tr class="border-b border-slate-200 bg-slate-50 text-left text-slate-700">
+          <th class="px-3 py-2 font-semibold">Tool</th>
+          <th class="px-3 py-2 font-semibold">Affiliate status</th>
+          <th class="px-3 py-2 font-semibold">Notes</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        {toolStatuses.map((t) => {
+          const statusStyles = {
+            Active: 'bg-emerald-100 text-emerald-800 ring-emerald-200',
+            Pending: 'bg-amber-100 text-amber-800 ring-amber-200',
+            None: 'bg-slate-100 text-slate-700 ring-slate-200',
+          };
+          return (
+            <tr>
+              <td class="px-3 py-2">
+                <a href={`/tools/${t.slug}/`} class="font-medium text-slate-900 hover:text-orange-600">
+                  {t.name}
+                </a>
+              </td>
+              <td class="px-3 py-2">
+                <span class={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ${statusStyles[t.status]}`}>
+                  {t.status}
+                </span>
+              </td>
+              <td class="px-3 py-2 text-slate-600">{t.note}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+
+    <h3 class="mt-8">What "Active", "Pending", and "None" mean</h3>
+
+    <ul>
+      <li>
+        <strong>Active</strong> — we have an approved affiliate relationship and use a tracked
+        URL on this tool's review page. If you sign up via our link, we earn a commission. This
+        does not affect what we write about the tool, including the cons section.
+      </li>
+      <li>
+        <strong>Pending</strong> — we've applied to the affiliate program but tracking is not yet
+        confirmed. The "Visit" button currently points to the vendor's public page directly,
+        meaning we don't earn anything from clicks on this tool today.
+      </li>
+      <li>
+        <strong>None</strong> — no affiliate program exists for this tool, or we've chosen not
+        to participate. The "Visit" button points to the vendor's public page. We earn no
+        commission from this tool.
+      </li>
+    </ul>
+
+    <h3>What we will never do</h3>
+
+    <ul>
+      <li>Accept payment for placement in a "best of" list</li>
+      <li>Accept payment to raise a tool's WrenchStack Score</li>
+      <li>Accept payment to omit or soften cons in a tool review</li>
+      <li>Hide an affiliate relationship — every tool's status is on this page</li>
+      <li>Recommend a tool we wouldn't recommend if no commission existed</li>
+    </ul>
+
+    <h2>Where pricing data comes from</h2>
+
+    <p>
+      Each pricing tier shows a <strong>verified date</strong>. We re-check pricing quarterly by
+      visiting each vendor's public pricing page; for custom-quoted enterprise platforms, we cite
+      user-reported ranges from public sources (Reddit threads, G2 reviews, vendor RFP responses
+      shared publicly). Numbers older than 90 days get flagged with an amber freshness pill;
+      older than 180 days get a red pill and are queued for re-verification before they show on
+      ranked pages.
+    </p>
+
+    <p>
+      Vendor-supplied pricing claims that contradict published pages are ignored. If a vendor
+      tells us their pricing has changed but the public page still shows the old number, we keep
+      the public number until the public page changes.
+    </p>
+
+    <h2>Questions or corrections?</h2>
+
+    <p>
+      Email <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a>. We respond to
+      vendor pricing corrections within 48 hours, methodology questions within 5 business days.
+      Substantive complaints about ranking or review accuracy get a public response on the
+      affected page if the dispute can't be resolved privately.
     </p>
   </article>
 </Layout>
