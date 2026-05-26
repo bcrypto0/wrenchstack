@@ -41,6 +41,22 @@ const onlyInFromFeatures = fromTool.key_features.filter(f => !toTool.key_feature
 const onlyInToFeatures = toTool.key_features.filter(f => !fromTool.key_features.includes(f));
 const sharedIntegrations = fromTool.integrations.filter(i => toTool.integrations.includes(i));
 const lostIntegrations = fromTool.integrations.filter(i => !toTool.integrations.includes(i));
+const newIntegrations = toTool.integrations.filter(i => !fromTool.integrations.includes(i));
+
+// Cost-of-switch analysis
+const fromPrice = fromTool.pricing.starting_at_usd;
+const toPrice = toTool.pricing.starting_at_usd;
+const monthlyDelta = (fromPrice !== null && toPrice !== null) ? toPrice - fromPrice : null;
+const annualDelta = monthlyDelta !== null ? monthlyDelta * 12 : null;
+
+// Classify TO tool by pricing tier for implementation cost estimate
+function implementationCost(t: Tool): { range: string; description: string } {
+  const p = t.pricing.starting_at_usd;
+  if (p === null) return { range: '$5,000-$50,000+', description: 'Enterprise platforms ($5K-$30K typical; ServiceTitan/Procore $15K-$50K)' };
+  if (p >= 200) return { range: '$1,500-$5,000', description: 'Mid-tier platforms often charge for guided onboarding' };
+  return { range: '$0-$1,500', description: 'Entry-tier platforms typically offer self-service; optional paid setup $500-$1,500' };
+}
+const implCost = implementationCost(toTool);
 
 const pageTitle = `How to migrate from ${fromTool.name} to ${toTool.name} (2026)`;
 const pageDescription = `Practical guide to switching from ${fromTool.name} to ${toTool.name}. Why teams migrate, what to expect, timeline, and what to watch out for.`;
@@ -54,7 +70,7 @@ const breadcrumbs = [
 const faqs = [
   {
     q: `How long does it take to migrate from ${fromTool.name} to ${toTool.name}?`,
-    a: `Realistic timeline: 4–12 weeks for a full cutover. Week 1–2: account setup + initial config. Week 2–4: data import (customers, recurring service agreements). Week 4–8: team training + parallel run. Week 8–12: full cutover + decommission of ${fromTool.name}. Faster is possible for small teams; enterprise migrations can run 3–6 months.`,
+    a: `Realistic timeline: 4-12 weeks for a full cutover. Week 1-2: account setup + initial config. Week 2-4: data import (customers, recurring service agreements). Week 4-8: team training + parallel run. Week 8-12: full cutover + decommission of ${fromTool.name}. Faster is possible for small teams; enterprise migrations to ${toTool.name === 'ServiceTitan' || toTool.name === 'Procore' || toTool.name === 'BuildOps' ? toTool.name : 'enterprise platforms'} can run 3-6 months.`,
   },
   {
     q: `Will all my ${fromTool.name} data transfer?`,
@@ -78,6 +94,22 @@ const faqs = [
       if (tp < fp) return `${toTool.name} starts at ${formatPrice(toTool)} vs ${fromTool.name}'s ${formatPrice(fromTool)} — about ${Math.round(((fp - tp) / fp) * 100)}% cheaper at entry. Read the feature differences below to make sure you're not downgrading capability.`;
       return 'Entry pricing is roughly the same. Compare based on features and integrations rather than price.';
     })(),
+  },
+  {
+    q: `What's the total cost of switching from ${fromTool.name} to ${toTool.name}?`,
+    a: `Three components: (1) software-cost change — ${monthlyDelta !== null ? `${monthlyDelta > 0 ? `~$${monthlyDelta}/month more` : `~$${Math.abs(monthlyDelta)}/month less`} at the entry tier` : 'depends on quoted pricing for both'}. (2) Implementation fees — ${implCost.range} for ${toTool.name} (${implCost.description}). (3) Team time during transition — typically 40-100 hours of office-staff time across the 4-12 week migration, plus 2-4 hours per field technician for training. For most shops, the total switching cost is recovered within 6-18 months if the new platform delivers on its value proposition.`,
+  },
+  {
+    q: `Can I run ${fromTool.name} and ${toTool.name} in parallel during migration?`,
+    a: `Yes, and you should. Plan for 2-4 weeks of parallel operation: new jobs entered in ${toTool.name}, in-flight jobs completed in ${fromTool.name}. Both subscriptions active during this window. The parallel period catches data-integrity issues before you've cancelled ${fromTool.name} and lost access. Don't try to cut over in a single day — that's how shops lose customer data and miss appointments during the chaos.`,
+  },
+  {
+    q: `What if my team resists the move from ${fromTool.name}?`,
+    a: `Team adoption resistance is the #1 cause of failed migrations. Mitigate by: (1) getting your 2-3 most software-resistant techs and office staff into a ${toTool.name} demo BEFORE signing the contract — if they push back hard, your timeline doubles or the migration fails outright; (2) frame ${toTool.name} as solving specific pain points they complain about (not as "we're switching"); (3) train champions first (tech-comfortable team members) who then peer-train the rest. Skipping team buy-in causes 6-month migration projects to stretch into 18-month disasters.`,
+  },
+  {
+    q: `Should I migrate during peak season or off-season?`,
+    a: `Off-season, almost always. HVAC: avoid summer (peak cooling) and winter (peak heating) — best window is March-May or September-October. Plumbing: same pattern. Pest control: avoid spring-summer peak. Landscaping: avoid spring setup and fall cleanup. The reasoning is simple: migration consumes office-staff capacity that you need for customer-facing work during peak demand. Migrate during a quiet period when missed dispatch decisions don't compound into lost revenue.`,
   },
 ];
 
@@ -179,6 +211,24 @@ const faqSchema = {
         <p>{toTool.name} covers everything {fromTool.name} did and more. Migration is a clean upgrade.</p>
       )}
 
+      <h2>Cost-of-switch analysis</h2>
+      <p>Three cost components when migrating from {fromTool.name} to {toTool.name}:</p>
+      <ul>
+        <li>
+          <strong>Software-cost change:</strong>{' '}
+          {monthlyDelta === null
+            ? `${fromPrice === null ? fromTool.name : toTool.name} uses custom-quoted pricing — request actual quotes for both to compare at your team size.`
+            : monthlyDelta > 0
+              ? `~$${monthlyDelta}/month more on ${toTool.name} (${formatPrice(toTool)} vs ${formatPrice(fromTool)}). Annual delta: ~$${annualDelta} extra.`
+              : monthlyDelta < 0
+                ? `~$${Math.abs(monthlyDelta)}/month less on ${toTool.name} (${formatPrice(toTool)} vs ${formatPrice(fromTool)}). Annual savings: ~$${Math.abs(annualDelta ?? 0)}.`
+                : `Entry pricing is identical. Compare based on features and integrations, not price.`}
+        </li>
+        <li><strong>Implementation fees:</strong> {implCost.range} for {toTool.name}. {implCost.description}.</li>
+        <li><strong>Team time during transition:</strong> 40-100 hours of office-staff time across the 4-12 week migration, plus 2-4 hours per field technician for training. For a 10-tech shop with 2 office staff, total internal labor cost typically runs $5,000-$15,000 at loaded hourly rates.</li>
+      </ul>
+      <p>For most shops, the total switching cost is recovered within 6-18 months if the new platform delivers on its value proposition. Below 6 months, the math usually doesn't work — make sure your reason for switching justifies the friction.</p>
+
       <h2>Migration timeline (realistic)</h2>
 
       <h3>Week 1–2: Account setup + initial config</h3>
@@ -195,6 +245,57 @@ const faqSchema = {
 
       <h3>Month 3–6: Optimization</h3>
       <p>Build out automation workflows {toTool.name} unlocks that you couldn't do on {fromTool.name}. This is where the ROI of switching actually shows up.</p>
+
+      <h2>Data export checklist (before cancelling {fromTool.name})</h2>
+      <p>Export everything from {fromTool.name} BEFORE you cancel — vendors typically lock out access immediately after subscription termination. Your checklist:</p>
+      <ul>
+        <li><strong>Customer records</strong> — full export with names, addresses, contact info, custom fields, service notes</li>
+        <li><strong>Active job data</strong> — open work orders, scheduled appointments, recurring service agreements</li>
+        <li><strong>Historical invoices</strong> — at minimum the last 12 months for accounting reference; ideally everything for tax/audit purposes</li>
+        <li><strong>Payment records</strong> — past payments, outstanding balances, payment method history (with tokenization concerns)</li>
+        <li><strong>Photo and document attachments</strong> — job site photos, signed agreements, equipment photos — often the hardest to migrate cleanly</li>
+        <li><strong>Pricebook / service catalog</strong> — your service offerings with pricing structure (often rebuilt in new platform regardless)</li>
+        <li><strong>Membership/maintenance plan data</strong> — recurring billing setups, plan tiers, member status</li>
+        <li><strong>Integration configurations</strong> — screenshot/document existing QuickBooks sync, Stripe setup, Zapier workflows for re-creation</li>
+        <li><strong>User accounts and permissions</strong> — list of staff with their role assignments (rebuilt in new platform)</li>
+        <li><strong>Reports and saved views</strong> — note custom dashboards or reports you'll need to rebuild</li>
+      </ul>
+
+      <h2>Integration migration checklist</h2>
+      {sharedIntegrations.length > 0 && (
+        <>
+          <p><strong>Continues to work without disruption:</strong></p>
+          <ul>
+            {sharedIntegrations.map(i => <li>{i.replace(/_/g, ' ')} — both {fromTool.name} and {toTool.name} support this natively</li>)}
+          </ul>
+        </>
+      )}
+      {lostIntegrations.length > 0 && (
+        <>
+          <p><strong>Need rebuilding or workarounds:</strong></p>
+          <ul>
+            {lostIntegrations.map(i => <li><strong>{i.replace(/_/g, ' ')}</strong> — {fromTool.name} has this natively, but {toTool.name} doesn't. Bridge via Zapier, custom middleware, or accept the workflow loss.</li>)}
+          </ul>
+        </>
+      )}
+      {newIntegrations.length > 0 && (
+        <>
+          <p><strong>New integration options on {toTool.name}</strong> (worth evaluating during migration):</p>
+          <ul>
+            {newIntegrations.slice(0, 6).map(i => <li>{i.replace(/_/g, ' ')}</li>)}
+          </ul>
+        </>
+      )}
+
+      <h2>Common migration pitfalls (and how to avoid them)</h2>
+      <ul>
+        <li><strong>Cancelling {fromTool.name} too early.</strong> Don't terminate until you've verified data exported cleanly and the new platform is operational. Keep both subscriptions active during the 2-4 week parallel run, even though it's painful to pay double.</li>
+        <li><strong>Skipping the pricebook rebuild.</strong> Pricebook data rarely migrates cleanly between platforms (different schemas, line-item structures). Rebuild fresh in {toTool.name} during the parallel period — don't try to import.</li>
+        <li><strong>Ignoring custom workflows.</strong> If your office staff built custom workflows or automations on {fromTool.name} (specific dispatch rules, custom email templates, automated billing sequences), those won't transfer. List every custom workflow you depend on and rebuild equivalents in {toTool.name} before cutover.</li>
+        <li><strong>Underestimating team adoption resistance.</strong> Get tech-resistant team members on a {toTool.name} demo BEFORE signing the contract. If they hate it, your timeline doubles or the migration fails. Train champions first, peer-train resistant team members second.</li>
+        <li><strong>Migrating during peak season.</strong> Don't switch HVAC software in July or roofing software during storm season. Migration friction during peak demand cascades into missed customers and lost revenue.</li>
+        <li><strong>Not budgeting for parallel-run cost.</strong> 2-4 weeks of running both subscriptions adds ${monthlyDelta !== null && fromPrice !== null && toPrice !== null ? `~$${Math.round((fromPrice + toPrice) / 2)}` : '$200-$1,000'} in subscription overlap. Plan for it; don't surprise yourself.</li>
+      </ul>
 
       <h2>Things to verify BEFORE you sign the new contract</h2>
       <ul>
