@@ -10,6 +10,7 @@ interface Resolved {
   toTool: Tool;
   url: string;
   intent: string;
+  reason?: string;
 }
 
 const resolved: Resolved[] = MIGRATIONS.map(m => {
@@ -21,43 +22,158 @@ const resolved: Resolved[] = MIGRATIONS.map(m => {
     toTool,
     url: `/migrate/from-${m.from}-to-${m.to}/`,
     intent: m.intent,
+    reason: m.reason,
   };
 }).filter((r): r is Resolved => r !== null);
+
+// Categorize migrations by destination tool tier (where you're going)
+function destinationTier(t: Tool): 'enterprise' | 'mid' | 'entry' {
+  const p = t.pricing.starting_at_usd;
+  if (p === null || p >= 250) return 'enterprise';
+  if (p >= 100) return 'mid';
+  return 'entry';
+}
+
+const toEnterprise = resolved.filter(r => destinationTier(r.toTool) === 'enterprise');
+const toMidTier = resolved.filter(r => destinationTier(r.toTool) === 'mid');
+const toEntryTier = resolved.filter(r => destinationTier(r.toTool) === 'entry');
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Migration guides', url: '/migrate/' },
 ];
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Trades software migration guides',
+  numberOfItems: resolved.length,
+  itemListElement: resolved.map((r, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: `${r.fromTool.name} to ${r.toTool.name}`,
+    url: `https://wrenchstack.com${r.url}`,
+  })),
+};
 ---
 
 <Layout
-  title="Trades software migration guides — switching tools"
-  description={`Practical guides for switching from one trades software to another. ${resolved.length} migration paths covered with timelines, data export tips, and what to watch out for.`}
+  title={`Trades software migration guides — ${resolved.length} switching paths covered`}
+  description={`Practical guides for switching between trades software platforms. ${resolved.length} migration paths with realistic timelines (4-12 weeks), cost-of-switch analysis, data export checklists, integration migration steps, and common pitfalls.`}
   breadcrumbs={breadcrumbs}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+
   <section class="mx-auto max-w-5xl px-4 py-12">
-    <header class="mb-8">
-      <h1 class="text-4xl font-bold tracking-tight text-slate-900">Migration guides</h1>
-      <p class="mt-3 max-w-2xl text-lg text-slate-600">
-        Switching field service software is a 4–12 week project with real risk if you skip steps. {resolved.length} migration paths covered — what transfers cleanly, what doesn't, and the realistic timeline.
+    <header class="mb-10">
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        Migration guides
+      </h1>
+      <p class="mt-4 max-w-3xl text-lg text-slate-600">
+        Switching field service software is a 4-12 week project with real operational risk if you skip steps. {resolved.length} migration paths covered — what transfers cleanly, what doesn't, realistic timeline, cost analysis, and common pitfalls.
+      </p>
+      <p class="mt-3 text-sm text-slate-500">
+        Each guide includes cost-of-switch analysis with templated $ numbers, 10-item data export checklist, integration migration walkthrough, and 8 FAQ entries covering everything from parallel-run cost to team adoption resistance.
       </p>
     </header>
 
-    <div class="grid gap-4 sm:grid-cols-2">
-      {resolved.map(r => (
-        <a
-          href={r.url}
-          class="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-slate-400 hover:shadow-sm"
-        >
-          <div class="text-lg font-semibold text-slate-900 group-hover:text-orange-600">
-            {r.fromTool.name} → {r.toTool.name}
-          </div>
-          <div class="mt-1 text-sm text-slate-500">{r.intent}</div>
-        </a>
-      ))}
-    </div>
+    {toEnterprise.length > 0 && (
+      <section class="mb-12">
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Migrating up to enterprise</h2>
+        <p class="mb-6 text-slate-600">
+          Moving from a mid-tier platform to ServiceTitan, BuildOps, Procore, or another enterprise tool. Plan 3-6 months with $5K-$50K in implementation fees.
+        </p>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {toEnterprise.map(r => (
+            <a
+              href={r.url}
+              class="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm"
+            >
+              <div class="font-semibold text-slate-900 group-hover:text-orange-600">
+                {r.fromTool.name} → {r.toTool.name}
+              </div>
+              <div class="mt-1 text-xs text-slate-500 leading-snug">{r.intent}</div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
 
-    <section class="mt-12 rounded-lg bg-slate-50 p-6 text-sm text-slate-600">
+    {toMidTier.length > 0 && (
+      <section class="mb-12">
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Migrating to mid-tier platforms</h2>
+        <p class="mb-6 text-slate-600">
+          Moving to mid-tier FSM platforms ($100-$250/user/mo). Plan 4-8 weeks with optional paid onboarding ($500-$2K).
+        </p>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {toMidTier.map(r => (
+            <a
+              href={r.url}
+              class="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm"
+            >
+              <div class="font-semibold text-slate-900 group-hover:text-orange-600">
+                {r.fromTool.name} → {r.toTool.name}
+              </div>
+              <div class="mt-1 text-xs text-slate-500 leading-snug">{r.intent}</div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {toEntryTier.length > 0 && (
+      <section class="mb-12">
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Migrating to entry-tier platforms</h2>
+        <p class="mb-6 text-slate-600">
+          Moving to entry-tier FSM ($39-$99/user/mo or free tier). Plan 1-3 weeks for self-service onboarding.
+        </p>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {toEntryTier.map(r => (
+            <a
+              href={r.url}
+              class="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm"
+            >
+              <div class="font-semibold text-slate-900 group-hover:text-orange-600">
+                {r.fromTool.name} → {r.toTool.name}
+              </div>
+              <div class="mt-1 text-xs text-slate-500 leading-snug">{r.intent}</div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="mb-12 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-xl font-bold text-slate-900">What's in every migration guide</h2>
+      <div class="grid gap-4 text-sm text-slate-700 md:grid-cols-2">
+        <div>
+          <div class="font-semibold text-slate-900">Cost-of-switch analysis</div>
+          <p class="mt-1 text-slate-600">Templated $ numbers: monthly+annual delta if both prices public, implementation fee tier (entry/mid/enterprise), team time during transition (40-100 office-staff hours estimate).</p>
+        </div>
+        <div>
+          <div class="font-semibold text-slate-900">Migration timeline (realistic)</div>
+          <p class="mt-1 text-slate-600">Week-by-week phased timeline: setup → data import → training → parallel run → cutover → optimization. Tailored to platform tier.</p>
+        </div>
+        <div>
+          <div class="font-semibold text-slate-900">Data export checklist</div>
+          <p class="mt-1 text-slate-600">10-item pre-cancellation checklist (customer records, active jobs, historical invoices, photos, integrations, etc.). Vendor lockout warning at termination.</p>
+        </div>
+        <div>
+          <div class="font-semibold text-slate-900">Integration migration walkthrough</div>
+          <p class="mt-1 text-slate-600">Per-tool integration analysis: what continues to work, what needs rebuilding, what new options to evaluate during migration.</p>
+        </div>
+        <div>
+          <div class="font-semibold text-slate-900">Common pitfalls (6 items)</div>
+          <p class="mt-1 text-slate-600">What goes wrong: cancelling too early, skipping pricebook rebuild, team adoption resistance, peak-season migration, parallel-run cost surprises.</p>
+        </div>
+        <div>
+          <div class="font-semibold text-slate-900">8 FAQs per guide</div>
+          <p class="mt-1 text-slate-600">Timing, data transfer, integration concerns, cost questions, parallel operation, team resistance, peak vs off-season — all with FAQPage schema.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-8 rounded-lg bg-slate-50 p-6 text-sm text-slate-600">
       <p>
         Don't see your migration path? Email <a href="mailto:hello@wrenchstack.com" class="text-orange-600 hover:underline">hello@wrenchstack.com</a> with your current tool and target — we add new guides based on reader requests.
       </p>

@@ -1,42 +1,134 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { verticals, toolsForVertical, verticalToUrl } from '../../lib/data';
+import { tools, verticals, toolsForVertical, verticalToUrl } from '../../lib/data';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Pricing', url: '/pricing/' },
 ];
+
+// Quick stats
+const totalTools = tools.length;
+const freeTierTools = tools.filter(t => t.pricing.starting_at_usd === 0);
+const customQuotedTools = tools.filter(t => t.pricing.starting_at_usd === null);
+const cheapestPaid = tools
+  .filter(t => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0)
+  .sort((a, b) => (a.pricing.starting_at_usd ?? 999) - (b.pricing.starting_at_usd ?? 999))[0];
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Trades software pricing pages',
+  numberOfItems: verticals.length,
+  itemListElement: verticals.map((v, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: `${v.name} software pricing`,
+    url: `https://wrenchstack.com/pricing/${verticalToUrl(v.slug)}/`,
+  })),
+};
 ---
 
 <Layout
-  title="Trades software pricing — every tool, every tier, verified"
-  description="Real pricing for field service and trades software across all 13 verticals. Every tier verified quarterly. No vendor-supplied numbers."
+  title="Trades software pricing — every tool, every tier, verified quarterly"
+  description={`Real pricing for ${totalTools}+ field service and trades software platforms across ${verticals.length} verticals. Best-value picks by tier, pricing scenarios by team size, hidden cost callouts. Every tier verified.`}
   breadcrumbs={breadcrumbs}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+
   <section class="mx-auto max-w-5xl px-4 py-12">
-    <header class="mb-8">
-      <h1 class="text-4xl font-bold tracking-tight text-slate-900">Pricing comparison hub</h1>
-      <p class="mt-3 max-w-2xl text-lg text-slate-600">
-        Pricing breakdown for every field service software platform across {verticals.length} trades verticals.
-        Each tier verified independently. Sorted cheapest first.
+    <header class="mb-10">
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        Trades software pricing
+      </h1>
+      <p class="mt-4 max-w-3xl text-lg text-slate-600">
+        Real pricing for {totalTools}+ field service software platforms across {verticals.length} verticals. Every tier verified independently from vendor pricing pages. Sorted cheapest first with hidden-cost callouts and team-size pricing scenarios.
       </p>
+      <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500">
+        <span><span class="font-bold text-slate-900">{totalTools}+</span> tools priced</span>
+        <span class="text-slate-300">·</span>
+        <span><span class="font-bold text-slate-900">{freeTierTools.length}</span> with free tiers</span>
+        <span class="text-slate-300">·</span>
+        <span><span class="font-bold text-slate-900">{customQuotedTools.length}</span> custom-quoted enterprise</span>
+        <span class="text-slate-300">·</span>
+        <span>Verified quarterly</span>
+      </div>
     </header>
 
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {verticals.map((v) => {
-        const count = toolsForVertical(v.slug).length;
-        return (
-          <a
-            href={`/pricing/${verticalToUrl(v.slug)}/`}
-            class="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-slate-400 hover:shadow-sm"
-          >
-            <h3 class="text-lg font-semibold text-slate-900 group-hover:text-orange-600">
-              {v.name} software pricing
-            </h3>
-            <p class="mt-1 text-sm text-slate-500">{count} platform{count === 1 ? '' : 's'} compared</p>
-          </a>
-        );
-      })}
-    </div>
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold tracking-tight text-slate-900">Pricing by trade</h2>
+      <p class="mb-6 text-slate-600">
+        Each vertical pricing page includes: full pricing table sorted cheapest first, best-value picks by tier (entry/mid/enterprise), estimated cost at 3/10/25 techs per tool, hidden cost callouts, and 8 FAQs.
+      </p>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {verticals.map((v) => {
+          const count = toolsForVertical(v.slug).length;
+          return (
+            <a
+              href={`/pricing/${verticalToUrl(v.slug)}/`}
+              class="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm"
+            >
+              <h3 class="text-base font-semibold text-slate-900 group-hover:text-orange-600">
+                {v.name} software pricing
+              </h3>
+              <p class="mt-1 text-sm text-slate-500">{count} platform{count === 1 ? '' : 's'} compared</p>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+
+    <section class="mb-12 rounded-lg bg-slate-50 p-8">
+      <h2 class="mb-4 text-2xl font-bold tracking-tight text-slate-900">Quick pricing benchmarks</h2>
+      <div class="grid gap-6 md:grid-cols-3">
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-emerald-700">Free tier</div>
+          <div class="mt-2 text-lg font-semibold text-slate-900">{freeTierTools.length} tools</div>
+          <p class="mt-1 text-sm text-slate-600">
+            {freeTierTools.slice(0, 4).map(t => t.name).join(', ')}{freeTierTools.length > 4 ? ` and ${freeTierTools.length - 4} more` : ''}. Free tiers typically cover solo operators or 1-2 person teams; full features require paid tiers.
+          </p>
+        </div>
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-blue-700">Cheapest paid</div>
+          <div class="mt-2 text-lg font-semibold text-slate-900">{cheapestPaid?.name ?? '—'}</div>
+          <p class="mt-1 text-sm text-slate-600">
+            From ${cheapestPaid?.pricing.starting_at_usd}/month. Below $50/month tier is sparse — most legitimate full-feature FSM starts at $39-$65/month per user.
+          </p>
+        </div>
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-orange-700">Enterprise / custom-quoted</div>
+          <div class="mt-2 text-lg font-semibold text-slate-900">{customQuotedTools.length} tools</div>
+          <p class="mt-1 text-sm text-slate-600">
+            ServiceTitan, BuildOps, Procore, FieldEdge enterprise tier. User-reported $250-$800 per user per month + $5K-$50K implementation. Sales call required for actual quote.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-12 prose prose-slate max-w-none">
+      <h2>What you'll find on each vertical pricing page</h2>
+      <p>
+        Every vertical pricing page (HVAC, plumbing, electrical, etc.) includes the same depth of analysis:
+      </p>
+      <ul>
+        <li><strong>Quick price comparison table</strong> — every tool serving the vertical, sorted cheapest first, with pricing model + free trial + verification date.</li>
+        <li><strong>Best-value picks by tier</strong> — highest-rated tool in each price bracket (entry under $100/mo, mid $100-$250, enterprise $250+).</li>
+        <li><strong>Pricing scenarios by team size</strong> — estimated monthly cost at 3, 10, and 25 techs per tool. Per-user platforms scale linearly; flat-rate platforms barely change.</li>
+        <li><strong>Hidden costs callout</strong> — payment processing fees (2.59-2.99% + $0.30), implementation fees ($500-$50K), add-on integrations ($20-$200/mo each).</li>
+        <li><strong>Per-tool pricing breakdown</strong> — all tiers for each platform with custom-quote tools showing user-reported ranges.</li>
+        <li><strong>8 FAQs</strong> — average cost, cheapest options, per-user vs flat-rate analysis, pricing verification, hidden costs, scaling math, negotiability.</li>
+      </ul>
+
+      <h2>How we verify pricing</h2>
+      <p>
+        Every pricing tier on every vertical page carries a <strong>verified_date</strong>. We re-check pricing quarterly by visiting each vendor's public pricing page; for custom-quoted enterprise platforms, we cite user-reported ranges from public sources rather than vendor-supplied numbers. Pricing older than 90 days gets flagged for re-verification. See the <a href="/methodology/">methodology page</a> for full details.
+      </p>
+    </section>
+
+    <section class="mt-12 rounded-lg bg-slate-50 p-6 text-sm text-slate-600">
+      <p>
+        Want personalized pricing recommendations? Take the <a href="/quiz/" class="text-orange-600 hover:underline">60-second matching quiz</a> for 3 ranked picks at your team size and budget. Or run the <a href="/roi-calculator/" class="text-orange-600 hover:underline">ROI calculator</a> to estimate payback period at your specific situation.
+      </p>
+    </section>
   </section>
 </Layout>
