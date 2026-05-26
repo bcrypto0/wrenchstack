@@ -569,7 +569,7 @@ export function linkifyTools(text: string | undefined, currentSlug: string): str
     // Don't overwrite if a full tool name already maps to this alias
     if (!nameToSlug.has(alias)) nameToSlug.set(alias, targetSlug);
   }
-  if (nameToSlug.size === 0) return escaped;
+  if (nameToSlug.size === 0) return linkifyGlossary(escaped);
 
   // Sort names longest-first so "Service Autopilot" matches before "Service"
   const names = Array.from(nameToSlug.keys()).sort(
@@ -582,9 +582,102 @@ export function linkifyTools(text: string | undefined, currentSlug: string): str
   // greedy alternation handles ordering, so we only need to guard against
   // post-replacement substring matches — but since we run the regex once
   // against the original escaped text, no double-linking happens.
-  return escaped.replace(pattern, (match) => {
+  const withToolLinks = escaped.replace(pattern, (match) => {
     const slug = nameToSlug.get(match);
     if (!slug) return match;
     return `<a href="/tools/${slug}/" class="font-medium underline decoration-orange-400 decoration-2 underline-offset-2 hover:decoration-orange-600">${match}</a>`;
   });
+
+  // Then layer on glossary cross-references for jargon terms
+  return linkifyGlossary(withToolLinks);
+}
+
+// --- Glossary cross-reference: links jargon terms in prose to /glossary/
+// definitions. Wikipedia-style cross-references. Case-INsensitive matching
+// for terms that appear naturally in lowercase prose ("dispatching",
+// "service agreement"); abbreviations (FSM, CMMS, AIA) require the exact
+// uppercase form. Only the first occurrence per text block gets linked
+// to avoid clutter.
+
+// Curated term → slug map. Pulled from /glossary/ categories. Sorted
+// longest-first via .length comparator at use time. Each entry: [term,
+// glossary-slug, case-sensitivity flag (true = exact case required)].
+const GLOSSARY_TERMS: Array<[string, string, boolean]> = [
+  // Multi-word terms first (longer = matched first)
+  ['custom-quoted pricing', 'custom-quoted', false],
+  ['per-company pricing', 'per-company-pricing', false],
+  ['per-user pricing', 'per-user-pricing', false],
+  ['implementation fee', 'implementation-fee', false],
+  ['service agreement', 'service-agreement', false],
+  ['service agreements', 'service-agreement', false],
+  ['customer portal', 'customer-portal', false],
+  ['route optimization', 'route-optimization', false],
+  ['membership program', 'membership-program', false],
+  ['consumer financing', 'consumer-financing', false],
+  ['selection management', 'selection-management', false],
+  ['chemical tracking', 'chemical-tracking', false],
+  ['asset tracking', 'asset-tracking', false],
+  ['preventive maintenance', 'preventive-maintenance', false],
+  ['parallel run', 'parallel-run', false],
+  ['vendor lockout', 'vendor-lockout', false],
+  ['implementation manager', 'implementation-manager', false],
+  ['adoption resistance', 'adoption-resistance', false],
+  ['change orders', 'change-orders', false],
+  ['two-way SMS', 'two-way-sms', false],
+  ['AIA billing', 'aia-billing', true],
+  ['Google Local Services Ads', 'lsa', true],
+  ['QuickBooks Online', 'qbo-vs-desktop', true],
+  ['QuickBooks Desktop', 'qbo-vs-desktop', true],
+  ['Sage Intacct', 'sage-intacct-netsuite', true],
+  // Single-word abbreviations require exact case
+  ['FSM', 'fsm', true],
+  ['CMMS', 'cmms', true],
+  ['LSA', 'lsa', true],
+  ['CRM', 'crm', true],
+  ['Xero', 'xero', true],
+  ['Stripe', 'stripe', true],
+  ['Zapier', 'zapier', true],
+  ['NetSuite', 'sage-intacct-netsuite', true],
+];
+
+function linkifyGlossary(html: string): string {
+  // Track which terms we've already linked (first-occurrence-only policy)
+  const alreadyLinked = new Set<string>();
+  // Sort longest-first
+  const sortedTerms = [...GLOSSARY_TERMS].sort((a, b) => b[0].length - a[0].length);
+
+  let result = html;
+  for (const [term, slug, caseSensitive] of sortedTerms) {
+    if (alreadyLinked.has(slug)) continue;
+    const flags = caseSensitive ? '' : 'i';
+    const pattern = new RegExp(`\\b(${regexEscape(term)})\\b`, flags);
+    // Find a match that isn't already inside an anchor tag.
+    let match: RegExpExecArray | null = null;
+    let searchFrom = 0;
+    while (searchFrom < result.length) {
+      const re = new RegExp(`\\b(${regexEscape(term)})\\b`, flags + 'g');
+      re.lastIndex = searchFrom;
+      const m = re.exec(result);
+      if (!m) break;
+      // Check if the match is inside an <a> tag: scan backwards from match for
+      // an unclosed <a; if found before a </a, skip this match.
+      const before = result.slice(0, m.index);
+      const lastOpenA = before.lastIndexOf('<a ');
+      const lastCloseA = before.lastIndexOf('</a>');
+      if (lastOpenA > lastCloseA) {
+        // Inside an existing link — skip this occurrence and continue
+        searchFrom = m.index + m[0].length;
+        continue;
+      }
+      match = m;
+      break;
+    }
+    if (!match) continue;
+    // Replace this single occurrence
+    const matchedText = match[0];
+    const replacement = `<a href="/glossary/#${slug}" class="border-b border-dotted border-slate-400 hover:border-orange-500 hover:text-orange-700">${matchedText}</a>`;
+    result = result.slice(0, match.index) + replacement + result.slice(match.index + matchedText.length);
+    alreadyLinked.add(slug);
+  }
+  return result;
 }
