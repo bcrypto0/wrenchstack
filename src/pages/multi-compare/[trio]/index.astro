@@ -6,6 +6,8 @@ import {
   aggregateRating,
   formatPrice,
   wrenchStackScore,
+  verticals,
+  verticalToUrl,
   type Tool,
 } from '../../../lib/data';
 import WrenchScore from '../../../components/WrenchScore.astro';
@@ -13,7 +15,6 @@ import ToolLogo from '../../../components/ToolLogo.astro';
 
 export async function getStaticPaths() {
   return triosData.trios.flatMap(def => {
-    // Sort alphabetically for canonical URL — dedupe pages identical-up-to-order
     const sorted = [...def.slugs].sort();
     const tools = sorted.map(slug => getTool(slug));
     if (tools.some(t => !t)) return [];
@@ -35,9 +36,9 @@ const [a, b, c] = trioTools;
 
 const titleStr = `${a.name} vs ${b.name} vs ${c.name}`;
 const pageTitle = `${titleStr} (2026): 3-Way Comparison`;
-const pageDescription = `${a.name} vs ${b.name} vs ${c.name} compared side-by-side: pricing, features, integrations, and use-case fit. Updated 2026.`;
+const pageDescription = `${a.name} vs ${b.name} vs ${c.name} compared side-by-side: pricing, features, integrations, decision matrix, and pros/cons for each. Updated 2026.`;
 
-// Find best fit by category
+// --- Analysis helpers ---
 const allRated = trioTools.map(t => ({ tool: t, score: wrenchStackScore(t) })).sort((x, y) => y.score - x.score);
 const winner = allRated[0].tool;
 
@@ -47,27 +48,142 @@ const cheapest = trioTools.reduce((lowest, t) => {
   return lowest;
 }, null as Tool | null);
 
+const highestRated = trioTools.reduce((top, t) => {
+  const r = aggregateRating(t) ?? 0;
+  const topR = aggregateRating(top) ?? 0;
+  return r > topR ? t : top;
+}, trioTools[0]);
+
 const sharedFeatures = a.key_features.filter(f => b.key_features.includes(f) && c.key_features.includes(f));
 const sharedIntegrations = a.integrations.filter(i => b.integrations.includes(i) && c.integrations.includes(i));
 
+// Unique features per tool (not in the other two)
+function uniqueFeatures(t: Tool): string[] {
+  const others = trioTools.filter(o => o.slug !== t.slug);
+  return t.key_features.filter(f => others.every(o => !o.key_features.includes(f)));
+}
+
+function uniqueIntegrations(t: Tool): string[] {
+  const others = trioTools.filter(o => o.slug !== t.slug);
+  return t.integrations.filter(i => others.every(o => !o.integrations.includes(i)));
+}
+
+// Shared verticals across all three
+const sharedVerticals = a.verticals
+  .filter(v => b.verticals.includes(v) && c.verticals.includes(v))
+  .map(v => verticals.find(x => x.slug === v))
+  .filter((v): v is NonNullable<typeof v> => !!v);
+
+// Per-vertical winner among the trio
+function verticalWinner(verticalSlug: string): { winner: Tool | null; scores: { tool: Tool; fit: number }[] } {
+  const scores = trioTools.map(t => ({ tool: t, fit: t.vertical_fit?.[verticalSlug] ?? 5 }));
+  scores.sort((x, y) => y.fit - x.fit);
+  const top = scores[0];
+  const winner = scores[1].fit < top.fit ? top.tool : null; // null if tied
+  return { winner, scores };
+}
+
+// Implementation timeline per tool (based on price tier)
+function implementationTimeline(t: Tool): string {
+  const p = t.pricing.starting_at_usd;
+  if (p === null) return '3-6 months (enterprise — dedicated implementation manager)';
+  if (p >= 250) return '3-6 months (enterprise tier — dedicated PM required)';
+  if (p >= 100) return '4-8 weeks (mid-tier — optional paid onboarding)';
+  return '1-3 weeks (self-service onboarding)';
+}
+
+// Decision-matrix reasons per tool
+function getDecisionReasonsFor(t: Tool): string[] {
+  const reasons: string[] = [];
+  const aHasQB = t.integrations.some(i => i.includes('quickbooks'));
+  const aHasGLS = t.integrations.some(i => i.includes('google_local_services'));
+  const aHasTrial = (t.pricing.free_trial_days ?? 0) > 0;
+  const others = trioTools.filter(o => o.slug !== t.slug);
+
+  // Best-for line (always)
+  reasons.push(`**Your situation matches**: ${t.best_for}`);
+
+  // Cheapest of trio
+  if (cheapest && cheapest.slug === t.slug && t.pricing.starting_at_usd !== null) {
+    reasons.push(`**Budget is the constraint** — ${t.name} has the lowest starting price among these three (${formatPrice(t)})`);
+  }
+
+  // Highest rated
+  if (highestRated.slug === t.slug && aggregateRating(t) !== null) {
+    const r = aggregateRating(t)!;
+    const minOther = Math.min(...others.map(o => aggregateRating(o) ?? 0));
+    if (r - minOther >= 0.2) {
+      reasons.push(`**Post-purchase satisfaction matters** — ${t.name} has the highest user rating in this trio (${r.toFixed(1)} / 5)`);
+    }
+  }
+
+  // QuickBooks
+  if (aHasQB && others.some(o => !o.integrations.some(i => i.includes('quickbooks')))) {
+    reasons.push(`**QuickBooks is critical** — ${t.name} integrates natively; not all alternatives in this comparison do`);
+  }
+
+  // GLS
+  if (aHasGLS && others.some(o => !o.integrations.some(i => i.includes('google_local_services')))) {
+    reasons.push(`**Google Local Services Ads drive inbound** — ${t.name} has native GLS integration`);
+  }
+
+  // Free trial advantage
+  if (aHasTrial && others.every(o => !((o.pricing.free_trial_days ?? 0) > 0))) {
+    reasons.push(`**You want to try before buying** — ${t.name} offers a ${t.pricing.free_trial_days}-day free trial; the alternatives don't`);
+  }
+
+  // Multi-vertical advantage
+  if (others.every(o => t.verticals.length > o.verticals.length + 1)) {
+    reasons.push(`**You serve multiple trades** — ${t.name} covers ${t.verticals.length} verticals vs the alternatives' ${Math.max(...others.map(o => o.verticals.length))}`);
+  }
+
+  // Unique features
+  const unique = uniqueFeatures(t);
+  if (unique.length > 0) {
+    reasons.push(`**You specifically need** ${unique.slice(0, 2).map(f => f.replace(/_/g, ' ')).join(' or ')} — only ${t.name} has ${unique.length === 1 ? 'it' : 'these'} in this comparison`);
+  }
+
+  return reasons.slice(0, 5);
+}
+
+const decisionMatrix = trioTools.map(t => ({ tool: t, reasons: getDecisionReasonsFor(t) }));
+
+// FAQs
 const faqs = [
   {
     q: `Which is best — ${a.name}, ${b.name}, or ${c.name}?`,
-    a: `Based on our WrenchStack Score, ${winner.name} ranks highest of the three for ${category.toLowerCase()}. But "best" depends on your specific buyer profile — see the side-by-side comparison above and read each tool's full review for the nuances.`,
+    a: `Based on our WrenchStack Score, ${winner.name} ranks highest of the three for ${category.toLowerCase()}. But "best" depends on your specific buyer profile — see the decision matrix above for situation-specific guidance, the per-vertical winner table below if you serve a specific trade, or the cheapest/highest-rated quick callouts at the top.`,
   },
   {
     q: `What's the cheapest of the three?`,
     a: cheapest
-      ? `${cheapest.name} starts at ${formatPrice(cheapest)}, the lowest entry point of these three. Note: cheapest starting price isn't always cheapest total cost. Per-user pricing scales differently than per-company pricing as team size grows.`
-      : `All three use custom-quote pricing — request quotes from each for accurate apples-to-apples comparison.`,
+      ? `${cheapest.name} starts at ${formatPrice(cheapest)}, the lowest entry point of these three. Cheapest starting price isn't always cheapest total cost though — per-user pricing scales differently than per-company pricing as team size grows. Check the pricing table for tier-by-tier comparison.`
+      : `All three use custom-quote pricing — request quotes from each for accurate apples-to-apples comparison at your team size.`,
   },
   {
     q: `Do they all integrate with QuickBooks?`,
     a: (() => {
       const withQb = trioTools.filter(t => t.integrations.some(i => i.includes('quickbooks')));
-      if (withQb.length === 3) return 'Yes — all three integrate with QuickBooks. Depth varies (one-way push vs two-way sync, Online vs Desktop support). Check each tool detail page for specifics.';
-      return `${withQb.length} of the 3 integrate with QuickBooks: ${withQb.map(t => t.name).join(', ')}.`;
+      if (withQb.length === 3) return 'Yes — all three integrate with QuickBooks. Depth varies (one-way push vs two-way sync, QuickBooks Online vs Desktop support). Check each tool detail page for specifics.';
+      if (withQb.length === 0) return 'None of the three integrate with QuickBooks natively. You\'ll need Zapier middleware or manual exports for accounting sync.';
+      return `${withQb.length} of the 3 integrate with QuickBooks natively: ${withQb.map(t => t.name).join(', ')}. The remaining ${3 - withQb.length} require Zapier workarounds or don't support QB at all.`;
     })(),
+  },
+  {
+    q: `How do they compare on implementation time?`,
+    a: `${a.name}: ${implementationTimeline(a)}. ${b.name}: ${implementationTimeline(b)}. ${c.name}: ${implementationTimeline(c)}. Implementation length tracks pricing tier — enterprise platforms ($250+/user/mo) need 3-6 months with dedicated PM; mid-tier reach operational status in 4-8 weeks; entry-tier are self-service in 1-3 weeks.`,
+  },
+  {
+    q: `Can I migrate from any of these to another later?`,
+    a: `Yes, but plan for friction. Customer records and active jobs typically export cleanly via CSV. Historical job data, custom workflows, and integrations often don't transfer and need rebuilding in the new platform. Budget 4-12 weeks for a mid-tier migration, 3-6 months for enterprise. The platform you commit to should make sense for 18-36 months, not just today.`,
+  },
+  {
+    q: `Which has the best mobile app for field techs?`,
+    a: `Mobile UX varies — generally newer platforms (Sera Systems, Roofr, modern Jobber) have more polished mobile apps than older ones (FieldEdge dates from 2005, ServiceFusion from 2014). For shops where tech adoption is the bottleneck, mobile UX quality matters more than feature breadth. Check each tool's full review for specifics and consider trial-running with your most software-resistant tech.`,
+  },
+  {
+    q: `What if my team size is on the edge between these three?`,
+    a: `Pricing math changes meaningfully past 6-8 users for per-user platforms vs flat-rate platforms. If you're at 5-7 users today and growing, model the cost at your projected 12-18 month team size — not just today's. Flat-rate platforms (like Service Fusion) become meaningfully cheaper at scale; per-user platforms add up quickly. Run the actual numbers for your projected growth.`,
   },
 ];
 
@@ -100,7 +216,7 @@ const breadcrumbs = [
         {a.name} vs {b.name} vs {c.name}
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        Three popular field service platforms compared side-by-side. Pricing, feature overlap, integration depth, and which fits which buyer.
+        Three popular field service platforms compared side-by-side. Decision matrix, pricing, feature overlap, integration depth, implementation timeline, and per-vertical winner analysis.
       </p>
     </header>
 
@@ -153,6 +269,45 @@ const breadcrumbs = [
       })}
     </section>
 
+    <section class="mb-12 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Quick verdict</h2>
+      <div class="space-y-3 text-slate-800">
+        <p>
+          <strong class="text-slate-900">{a.name}:</strong> {a.best_for}.
+        </p>
+        <p>
+          <strong class="text-slate-900">{b.name}:</strong> {b.best_for}.
+        </p>
+        <p>
+          <strong class="text-slate-900">{c.name}:</strong> {c.best_for}.
+        </p>
+        {cheapest && (
+          <p class="mt-3 text-sm text-slate-600">
+            <strong>{cheapest.name}</strong> has the lowest entry price ({formatPrice(cheapest)}). <strong>{highestRated.name}</strong> has the highest user rating ({aggregateRating(highestRated)?.toFixed(1) ?? '—'} / 5). <strong>{winner.name}</strong> ranks highest on our combined WrenchStack Score.
+          </p>
+        )}
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Decision matrix — which to pick</h2>
+      <div class="grid gap-4 md:grid-cols-3">
+        {decisionMatrix.map(({ tool: t, reasons }) => (
+          <div class="rounded-lg border border-slate-200 bg-white p-5">
+            <h3 class="mb-3 text-lg font-bold text-slate-900">Pick {t.name} if…</h3>
+            <ul class="space-y-2 text-sm text-slate-700">
+              {reasons.map((r) => (
+                <li class="flex gap-2">
+                  <span class="font-bold text-orange-600">→</span>
+                  <span set:html={r.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Pricing side-by-side</h2>
       <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
@@ -200,30 +355,123 @@ const breadcrumbs = [
     </section>
 
     <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-bold text-slate-900">Common integrations</h2>
-      {sharedIntegrations.length > 0 ? (
-        <div class="flex flex-wrap gap-2">
-          {sharedIntegrations.map(i => (
-            <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-sm font-medium text-slate-700">
-              {i.replace(/_/g, ' ')}
-            </span>
-          ))}
-        </div>
-      ) : (
-        <p class="text-slate-600">No integrations are common across all three.</p>
-      )}
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Unique features per tool</h2>
+      <div class="grid gap-4 md:grid-cols-3">
+        {trioTools.map(t => {
+          const unique = uniqueFeatures(t);
+          return (
+            <div class="rounded-lg border border-slate-200 bg-white p-4">
+              <h3 class="mb-2 font-semibold text-slate-900">Only in {t.name}</h3>
+              {unique.length > 0 ? (
+                <ul class="space-y-1 text-sm text-slate-700">
+                  {unique.map(f => <li>+ {f.replace(/_/g, ' ')}</li>)}
+                </ul>
+              ) : (
+                <p class="text-sm text-slate-500">— No exclusive features —</p>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </section>
 
-    <section class="mb-12 prose prose-slate max-w-none">
-      <h2>Which to pick</h2>
-
-      {trioTools.map(t => (
-        <div>
-          <h3>Pick {t.name} if</h3>
-          <p>{t.best_for}</p>
-          <p><strong>Watch out for:</strong> {t.weaknesses}</p>
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Integrations</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        <div class="rounded-lg border border-green-200 bg-green-50 p-4">
+          <h3 class="mb-2 text-sm font-semibold uppercase tracking-wider text-green-700">
+            All three integrate with
+          </h3>
+          {sharedIntegrations.length > 0 ? (
+            <ul class="space-y-1 text-sm text-green-900">
+              {sharedIntegrations.map(i => <li>✓ {i.replace(/_/g, ' ')}</li>)}
+            </ul>
+          ) : (
+            <p class="text-sm text-green-700">— No integrations are common across all three —</p>
+          )}
         </div>
-      ))}
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <h3 class="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-500">
+            Unique per tool
+          </h3>
+          <ul class="space-y-2 text-sm text-slate-700">
+            {trioTools.map(t => {
+              const unique = uniqueIntegrations(t);
+              if (unique.length === 0) return null;
+              return (
+                <li>
+                  <strong class="text-slate-900">{t.name}:</strong> {unique.map(i => i.replace(/_/g, ' ')).join(', ')}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    {sharedVerticals.length > 0 && (
+      <section class="mb-12">
+        <h2 class="mb-4 text-2xl font-bold text-slate-900">Which fits best in each trade</h2>
+        <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+          <table class="w-full text-sm">
+            <thead class="bg-slate-50 text-left text-slate-700">
+              <tr>
+                <th class="p-3 font-semibold">Trade</th>
+                {trioTools.map(t => <th class="p-3 font-semibold text-center">{t.name}</th>)}
+                <th class="p-3 font-semibold">Winner</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              {sharedVerticals.map(v => {
+                const { winner: vw, scores } = verticalWinner(v.slug);
+                return (
+                  <tr>
+                    <td class="p-3 font-semibold text-slate-900">
+                      <a href={`/${verticalToUrl(v.slug)}/`} class="hover:text-orange-600">{v.name}</a>
+                    </td>
+                    {scores.sort((x, y) => trioTools.indexOf(x.tool) - trioTools.indexOf(y.tool)).map(s => (
+                      <td class="p-3 text-center text-slate-700">{s.fit} / 10</td>
+                    ))}
+                    <td class="p-3 text-slate-700">
+                      {vw ? <span class="font-semibold text-slate-900">{vw.name}</span> : <span class="text-slate-500">Tie</span>}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-2 text-xs text-slate-500">
+          Vertical-fit scores combine feature coverage, customer base concentration, and the tool's own positioning for the trade. See <a href="/methodology/" class="underline hover:text-slate-700">methodology</a>.
+        </p>
+      </section>
+    )}
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Implementation timeline comparison</h2>
+      <div class="grid gap-4 md:grid-cols-3">
+        {trioTools.map(t => (
+          <div class="rounded-lg border border-slate-200 bg-white p-4">
+            <h3 class="mb-2 font-semibold text-slate-900">{t.name}</h3>
+            <p class="text-sm text-slate-700">{implementationTimeline(t)}</p>
+          </div>
+        ))}
+      </div>
+      <p class="mt-4 text-sm text-slate-600 leading-relaxed">
+        Enterprise-tier platforms (custom pricing or $250+/user/mo) typically require 3-6 months with dedicated admin time and custom pricebook setup. Mid-tier platforms reach operational status in 4-8 weeks with optional paid onboarding. Entry-tier platforms are designed for self-service onboarding in 1-3 weeks. Always plan for 2-4 weeks of parallel operation with your existing system before cutting over.
+      </p>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Watch-out-for warnings per tool</h2>
+      <div class="grid gap-4 md:grid-cols-3">
+        {trioTools.map(t => (
+          <div class="rounded-lg border border-orange-200 bg-orange-50 p-4">
+            <h3 class="mb-2 font-semibold text-orange-900">{t.name}</h3>
+            <p class="text-sm text-orange-900">{t.weaknesses}</p>
+          </div>
+        ))}
+      </div>
     </section>
 
     <section class="mb-12">
@@ -232,7 +480,7 @@ const breadcrumbs = [
         {faqs.map(f => (
           <details class="rounded-lg border border-slate-200 bg-white p-4">
             <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
-            <p class="mt-3 text-slate-700">{f.a}</p>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
           </details>
         ))}
       </div>
@@ -240,10 +488,13 @@ const breadcrumbs = [
 
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Need a deeper dive?</h2>
-      <p class="mt-2 text-slate-300">See our full reviews of each, take the matching quiz, or compare any two head-to-head.</p>
+      <p class="mt-2 text-slate-300">See our full reviews of each tool, take the matching quiz, or compare any two head-to-head.</p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/quiz/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Take the matching quiz →</a>
         <a href="/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">All comparisons</a>
+        {trioTools.map(t => (
+          <a href={`/tools/${t.slug}/`} class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">{t.name} review</a>
+        ))}
       </div>
     </section>
   </article>
