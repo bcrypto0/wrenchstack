@@ -10,15 +10,19 @@ import {
 } from '../../../lib/data';
 
 export async function getStaticPaths() {
+  // Generate both directions per pair (e.g. jobber-vs-servicetitan AND
+  // servicetitan-vs-jobber). Google indexes both, the canonical tag points
+  // to the alphabetical version to consolidate ranking signals. Captures
+  // search demand at either word order without losing PageRank.
   const pairs: { a: Tool; b: Tool }[] = [];
   for (let i = 0; i < tools.length; i++) {
-    for (let j = i + 1; j < tools.length; j++) {
+    for (let j = 0; j < tools.length; j++) {
+      if (i === j) continue;
       const a = tools[i];
       const b = tools[j];
       const sharedVertical = a.verticals.some((v) => b.verticals.includes(v));
       if (!sharedVertical) continue;
-      const [first, second] = [a, b].sort((x, y) => x.slug.localeCompare(y.slug));
-      pairs.push({ a: first, b: second });
+      pairs.push({ a, b });
     }
   }
   return pairs.map(({ a, b }) => ({
@@ -334,6 +338,11 @@ const faqSchema = {
 const pageTitle = `${a.name} vs ${b.name} (2026): Side-by-Side Comparison`;
 const pageDescription = `${a.name} vs ${b.name} compared head-to-head: pricing, features, integrations, pros and cons. Updated ${a.pricing.verified_date}.`;
 
+// Canonical URL points to the alphabetical version of the pair so Google
+// consolidates ranking signals across both directions (X-vs-Y and Y-vs-X).
+const canonicalSlugs = [a.slug, b.slug].sort();
+const canonical = `https://wrenchstack.com/compare/${canonicalSlugs.join('-vs-')}/`;
+
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Compare', url: '/compare/' },
@@ -341,7 +350,7 @@ const breadcrumbs = [
 ];
 ---
 
-<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} canonical={canonical}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <article class="mx-auto max-w-5xl px-4 py-12">
