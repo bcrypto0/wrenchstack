@@ -10,6 +10,7 @@ import {
   verticals,
   wrenchStackScore,
   readingTimeMinutes,
+  linkifyTools,
   type Tool,
 } from '../../../lib/data';
 
@@ -445,7 +446,7 @@ const breadcrumbs = [
     {hasLongDesc && (
       <section class="mb-10 prose prose-slate max-w-none">
         <h2>About {tool.name}</h2>
-        <div set:html={tool.long_description!.split('\n\n').map(p => `<p>${p}</p>`).join('')} />
+        <div set:html={tool.long_description!.split('\n\n').map(p => `<p>${linkifyTools(p, tool.slug)}</p>`).join('')} />
       </section>
     )}
 
@@ -526,13 +527,13 @@ const breadcrumbs = [
           ? tool.pros_detail!.map((p) => (
               <li class="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
                 <div class="mb-1 font-semibold text-emerald-900">+ {p.title}</div>
-                <p class="text-emerald-900/90 leading-relaxed">{p.explanation}</p>
+                <p class="text-emerald-900/90 leading-relaxed" set:html={linkifyTools(p.explanation, tool.slug)} />
               </li>
             ))
           : prosList.map((p) => (
               <li class="flex gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
                 <span class="font-bold text-emerald-700">+</span>
-                <span set:html={p.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')} />
+                <span set:html={linkifyTools(p, tool.slug).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')} />
               </li>
             ))}
       </ul>
@@ -545,13 +546,13 @@ const breadcrumbs = [
           ? tool.cons_detail!.map((c) => (
               <li class="rounded-lg border border-orange-200 bg-orange-50 p-4 text-sm text-orange-900">
                 <div class="mb-1 font-semibold text-orange-900">− {c.title}</div>
-                <p class="text-orange-900/90 leading-relaxed">{c.explanation}</p>
+                <p class="text-orange-900/90 leading-relaxed" set:html={linkifyTools(c.explanation, tool.slug)} />
               </li>
             ))
           : consList.map((c) => (
               <li class="flex gap-3 rounded-lg border border-orange-200 bg-orange-50 p-4 text-sm text-orange-900">
                 <span class="font-bold text-orange-700">−</span>
-                <span set:html={c.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')} />
+                <span set:html={linkifyTools(c, tool.slug).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')} />
               </li>
             ))}
       </ul>
@@ -561,9 +562,7 @@ const breadcrumbs = [
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Implementation timeline</h2>
       <div class="rounded-lg border border-slate-200 bg-white p-6">
         <p class="mb-2 text-lg font-semibold text-slate-900">{timeline.headline}</p>
-        <p class="text-slate-700 leading-relaxed">
-          {hasCustomImpl ? tool.implementation_notes : timeline.detail}
-        </p>
+        <p class="text-slate-700 leading-relaxed" set:html={linkifyTools(hasCustomImpl ? tool.implementation_notes : timeline.detail, tool.slug)} />
       </div>
     </section>
 
@@ -572,11 +571,11 @@ const breadcrumbs = [
       <div class="grid gap-6 md:grid-cols-2">
         <div class="rounded-lg border border-green-200 bg-green-50 p-5">
           <h3 class="mb-2 font-bold text-green-900">Best for</h3>
-          <p class="text-sm text-green-900">{tool.best_for}</p>
+          <p class="text-sm text-green-900" set:html={linkifyTools(tool.best_for, tool.slug)} />
         </div>
         <div class="rounded-lg border border-orange-200 bg-orange-50 p-5">
           <h3 class="mb-2 font-bold text-orange-900">Watch out for</h3>
-          <p class="text-sm text-orange-900">{tool.weaknesses}</p>
+          <p class="text-sm text-orange-900" set:html={linkifyTools(tool.weaknesses, tool.slug)} />
         </div>
       </div>
     </section>
@@ -619,7 +618,7 @@ const breadcrumbs = [
         {faqsList.map((f) => (
           <details class="rounded-lg border border-slate-200 bg-white p-4">
             <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
-            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+            <p class="mt-3 text-slate-700 leading-relaxed" set:html={linkifyTools(f.a, tool.slug)} />
           </details>
         ))}
       </div>

@@ -151,3 +151,76 @@ export function getLogoUrl(t: Tool, size = 64): string {
 export function readingTimeMinutes(wordCount: number): number {
   return Math.max(1, Math.round(wordCount / 220));
 }
+
+// --- Cross-link audit: convert competitor tool name mentions in prose
+// into clickable links to /tools/<slug>/. Used in the tool review template
+// to make every Phase 2 narrative section discoverable to crawlers and
+// human readers.
+//
+// Behaviour:
+// - Word-boundary, case-sensitive matching (prevents false positives like
+//   "joist" the wood beam matching the Joist tool, since brand names are
+//   capitalized).
+// - Longest-first matching so multi-word names ("Service Autopilot") win
+//   over shorter substrings.
+// - Excludes the current tool's own name (no self-links).
+// - HTML-escapes input before injecting links (safe to use with set:html).
+// - Includes optional aliases for tools whose brand name is commonly
+//   shortened in prose (e.g. "Limble CMMS" also matched as "Limble").
+
+const TOOL_NAME_ALIASES: Record<string, string> = {
+  // alias -> canonical slug
+  'Limble': 'limble',
+  'Houzz': 'houzz-pro',
+  'HCP': 'housecall-pro',
+  'STitan': 'servicetitan',
+};
+
+function escapeHtmlForLinkify(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function regexEscape(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+export function linkifyTools(text: string | undefined, currentSlug: string): string {
+  if (!text) return '';
+  const escaped = escapeHtmlForLinkify(text);
+
+  // Build mapping of display-name -> slug, excluding the current tool
+  // and any alias whose target is the current tool.
+  const nameToSlug = new Map<string, string>();
+  for (const t of tools) {
+    if (t.slug === currentSlug) continue;
+    nameToSlug.set(t.name, t.slug);
+  }
+  for (const [alias, targetSlug] of Object.entries(TOOL_NAME_ALIASES)) {
+    if (targetSlug === currentSlug) continue;
+    if (!tools.some((t) => t.slug === targetSlug)) continue;
+    // Don't overwrite if a full tool name already maps to this alias
+    if (!nameToSlug.has(alias)) nameToSlug.set(alias, targetSlug);
+  }
+  if (nameToSlug.size === 0) return escaped;
+
+  // Sort names longest-first so "Service Autopilot" matches before "Service"
+  const names = Array.from(nameToSlug.keys()).sort(
+    (a, b) => b.length - a.length,
+  );
+  const pattern = new RegExp(`\\b(${names.map(regexEscape).join('|')})\\b`, 'g');
+
+  // Track positions already wrapped so we don't double-link inside an <a>
+  // that a longer name already created. The regex's left-to-right pass with
+  // greedy alternation handles ordering, so we only need to guard against
+  // post-replacement substring matches — but since we run the regex once
+  // against the original escaped text, no double-linking happens.
+  return escaped.replace(pattern, (match) => {
+    const slug = nameToSlug.get(match);
+    if (!slug) return match;
+    return `<a href="/tools/${slug}/" class="font-medium underline decoration-orange-400 decoration-2 underline-offset-2 hover:decoration-orange-600">${match}</a>`;
+  });
+}
