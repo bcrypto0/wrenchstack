@@ -1,7 +1,31 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { tools, verticals, aggregateRating, formatPrice, verticalToUrl, type Tool } from '../../lib/data';
+import { tools, verticals, aggregateRating, formatPrice, verticalToUrl, priceTier, teamSizeBucket, freshnessTier, type Tool } from '../../lib/data';
 import FreshnessBadge from '../../components/FreshnessBadge.astro';
+
+// Compute filter data per tool for the client-side filter system.
+// We pre-compute these server-side to avoid sending all tool data to JS.
+function toolFilterAttrs(t: Tool): Record<string, string> {
+  const verticalSlugs = t.verticals.join(' ');
+  const tier = priceTier(t);
+  const team = teamSizeBucket(t);
+  const hasQuickBooks = t.integrations.some((i) => i.includes('quickbooks')) ? '1' : '0';
+  const hasStripe = t.integrations.some((i) => i.includes('stripe')) ? '1' : '0';
+  const hasFreeTrial = (t.pricing.free_trial_days ?? 0) > 0 ? '1' : '0';
+  const hasFreeTier = t.pricing.starting_at_usd === 0 ? '1' : '0';
+  const freshness = freshnessTier(t);
+  return {
+    'data-vertical': verticalSlugs,
+    'data-tier': tier,
+    'data-team': team,
+    'data-qb': hasQuickBooks,
+    'data-stripe': hasStripe,
+    'data-trial': hasFreeTrial,
+    'data-free': hasFreeTier,
+    'data-freshness': freshness,
+    'data-name': t.name.toLowerCase(),
+  };
+}
 
 // Flagship tools = those with deep custom content (long_description). 15 tools as of 2026-05-26.
 const flagshipTools = tools
@@ -68,6 +92,73 @@ const itemListSchema = {
         <span><span class="font-bold text-slate-900">{verticals.length}</span> trades covered</span>
       </div>
     </header>
+
+    <section id="filter-bar" class="mb-8 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+      <div class="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+        <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-700">Filter tools</h2>
+        <button
+          type="button"
+          id="filter-clear"
+          class="hidden text-xs font-medium text-orange-600 hover:text-orange-700"
+        >
+          Clear all filters
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <div class="mb-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Trade</div>
+          <div class="flex flex-wrap gap-1.5" data-filter-group="vertical">
+            {verticals.map((v) => (
+              <button
+                type="button"
+                data-filter-value={v.slug}
+                class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700"
+              >
+                {v.name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div class="grid gap-3 md:grid-cols-2">
+          <div>
+            <div class="mb-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Price tier</div>
+            <div class="flex flex-wrap gap-1.5" data-filter-group="tier">
+              <button type="button" data-filter-value="free" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Free tier</button>
+              <button type="button" data-filter-value="entry" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Entry (&lt;$100/mo)</button>
+              <button type="button" data-filter-value="mid" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Mid ($100-249)</button>
+              <button type="button" data-filter-value="enterprise" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Enterprise ($250+/custom)</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="mb-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Team size</div>
+            <div class="flex flex-wrap gap-1.5" data-filter-group="team">
+              <button type="button" data-filter-value="solo" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Solo (1-3)</button>
+              <button type="button" data-filter-value="small" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Small (3-15)</button>
+              <button type="button" data-filter-value="mid" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Mid (15-50)</button>
+              <button type="button" data-filter-value="large" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Large (50+)</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="mb-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Must have</div>
+          <div class="flex flex-wrap gap-1.5" data-filter-group="must">
+            <button type="button" data-filter-value="qb" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">QuickBooks</button>
+            <button type="button" data-filter-value="trial" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Free trial</button>
+            <button type="button" data-filter-value="free" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Free tier</button>
+            <button type="button" data-filter-value="stripe" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Stripe payments</button>
+            <button type="button" data-filter-value="fresh" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Verified &lt;90 days</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="filter-status" class="mt-4 hidden rounded-md bg-orange-50 px-3 py-2 text-sm text-orange-900">
+        Showing <span id="filter-count-visible">0</span> of {tools.length} tools.
+      </div>
+    </section>
 
     <nav class="mb-12 rounded-lg border border-slate-200 bg-slate-50 p-4">
       <div class="text-sm font-semibold text-slate-700">Jump to:</div>
@@ -163,15 +254,17 @@ const itemListSchema = {
     <section id="all-tools" class="mb-12 scroll-mt-8">
       <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">All tools (alphabetical)</h2>
       <p class="mb-6 text-slate-600">
-        Every tool in the directory in A-Z order. Use ⌘F / Ctrl+F to find a specific tool by name.
+        Every tool in the directory in A-Z order. Filters at the top of the page narrow this list in real time.
       </p>
-      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div id="filtered-grid" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {allAlphabetical.map((t) => {
           const r = aggregateRating(t);
+          const attrs = toolFilterAttrs(t);
           return (
             <a
               href={`/tools/${t.slug}/`}
-              class="group rounded-lg border border-slate-200 bg-white p-3 transition hover:border-slate-400"
+              class="tool-card group rounded-lg border border-slate-200 bg-white p-3 transition hover:border-slate-400"
+              {...attrs}
             >
               <div class="flex items-baseline justify-between">
                 <div class="font-semibold text-slate-900 group-hover:text-orange-600">{t.name}</div>
@@ -184,6 +277,139 @@ const itemListSchema = {
           );
         })}
       </div>
+      <div id="filter-no-results" class="mt-6 hidden rounded-lg border border-slate-200 bg-slate-50 p-6 text-center text-sm text-slate-500">
+        No tools match those filters. Loosen one or two filters and try again.
+      </div>
     </section>
   </section>
+
+  <script>
+    // Tool index client-side filter. Filter chips toggle active state and
+    // we apply boolean AND across groups + OR within each group: tool must
+    // match at least one vertical chip if any vertical is active, AND at
+    // least one tier chip if any tier is active, AND ALL must-have filters.
+    (() => {
+      const filterBar = document.getElementById('filter-bar');
+      const grid = document.getElementById('filtered-grid');
+      const noResults = document.getElementById('filter-no-results');
+      const status = document.getElementById('filter-status');
+      const countVisible = document.getElementById('filter-count-visible');
+      const clearBtn = document.getElementById('filter-clear');
+      const flagshipSection = document.getElementById('flagship');
+      const byTradeSection = document.getElementById('by-trade');
+      const allCards = grid ? Array.from(grid.querySelectorAll('.tool-card')) : [];
+      if (!filterBar || !grid || allCards.length === 0) return;
+
+      type FilterGroup = 'vertical' | 'tier' | 'team' | 'must';
+      const activeFilters: Record<FilterGroup, Set<string>> = {
+        vertical: new Set(),
+        tier: new Set(),
+        team: new Set(),
+        must: new Set(),
+      };
+
+      const chips = Array.from(filterBar.querySelectorAll<HTMLButtonElement>('.filter-chip'));
+
+      function chipGroup(chip: HTMLButtonElement): FilterGroup {
+        const group = chip.closest('[data-filter-group]') as HTMLElement | null;
+        return (group?.dataset.filterGroup ?? 'must') as FilterGroup;
+      }
+
+      function applyFilters() {
+        const anyActive = Object.values(activeFilters).some((s) => s.size > 0);
+
+        // Show/hide other sections based on whether filters are active
+        if (anyActive) {
+          flagshipSection?.classList.add('hidden');
+          byTradeSection?.classList.add('hidden');
+          status?.classList.remove('hidden');
+          clearBtn?.classList.remove('hidden');
+        } else {
+          flagshipSection?.classList.remove('hidden');
+          byTradeSection?.classList.remove('hidden');
+          status?.classList.add('hidden');
+          clearBtn?.classList.add('hidden');
+        }
+
+        let visibleCount = 0;
+        for (const card of allCards) {
+          const el = card as HTMLElement;
+          const cardVerticals = (el.dataset.vertical ?? '').split(' ');
+          const cardTier = el.dataset.tier ?? '';
+          const cardTeam = el.dataset.team ?? '';
+          const cardQB = el.dataset.qb === '1';
+          const cardStripe = el.dataset.stripe === '1';
+          const cardTrial = el.dataset.trial === '1';
+          const cardFree = el.dataset.free === '1';
+          const cardFresh = el.dataset.freshness === 'fresh';
+
+          let visible = true;
+
+          // Vertical: card must include at least one of the active verticals
+          if (activeFilters.vertical.size > 0) {
+            visible = cardVerticals.some((v) => activeFilters.vertical.has(v));
+          }
+          // Tier: card's tier must be in active tiers
+          if (visible && activeFilters.tier.size > 0) {
+            visible = activeFilters.tier.has(cardTier);
+          }
+          // Team: card's team must be in active teams
+          if (visible && activeFilters.team.size > 0) {
+            visible = activeFilters.team.has(cardTeam);
+          }
+          // Must-have: ALL active must-haves must be present on card
+          if (visible && activeFilters.must.size > 0) {
+            for (const m of activeFilters.must) {
+              if (m === 'qb' && !cardQB) { visible = false; break; }
+              if (m === 'stripe' && !cardStripe) { visible = false; break; }
+              if (m === 'trial' && !cardTrial) { visible = false; break; }
+              if (m === 'free' && !cardFree) { visible = false; break; }
+              if (m === 'fresh' && !cardFresh) { visible = false; break; }
+            }
+          }
+
+          if (visible) {
+            el.classList.remove('hidden');
+            visibleCount++;
+          } else {
+            el.classList.add('hidden');
+          }
+        }
+
+        if (countVisible) countVisible.textContent = String(visibleCount);
+        if (noResults) {
+          if (anyActive && visibleCount === 0) noResults.classList.remove('hidden');
+          else noResults.classList.add('hidden');
+        }
+      }
+
+      for (const chip of chips) {
+        chip.addEventListener('click', () => {
+          const group = chipGroup(chip);
+          const value = chip.dataset.filterValue ?? '';
+          if (activeFilters[group].has(value)) {
+            activeFilters[group].delete(value);
+            chip.classList.remove('bg-orange-500', 'text-white', 'border-orange-500');
+            chip.classList.add('bg-white', 'text-slate-700', 'border-slate-300');
+          } else {
+            activeFilters[group].add(value);
+            chip.classList.add('bg-orange-500', 'text-white', 'border-orange-500');
+            chip.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
+          }
+          applyFilters();
+        });
+      }
+
+      clearBtn?.addEventListener('click', () => {
+        for (const group of Object.keys(activeFilters) as FilterGroup[]) {
+          activeFilters[group].clear();
+        }
+        for (const chip of chips) {
+          chip.classList.remove('bg-orange-500', 'text-white', 'border-orange-500');
+          chip.classList.add('bg-white', 'text-slate-700', 'border-slate-300');
+        }
+        applyFilters();
+      });
+    })();
+  </script>
 </Layout>
