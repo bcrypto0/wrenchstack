@@ -5,6 +5,7 @@ import {
   toolsForVertical,
   verticalToUrl,
   formatPrice,
+  aggregateRating,
   type Vertical,
   type Tool,
 } from '../../../lib/data';
@@ -38,10 +39,45 @@ const cheapestPublic = cheapestFirst.find((t) => t.pricing.starting_at_usd !== n
 const freeTier = cheapestFirst.find((t) => t.pricing.starting_at_usd === 0);
 const customQuoteOnly = verticalTools.filter((t) => t.pricing.starting_at_usd === null);
 
+// Pricing model classification
+const flatRateTools = verticalTools.filter((t) => t.pricing.pricing_note?.toLowerCase().includes('unlimited users') || t.pricing.pricing_note?.toLowerCase().includes('per-company'));
+const perUserTools = verticalTools.filter((t) => !flatRateTools.includes(t) && t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0);
+
+// Best value picks by tier
+const entryTierTools = verticalTools.filter((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0 && t.pricing.starting_at_usd < 100);
+const midTierTools = verticalTools.filter((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd >= 100 && t.pricing.starting_at_usd < 250);
+const enterpriseTierTools = verticalTools.filter((t) => t.pricing.starting_at_usd === null || (t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd >= 250));
+
+function bestValueIn(set: Tool[]): Tool | null {
+  if (set.length === 0) return null;
+  return [...set].sort((a, b) => (aggregateRating(b) ?? 0) - (aggregateRating(a) ?? 0))[0];
+}
+const entryBest = bestValueIn(entryTierTools);
+const midBest = bestValueIn(midTierTools);
+const enterpriseBest = bestValueIn(enterpriseTierTools);
+
+// Pricing scenario at team sizes
+function scenarioCost(t: Tool, teamSize: number): string {
+  const p = t.pricing.starting_at_usd;
+  if (p === null) return 'Custom quote';
+  if (p === 0) return 'Free';
+  // Detect flat-rate
+  const isFlat = t.pricing.pricing_note?.toLowerCase().includes('unlimited users') || t.pricing.pricing_note?.toLowerCase().includes('per-company');
+  if (isFlat) {
+    // Use mid-tier price as proxy for flat pricing scaling
+    const tiers = t.pricing.tier_prices_usd ?? [];
+    if (teamSize <= 5) return `~$${p}/mo`;
+    if (teamSize <= 15 && tiers[1]) return `~$${tiers[1]}/mo`;
+    return tiers[2] ? `~$${tiers[2]}/mo` : `~$${p}/mo`;
+  }
+  // Per-user pricing — multiply by team size (rough estimate)
+  return `~$${p * teamSize}/mo`;
+}
+
 const faqs = [
   {
     q: `How much does ${verticalLower} software cost?`,
-    a: `Entry-level tools start at ${freeTier ? `free (${freeTier.name})` : `$${cheapestPublic?.pricing.starting_at_usd}/month (${cheapestPublic?.name})`}. Mid-tier tools run $99–$300/month for small teams. Enterprise platforms like ${customQuoteOnly[0]?.name ?? 'ServiceTitan'} use custom quotes and typically run $300–$800/user/month at typical configurations.`,
+    a: `Entry-level tools start at ${freeTier ? `free (${freeTier.name})` : `$${cheapestPublic?.pricing.starting_at_usd}/month (${cheapestPublic?.name})`}. Mid-tier tools run $99-$300/month for small teams. Enterprise platforms like ${customQuoteOnly[0]?.name ?? 'ServiceTitan'} use custom quotes and typically run $300-$800/user/month at typical configurations.`,
   },
   {
     q: `What's the cheapest ${verticalLower} software?`,
@@ -60,6 +96,18 @@ const faqs = [
   {
     q: `Why don't some tools show pricing?`,
     a: `Enterprise platforms (ServiceTitan, FieldEdge, BuildOps, etc.) don't publish pricing publicly — they require a sales call to get a custom quote. This is typical for software targeting $1M+ revenue businesses. Reports from users put their pricing in the $100-800/user/month range depending on tier and team size.`,
+  },
+  {
+    q: `What hidden costs should I expect beyond the monthly subscription?`,
+    a: `Three usual hidden costs: (1) Payment processing fees — 2.59-2.99% + $0.30 per transaction if you process payments through the platform. For $100K+ annual card volume, switching to standalone Stripe saves 20-50 basis points. (2) Implementation fees — mid-tier platforms often charge $500-$2,000 for guided setup; enterprise platforms $5K-$50K. (3) Add-on integrations — Wisetack consumer financing, FinanceIt, advanced GPS tracking, premium phone systems often added separately at $20-$100/month each.`,
+  },
+  {
+    q: `How does pricing scale as I grow from 3 to 10 to 25 techs?`,
+    a: `Massive difference depending on pricing model. Per-user platforms (Jobber: $39/user, ServiceTitan: $300-$800/user) scale linearly — 10x tech count = 10x software cost. Flat-rate platforms (Service Fusion $195/mo, ServiceM8 $59-$329/mo by call volume) barely change — you might pay 1.5-2x more going from 3 to 25 techs vs 10x. Crossover point is typically 6-8 users: below that, per-user platforms are cheaper; above that, flat-rate platforms become meaningfully cheaper. Model your projected 18-month team size when comparing.`,
+  },
+  {
+    q: `Can I negotiate ${verticalLower} software pricing?`,
+    a: `For custom-quoted enterprise platforms (ServiceTitan, BuildOps, Procore, FieldEdge enterprise tier), yes — pricing is always negotiable. Standard discounts: 10-20% off list price for annual contracts, additional 5-10% for multi-year commitments. End-of-quarter or end-of-year purchases often get extra leverage as sales reps chase quotas. For published-pricing platforms (Jobber, Housecall Pro), pricing is usually firm — discounts come from annual commitment (typically 15-20% off monthly rates) rather than negotiation.`,
   },
 ];
 
@@ -144,6 +192,110 @@ const breadcrumbs = [
           </tbody>
         </table>
       </div>
+    </section>
+
+    {(entryBest || midBest || enterpriseBest) && (
+      <section class="mb-12">
+        <h2 class="mb-4 text-2xl font-bold text-slate-900">Best value picks by tier</h2>
+        <p class="mb-6 text-slate-600">
+          Highest-rated tool in each pricing tier — combining price-tier classification with aggregate user ratings to surface the best value per spending bracket.
+        </p>
+        <div class="grid gap-4 md:grid-cols-3">
+          {entryBest && (
+            <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-5">
+              <div class="mb-1 text-xs font-bold uppercase tracking-wider text-emerald-700">Entry tier (under $100/mo)</div>
+              <h3 class="text-lg font-bold text-slate-900">
+                <a href={`/tools/${entryBest.slug}/`} class="hover:text-orange-600">{entryBest.name}</a>
+              </h3>
+              <div class="mt-1 text-sm text-slate-700">
+                {formatPrice(entryBest)} · {aggregateRating(entryBest)?.toFixed(1) ?? '—'} / 5
+              </div>
+              <p class="mt-2 text-xs text-slate-600">{entryBest.best_for}</p>
+            </div>
+          )}
+          {midBest && (
+            <div class="rounded-lg border border-blue-200 bg-blue-50 p-5">
+              <div class="mb-1 text-xs font-bold uppercase tracking-wider text-blue-700">Mid tier ($100-$250/mo)</div>
+              <h3 class="text-lg font-bold text-slate-900">
+                <a href={`/tools/${midBest.slug}/`} class="hover:text-orange-600">{midBest.name}</a>
+              </h3>
+              <div class="mt-1 text-sm text-slate-700">
+                {formatPrice(midBest)} · {aggregateRating(midBest)?.toFixed(1) ?? '—'} / 5
+              </div>
+              <p class="mt-2 text-xs text-slate-600">{midBest.best_for}</p>
+            </div>
+          )}
+          {enterpriseBest && (
+            <div class="rounded-lg border border-orange-200 bg-orange-50 p-5">
+              <div class="mb-1 text-xs font-bold uppercase tracking-wider text-orange-700">Enterprise ($250+/user/mo or custom)</div>
+              <h3 class="text-lg font-bold text-slate-900">
+                <a href={`/tools/${enterpriseBest.slug}/`} class="hover:text-orange-600">{enterpriseBest.name}</a>
+              </h3>
+              <div class="mt-1 text-sm text-slate-700">
+                {formatPrice(enterpriseBest)} · {aggregateRating(enterpriseBest)?.toFixed(1) ?? '—'} / 5
+              </div>
+              <p class="mt-2 text-xs text-slate-600">{enterpriseBest.best_for}</p>
+            </div>
+          )}
+        </div>
+      </section>
+    )}
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Pricing scenarios by team size</h2>
+      <p class="mb-6 text-slate-600">
+        Estimated monthly cost at different team sizes. Per-user platforms scale linearly; flat-rate platforms scale much more slowly. Crossover point is typically 6-8 techs where flat-rate starts winning.
+      </p>
+      <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-left text-slate-700">
+            <tr>
+              <th class="p-3 font-semibold">Tool</th>
+              <th class="p-3 font-semibold">Pricing model</th>
+              <th class="p-3 font-semibold text-right">3 techs</th>
+              <th class="p-3 font-semibold text-right">10 techs</th>
+              <th class="p-3 font-semibold text-right">25 techs</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            {cheapestFirst.filter((t) => t.pricing.starting_at_usd !== null).slice(0, 10).map((t) => {
+              const isFlat = t.pricing.pricing_note?.toLowerCase().includes('unlimited users') || t.pricing.pricing_note?.toLowerCase().includes('per-company');
+              return (
+                <tr class="hover:bg-slate-50">
+                  <td class="p-3">
+                    <a href={`/tools/${t.slug}/`} class="font-semibold text-slate-900 hover:text-orange-600">{t.name}</a>
+                  </td>
+                  <td class="p-3 text-xs text-slate-600">{isFlat ? 'Flat per company' : 'Per user'}</td>
+                  <td class="p-3 text-right text-slate-700">{scenarioCost(t, 3)}</td>
+                  <td class="p-3 text-right text-slate-700">{scenarioCost(t, 10)}</td>
+                  <td class="p-3 text-right text-slate-700">{scenarioCost(t, 25)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-3 text-xs text-slate-500">
+        Estimates based on entry-tier price × team size for per-user platforms; tier-progression assumption for flat-rate platforms. Actual pricing depends on chosen tier, annual vs monthly commitment, and any negotiated discounts.
+      </p>
+    </section>
+
+    <section class="mb-12 rounded-lg border border-orange-200 bg-orange-50 p-6">
+      <h2 class="mb-3 text-xl font-bold text-slate-900">Hidden costs beyond the monthly subscription</h2>
+      <p class="mb-4 text-slate-700">
+        Three cost components often missing from "starting at $X/mo" marketing copy. Budget for these when comparing platforms:
+      </p>
+      <ul class="space-y-3 text-slate-700">
+        <li>
+          <strong class="text-slate-900">Payment processing fees</strong> — Most FSM platforms charge 2.59-2.99% + $0.30 per credit card transaction (similar to Stripe). For $100K+/year card volume, standalone Stripe or Adyen can save 20-50 basis points. ACH is cheaper ($0.50-$1.00/transaction) but slower.
+        </li>
+        <li>
+          <strong class="text-slate-900">Implementation fees</strong> — Mid-tier platforms often offer $500-$2,000 paid setup packages (Quick Start, Pro Setup, Concierge tiers). Enterprise platforms (ServiceTitan, Procore, BuildOps) charge $5K-$50K for required implementation services.
+        </li>
+        <li>
+          <strong class="text-slate-900">Add-on integrations and features</strong> — Consumer financing (Wisetack, FinanceIt), advanced GPS tracking, premium phone systems, additional users beyond tier limits, custom integrations — typically $20-$200/month each. Stack these carefully.
+        </li>
+      </ul>
     </section>
 
     <section class="mb-12">
