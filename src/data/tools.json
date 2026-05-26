@@ -2552,7 +2552,79 @@
         "cleaning": 7,
         "handyman": 7,
         "appliance_repair": 7
-      }
+      },
+      "long_description": "RazorSync is the per-company-pricing FSM platform for small-to-mid service businesses, founded in 2010 in Bloomington, Minnesota and serving HVAC, plumbing, electrical, cleaning, handyman, and appliance repair operations. The product targets a specific buyer segment that per-user FSM platforms underserve: small-to-mid service businesses 1-20 techs where per-user pricing math becomes painful as the team grows, wanting flat-rate per-company pricing that doesn't scale with team size.\n\nWhat separates RazorSync from competitors is the per-company pricing structure at most tiers (Solo, Team, Pro). At per-user FSM pricing ($39-$99/user/month), a 10-tech operation pays $390-$990/month. RazorSync's Pro tier at $360/month flat per company covers operations up to a defined tech count without per-user cost scaling. For operations crossing 5-10 techs, the math becomes decisively favorable versus per-user alternatives — savings of 30-50% are common.\n\nPricing spans four tiers: Solo at $90/month for solo operators, Team at $175/month for small operations (typically up to 5 users), Pro at $360/month for mid-size (typically up to 15 users), and Enterprise custom-quoted for larger operations. The 14-day free trial allows substantial evaluation. The exact user limits per tier vary; sales call confirms specifics for operations approaching tier thresholds.\n\nIntegration coverage focuses on accounting: QuickBooks Desktop (rare in modern FSM — most platforms only support QuickBooks Online), QuickBooks Online, and Stripe for payment processing. The QuickBooks Desktop integration is particularly valuable for older operations still running QuickBooks Desktop — many modern FSM only support QuickBooks Online, forcing migration to QBO that some operations resist.\n\nThe trade-off: RazorSync's UI feels mid-2010s — functional but not as visually polished as newer entrants (Jobber, FieldPulse, Sera Systems). Fewer modern features like AI dispatching, online booking widgets, or marketing automation. For small-to-mid service businesses prioritizing predictable per-company pricing over modern UX and feature breadth, RazorSync is consistently competitive. For operations prioritizing modern features and willing to pay per-user, alternatives like Jobber, FieldPulse, or Workiz typically offer better feature depth despite higher cost at scale.",
+      "pros_detail": [
+        {
+          "title": "Per-company pricing at most tiers",
+          "explanation": "Solo $90, Team $175, Pro $360 per month flat — adding techs doesn't increase subscription cost within tier limits. For 5+ tech operations, decisively cheaper than per-user alternatives. Predictable monthly cost that doesn't scale with team growth."
+        },
+        {
+          "title": "QuickBooks Desktop integration (rare in modern FSM)",
+          "explanation": "QuickBooks Desktop integration is unusual — most modern FSM only support QuickBooks Online. RazorSync's QB Desktop integration depth is meaningful for established operations still running QuickBooks Desktop who don't want to migrate to QBO."
+        },
+        {
+          "title": "Multi-trade coverage",
+          "explanation": "HVAC, plumbing, electrical, cleaning, handyman, appliance repair all supported with relevant workflows. Multi-trade operations avoid the dual-platform problem of running separate FSM per service line."
+        },
+        {
+          "title": "Established platform (founded 2010)",
+          "explanation": "14+ years of FSM development. Mature feature set with refined workflows and stable infrastructure. Operations prioritizing stability over modern UI get value from the long track record."
+        },
+        {
+          "title": "14-day free trial",
+          "explanation": "Allows real evaluation including QuickBooks integration setup and per-company pricing math validation. Standard among FSM but worth noting for operations evaluating alternatives."
+        },
+        {
+          "title": "GPS tracking built in",
+          "explanation": "Tech location tracking with route history. Included at all paid tiers (not premium-only). Important for operations dispatching across service areas and tracking actual vs scheduled service times."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "UI feels mid-2010s",
+          "explanation": "2010 founding with incremental UI evolution. Functional and feature-deep but not as visually polished as newer entrants (Jobber, FieldPulse, Sera Systems). Operations comparing against modern competitors notice the generation gap."
+        },
+        {
+          "title": "Fewer modern features than newer competitors",
+          "explanation": "No AI dispatching, no online customer booking widget, no marketing automation, no consumer financing integration. Modern features that newer FSM ships as standard are missing or basic in RazorSync."
+        },
+        {
+          "title": "Per-tier user caps create upgrade decisions",
+          "explanation": "Each tier has implicit user count limits. Operations approaching tier thresholds need to upgrade to higher tier — which can be a meaningful price jump (Team $175 → Pro $360 = 2x). Plan ahead before growing past tier limits."
+        },
+        {
+          "title": "Mediocre 4.2 G2 / 4.3 Capterra rating",
+          "explanation": "Lower than premium FSM (4.5-4.8) and reflects mixed customer satisfaction. Some users report UI frustration and slower modernization pace. Others appreciate the per-company pricing and stability."
+        },
+        {
+          "title": "Smaller user community than Jobber or Housecall Pro",
+          "explanation": "Smaller online community, fewer YouTube tutorials, fewer third-party guides. Self-service learning ecosystem is thinner than market leaders. Affects troubleshooting speed when implementation issues arise."
+        }
+      ],
+      "implementation_notes": "Plan for 2-4 weeks for full deployment. RazorSync's onboarding is largely self-service with email support; larger deployments (Pro tier and above) get more guided implementation. Realistic timeline for a 10-tech HVAC or plumbing operation: Week 1 account setup, customer data import (manual or CSV), service catalog setup with pricing, mobile app rollout to techs, GPS tracking configuration. Weeks 2-3 dispatching workflow setup with role permissions, QuickBooks integration (Desktop or Online based on operation's accounting setup), recurring service contracts migration from existing platform or spreadsheets. Week 4 first jobs run through RazorSync in production with parallel tracking on legacy system; financial integration verified for invoice flow into QuickBooks; refinement based on first month's actual usage. For operations migrating from spreadsheet-based workflows, the migration is straightforward — start using RazorSync for new jobs. For operations migrating from competitor FSM (Jobber, Housecall Pro, ServiceFusion), customer and historical data typically transfers via CSV; recurring contract reconstruction is the most time-intensive step.",
+      "tool_faqs": [
+        {
+          "q": "How does RazorSync compare to Jobber or Housecall Pro?",
+          "a": "RazorSync is per-company pricing ($90-$360/month flat) at most tiers; Jobber and Housecall Pro are per-user/per-month at higher tiers. For 5+ tech operations, RazorSync's per-company math typically wins on cost — savings of 30-50% common. Trade-off: Jobber and Housecall Pro have larger user communities, more modern UI, more feature depth (online booking, AI features, marketing automation). RazorSync wins on pure cost-to-feature ratio; Jobber/Housecall Pro win on modern UX and ecosystem depth."
+        },
+        {
+          "q": "Does RazorSync work with QuickBooks Desktop?",
+          "a": "Yes — QuickBooks Desktop integration is supported, which is unusual in modern FSM. Most newer FSM platforms only support QuickBooks Online, forcing operations to migrate from QB Desktop to QBO. RazorSync's QB Desktop integration is valuable for established operations resisting the QBO migration. Also supports QuickBooks Online for operations already on cloud accounting."
+        },
+        {
+          "q": "What's the user count for each tier?",
+          "a": "Tier user counts aren't transparently published — sales call confirms specifics for operations approaching tier limits. General guidance: Solo ($90) covers solo operators or 1-2 users; Team ($175) typically covers up to 5 users; Pro ($360) typically covers up to 15 users; Enterprise (custom-quoted) for larger operations. Operations should confirm exact tier limits with RazorSync sales before committing, especially if growing through 5 or 15 user thresholds."
+        },
+        {
+          "q": "Is RazorSync's per-company pricing actually cheaper?",
+          "a": "For operations with 5+ techs, decisively yes versus per-user FSM. Comparison at 10 techs: RazorSync Pro $360/month flat vs Housecall Pro $79/user = $790/month — RazorSync wins. Versus Jobber Connect tier ($169/month flat-rate at smaller team caps) the comparison is closer. Per-company pricing wins most decisively against per-user platforms; comparison vs other flat-rate platforms depends on tier limits."
+        },
+        {
+          "q": "What's RazorSync best for?",
+          "a": "Small-to-mid service businesses (5-15 techs) running multi-trade workflows (HVAC, plumbing, electrical, cleaning, handyman, appliance repair) where per-company pricing math matters and modern UX is less important than predictable cost. Operations on QuickBooks Desktop specifically get added value from the QB Desktop integration. Operations prioritizing modern features should evaluate Jobber, FieldPulse, or Workiz instead."
+        }
+      ]
     },
     {
       "slug": "tradify",
@@ -3363,7 +3435,79 @@
       "headquartered": "Holmdel, USA",
       "vertical_fit": {
         "pest_control": 9
-      }
+      },
+      "long_description": "PestPac is the longest-established pest control management software in the market, founded in 1981 in Holmdel, New Jersey and now owned by WorkWave (the parent company also operating FieldRoutes). The product targets a specific buyer segment: long-established pest control operations 20-500 employees with deep industry workflows that newer cloud-native platforms can't fully replicate, particularly multi-location enterprise pest operations with complex commercial accounts.\n\nWhat separates PestPac from modern competitors (FieldRoutes, GorillaDesk) is the 40+ years of pest control specialization. The platform's workflow assumptions reflect four decades of pest control industry refinement: complex multi-location commercial accounts with property hierarchies, chemical compliance reporting that meets state-by-state EPA pesticide regulations, integration with Sentricon (the dominant termite-monitoring system in the industry), service agreement management for recurring pest contracts, and deep reporting around route density and operational metrics. For operations with significant legacy data and decades of customer history, PestPac's data structures handle the depth that newer platforms haven't accumulated.\n\nPricing is custom-quoted across two tiers (Standard, Enterprise) with no published pricing. User-reported pricing typically lands at $99-$199 per user per month for the Standard tier and meaningfully higher for Enterprise depending on team size and module selection. Sales-call required to get pricing — typical for enterprise pest control software where deployment includes significant implementation work.\n\nIntegration coverage focuses on pest industry tools: QuickBooks for accounting, Stripe for payment processing, and Sentricon for termite monitoring integration. The Sentricon integration is particularly important — Sentricon is the dominant termite baiting system, and PestPac's deep integration reflects PestPac's long history with the pest industry's dominant tools.\n\nThe trade-off: PestPac shows its age in places. The UI feels legacy compared to FieldRoutes (modern cloud) or GorillaDesk (small-business modern). Some modules still run on older technology infrastructure with cloud transition in progress. For long-established pest operations with significant legacy data and complex commercial workflows, the depth justifies the dated UI. For new pest operations or operations modernizing, FieldRoutes (also WorkWave-owned) is increasingly the recommended path for greenfield pest software deployments, with PestPac retaining customers via historical lock-in and feature depth that matters at enterprise scale.",
+      "pros_detail": [
+        {
+          "title": "40+ years of pest control specialization",
+          "explanation": "Founded 1981 — by far the longest-tenured pest control software still active. Workflow assumptions reflect four decades of industry refinement. Data structures and edge-case handling match conventions that newer platforms haven't accumulated."
+        },
+        {
+          "title": "Deep commercial pest control workflows",
+          "explanation": "Multi-location commercial accounts with property hierarchies, certificate-of-service generation, complex billing structures for enterprise pest contracts. Critical for operations where commercial pest is 50%+ of revenue."
+        },
+        {
+          "title": "Sentricon integration for termite operations",
+          "explanation": "Sentricon is the dominant termite baiting system in pest control. PestPac's deep Sentricon integration reflects decades of partnership and is rare among pest control platforms. Critical for termite-heavy operations."
+        },
+        {
+          "title": "Comprehensive chemical compliance reporting",
+          "explanation": "Chemical application logs with state-by-state EPA pesticide regulatory compliance reporting refined over decades. Handles edge cases (restricted-use pesticides, special permits, federal facility reporting) that newer platforms approximate."
+        },
+        {
+          "title": "Established enterprise customer base",
+          "explanation": "Large operations (national pest control chains, regional pest operators 50+ employees) have used PestPac for decades. Industry-specific case studies, conference presence, and consultant ecosystem are PestPac-familiar."
+        },
+        {
+          "title": "WorkWave ownership brings investment",
+          "explanation": "Owned by WorkWave (also owns FieldRoutes, RouteSpotter, others) since acquisition. Active investment in cloud transition and feature modernization. Pricing and feature parity with FieldRoutes evolving as WorkWave consolidates pest software portfolio."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Legacy UI in places",
+          "explanation": "1981 founding means significant legacy UI patterns. WorkWave is investing in modernization but some modules still feel dated. Operations comparing against modern FieldRoutes (also WorkWave) or GorillaDesk notice the UI generation gap."
+        },
+        {
+          "title": "Cloud transition still in progress",
+          "explanation": "Not all PestPac modules have completed migration to modern cloud architecture. Some workflows still require legacy deployment patterns. Active project but not finished. Affects mobile performance and modern-tech expectations."
+        },
+        {
+          "title": "Custom-quoted pricing (opaque)",
+          "explanation": "Sales call required for quotes. No published pricing. User-reported $99-$199/user/month for Standard tier but actual quotes vary significantly. Comparison shopping requires committing time to multiple sales calls."
+        },
+        {
+          "title": "Implementation timeline 8-16 weeks",
+          "explanation": "Enterprise pest control deployment is real project work. Significant data migration from legacy systems, complex workflow configuration, multi-location rollouts. PestPac assigns dedicated implementation managers but the timeline is real."
+        },
+        {
+          "title": "WorkWave is consolidating pest software portfolio",
+          "explanation": "WorkWave owns PestPac + FieldRoutes + other pest platforms. Long-term strategic direction of the portfolio is unclear. PestPac customers should monitor WorkWave's positioning of PestPac vs FieldRoutes for new customer acquisition."
+        }
+      ],
+      "implementation_notes": "Plan for 8-16 weeks for full deployment. PestPac assigns dedicated implementation managers for all customers given the custom-quoted enterprise positioning. Realistic timeline for a 50-tech pest control operation transitioning from another platform: Weeks 1-3 discovery and system configuration including chemical SKU library setup with EPA registration codes, service agreement structure mapping, multi-location property hierarchies, user roles and permissions. Weeks 3-6 customer data migration with historical pest service records (most complex step — decades of customer history needs to import correctly), recurring service contract migration, chemical compliance baseline establishment. Weeks 6-10 office staff training on service agreement management, commercial account workflows, chemical compliance reporting; route configuration and optimization setup. Weeks 10-13 field tech training on mobile app with chemical logging workflows, customer history access, route navigation. Weeks 13-16 first routes go live in production with parallel run on legacy system; financial integration with QuickBooks/Stripe verified; Sentricon integration setup if applicable. For operations migrating from spreadsheet-based or paper workflows, the migration is simpler but still substantial — PestPac's data depth requires careful setup. For operations migrating from GorillaDesk (modern competitor at smaller scale), expect data structure differences requiring manual reconstruction of recurring contracts.",
+      "tool_faqs": [
+        {
+          "q": "How does PestPac compare to FieldRoutes (also WorkWave)?",
+          "a": "Both are WorkWave-owned pest control platforms. PestPac (founded 1981) is the legacy enterprise platform with deeper commercial pest workflows and established large customer base. FieldRoutes (founded 2012, acquired 2021) is the modern cloud-native alternative with better mobile UX, AI features, and modern technology foundation. For new pest control operations choosing software in 2026, WorkWave typically recommends FieldRoutes. PestPac retains customers via historical lock-in and feature depth for very large enterprise pest operations."
+        },
+        {
+          "q": "Should I switch from PestPac to FieldRoutes?",
+          "a": "Depends on operation size and workflow needs. For pest operations under 50 techs without significant legacy data lock-in, FieldRoutes typically offers better UI and modern features at comparable pricing. For larger operations (50+ techs) with deep legacy data in PestPac and complex commercial workflows, the migration cost may not justify the upgrade. WorkWave is actively investing in PestPac modernization, so the gap is closing. Worth evaluating both via demos if considering switching."
+        },
+        {
+          "q": "Does PestPac integrate with Sentricon for termite work?",
+          "a": "Yes — Sentricon integration is one of PestPac's signature features. Sentricon is the dominant termite baiting system in pest control. PestPac's deep Sentricon integration (refined over decades of partnership) is rare among pest control platforms. For termite-heavy operations (Sentricon-dependent workflows), PestPac retains advantage over modern competitors."
+        },
+        {
+          "q": "How does PestPac handle chemical compliance reporting?",
+          "a": "Built-in chemical application logs with EPA registration tracking and state-by-state regulatory compliance reporting refined over decades. Handles edge cases (restricted-use pesticides, special permits, federal facility reporting) that newer platforms approximate. Critical for pest control operations meeting state and EPA reporting requirements, especially operations working with restricted-use pesticides or federal contracts."
+        },
+        {
+          "q": "Is PestPac still being actively developed?",
+          "a": "Yes — WorkWave (the parent company) is actively investing in PestPac modernization including cloud architecture migration and UI refresh. Pace is slower than FieldRoutes development (which is the modern flagship platform), but PestPac continues to receive updates. WorkWave's long-term strategic direction for the pest software portfolio (PestPac + FieldRoutes coexistence vs eventual consolidation) is evolving."
+        }
+      ]
     },
     {
       "slug": "zenmaid",
@@ -3804,7 +3948,79 @@
         "electrical": 6,
         "general_contractor": 6,
         "handyman": 6
-      }
+      },
+      "long_description": "Method:CRM is the QuickBooks-native customer relationship management platform for contractors deeply embedded in the QuickBooks ecosystem, founded in 2010 in Toronto and now serving service businesses across HVAC, plumbing, electrical, general contracting, and handyman trades. The product targets a specific buyer segment that other CRM platforms underserve: contractors using QuickBooks (Desktop or Online) as their financial core who want a CRM that integrates deeply with QuickBooks rather than fighting against it.\n\nWhat separates Method:CRM from general CRM (Salesforce, HubSpot) and from FSM-bundled CRM (Jobber, Housecall Pro internal CRM features) is the QuickBooks-native architecture. Method runs on top of QuickBooks as the source of truth — customer records, invoices, payments, and accounting data flow bidirectionally without the synchronization issues that plague Salesforce-to-QuickBooks or HubSpot-to-QuickBooks integrations. For contractors who consider QuickBooks their financial single-source-of-truth, this architecture eliminates a category of data inconsistency that costs other CRM users hours of monthly reconciliation.\n\nPricing is per-user across three tiers: Contact Management at $25/user/month for basic CRM with QuickBooks sync, CRM Pro at $49/user/month adding workflow automation and customization, and CRM Enterprise at $74/user/month with the full feature set including advanced custom fields and integration depth. The 30-day free trial allows substantial evaluation including QuickBooks integration testing. Pricing is meaningfully cheaper than Salesforce (typically $75-$300/user/month) at comparable CRM functionality for contractor workflows.\n\nIntegration coverage focuses on QuickBooks as the primary requirement: QuickBooks Desktop and QuickBooks Online both supported with native sync (not Zapier middleware). Additional integrations include Google Calendar, Outlook, and Gmail for calendar/email sync. The integration footprint is intentionally focused on the QuickBooks-centric workflow rather than broad ecosystem coverage.\n\nThe trade-off: Method:CRM requires QuickBooks. Operations not using QuickBooks (Xero users, Sage users, alternative accounting) can't use Method:CRM. It's also CRM-first, not a full FSM — no dispatching optimization, no recurring service contracts at FSM-depth, no advanced scheduling. Operations needing full FSM functionality typically run Method:CRM alongside FSM (Jobber, Housecall Pro, Workiz) rather than as a replacement. For contractors deeply embedded in QuickBooks who need CRM that doesn't create reconciliation problems, Method:CRM is consistently the strongest option in the QuickBooks-centric CRM market.",
+      "pros_detail": [
+        {
+          "title": "Native QuickBooks bidirectional sync",
+          "explanation": "Customer records, invoices, payments, and accounting data flow bidirectionally with QuickBooks as source of truth. Eliminates synchronization issues that plague Salesforce-to-QB or HubSpot-to-QB integrations. Critical for contractors treating QuickBooks as financial single-source-of-truth."
+        },
+        {
+          "title": "QuickBooks Desktop AND Online both supported",
+          "explanation": "Rare among CRM platforms — most only support QuickBooks Online (forcing migration from QB Desktop). Method:CRM supports both natively with comparable depth, valuable for established contractors still running QuickBooks Desktop."
+        },
+        {
+          "title": "Significantly cheaper than Salesforce",
+          "explanation": "$25-$74/user/month vs Salesforce $75-$300/user/month at comparable contractor CRM functionality. For 5+ user operations, decisive cost advantage without sacrificing CRM depth for the contractor use case."
+        },
+        {
+          "title": "Custom fields and workflow automation",
+          "explanation": "Pro and Enterprise tiers include extensive custom field capabilities and workflow automation. Operations can customize Method:CRM to match their specific lead-to-sale workflows without expensive custom development typical of Salesforce."
+        },
+        {
+          "title": "Strong 4.4 G2 rating",
+          "explanation": "Reflects clear positioning and consistent execution at the QuickBooks-centric CRM tier. Operations who fit the QB-centric profile report high satisfaction; the Capterra 4.1 reflects accurate expectations management for the niche positioning."
+        },
+        {
+          "title": "30-day free trial with QuickBooks integration testing",
+          "explanation": "Among the longer trials in CRM software (most platforms offer 14 days). Allows real evaluation of QuickBooks integration depth which is the platform's biggest differentiator."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "QuickBooks-required (hard dependency)",
+          "explanation": "Operations not using QuickBooks (Xero users, Sage users, alternative accounting) cannot use Method:CRM. The platform's value proposition depends entirely on QuickBooks as the financial core."
+        },
+        {
+          "title": "Not a full FSM",
+          "explanation": "CRM-first positioning. Doesn't handle dispatching optimization, recurring service contracts at FSM-depth, or advanced scheduling workflows. Operations needing full FSM run Method:CRM alongside FSM rather than as a replacement — additional monthly cost."
+        },
+        {
+          "title": "Smaller user community than Salesforce",
+          "explanation": "Smaller online community, fewer third-party tutorials, fewer integration consultants familiar with Method:CRM specifically. Affects availability of expert help for complex customizations."
+        },
+        {
+          "title": "Customization learning curve",
+          "explanation": "The custom field and workflow automation depth is powerful but has a learning curve. Operations without internal technical capability may need consultant help for advanced customization. Out-of-box workflows are functional but customization is where the platform's value compounds."
+        },
+        {
+          "title": "Toronto-rooted with primarily English-speaking user base",
+          "explanation": "Founded in Canada, English-only UI primarily. Operations needing multi-language CRM or international currency support get better fit from Synchroteam or similar international CRM."
+        }
+      ],
+      "implementation_notes": "Plan for 2-4 weeks for full deployment. Method:CRM's onboarding includes guided QuickBooks integration setup which is the highest-value step. Realistic timeline for a 10-user contractor operation: Week 1 account setup, QuickBooks integration configuration with bidirectional sync verification (this is the most important setup step — get it right and the rest follows), customer data import from QuickBooks as the source of truth, user roles and permissions setup. Weeks 2-3 custom field configuration for operation-specific data tracking, workflow automation setup for common lead-to-sale stages, integration with Google Calendar/Outlook/Gmail for calendar and email sync. Week 4 first leads run through Method:CRM end-to-end with QuickBooks integration verified for invoice and payment flow; sales rep training on the workflow; office staff training on dashboard and reporting. The QuickBooks integration depth is the implementation differentiator — operations that configure the integration carefully (mapping QB classes, locations, items correctly to Method:CRM concepts) get the bidirectional sync that's Method:CRM's value proposition. Operations that rush the integration setup often experience sync issues that require rework. For contractors migrating from spreadsheets or general CRM (Salesforce, HubSpot) to Method:CRM, the QB-centric architecture is a meaningful workflow shift requiring 4-8 weeks of habit formation.",
+      "tool_faqs": [
+        {
+          "q": "Do I need QuickBooks to use Method:CRM?",
+          "a": "Yes — Method:CRM is QuickBooks-native and requires QuickBooks Desktop or QuickBooks Online as the financial core. Operations not using QuickBooks (Xero users, Sage users, alternative accounting) cannot use Method:CRM. The platform's value proposition depends entirely on the QuickBooks integration. For operations on Xero, Tradify's CRM features or general Xero-integrated CRM are better fits."
+        },
+        {
+          "q": "How does Method:CRM compare to Salesforce?",
+          "a": "Method:CRM is QuickBooks-native ($25-$74/user/month) with deep QB integration; Salesforce is general-purpose CRM ($75-$300/user/month) requiring custom QuickBooks integration setup. For contractors using QuickBooks as financial core: Method:CRM wins on QB integration depth and meaningfully lower cost. For operations with complex non-QB requirements (multi-currency, complex sales pipelines, advanced marketing automation): Salesforce's broader ecosystem and customization may justify higher cost. Most contractor CRM use cases fit Method:CRM better than Salesforce."
+        },
+        {
+          "q": "Is Method:CRM a replacement for my FSM?",
+          "a": "No — Method:CRM is CRM, not FSM. It handles customer relationship management, lead tracking, and customer history with deep QuickBooks integration. It doesn't handle dispatching optimization, recurring service contracts at FSM-depth, advanced scheduling, or technician mobile workflows. Operations needing full FSM run Method:CRM alongside FSM (Jobber, Housecall Pro, ServiceTitan, etc.). The architecture is intentionally a layered approach — Method:CRM for customer/lead management, FSM for operations execution."
+        },
+        {
+          "q": "What's the difference between Contact Management, CRM Pro, and CRM Enterprise tiers?",
+          "a": "Contact Management ($25/user/month) covers basic CRM with QuickBooks sync — customer records, invoices, payments synced bidirectionally. CRM Pro ($49/user/month) adds workflow automation, custom fields, customer portal, and field app for technicians. CRM Enterprise ($74/user/month) adds advanced customization, unlimited custom fields, advanced integration depth, and enterprise security features. For most contractor operations, CRM Pro is the sweet spot — the custom field and workflow automation depth typically justifies the upgrade from Contact Management."
+        },
+        {
+          "q": "Does Method:CRM integrate with QuickBooks Desktop?",
+          "a": "Yes — both QuickBooks Desktop and QuickBooks Online are supported with native bidirectional sync. The QuickBooks Desktop support is particularly valuable for established contractors still running QuickBooks Desktop who don't want to migrate to QBO. Most modern CRM only supports QuickBooks Online; Method:CRM's QB Desktop support is rare and meaningful for the QB Desktop user base."
+        }
+      ]
     },
     {
       "slug": "simpro",
@@ -5530,7 +5746,79 @@
       "vertical_fit": {
         "general_contractor": 9,
         "roofing": 6
-      }
+      },
+      "long_description": "Buildxact is the leading estimating and project management platform for residential custom home builders and remodelers, founded in 2011 in Melbourne, Australia and now expanding into US, Canadian, and UK markets. The product targets a specific buyer segment that general construction PM (Buildertrend, JobTread) and general FSM platforms underserve: residential construction businesses 1-15 employees doing custom builds, remodels, and renovations where estimating accuracy is the primary economic driver and project profitability depends on getting the bid right.\n\nWhat separates Buildxact from competitors is the estimating depth specifically built for residential construction. The platform handles materials takeoffs (counting items from drawings), supplier pricing integration (real-time material costs from major suppliers), labor estimating by trade and skill level, change order management with cost impact analysis, and budgeting with actual-vs-estimate tracking through project completion. For residential construction operations bidding custom projects where 10-15% estimating error becomes the difference between profit and loss, this depth is essential.\n\nPricing is per-company across three tiers: Entry at $179/month for solo builders and small remodelers, Pro at $249/month adding takeoffs and supplier integration, and Teams at $349/month including the full feature set with team management. The 14-day free trial allows substantial evaluation including takeoff workflow testing. Per-company pricing is meaningfully cheaper than Buildertrend at comparable team sizes.\n\nIntegration coverage focuses on residential construction workflow: QuickBooks for accounting, Xero for Australian/NZ/UK markets, and Dropbox for plan/document storage. The narrow integration ecosystem reflects Buildxact's positioning as a specialty estimating + PM tool rather than broad ecosystem coverage. Operations needing CRM integration, marketing automation, or other tools typically pair Buildxact with additional software.\n\nThe trade-off: Buildxact is smaller and less established than Buildertrend (founded 2006, much larger user base, deeper integration ecosystem). UI is less polished than newer competitors like JobTread. Primarily Australian/NZ heritage with US presence still growing — US-specific features (US tax handling, US payroll integrations, US supplier integrations) less mature than US-rooted alternatives. For residential builders and remodelers prioritizing estimating depth and per-company pricing over established brand or modern UX, Buildxact is consistently competitive. For operations prioritizing established community and broader integration ecosystem, Buildertrend remains the default despite higher cost.",
+      "pros_detail": [
+        {
+          "title": "Estimating depth for residential construction",
+          "explanation": "Materials takeoffs from drawings, supplier pricing integration, labor estimating by trade and skill level, change order cost impact analysis. The granularity residential construction needs for accurate bidding versus general FSM's line-item quote approach."
+        },
+        {
+          "title": "Per-company pricing (not per-user)",
+          "explanation": "Entry $179, Pro $249, Teams $349 per month for the company. Adding team members doesn't increase subscription cost. For 5+ person operations, decisively cheaper than per-user alternatives or Buildertrend at comparable team sizes."
+        },
+        {
+          "title": "Supplier pricing integration",
+          "explanation": "Real-time material costs from supplier integrations. Estimates reflect current pricing rather than stale spreadsheet data that creates margin errors. Pro tier and above include this — critical for material-heavy residential construction."
+        },
+        {
+          "title": "Takeoffs from drawings (Pro+)",
+          "explanation": "Direct measurement and counting from architectural drawings. Reduces estimating time significantly compared to manual takeoff processes. Important for operations doing custom builds with detailed architectural plans."
+        },
+        {
+          "title": "Strong 4.3 G2 / 4.5 Capterra rating",
+          "explanation": "Reflects accurate satisfaction at the residential construction estimating tier. Operations who fit the residential-builder profile report high satisfaction; broader construction operations may find the focus limiting."
+        },
+        {
+          "title": "14-day free trial",
+          "explanation": "Allows substantial evaluation including takeoff workflow testing and supplier integration setup. Important for evaluating whether the estimating depth justifies the cost versus simpler alternatives."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Smaller user community than Buildertrend",
+          "explanation": "Buildertrend (2006) has 19+ years and much larger US user community. Buildxact (2011) is competitive on features but smaller on community, case studies, and consultant ecosystem. Established residential builders may prefer Buildertrend for market presence."
+        },
+        {
+          "title": "UI less polished than newer competitors",
+          "explanation": "JobTread (2019) and modern construction PM ship more refined UI design. Buildxact's UI is functional and feature-deep but visually less polished than newer entrants. Operations prioritizing modern UX may prefer JobTread despite different feature emphasis."
+        },
+        {
+          "title": "Primarily Australian/NZ heritage",
+          "explanation": "Founded in Melbourne with US presence growing. US-specific features (US tax handling, US payroll integrations, US supplier integrations) less mature than US-rooted competitors. UK and Australian markets have deeper Buildxact penetration."
+        },
+        {
+          "title": "Limited integration ecosystem",
+          "explanation": "QuickBooks, Xero, Dropbox — covers essentials but smaller than Buildertrend's integration footprint. Operations needing CRM integration, marketing automation, or specialty construction tools depend on manual workflows."
+        },
+        {
+          "title": "Roofing fit is weak",
+          "explanation": "Built for residential construction; roofing operations get a thinner feature set than dedicated roofing platforms (AccuLynx, JobNimbus, Roofr). Listed in roofing vertical because some general contractors do roofing, but pure roofing operations should use roofing-specialty alternatives."
+        }
+      ],
+      "implementation_notes": "Plan for 3-6 weeks for full deployment. Buildxact includes dedicated implementation manager engagement for Pro and Teams tiers. Realistic timeline for a 10-person residential builder/remodeler: Weeks 1-2 system setup including company profile, project templates for typical project types (kitchen remodel, bathroom remodel, custom build, addition), pricing structures with markup rules, supplier pricing integration configuration, customer/contact data import. Weeks 2-4 takeoff workflow training (the highest-value capability — operations need 4-8 hours of careful practice with takeoffs from architectural drawings), estimating templates refined for operation-specific cost structures, change order workflow configuration. Weeks 4-6 first projects run through Buildxact end-to-end — estimate → project setup → progress tracking → change order management → completion. Office staff training on dashboard interpretation; QuickBooks integration verified for invoice flow. The estimating system refinement is iterative — operations typically refine their material rates and labor pricing over 3-6 months as they see actual project results vs estimates. For operations migrating from spreadsheet-based estimating workflows (common in residential construction), the migration is largely a workflow shift to digital takeoffs and structured estimating. The biggest behavior change is adopting takeoffs from drawings versus manual measurement approaches — operations that commit to the digital takeoff workflow see significant time savings.",
+      "tool_faqs": [
+        {
+          "q": "How does Buildxact compare to Buildertrend and JobTread?",
+          "a": "Buildxact is estimating-focused residential construction PM with per-company pricing ($179-$349/month). Buildertrend is the established US construction PM ($199-$399/month) with broader feature ecosystem and larger user community. JobTread is modern construction PM ($159-$329/month) with most polished UI of the three. For estimating depth specifically, Buildxact has the deepest specialty focus. For broader feature ecosystem and established community, Buildertrend wins. For modern UX and growing user base, JobTread is increasingly competitive."
+        },
+        {
+          "q": "What's the takeoff feature in Buildxact?",
+          "a": "Materials takeoffs from architectural drawings — direct measurement and counting of building components from digital plans. Pro tier and above include the takeoff feature. Operations upload PDF or image plans, use Buildxact's measurement tools to count items (cabinets, doors, square footage of various materials), and the takeoffs flow into the estimate with current supplier pricing. Reduces estimating time significantly vs manual takeoff processes."
+        },
+        {
+          "q": "Is Buildxact good for US-based builders?",
+          "a": "Yes, but with caveats. Core estimating and project management workflows work well for US residential builders. US presence has grown significantly in recent years. US-specific features (US tax handling, US payroll integrations, US supplier integrations like ABC Supply or Home Depot Pro) are less mature than US-rooted competitors. For US builders prioritizing estimating depth over US-specific feature maturity, Buildxact is competitive. For US builders prioritizing established US ecosystem, Buildertrend's longer US tenure may justify higher cost."
+        },
+        {
+          "q": "Does Buildxact handle commercial construction?",
+          "a": "Limited — Buildxact is built for residential construction (custom homes, remodels, renovations). Commercial construction operations doing significant new construction with AIA progress billing, complex vendor management, RFI workflows, and submittals typically need Procore, Simpro, or other commercial-construction PM platforms. Small commercial builders doing work similar in scope to large residential projects can use Buildxact; larger commercial operations outgrow its feature set."
+        },
+        {
+          "q": "What's the difference between Entry, Pro, and Teams tiers?",
+          "a": "Entry ($179/month) covers basic estimating and project management for solo builders and small remodelers. Pro ($249/month) adds takeoffs from drawings and supplier pricing integration — the platform's biggest differentiators. Teams ($349/month) includes full feature set with team management, advanced reporting, and unlimited projects. For solo builders, Entry may be sufficient. For 3+ person operations doing significant custom work, Pro is the sweet spot. Teams tier matters for 5+ person operations needing team management."
+        }
+      ]
     },
     {
       "slug": "yardbook",
@@ -5576,7 +5864,79 @@
       "headquartered": "USA",
       "vertical_fit": {
         "landscaping": 8
-      }
+      },
+      "long_description": "Yardbook is the genuinely free landscape business management platform, founded in 2014 and serving thousands of solo landscapers and small landscape operations across the United States. The product fills a specific gap that established landscape software underserves: solo and 1-5 crew landscape operations bootstrapping with little budget, who need basic business management functionality without committing to monthly subscriptions from day one.\n\nWhat separates Yardbook from competitors is the genuinely free tier. Most 'free' landscape software is trial-only or feature-limited beyond usefulness. Yardbook's free tier covers scheduling, invoicing, estimating, customer management, route planning, and a mobile app — the full landscape FSM workflow at no cost. The Premium tier at $25/month adds advanced reporting and priority support. This is the most accessible price point in the landscape software market.\n\nPricing is simple: Free tier (no time limit, full workflow) or Premium at $25/month per company. The free tier serves as both evaluation and long-term option for operations that genuinely don't need premium features. Many Yardbook users run on the free tier indefinitely. No free trial of Premium needed since Free covers most use cases.\n\nIntegration coverage is intentionally minimal — QuickBooks for accounting only. The narrow integration ecosystem reflects Yardbook's positioning as a budget-focused tool for small operations that typically don't use complex software stacks. Operations needing broader integration depth typically outgrow Yardbook and migrate to Service Autopilot, LMN, or Jobber.\n\nThe trade-off: Yardbook is small-operation focused with limited support resources and a smaller user community than Jobber or Service Autopilot. Feature depth is intentionally basic — operations growing past 5 crews or needing advanced reporting/automation outgrow Yardbook quickly. For solo landscapers and 1-5 crew operations specifically — especially landscape businesses bootstrapping where every monthly subscription is a real cost decision — Yardbook's free tier is consistently the most accessible starting point in landscape software.",
+      "pros_detail": [
+        {
+          "title": "Genuinely free tier with full workflow",
+          "explanation": "Free tier covers scheduling, invoicing, estimating, customer management, route planning, and mobile app — the complete landscape FSM workflow at no cost, no time limit. Among the most generous free tiers in trades software."
+        },
+        {
+          "title": "Premium tier accessible at $25/month",
+          "explanation": "Premium upgrade is $25/month per company (not per user). Among the cheapest paid tiers in trades software. Operations outgrowing free tier features have a low-cost upgrade path before considering more expensive alternatives like Service Autopilot."
+        },
+        {
+          "title": "Landscape-specific focus",
+          "explanation": "Built specifically for landscape operations (mowing, gardening, maintenance, basic landscape construction). Workflow assumptions match landscape industry conventions. Operations using general FSM (Jobber, Housecall Pro) for landscape work get worse fit than Yardbook for the same money."
+        },
+        {
+          "title": "Route planning built into free tier",
+          "explanation": "Basic route planning for recurring landscape maintenance routes. Many free FSM lack route planning entirely. Critical for landscape operations doing maintenance work where route density affects daily economics."
+        },
+        {
+          "title": "Mobile app for crew time tracking",
+          "explanation": "Free tier mobile app handles crew time tracking, customer signatures, photo documentation, and invoice generation. Functional for small landscape operations doing real fieldwork."
+        },
+        {
+          "title": "Strong 4.5 G2 / 4.4 Capterra rating",
+          "explanation": "Solid satisfaction at the free landscape tier. Reflects accurate positioning — operations using Yardbook understand it's basic landscape FSM, not enterprise depth, and are satisfied within those expectations."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Limited support resources",
+          "explanation": "Smaller team and limited support staffing than established landscape software vendors. Free-tier support is email-only with response delays during peak landscape season (spring through fall). Premium tier gets priority support."
+        },
+        {
+          "title": "Smaller user community than Jobber or Service Autopilot",
+          "explanation": "Smaller online community, fewer YouTube tutorials, fewer third-party guides. Self-service learning ecosystem is thinner. Operations needing peer community for landscape software questions get better support from larger competitor communities."
+        },
+        {
+          "title": "Basic feature set vs premium alternatives",
+          "explanation": "Premium landscape software (Service Autopilot $49+/user/mo, LMN $59+/month, Aspire enterprise) offers significantly more depth. Operations growing past basic landscape workflow needs outgrow Yardbook quickly. Best for staying small, not for scaling."
+        },
+        {
+          "title": "Limited integration ecosystem (QuickBooks only)",
+          "explanation": "Native integration to QuickBooks only. Operations needing CRM integration, marketing automation, or specialty tool integration depend on manual data handling. Significantly thinner than general FSM integration counts."
+        },
+        {
+          "title": "Outgrown past 5 crews",
+          "explanation": "Feature depth and scaling characteristics fit 1-5 crew operations. Growing past 5 crews typically triggers migration to Service Autopilot, LMN, or general FSM for deeper crew management, dispatching, and reporting features."
+        }
+      ],
+      "implementation_notes": "Plan for 1-2 weeks for full deployment. Yardbook's onboarding is self-service with email support. Realistic timeline for a solo landscaper or 2-3 crew operation: Week 1 account setup (Free tier requires no payment information), customer data import (manual or CSV), service catalog setup with pricing, route configuration for recurring maintenance routes, mobile app installation for crew members. Week 2 first jobs run through Yardbook end-to-end — quote → schedule → service → invoice → payment workflow tested with real customers; QuickBooks integration setup if applicable. The setup simplicity reflects Yardbook's positioning toward solo and small landscape operations — there's nothing complex to configure because the platform is intentionally accessible. For operations migrating from spreadsheet-based or paper-based workflows, the migration is just starting fresh in Yardbook — no data conversion complexity. For operations migrating from competitor landscape software (Service Autopilot, LMN, Jobber), the data structures differ enough that customer history typically gets entered manually rather than imported wholesale. The biggest implementation step is establishing the crew routine of using Yardbook's mobile app for time tracking and customer signatures — that's the behavior change that makes the platform valuable versus paper.",
+      "tool_faqs": [
+        {
+          "q": "Is Yardbook's free tier actually usable for a real landscape business?",
+          "a": "Yes for solo landscapers and 1-5 crew operations with basic workflow needs. The free tier covers scheduling, invoicing, estimating, customer management, route planning, and mobile app — the complete landscape FSM workflow at no cost with no time limit. Real landscape operations run Yardbook's free tier for years before upgrading or outgrowing. Main limitations: smaller user community, limited support resources, basic reporting versus Premium tier."
+        },
+        {
+          "q": "How does Yardbook compare to Jobber for landscape operations?",
+          "a": "Yardbook is landscape-specific with free tier; Jobber is multi-trade FSM with paid tiers ($29-$169/month flat-rate). For solo landscapers and 1-5 crew operations doing primarily landscape maintenance, Yardbook's landscape focus + free tier wins on cost and trade fit. For operations doing landscape plus other services (cleaning, snow plowing, lawn care, handyman) or operations needing broader feature depth, Jobber's multi-trade coverage and larger user community fit better despite higher cost."
+        },
+        {
+          "q": "When should I upgrade from Yardbook to LMN or Service Autopilot?",
+          "a": "Typical upgrade triggers: (1) team grows past 4-5 crews and Yardbook's basic crew management becomes limiting; (2) need deeper estimating with materials/labor breakdown (LMN territory); (3) need landscape + cleaning + other trades coverage (Service Autopilot territory); (4) need marketing automation, advanced reporting, or specialty integrations; (5) need professional support response times during peak season. At any of these triggers, LMN ($59-$397/month) or Service Autopilot ($49-$199/user/mo) typically fit better despite the cost increase."
+        },
+        {
+          "q": "What's the difference between Free and Premium tiers?",
+          "a": "Free tier covers the complete landscape FSM workflow (scheduling, invoicing, estimating, customer management, route planning, mobile app, QuickBooks integration) at no cost with no time limit. Premium ($25/month) adds advanced reporting, priority support, and premium features. For most solo landscapers and small operations, Free is sufficient. Premium upgrade typically makes sense when reporting needs grow or support response time matters during peak season."
+        },
+        {
+          "q": "Does Yardbook handle landscape construction estimating?",
+          "a": "Basic estimating only. Yardbook's estimating handles simple landscape work (mowing services, basic landscape installation) but lacks the depth landscape construction needs (materials with markup, labor by crew skill level, equipment time allocation, sub-contractor cost integration). For landscape construction operations doing significant project work, LMN's estimating depth is meaningfully more capable. For landscape maintenance operations, Yardbook's basic estimating is usually sufficient."
+        }
+      ]
     },
     {
       "slug": "roofr",
