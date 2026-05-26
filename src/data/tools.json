@@ -1818,7 +1818,79 @@
         "garage_door": 8,
         "appliance_repair": 8,
         "handyman": 8
-      }
+      },
+      "long_description": "FieldPulse is the modern all-in-one platform for growing service contractors, founded in 2017 in Dallas and now serving thousands of multi-trade operations across HVAC, plumbing, electrical, garage door, appliance repair, and handyman services. The product targets the specific buyer segment that gets squeezed between entry-tier FSM (Jobber, Housecall Pro) and enterprise FSM (ServiceTitan, FieldEdge): growing 3-30 tech operations wanting modern UI and full FSM features at mid-tier pricing.\n\nWhat separates FieldPulse from competitors is the combination of broad multi-trade coverage and modern user experience. The platform supports the workflows of HVAC operations (recurring service contracts, system replacement quotes) alongside garage door operations (residential service calls with photo documentation) alongside handyman operations (project quotes and progress billing) — all in one platform. For multi-trade operations or operations that started in one trade and expanded into others, FieldPulse avoids the dual-platform problem of running separate software for each service line.\n\nPricing is per-user across three tiers: Essentials at $99/user/month covers core FSM (scheduling, dispatching, invoicing, estimates), Plus at $199/user/month adds advanced features (online booking, team chat, custom workflows), and Pro at $299/user/month includes the full feature set with inventory management and advanced reporting. Annual pricing reflects a discount; monthly pricing is higher. The 14-day free trial allows substantial evaluation.\n\nIntegration coverage includes QuickBooks for accounting, Stripe for payment processing, Google Calendar for scheduling sync, Mailchimp for email marketing, and Zapier for custom workflow automation. The integration footprint is intentionally focused on the tools growing service operations actually use, rather than the enterprise integration depth ServiceTitan or BuildOps ship.\n\nThe trade-off: FieldPulse is newer (2017 founded) with a smaller user community than Jobber, Housecall Pro, or ServiceTitan. Phone support is limited at the Essentials tier. For operations prioritizing established community and case studies, the bigger brands may feel safer. For operations prioritizing modern UI, multi-trade flexibility, and mid-tier pricing, FieldPulse is increasingly the strongest option among recent FSM entrants.",
+      "pros_detail": [
+        {
+          "title": "Multi-trade coverage in one platform",
+          "explanation": "HVAC, plumbing, electrical, garage door, appliance repair, handyman all supported with workflows tailored to each trade. Multi-trade operations avoid the dual-platform problem."
+        },
+        {
+          "title": "Modern UI (4.6 G2 / 4.7 Capterra)",
+          "explanation": "Built 2017+ as modern alternative to legacy FSM. Mobile performance and office staff onboarding are notably better than older platforms in this tier."
+        },
+        {
+          "title": "Online booking built in",
+          "explanation": "Plus tier and above include customer-facing online booking widgets. Reduces inbound call load and improves customer experience. Standard on enterprise platforms but rare at FieldPulse's pricing tier."
+        },
+        {
+          "title": "Custom workflows for each trade",
+          "explanation": "Plus and Pro tiers support custom workflow templates per trade — different quote templates for HVAC system replacements vs garage door tune-ups vs handyman projects. Important for multi-trade operations."
+        },
+        {
+          "title": "Built-in team chat",
+          "explanation": "In-platform team messaging between techs, dispatchers, and office staff. Reduces dependency on third-party tools (Slack, WhatsApp) for daily operations communication."
+        },
+        {
+          "title": "14-day free trial with full features",
+          "explanation": "No feature gates during trial. Allows substantial evaluation including multi-trade workflow setup and online booking configuration."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Newer brand with smaller user community",
+          "explanation": "2017 founding versus Jobber (2010), Housecall Pro (2013), ServiceTitan (2012). Smaller third-party guide ecosystem, fewer case studies, smaller online community. Established operations may prefer bigger brands for safety."
+        },
+        {
+          "title": "Limited phone support at Essentials tier",
+          "explanation": "Phone support requires Plus tier ($199/user/mo). Smaller operations on Essentials get email/chat support only, which is fine for product issues but slower for time-sensitive operations questions."
+        },
+        {
+          "title": "Per-user pricing scales painfully at scale",
+          "explanation": "At $99-$299 per user per month, large operations (20+ techs) hit $2,000-$6,000+ per month. Past 15 techs, evaluate against ServiceTitan or BuildOps for comparable per-user cost with deeper feature sets."
+        },
+        {
+          "title": "No QuickBooks Desktop integration",
+          "explanation": "QuickBooks Online only. Operations on QuickBooks Desktop need to migrate to QuickBooks Online or use Zapier workflows. Common migration trigger."
+        },
+        {
+          "title": "Smaller integration ecosystem than enterprise FSM",
+          "explanation": "Covers core integrations (QuickBooks Online, Stripe, Google Calendar, Mailchimp, Zapier) but smaller than ServiceTitan's 50+ integration footprint. Custom integration needs depend on Zapier."
+        }
+      ],
+      "implementation_notes": "Plan for 2-4 weeks for full deployment. FieldPulse's onboarding is largely self-service at the Essentials tier with email support; Plus and Pro tiers include guided implementation. Realistic timeline for a 10-tech multi-trade operation (HVAC + garage door): Week 1 account setup, customer/property data import, service catalog setup with HVAC and garage door pricing per trade, mobile app rollout to techs. Week 2 trade-specific workflow templates configured (HVAC quote templates vs garage door service call templates), recurring service contracts migrated from existing platform, online booking widget setup if Plus tier or above. Week 3 office staff training on multi-trade dispatching, team chat workflow, online booking lead routing. Week 4 first jobs run through FieldPulse in production with parallel tracking on legacy system; financial integration with QuickBooks Online verified; customer portal launched to existing customer base. For operations migrating from spreadsheet-based workflows, the migration is straightforward — manual data entry with template setup. For operations migrating from competitor FSM (Jobber, Housecall Pro), CSV export and import works for customer data; recurring service contracts typically need manual reconstruction since data structures vary between platforms. Plan for 1-2 weeks of parallel run before full cutover.",
+      "tool_faqs": [
+        {
+          "q": "How does FieldPulse compare to Jobber and Housecall Pro?",
+          "a": "FieldPulse is mid-tier ($99-$299/user/month) with multi-trade workflows and modern UI. Jobber and Housecall Pro are entry-mid tier ($29-$169 flat-rate and $79-$300/user respectively) with broader user communities and longer track records. For 3-15 tech multi-trade operations wanting modern UI and online booking built in, FieldPulse is competitive. For operations prioritizing the largest user community and most case studies, Jobber or Housecall Pro are safer choices. Worth evaluating side-by-side via free trials."
+        },
+        {
+          "q": "Is FieldPulse worth $99-$299 per user per month?",
+          "a": "For multi-trade operations (HVAC + other trades) 3-15 techs, yes — the multi-trade workflow flexibility avoids the dual-platform problem. Single-trade operations may find Jobber or Housecall Pro adequate at lower cost. At 20+ techs, evaluate against ServiceTitan or BuildOps where the per-user cost is similar but enterprise feature depth is higher. Sweet spot is 5-15 techs running 2+ trades."
+        },
+        {
+          "q": "Does FieldPulse handle online customer booking?",
+          "a": "Yes on Plus and Pro tiers. Customer-facing online booking widget that integrates with FieldPulse scheduling. Customers book appointments through your website or a hosted booking page; bookings flow into FieldPulse and route to available techs based on service area and skills. Reduces inbound call volume significantly for residential operations."
+        },
+        {
+          "q": "Can FieldPulse handle garage door operations specifically?",
+          "a": "Yes — garage door is one of FieldPulse's six supported trades with workflows tailored to garage door service calls (residential focus, photo documentation of damage, common parts library). Strong fit for garage door operations 2-15 techs. Alternative platforms specifically for garage door are limited — most garage door operators end up on multi-trade FSM like FieldPulse, Workiz, or Housecall Pro."
+        },
+        {
+          "q": "Does FieldPulse work for solo contractors?",
+          "a": "At Essentials tier ($99/month for 1 user), yes. Solo contractors get the modern UI, online booking, and trade-specific workflows that other entry-tier FSM may not offer. However, at $99/month vs Jobber Core $39/month or Joist Pro $13/month, solo contractors who don't need the multi-trade flexibility or online booking may find cheaper options adequate."
+        }
+      ]
     },
     {
       "slug": "smart-service",
@@ -1975,7 +2047,79 @@
         "landscaping": 8,
         "cleaning": 7,
         "pool_service": 8
-      }
+      },
+      "long_description": "GorillaDesk is the leading affordable platform for small-to-mid pest control and lawn care businesses, founded in 2014 in St. Petersburg, Florida and now serving thousands of operations across the United States and internationally. The product targets a specific buyer segment that enterprise pest control platforms (PestPac, FieldRoutes) underserve: solo operators through mid-size operations (3-20 techs) wanting modern software at fair prices without enterprise complexity.\n\nWhat separates GorillaDesk from competitors is the balance of feature depth and accessible pricing. The platform handles all the pest-control-specific workflows that matter for small-to-mid operators: chemical application logs with EPA registration tracking for regulatory compliance, route optimization for recurring service days, automated invoicing with customer payment collection, esignature for service contracts, and a customer portal optimized for residential homeowner pest service. None of this is dumbed down — it's the same workflow depth as PestPac, just delivered at small-business pricing.\n\nPricing is transparent and predictable: Basic at $49/user/month covers the essentials for small operations, Pro at $89/user/month adds the routing optimization and chemical logs that mid-size operators need, and Premium at $149/user/month includes the full feature set with advanced reporting. Annual pricing reflects a discount versus monthly billing. The 14-day free trial allows substantial evaluation before commitment.\n\nIntegrations cover QuickBooks Online for accounting, Stripe for payment processing, Mailchimp for email marketing, and Zapier for custom workflow automation. The integration footprint is intentionally focused on what small-mid pest control operations actually use, rather than including enterprise integrations that small operators don't need.\n\nThe trade-off: GorillaDesk is positioned for small-to-mid operations. Enterprise pest control operations (20+ techs, multi-region, complex commercial accounts) get a thinner feature set than PestPac or FieldRoutes designed for that scale. For small-to-mid pest control operations specifically — 1-20 techs running residential and small commercial pest control — GorillaDesk is consistently the highest-rated affordable platform in the market (4.7 G2, 4.8 Capterra).",
+      "pros_detail": [
+        {
+          "title": "Pest-control workflow depth at small-business pricing",
+          "explanation": "Chemical logs, route optimization, recurring service contracts, customer portal — the same features as enterprise pest platforms (PestPac, FieldRoutes) at 1/3 to 1/5 the price. Best fit for 1-20 tech operations."
+        },
+        {
+          "title": "Transparent published pricing",
+          "explanation": "Three tiers at $49/$89/$149 per user per month. Rare in the pest control software market where most platforms require sales calls. Allows budget planning without committing time to demos."
+        },
+        {
+          "title": "EPA-compliant chemical tracking",
+          "explanation": "Built-in chemical application logs with EPA registration number tracking and state-by-state compliance reports. Critical regulatory requirement that solo operators sometimes underestimate."
+        },
+        {
+          "title": "High user satisfaction (4.7 G2 / 4.8 Capterra)",
+          "explanation": "Among the highest-rated pest control platforms. Reflects clear small-business positioning and active product development pace."
+        },
+        {
+          "title": "14-day free trial with full features",
+          "explanation": "Allows real evaluation including chemical log setup and route optimization configuration before committing. Standard among modern FSM but not all pest control software offers it."
+        },
+        {
+          "title": "Easy upgrade path within product",
+          "explanation": "Basic → Pro → Premium tier upgrades happen within the same account without data migration. Scales with operations from 1-tech to 20-tech without platform switching."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Limited at enterprise pest control scale",
+          "explanation": "Operations 20+ techs with multi-region operations, complex commercial accounts, or sophisticated marketing automation needs may outgrow GorillaDesk and need PestPac or FieldRoutes."
+        },
+        {
+          "title": "Weaker commercial pest workflows",
+          "explanation": "Built primarily for residential pest control. Commercial pest accounts with multi-property structures, certificate-of-service generation, and facility manager portals get a thinner feature set than commercial-specialty platforms."
+        },
+        {
+          "title": "No payroll integration",
+          "explanation": "Tech payroll typically handled by separate accounting/HR software. Operations wanting integrated payroll need to evaluate against platforms with native payroll integrations."
+        },
+        {
+          "title": "Smaller integration ecosystem than general FSM",
+          "explanation": "QuickBooks Online, Stripe, Mailchimp, Zapier — covers small-mid pest control needs but smaller than the integration counts on general-purpose FSM platforms."
+        },
+        {
+          "title": "Pest control specialty (not multi-trade)",
+          "explanation": "Operations combining pest control with HVAC or general home services need to either use GorillaDesk just for pest and a separate FSM for other trades, or pick a multi-trade FSM that covers pest control adequately."
+        }
+      ],
+      "implementation_notes": "Plan for 1-2 weeks for full deployment. GorillaDesk's onboarding is self-service with email support and a customer success team during business hours. Realistic timeline for a 5-tech pest control operation: Week 1 account setup, customer/property data import, chemical SKU library setup with EPA registration numbers, recurring service contract migration from existing platform or spreadsheets, route configuration with property-level service intervals. Week 2 mobile app rollout to techs with chemical reading and customer signature workflows; first routes go live in production with parallel run on existing system for risk mitigation. For operations migrating from spreadsheet-based tracking or paper logs, the migration is straightforward — manual customer entry and chemical setup, no data conversion complexity. For operations migrating from competitor platforms (PestPac, ServSuite), the data structures usually allow CSV export and import; expect 2-3 days of careful chemical SKU reconciliation since EPA registration tracking varies between platforms. The chemical log workflow is the biggest behavior change for techs migrating from paper-based logs — expect 1-2 weeks of habit formation before chemical entries become routine.",
+      "tool_faqs": [
+        {
+          "q": "How does GorillaDesk compare to PestPac and FieldRoutes?",
+          "a": "GorillaDesk serves small-mid pest control (1-20 techs) at $49-$149/user/month; PestPac and FieldRoutes serve mid-to-large (10-200 techs) at $99-$199/user/month custom-quoted. For 1-tech to 20-tech pest control operations, GorillaDesk wins on price and ease of setup. For 20+ techs with multi-region operations or complex commercial accounts, PestPac or FieldRoutes have more depth. The crossover point is typically around 15-20 techs where the platforms cost similarly but enterprise depth matters."
+        },
+        {
+          "q": "Does GorillaDesk handle commercial pest control accounts?",
+          "a": "Yes for typical commercial pest accounts (restaurants, small offices, retail). Commercial accounts get the same chemical logs, customer portal, and recurring service contract features as residential accounts. Multi-location commercial accounts (large chains with multiple sites under one contract) get a thinner feature set than commercial-specialty pest platforms. For operations where 70%+ of revenue is multi-property commercial, evaluate against FieldRoutes or PestPac."
+        },
+        {
+          "q": "Can GorillaDesk handle lawn care alongside pest control?",
+          "a": "Yes — GorillaDesk explicitly serves both pest control and lawn care, plus cleaning and pool service. The chemical log workflow handles both pesticide and fertilizer/herbicide applications. For operations combining pest and lawn care, GorillaDesk avoids the dual-platform problem of running pest software for pest and separate lawn software for lawn. Service Autopilot also handles this combo at higher pricing if you outgrow GorillaDesk."
+        },
+        {
+          "q": "What chemicals does GorillaDesk's tracking support?",
+          "a": "Any chemical you add to your library — the platform isn't restricted to specific products. You set up the chemical SKU with EPA registration number, active ingredients, target pests, and standard application rates. The platform then generates compliance reports for state pesticide regulatory agencies with the chemical history tied to specific properties and dates. EPA registration tracking matters because most state regulators require it on application reports."
+        },
+        {
+          "q": "Is GorillaDesk worth $89-$149/month for a 5-tech operation?",
+          "a": "Yes — at 5 techs on the Pro tier ($89/user/mo = $445/month), the routing optimization, automated invoicing, and chemical logs typically save 10-20 hours/week of office time. The platform also reduces customer disputes about service quality (the photo attachments and chemical history are evidence) and increases recurring contract renewals. Payback period is usually 1-3 months for pest control operations with established customer bases."
+        }
+      ]
     },
     {
       "slug": "service-autopilot",
@@ -4309,7 +4453,79 @@
         "hvac": 9,
         "plumbing": 8,
         "electrical": 8
-      }
+      },
+      "long_description": "Sera Systems is the modern HVAC, plumbing, and electrical management platform built for growing residential service shops who've outgrown entry-tier FSM but don't need ServiceTitan's enterprise complexity or pricing. Founded in 2020 in Austin and rapidly growing, Sera has captured market share among $500K-$5M revenue HVAC/plumbing/electrical operations by combining ServiceTitan-style features (marketing attribution, membership management, consumer financing, KPI dashboards) with a modern UX that's notably easier to deploy than legacy enterprise platforms.\n\nWhat separates Sera from competitors is the deliberate mid-market positioning. ServiceTitan's enterprise feature set at enterprise pricing ($400-$800/user/mo) and ServiceTitan's enterprise implementation timeline (12-24 weeks) are wrong for a 5-tech HVAC shop doing $1M revenue. Jobber and Housecall Pro at entry-tier pricing don't have the marketing attribution, membership management, or KPI reporting that growing shops need to actually scale past 10 techs. Sera targets exactly this gap: enterprise-tier features at mid-market pricing with a 4-8 week deployment timeline.\n\nPricing is custom-quoted across three tiers (Plus, Pro, Premier), with user-reported pricing typically $150-$300 per user per month — meaningfully cheaper than ServiceTitan ($400-$800) at comparable feature depth for the growing-shop tier. The custom-quoted pricing reflects significant variance by team size and module selection; growing shops should request quotes early in evaluation since pricing impacts the buy-vs-build-vs-ServiceTitan decision.\n\nIntegration coverage includes QuickBooks for accounting, Stripe for payment processing, and Google Local Services Ads — the GLS integration matters because LSA is the largest paid customer acquisition channel for residential HVAC/plumbing/electrical, and operations using LSA need the lead-attribution data to feed Sera's marketing dashboards.\n\nThe trade-off: Sera is newer (2020 founded) with a smaller customer base than ServiceTitan and a smaller third-party implementation partner ecosystem. For operations that prioritize having a large user community and many years of feature evolution, ServiceTitan still wins. For operations that prioritize modern UX, mid-market pricing, and a 4-8 week deployment, Sera is increasingly the strongest option.",
+      "pros_detail": [
+        {
+          "title": "Enterprise features at mid-market pricing",
+          "explanation": "Marketing attribution, membership management, consumer financing, KPI dashboards — typically only found in ServiceTitan at enterprise pricing. Sera ships these at user-reported $150-$300 per user per month vs ServiceTitan's $400-$800."
+        },
+        {
+          "title": "Modern UX (4.7 G2 / 4.8 Capterra)",
+          "explanation": "Built 2020+ as modern alternative to legacy enterprise FSM. Notably faster mobile performance and easier office staff onboarding than ServiceTitan according to user reviews."
+        },
+        {
+          "title": "Google Local Services Ads integration",
+          "explanation": "Direct GLS lead routing and attribution. LSA generates 30-50% of leads for many residential HVAC operations; having lead source data flow into FSM unlocks marketing ROI analysis."
+        },
+        {
+          "title": "Built-in consumer financing",
+          "explanation": "GreenSky/Synchrony integration for residential HVAC system replacements. Lifts average ticket 30-60% on high-ticket installs. Standard on ServiceTitan, rare at Sera's pricing tier."
+        },
+        {
+          "title": "4-8 week implementation vs ServiceTitan's 12-24",
+          "explanation": "Faster deployment matters for growing operations that can't afford long transitions. Sera ships dedicated implementation manager at all paid tiers."
+        },
+        {
+          "title": "KPI dashboards built for HVAC/plumbing/electrical KPIs",
+          "explanation": "Average ticket, close rate, conversion rate by lead source, technician profitability — the metrics that residential trade operations actually run on. Different from generic FSM reporting."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Newer platform (2020 founding)",
+          "explanation": "Smaller customer base, fewer case studies, smaller implementation partner ecosystem than ServiceTitan. Some operations prioritize maturity and won't switch from established platforms."
+        },
+        {
+          "title": "Custom-quoted pricing",
+          "explanation": "Sales call required to get pricing. User-reported $150-$300/user/month range but actual quotes vary by operation size and modules selected. No transparent pricing on website."
+        },
+        {
+          "title": "HVAC/plumbing/electrical specific",
+          "explanation": "Not designed for general FSM or trades outside residential HVAC/plumbing/electrical. Multi-trade operations need to evaluate whether Sera serves all their trades adequately or if a multi-trade FSM fits better."
+        },
+        {
+          "title": "Limited integration ecosystem versus enterprise platforms",
+          "explanation": "QuickBooks, Stripe, Google LSA — covers core HVAC operations but smaller than ServiceTitan's integration footprint (50+ integrations). Custom integrations may require Zapier."
+        },
+        {
+          "title": "Implementation manager required (no self-service tier)",
+          "explanation": "All paid tiers include implementation manager engagement (4-8 weeks). No self-service signup option for very small operations wanting immediate access without sales process."
+        }
+      ],
+      "implementation_notes": "Plan for 4-8 weeks for full deployment. Sera assigns a dedicated implementation manager for all paid tiers. Realistic timeline for a 10-tech HVAC operation transitioning from a legacy FSM: Weeks 1-2 discovery and system configuration including chart of accounts mapping, user roles, service catalog setup with good-better-best pricing structures. Weeks 2-4 customer data migration from existing platform, recurring service contract (membership) migration, pricebook setup with HVAC SKU library and consumer financing integration if purchased. Weeks 4-6 office staff training on dispatching workflow, membership management, KPI dashboard interpretation, and marketing attribution setup with Google LSA integration. Weeks 6-7 field tech training on mobile app with quote-presentation workflow (good-better-best at the kitchen table), customer signature capture, and time tracking. Weeks 7-8 first jobs run through Sera in production with parallel tracking on legacy system; financial integration with QuickBooks verified; KPI dashboard baseline established for 4-week post-launch comparison. For operations migrating from ServiceTitan, the data structures are more similar than for migrations from Jobber/Housecall Pro; recurring contract reconstruction is the longest pole.",
+      "tool_faqs": [
+        {
+          "q": "How does Sera Systems compare to ServiceTitan?",
+          "a": "Sera is the mid-market alternative to ServiceTitan. Pricing: Sera ~$150-$300/user/month vs ServiceTitan $400-$800/user/month. Implementation: Sera 4-8 weeks vs ServiceTitan 12-24 weeks. Features: Both have marketing attribution, membership management, consumer financing, KPI dashboards. Differences: ServiceTitan has more integration depth, larger user community, more case studies. For growing operations ($500K-$5M revenue) wanting ServiceTitan-style features without ServiceTitan-tier complexity and cost, Sera is increasingly the strongest fit."
+        },
+        {
+          "q": "Is Sera Systems worth the price for a 5-tech HVAC operation?",
+          "a": "Borderline. At 5 techs, Sera Pro at user-reported $200/user/month = $1,000/month. That's a real commitment for a sub-$1M revenue shop. The features (marketing attribution, membership, financing) typically pay back through 30-60% average ticket lift on financed installs + 15-25% better lead-source ROI from LSA attribution. But the math requires actually using the features — operations that just need basic scheduling and invoicing are better served by Jobber or Housecall Pro at lower cost."
+        },
+        {
+          "q": "What's Sera Systems best for?",
+          "a": "Growing residential HVAC, plumbing, and electrical shops ($500K-$5M revenue, 5-25 employees) that have outgrown entry-tier FSM but don't need ServiceTitan's enterprise feature set or pricing. Specifically: operations running consumer financing on installs, operations using Google Local Services Ads heavily, operations with established membership programs that need automation. Operations under $500K revenue or above $5M typically fit better with other platforms."
+        },
+        {
+          "q": "Does Sera Systems handle consumer financing?",
+          "a": "Yes — GreenSky and Synchrony integrations are built in. Consumer financing typically lifts average HVAC install ticket 30-60% by removing the price-shock barrier at the kitchen table. The financing workflow integrates with the quote presentation so customers see the monthly payment option alongside the cash price at the point of decision."
+        },
+        {
+          "q": "How does Sera compare to FieldEdge?",
+          "a": "Different positioning. FieldEdge is QuickBooks-centric, $90/user/month, established (founded 2003) with strong QuickBooks Desktop integration. Sera is modern UX with marketing attribution + consumer financing built in, ~$150-$300/user/month custom-quoted, newer (2020). FieldEdge wins for QuickBooks Desktop shops prioritizing accounting integration. Sera wins for growing shops prioritizing marketing/sales features. Both are reasonable mid-market options."
+        }
+      ]
     },
     {
       "slug": "lmn",
@@ -4542,7 +4758,79 @@
         "landscaping": 8,
         "cleaning": 7,
         "pest_control": 7
-      }
+      },
+      "long_description": "CompanyCam is the dominant photo documentation and communication platform for trades contractors, founded in 2014 in Lincoln, Nebraska and now serving tens of thousands of contracting businesses. The product targets a specific gap that traditional FSM platforms underserve: structured, organized, GPS-tagged photo documentation tied to projects, customers, and crews — critical for insurance restoration claims, marketing portfolios, customer trust, and dispute resolution.\n\nWhat separates CompanyCam from generic photo apps and built-in FSM photo features is the organization architecture. Every photo is GPS-tagged automatically, organized into project galleries by job or customer, supports annotations and comments, integrates with the major FSM platforms (ServiceTitan, JobNimbus, AccuLynx, Buildertrend) so photos flow into the FSM record without manual upload, and uses AI to automatically tag photos with content recognition (roof damage, equipment failure, before-after pairs). For roofing contractors specifically, photo documentation drives insurance claims approval rates significantly higher than text-only documentation.\n\nPricing is per-user across three tiers: Standard at $24/user/month for basic photo documentation, Pro at $34/user/month adding sharing and customer-facing galleries, and Premium at $49/user/month with the full feature set including AI tagging and unlimited customer collaboration. The 14-day free trial allows substantial evaluation. Compared to other contractor tools, CompanyCam is intentionally affordable for the photo-only positioning.\n\nIntegration coverage is unusually broad for a specialty tool: QuickBooks for accounting, Salesforce for CRM, plus direct integrations with ServiceTitan, JobNimbus, AccuLynx, and Buildertrend (the major roofing and construction PM platforms). The integration depth reflects CompanyCam's positioning — it sits ALONGSIDE your FSM as a photo-specialty layer, not as a replacement.\n\nThe trade-off: CompanyCam is photo-only, not a full FSM. It adds another monthly subscription on top of your existing FSM. Per-user pricing scales with team size, which can add up for large operations. For roofing contractors, general contractors, and operations doing significant insurance restoration work, the photo discipline pays back through faster claims and reduced disputes. For operations doing minimal photo documentation, CompanyCam may be unnecessary overhead.",
+      "pros_detail": [
+        {
+          "title": "GPS-tagged photo organization",
+          "explanation": "Every photo automatically tied to location, project, customer, and date. Eliminates the 'which job was this photo from?' problem that kills contractor photo libraries. Critical for insurance restoration documentation."
+        },
+        {
+          "title": "AI photo tagging",
+          "explanation": "Premium tier automatically tags photos with content recognition (roof damage, water damage, equipment, before-after). Reduces office staff time organizing photos by 60-80% per user reports."
+        },
+        {
+          "title": "Native integrations with major FSM platforms",
+          "explanation": "ServiceTitan, JobNimbus, AccuLynx, Buildertrend integrations mean photos flow into the FSM record without manual upload. Unusual depth of FSM integration for a specialty tool."
+        },
+        {
+          "title": "Insurance claim acceleration for roofing",
+          "explanation": "Roofing contractors report 30-50% faster insurance claim approvals when claims include CompanyCam-style organized photo documentation versus text-only or unorganized photos."
+        },
+        {
+          "title": "Customer-facing galleries (Pro+)",
+          "explanation": "Share project galleries with customers as live links. Builds trust during the project and creates marketing assets after completion. Roofing and general contracting customers particularly value this transparency."
+        },
+        {
+          "title": "High user satisfaction (4.7 G2 / 4.7 Capterra)",
+          "explanation": "Reflects clear positioning, focused feature set, and active product development. Active CompanyCam Facebook community of 30,000+ contractors."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Photo platform only, not full FSM",
+          "explanation": "CompanyCam doesn't handle scheduling, dispatching, invoicing, or customer billing. Sits on top of your FSM as a photo layer. Additional monthly subscription rather than replacement."
+        },
+        {
+          "title": "Per-user pricing scales with team size",
+          "explanation": "At $24-$49/user/month, large operations (20+ techs) hit $1,000-$2,400/month for CompanyCam alone. Cost-benefit depends on photo discipline actually paying back through faster claims and better marketing."
+        },
+        {
+          "title": "AI tagging only on Premium tier",
+          "explanation": "The headline AI feature requires the $49/user/month Premium tier. Standard and Pro tiers have manual tagging only. Smaller operations may feel pricing pressure if AI features are the buying motivation."
+        },
+        {
+          "title": "Roofing-centric positioning",
+          "explanation": "Highest value for roofing contractors and operations doing insurance restoration. HVAC, plumbing, electrical operations get value from photo documentation but the ROI math is less compelling than for roofing."
+        },
+        {
+          "title": "Photo cloud storage costs",
+          "explanation": "Unlimited photo storage included in all tiers but high-volume photographers (drone footage, video) may hit fair-use thresholds that prompt upgrade conversations or storage management."
+        }
+      ],
+      "implementation_notes": "Plan for 1-3 weeks for full deployment. CompanyCam's onboarding is largely self-service with active email support and a customer success team. Realistic timeline for a 10-tech roofing or contracting operation: Week 1 account setup, FSM integration with existing platform (ServiceTitan, JobNimbus, AccuLynx, or Buildertrend), team member invites, mobile app installation for all field staff. Week 2 photo discipline training — establishing the standards for what gets photographed at each stage of a job (arrival, before-state, work-in-progress, completion, customer signature). Office staff training on photo organization, customer gallery sharing, AI tag review (Premium tier), and insurance claim photo packaging if applicable. Week 3 first projects run with full photo discipline in production; FSM integration verified for photo flow into project records. The biggest implementation challenge is behavior change among field techs — establishing photo discipline at every job stage requires repeated reminders for 4-6 weeks before becoming routine. Operations with established photo habits adopt CompanyCam faster than operations starting from zero. For insurance restoration roofing operations, the ROI math is typically established within 60 days through faster claims approvals.",
+      "tool_faqs": [
+        {
+          "q": "Is CompanyCam worth the extra subscription on top of my FSM?",
+          "a": "For roofing contractors and operations doing insurance restoration work, almost certainly yes — the faster claims approvals (30-50% reported) and reduced disputes typically pay back the subscription within 1-3 months. For HVAC, plumbing, electrical operations doing minimal photo work, the ROI is less clear. Evaluate based on: (1) how much insurance restoration work you do, (2) how often you have customer disputes that photo evidence would resolve, (3) whether you use photos for marketing portfolios."
+        },
+        {
+          "q": "How does CompanyCam compare to taking photos with my phone's camera?",
+          "a": "Native phone photos lack: GPS tagging tied to a specific project, automatic organization into project galleries, annotations and comments tied to specific images, structured before/after pairing, AI content tagging, customer-facing galleries, and integration with your FSM. CompanyCam is essentially the office discipline layer on top of phone photos — same photos, but searchable, organized, and tied to business records. The discipline matters more than the photos themselves."
+        },
+        {
+          "q": "Does CompanyCam integrate with ServiceTitan?",
+          "a": "Yes — native integration. Photos taken in CompanyCam automatically flow into the ServiceTitan customer record. Photos taken from ServiceTitan flow to CompanyCam. The integration runs both directions and is one of the most-used CompanyCam integrations. Setup is straightforward through the integrations panel in either platform."
+        },
+        {
+          "q": "Can CompanyCam handle drone footage?",
+          "a": "Yes — drone photos and video upload through the same mobile app or web interface. GPS tagging works for drone images if the drone embeds GPS metadata (most modern drones do). Common workflow for roofing contractors: drone aerial documentation of roof damage + ground-level photos of specific damage sites, all organized in the same project gallery."
+        },
+        {
+          "q": "What's the difference between Standard, Pro, and Premium tiers?",
+          "a": "Standard ($24/user/mo) covers basic photo documentation with GPS tagging and project organization. Pro ($34/user/mo) adds customer-facing galleries and unlimited customer collaboration. Premium ($49/user/mo) adds AI photo tagging, advanced annotations, and premium support. For most contractors, Pro is the sweet spot. Roofing operations using AI features for tagging damage typically need Premium."
+        }
+      ]
     },
     {
       "slug": "buildxact",
@@ -5053,7 +5341,79 @@
         "electrical": 7,
         "general_contractor": 6,
         "appliance_repair": 6
-      }
+      },
+      "long_description": "MaintainX is the leading modern cloud CMMS (Computerized Maintenance Management System), founded in 2018 in San Francisco and now serving thousands of facility maintenance teams globally. The product captured significant market share among internal maintenance operations 5-500 employees by being the first mobile-first CMMS — built from scratch for techs on phones rather than office-based maintenance planners on desktop computers.\n\nWhat separates MaintainX from legacy CMMS (Maximo, Maintenance Connection) is the modern technology foundation: a cloud-native architecture with offline-capable mobile apps for techs working in basements and rooftops without signal, QR code-based asset scanning for instant work order lookup, AI-powered procedure templates that capture institutional knowledge from senior techs, and Slack/Microsoft Teams integration for workflow communication.\n\nPricing is genuinely accessible: Basic tier is free for small teams (limited features, no work order limits), Essential at $16/user/month covers most operations under 50 techs, Premium at $49/user/month adds advanced reporting and parts inventory tracking, and Enterprise tier is custom-quoted for operations 100+ techs. The 30-day free trial allows full evaluation of paid tiers — longer than industry standard 14 days.\n\nIntegration coverage includes QuickBooks for accounting, SAP and Oracle for enterprise ERP, Slack and Microsoft Teams for workflow comms, and Zapier for custom automations. The Slack/Teams integrations matter because most maintenance teams already use one of these for daily communication — having work orders flow into those channels rather than requiring tech to switch apps is a meaningful workflow improvement.\n\nThe trade-off: MaintainX is internal maintenance, not customer-facing field service. HVAC, plumbing, and electrical contractors visiting customer sites need an FSM platform (ServiceTitan, Jobber, Housecall Pro), not a CMMS. MaintainX is for the facility manager AT the building, not the contractor servicing it. For internal maintenance teams 5-500 employees, MaintainX is consistently the highest-rated modern CMMS option.",
+      "pros_detail": [
+        {
+          "title": "Mobile-first cloud architecture",
+          "explanation": "Built 2018+ as modern alternative to legacy CMMS. Offline-capable mobile app handles techs working in basements, rooftops, and other low-signal locations. UI quality genuinely better than legacy competitors."
+        },
+        {
+          "title": "Free tier with no work order limits",
+          "explanation": "Basic tier is genuinely free, not a trial. Limited features but no time limit. Lowest barrier to entry in the CMMS category — competitors typically start at $35-$50/user/month with no free option."
+        },
+        {
+          "title": "QR code asset scanning",
+          "explanation": "Print QR codes on equipment; techs scan to instantly load work order history, manuals, and parts lists. Critical for operations with hundreds of pieces of equipment across multiple buildings."
+        },
+        {
+          "title": "30-day free trial",
+          "explanation": "Full Premium tier access for 30 days. Longer than most CMMS competitors (14 days standard). Allows complete monthly cycle of preventive maintenance to flow through before commitment."
+        },
+        {
+          "title": "Slack and Microsoft Teams integration",
+          "explanation": "Work orders flow into the chat tools the maintenance team already uses daily. Reduces app-switching friction; improves response time to high-priority work orders."
+        },
+        {
+          "title": "Top user satisfaction rating",
+          "explanation": "4.8 G2, 4.8 Capterra — highest in the modern CMMS category. Active product development pace (weekly feature releases reported)."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Internal maintenance only, not customer-facing FSM",
+          "explanation": "Not designed to bill customers. HVAC, plumbing, electrical contractors need ServiceTitan, Jobber, or Housecall Pro for customer-billing workflows. Confusion between CMMS and FSM is the most common buyer mistake in this space."
+        },
+        {
+          "title": "Free tier has real limitations",
+          "explanation": "No automation, no reports, no integrations on the Basic tier. Real operations need at least the Essential tier ($16/user/mo). Free is genuinely free but not full-featured."
+        },
+        {
+          "title": "Enterprise tier custom-quoted",
+          "explanation": "Operations past 100 techs pay enterprise pricing that isn't published. User-reported $40-$80 per user per month at enterprise scale."
+        },
+        {
+          "title": "Newer than legacy CMMS",
+          "explanation": "2018 founding versus Maximo's 1990s/2000s history. Feature depth in edge cases (complex parts hierarchies, multi-site enterprise reporting) less mature than legacy enterprise CMMS."
+        },
+        {
+          "title": "Limble CMMS is a direct competitor with similar features",
+          "explanation": "Both rated 4.8, both modern cloud CMMS. Worth evaluating side-by-side rather than picking either by default. Implementation and pricing differ; feature parity is close."
+        }
+      ],
+      "implementation_notes": "Plan for 2-6 weeks for full deployment depending on operation size. MaintainX's onboarding is largely self-service with email support; paid Premium and Enterprise tiers include a dedicated customer success manager. Realistic timeline for a 15-tech facility maintenance operation: Week 1 account setup, asset library import (manually or via CSV), location/building hierarchy configuration. Weeks 2-3 work order template creation for typical job types, QR code generation and printing for high-priority assets, preventive maintenance schedule setup. Weeks 3-4 mobile app rollout to techs with hands-on training; first work orders processed end-to-end. Weeks 4-6 reporting dashboard configuration, parts inventory baseline establishment if applicable, integration setup with QuickBooks or SAP. For operations migrating from spreadsheet-based tracking or paper work orders, the migration is largely just starting fresh in MaintainX — no data import complexity. For operations migrating from legacy CMMS (Maximo, Maintenance Connection), expect manual reconstruction of asset libraries; the data structures differ enough that bulk imports rarely transfer cleanly. Plan for 4-8 weeks of dual-system operation during transition.",
+      "tool_faqs": [
+        {
+          "q": "What's the difference between CMMS and FSM software?",
+          "a": "CMMS (Computerized Maintenance Management System) is for INTERNAL maintenance teams — the facility manager at a hospital, school, or office building managing their building's equipment. FSM (Field Service Management) is for CONTRACTORS visiting customer sites — the HVAC company servicing that hospital. MaintainX is CMMS. ServiceTitan, Jobber, Housecall Pro are FSM. They're different software for different jobs and the buyers are different people."
+        },
+        {
+          "q": "How does MaintainX compare to UpKeep and Limble CMMS?",
+          "a": "All three are modern cloud CMMS competitors. UpKeep is the longest-established (founded 2014). MaintainX (2018) and Limble (2017) are newer with similar feature sets. All three rate 4.7-4.8 across G2 and Capterra. Worth evaluating: MaintainX has the strongest free tier and largest user community; Limble has slightly cheaper paid tiers; UpKeep has more legacy customers and deeper inventory management. For a 30-tech facility maintenance operation, expect $400-$1,500/month for any of the three at production usage."
+        },
+        {
+          "q": "Is MaintainX's free tier actually usable?",
+          "a": "Yes for very small operations (1-3 techs, basic work order tracking). The free tier has no time limit but lacks: automation rules, advanced reports, integrations beyond a few basic ones, and parts inventory features. Most operations upgrade to Essential ($16/user/mo) within 1-3 months for the automation and reporting features. The free tier serves best as an extended trial or for solo facility managers."
+        },
+        {
+          "q": "Does MaintainX integrate with SAP or Oracle?",
+          "a": "Yes — both SAP and Oracle integrations are supported, which is rare among modern CMMS (most only integrate with QuickBooks-tier accounting). The SAP and Oracle integrations reflect MaintainX's positioning toward larger operations and corporate facility management. For smaller operations on QuickBooks, the standard QuickBooks integration is also supported."
+        },
+        {
+          "q": "When should I choose MaintainX over a full FSM platform?",
+          "a": "Choose CMMS over FSM when: (1) you're an internal maintenance team at a building/facility, not a contractor billing customers; (2) you're tracking work orders for equipment you own, not services rendered to customers; (3) you don't need quote-to-invoice workflows; (4) you're paying technicians, not invoicing customers. If you don't fit those criteria, you probably want FSM (ServiceTitan, Jobber, Housecall Pro) instead."
+        }
+      ]
     },
     {
       "slug": "fieldaware",
