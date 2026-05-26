@@ -1,28 +1,74 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { verticals, verticalToUrl } from '../lib/data';
+import { tools, verticals, verticalToUrl, aggregateRating, formatPrice } from '../lib/data';
+
+// Top 6 tools by aggregate rating for the "popular tools" section
+const popularTools = [...tools]
+  .filter((t) => (t as { long_description?: string }).long_description)
+  .sort((a, b) => (aggregateRating(b) ?? 0) - (aggregateRating(a) ?? 0))
+  .slice(0, 6);
+
+// Curated most-searched comparisons
+const popularComparisons = [
+  { a: 'jobber', b: 'housecall-pro', label: 'Jobber vs Housecall Pro' },
+  { a: 'jobber', b: 'servicetitan', label: 'Jobber vs ServiceTitan' },
+  { a: 'housecall-pro', b: 'servicetitan', label: 'Housecall Pro vs ServiceTitan' },
+  { a: 'fieldedge', b: 'servicetitan', label: 'FieldEdge vs ServiceTitan' },
+  { a: 'acculynx', b: 'jobnimbus', label: 'AccuLynx vs JobNimbus' },
+  { a: 'buildertrend', b: 'jobtread', label: 'Buildertrend vs JobTread' },
+];
+
+function comparisonUrl(a: string, b: string): string {
+  const [first, second] = [a, b].sort();
+  return `/compare/${first}-vs-${second}/`;
+}
+
+const tools_for_section = [
+  { label: 'Get Matched Quiz', desc: 'Find your tool in 60 seconds', href: '/quiz/' },
+  { label: 'ROI Calculator', desc: 'Estimate annual savings and payback', href: '/roi-calculator/' },
+  { label: 'Cost-of-Switch Calc', desc: 'Real 12-month switching cost', href: '/cost-of-switch/' },
+  { label: 'Glossary', desc: 'FSM/CMMS/AIA jargon explained', href: '/glossary/' },
+  { label: 'All Tools', desc: 'Filter and browse 59 tools', href: '/tools/' },
+  { label: 'Methodology', desc: 'How we rank and disclose', href: '/methodology/' },
+];
 ---
 
 <Layout
   title="Page not found — WrenchStack"
-  description="The page you're looking for doesn't exist. Browse our software comparisons by trade instead."
+  description="The page you're looking for doesn't exist. Try our search at the top, or pick a starting point below."
   noindex={true}
 >
-  <section class="mx-auto max-w-3xl px-4 py-20 text-center">
-    <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">404</p>
-    <h1 class="mt-2 text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
-      That page doesn't exist
-    </h1>
-    <p class="mt-4 text-lg text-slate-600">
-      The link you followed may be broken, or the page may have been moved. Try one of
-      these instead.
-    </p>
+  <section class="mx-auto max-w-5xl px-4 py-16">
+    <div class="mb-12 text-center">
+      <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">404</p>
+      <h1 class="mt-2 text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        That page doesn't exist
+      </h1>
+      <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-600">
+        The link you followed may be broken, or the page may have moved. Try the search bar at the top of the page, or pick a starting point below.
+      </p>
 
-    <div class="mt-10">
-      <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-500">
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        <a
+          href="/"
+          class="rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+        >
+          ← Back to homepage
+        </a>
+        <a
+          href="/quiz/"
+          class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600"
+        >
+          Take the matching quiz →
+        </a>
+      </div>
+    </div>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-700">
         Browse by trade
       </h2>
-      <div class="flex flex-wrap justify-center gap-2">
+      <div class="flex flex-wrap gap-2">
         {verticals.map((v) => (
           <a
             href={`/${verticalToUrl(v.slug)}/`}
@@ -32,21 +78,71 @@ import { verticals, verticalToUrl } from '../lib/data';
           </a>
         ))}
       </div>
-    </div>
+    </section>
 
-    <div class="mt-10 flex justify-center gap-3">
-      <a
-        href="/"
-        class="rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
-      >
-        ← Back to homepage
-      </a>
-      <a
-        href="/tools/"
-        class="rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:border-slate-400"
-      >
-        Browse all tools
-      </a>
-    </div>
+    <section class="mb-12">
+      <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-700">
+        Popular tools
+      </h2>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {popularTools.map((t) => {
+          const r = aggregateRating(t);
+          return (
+            <a
+              href={`/tools/${t.slug}/`}
+              class="group rounded-lg border border-slate-200 bg-white p-4 transition hover:border-orange-400 hover:shadow-sm"
+            >
+              <div class="flex items-baseline justify-between">
+                <div class="font-semibold text-slate-900 group-hover:text-orange-600">{t.name}</div>
+                {r !== null && <span class="text-sm font-medium text-slate-500">{r.toFixed(1)} ★</span>}
+              </div>
+              <div class="mt-1 text-xs text-slate-500">{formatPrice(t)}</div>
+              <div class="mt-1 text-xs italic text-slate-400 line-clamp-1">{t.tagline}</div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-700">
+        Most-searched comparisons
+      </h2>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {popularComparisons.map((c) => (
+          <a
+            href={comparisonUrl(c.a, c.b)}
+            class="rounded-lg border border-slate-200 bg-white p-3 text-sm font-medium text-slate-900 transition hover:border-orange-400 hover:text-orange-600"
+          >
+            {c.label} →
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-700">
+        Tools and guides
+      </h2>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {tools_for_section.map((t) => (
+          <a
+            href={t.href}
+            class="group rounded-lg border border-slate-200 bg-white p-4 transition hover:border-orange-400 hover:shadow-sm"
+          >
+            <div class="font-semibold text-slate-900 group-hover:text-orange-600">{t.label}</div>
+            <div class="mt-1 text-xs text-slate-500">{t.desc}</div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="rounded-lg bg-slate-50 p-6 text-center text-sm text-slate-600">
+      <p>
+        Came from a broken link?
+        Email <a href="mailto:hello@wrenchstack.com" class="text-orange-600 hover:underline">hello@wrenchstack.com</a>
+        with the URL — we'll fix the link or add a redirect.
+      </p>
+    </section>
   </section>
 </Layout>
