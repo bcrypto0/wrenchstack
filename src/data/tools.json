@@ -1755,7 +1755,79 @@
         "cleaning": 7,
         "pest_control": 7,
         "appliance_repair": 7
-      }
+      },
+      "long_description": "Synchroteam is the dominant international field service management platform for multi-language and multi-currency operations, founded in 2007 in Paris and now serving service businesses across 50+ countries. The product was built from the ground up for global operations — multi-language UI (English, French, Spanish, Italian, German, Portuguese, and others), multi-currency billing, time-zone-aware scheduling, and integration with international accounting systems beyond the US-centric QuickBooks ecosystem.\n\nWhat separates Synchroteam from US-rooted FSM competitors is the international architecture. Multi-language support isn't just translated UI — it's full localization including date/time formats, currency handling, tax structures (VAT, GST, etc.), and locale-specific invoice formats. For service businesses with techs working across countries, Synchroteam handles the operational complexity that platforms designed for single-country operations struggle with.\n\nPricing is transparent and accessible: single per-user tier at $28/user/month with minimum-user requirements that vary by operation size. The 14-day free trial allows substantial evaluation including multi-language UI testing.\n\nIntegration coverage is unusually broad for accounting platforms: QuickBooks (US), Xero (AU/NZ/UK), FreshBooks (Canada/US), Sage (UK/EU), plus Zapier for custom automation. The diverse accounting integration set reflects Synchroteam's global positioning — operations in different countries typically run different accounting platforms, and Synchroteam supports the major ones in each major market.\n\nThe trade-off: Synchroteam is positioned for international and multi-language operations specifically. US-only service businesses on QuickBooks Online with English-only teams may find Jobber or Housecall Pro better-fit on US-specific features (US-style scheduling conventions, US tax handling, US payroll integrations). For service businesses with international clients, multi-language teams, multi-currency invoicing, or European/Asian/Latin American operations, Synchroteam is consistently the strongest specialty option in the trades software market.",
+      "pros_detail": [
+        {
+          "title": "Multi-language UI (6+ languages)",
+          "explanation": "Full localization across English, French, Spanish, Italian, German, Portuguese, and others. Critical for service businesses with non-English-speaking field techs or international customers. Most US-rooted FSM ships English-only."
+        },
+        {
+          "title": "Multi-currency billing built in",
+          "explanation": "Operations billing in multiple currencies (USD, EUR, GBP, CAD, AUD) get native multi-currency support. Includes locale-specific tax structures (VAT, GST, sales tax) handled correctly per region."
+        },
+        {
+          "title": "Broad accounting integration ecosystem",
+          "explanation": "QuickBooks (US), Xero (AU/NZ/UK), FreshBooks (Canada/US), Sage (UK/EU) — multi-country accounting coverage. Operations on European or Australian accounting systems get native integration where US-rooted FSM forces manual workarounds."
+        },
+        {
+          "title": "Transparent single-tier pricing",
+          "explanation": "$28/user/month single tier — predictable, no upgrade-tier feature gates. Among the most affordable mid-tier FSM in the international market. Pricing visible without sales call required."
+        },
+        {
+          "title": "Time-zone-aware scheduling",
+          "explanation": "Operations with techs across multiple time zones get scheduling that handles zone differences correctly. Critical for multi-region service operations or operations dispatching from one country to another."
+        },
+        {
+          "title": "Long product history (18+ years)",
+          "explanation": "2007 founding means 18 years of FSM development. Feature depth and edge-case handling in international operations reflect long product evolution. Among the longest-tenured FSM platforms still active."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "US-centric UX feels less polished",
+          "explanation": "Built primarily for European market initially; US-specific UX conventions (US date formats default, US-style address handling, US tax conventions) feel slightly less refined than US-rooted competitors. Functional but noticeable to US-only operations."
+        },
+        {
+          "title": "Phone support not 24/7",
+          "explanation": "Support primarily during European business hours. US operations get some overlap during US morning but afternoon and evening US support is email/chat only. Smaller US support team than US-rooted competitors."
+        },
+        {
+          "title": "Minimum user requirements",
+          "explanation": "Per-user pricing has minimum-user requirements that vary by plan and region. Solo contractors and 1-2 person operations may find the minimums constraining vs platforms with explicit single-user pricing (Jobber, Joist)."
+        },
+        {
+          "title": "Limited US payroll integrations",
+          "explanation": "Payroll integration ecosystem is stronger in EU markets than US. US operations needing tight payroll integration (Gusto, ADP, Paychex) may find competitors like Workiz or Housecall Pro better-fit."
+        },
+        {
+          "title": "Smaller US user community",
+          "explanation": "US user base smaller than Jobber, Housecall Pro, or ServiceTitan. Fewer US-specific case studies, smaller US-focused Facebook community, fewer US YouTube tutorials. Self-service learning ecosystem is European-leaning."
+        }
+      ],
+      "implementation_notes": "Plan for 2-4 weeks for full deployment. Synchroteam's onboarding is self-service with email support; larger deployments (25+ techs) get dedicated implementation manager engagement. Realistic timeline for a 15-tech multi-language service operation: Week 1 account setup with language and currency configuration, user setup with role permissions, customer data import including multi-currency historical records, accounting integration with QuickBooks/Xero/Sage based on region. Weeks 2-3 mobile app rollout to techs with multi-language UI training, scheduling workflow setup with time-zone configuration if multi-region, dispatching workflow training for office staff. Week 4 first jobs run through Synchroteam in production with parallel tracking on legacy system; multi-currency invoicing verified; tax handling validated against accounting integration. For US-only English operations adopting Synchroteam, the implementation simplifies considerably — single language, single currency, single-region scheduling. For genuinely international operations (multi-country techs, multi-currency customers), expect 4-6 weeks as the multi-region configuration takes time to dial in correctly. The biggest behavior change for US-rooted teams is adopting the international UI conventions — date formats, address structures, and tax handling differ enough to require habit formation.",
+      "tool_faqs": [
+        {
+          "q": "Is Synchroteam suitable for US-based service businesses?",
+          "a": "Yes, but with caveats. The core FSM workflows (scheduling, dispatching, invoicing, mobile app) work well for US operations. US-specific features (US payroll integrations, US-style scheduling conventions, US tax handling) are less mature than US-rooted competitors like Jobber or Housecall Pro. For US-only operations on QuickBooks Online with English-only teams, evaluate Synchroteam against Jobber, Housecall Pro, and Workiz. For US operations with international clients or multi-language teams, Synchroteam wins decisively on multi-language and multi-currency support."
+        },
+        {
+          "q": "What languages does Synchroteam support?",
+          "a": "Full localization across English, French, Spanish, Italian, German, Portuguese, and others (8+ languages with active maintenance). Localization includes UI translation plus locale-specific date formats, currency handling, tax structures, and invoice formats. Tech mobile app supports the same language set, so non-English-speaking field techs get native-language workflows."
+        },
+        {
+          "q": "How does Synchroteam compare to Jobber for an international service operation?",
+          "a": "For US-only operations on QuickBooks, Jobber wins on US-specific UX polish and larger US user community. For international operations or operations with multi-language teams, Synchroteam wins decisively on multi-language UI, multi-currency billing, and international accounting integration breadth (Xero, Sage, FreshBooks alongside QuickBooks). Operations spanning US + international markets sometimes run both — Jobber for US operations, Synchroteam for international."
+        },
+        {
+          "q": "Does Synchroteam integrate with Xero?",
+          "a": "Yes — Xero integration is supported, which matters for operations in Australia, New Zealand, the UK, and other markets where Xero dominates accounting. Synchroteam's Xero integration is mature given the platform's European roots — comparable depth to Tradify's Xero integration. For Xero-using operations, Synchroteam is a strong FSM fit."
+        },
+        {
+          "q": "Is Synchroteam's $28/user/month worth it?",
+          "a": "For multi-language operations or international service businesses, yes — the multi-language and multi-currency features alone justify the cost versus US-rooted competitors that lack these. For US-only English-only operations, $28/user is similar to Jobber Core ($39/user/mo single-tier) or Synchroteam's other competitors at the same tier. The decision is feature-set fit, not just price."
+        }
+      ]
     },
     {
       "slug": "fieldpulse",
@@ -2663,7 +2735,79 @@
         "electrical": 7,
         "landscaping": 7,
         "general_contractor": 7
-      }
+      },
+      "long_description": "BigChange is the leading UK-rooted field service management platform expanding into US and global markets, founded in 2014 in Leeds, England and now serving thousands of mid-large field service operations. The product targets a specific buyer segment: mid-large field service organizations 25-500 technicians running mixed fleet + service operations, with deep vehicle tracking and stock control as differentiators alongside standard FSM.\n\nWhat separates BigChange from US-rooted enterprise FSM (ServiceTitan, BuildOps) is the JobWatch platform's fleet-integration depth. BigChange handles vehicle tracking, fuel monitoring, driver behavior analytics, and route optimization at the same depth as dedicated fleet management platforms — alongside the FSM workflows. For service operations where fleet costs and driver behavior meaningfully impact operations economics, this depth is unusual at the FSM tier.\n\nPricing is custom-quoted across three tiers (Starter, Pro, Enterprise) with pricing publicly available for UK customers only — US operations require sales-call quotes. User-reported US pricing lands in $80-$200 per user per month range depending on team size and module selection, putting BigChange in the mid-to-upper FSM tier but cheaper than ServiceTitan or BuildOps at comparable scale.\n\nIntegration coverage focuses on accounting: Xero (strong UK/AU/NZ/UK), Sage (UK/EU dominant), QuickBooks (US-focused), plus Salesforce for CRM-heavy operations. The integration footprint reflects BigChange's European roots; US-specific integrations (US payroll, US-specific marketing platforms) are less mature than US-rooted competitors.\n\nThe trade-off: BigChange is positioned for mid-to-large operations (25+ techs) with significant fleet operations. Small US-only operations get better fit from Jobber, Housecall Pro, or FieldPulse. Operations without significant fleet management needs may find the deep vehicle tracking features unnecessary complexity. For mid-large international field service operations or US operations with substantial fleet management needs, BigChange is increasingly competitive against ServiceTitan and BuildOps at meaningfully lower cost.",
+      "pros_detail": [
+        {
+          "title": "Best-in-class vehicle tracking + fleet integration",
+          "explanation": "Vehicle tracking, fuel monitoring, driver behavior analytics, route optimization at fleet-management-platform depth. Operations where fleet costs significantly impact economics get FSM + fleet management in one platform vs running two."
+        },
+        {
+          "title": "AI assistant for dispatching",
+          "explanation": "Built-in AI assistant suggests optimal job assignments, route plans, and customer communications. Among the more mature AI features in FSM (most platforms ship AI as roadmap items)."
+        },
+        {
+          "title": "Cheaper than ServiceTitan/BuildOps at comparable scale",
+          "explanation": "User-reported $80-$200/user/month vs ServiceTitan $400-$800 or BuildOps similar. For 50-tech operations, BigChange typically costs 1/3 to 1/2 of ServiceTitan with comparable enterprise FSM depth."
+        },
+        {
+          "title": "Strong UK/EU accounting integration",
+          "explanation": "Xero and Sage integrations are best-in-class for operations in UK/AU/NZ markets. Operations on Xero specifically (rather than QuickBooks) get a meaningfully better experience than US-rooted FSM."
+        },
+        {
+          "title": "Stock control built in",
+          "explanation": "Parts and equipment inventory management integrated with FSM workflows. Important for service operations with significant parts handling — operations can avoid running separate inventory management software."
+        },
+        {
+          "title": "Established (founded 2014)",
+          "explanation": "10+ years of FSM development with mature customer success processes for mid-large deployments. Implementation methodology refined over hundreds of UK enterprise customers; growing US implementation experience."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "US market presence still growing",
+          "explanation": "Originated in UK; US user community is smaller than ServiceTitan, FieldEdge, or BuildOps. US-specific features (US payroll integrations, US change order workflows) less mature than US-rooted competitors."
+        },
+        {
+          "title": "Custom-quoted pricing for US (opaque)",
+          "explanation": "UK customers see public pricing; US customers must contact sales for quotes. User-reported $80-$200/user/month range but actual quotes vary significantly. No transparent pricing on the US-facing website."
+        },
+        {
+          "title": "Longer implementation than US competitors",
+          "explanation": "Mid-large deployments run 8-16 weeks vs typical 4-8 weeks for US-rooted FSM at similar scale. The fleet management module setup adds complexity beyond standard FSM implementation."
+        },
+        {
+          "title": "Fleet features overkill for small operations",
+          "explanation": "Operations under 25 techs without significant fleet management needs pay for vehicle tracking depth they won't use. Smaller operations get better fit from FSM platforms without the fleet integration premium."
+        },
+        {
+          "title": "Smaller US user community",
+          "explanation": "Most case studies, tutorials, and YouTube content come from UK market. US-specific guidance is thinner than for US-rooted competitors. Self-service learning ecosystem is UK-leaning."
+        }
+      ],
+      "implementation_notes": "Plan for 8-16 weeks for full deployment depending on operation size and module selection. BigChange assigns a dedicated implementation manager for all paid tiers. Realistic timeline for a 40-tech mid-large field service operation transitioning from legacy FSM: Weeks 1-3 discovery and system configuration including chart of accounts mapping for accounting integration (Xero/Sage/QuickBooks), user roles and permissions, vehicle fleet onboarding with GPS device installation if applicable. Weeks 3-6 customer data migration, recurring service contract migration, stock inventory baseline establishment, dispatch workflow configuration. Weeks 6-10 office staff training on dispatching workflow, fleet management module, stock control, and AI assistant features. Weeks 10-13 field tech training on mobile app with vehicle tracking integration, customer signature capture, and parts handling. Weeks 13-16 first jobs run through BigChange in production with parallel tracking on legacy system; financial integration verified; fleet metrics baseline established for ROI measurement. For operations migrating from US-rooted FSM (ServiceTitan, FieldEdge), the data structures and workflows differ enough that expect substantial reconstruction effort. For operations migrating from spreadsheet-based or paper workflows, the migration is simpler — adopt BigChange as the source of truth from day one.",
+      "tool_faqs": [
+        {
+          "q": "Is BigChange suitable for US-based service operations?",
+          "a": "Yes for mid-large US operations (25+ techs) with significant fleet management needs. The fleet integration depth and AI assistant features are competitive against ServiceTitan/BuildOps at meaningfully lower cost. US-specific features (US payroll integrations, US tax handling, US-style change order workflows) are less mature than US-rooted competitors. For US operations without significant fleet needs or under 25 techs, evaluate Jobber, Housecall Pro, FieldPulse, or Sera Systems instead."
+        },
+        {
+          "q": "How does BigChange compare to ServiceTitan?",
+          "a": "BigChange is significantly cheaper ($80-$200/user/mo vs ServiceTitan $400-$800/user/mo) at comparable enterprise FSM feature depth. ServiceTitan has stronger US market presence, larger US user community, deeper US payroll integrations, and more US-specific case studies. BigChange has stronger fleet management integration, AI assistant features, UK/EU accounting integration depth, and substantially better cost-to-feature ratio. For US-only commercial residential operations, ServiceTitan is the default. For mid-large operations willing to evaluate UK-rooted alternatives, BigChange is increasingly competitive."
+        },
+        {
+          "q": "What's BigChange's fleet management capability?",
+          "a": "Vehicle tracking (real-time GPS), fuel monitoring with cost tracking, driver behavior analytics (harsh braking, speeding, idle time), route optimization with traffic awareness, and vehicle maintenance scheduling. Same depth as dedicated fleet management platforms (Verizon Connect, Fleetio) but integrated with FSM workflows. Critical for operations where fleet costs are 15-25% of operational expenses."
+        },
+        {
+          "q": "Does BigChange integrate with Xero?",
+          "a": "Yes — Xero integration is best-in-class given BigChange's UK origins. Critical for operations in Australia, New Zealand, the UK, and other markets where Xero dominates commercial accounting. For US operations on QuickBooks, the QuickBooks integration is also supported with mature feature depth."
+        },
+        {
+          "q": "What's the AI assistant in BigChange?",
+          "a": "Built-in AI assistant suggests optimal job assignments based on tech skills, location, and historical data; recommends route plans based on traffic and stops; drafts customer communications; and surfaces job-related insights from historical patterns. Among the more mature AI features in FSM — most competitors ship AI features as roadmap items rather than working production features. Active product development continues to expand AI capabilities."
+        }
+      ]
     },
     {
       "slug": "fieldcomplete",
@@ -2723,7 +2867,79 @@
         "roofing": 7,
         "garage_door": 7,
         "appliance_repair": 7
-      }
+      },
+      "long_description": "Field Complete is the modern service management platform with a built-in subcontractor marketplace, founded in 2018 in Atlanta and now serving service businesses that use subcontracted labor alongside in-house techs. The product fills a specific gap that general FSM platforms underserve: operations that meaningfully scale through subcontractor relationships rather than just hiring more W-2 employees, with the subcontractor coordination workflow as a first-class feature rather than a workaround.\n\nWhat separates Field Complete from competitors is the subcontractor marketplace. Most FSM platforms treat subcontractors as edge cases — operations track them as 1099 contractors in payroll but use the same workflows as W-2 techs. Field Complete makes subcontractor coordination a core platform feature: vetted sub network with pre-screened backgrounds and qualifications, automated routing to available subs based on skills and location, transparent rate negotiation, and quality tracking with customer feedback. For service operations growing through subcontractor relationships (common in property maintenance, multi-location service, and capacity overflow scenarios), this architecture significantly reduces coordination overhead.\n\nPricing is per-user across three tiers: Basic at $39/user/month for core FSM with subcontractor coordination, Pro at $79/user/month adding white-label customer portal and automated routing, and Enterprise custom-quoted for operations 50+ users with advanced workflow customization. The 14-day free trial allows substantial evaluation including subcontractor marketplace access.\n\nIntegration coverage includes QuickBooks for accounting, Stripe for payment processing, and Google Calendar for scheduling sync. The integration footprint reflects Field Complete's positioning toward small-mid service businesses that subcontract work; enterprise integrations (Salesforce, NetSuite) require Enterprise tier engagement.\n\nThe trade-off: Field Complete's subcontractor marketplace is the platform's biggest differentiator — but it's only valuable for operations that actually use subcontracted labor meaningfully. Pure W-2-employee operations get standard FSM functionality similar to mid-tier competitors without leveraging the differentiator. Newer platform (2018) means smaller user base and fewer case studies than established FSM. For service operations 3-50 employees that meaningfully use subcontractors — property maintenance, multi-location service, capacity overflow handling — Field Complete is consistently the strongest specialty fit.",
+      "pros_detail": [
+        {
+          "title": "Built-in subcontractor marketplace",
+          "explanation": "Vetted sub network with pre-screened backgrounds, automated routing based on skills and location, transparent rate negotiation. Unique among FSM platforms — most treat subcontractors as edge cases requiring manual workflow workarounds."
+        },
+        {
+          "title": "Automated routing for subs",
+          "explanation": "Pro tier and above include automated job-to-sub matching based on skills, location, availability, and historical performance. Eliminates the manual phone-around process most operations use to find available subs for capacity overflow."
+        },
+        {
+          "title": "White-label customer portal",
+          "explanation": "Pro tier and above include customer-facing portal with the operation's branding (not Field Complete branding). Important for operations doing significant subcontracted work where customers shouldn't see the platform branding."
+        },
+        {
+          "title": "Strong 4.5 G2 / 4.6 Capterra rating",
+          "explanation": "Reflects clear positioning and consistent execution at the subcontractor-coordination tier. Top quartile for FSM platforms in the mid-market segment."
+        },
+        {
+          "title": "Modern UI (founded 2018)",
+          "explanation": "Built as modern cloud-native FSM with mobile-first architecture. UI quality and mobile performance competitive with FieldPulse, Sera Systems, and other recent FSM entrants."
+        },
+        {
+          "title": "Affordable Basic tier at $39/user/month",
+          "explanation": "Among the more accessible mid-tier FSM pricing. Operations can get core FSM + subcontractor marketplace access without committing to higher tier features they may not need."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Subcontractor marketplace only valuable if you use subs",
+          "explanation": "The platform's biggest differentiator is only valuable for operations that meaningfully use subcontracted labor. Pure W-2-employee operations get standard mid-tier FSM functionality similar to FieldPulse, Synchroteam, or Service Fusion without leveraging Field Complete's unique strength."
+        },
+        {
+          "title": "Smaller user base than established FSM",
+          "explanation": "2018 founding with smaller user community than Jobber, Housecall Pro, or ServiceTitan. Fewer case studies, smaller online community, fewer third-party guides. Affects availability of consultants familiar with Field Complete specifically."
+        },
+        {
+          "title": "Per-user pricing scales with team size",
+          "explanation": "At $39-$79 per user per month, large operations (25+ users) hit $975-$1,975 per month. Subcontractor marketplace fees may also apply for jobs routed through the platform. Cost-benefit depends on whether the subcontractor coordination efficiency pays back the subscription."
+        },
+        {
+          "title": "Limited integration ecosystem",
+          "explanation": "QuickBooks, Stripe, Google Calendar — covers essentials but smaller than established FSM platforms. Operations needing CRM integrations, marketing automation, or specialty tools depend on Zapier workflows."
+        },
+        {
+          "title": "Subcontractor quality depends on regional sub network density",
+          "explanation": "The vetted sub network has stronger coverage in major metros than rural areas. Operations in regions with thin subcontractor populations may find the marketplace less useful — most subs in their region aren't on Field Complete's network."
+        }
+      ],
+      "implementation_notes": "Plan for 2-4 weeks for full deployment. Field Complete's onboarding is self-service at Basic tier with email support; Pro and Enterprise tiers include guided implementation. Realistic timeline for a 10-tech service operation that uses subcontractors: Week 1 account setup, customer/property data import, service catalog setup with pricing, mobile app rollout to W-2 techs, subcontractor marketplace activation and network browse to identify subs in your service area. Week 2 sub-coordination workflow setup including rate cards for typical job types, quality tracking parameters, and dispatch routing rules; office staff training on hybrid W-2 + sub dispatching. Week 3 first jobs dispatched through Field Complete including subcontracted overflow work; quality feedback loop established with customer post-job surveys. Week 4 white-label customer portal launched (Pro tier and above) with operation's branding; financial integration with QuickBooks verified for both W-2 and 1099 contractor billing. For operations migrating from spreadsheet-based sub coordination or phone-based dispatching, the migration is largely a workflow shift — the platform replaces ad-hoc processes with structured coordination. For operations migrating from competitor FSM, customer and service catalog data typically import via CSV; sub coordination workflows need configuration in Field Complete's structure.",
+      "tool_faqs": [
+        {
+          "q": "Who is Field Complete best for?",
+          "a": "Service operations 3-50 employees that meaningfully use subcontracted labor — property maintenance companies, multi-location service operations, capacity overflow handlers, and 1099-heavy operations. The subcontractor marketplace is the platform's biggest differentiator and only valuable if you actually use subs. Pure W-2-employee operations get standard mid-tier FSM functionality similar to FieldPulse or Synchroteam without leveraging Field Complete's unique strength."
+        },
+        {
+          "q": "How does Field Complete's subcontractor marketplace work?",
+          "a": "Vetted sub network with pre-screened backgrounds, qualifications, and insurance verification. When you have a job that needs subcontracted labor, Field Complete's automated routing matches the job to available subs in your area based on skills, location, and historical performance. Rate negotiation happens through the platform with transparent pricing. Quality tracking with customer feedback flows back to sub ratings. Eliminates the manual phone-around process most operations use to find available subs."
+        },
+        {
+          "q": "How does Field Complete compare to general FSM platforms?",
+          "a": "For pure W-2-employee operations: Field Complete is comparable to FieldPulse, Synchroteam, or Service Fusion at similar pricing — solid mid-tier FSM but no unique differentiator. For operations using subcontractors: Field Complete is meaningfully better than general FSM because the sub marketplace eliminates manual coordination overhead. Evaluate based on whether subcontracted labor is a meaningful part of your operations."
+        },
+        {
+          "q": "Does Field Complete handle the 1099 contractor relationships?",
+          "a": "Yes — Field Complete is built around 1099 subcontractor coordination as a first-class feature. Operations can manage sub assignments, rate cards, quality tracking, and 1099 documentation through the platform. The QuickBooks integration handles 1099-related accounting (vendor records, 1099 reporting). For pure W-2 operations without 1099 work, the sub coordination features stay unused."
+        },
+        {
+          "q": "Is Field Complete worth $39-$79 per user per month?",
+          "a": "For operations that meaningfully use subcontracted labor, yes — the sub marketplace and automated routing typically save 10-20 hours per week of manual sub coordination, paying back the subscription cost. For operations without significant subcontracted labor, Field Complete is comparable to other mid-tier FSM and the choice comes down to UI preference and integration needs. Worth evaluating via the 14-day free trial whether the sub marketplace network has good coverage in your specific service area."
+        }
+      ]
     },
     {
       "slug": "acculynx",
@@ -4645,7 +4861,79 @@
       "headquartered": "Burlington, Canada",
       "vertical_fit": {
         "landscaping": 9
-      }
+      },
+      "long_description": "LMN is the leading mid-market platform for landscape construction and maintenance companies, founded in 2009 in Burlington, Canada and now serving thousands of landscape operations across North America. The product fills a specific gap in the landscape software market: between entry-tier general FSM (Jobber, Service Autopilot) and enterprise commercial landscape platforms (Aspire), LMN serves the $500K-$3M revenue landscape construction operation that needs deeper estimating and job costing than entry-tier FSM but doesn't need or can't justify Aspire's enterprise pricing.\n\nWhat separates LMN from competitors is the estimating depth specifically built for landscape construction. The platform handles complex landscape estimates with materials, labor breakdowns by crew skill level, equipment time, sub-contractor costs, and overhead allocation — the components landscape contractors actually need to bid commercial and residential landscape projects accurately. Most general FSM treats estimates as line-item quotes; LMN treats them as project-cost-models with the granularity landscape construction requires.\n\nPricing spans three tiers: Basic at $59/month for the core estimating and scheduling, Pro at $197/month adding job costing and crew time tracking with the full mobile app workflow, and Pro+ at $397/month including budgeting, advanced reporting, and customer portal. The 14-day free trial allows substantial evaluation. The flat-rate per-company pricing scales reasonably with team size.\n\nIntegration coverage is minimal — QuickBooks for accounting is the primary integration. The narrow integration ecosystem reflects LMN's landscape-specialty focus; broader integrations (CRM, marketing automation, specialty tools) typically require Zapier workflows or manual data handling.\n\nThe trade-off: LMN is landscape-only and the mobile UX is less refined than Aspire's. Operations doing multiple trades beyond landscape need general FSM (Service Autopilot serves landscape + cleaning combined, for example). Operations $3M+ revenue or with significant commercial multi-property accounts typically need Aspire's deeper enterprise features. For landscape operations $500K-$3M revenue specifically — landscape construction shops doing residential and small commercial work — LMN's estimating depth and job costing typically deliver real ROI through more accurate bids and better project profitability tracking.",
+      "pros_detail": [
+        {
+          "title": "Landscape construction estimating depth",
+          "explanation": "Materials, labor by crew skill level, equipment time, sub-contractors, overhead allocation — the granularity landscape construction needs for accurate bidding. General FSM treats estimates as line-item quotes; LMN treats them as project cost models."
+        },
+        {
+          "title": "Per-company pricing (not per-user)",
+          "explanation": "Basic $59, Pro $197, Pro+ $397 per month for the company. Adding crews doesn't increase subscription cost. For 5+ crew operations, decisively cheaper than per-user FSM alternatives."
+        },
+        {
+          "title": "Crew time tracking with job costing",
+          "explanation": "Pro tier and above include mobile crew time tracking that flows into job cost reports. Operations can see actual labor cost vs estimated labor cost per job, which is critical for improving estimating accuracy over time."
+        },
+        {
+          "title": "Landscape-specific photo documentation",
+          "explanation": "Built-in photo workflow for landscape construction documentation — before/after photos, progress photos, change-order documentation. Important for customer disputes, marketing portfolios, and warranty claims."
+        },
+        {
+          "title": "Mid-market positioning fits real gap",
+          "explanation": "Bridges the gap between Jobber/Service Autopilot (entry-tier) and Aspire (enterprise commercial). $500K-$3M revenue landscape operations get a meaningful fit that neither tier serves well."
+        },
+        {
+          "title": "Strong 4.4 G2 / 4.4 Capterra rating",
+          "explanation": "Solid satisfaction in the landscape construction segment. Reflects clear positioning and consistent execution at the mid-market landscape tier."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Landscaping only — not multi-trade",
+          "explanation": "Operations combining landscape with cleaning, pest control, or general home services need different software (Service Autopilot serves landscape + multiple green-industry trades, for example). LMN is landscape-specialty exclusively."
+        },
+        {
+          "title": "Mobile UX less refined than Aspire",
+          "explanation": "Crew time tracking mobile workflow is functional but less polished than newer enterprise competitors. Aspire's mobile experience reflects more recent UI investment. Adoption among less-tech-savvy crews can be slower."
+        },
+        {
+          "title": "Limited integration ecosystem (QuickBooks only)",
+          "explanation": "Native integration to QuickBooks only. Operations needing CRM integration, marketing automation, or specialty tool integration depend on Zapier workflows or manual data handling. Significantly thinner than general FSM integration counts."
+        },
+        {
+          "title": "Estimating learning curve",
+          "explanation": "The estimating depth that's LMN's strength also creates a learning curve — operations migrating from spreadsheet-based or simple-quote workflows need 4-8 weeks to become proficient with the project-cost-model approach to estimating."
+        },
+        {
+          "title": "Pro+ tier expensive for what's added",
+          "explanation": "Jump from Pro ($197) to Pro+ ($397) is 2x cost for advanced reporting and customer portal additions. Many operations stay on Pro tier and skip Pro+ unless the customer portal feature specifically matters to their customer base."
+        }
+      ],
+      "implementation_notes": "Plan for 4-8 weeks for full deployment depending on operation size and existing process maturity. LMN includes dedicated customer success engagement for Pro and Pro+ tiers. Realistic timeline for a 15-employee landscape construction operation: Weeks 1-2 system setup including service catalog with landscape construction components (materials, labor rates by crew skill, equipment, sub-contractor categories), QuickBooks integration setup, user accounts with crew leader and crew member role permissions. Weeks 2-4 estimating template creation for typical project types (residential landscape design, commercial maintenance, hardscape installation, planting projects), pricing structures with overhead allocation, sample estimates run to validate the cost-model approach. Weeks 4-6 mobile app rollout to crews with time tracking and photo workflow training, dispatcher training on job assignment and progress tracking, office staff training on job cost reports and estimating refinement. Weeks 6-8 first projects run through LMN end-to-end — estimate → project setup → crew time tracking → job costing → customer invoicing. Plan for 2-4 weeks of dual-system operation before fully retiring legacy estimating spreadsheets. The estimating system refinement is iterative — operations typically refine their cost rates and overhead allocation over 3-6 months as they see actual job results vs estimates.",
+      "tool_faqs": [
+        {
+          "q": "How does LMN compare to Aspire?",
+          "a": "LMN is mid-market landscape construction ($59-$397/month flat per company); Aspire is enterprise commercial landscape (custom-quoted, user-reported $400-$800/user/month with $15K-$50K implementation). For landscape operations $500K-$3M revenue, LMN is decisively cheaper and faster to deploy. For commercial landscape operations $5M+ revenue with multi-property commercial accounts and PE backing, Aspire's enterprise feature depth typically justifies the cost. The dividing line is around $3-5M revenue and whether commercial multi-property accounts dominate the customer base."
+        },
+        {
+          "q": "How does LMN compare to Service Autopilot?",
+          "a": "Service Autopilot serves green-industry (landscape + cleaning + pest control + pool service) at $49-$199/user/month per user. LMN is landscape-only at $59-$397/month per company. For landscape-only operations doing significant construction work where estimating depth matters, LMN typically wins on construction-specific features. For operations combining landscape with cleaning or other green-industry services, Service Autopilot's multi-trade coverage is more efficient than running LMN + separate software for non-landscape work."
+        },
+        {
+          "q": "Does LMN handle maintenance landscape operations?",
+          "a": "Yes — LMN covers landscape maintenance alongside landscape construction with recurring service contracts, route planning for maintenance routes, and crew time tracking on maintenance work. However, operations doing primarily maintenance work (lawn mowing, snow plowing, gardening) without significant construction work may find general FSM platforms (Jobber, Service Autopilot) more efficient since they don't need LMN's construction-specific estimating depth."
+        },
+        {
+          "q": "What's LMN's estimating capability compared to general FSM?",
+          "a": "General FSM (Jobber, Housecall Pro) treats estimates as line-item quotes — list of services with prices. LMN treats estimates as project cost models with materials, labor breakdowns by crew skill level (lead, foreman, laborer), equipment time, sub-contractor costs, and overhead allocation. The depth allows accurate landscape construction bidding where labor cost can vary 30-50% by crew composition. General FSM can't model that granularity."
+        },
+        {
+          "q": "Is LMN worth $197-$397/month for a small landscape operation?",
+          "a": "For landscape construction operations doing $500K+ annual revenue with significant residential or commercial construction work, yes — the estimating accuracy and job costing typically improve project profitability by 10-20% through better bidding and faster identification of unprofitable jobs. For landscape maintenance-only operations under $300K revenue, the cost is harder to justify versus simpler general FSM at lower price points. Sweet spot is $500K-$2M revenue landscape construction with 5-25 employees."
+        }
+      ]
     },
     {
       "slug": "marketsharp",
@@ -4762,7 +5050,79 @@
         "pool_service": 8,
         "appliance_repair": 6,
         "handyman": 6
-      }
+      },
+      "long_description": "OptimoRoute is the leading specialty route optimization platform for multi-route service businesses, founded in 2012 in London and now serving thousands of operations across pest control, landscaping, cleaning, pool service, delivery, and field service worldwide. The product targets a specific gap that general FSM platforms underserve: operations with high route density (15-50+ stops per tech per day) where route optimization is the operational economics driver, not a nice-to-have feature.\n\nWhat separates OptimoRoute from FSM platforms with built-in routing is the depth of the optimization engine. OptimoRoute handles multi-day route planning, time-window constraints, driver skill matching, vehicle capacity, customer preferences, traffic awareness, and real-time re-optimization when jobs are added or removed. For pest control operations running 25-stop routes, the difference between OptimoRoute's optimization and a general FSM's routing can be 15-25% in daily route efficiency (fewer miles, more stops per day, less driver fatigue).\n\nPricing is per-driver with two transparent tiers plus custom enterprise: Starter at $35/driver/month for core optimization, Business at $49/driver/month adding real-time dispatching and advanced features, and Enterprise custom-quoted for operations 50+ drivers. The 30-day free trial allows substantial evaluation — among the longest in the trades software market.\n\nIntegration coverage is intentionally focused: Zapier for custom workflow automation, QuickBooks for accounting export, and Slack for team communication. The integration footprint reflects OptimoRoute's positioning as a routing-specialty layer that pairs with whatever FSM, CRM, or accounting platform an operation already uses — not as a full FSM replacement.\n\nThe trade-off: OptimoRoute is routing only, not a full FSM. Operations need separate FSM/CRM/invoicing platforms underneath. For operations with high route density (pest control, lawn care, pool service, delivery) where routing is the economic driver, OptimoRoute's specialty depth typically pays back the subscription within 2-4 months through fuel savings and additional stops per day. For operations with low route density (HVAC service calls with 6-10 stops per day) or operations needing full FSM functionality, general FSM platforms with built-in routing are usually sufficient.",
+      "pros_detail": [
+        {
+          "title": "Best-in-class route optimization engine",
+          "explanation": "Multi-day planning, time windows, driver skills, vehicle capacity, traffic awareness, and real-time re-optimization. Routing depth that general FSM platforms can't match. Pest control operations report 15-25% efficiency gains over FSM-bundled routing."
+        },
+        {
+          "title": "30-day free trial (longest in market)",
+          "explanation": "Full Business tier access for 30 days — allows real route optimization testing on actual customer data including a complete monthly billing cycle. Most FSM platforms offer 14-day trials; OptimoRoute's 30 days reflects confidence in the platform's value demonstration."
+        },
+        {
+          "title": "Pairs with existing FSM",
+          "explanation": "OptimoRoute isn't a replacement — it's the routing-specialty layer on top of whatever FSM you use. No platform migration required to adopt. Pest control operations on PestPac/FieldRoutes/GorillaDesk can add OptimoRoute as the routing specialty without changing their core platform."
+        },
+        {
+          "title": "Real-time dispatching with traffic awareness",
+          "explanation": "Business tier and above include real-time route adjustments based on traffic conditions and job additions/cancellations. Critical for high-density routing operations where mid-day route adjustments are common."
+        },
+        {
+          "title": "Multi-day route planning",
+          "explanation": "Operations doing recurring routes (pest control 30-day cycles, lawn care 7-14-day cycles) get multi-day planning where the platform optimizes recurring schedules holistically, not just day-by-day."
+        },
+        {
+          "title": "Strong 4.6 G2 / 4.6 Capterra rating",
+          "explanation": "Reflects clear positioning and consistent execution at the routing-specialty tier. Top quartile in the routing software category."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Route optimization only — not a full FSM",
+          "explanation": "OptimoRoute doesn't handle customer billing, quote management, customer portal, or invoicing. Requires existing FSM/CRM/invoicing platforms underneath. Adds another monthly subscription on top of your existing FSM stack."
+        },
+        {
+          "title": "Per-driver pricing adds up at scale",
+          "explanation": "At $35-$49 per driver per month, large operations (50+ drivers) hit $1,750-$2,450 per month for OptimoRoute alone (on top of FSM costs). Cost-benefit depends on whether route optimization efficiency gains actually pay back the subscription."
+        },
+        {
+          "title": "Less trade-specific than HVAC- or plumbing-focused FSM",
+          "explanation": "Routing-specialty positioning means no trade-specific workflows for HVAC repair quoting, plumbing service contracts, or electrical inspection workflows. HVAC operations get the routing benefit but lose trade-specific FSM depth."
+        },
+        {
+          "title": "Smaller integration ecosystem than full FSM",
+          "explanation": "Zapier, QuickBooks, Slack — covers essentials for routing-specialty positioning but smaller than the integration counts on general-purpose FSM platforms. Custom integration needs depend on Zapier."
+        },
+        {
+          "title": "Best fit narrow (high-density routing operations)",
+          "explanation": "Pest control, lawn care, pool service, delivery operations benefit most. HVAC service calls (6-10 stops/day) get less marginal benefit since general FSM routing is usually sufficient at low density."
+        }
+      ],
+      "implementation_notes": "Plan for 1-3 weeks for full deployment. OptimoRoute's onboarding is largely self-service with email support and a customer success team for paid tiers. Realistic timeline for a 10-driver pest control or landscape operation: Week 1 account setup, customer/route data import (CSV from existing FSM or spreadsheets), driver and vehicle setup with skill assignments and capacity limits, depot/starting location configuration. Week 2 mobile app rollout to drivers with route navigation and proof-of-delivery workflows; office staff training on route planning workflow including time window setup and constraint configuration; first routes optimized and tested in production. Week 3 financial integration with QuickBooks for export, Slack integration for team communication, dispatcher training on real-time route adjustment workflow. The biggest implementation step is the constraint configuration — operations need to articulate their actual constraints (time windows, vehicle capacity, driver skills, customer preferences) in OptimoRoute's structure. This typically takes 2-4 hours of careful setup but pays back through significantly better optimization results once configured correctly. For operations migrating from manual route planning (whiteboards, spreadsheets), the migration is straightforward — just adopt OptimoRoute for new routes. For operations migrating from competitor routing software (Routific, WorkWave Route Manager), CSV exports and imports typically work for customer and route data.",
+      "tool_faqs": [
+        {
+          "q": "How does OptimoRoute compare to routing built into FSM platforms?",
+          "a": "FSM-bundled routing (Jobber, Housecall Pro, ServiceTitan routing modules) covers basic scheduling and route ordering. OptimoRoute is specialty routing software with deeper optimization (multi-day planning, complex constraints, real-time re-optimization). For low-density routing (HVAC service calls 6-10 stops/day), FSM-bundled routing is usually sufficient. For high-density routing (pest control 20-30+ stops/day), OptimoRoute's specialty optimization typically delivers 15-25% efficiency gains over FSM-bundled routing."
+        },
+        {
+          "q": "Do I need to switch FSM to use OptimoRoute?",
+          "a": "No — OptimoRoute pairs with whatever FSM you currently use. Customer data and route assignments flow between OptimoRoute and your FSM via Zapier workflows or CSV imports. The architecture is intentionally layered — OptimoRoute as the routing specialty, your existing FSM as the customer/billing/invoicing core."
+        },
+        {
+          "q": "What types of operations benefit most from OptimoRoute?",
+          "a": "High-density routing operations: pest control (25-30+ stops per day per tech), lawn care (recurring weekly/biweekly routes), pool service (recurring monthly routes), cleaning services with route-based scheduling, and delivery operations. Low-density routing operations (HVAC service calls, plumbing repair work, electrical inspection) get less marginal benefit since route density doesn't push general FSM routing limits."
+        },
+        {
+          "q": "Is the 30-day free trial enough to evaluate OptimoRoute?",
+          "a": "Yes — 30 days captures a complete monthly cycle of route planning including recurring routes if applicable. Use the trial to: (1) configure constraints (time windows, vehicle capacity, driver skills), (2) optimize 2-3 weeks of real routes, (3) measure actual efficiency gains versus your current routing baseline. Operations evaluating OptimoRoute should treat the trial as a real production test, not just a demo exploration."
+        },
+        {
+          "q": "What's the difference between Starter, Business, and Enterprise tiers?",
+          "a": "Starter ($35/driver/mo) covers core route optimization with single-day planning and basic constraint handling. Business ($49/driver/mo) adds multi-day planning, real-time dispatching, advanced constraint types, and customer notifications. Enterprise (custom-quoted, user-reported $60-$100/driver/mo at scale) adds dedicated customer success, custom integrations, advanced analytics, and SLA guarantees for operations 50+ drivers."
+        }
+      ]
     },
     {
       "slug": "companycam",
