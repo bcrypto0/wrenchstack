@@ -1890,7 +1890,79 @@
         "cleaning": 8,
         "pest_control": 7,
         "pool_service": 7
-      }
+      },
+      "long_description": "Service Autopilot is the dominant mid-market platform for green industry operators — lawn care, landscaping, cleaning, snow management, and pest control. Founded in 2008 in Dallas, the company built one of the deepest feature sets for routing-heavy service businesses with recurring customer bases. The product is now used by thousands of operations ranging from 5-employee residential landscape shops up to 50-tech regional commercial operators.\n\nWhat separates Service Autopilot from generic FSM platforms is the depth of green-industry features: optimized routing with property-level service tracking, recurring service contracts as a first-class concept (versus jobs as the primary unit), automated chemical application logs for lawn treatment compliance, snow route optimization with event-triggered dispatch, and two-way SMS chat that handles customer communications without manual back-and-forth.\n\nPricing spans four tiers from Startup at $49/month per user to Pro Plus at $199/month per user, plus a custom-quoted Elite tier for larger operations. Most green industry operators land in the Pro tier ($109/user/mo) with the full automation suite, client portal, and routing engine. The Elite tier adds advanced reporting, dedicated support, and integration consulting for operations $3M+ revenue.\n\nThe platform integrates with QuickBooks, Stripe, Twilio, and is Real Green compatible — important for operators migrating from Real Green or wanting to maintain compatibility with industry-standard chemical-tracking workflows. The two-way chat and client portal reduce office-staff communication load significantly.\n\nThe trade-off: Service Autopilot is built specifically for green industry workflows. HVAC, plumbing, electrical, and general FSM operators get a learning curve with features they won't use (recurring routing, chemical logs, snow workflows). For landscape, lawn care, and cleaning operations 5-50 employees, it's typically the strongest mid-market fit.",
+      "pros_detail": [
+        {
+          "title": "Deep green-industry workflows",
+          "explanation": "Built specifically for lawn care, landscaping, cleaning, and snow management with features like recurring service contracts, chemical logs, and snow route optimization that generic FSM platforms can't match."
+        },
+        {
+          "title": "Snow route optimization",
+          "explanation": "Event-triggered dispatch for snow plowing operations with per-push or per-inch billing. Critical for northern-market operators where snow generates 20-40% of annual revenue."
+        },
+        {
+          "title": "Four-tier pricing ladder",
+          "explanation": "Startup ($49/user/mo) for small ops up through Elite custom for $3M+ operations. Easy upgrade path as you scale without platform migration."
+        },
+        {
+          "title": "Real Green ecosystem compatibility",
+          "explanation": "Important integration path for operators migrating from Real Green or maintaining chemical-tracking compatibility. Critical for lawn care operations with regulatory chemical reporting requirements."
+        },
+        {
+          "title": "Two-way SMS chat built in",
+          "explanation": "Reduces office-staff customer communication load significantly. Customers respond to appointment confirmations and updates without phone calls."
+        },
+        {
+          "title": "Client portal depth",
+          "explanation": "Customers self-serve invoice history, payment, service notes, and chemical application reports. Strong for residential lawn care where customers want recurring-service transparency."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Steep learning curve",
+          "explanation": "Feature-deep product with multiple modules (routing, contracts, chemicals, snow, marketing automation); takes 4-8 weeks for office staff to become proficient."
+        },
+        {
+          "title": "Overkill for non-green trades",
+          "explanation": "HVAC, plumbing, electrical, and general FSM operators won't use the green-industry-specific features and would benefit more from Housecall Pro or Jobber."
+        },
+        {
+          "title": "UI feels dated",
+          "explanation": "2008-era platform shows its age relative to newer entrants like Jobber or Housecall Pro. Functional but not visually polished."
+        },
+        {
+          "title": "No free trial",
+          "explanation": "Sales call required to evaluate beyond the demo; pricing transparency is good but trial access is gated."
+        },
+        {
+          "title": "Elite tier custom-quoted",
+          "explanation": "Largest tier requires sales conversation; user-reported pricing varies $250-$600/user/mo depending on add-ons and operation size."
+        }
+      ],
+      "implementation_notes": "Plan for 4-8 weeks for full deployment depending on tier. Startup tier ($49/user/mo) onboarding is largely self-service — account setup, customer import, route configuration in 2-3 weeks. Pro tier ($109/user/mo) deployments typically take 4-6 weeks: weeks 1-2 customer/property data import and route mapping, weeks 3-4 chemical SKU setup and recurring contract migration, weeks 5-6 office staff training on automation workflows and field crew mobile app rollout. Pro Plus and Elite tiers ($199/user/mo+) include dedicated implementation manager and run 6-10 weeks for full deployment of advanced reporting and multi-region operations. Data migration complexity depends on source platform. Migrating from spreadsheet-based operations is straightforward (import customer list, build recurring contracts from scratch). Migrating from Real Green is relatively clean due to the compatible data structures. Migrating from generic FSM (Jobber, Housecall Pro) requires manual reconstruction of recurring service contracts since those platforms model jobs differently. Plan for 2-4 weeks of parallel run before cutting over completely.",
+      "tool_faqs": [
+        {
+          "q": "Is Service Autopilot worth the price for a 5-tech residential landscaping operation?",
+          "a": "At the Startup tier ($49/user/mo = $245/month for 5 techs), yes — the routing engine, recurring contracts, and two-way chat typically save 8-15 hours/week of office time, paying back the cost. For operations below 3 techs, Jobber or Service Autopilot's smaller competitors offer better fit at lower cost."
+        },
+        {
+          "q": "How does Service Autopilot compare to Aspire?",
+          "a": "Service Autopilot serves residential and small-mid commercial landscape ($49-$199/user/mo); Aspire serves enterprise commercial landscape ($400-$800/user/mo with $15K-$50K implementation). Most landscape operations should start with Service Autopilot; Aspire is for $5M+ commercial operations with PE backing or multi-region complexity."
+        },
+        {
+          "q": "Can Service Autopilot handle snow plowing workflows?",
+          "a": "Yes — Service Autopilot has dedicated snow plowing features including event-triggered dispatch, per-push/per-inch billing, and mobile snow crew workflows. This is one of the platform's differentiators versus generic FSM and a major reason northern-market landscape operators choose it."
+        },
+        {
+          "q": "Is Service Autopilot good for cleaning businesses?",
+          "a": "Yes, but with caveats. The routing and recurring contract features work well for residential and commercial cleaning. However, for cleaning-only operations, ZenMaid (cleaning-specialty platform) or Jobber typically offer faster setup and lower cost. Service Autopilot is the better choice for operations that combine cleaning with landscape or other green industry services."
+        },
+        {
+          "q": "What's the difference between Service Autopilot tiers?",
+          "a": "Startup ($49/user/mo) covers basic scheduling, invoicing, customer database, and mobile app. Pro ($109/user/mo) adds automated marketing, two-way chat, recurring contracts, and the routing optimization engine. Pro Plus ($199/user/mo) adds advanced reporting, snow management, and chemical tracking. Elite (custom) adds dedicated support, integration consulting, and multi-region operations features."
+        }
+      ]
     },
     {
       "slug": "aspire",
@@ -2176,7 +2248,79 @@
         "electrical": 7,
         "handyman": 7,
         "general_contractor": 6
-      }
+      },
+      "long_description": "Tradify is the leading job management platform for small trade businesses internationally, founded in 2009 in Auckland, New Zealand, and now serving operations across New Zealand, Australia, the UK, and increasingly the United States. The product targets the 1-10 person trade business segment with a tight quote-to-invoice workflow, transparent single-tier pricing, and deep accounting software integration (Xero-first, with QuickBooks Online, MyOB, and others supported).\n\nWhat separates Tradify from US-rooted competitors like Jobber and Housecall Pro is the international focus and accounting-software-first integration philosophy. Xero is the dominant small business accounting platform in NZ, AU, and UK markets; Tradify's deep Xero integration (built before QuickBooks integration was added) is best-in-class for operations on Xero. The product also supports QuickBooks Online, MyOB (AU), Stripe and GoCardless for payment processing, plus standard CRM and scheduling workflows.\n\nPricing is the simplest in the FSM market: a single tier at $36/user/month with volume discounts past 5 users. No tier ladder, no upgrade-to-unlock features, no custom-quoted enterprise tier. Every customer gets the full feature set. The 14-day free trial allows full evaluation. For 1-3 person operations, this works out to $36-$108/month — the lowest entry price for a full-featured FSM platform in the market.\n\nKey features include quotes, invoicing, scheduling, time tracking, job management with budget tracking, purchase orders, and a strong mobile app for field tradespeople. The product is built for operations where the owner is also a working tradesperson — workflows assume the user is doing the work, not just managing it from an office.\n\nThe trade-off: Tradify is positioned for small operations (1-10 people) on Xero-first accounting. US operations on QuickBooks Online get good fit but may find ServiceM8 or Jobber's US-specific integrations slightly stronger. Operations larger than 10 people need to evaluate whether the single-tier feature set covers their dispatching and reporting needs.",
+      "pros_detail": [
+        {
+          "title": "Simple single-tier pricing",
+          "explanation": "$36/user/month with no upgrade tiers. Predictable, lowest entry price in the FSM market for a full-featured platform. No surprises, no upsells."
+        },
+        {
+          "title": "Xero-native integration (best in market)",
+          "explanation": "Built in the Xero ecosystem first; Xero integration depth is unmatched by US-rooted competitors. Critical for operations on Xero (dominant in NZ/AU/UK)."
+        },
+        {
+          "title": "Lowest entry price for full features",
+          "explanation": "Single $36/user/mo tier means even solo operators get the complete feature set. Jobber and Housecall Pro lock features behind higher tiers; Tradify doesn't."
+        },
+        {
+          "title": "Tight quote-to-invoice flow",
+          "explanation": "Quote → approval → job → time tracking → invoice flow is optimized for small trade businesses where the owner needs visibility from quote to payment in one workflow."
+        },
+        {
+          "title": "Strong mobile app for working tradespeople",
+          "explanation": "Built for operations where the owner is a working tradesperson. Mobile app handles real fieldwork (time tracking, materials capture, customer signatures, photo attachments) without office reliance."
+        },
+        {
+          "title": "14-day free trial with full features",
+          "explanation": "No feature gates during trial; full evaluation including Xero integration setup. Standard in FSM market but worth noting for operations evaluating alternatives."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "US payroll integrations weaker than US-rooted competitors",
+          "explanation": "Tradify's payroll integration ecosystem is stronger in NZ/AU/UK markets than in the US. US operations needing tight payroll integration may find ServiceM8, Jobber, or Housecall Pro better-fit."
+        },
+        {
+          "title": "Single tier with no upgrade path",
+          "explanation": "At 10+ people, operations may outgrow the single-tier feature set. No enterprise tier with advanced dispatching, reporting, or multi-region features."
+        },
+        {
+          "title": "Limited marketing automation",
+          "explanation": "No built-in marketing automation, review request workflows, or campaign management. Operations needing marketing automation need to layer Mailchimp or similar through Zapier."
+        },
+        {
+          "title": "International support hours",
+          "explanation": "Customer support primarily during NZ/AU/UK business hours. US operations get reduced support availability during US business hours (some overlap with US morning)."
+        },
+        {
+          "title": "Smaller US user community",
+          "explanation": "Most case studies, tutorials, and YouTube content come from NZ/AU/UK markets. US-specific guidance is thinner than for US-rooted competitors."
+        }
+      ],
+      "implementation_notes": "Plan for 1-2 weeks for full deployment. Tradify's onboarding is self-service with email support and an active customer success team in NZ business hours. Realistic timeline for a 3-person trade operation: Week 1 account setup, Xero (or QuickBooks Online) integration setup, customer import, pricebook/material library setup, mobile app installation for all users. Week 2 first jobs run through Tradify end-to-end: quote → approval → job → time tracking → invoice → Xero sync. Office staff (if any) train on job pipeline view and reporting. The Xero integration is the highest-value setup step for operations on Xero — the integration handles invoice sync, payment matching, customer sync, and chart of accounts mapping. Plan for 2-4 hours of careful setup to map your existing Xero chart of accounts to Tradify's job categories. For QuickBooks Online operations, the integration is functional but slightly less deep than Xero. For operations migrating from spreadsheet-based workflows, the migration is straightforward — import customer list, set up pricebook/materials, configure default invoice templates. For operations migrating from competitor FSM platforms (ServiceM8, Jobber, Housecall Pro), the data migration depends on source platform — most allow CSV export of customers and historical invoices.",
+      "tool_faqs": [
+        {
+          "q": "Is Tradify suitable for US-based trade businesses?",
+          "a": "Yes, with caveats. The core FSM workflows (quote, schedule, time-track, invoice) work well for US operations. The Xero integration is best-in-class — important if you're on Xero. US payroll integrations are weaker than US-rooted competitors like Jobber or Housecall Pro. For US operations on QuickBooks Online needing US-specific payroll integration, evaluate Tradify against ServiceM8 and Jobber for fit."
+        },
+        {
+          "q": "How does Tradify compare to Jobber?",
+          "a": "Tradify and Jobber serve similar small-business segments but with different positioning. Tradify: $36/user/mo single tier, Xero-first, international roots, simpler upgrade path. Jobber: tiered $29-$169/mo by feature, QuickBooks-first, US-rooted, deeper marketing features. Pure cost comparison: at 1 user, Tradify $36 vs Jobber Core $39 are similar; at 5 users, Tradify $180 vs Jobber Connect $69 (flat-rate) — Jobber cheaper at scale. The trade-off is feature depth versus pricing model."
+        },
+        {
+          "q": "Does Tradify have an enterprise tier?",
+          "a": "No — Tradify offers a single tier at $36/user/month with volume discounts past 5 users. Operations needing enterprise features (multi-region, advanced dispatching, custom workflows) need to evaluate ServiceTitan, BuildOps, or other enterprise-tier platforms. Tradify is positioned for the 1-10 person trade business segment specifically."
+        },
+        {
+          "q": "What accounting software does Tradify integrate with?",
+          "a": "Xero (deepest integration, NZ/AU/UK dominant), QuickBooks Online (US-focused), MyOB (Australia). No QuickBooks Desktop, no Sage. Tradify's positioning assumes you're on modern cloud accounting software. Operations on QuickBooks Desktop need to migrate to QuickBooks Online to use Tradify effectively."
+        },
+        {
+          "q": "Is the $36/user/month pricing competitive?",
+          "a": "Yes — it's the lowest entry price for a full-featured FSM platform. Most competitors start at $29-$49 for limited tiers and require $69-$199 for full feature access. Tradify's single tier means even solo operators get the complete feature set at $36/month. For 5+ user operations, flat-rate alternatives (Jobber Connect, Housecall Pro flat-rate plans) may be cheaper on absolute cost."
+        }
+      ]
     },
     {
       "slug": "bigchange",
@@ -2598,7 +2742,79 @@
       "vertical_fit": {
         "pest_control": 10,
         "landscaping": 9
-      }
+      },
+      "long_description": "FieldRoutes is the modern cloud-native platform for mid-to-large pest control and lawn care operations, founded in 2012 in McKinney, Texas, and acquired by WorkWave in 2021. The product was built from scratch as a modern alternative to legacy pest control platforms (PestPac, GorillaDesk for larger ops), and has captured significant market share among pest control operations 10-200 techs.\n\nWhat separates FieldRoutes from competitors is the modern technology foundation: a cloud-native architecture that performs reliably on mobile devices, AI phone agent technology that handles inbound customer calls (a unique feature in the pest control software market), built-in marketing automation through the WorkWave Marketing platform, and chemical tracking with regulatory compliance reporting. The recurring service contract management is purpose-built for the route-density economics that define pest control operations.\n\nPricing is custom-quoted across three tiers (Essentials, Pro, Enterprise), with user-reported pricing landing in the $99-$199/user/month range depending on operation size and module selection. Most mid-market pest control operations (15-50 techs) report $130-$170/user/mo in production. The custom-quoted pricing reflects the platform's positioning toward operations with multiple revenue streams (residential pest, commercial pest, lawn care, mosquito treatment).\n\nIntegration includes QuickBooks for accounting, Stripe for payment processing, Twilio for SMS, and the WorkWave Marketing automation suite for SEO and PPC management — important because WorkWave operates one of the largest marketing services for pest control operations in North America. The integrated marketing-to-operations data flow is a competitive advantage for operations buying both services.\n\nThe trade-off: FieldRoutes is positioned for mid-to-large pest control operations specifically. Smaller pest control operations (1-10 techs) get better fit and lower cost from GorillaDesk or Jobber. Operations outside pest control and lawn care get features they won't use.",
+      "pros_detail": [
+        {
+          "title": "Modern cloud-native architecture",
+          "explanation": "Built 2012+ as a modern alternative to legacy PestPac. Mobile performance, sync reliability, and UI are significantly better than older platforms in the pest control space."
+        },
+        {
+          "title": "AI phone agent (unique in pest control)",
+          "explanation": "Inbound call handling with AI agent that schedules appointments and answers FAQs. Reduces office-staff load during peak season; unique feature in the pest control software market."
+        },
+        {
+          "title": "Chemical tracking and compliance",
+          "explanation": "Built-in chemical SKU tracking with application logs and regulatory compliance reporting. Critical for pest control operations meeting state and EPA reporting requirements."
+        },
+        {
+          "title": "Route optimization for recurring routes",
+          "explanation": "Purpose-built for pest control route-density economics. Optimizes recurring routes with property history, chemical history, and customer preferences factored in."
+        },
+        {
+          "title": "WorkWave Marketing integration",
+          "explanation": "Direct data flow from marketing campaigns to operations metrics. Important for operations buying both marketing services and FSM software from WorkWave."
+        },
+        {
+          "title": "Strong recurring service contract management",
+          "explanation": "Recurring service is the primary revenue model for pest control; FieldRoutes models it as a first-class concept (versus jobs as primary)."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Custom-quoted pricing",
+          "explanation": "Sales call required to get pricing; user-reported $99-$199/user/mo lands in mid-market tier and may be expensive for smaller operations. No transparent pricing on the website."
+        },
+        {
+          "title": "Pest/lawn specific positioning",
+          "explanation": "Designed for pest control and lawn care; HVAC, plumbing, electrical, and general FSM operations get features they won't use and miss features they need."
+        },
+        {
+          "title": "WorkWave acquisition transition",
+          "explanation": "2021 WorkWave acquisition has driven ongoing platform integration work; expect occasional UI changes and feature roadmap uncertainty during the integration period."
+        },
+        {
+          "title": "Implementation timeline 6-10 weeks",
+          "explanation": "Mid-market deployment is real-project effort, not self-service. Plan for dedicated implementation manager engagement."
+        },
+        {
+          "title": "Overkill for small pest control operators",
+          "explanation": "Under 10 techs, GorillaDesk or Jobber offer faster setup, lower cost, and simpler workflows. FieldRoutes positioning starts at 10+ techs."
+        }
+      ],
+      "implementation_notes": "Plan for 6-10 weeks from contract signing to fully operational deployment. FieldRoutes assigns a dedicated implementation manager who guides phased rollout. Realistic timeline for a mid-size pest control operation (15-50 techs): Weeks 1-2 system configuration, user setup, customer/property data import, chemical SKU library setup with regulatory codes. Weeks 3-4 recurring service contract migration from existing platform (this is the most complex step — contract data structures differ significantly between platforms), route configuration with property-level history. Weeks 5-6 office staff training on contract management, automation workflows, chemical compliance reporting; AI phone agent setup if purchased. Weeks 7-8 field tech training on mobile app, chemical logging workflows, and customer history access. Weeks 8-10 first routes go live in production with parallel run on legacy system; financial integration with QuickBooks; WorkWave Marketing integration setup if purchased. For operations migrating from PestPac, the data migration is the longest pole — recurring contract structures need manual reconstruction in many cases. For operations migrating from GorillaDesk, the migration is simpler. New operations starting fresh on FieldRoutes can go live in 4-6 weeks.",
+      "tool_faqs": [
+        {
+          "q": "How does FieldRoutes compare to PestPac?",
+          "a": "FieldRoutes is the modern cloud-native alternative to PestPac (a legacy platform from the early 2000s). FieldRoutes wins on UI, mobile performance, AI features, and integration quality. PestPac retains a customer base in larger enterprise pest control operations due to historical lock-in. New pest control operations choosing software in 2026 typically pick FieldRoutes or GorillaDesk over PestPac."
+        },
+        {
+          "q": "Is FieldRoutes worth $99-$199/user/month for a 20-tech pest control operation?",
+          "a": "Yes for operations 15+ techs with route-density optimization needs, regulatory chemical compliance requirements, and marketing automation needs. The AI phone agent and WorkWave Marketing integration can pay back the cost through operational efficiency and customer acquisition. Below 10 techs, GorillaDesk ($79/month base) or Jobber typically offer better fit at lower cost."
+        },
+        {
+          "q": "What does the WorkWave acquisition mean for FieldRoutes customers?",
+          "a": "WorkWave acquired FieldRoutes in 2021 to expand its FSM portfolio (WorkWave also owns RouteSpotter and several other FSM/marketing brands). The acquisition has driven ongoing platform integration with WorkWave Marketing services. The product continues to be developed actively; pricing has trended up moderately since the acquisition. Customer support has been stable through the transition."
+        },
+        {
+          "q": "How does FieldRoutes handle chemical compliance?",
+          "a": "Built-in chemical SKU tracking with application logs, EPA registration number tracking, and state-by-state regulatory compliance reporting. Generates the chemical application reports required by most state pesticide regulatory agencies. This is a core feature, not an add-on — critical for any pest control operation."
+        },
+        {
+          "q": "Can FieldRoutes handle commercial pest control accounts?",
+          "a": "Yes — FieldRoutes serves both residential and commercial pest control operations. Commercial accounts (offices, restaurants, multi-location chains) get features like multi-property contract management, custom reporting per account, and certificate of service generation. Commercial pest control operations are a significant portion of FieldRoutes' customer base."
+        }
+      ]
     },
     {
       "slug": "pestpac",
@@ -2693,7 +2909,79 @@
       "headquartered": "Remote (USA)",
       "vertical_fit": {
         "cleaning": 10
-      }
+      },
+      "long_description": "ZenMaid is the dominant specialty platform for residential cleaning businesses, founded in 2013 as a cleaning-only alternative to general FSM platforms. The product has earned the highest user satisfaction ratings in the cleaning software market (4.7 G2, 4.8 Capterra) by focusing exclusively on cleaning workflows rather than spreading across multiple trades.\n\nWhat separates ZenMaid from general FSM platforms is depth in cleaning-specific workflows: recurring scheduling that handles biweekly/monthly cleaning cadences as the primary scheduling model, team messaging built into the platform (rather than requiring third-party tools), automated appointment reminders that have reduced no-show rates significantly across the customer base, customer portal optimized for cleaning service self-service (request specific cleaners, modify recurring schedule, view service notes), and esignature for contract management.\n\nPricing is transparent and predictable: Solo at $58/month for owner-operators, Team at $116/month for 2-10 cleaners, and Premium at $174/month for 10-30 cleaners. Annual pricing reflects a discount versus monthly billing. The 14-day free trial allows full evaluation before commitment — important since the platform's value compounds over weeks as recurring schedules build out.\n\nIntegration covers QuickBooks for accounting, Stripe for payment processing, Mailchimp for email marketing, and Zapier for custom workflow automation. The integration footprint is smaller than general FSM platforms but covers the essential workflows for cleaning operations. Most ZenMaid customers report that the cleaning-specific feature depth more than compensates for the smaller integration list.\n\nThe trade-off: ZenMaid is residential cleaning-focused. Commercial janitorial operations get thin features for the multi-shift, multi-supervisor workflows that commercial cleaning requires. Operations combining cleaning with other trades (landscape + cleaning, for example) typically choose Jobber or Service Autopilot instead. For residential cleaning-only operations 1-30 cleaners, ZenMaid is consistently the highest-rated platform in the market.",
+      "pros_detail": [
+        {
+          "title": "Cleaning-specific workflows",
+          "explanation": "Recurring scheduling, team messaging, customer portal, and automation all designed specifically for residential cleaning operations. Feature depth in cleaning workflows exceeds general FSM platforms."
+        },
+        {
+          "title": "Highest user satisfaction in the category",
+          "explanation": "4.7 G2, 4.8 Capterra ratings — the highest in the cleaning software market. Reflects the cleaning-specific focus and ongoing product development pace."
+        },
+        {
+          "title": "Recurring scheduling depth",
+          "explanation": "Recurring (biweekly/monthly) cleaning cadences as the primary scheduling model. Handles the schedule changes, holiday adjustments, and tech-availability shifts that cleaning operations face daily."
+        },
+        {
+          "title": "Team messaging built in",
+          "explanation": "In-platform team communication (between cleaners, supervisors, office). Reduces dependency on third-party tools like Slack or WhatsApp for operations communication."
+        },
+        {
+          "title": "Automated appointment reminders",
+          "explanation": "Reduces no-show rates significantly. Cleaning businesses report no-show reduction of 30-50% after implementing ZenMaid's automation."
+        },
+        {
+          "title": "Transparent annual pricing",
+          "explanation": "Solo $58/mo, Team $116/mo, Premium $174/mo with annual discount. Predictable pricing without sales call required."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Cleaning-only (no diversification)",
+          "explanation": "Not suitable for operations combining cleaning with landscape, pest control, or other trades. Operations diversifying beyond cleaning need to migrate or run multiple platforms."
+        },
+        {
+          "title": "Thin features for commercial janitorial",
+          "explanation": "Built for residential cleaning workflows; commercial janitorial operations with multi-shift, multi-supervisor structures get a thinner feature set than dedicated commercial janitorial platforms."
+        },
+        {
+          "title": "Smaller integration ecosystem",
+          "explanation": "QuickBooks, Stripe, Mailchimp, Zapier — covers essentials but smaller than general FSM platforms. Custom integration needs depend on Zapier workflows."
+        },
+        {
+          "title": "Premium tier needed for full feature set",
+          "explanation": "Some advanced features (marketing automation, esignature) only available at the $174/month Premium tier. Smaller operations may feel pricing pressure if they need the advanced features."
+        },
+        {
+          "title": "Annual pricing locked in",
+          "explanation": "Annual pricing requires upfront commitment; monthly available at higher rate. Cancellation mid-year requires negotiation."
+        }
+      ],
+      "implementation_notes": "Plan for 1-3 weeks for full deployment. ZenMaid's onboarding is largely self-service with email support and an active customer success team. Realistic timeline for a 5-cleaner residential cleaning operation: Week 1 account setup, customer import, recurring schedule configuration for existing customer base, cleaner mobile app setup. Week 2 team training on the mobile app, customer portal launch to existing customers, payment integration with Stripe. Week 3 first full week with all recurring schedules running through ZenMaid; office staff transition from previous workflow tools (spreadsheets or general FSM) to ZenMaid as primary operations platform. The migration from spreadsheets is straightforward — import customer list, manually configure recurring schedules. Migration from Jobber or general FSM platforms requires recurring schedule reconstruction since those platforms model recurring services differently. Migration from competitors like Launch27 or Maid Easy is supported with data import templates. For operations larger than 15 cleaners, plan for an additional week of cleaner training and parallel run before cutover. The team messaging feature is the biggest behavior change for operations migrating from text/WhatsApp-based communication; expect 1-2 weeks of habit formation before adoption is complete.",
+      "tool_faqs": [
+        {
+          "q": "Is ZenMaid worth $58-$174/month versus using Jobber or Housecall Pro?",
+          "a": "For cleaning-only operations 1-30 cleaners, yes. The cleaning-specific features (recurring scheduling depth, team messaging, automated reminders) save more time than the generic features in general FSM platforms. For operations combining cleaning with other trades, Jobber or Housecall Pro fit better. Pure-cleaning operations consistently report higher satisfaction with ZenMaid."
+        },
+        {
+          "q": "Can ZenMaid handle commercial janitorial cleaning?",
+          "a": "Limited — ZenMaid is built for residential cleaning workflows. Commercial janitorial operations with multi-shift, multi-supervisor structures and night cleaning crews typically need dedicated commercial janitorial platforms like Janitorial Manager or CleanTelligent. Mixed residential-commercial cleaning operations can use ZenMaid for the residential side."
+        },
+        {
+          "q": "How does ZenMaid handle no-shows?",
+          "a": "Automated appointment reminders sent at configurable intervals (24h, 2h before service) reduce no-show rates significantly. Customer base reports 30-50% reduction in no-shows after implementing the automation. The customer portal also reduces no-shows by allowing self-service rescheduling."
+        },
+        {
+          "q": "What integrations does ZenMaid support?",
+          "a": "QuickBooks (accounting sync), Stripe (payment processing), Mailchimp (email marketing), and Zapier (custom workflow automation to thousands of other tools). The native integration list is smaller than general FSM platforms, but Zapier covers most custom integration needs."
+        },
+        {
+          "q": "Is the 14-day free trial enough to evaluate ZenMaid?",
+          "a": "Yes for basic evaluation but plan to use it strategically. ZenMaid's value compounds over weeks as recurring schedules build out and automation reduces office workload. Use the trial to set up real customer schedules and run the platform in parallel with existing workflows. Full ROI evaluation typically takes 6-8 weeks post-purchase."
+        }
+      ]
     },
     {
       "slug": "jobtread",
@@ -3027,7 +3315,79 @@
       "headquartered": "Tampa, USA",
       "vertical_fit": {
         "pool_service": 10
-      }
+      },
+      "long_description": "Skimmer is the modern cloud platform for pool service operations, founded in 2017 in Tampa as a purpose-built alternative to the legacy pool service software that dominated the market in the 2010s. In under a decade, Skimmer has captured significant market share among pool service routes 1-50, earning the highest user satisfaction ratings in the pool service software category (4.7 G2, 4.8 Capterra).\n\nWhat separates Skimmer from competitors is the modern technology foundation and pool-specific workflow depth: chemical reading logs with built-in LSI (Langelier Saturation Index) calculations and chlorine/pH/alkalinity tracking, route optimization specifically for pool service density patterns (typically 15-25 stops per day per tech), photo attachments standard on every service stop (proof-of-service for customers and dispute resolution), recurring service contracts modeled as the primary unit (since 80%+ of pool service revenue is recurring), and a customer communication suite optimized for the homeowner pool service relationship.\n\nPricing is per-company (not per-user) across three tiers: Starter at $49/month for solo operators, Pro at $99/month for 1-10 techs unlimited users, and Premium at $179/month for 10-50 routes unlimited users. The per-company pricing model is significant — unlike per-user platforms, adding additional techs doesn't increase the subscription cost. For operations with 5+ techs, this typically makes Skimmer 40-70% cheaper than per-user alternatives. The 30-day free trial is the longest in the FSM market.\n\nIntegration includes QuickBooks Online for accounting, Stripe for payment processing, and Zapier for custom workflow automation. The integration list is intentionally smaller than general FSM platforms — Skimmer's positioning is depth in pool-specific workflows rather than broad integration coverage.\n\nThe trade-off: Skimmer is pool-service only. Operations combining pool service with other trades (pool + landscape, for example) need to choose between Skimmer (pool depth) or general FSM (broader coverage). For pool-service-only operations 1-50 routes, Skimmer is consistently the highest-rated platform.",
+      "pros_detail": [
+        {
+          "title": "Per-company pricing (unlimited techs)",
+          "explanation": "$49/$99/$179/month per company, not per user. For operations with 5+ techs, typically 40-70% cheaper than per-user alternatives like Jobber or Housecall Pro applied to pool service."
+        },
+        {
+          "title": "Chemical readings with LSI calculator",
+          "explanation": "Built-in LSI (Langelier Saturation Index) calculator and chlorine/pH/alkalinity tracking. Pool-specific workflow that general FSM platforms can't match."
+        },
+        {
+          "title": "Modern mobile-first UI",
+          "explanation": "Built 2017+ as a modern cloud platform. Mobile performance and offline sync are significantly better than legacy pool service software."
+        },
+        {
+          "title": "30-day free trial (longest in market)",
+          "explanation": "Allows full evaluation including a complete monthly billing cycle. Most FSM platforms offer 14-day trials; Skimmer's 30 days is notable."
+        },
+        {
+          "title": "Photo attachments standard",
+          "explanation": "Every service stop supports photo attachment by default (water clarity, equipment condition, before/after). Proof-of-service standard reduces customer disputes significantly."
+        },
+        {
+          "title": "High user satisfaction ratings",
+          "explanation": "4.7 G2, 4.8 Capterra — highest in the pool service software category. Reflects the modern UI, pool-specific focus, and active product development pace."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Pool service only",
+          "explanation": "Not suitable for operations combining pool service with other trades (pool + landscape, for example). Operations diversifying need to migrate or run multiple platforms."
+        },
+        {
+          "title": "Limited integration ecosystem",
+          "explanation": "QuickBooks Online, Stripe, Zapier only. No QuickBooks Desktop, no payroll integrations, no marketing automation tools. Custom integration needs depend on Zapier."
+        },
+        {
+          "title": "Newer than competitors (less feature depth in edge cases)",
+          "explanation": "2017 founding means less feature accumulation than legacy competitors. Edge-case features (complex chemical regimens, multi-location commercial pool contracts) may have gaps."
+        },
+        {
+          "title": "Customer support during peak season",
+          "explanation": "Pool service peaks May-September; support response times slow during peak season as Skimmer scales support capacity. Off-season support is responsive."
+        },
+        {
+          "title": "Per-company pricing penalizes solo operators",
+          "explanation": "At $49/month for 1 tech, per-tech math is worse than per-user platforms at the solo level. Per-company pricing wins decisively at 3+ techs."
+        }
+      ],
+      "implementation_notes": "Plan for 1-3 weeks for full deployment. Skimmer's onboarding is largely self-service with active email support and a customer success team during business hours. Realistic timeline for a 5-tech pool service operation: Week 1 account setup, customer import, pool configuration (each customer's pool has its own profile with size, equipment, chemical history), route assignment to techs. Week 2 tech mobile app training (chemical reading workflows, photo attachment standards, customer history access), payment integration with Stripe, customer portal launch. Week 3 first full week with all routes running through Skimmer in production. The migration from spreadsheets or older platforms (Pool Office Manager, Service Manager) is straightforward — import customer list, build pool profiles, configure recurring routes. The pool profile setup is the most time-intensive step since each pool needs equipment details, chemical baseline, and service history. Plan for 30-60 minutes per pool for full profile setup if doing comprehensive migration. For operations larger than 20 routes, plan for an additional week of route optimization and tech training. The chemical reading workflow is a behavior change for techs migrating from paper-based logs; expect 1-2 weeks of habit formation. Skimmer's customer success team typically runs a 1-hour onboarding session in the first week.",
+      "tool_faqs": [
+        {
+          "q": "Is Skimmer's per-company pricing actually cheaper than per-user alternatives?",
+          "a": "For 1 tech (solo operator), Skimmer Starter at $49/month is similar to per-user alternatives. For 3+ techs, Skimmer becomes decisively cheaper — at 5 techs, Skimmer Pro at $99/month is roughly $20/tech versus $49+/tech for per-user platforms applied to pool service. At 10 techs, Skimmer Premium at $179/month is $18/tech."
+        },
+        {
+          "q": "Can Skimmer handle commercial pool service accounts?",
+          "a": "Yes for typical commercial pools (hotels, apartments, HOA-managed community pools). Commercial accounts get the same features as residential — pool profiles, chemical readings, recurring routes, photo attachments. Multi-location commercial accounts (large hotel chains with multiple pools) get a thinner feature set than dedicated commercial pool platforms."
+        },
+        {
+          "q": "How does Skimmer compare to legacy pool service software?",
+          "a": "Skimmer is the modern cloud-native alternative to legacy pool service platforms like Pool Office Manager and Service Manager. Skimmer wins on UI, mobile performance, sync reliability, and product development pace. Legacy platforms retain customers in larger commercial pool operations due to historical lock-in. New pool service operations choosing software in 2026 typically pick Skimmer."
+        },
+        {
+          "q": "Does Skimmer integrate with QuickBooks Desktop?",
+          "a": "No — Skimmer integrates with QuickBooks Online only. Operations on QuickBooks Desktop need to either migrate to QuickBooks Online or use Zapier workflows for partial sync. This is a common migration trigger for pool service operations adopting Skimmer."
+        },
+        {
+          "q": "What's included in the 30-day free trial?",
+          "a": "Full access to the platform at the Pro tier ($99/month equivalent) — all features, unlimited techs, chemical readings, route optimization, photo attachments, customer portal. The 30 days allows a complete monthly billing cycle to evaluate the full workflow. No credit card required for trial start."
+        }
+      ]
     },
     {
       "slug": "vonigo",
