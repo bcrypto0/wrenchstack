@@ -1,0 +1,60 @@
+---
+import { freshnessTier, freshnessLabel, daysSinceVerified, type Tool } from '../lib/data';
+
+interface Props {
+  tool: Tool;
+  // 'compact' shows just a dot + days; 'full' shows label text too
+  variant?: 'compact' | 'full';
+  // Show the raw verified_date for forensics
+  showDate?: boolean;
+}
+
+const { tool, variant = 'compact', showDate = false } = Astro.props;
+const tier = freshnessTier(tool);
+const label = freshnessLabel(tool);
+const days = daysSinceVerified(tool);
+
+const tierStyles = {
+  fresh: {
+    dot: 'bg-emerald-500',
+    ring: 'ring-emerald-200',
+    text: 'text-emerald-700',
+  },
+  aging: {
+    dot: 'bg-amber-500',
+    ring: 'ring-amber-200',
+    text: 'text-amber-700',
+  },
+  stale: {
+    dot: 'bg-rose-500',
+    ring: 'ring-rose-200',
+    text: 'text-rose-700',
+  },
+};
+
+const style = tierStyles[tier];
+const titleText = `Pricing last verified ${tool.pricing.verified_date} (${days} day${days === 1 ? '' : 's'} ago)`;
+---
+
+{variant === 'compact' ? (
+  <span
+    class={`inline-flex items-center gap-1.5 text-xs font-medium ${style.text}`}
+    title={titleText}
+  >
+    <span class={`h-1.5 w-1.5 rounded-full ${style.dot} ring-2 ${style.ring}`}></span>
+    <span>{label}</span>
+  </span>
+) : (
+  <span
+    class={`inline-flex items-center gap-2 rounded-full bg-white px-2.5 py-1 text-xs font-medium ${style.text} ring-1 ${style.ring}`}
+    title={titleText}
+  >
+    <span class={`h-2 w-2 rounded-full ${style.dot}`}></span>
+    <span>{label}</span>
+    {showDate && (
+      <span class="text-slate-400">
+        · {tool.pricing.verified_date}
+      </span>
+    )}
+  </span>
+)}

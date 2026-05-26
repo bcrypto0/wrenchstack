@@ -451,6 +451,71 @@ export function smartAlternatives(t: Tool, n: number = 6): ScoredAlternative[] {
   return scored.sort((a, b) => b.score - a.score).slice(0, n);
 }
 
+// --- Freshness signal: every tool's pricing has a verified_date. Surfacing
+// "how fresh is this data?" as a UI pill is our single biggest direct
+// attack on competitors' staleness (e.g. Capterra's ServiceTitan profile is
+// 9 months out of date). Three tiers: fresh ≤90 days, aging 91-180, stale >180.
+
+export type FreshnessTier = 'fresh' | 'aging' | 'stale';
+
+export function daysSinceVerified(t: Tool): number {
+  const verifiedDate = t.pricing.verified_date;
+  if (!verifiedDate) return Number.POSITIVE_INFINITY;
+  const verified = new Date(verifiedDate);
+  const now = new Date();
+  const msPerDay = 24 * 60 * 60 * 1000;
+  return Math.floor((now.getTime() - verified.getTime()) / msPerDay);
+}
+
+export function freshnessTier(t: Tool): FreshnessTier {
+  const d = daysSinceVerified(t);
+  if (d <= 90) return 'fresh';
+  if (d <= 180) return 'aging';
+  return 'stale';
+}
+
+// Human-readable freshness phrase: "6 days ago" / "3 months ago" / "stale"
+export function freshnessLabel(t: Tool): string {
+  const d = daysSinceVerified(t);
+  if (d === Number.POSITIVE_INFINITY) return 'No verified date';
+  if (d === 0) return 'Verified today';
+  if (d === 1) return 'Verified yesterday';
+  if (d < 14) return `Verified ${d} days ago`;
+  if (d < 60) return `Verified ${Math.round(d / 7)} weeks ago`;
+  if (d < 365) return `Verified ${Math.round(d / 30)} months ago`;
+  return `Verified ${Math.round(d / 365)}+ year(s) ago`;
+}
+
+// Sitewide freshness stats — used on homepage widget.
+export interface FreshnessStats {
+  fresh: number;
+  aging: number;
+  stale: number;
+  verifiedLast30Days: number;
+  totalTools: number;
+}
+
+export function freshnessStats(): FreshnessStats {
+  let fresh = 0;
+  let aging = 0;
+  let stale = 0;
+  let verifiedLast30Days = 0;
+  for (const t of tools) {
+    const tier = freshnessTier(t);
+    if (tier === 'fresh') fresh++;
+    else if (tier === 'aging') aging++;
+    else stale++;
+    if (daysSinceVerified(t) <= 30) verifiedLast30Days++;
+  }
+  return {
+    fresh,
+    aging,
+    stale,
+    verifiedLast30Days,
+    totalTools: tools.length,
+  };
+}
+
 // --- Cross-link audit: convert competitor tool name mentions in prose
 // into clickable links to /tools/<slug>/. Used in the tool review template
 // to make every Phase 2 narrative section discoverable to crawlers and

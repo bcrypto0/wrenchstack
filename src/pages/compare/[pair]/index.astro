@@ -8,6 +8,7 @@ import {
   verticals,
   type Tool,
 } from '../../../lib/data';
+import FreshnessBadge from '../../../components/FreshnessBadge.astro';
 
 export async function getStaticPaths() {
   // Generate both directions per pair (e.g. jobber-vs-servicetitan AND
@@ -368,8 +369,11 @@ const breadcrumbs = [
       </h1>
       <p class="mt-4 text-lg text-slate-600">
         Head-to-head comparison of pricing, features, integrations, and use-case fit.
-        Updated {a.pricing.verified_date}.
       </p>
+      <div class="mt-4 flex flex-wrap items-center gap-3">
+        <FreshnessBadge tool={a} variant="full" showDate={true} />
+        <FreshnessBadge tool={b} variant="full" showDate={true} />
+      </div>
     </header>
 
     <section class="mb-12 grid gap-6 md:grid-cols-2">

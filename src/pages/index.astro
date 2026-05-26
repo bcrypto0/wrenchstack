@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import categories from '../data/categories.json';
 import toolsData from '../data/tools.json';
 import featuresData from '../data/features.json';
-import { tools, toolsForVertical } from '../lib/data';
+import { tools, toolsForVertical, freshnessStats } from '../lib/data';
 
 const verticals = categories.verticals;
 const toolCount = tools.length;
@@ -19,6 +19,11 @@ const formattedLastVerified = new Date(lastVerifiedDate).toLocaleDateString('en-
   month: 'long',
   day: 'numeric',
 });
+
+// Live freshness stats — surfacing this on the homepage is our direct
+// attack on competitors' staleness (Capterra ServiceTitan profile last
+// updated Aug 2025 = 9 months stale at time of this writing).
+const freshness = freshnessStats();
 
 // Tool count per vertical (for the "Pick your trade" cards)
 const verticalsWithCounts = verticals.map((v) => ({
@@ -81,9 +86,12 @@ function featureToUrl(slug: string): string {
         <span class="text-slate-300">·</span>
         <span><span class="font-bold text-slate-900">{verticals.length}</span> trades verticals</span>
         <span class="text-slate-300">·</span>
-        <span><span class="font-bold text-slate-900">1,100+</span> comparison pages</span>
+        <span><span class="font-bold text-slate-900">2,400+</span> comparison pages</span>
         <span class="text-slate-300">·</span>
-        <span>Pricing verified {formattedLastVerified}</span>
+        <span class="inline-flex items-center gap-1.5">
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 ring-2 ring-emerald-200"></span>
+          <span class="font-bold text-slate-900">{freshness.verifiedLast30Days}</span> verified in last 30 days
+        </span>
       </div>
       <div class="mt-8 flex flex-wrap gap-3">
         <a
