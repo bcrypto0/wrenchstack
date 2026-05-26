@@ -2014,7 +2014,79 @@
         "electrical": 7,
         "pest_control": 7,
         "appliance_repair": 7
-      }
+      },
+      "long_description": "Smart Service is the QuickBooks-Desktop-native field service management platform, founded in 1996 in Bohemia, New York and serving HVAC, plumbing, electrical, pest control, and appliance repair operations. The product targets a specific buyer segment that other FSM platforms can't fully serve: service operations deeply embedded in QuickBooks Desktop (often QuickBooks Enterprise) who want a tightly-bound dispatcher that integrates at depth most modern FSM cannot match.\n\nWhat separates Smart Service from competitors is the QuickBooks Desktop integration depth. The platform was built as a QuickBooks-native FSM from inception — not a modern cloud platform with QuickBooks integration added, but a QuickBooks-architected product where QuickBooks IS the database. Customer records, invoices, payments, and accounting data are unified with QuickBooks Desktop in real-time without the sync delays or reconciliation issues that affect cloud-FSM-to-QuickBooks-Online integrations. For HVAC and plumbing operations on QuickBooks Desktop who consider QuickBooks the financial single-source-of-truth, this architectural depth eliminates a category of data inconsistency.\n\nPricing is custom-quoted with no published tiers. User-reported pricing typically lands at $79-$149 per user per month plus the QuickBooks Desktop license cost (QuickBooks Desktop required). Sales-call required for quotes. The QuickBooks Desktop dependency is also a cost — QuickBooks Desktop subscription has been pushed to annual subscription pricing by Intuit.\n\nIntegration coverage is intentionally narrow: QuickBooks Desktop and QuickBooks Enterprise integration only. No QuickBooks Online support — the platform's architectural foundation is QuickBooks Desktop specifically. This is both a strength (deep integration) and a constraint (operations on QBO can't use it).\n\nThe trade-off: Smart Service requires QuickBooks Desktop. The UI shows the platform's age (founded 1996). No QuickBooks Online support. No public pricing. For HVAC and plumbing operations specifically running QuickBooks Desktop and committed to staying on Desktop (not migrating to QBO), Smart Service's integration depth is uniquely valuable. For operations on QuickBooks Online or willing to migrate to QBO, modern FSM (Sera Systems, FieldEdge, ServiceTitan) typically fit better despite different integration approaches.",
+      "pros_detail": [
+        {
+          "title": "QuickBooks Desktop native architecture",
+          "explanation": "Built as QuickBooks-native FSM from 1996 founding — QuickBooks IS the database, not a sync target. Real-time data unity between FSM workflows and QuickBooks Desktop accounting. Eliminates sync delays and reconciliation issues that affect cloud-FSM-to-QBO integrations."
+        },
+        {
+          "title": "QuickBooks Enterprise support",
+          "explanation": "Works with QuickBooks Enterprise (the high-end QuickBooks Desktop product for larger operations). Most modern FSM only support QuickBooks Online or basic QuickBooks Desktop; Smart Service's Enterprise compatibility is rare."
+        },
+        {
+          "title": "30-year HVAC/plumbing specialization",
+          "explanation": "Founded 1996 — among the longest-tenured FSM specifically for HVAC, plumbing, and similar service trades. Workflow depth reflects three decades of industry refinement and customer accumulation."
+        },
+        {
+          "title": "Service agreement workflows",
+          "explanation": "Recurring service agreement management for HVAC/plumbing maintenance contracts. Mature feature reflecting decades of service industry workflow refinement."
+        },
+        {
+          "title": "Route optimization built in",
+          "explanation": "Built-in route optimization for tech dispatching across service calls. Standard among mid-tier FSM but worth noting for Smart Service's specialty category positioning."
+        },
+        {
+          "title": "Solid 4.3 G2 / 4.3 Capterra rating",
+          "explanation": "Reflects accurate satisfaction in the QuickBooks Desktop FSM niche. Operations fitting the QB Desktop profile report consistent satisfaction; broader operations may find the QB Desktop dependency limiting."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "QuickBooks Desktop REQUIRED",
+          "explanation": "Hard dependency on QuickBooks Desktop. Operations on QuickBooks Online cannot use Smart Service. Operations not using QuickBooks at all cannot use Smart Service. The QB Desktop dependency is both architectural strength and adoption constraint."
+        },
+        {
+          "title": "Dated UI",
+          "explanation": "1996 founding shows in UI design. Functional but visually dated compared to modern cloud FSM (Sera Systems, FieldEdge, ServiceTitan, Jobber). Operations comparing against modern competitors notice the substantial generation gap."
+        },
+        {
+          "title": "No public pricing",
+          "explanation": "Sales call required for quotes. User-reported $79-$149/user/month plus QuickBooks Desktop license cost but actual quotes vary. Comparison shopping requires committing time to sales process."
+        },
+        {
+          "title": "QuickBooks Desktop is on borrowed time",
+          "explanation": "Intuit has been gradually pushing QuickBooks Desktop customers toward QuickBooks Online. Operations on QB Desktop face eventual migration pressure. Smart Service's QB Desktop dependency may become a constraint as Intuit's QB Desktop investment slows."
+        },
+        {
+          "title": "Smaller user community than modern FSM",
+          "explanation": "Niche positioning means smaller online community, fewer tutorials, fewer third-party guides. Self-service learning ecosystem is thinner than market leaders. Affects troubleshooting speed when implementation issues arise."
+        }
+      ],
+      "implementation_notes": "Plan for 4-8 weeks for full deployment. Smart Service includes dedicated implementation manager engagement for all customers given the custom-quoted positioning. Realistic timeline for a 15-tech HVAC operation on QuickBooks Desktop: Weeks 1-2 system setup including QuickBooks Desktop integration configuration (this is the highest-value step — the architectural integration depth is the platform's value proposition), user roles and permissions matched to QuickBooks user setup, service catalog import from QuickBooks items list. Weeks 2-4 customer data verification (already in QuickBooks, but workflow setup happens in Smart Service), service agreement migration from existing platform if applicable, dispatching workflow configuration with route optimization parameters. Weeks 4-6 office staff training on dispatching workflow with real-time QuickBooks integration awareness; field tech training on mobile app with service agreement workflows; first jobs run with parallel tracking on legacy system. Weeks 6-8 transition to full production with QuickBooks Desktop as unified data store; financial reporting validated against accounting; refinement based on actual usage patterns. For operations migrating from spreadsheet-based or paper workflows on QuickBooks Desktop, the migration is largely workflow adoption since QuickBooks data already exists. For operations migrating from QuickBooks Online + cloud FSM to Smart Service + QB Desktop, the migration is substantial and includes accounting platform downgrade — uncommon and not generally recommended.",
+      "tool_faqs": [
+        {
+          "q": "Do I need QuickBooks Desktop to use Smart Service?",
+          "a": "Yes — Smart Service requires QuickBooks Desktop or QuickBooks Enterprise as the financial core. Operations on QuickBooks Online cannot use Smart Service. Operations not using QuickBooks at all cannot use Smart Service. The QB Desktop architectural integration is the platform's primary value proposition; without QB Desktop, the platform has no value."
+        },
+        {
+          "q": "How does Smart Service compare to FieldEdge?",
+          "a": "Both target HVAC/plumbing operations on QuickBooks Desktop. FieldEdge ($90/user/month) is more modern with broader feature ecosystem and larger user community. Smart Service has deeper QuickBooks Desktop integration architecturally (QB is the database, not a sync target) and potentially lower pricing for some configurations. For operations prioritizing QB Desktop integration depth above all else, Smart Service's architectural approach is uniquely valuable. For operations wanting broader FSM features and willing to accept slightly less direct QB integration, FieldEdge typically fits better."
+        },
+        {
+          "q": "Should I migrate from QuickBooks Desktop to QuickBooks Online?",
+          "a": "Depends on your situation. Intuit has been gradually pushing operations from QB Desktop to QBO through pricing changes and feature investment. QBO has broader modern FSM integration support; QB Desktop has deeper integration with specialty FSM like Smart Service and FieldEdge. Operations on QB Desktop with no migration pressure can stay on Desktop indefinitely. Operations facing increasing QB Desktop subscription costs or wanting modern FSM integration should evaluate the migration timeline."
+        },
+        {
+          "q": "What does Smart Service actually cost?",
+          "a": "Custom-quoted with no public pricing. User-reported $79-$149 per user per month plus the QuickBooks Desktop license cost (typically $549+/year for QB Desktop Pro Plus or $1,800+/year for QB Desktop Enterprise). Total cost is meaningful — for a 10-tech operation, $7,900-$14,900/year for Smart Service alone plus QuickBooks Desktop license. Comparable to FieldEdge total cost."
+        },
+        {
+          "q": "What's Smart Service best for?",
+          "a": "HVAC, plumbing, electrical, and pest control operations 3-25 techs that are: (1) deeply embedded in QuickBooks Desktop or QuickBooks Enterprise, (2) committed to staying on QuickBooks Desktop (not migrating to QBO), (3) prioritizing QuickBooks integration depth over modern UI or broader feature ecosystem. Operations meeting all three criteria get unique value from Smart Service. Operations on QBO or willing to migrate to QBO should evaluate modern FSM alternatives."
+        }
+      ]
     },
     {
       "slug": "servsuite",
@@ -4202,7 +4274,79 @@
         "hvac": 8,
         "plumbing": 8,
         "electrical": 7
-      }
+      },
+      "long_description": "Commusoft is the longest-tenured field service management platform for HVAC and plumbing operations serving both residential and light-commercial customers, founded in 1993 in London and now serving operations across the UK and growing US market. The product targets a specific buyer segment: HVAC and plumbing companies 5-50 employees doing mixed residential and light-commercial service work where service agreement workflow depth matters, particularly operations doing boiler servicing (a major UK trade specialty) requiring purpose-built workflows.\n\nWhat separates Commusoft from competitors is the 30+ years of HVAC/plumbing specialization. Founded in 1993, the platform predates most modern FSM and has accumulated workflow depth that reflects three decades of UK HVAC and plumbing industry refinement. The boiler servicing modules are particularly notable — UK operations doing significant boiler maintenance work get purpose-built workflows that general FSM approximates poorly. Service agreement management is a first-class concept (not a workaround), reflecting the recurring-maintenance nature of HVAC and plumbing operations.\n\nPricing is per-user across three tiers: Connect at $49/user/month for basic FSM with service agreements, Advance at $119/user/month adding asset tracking and customer portal, and Pro at $199/user/month with the full feature set including advanced reporting. The 14-day free trial allows substantial evaluation including service agreement workflow testing.\n\nIntegration coverage focuses on accounting and communication: QuickBooks (cross-Atlantic), Xero (UK dominant), Stripe for payment processing, and Twilio for SMS communications. The integration footprint reflects Commusoft's UK roots with growing US support — UK operations get the Xero depth, US operations get QuickBooks integration.\n\nThe trade-off: Commusoft is UK-rooted with US presence still growing. US-specific integrations (Angi, Google Local Services Ads, US payroll providers) are less mature than US-rooted competitors. UI is functional but less polished than newer entrants. For HVAC and plumbing operations doing significant boiler servicing or service agreement work, Commusoft's depth in those workflows is consistently competitive. For US-only operations prioritizing modern UX or LSA integration, US-rooted alternatives (Sera Systems, FieldEdge, ServiceTitan) typically fit better.",
+      "pros_detail": [
+        {
+          "title": "30+ years of HVAC/plumbing specialization",
+          "explanation": "Founded 1993 — by far the longest-tenured FSM specifically for HVAC and plumbing. Three decades of workflow refinement create depth that newer competitors haven't accumulated, particularly for UK trade conventions."
+        },
+        {
+          "title": "Boiler servicing modules (UK specialty)",
+          "explanation": "Purpose-built boiler servicing workflows including UK gas safety regulations, service certificates, parts tracking specific to UK boiler brands. Critical for UK operations doing significant boiler maintenance — general FSM handles this poorly."
+        },
+        {
+          "title": "Service agreement workflow depth",
+          "explanation": "Recurring service agreements as first-class concept (not workaround). Critical for HVAC and plumbing operations where 30-60% of revenue comes from maintenance contracts. Service agreement management is more mature than mid-tier general FSM."
+        },
+        {
+          "title": "Strong Xero integration (UK accounting standard)",
+          "explanation": "Xero dominates UK small business accounting. Commusoft's Xero integration depth reflects UK-market focus. Critical advantage for UK operations versus US-rooted FSM that handle Xero awkwardly."
+        },
+        {
+          "title": "Asset tracking for commercial accounts",
+          "explanation": "Asset-level service history for commercial accounts including warranty tracking, service history per equipment unit, and customer-facing reports. Important for HVAC/plumbing operations with light-commercial accounts."
+        },
+        {
+          "title": "Established UK customer base + 4.3/4.4 ratings",
+          "explanation": "Solid established satisfaction in UK HVAC and plumbing market. UK-specific user community provides industry-relevant peer support. US growth ongoing."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "UK-rooted with US presence still growing",
+          "explanation": "Originated in UK; US user community is smaller than US-rooted FSM (ServiceTitan, FieldEdge, Sera Systems). US-specific features and case studies less mature. Functional for US operations but noticeable cultural fit difference."
+        },
+        {
+          "title": "US-specific integrations limited",
+          "explanation": "Angi, Google Local Services Ads, US payroll providers (Gusto, ADP, Paychex), US-specific marketing tools — integration ecosystem thinner than US-rooted competitors. US operations may need workarounds for US-specific tools."
+        },
+        {
+          "title": "UI feels mid-tier polish",
+          "explanation": "Functional but less visually polished than newer entrants (Sera Systems, FieldPulse, JobTread). 30+ years of incremental UI evolution shows. Operations comparing against modern competitors notice the generation gap."
+        },
+        {
+          "title": "Per-user pricing scales with team size",
+          "explanation": "At $49-$199 per user per month, large operations (20+ techs) hit $1,000-$4,000 per month. For mid-large operations, evaluate against per-company-pricing alternatives (RazorSync) or higher-tier FSM with bulk discounts."
+        },
+        {
+          "title": "No free tier — only 14-day trial",
+          "explanation": "Operations wanting to evaluate at length need to commit to paid trial timeline. Some competitors (Jobber, Markate) offer free tiers for extended evaluation. Commusoft's 14-day trial is standard but shorter than 30-day trials offered by some competitors."
+        }
+      ],
+      "implementation_notes": "Plan for 4-6 weeks for full deployment. Commusoft includes dedicated implementation manager engagement for Advance and Pro tiers. Realistic timeline for a 15-tech UK HVAC/plumbing operation: Weeks 1-2 system setup including service catalog with UK gas safety codes and boiler servicing categories, customer data import, Xero integration setup with VAT structure mapping, user roles and permissions. Weeks 2-3 service agreement migration from existing platform with recurring schedule reconstruction (this is the most complex step — service agreement data structures differ between platforms), asset library setup for commercial accounts. Weeks 3-4 office staff training on service agreement management, dispatching workflow, customer portal launch; field tech training on mobile app with gas safety inspection workflows. Weeks 4-6 first jobs run through Commusoft in production with parallel tracking on legacy system; financial integration verified for invoice flow into Xero/QuickBooks; service agreement billing cycle validated against accounting. For UK operations migrating from spreadsheet-based or paper workflows, the migration is straightforward but the boiler servicing workflow setup requires careful attention to regulatory compliance. For US operations adopting Commusoft, expect additional time for adapting UK-default workflows to US conventions.",
+      "tool_faqs": [
+        {
+          "q": "Is Commusoft suitable for US-based HVAC/plumbing operations?",
+          "a": "Yes for operations doing significant service agreement work or boiler servicing where Commusoft's specialty depth matters. US-specific features (US payroll integrations, Google LSA integration, US-style scheduling) less mature than US-rooted competitors. For US operations on Xero (less common than QuickBooks), Commusoft is particularly strong. For US-only operations on QuickBooks with US payroll needs and LSA-heavy marketing, US-rooted alternatives (Sera Systems, FieldEdge, ServiceTitan) typically fit better."
+        },
+        {
+          "q": "What's Commusoft's boiler servicing capability?",
+          "a": "Purpose-built workflows for boiler maintenance including UK gas safety regulations compliance, service certificates generation, parts tracking specific to UK boiler brands, customer service history per boiler unit, and warranty management. UK operations doing significant boiler maintenance get specialty workflows that general FSM approximates poorly. US operations doing similar HVAC equipment maintenance get adapted workflows that work but aren't optimized."
+        },
+        {
+          "q": "How does Commusoft compare to ServiceTitan for HVAC/plumbing?",
+          "a": "Commusoft is mid-tier UK-rooted FSM ($49-$199/user/month) with strong service agreement depth and Xero integration. ServiceTitan is US-rooted enterprise FSM ($400-$800/user/month) with stronger US market presence, more modern UX, and broader integration ecosystem. For UK HVAC/plumbing operations or US operations doing significant boiler service work, Commusoft's specialty depth is competitive at meaningfully lower cost. For US operations prioritizing modern UX and US-specific features, ServiceTitan typically justifies the premium pricing."
+        },
+        {
+          "q": "Does Commusoft handle commercial HVAC accounts?",
+          "a": "Yes for light-commercial HVAC accounts. Service agreement workflows, asset tracking, and customer portal support light-commercial work well. Operations doing significant heavy-commercial mechanical contracting (multi-property commercial accounts, complex commercial billing, AIA progress billing for installs) may need dedicated commercial mechanical FSM like ServiceTrade or BuildOps."
+        },
+        {
+          "q": "What's the difference between Connect, Advance, and Pro tiers?",
+          "a": "Connect ($49/user/month) covers basic FSM with service agreements — sufficient for small operations focused on residential service. Advance ($119/user/month) adds asset tracking, customer portal, advanced scheduling. Pro ($199/user/month) includes full feature set with advanced reporting, custom workflows, and priority support. For 5-10 tech operations doing standard residential HVAC/plumbing, Connect is typically sufficient. For 10+ tech operations with light-commercial work, Advance is the sweet spot."
+        }
+      ]
     },
     {
       "slug": "skimmer",
@@ -4913,7 +5057,79 @@
       "headquartered": "Atlanta, USA",
       "vertical_fit": {
         "cleaning": 9
-      }
+      },
+      "long_description": "Launch27 is the residential cleaning specialty FSM with strong online booking, founded in 2012 in Atlanta and now serving residential cleaning operations across the United States. The product targets a specific buyer segment that general FSM and ZenMaid both partially serve: residential cleaning operations 1-15 cleaners prioritizing online booking conversion and recurring scheduling depth over modern UI or broader integration ecosystem.\n\nWhat separates Launch27 from competitors is the online booking conversion focus. The platform's customer-facing online booking widget is purpose-built for cleaning service conversion — instant pricing based on home size and frequency, transparent service inclusions, automated follow-up sequences for booking-abandoned visitors, and recurring schedule setup at booking time. For cleaning operations getting significant traffic from website or paid ads, the booking conversion depth typically meaningfully improves website-to-booked-customer conversion rates compared to general FSM bundled booking features.\n\nPricing is per-company across three tiers: Solo at $49/month for solo cleaners, Growth at $99/month for small operations (typically up to 5 cleaners), and Pro at $199/month for established operations with full feature set. The 14-day free trial allows substantial evaluation. Per-company pricing scales reasonably with team size — meaningfully cheaper than per-user cleaning software (ZenMaid Team $116/mo or per-user FSM applied to cleaning).\n\nIntegration coverage focuses on cleaning operations: QuickBooks for accounting, Stripe for payment processing, Mailchimp for email marketing, and Zapier for custom workflow automation. The integration footprint is intentionally focused on cleaning-business essentials rather than broad ecosystem coverage.\n\nThe trade-off: Launch27 is cleaning-only with UI that feels dated compared to newer entrants (ZenMaid modern UI, general FSM modern dashboards). Feature breadth is narrower than ZenMaid for some workflows — operations that prioritize broader feature depth over online booking specifically often prefer ZenMaid. For residential cleaning operations specifically prioritizing online booking conversion as the primary growth lever, Launch27's specialty focus is consistently competitive. For operations prioritizing modern UX, broader features, or higher user ratings, ZenMaid (4.7/4.8) typically wins.",
+      "pros_detail": [
+        {
+          "title": "Online booking conversion-optimized",
+          "explanation": "Customer-facing booking widget purpose-built for cleaning service conversion — instant pricing, transparent inclusions, recurring setup at booking, automated abandonment follow-up. Critical for cleaning operations with significant website or paid-ad traffic."
+        },
+        {
+          "title": "Per-company pricing (not per-user)",
+          "explanation": "Solo $49, Growth $99, Pro $199 per month flat. Adding cleaners doesn't increase subscription cost within tier limits. For 5+ cleaner operations, decisively cheaper than per-user cleaning software (ZenMaid Team $116/user/mo)."
+        },
+        {
+          "title": "Recurring scheduling depth for cleaning cadences",
+          "explanation": "Biweekly/monthly cleaning cadences as primary scheduling model. Handles holiday adjustments, cleaner-availability shifts, and customer-preference changes that cleaning operations face daily. Specialty depth beats general FSM."
+        },
+        {
+          "title": "Solid 4.2 G2 / 4.5 Capterra rating",
+          "explanation": "Reflects accurate positioning at the cleaning specialty tier. Lower than ZenMaid (4.7/4.8) but appropriate for the more focused feature set. Cleaning operations using Launch27 understand it's online-booking-focused and rate accordingly."
+        },
+        {
+          "title": "Route optimization for residential cleaning",
+          "explanation": "Built-in route optimization for cleaner routing across the day. Important for operations doing multiple cleanings per cleaner per day where drive time between jobs affects daily economics."
+        },
+        {
+          "title": "14-day free trial",
+          "explanation": "Allows real evaluation including online booking widget setup and conversion testing. Standard among cleaning software but worth noting for operations evaluating alternatives like ZenMaid."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "UI dated compared to newer cleaning software",
+          "explanation": "2012 founding with incremental UI updates. ZenMaid (2013) and modern FSM ship more refined UI design. Operations prioritizing modern UX may prefer ZenMaid or Jobber despite different feature emphasis."
+        },
+        {
+          "title": "Cleaning-only positioning",
+          "explanation": "Operations combining cleaning with other services (landscape + cleaning, handyman + cleaning, etc.) need different software. Pure-cleaning operations get value; mixed-service operations need multi-trade FSM."
+        },
+        {
+          "title": "Smaller integration ecosystem than general FSM",
+          "explanation": "QuickBooks, Stripe, Mailchimp, Zapier — covers cleaning-business essentials but smaller than general FSM integration counts. Custom integration needs depend on Zapier workflows."
+        },
+        {
+          "title": "Lower user satisfaction than ZenMaid",
+          "explanation": "Launch27 4.2 G2 / 4.5 Capterra vs ZenMaid 4.7/4.8. Reflects ZenMaid's broader feature set and modern UI. Operations prioritizing user satisfaction ratings should evaluate ZenMaid first."
+        },
+        {
+          "title": "Per-tier user limits constrain growth",
+          "explanation": "Each tier has implicit cleaner-count limits. Operations approaching limits need to upgrade — Growth ($99) to Pro ($199) is 2x cost jump. Plan ahead before growing past tier limits."
+        }
+      ],
+      "implementation_notes": "Plan for 1-3 weeks for full deployment. Launch27's onboarding is self-service with email support and a customer success team during business hours. Realistic timeline for a 5-cleaner residential cleaning operation: Week 1 account setup, customer/property data import, recurring schedule configuration for existing customer base, online booking widget setup with pricing rules per home size and service frequency, cleaner mobile app installation. Week 2 cleaner training on mobile app workflows including customer signatures and photo documentation, customer portal launch to existing customers, payment integration with Stripe. Week 3 first full week with all recurring schedules running through Launch27; online booking widget published on website with conversion tracking; refinement of pricing rules based on initial booking patterns. For operations migrating from spreadsheets or general FSM, the migration is largely a workflow shift — recurring schedule reconstruction is the most time-intensive step since recurring service data structures vary between platforms. For operations migrating from ZenMaid or competitor cleaning software, customer list export and import works for customer data; recurring schedules typically need manual rebuilding. The online booking widget configuration is the highest-value setup step — operations that carefully configure pricing rules and abandonment follow-up sequences see significant booking conversion improvements within 4-8 weeks.",
+      "tool_faqs": [
+        {
+          "q": "How does Launch27 compare to ZenMaid?",
+          "a": "Both are cleaning specialty FSM. ZenMaid (4.7 G2 / 4.8 Capterra, founded 2013) has more modern UI, broader feature set, and higher user satisfaction. Launch27 (4.2/4.5, founded 2012) has stronger online booking conversion focus and slightly cheaper per-company pricing. For pure cleaning operations prioritizing modern UX and broader features, ZenMaid typically wins. For cleaning operations where online booking conversion is the primary growth lever, Launch27's specialty focus is competitive."
+        },
+        {
+          "q": "Is Launch27 worth $49-$199/month for a cleaning operation?",
+          "a": "For residential cleaning operations 1-15 cleaners getting significant website or paid-ad traffic, yes — the online booking conversion typically pays back the subscription through increased website-to-booked-customer conversion rates. For cleaning operations getting primarily phone-based bookings or referral bookings, the online booking depth is less valuable and general FSM (Jobber, Housecall Pro) may fit better at similar pricing."
+        },
+        {
+          "q": "Can Launch27 handle commercial janitorial cleaning?",
+          "a": "Limited — Launch27 is built for residential cleaning workflows. Commercial janitorial operations with multi-shift, multi-supervisor structures and night cleaning crews need dedicated commercial janitorial platforms like CleanTelligent or Janitorial Manager. Mixed residential-commercial operations may need to run multiple platforms."
+        },
+        {
+          "q": "Does Launch27 have an online booking widget?",
+          "a": "Yes — purpose-built customer-facing online booking widget is Launch27's signature feature. Customers visit operation's website, select services and frequency, see instant pricing based on home size, book directly, and customer record is created in Launch27 with recurring schedule established. Significantly more conversion-optimized than general FSM bundled booking features."
+        },
+        {
+          "q": "What's the difference between Solo, Growth, and Pro tiers?",
+          "a": "Solo ($49/month) covers solo cleaners with basic FSM and online booking. Growth ($99/month) typically covers up to 5 cleaners with full booking automation and advanced scheduling. Pro ($199/month) includes full feature set for 5+ cleaner operations with advanced reporting and team management. Exact cleaner-count limits per tier should be confirmed with sales for operations approaching tier thresholds."
+        }
+      ]
     },
     {
       "slug": "markate",
@@ -6645,7 +6861,79 @@
       "headquartered": "Provo, USA",
       "vertical_fit": {
         "cleaning": 9
-      }
+      },
+      "long_description": "CleanTelligent is the leading commercial janitorial quality control and operations platform, founded in 1999 in Provo, Utah (parent company SC Logic) and now serving commercial cleaning operations across North America. The product targets a specific buyer segment that residential cleaning software (ZenMaid, Launch27) and general FSM both underserve: commercial janitorial operations 10-500 employees doing contract cleaning of office buildings, schools, healthcare facilities, retail spaces, and government buildings where quality control and customer survey workflows matter more than residential-cleaning workflows.\n\nWhat separates CleanTelligent from competitors is the commercial janitorial workflow architecture. The platform's quality inspection workflow is purpose-built for commercial cleaning context — supervisors do daily/weekly QC inspections of cleaned properties with pass/fail rubrics, customer-facing survey workflows where building managers rate cleaning quality, work order management for special requests and incident response, and reporting that demonstrates value to commercial customers during contract renewal discussions. Residential cleaning software doesn't handle this workflow because residential cleaning relationships are different (homeowner relationships vs commercial facility manager relationships).\n\nPricing is custom-quoted with no published tiers. User-reported pricing typically lands at $100-$200 per user per month for typical commercial janitorial configurations. Sales-call required to get pricing — typical for enterprise commercial cleaning software where deployment includes significant implementation work and customer onboarding.\n\nIntegration coverage is intentionally focused: QuickBooks for accounting and Zapier for custom workflow automation. The narrow integration ecosystem reflects CleanTelligent's commercial-cleaning specialty focus rather than broad ecosystem coverage. Commercial cleaning operations don't typically need the broad integration depth of general FSM.\n\nThe trade-off: CleanTelligent is commercial cleaning-only and the UI shows its age (founded 1999, 25+ years of incremental updates). Modern competitors with similar use cases but newer UI don't really exist — commercial cleaning specialty software hasn't had the same recent investment as residential cleaning software (ZenMaid, Launch27). For commercial janitorial operations specifically — contract cleaning of commercial buildings where quality control and customer survey workflows matter — CleanTelligent is consistently the strongest specialty option. Residential cleaning operations need different software entirely.",
+      "pros_detail": [
+        {
+          "title": "Commercial janitorial quality control workflow",
+          "explanation": "Purpose-built supervisor QC inspection workflows with pass/fail rubrics, customer-facing survey workflows, and reporting that demonstrates value during commercial contract renewal discussions. Residential cleaning software doesn't handle this — different relationship model."
+        },
+        {
+          "title": "Customer survey + feedback management",
+          "explanation": "Built-in customer survey workflows where commercial facility managers rate cleaning quality. Critical for commercial cleaning operations where customer relationship maintenance drives contract renewals worth thousands per year per account."
+        },
+        {
+          "title": "Established 25+ year specialty focus",
+          "explanation": "Founded 1999 — by far the longest-tenured commercial janitorial software still active. Workflow depth reflects 25 years of commercial cleaning industry refinement. Established customer base of large commercial cleaning operations."
+        },
+        {
+          "title": "Incident reporting workflows",
+          "explanation": "Structured incident response workflows for issues that arise during commercial cleaning (damage, security incidents, customer complaints). Important for commercial operations where incident documentation is regulatory or contractual requirement."
+        },
+        {
+          "title": "Mobile app for supervisor QC inspections",
+          "explanation": "Supervisor-focused mobile app for conducting QC inspections during property visits. Different from residential cleaning mobile apps (cleaner-focused) because the user is different — supervisor inspecting completed cleaning work versus cleaner performing the cleaning."
+        },
+        {
+          "title": "4.3 G2 / 4.4 Capterra rating",
+          "explanation": "Solid satisfaction within commercial janitorial niche. Reflects accurate expectations — operations using CleanTelligent understand it's commercial cleaning specialty, not modern general-purpose FSM."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Custom-quoted pricing (opaque)",
+          "explanation": "Sales call required for quotes. No published pricing. User-reported $100-$200/user/month range but actual quotes vary by operation size. Comparison shopping requires committing time to sales process."
+        },
+        {
+          "title": "Commercial cleaning specific (not residential)",
+          "explanation": "Doesn't fit residential cleaning operations. The quality control workflow, customer survey system, and supervisor inspection focus are commercial-cleaning specific. Residential cleaning operations need ZenMaid, Launch27, or general FSM instead."
+        },
+        {
+          "title": "UI shows its age",
+          "explanation": "25+ year platform history shows in UI design. Functional but visually dated. SC Logic (parent company) investment in modernization has been incremental. Operations comparing against modern software notice the generation gap."
+        },
+        {
+          "title": "Smaller integration ecosystem",
+          "explanation": "QuickBooks and Zapier only. Operations needing CRM integration, marketing automation, or specialty tools depend on Zapier workflows. Significantly thinner than general FSM integration counts."
+        },
+        {
+          "title": "Modern competitors with similar focus don't really exist",
+          "explanation": "Commercial cleaning specialty software hasn't seen the same recent investment as residential cleaning software. No modern (2015+) startup with similar focus has emerged. This means CleanTelligent dominates the niche but also means competitive pressure for UI/feature modernization is limited."
+        }
+      ],
+      "implementation_notes": "Plan for 6-10 weeks for full deployment. CleanTelligent includes dedicated implementation manager engagement given the custom-quoted enterprise positioning. Realistic timeline for a 50-employee commercial janitorial operation transitioning from another platform: Weeks 1-2 system setup including property and customer hierarchy mapping (commercial cleaning operations have complex customer structures with parent contracts and property hierarchies), supervisor and cleaner roles with appropriate permissions, QC inspection rubric configuration for typical property types (office, school, healthcare, retail). Weeks 2-4 customer survey workflow setup with question templates and notification rules, customer-facing portal launch with branding configured, customer onboarding for facility managers who will use the survey system. Weeks 4-7 supervisor training on QC inspection mobile workflow, office staff training on incident management and customer survey reporting, integration setup with QuickBooks. Weeks 7-10 first inspections run through CleanTelligent in production with parallel tracking on legacy system; customer survey responses analyzed against baseline; reporting dashboards refined for contract renewal conversations. For operations migrating from paper-based or spreadsheet-based QC processes, the migration is largely a behavior change — establishing the discipline of supervisor inspections through the platform versus paper. The biggest implementation challenge is customer adoption of the survey system — commercial facility managers need to be onboarded to actually complete surveys, which is the platform's value proposition.",
+      "tool_faqs": [
+        {
+          "q": "Is CleanTelligent for residential or commercial cleaning?",
+          "a": "Commercial janitorial only. CleanTelligent's quality control workflow, customer survey system, and supervisor inspection focus are commercial-cleaning specific — they don't fit residential cleaning operations. For residential cleaning, ZenMaid (residential specialty) or Launch27 (residential with strong online booking) are better fits. For mixed residential + commercial cleaning, operations typically run multiple platforms or compromise on the commercial side."
+        },
+        {
+          "q": "How does CleanTelligent compare to ZenMaid?",
+          "a": "Different markets entirely. ZenMaid is residential cleaning specialty ($58-$174/month) with cleaner-focused workflows and homeowner customer relationships. CleanTelligent is commercial janitorial specialty (user-reported $100-$200/user/month) with supervisor-focused workflows and facility-manager customer relationships. The platforms aren't competitors — they serve different segments of the cleaning industry. Operations doing both residential and commercial work need different software for each."
+        },
+        {
+          "q": "What does the customer survey workflow do?",
+          "a": "Commercial cleaning operations send surveys to facility managers asking them to rate cleaning quality, identify problems, and provide feedback. CleanTelligent automates the survey delivery, collects responses, and aggregates results into reporting that operations use during contract renewal discussions. Critical for commercial cleaning operations where customer relationship maintenance directly drives contract renewals worth thousands of dollars per year per account."
+        },
+        {
+          "q": "Is the 1999 founding date concerning for UI/feature freshness?",
+          "a": "Realistic concern. CleanTelligent shows its age in UI design and feature evolution pace. Modern competitors with similar commercial janitorial focus don't really exist — the segment hasn't seen the same recent startup investment as residential cleaning software. SC Logic (parent) invests in CleanTelligent updates incrementally. Operations evaluating CleanTelligent should accept the UI maturity as a trade-off for the specialty workflow depth that newer alternatives don't provide."
+        },
+        {
+          "q": "What kind of operations use CleanTelligent?",
+          "a": "Commercial janitorial operations 10-500 employees doing contract cleaning of: office buildings, schools, universities, healthcare facilities, retail spaces, government buildings, multi-tenant commercial properties. Typically these operations have established customer bases of facility managers and need to maintain customer relationships through quality control documentation and survey feedback. Smaller commercial cleaning operations (under 10 employees) may find general FSM with photo documentation sufficient; larger operations benefit most from CleanTelligent's specialty depth."
+        }
+      ]
     },
     {
       "slug": "maintainx",
@@ -7027,7 +7315,79 @@
         "plumbing": 6,
         "electrical": 6,
         "general_contractor": 5
-      }
+      },
+      "long_description": "Praxedo is the leading French-rooted enterprise field service management platform expanding into global markets, founded in 2005 in Paris and now serving mid-large service organizations across Europe, the United States, Canada, and Latin America. The product targets a specific buyer segment: mid-market service organizations 20-500 employees with multi-region or multi-country operations needing enterprise FSM capability with European market localization and SAP/Salesforce integration depth that US-rooted FSM lacks.\n\nWhat separates Praxedo from US-rooted enterprise FSM (ServiceTitan, BuildOps) is the European enterprise architecture. The platform handles SAP integration natively (rare in modern FSM), Microsoft Dynamics integration for Dynamics-centric operations, Salesforce integration for CRM-heavy operations, multi-language UI for international teams, and the regulatory/compliance handling that varies across European countries. For service organizations spanning multiple European countries or with significant European-corporate-IT context (SAP, Microsoft Dynamics, multi-country VAT structures), Praxedo's localization runs deep where US-rooted alternatives struggle.\n\nPricing is custom-quoted across three tiers (Essential, Pro, Enterprise). User-reported pricing typically lands at $35-$60 per user per month for typical mid-market configurations — meaningfully cheaper than ServiceTitan ($400-$800) or BuildOps at comparable enterprise FSM feature depth. The pricing accessibility reflects Praxedo's positioning toward European mid-market operations where US-tier enterprise pricing is uncompetitive.\n\nIntegration coverage is unusually broad at the enterprise tier: SAP (rare in FSM, critical for European corporate IT), Microsoft Dynamics (Microsoft-stack operations), Salesforce (CRM-heavy operations), Sage (European accounting dominant), and QuickBooks (US-friendly). The diverse enterprise integration footprint reflects Praxedo's European corporate context — operations there typically run different ERP/CRM stacks than US-rooted FSM expects.\n\nThe trade-off: Praxedo is primarily European with US market presence growing. US user community is smaller than US-rooted enterprise FSM. US-specific features (US payroll integrations, US-specific tax handling, US-style change order workflows) are less mature than US-rooted alternatives. For mid-market service organizations in Europe or operations with significant European corporate IT context, Praxedo is consistently strongest. For US-only operations on QuickBooks/US payroll, US-rooted alternatives (ServiceTitan, BuildOps, FieldEdge) typically fit better despite higher cost.",
+      "pros_detail": [
+        {
+          "title": "SAP integration (rare in modern FSM)",
+          "explanation": "Native SAP integration for European corporate IT contexts where SAP is the financial/operations backbone. Most modern FSM only integrate with QuickBooks-tier accounting; Praxedo's SAP depth is meaningful for European enterprise operations."
+        },
+        {
+          "title": "Significantly cheaper than US enterprise FSM",
+          "explanation": "User-reported $35-$60/user/month vs ServiceTitan $400-$800 or BuildOps similar. For European mid-market operations, the pricing accessibility makes enterprise FSM feasible where US-tier pricing is uncompetitive."
+        },
+        {
+          "title": "Multi-language UI for international teams",
+          "explanation": "Native localization across multiple European languages (French, German, Spanish, Italian, Portuguese, English, others). Critical for service organizations spanning multiple European countries with non-English-speaking field techs."
+        },
+        {
+          "title": "Microsoft Dynamics + Salesforce integrations",
+          "explanation": "Native integrations with Microsoft Dynamics (Microsoft-stack operations) and Salesforce (CRM-heavy operations). Broader enterprise ERP/CRM coverage than US-rooted FSM that typically focus on QuickBooks ecosystem."
+        },
+        {
+          "title": "Strong 4.5 G2 / 4.6 Capterra rating",
+          "explanation": "Reflects clear positioning and consistent execution at the European mid-market tier. Top quartile in the enterprise FSM category despite smaller US user community."
+        },
+        {
+          "title": "Long product history (20+ years)",
+          "explanation": "Founded 2005 — 20+ years of FSM development. Feature depth and edge-case handling in enterprise operations reflect long product evolution. Among the longer-tenured FSM platforms still active."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "US market presence still growing",
+          "explanation": "Originated in France; US user community is smaller than ServiceTitan, FieldEdge, or BuildOps. Fewer US-specific case studies, smaller US-focused user community, US implementation consultants harder to find."
+        },
+        {
+          "title": "Custom-quoted pricing (opaque)",
+          "explanation": "Sales call required for quotes. No published pricing in any market. User-reported $35-$60/user/month range but actual quotes vary significantly. Comparison shopping requires committing time to sales process."
+        },
+        {
+          "title": "US-specific features less mature",
+          "explanation": "US payroll integrations (Gusto, ADP, Paychex) less mature than US-rooted competitors. US-specific change order workflows, US tax handling, US-specific compliance reporting less polished. Functional but noticeable to US operations."
+        },
+        {
+          "title": "Implementation timeline 8-12 weeks",
+          "explanation": "Enterprise FSM deployment is real project work. Significant data migration, multi-region rollout coordination, integration setup with SAP/Dynamics/Salesforce. Standard for enterprise FSM but slower than mid-tier alternatives (4-8 weeks)."
+        },
+        {
+          "title": "No free trial",
+          "explanation": "Sales call required to evaluate. Standard among custom-quoted enterprise FSM but limits self-service evaluation. Demos available; full evaluation requires guided trial."
+        }
+      ],
+      "implementation_notes": "Plan for 8-12 weeks for full deployment. Praxedo assigns dedicated implementation manager for all customers. Realistic timeline for a 50-tech European or US service organization: Weeks 1-3 discovery and system configuration including multi-region setup (time zones, currencies, languages), user roles with role-based permissions, integration planning for SAP/Dynamics/Salesforce as applicable. Weeks 3-6 customer data migration from legacy systems, recurring service contract setup, multi-language template configuration if international, accounting integration with QuickBooks/Sage/SAP. Weeks 6-9 office staff training on dispatching workflow, multi-region operations management, customer portal launch, reporting dashboard configuration. Weeks 9-11 field tech training on multi-language mobile app, asset tracking workflows, esignature capture. Weeks 11-12 first jobs run through Praxedo in production with parallel tracking on legacy system; financial integration verified across all regions; multi-region reporting baseline established. For European operations migrating from legacy enterprise FSM, the migration is substantial but Praxedo's implementation team has refined European migration playbooks. For US operations adopting Praxedo (less common but happens), expect additional time for US-specific feature adoption since the platform's European assumptions need workarounds.",
+      "tool_faqs": [
+        {
+          "q": "Is Praxedo suitable for US-based service operations?",
+          "a": "Yes for mid-large US operations (20+ techs) with significant European corporate IT context (SAP, Microsoft Dynamics) or international operations spanning US + European markets. For US-only operations on QuickBooks with US-only teams, US-rooted enterprise FSM (ServiceTitan, BuildOps, FieldEdge) typically fit better due to US-specific feature maturity. The platform's European depth that's Praxedo's strength becomes less relevant for US-only contexts."
+        },
+        {
+          "q": "How does Praxedo compare to ServiceTitan for European operations?",
+          "a": "For European operations specifically, Praxedo decisively wins on cost ($35-$60/user/month vs ServiceTitan's $400-$800), localization (multi-language, multi-currency, European accounting), and SAP integration depth. ServiceTitan has stronger US market presence but minimal European customer base. European operations should evaluate Praxedo as the primary enterprise FSM option. US operations may prefer ServiceTitan despite higher cost due to US-specific feature maturity."
+        },
+        {
+          "q": "Does Praxedo integrate with SAP?",
+          "a": "Yes — SAP integration is native and one of Praxedo's signature features. Rare among modern FSM where SAP integration typically requires custom development or middleware. Critical for European enterprise operations where SAP is the financial/operations backbone. The SAP integration depth reflects Praxedo's European enterprise positioning."
+        },
+        {
+          "q": "What's Praxedo's pricing structure?",
+          "a": "Custom-quoted across three tiers (Essential, Pro, Enterprise). User-reported $35-$60 per user per month for typical mid-market configurations. Pricing varies significantly by operation size, modules selected, and integration requirements. Sales call required for quotes. Significantly cheaper than US enterprise FSM (ServiceTitan, BuildOps) at comparable feature depth — accessible pricing reflects European mid-market positioning."
+        },
+        {
+          "q": "What languages does Praxedo support?",
+          "a": "Full localization across major European languages: French (native), English, German, Spanish, Italian, Portuguese, and others. Tech mobile app supports the same language set, so non-English-speaking field techs get native-language workflows. Critical for service organizations spanning multiple European countries or with multi-language workforce."
+        }
+      ]
     }
   ]
 }
