@@ -441,22 +441,22 @@ const breadcrumbs = [
       </div>
     </header>
 
-    <nav class="mb-8 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
+    <nav id="jump-to-nav" class="mb-8 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 md:sticky md:top-2 md:z-30 md:bg-white/95 md:backdrop-blur">
       <div class="text-xs font-semibold uppercase tracking-wider text-slate-700">Jump to</div>
       <div class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-sm">
-        <a href="#pricing" class="text-orange-600 hover:underline">Pricing</a>
+        <a href="#pricing" data-jump-link="pricing" class="jump-link text-orange-600 hover:underline">Pricing</a>
         <span class="text-slate-300">·</span>
-        <a href="#features" class="text-orange-600 hover:underline">Features</a>
+        <a href="#features" data-jump-link="features" class="jump-link text-orange-600 hover:underline">Features</a>
         <span class="text-slate-300">·</span>
-        <a href="#pros" class="text-orange-600 hover:underline">Pros</a>
+        <a href="#pros" data-jump-link="pros" class="jump-link text-orange-600 hover:underline">Pros</a>
         <span class="text-slate-300">·</span>
-        <a href="#cons" class="text-orange-600 hover:underline">Cons</a>
+        <a href="#cons" data-jump-link="cons" class="jump-link text-orange-600 hover:underline">Cons</a>
         <span class="text-slate-300">·</span>
-        <a href="#implementation" class="text-orange-600 hover:underline">Implementation</a>
+        <a href="#implementation" data-jump-link="implementation" class="jump-link text-orange-600 hover:underline">Implementation</a>
         <span class="text-slate-300">·</span>
-        <a href="#alternatives" class="text-orange-600 hover:underline">Alternatives</a>
+        <a href="#alternatives" data-jump-link="alternatives" class="jump-link text-orange-600 hover:underline">Alternatives</a>
         <span class="text-slate-300">·</span>
-        <a href="#faqs" class="text-orange-600 hover:underline">FAQs</a>
+        <a href="#faqs" data-jump-link="faqs" class="jump-link text-orange-600 hover:underline">FAQs</a>
       </div>
     </nav>
 
@@ -736,6 +736,74 @@ const breadcrumbs = [
   </article>
 
   <script>
+    // Scroll-spy: highlight the current section's link in the jump-to nav
+    // as the user scrolls. Uses IntersectionObserver to detect which
+    // section is most in viewport.
+    (() => {
+      const jumpLinks = document.querySelectorAll<HTMLAnchorElement>('.jump-link');
+      if (jumpLinks.length === 0) return;
+      const linkBySection = new Map<string, HTMLAnchorElement>();
+      const sections: HTMLElement[] = [];
+      for (const link of jumpLinks) {
+        const sectionId = link.dataset.jumpLink;
+        if (!sectionId) continue;
+        linkBySection.set(sectionId, link);
+        const section = document.getElementById(sectionId);
+        if (section) sections.push(section);
+      }
+      if (sections.length === 0) return;
+
+      const ACTIVE_CLASSES = ['font-bold', 'text-orange-700'];
+      const INACTIVE_CLASSES = ['text-orange-600'];
+
+      let currentActive: string | null = null;
+
+      function setActive(sectionId: string | null) {
+        if (sectionId === currentActive) return;
+        currentActive = sectionId;
+        for (const [id, link] of linkBySection.entries()) {
+          if (id === sectionId) {
+            link.classList.add(...ACTIVE_CLASSES);
+            link.classList.remove(...INACTIVE_CLASSES);
+          } else {
+            link.classList.remove(...ACTIVE_CLASSES);
+            link.classList.add(...INACTIVE_CLASSES);
+          }
+        }
+      }
+
+      // Track which sections are currently intersecting; the topmost one wins.
+      const intersecting = new Set<string>();
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            const id = entry.target.id;
+            if (entry.isIntersecting) intersecting.add(id);
+            else intersecting.delete(id);
+          }
+          if (intersecting.size === 0) {
+            // No section in viewport — default to nothing or first if scrolled past everything
+            return;
+          }
+          // Pick the topmost intersecting section in source order
+          for (const s of sections) {
+            if (intersecting.has(s.id)) {
+              setActive(s.id);
+              return;
+            }
+          }
+        },
+        {
+          // Trigger when section's top crosses the 20%-from-top line
+          rootMargin: '0px 0px -75% 0px',
+          threshold: 0,
+        },
+      );
+
+      for (const s of sections) observer.observe(s);
+    })();
+
     // Per-tool pricing widget: takes team size input, shows live monthly +
     // annual cost. Detects per-user vs per-company pricing from the
     // pricing_note hint.
