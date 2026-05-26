@@ -138,7 +138,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
             ></div>
           </div>
         </div>
-        <nav class="order-2 hidden gap-6 text-sm font-medium text-slate-600 md:order-3 md:flex">
+        <nav class="order-2 flex gap-4 text-sm font-medium text-slate-600 md:order-3 md:gap-6">
           <a href="/tools/" class="hover:text-slate-900">Tools</a>
           <a href="/compare/" class="hover:text-slate-900">Compare</a>
           <a href="/quiz/" class="font-semibold text-orange-600 hover:text-orange-700">Quiz</a>
@@ -388,11 +388,18 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
 
         input.addEventListener('input', () => {
           if (debounceTimer) window.clearTimeout(debounceTimer);
-          debounceTimer = window.setTimeout(() => {
+          debounceTimer = window.setTimeout(async () => {
             const q = input.value.trim();
             if (q.length === 0) {
               hideResults();
               return;
+            }
+            // Ensure index is loaded before running search; user may have
+            // started typing before the focus handler's fetch completed.
+            if (!index) {
+              resultsBox!.innerHTML = '<div class="px-4 py-3 text-sm text-slate-500">Loading…</div>';
+              resultsBox!.classList.remove('hidden');
+              await ensureIndex();
             }
             renderResults(runSearch(q));
           }, 100);

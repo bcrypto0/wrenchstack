@@ -393,12 +393,17 @@ const breadcrumbs = [
     <header class="mb-10">
       <div class="mb-4 flex items-start gap-4">
         <ToolLogo tool={tool} size={64} />
-        <div class="flex-1">
-          <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        <div class="min-w-0 flex-1">
+          <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
             {tool.name} Review
           </h1>
-          <p class="mt-2 text-lg italic text-slate-600">{tool.tagline}</p>
+          <p class="mt-2 text-base italic text-slate-600 sm:text-lg">{tool.tagline}</p>
         </div>
+        <div class="hidden shrink-0 sm:block">
+          <WrenchScore score={wrenchStackScore(tool)} size="lg" />
+        </div>
+      </div>
+      <div class="mb-4 block sm:hidden">
         <WrenchScore score={wrenchStackScore(tool)} size="lg" />
       </div>
       <Byline updatedDate={tool.pricing.verified_date} readingMinutes={readingTimeMinutes(1600)} />
