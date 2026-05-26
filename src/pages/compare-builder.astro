@@ -1,0 +1,480 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { tools, aggregateRating, formatPrice, priceTier, teamSizeBucket, freshnessTier, freshnessLabel } from '../lib/data';
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Compare', url: '/compare/' },
+  { name: 'Build comparison', url: '/compare-builder/' },
+];
+
+// Tool data shipped to client-side JS
+const builderTools = tools.map((t) => ({
+  slug: t.slug,
+  name: t.name,
+  tagline: t.tagline,
+  bestFor: t.best_for,
+  startingPrice: t.pricing.starting_at_usd,
+  formattedPrice: formatPrice(t),
+  tiers: t.pricing.tiers,
+  tier: priceTier(t),
+  freeTrialDays: t.pricing.free_trial_days ?? 0,
+  verifiedDate: t.pricing.verified_date,
+  freshness: freshnessTier(t),
+  freshnessLabel: freshnessLabel(t),
+  bestTeamSize: t.best_team_size ?? '—',
+  teamBucket: teamSizeBucket(t),
+  rating: aggregateRating(t),
+  verticals: t.verticals,
+  keyFeatures: t.key_features,
+  integrations: t.integrations,
+  hasQuickBooks: t.integrations.some((i) => i.includes('quickbooks')),
+  hasStripe: t.integrations.some((i) => i.includes('stripe')),
+  hasZapier: t.integrations.some((i) => i.includes('zapier')),
+  hasXero: t.integrations.some((i) => i.includes('xero')),
+  hasLSA: t.integrations.some((i) => i.includes('google_local_services')),
+  hasFreeTier: t.pricing.starting_at_usd === 0,
+  pricingNote: t.pricing.pricing_note ?? '',
+  founded: t.founded ?? null,
+  headquartered: t.headquartered ?? '',
+  vendorUrl: t.vendor_url,
+  affiliateUrl: t.affiliate_url,
+}));
+---
+
+<Layout
+  title="Build your own comparison — pick any 2-5 trades software tools"
+  description="Interactive side-by-side comparison builder. Pick any 2-5 trades software platforms from our directory and see them compared instantly across pricing, features, integrations, ratings, and freshness."
+  breadcrumbs={breadcrumbs}
+>
+  <article class="mx-auto max-w-6xl px-4 py-12">
+    <header class="mb-8">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
+        Free · live calculation · no email required
+      </p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        Build your own side-by-side comparison
+      </h1>
+      <p class="mt-4 text-lg text-slate-600">
+        Pick any 2-5 trades software platforms from our directory. We'll show them compared instantly — pricing, features, integrations, ratings, freshness — without you having to find a pre-built comparison page that happens to include your exact tools.
+      </p>
+    </header>
+
+    <section class="mb-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+      <label for="cb-search" class="mb-2 block text-sm font-semibold text-slate-900">
+        Add a tool to compare (search by name)
+      </label>
+      <div class="relative">
+        <input
+          id="cb-search"
+          type="search"
+          autocomplete="off"
+          placeholder="Start typing — e.g. ServiceTitan, Jobber, MaintainX…"
+          class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+        />
+        <div
+          id="cb-search-results"
+          class="absolute left-0 right-0 top-full z-30 mt-1 hidden max-h-80 overflow-y-auto rounded-md border border-slate-200 bg-white shadow-lg"
+        ></div>
+      </div>
+      <div class="mt-4 flex flex-wrap items-center gap-2">
+        <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Selected:</span>
+        <div id="cb-selected" class="flex flex-wrap gap-2"></div>
+        <button
+          id="cb-clear"
+          type="button"
+          class="hidden ml-2 text-xs font-medium text-orange-600 hover:text-orange-700"
+        >
+          Clear all
+        </button>
+      </div>
+      <p class="mt-3 text-xs text-slate-500">
+        Tip: paste a URL like <code class="rounded bg-slate-100 px-1.5 py-0.5">/compare-builder/?tools=jobber,housecall-pro,workiz</code> to share a specific comparison.
+      </p>
+    </section>
+
+    <section id="cb-output" class="hidden">
+      <!-- populated by JS -->
+    </section>
+
+    <section id="cb-prompt" class="rounded-lg border-2 border-dashed border-slate-300 bg-slate-50 p-12 text-center text-slate-500">
+      <svg class="mx-auto h-12 w-12 text-slate-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+      </svg>
+      <p class="mt-3 text-sm">
+        Pick at least 2 tools above to see your custom side-by-side comparison.
+      </p>
+      <p class="mt-2 text-xs text-slate-400">
+        Need pre-built comparisons instead? Browse <a href="/compare/" class="text-orange-600 hover:underline">~1,760 head-to-head pairings</a>.
+      </p>
+    </section>
+
+    <section class="mt-12 prose prose-slate max-w-none">
+      <h2>Why an interactive builder?</h2>
+      <p>
+        Pre-built comparison pages cover the most-searched matchups (Jobber vs Housecall Pro, ServiceTitan vs FieldEdge, etc.). But what if you're comparing three tools? Or your shortlist includes a niche specialty platform that doesn't have a popular comparison page yet? The interactive builder lets you compare any combination across our directory — 1.5+ trillion possible 2-5-tool combinations from {tools.length} platforms.
+      </p>
+
+      <h2>What the comparison includes</h2>
+      <ul>
+        <li><strong>Headline metrics</strong> — Starting price (per-user or flat-rate detected), aggregate rating (G2 + Capterra average), best team size, founded year, headquarters.</li>
+        <li><strong>Freshness badge</strong> — When we last verified the pricing tier against the vendor's public page. Green if under 90 days; amber if 91-180; red if older.</li>
+        <li><strong>Integration check</strong> — Does the tool integrate with QuickBooks, Stripe, Xero, Zapier, Google Local Services Ads? Y/N per integration.</li>
+        <li><strong>Feature counts</strong> — Number of key features and integrations shipped, with samples listed.</li>
+        <li><strong>Vertical fit</strong> — Which trades the tool serves and how well (1-10 scoring).</li>
+        <li><strong>Best for / target buyer</strong> — Each tool's stated target customer profile.</li>
+      </ul>
+
+      <h2>Sharing your comparison</h2>
+      <p>
+        The URL updates as you add and remove tools — so you can copy the URL bar to share your specific comparison with a colleague, business partner, or industry advisor. The URL pattern is <code>/compare-builder/?tools=slug1,slug2,slug3</code>. No account required.
+      </p>
+
+      <h2>Other ways to compare</h2>
+      <p>
+        For deep editorial side-by-side analysis (decision matrix, pros/cons, implementation timelines, 8-FAQ pairings), see our <a href="/compare/">1,760 pre-built head-to-head comparison pages</a> — every tool-pair that shares at least one vertical. For curated 3-way matchups by buyer segment, see the <a href="/multi-compare/">28 multi-tool comparison pages</a>.
+      </p>
+    </section>
+  </article>
+
+  <script define:vars={{ allTools: builderTools }}>
+    (() => {
+      const tools = allTools;
+
+      const search = document.getElementById('cb-search');
+      const results = document.getElementById('cb-search-results');
+      const selectedBox = document.getElementById('cb-selected');
+      const clearBtn = document.getElementById('cb-clear');
+      const output = document.getElementById('cb-output');
+      const prompt = document.getElementById('cb-prompt');
+      if (!search || !results || !selectedBox || !output || !prompt || !clearBtn) return;
+
+      const MAX_TOOLS = 5;
+      let selectedSlugs = [];
+
+      function escHtml(s) {
+        return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      function findTool(slug) {
+        return tools.find((t) => t.slug === slug);
+      }
+
+      function searchTools(q) {
+        const qLower = q.toLowerCase().trim();
+        if (qLower.length === 0) return [];
+        const scored = [];
+        for (const t of tools) {
+          if (selectedSlugs.includes(t.slug)) continue;
+          const name = t.name.toLowerCase();
+          let score = 0;
+          if (name === qLower) score = 100;
+          else if (name.startsWith(qLower)) score = 80;
+          else if (name.split(/\s+/).some((w) => w.startsWith(qLower))) score = 60;
+          else if (name.includes(qLower)) score = 40;
+          else if (t.tagline && t.tagline.toLowerCase().includes(qLower)) score = 20;
+          else if (t.verticals.some((v) => v.includes(qLower))) score = 15;
+          if (score > 0) scored.push({ t, score });
+        }
+        return scored.sort((a, b) => b.score - a.score).slice(0, 8).map((s) => s.t);
+      }
+
+      function renderSearchResults(matches) {
+        if (matches.length === 0) {
+          results.innerHTML = '<div class="px-3 py-2 text-sm text-slate-500">No matches. Try another name.</div>';
+          results.classList.remove('hidden');
+          return;
+        }
+        results.innerHTML = matches
+          .map(
+            (t) => `
+            <button
+              type="button"
+              data-add-slug="${t.slug}"
+              class="block w-full px-3 py-2 text-left text-sm transition hover:bg-orange-50 focus:bg-orange-50 focus:outline-none"
+            >
+              <div class="font-medium text-slate-900">${escHtml(t.name)}</div>
+              <div class="text-xs text-slate-500">${escHtml(t.formattedPrice)} · ${escHtml(t.bestTeamSize)} techs · ${t.rating ? t.rating.toFixed(1) + '★' : ''}</div>
+            </button>
+          `,
+          )
+          .join('');
+        results.classList.remove('hidden');
+      }
+
+      function hideSearchResults() {
+        results.classList.add('hidden');
+      }
+
+      function syncUrl() {
+        const url = new URL(window.location.href);
+        if (selectedSlugs.length > 0) {
+          url.searchParams.set('tools', selectedSlugs.join(','));
+        } else {
+          url.searchParams.delete('tools');
+        }
+        history.replaceState(null, '', url.toString());
+      }
+
+      function renderSelected() {
+        selectedBox.innerHTML = selectedSlugs
+          .map((slug) => {
+            const t = findTool(slug);
+            if (!t) return '';
+            return `
+              <span class="inline-flex items-center gap-2 rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-orange-800">
+                ${escHtml(t.name)}
+                <button type="button" data-remove-slug="${slug}" class="text-orange-600 hover:text-orange-800" aria-label="Remove ${escHtml(t.name)}">
+                  ×
+                </button>
+              </span>
+            `;
+          })
+          .join('');
+        clearBtn.classList.toggle('hidden', selectedSlugs.length === 0);
+      }
+
+      function renderComparison() {
+        if (selectedSlugs.length < 2) {
+          output.classList.add('hidden');
+          prompt.classList.remove('hidden');
+          return;
+        }
+        prompt.classList.add('hidden');
+        output.classList.remove('hidden');
+
+        const cols = selectedSlugs.map(findTool).filter((t) => !!t);
+        if (cols.length < 2) return;
+
+        const freshnessColors = {
+          fresh: 'bg-emerald-100 text-emerald-800',
+          aging: 'bg-amber-100 text-amber-800',
+          stale: 'bg-rose-100 text-rose-800',
+        };
+
+        // Build rows
+        const rows = [
+          {
+            label: 'Starting price',
+            cells: cols.map((t) => `<strong>${escHtml(t.formattedPrice)}</strong>${t.pricingNote ? `<div class="mt-1 text-xs text-slate-500">${escHtml(t.pricingNote.slice(0, 80))}${t.pricingNote.length > 80 ? '…' : ''}</div>` : ''}`),
+          },
+          {
+            label: 'Aggregate rating',
+            cells: cols.map((t) => t.rating !== null ? `<strong>${t.rating.toFixed(1)} / 5</strong><div class="mt-1 text-xs text-slate-500">G2 + Capterra avg</div>` : '<span class="text-slate-400">—</span>'),
+          },
+          {
+            label: 'Best team size',
+            cells: cols.map((t) => escHtml(t.bestTeamSize)),
+          },
+          {
+            label: 'Free trial',
+            cells: cols.map((t) => t.freeTrialDays > 0 ? `<span class="text-emerald-700">${t.freeTrialDays}-day trial</span>` : (t.hasFreeTier ? '<span class="text-emerald-700">Free tier</span>' : '<span class="text-slate-400">No</span>')),
+          },
+          {
+            label: 'Pricing freshness',
+            cells: cols.map((t) => {
+              const color = freshnessColors[t.freshness] ?? freshnessColors.fresh;
+              return `<span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${color}">${escHtml(t.freshnessLabel)}</span><div class="mt-1 text-xs text-slate-500">${t.verifiedDate}</div>`;
+            }),
+          },
+          {
+            label: 'Founded',
+            cells: cols.map((t) => t.founded ? `${t.founded}<div class="mt-1 text-xs text-slate-500">${2026 - t.founded} years</div>` : '<span class="text-slate-400">—</span>'),
+          },
+          {
+            label: 'Headquarters',
+            cells: cols.map((t) => escHtml(t.headquartered || '—')),
+          },
+          {
+            label: 'QuickBooks',
+            cells: cols.map((t) => t.hasQuickBooks ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">—</span>'),
+          },
+          {
+            label: 'Stripe',
+            cells: cols.map((t) => t.hasStripe ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">—</span>'),
+          },
+          {
+            label: 'Xero',
+            cells: cols.map((t) => t.hasXero ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">—</span>'),
+          },
+          {
+            label: 'Zapier',
+            cells: cols.map((t) => t.hasZapier ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">—</span>'),
+          },
+          {
+            label: 'Google LSA',
+            cells: cols.map((t) => t.hasLSA ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">—</span>'),
+          },
+          {
+            label: 'Key features (count)',
+            cells: cols.map((t) => {
+              const sample = t.keyFeatures.slice(0, 4).map((f) => f.replace(/_/g, ' ')).join(', ');
+              return `<strong>${t.keyFeatures.length}</strong><div class="mt-1 text-xs text-slate-500">${escHtml(sample)}${t.keyFeatures.length > 4 ? '…' : ''}</div>`;
+            }),
+          },
+          {
+            label: 'Integrations (count)',
+            cells: cols.map((t) => {
+              const sample = t.integrations.slice(0, 3).map((i) => i.replace(/_/g, ' ')).join(', ');
+              return `<strong>${t.integrations.length}</strong><div class="mt-1 text-xs text-slate-500">${escHtml(sample)}${t.integrations.length > 3 ? '…' : ''}</div>`;
+            }),
+          },
+          {
+            label: 'Verticals served',
+            cells: cols.map((t) => `<div class="text-xs text-slate-700">${t.verticals.slice(0, 4).map((v) => escHtml(v.replace(/_/g, ' '))).join(', ')}${t.verticals.length > 4 ? '…' : ''}</div>`),
+          },
+          {
+            label: 'Best for',
+            cells: cols.map((t) => `<div class="text-xs text-slate-700 leading-snug">${escHtml(t.bestFor)}</div>`),
+          },
+        ];
+
+        const header = `
+          <h2 class="mb-4 text-2xl font-bold text-slate-900">Side-by-side comparison</h2>
+          <p class="mb-6 text-sm text-slate-500">${cols.length} tools selected. ${cols.length < MAX_TOOLS ? `Add up to ${MAX_TOOLS - cols.length} more.` : `At maximum (${MAX_TOOLS} tools).`}</p>
+        `;
+
+        // Tool header cards
+        const headerCards = `
+          <div class="mb-6 grid gap-3" style="grid-template-columns: repeat(${cols.length}, minmax(0, 1fr));">
+            ${cols
+              .map(
+                (t) => `
+              <div class="rounded-lg border border-slate-200 bg-white p-4">
+                <a href="/tools/${t.slug}/" class="font-semibold text-slate-900 hover:text-orange-600">${escHtml(t.name)}</a>
+                <div class="mt-1 text-xs italic text-slate-500">${escHtml(t.tagline)}</div>
+                <a
+                  href="${t.affiliateUrl.startsWith('http') ? t.affiliateUrl : t.vendorUrl}"
+                  rel="sponsored nofollow noopener"
+                  target="_blank"
+                  class="mt-3 inline-block rounded-md bg-orange-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-orange-600"
+                >Visit →</a>
+              </div>
+            `,
+              )
+              .join('')}
+          </div>
+        `;
+
+        // Big table
+        const table = `
+          <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+            <table class="w-full text-sm">
+              <thead class="bg-slate-50 text-left text-slate-700">
+                <tr>
+                  <th class="px-4 py-3 font-semibold">Field</th>
+                  ${cols.map((t) => `<th class="px-4 py-3 font-semibold">${escHtml(t.name)}</th>`).join('')}
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                ${rows
+                  .map(
+                    (r) => `
+                  <tr>
+                    <td class="px-4 py-3 font-medium text-slate-700 align-top whitespace-nowrap">${r.label}</td>
+                    ${r.cells.map((c) => `<td class="px-4 py-3 text-slate-900 align-top">${c}</td>`).join('')}
+                  </tr>
+                `,
+                  )
+                  .join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        // Pairwise links — for any pair, link to the full pre-built comparison page
+        let pairLinks = '';
+        if (cols.length >= 2) {
+          const pairs = [];
+          for (let i = 0; i < cols.length; i++) {
+            for (let j = i + 1; j < cols.length; j++) {
+              const [a, b] = [cols[i].slug, cols[j].slug].sort();
+              pairs.push(`<a href="/compare/${a}-vs-${b}/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-900 hover:border-orange-400 hover:text-orange-600">${escHtml(cols[i].name)} vs ${escHtml(cols[j].name)} (deep) →</a>`);
+            }
+          }
+          pairLinks = `
+            <div class="mt-6 rounded-lg bg-slate-50 p-5">
+              <h3 class="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-700">Deep pre-built comparisons</h3>
+              <p class="mb-3 text-sm text-slate-600">For editorial side-by-side analysis with decision matrix, pros/cons, and 8-FAQ pairings, see the dedicated comparison pages:</p>
+              <div class="flex flex-wrap gap-2">${pairs.join('')}</div>
+            </div>
+          `;
+        }
+
+        output.innerHTML = header + headerCards + table + pairLinks;
+      }
+
+      function addTool(slug) {
+        if (selectedSlugs.includes(slug)) return;
+        if (selectedSlugs.length >= MAX_TOOLS) {
+          alert(`Maximum ${MAX_TOOLS} tools at once. Remove one before adding another.`);
+          return;
+        }
+        selectedSlugs.push(slug);
+        renderSelected();
+        renderComparison();
+        syncUrl();
+        search.value = '';
+        hideSearchResults();
+        search.focus();
+      }
+
+      function removeTool(slug) {
+        selectedSlugs = selectedSlugs.filter((s) => s !== slug);
+        renderSelected();
+        renderComparison();
+        syncUrl();
+      }
+
+      // URL state restore
+      const urlParams = new URLSearchParams(window.location.search);
+      const toolsParam = urlParams.get('tools');
+      if (toolsParam) {
+        for (const slug of toolsParam.split(',').slice(0, MAX_TOOLS)) {
+          if (findTool(slug)) selectedSlugs.push(slug);
+        }
+        renderSelected();
+        renderComparison();
+      }
+
+      search.addEventListener('input', () => {
+        const q = search.value;
+        if (q.length === 0) {
+          hideSearchResults();
+          return;
+        }
+        renderSearchResults(searchTools(q));
+      });
+
+      results.addEventListener('click', (e) => {
+        const target = e.target.closest('[data-add-slug]');
+        if (target) {
+          const slug = target.dataset.addSlug;
+          if (slug) addTool(slug);
+        }
+      });
+
+      selectedBox.addEventListener('click', (e) => {
+        const target = e.target.closest('[data-remove-slug]');
+        if (target) {
+          const slug = target.dataset.removeSlug;
+          if (slug) removeTool(slug);
+        }
+      });
+
+      clearBtn.addEventListener('click', () => {
+        selectedSlugs = [];
+        renderSelected();
+        renderComparison();
+        syncUrl();
+      });
+
+      // Close search results when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!search.contains(e.target) && !results.contains(e.target)) {
+          hideSearchResults();
+        }
+      });
+    })();
+  </script>
+</Layout>

@@ -84,6 +84,7 @@ export const GET: APIRoute = () => {
     { name: 'Methodology', url: '/methodology/', tagline: 'How WrenchStack scores and ranks tools — formula, sources, and affiliate disclosure' },
     { name: 'All Tools', url: '/tools/', tagline: `Browse all ${tools.length} trades software tools` },
     { name: 'Compare Tools', url: '/compare/', tagline: 'Head-to-head pairings of every shared-vertical tool combination' },
+    { name: 'Build Custom Comparison', url: '/compare-builder/', tagline: 'Interactive builder — pick any 2-5 tools and see them compared instantly' },
     { name: 'Pricing Comparison', url: '/pricing/', tagline: 'Pricing tables and per-tool tier breakdowns by trade' },
     { name: 'Buyer Guides', url: '/best-software-for/', tagline: 'Best software for specific trade + team size combinations' },
     { name: 'Migration Guides', url: '/migrate/', tagline: 'Practical guides for switching between tools' },
