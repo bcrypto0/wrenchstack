@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { tools, verticals, getTool, verticalToUrl, priceTier, freshnessTier, leadGenPlatforms, leadGenTier, insuranceProviders, insuranceTier } from '../lib/data';
+import { tools, verticals, getTool, verticalToUrl, priceTier, freshnessTier, leadGenPlatforms, leadGenTier, insuranceProviders, insuranceTier, payrollServices, payrollTier } from '../lib/data';
 import featuresData from '../data/features.json';
 import migrationsData from '../data/migrations.json';
 
@@ -73,6 +73,20 @@ export const GET: APIRoute = () => {
       bestFor: p.best_for,
       verticals: p.verticals,
       tier: insuranceTier(p),
+    });
+  }
+
+  // Payroll services (10)
+  for (const s of payrollServices) {
+    items.push({
+      type: 'payroll',
+      name: s.name,
+      slug: s.slug,
+      url: `/payroll/${s.slug}/`,
+      tagline: s.tagline,
+      bestFor: s.best_for,
+      verticals: s.verticals_supported,
+      tier: payrollTier(s),
     });
   }
 

@@ -1,0 +1,147 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { payrollServices, payrollTier, type PayrollService } from '../../lib/data';
+
+const pageTitle = `Best Payroll Software for Trades Contractors (2026)`;
+const pageDescription = `Independent reviews of ${payrollServices.length} payroll services for HVAC, plumbing, electrical, roofing, and other trades — Gusto, OnPay, Patriot, Hourly.io (with WC), QuickBooks Payroll, and more. Single-vendor focus on Gusto for affiliate economics; honest coverage of ADP and Paychex renewal patterns.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Payroll', url: '/payroll/' },
+];
+
+const tierOrder: Array<'S' | 'A' | 'B'> = ['S', 'A', 'B'];
+const byTier: Record<'S' | 'A' | 'B', PayrollService[]> = { S: [], A: [], B: [] };
+for (const s of payrollServices) byTier[payrollTier(s)].push(s);
+
+const tierMeta = {
+  S: { label: 'Tier S — recommended for SMB trades', description: 'Modern SMB payroll with best product + affiliate economics: Gusto leads on affiliate ($300-$1,000 via PartnerStack), OnPay on flat pricing, Patriot on lowest cost, Hourly.io on integrated WC+payroll.', badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
+  A: { label: 'Tier A — context-specific fit', description: 'Workable when you\'re already on the parent ecosystem (QuickBooks, Square) or genuinely need mid-market HR consolidation (Rippling).', badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
+  B: { label: 'Tier B — legacy or wrong-shape', description: 'Legacy big-name payroll with documented aggressive renewal-pricing patterns (ADP Run, Paychex Flex) or PEO model that doesn\'t fit trades operations (Justworks). Listed for completeness with structural concerns.', badgeColor: 'bg-amber-100 text-amber-900 ring-amber-300', cardBorder: 'border-amber-300' },
+};
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Payroll Services for Trades Contractors',
+  numberOfItems: payrollServices.length,
+  itemListElement: payrollServices.map((s, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'SoftwareApplication',
+      name: s.name,
+      description: s.tagline,
+      url: `https://wrenchstack.com/payroll/${s.slug}/`,
+    },
+  })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">Payroll</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        Best Payroll Software for Trades Contractors (2026)
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Independent reviews of {payrollServices.length} payroll services for trades contractors. Gusto leads for most SMB shops; OnPay and Patriot for price-discipline; Hourly.io for integrated workers comp + payroll. We document the ADP/Paychex renewal-pricing patterns honestly.
+      </p>
+    </header>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">The headline filter: company size</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        Unlike lead-gen or insurance, payroll is largely trade-agnostic — what matters is company size and feature needs. Use these <strong>company-size guides</strong> to find the right pick:
+      </p>
+      <div class="mt-4 grid gap-2 sm:grid-cols-3">
+        <a href="/payroll/by-size/1-5-employees/" class="block rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 no-underline hover:border-orange-400 hover:bg-orange-50 hover:text-orange-700">1-5 employees →</a>
+        <a href="/payroll/by-size/6-20-employees/" class="block rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 no-underline hover:border-orange-400 hover:bg-orange-50 hover:text-orange-700">6-20 employees →</a>
+        <a href="/payroll/by-size/20-plus-employees/" class="block rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 no-underline hover:border-orange-400 hover:bg-orange-50 hover:text-orange-700">20+ employees →</a>
+      </div>
+    </section>
+
+    {tierOrder.map((tier) => {
+      const services = byTier[tier];
+      if (services.length === 0) return null;
+      const meta = tierMeta[tier];
+      return (
+        <section class="mb-12">
+          <div class="mb-5">
+            <span class={`inline-block rounded-full px-3 py-1 text-xs font-bold ring-1 ${meta.badgeColor}`}>{meta.label}</span>
+            <p class="mt-2 text-sm text-slate-600 leading-relaxed">{meta.description}</p>
+          </div>
+
+          <div class="space-y-4">
+            {services.map((s) => (
+              <article class={`rounded-lg border-2 ${meta.cardBorder} bg-white p-5`}>
+                <div class="mb-3 flex items-start justify-between gap-3">
+                  <div class="min-w-0 flex-1">
+                    <h3 class="text-xl font-bold text-slate-900">
+                      <a href={`/payroll/${s.slug}/`} class="hover:text-orange-600">{s.name}</a>
+                    </h3>
+                    <p class="text-sm italic text-slate-500">{s.tagline}</p>
+                  </div>
+                  <div class="shrink-0 text-right text-xs">
+                    <p class="font-bold text-slate-900 uppercase tracking-wider">{s.service_type.replace(/-/g, ' ')}</p>
+                    <p class="text-slate-500">{s.pricing_summary.split(';')[0].split('—')[0].trim()}</p>
+                  </div>
+                </div>
+
+                {s.reputation_flag && (
+                  <div class="mb-3 rounded-md border-l-4 border-rose-500 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+                    <p class="font-bold uppercase tracking-wider text-xs text-rose-700 mb-1">⚠ Reputation warning</p>
+                    <p class="leading-relaxed">{s.reputation_flag.split('.')[0]}.</p>
+                  </div>
+                )}
+
+                <dl class="mb-3 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">G2 / Capterra</dt>
+                    <dd class="font-semibold text-slate-900">{s.ratings.g2 !== null && s.ratings.capterra !== null ? `${s.ratings.g2.toFixed(1)} / ${s.ratings.capterra.toFixed(1)}` : '—'}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Best team size</dt>
+                    <dd class="font-semibold text-slate-900">{s.best_team_size.split('(')[0].trim()}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Free trial</dt>
+                    <dd class="font-semibold text-slate-900">{s.free_trial_days > 0 ? `${s.free_trial_days} days` : 'No'}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Affiliate</dt>
+                    <dd class="font-semibold text-slate-900">{s.affiliate_program === 'none' || s.affiliate_program === 'unknown' ? 'None' : s.affiliate_program}</dd>
+                  </div>
+                </dl>
+
+                <p class="mb-3 text-sm text-slate-700 leading-relaxed">
+                  <strong class="text-slate-900">Best for:</strong> {s.best_for}
+                </p>
+
+                <div class="flex flex-wrap gap-2">
+                  <a href={`/payroll/${s.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">Read full review →</a>
+                  <a href={s.affiliate_url.startsWith('http') ? s.affiliate_url : s.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md border border-orange-300 bg-white px-4 py-2 text-sm font-semibold text-orange-700 hover:bg-orange-50">Visit {s.name}</a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Where to start</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">
+        For most SMB trades contractors with 2-20 W-2 employees, the recommendation is straightforward: <strong>Gusto</strong> — it's the modern SMB payroll standard, has the cleanest tax-filing automation, the best mixed W-2 + 1099 handling, and the highest affiliate payouts in our entire directory (which means we have aligned incentives to recommend it, which we'd do anyway). For 1-3 employee shops where every dollar counts: Patriot. For trades shops wanting integrated workers comp + payroll: Hourly.io.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/payroll/gusto/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Start with Gusto →</a>
+        <a href="/insurance/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Insurance providers</a>
+        <a href="/tools/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Software directory</a>
+      </div>
+    </section>
+  </article>
+</Layout>

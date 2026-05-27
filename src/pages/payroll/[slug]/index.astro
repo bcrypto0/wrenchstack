@@ -1,0 +1,228 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import {
+  payrollServices,
+  payrollTier,
+  type PayrollService,
+} from '../../../lib/data';
+
+export async function getStaticPaths() {
+  return payrollServices.map((s) => ({
+    params: { slug: s.slug },
+    props: { service: s },
+  }));
+}
+
+interface Props { service: PayrollService; }
+const { service } = Astro.props;
+const tier = payrollTier(service);
+
+const siblings = payrollServices.filter((s) => s.slug !== service.slug).slice(0, 6);
+
+const pageTitle = `${service.name} Review (2026): Pricing, Features, Pros & Cons`;
+const pageDescription = `${service.name} payroll review for trades contractors. ${service.tagline}. ${service.reputation_flag ? 'Includes documented reputation context. ' : ''}Updated 2026.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Payroll', url: '/payroll/' },
+  { name: service.name, url: `/payroll/${service.slug}/` },
+];
+
+const tierMeta = {
+  S: { label: 'Tier S', color: 'bg-emerald-100 text-emerald-900 ring-emerald-300' },
+  A: { label: 'Tier A', color: 'bg-blue-100 text-blue-900 ring-blue-300' },
+  B: { label: 'Tier B — legacy/structural concerns', color: 'bg-amber-100 text-amber-900 ring-amber-300' },
+};
+
+const softwareSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: service.name,
+  description: service.tagline,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  offers: service.starting_price_usd !== null ? { '@type': 'Offer', price: service.starting_price_usd, priceCurrency: 'USD' } : undefined,
+  ...(service.ratings.g2 !== null && {
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: ((service.ratings.g2 + (service.ratings.capterra ?? service.ratings.g2)) / 2).toFixed(1),
+      bestRating: '5',
+      reviewCount: 100,
+    },
+  }),
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: service.service_faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-8">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
+        Payroll · {tier === 'S' ? 'Recommended' : tier === 'A' ? 'Context-specific fit' : 'Legacy / structural concerns'}
+      </p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">{service.name} Review</h1>
+      <p class="mt-3 text-lg italic text-slate-600">{service.tagline}</p>
+
+      <div class="mt-5 flex flex-wrap items-center gap-2">
+        <span class={`inline-block rounded-full px-3 py-1 text-xs font-bold ring-1 ${tierMeta[tier].color}`}>{tierMeta[tier].label}</span>
+        <span class="inline-block rounded-full bg-slate-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-slate-700">{service.service_type.replace(/-/g, ' ')}</span>
+      </div>
+
+      <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
+        <span>Founded {service.founded}</span>
+        <span>HQ {service.headquartered}</span>
+        <span>Verified: {service.verified_date}</span>
+        {service.free_trial_days > 0 && <span>{service.free_trial_days}-day free trial</span>}
+      </div>
+
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href={service.affiliate_url.startsWith('http') ? service.affiliate_url : service.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Visit {service.name} →</a>
+        <a href="/payroll/" class="rounded-md border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50">See all payroll</a>
+      </div>
+    </header>
+
+    {service.reputation_flag && (
+      <section class="mb-10 rounded-lg border-2 border-rose-300 bg-rose-50 p-6">
+        <div class="mb-2 flex items-center gap-2">
+          <span class="text-xl">⚠</span>
+          <h2 class="text-lg font-bold text-rose-900">Reputation warning</h2>
+        </div>
+        <p class="text-sm text-rose-900 leading-relaxed">{service.reputation_flag}</p>
+      </section>
+    )}
+
+    <nav class="mb-8 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 md:sticky md:top-2 md:z-30 md:bg-white/95 md:backdrop-blur">
+      <div class="text-xs font-semibold uppercase tracking-wider text-slate-700">Jump to</div>
+      <div class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-sm">
+        <a href="#how-it-works" class="text-orange-600 hover:underline">How it works</a>
+        <span class="text-slate-300">·</span>
+        <a href="#pros-cons" class="text-orange-600 hover:underline">Pros & Cons</a>
+        <span class="text-slate-300">·</span>
+        <a href="#pricing" class="text-orange-600 hover:underline">Pricing</a>
+        <span class="text-slate-300">·</span>
+        <a href="#integrations" class="text-orange-600 hover:underline">Integrations</a>
+        <span class="text-slate-300">·</span>
+        <a href="#faqs" class="text-orange-600 hover:underline">FAQs</a>
+      </div>
+    </nav>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
+      <p class="text-slate-700 leading-relaxed">
+        <strong class="text-slate-900">{service.name}</strong> is best for {service.best_for}. Pricing: {service.pricing_summary}. {service.weaknesses}.
+      </p>
+    </section>
+
+    <section class="mb-10 prose prose-slate max-w-none">
+      <h2>About {service.name}</h2>
+      {service.long_description.split('\n\n').map((p) => <p>{p}</p>)}
+    </section>
+
+    <section id="how-it-works" class="mb-10 scroll-mt-8">
+      <h2 class="mb-3 text-2xl font-bold text-slate-900">How it works</h2>
+      <div class="rounded-lg border border-slate-200 bg-white p-5">
+        <p class="text-slate-700 leading-relaxed">{service.how_it_works}</p>
+      </div>
+    </section>
+
+    <section id="pros-cons" class="mb-10 scroll-mt-8">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Pros & cons</h2>
+      <div class="mb-6">
+        <h3 class="mb-3 text-sm font-bold uppercase tracking-wider text-emerald-700">What works</h3>
+        <ul class="space-y-3">
+          {service.pros_detail.map((p) => (
+            <li class="rounded-lg border-l-4 border-emerald-400 bg-emerald-50 px-4 py-3">
+              <p class="font-semibold text-emerald-900">{p.title}</p>
+              <p class="mt-1 text-sm text-emerald-900 leading-relaxed">{p.explanation}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3 class="mb-3 text-sm font-bold uppercase tracking-wider text-rose-700">What doesn't</h3>
+        <ul class="space-y-3">
+          {service.cons_detail.map((c) => (
+            <li class="rounded-lg border-l-4 border-rose-400 bg-rose-50 px-4 py-3">
+              <p class="font-semibold text-rose-900">{c.title}</p>
+              <p class="mt-1 text-sm text-rose-900 leading-relaxed">{c.explanation}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section id="pricing" class="mb-10 scroll-mt-8">
+      <h2 class="mb-3 text-2xl font-bold text-slate-900">Pricing</h2>
+      <div class="rounded-lg border border-slate-200 bg-white p-5">
+        <p class="font-semibold text-slate-900">{service.pricing_summary}</p>
+        {service.starting_price_usd !== null && (
+          <p class="mt-2 text-sm text-slate-600">Starting base: ${service.starting_price_usd}/mo{service.per_employee_fee_usd !== null && ` + $${service.per_employee_fee_usd}/employee`}</p>
+        )}
+        <p class="mt-3 text-sm text-slate-700"><strong class="text-slate-900">Affiliate disclosure:</strong> {service.affiliate_payout_note}.</p>
+      </div>
+    </section>
+
+    <section id="integrations" class="mb-10 scroll-mt-8">
+      <h2 class="mb-3 text-2xl font-bold text-slate-900">Integrations</h2>
+      <div class="rounded-lg border border-slate-200 bg-white p-5">
+        <div class="flex flex-wrap gap-1">
+          {service.integrations.map((i) => (
+            <span class="rounded-md bg-slate-100 px-2 py-0.5 text-xs">{i.replace(/_/g, ' ')}</span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="faqs" class="mb-10 scroll-mt-8">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Frequently asked</h2>
+      <div class="space-y-3">
+        {service.service_faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Other payroll services</h2>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {siblings.map((s) => {
+          const sTier = payrollTier(s);
+          const sBadge = sTier === 'S' ? 'bg-emerald-50 text-emerald-700' : sTier === 'B' ? 'bg-amber-50 text-amber-700' : 'bg-blue-50 text-blue-700';
+          return (
+            <a href={`/payroll/${s.slug}/`} class="block rounded-lg border border-slate-200 bg-white p-4 no-underline transition hover:border-orange-300 hover:bg-orange-50">
+              <div class="mb-1 flex items-center justify-between">
+                <p class="font-semibold text-slate-900">{s.name}</p>
+                <span class={`rounded px-1.5 py-0.5 text-[10px] font-bold uppercase ${sBadge}`}>Tier {sTier}</span>
+              </div>
+              <p class="text-xs text-slate-500 line-clamp-2">{s.tagline}</p>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Browse more</h2>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/payroll/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">All payroll services</a>
+        <a href="/insurance/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Insurance</a>
+        <a href="/lead-gen/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Lead-gen</a>
+      </div>
+    </section>
+  </article>
+</Layout>

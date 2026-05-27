@@ -1,0 +1,172 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import { payrollServices, payrollTier, payrollPicksForBucket, type PayrollService, type EmployeeBucket } from '../../../../lib/data';
+
+const SIZE_BUCKETS: Record<string, { bucket: EmployeeBucket; label: string; intro: string }> = {
+  '1-5-employees': {
+    bucket: '1-5',
+    label: '1-5 employees',
+    intro: 'For the smallest trades shops, payroll software cost discipline + clean tax-filing automation matter more than feature breadth. The recommended picks at this size are price-conscious modern SaaS (Patriot for lowest cost, Gusto for best ecosystem) plus Hourly.io for shops where integrated workers comp + payroll makes sense.',
+  },
+  '6-20-employees': {
+    bucket: '6-20',
+    label: '6-20 employees',
+    intro: 'This is the SMB payroll sweet spot. Most trades shops in this range benefit from modern SMB payroll (Gusto Plus, OnPay) with full feature breadth — tax filing, benefits administration, time tracking integration. Avoid legacy options (ADP, Paychex) at this size unless you have compliance complexity that specifically requires them.',
+  },
+  '20-plus-employees': {
+    bucket: '20+',
+    label: '20+ employees',
+    intro: 'At 20+ employees, payroll considerations shift — multi-state compliance, complex benefits administration, and HR workflow integration become real factors. Gusto Plus or Premium remains a strong default; Rippling earns consideration if HR + IT consolidation is needed; ADP/Paychex become credible if compliance complexity (multi-state, prevailing-wage, union) requires their depth.',
+  },
+};
+
+export async function getStaticPaths() {
+  const buckets = ['1-5-employees', '6-20-employees', '20-plus-employees'];
+  return buckets.map((range) => ({
+    params: { range },
+    props: { range },
+  }));
+}
+
+interface Props { range: string; }
+const { range } = Astro.props;
+const sizeInfo = SIZE_BUCKETS[range];
+if (!sizeInfo) throw new Error(`Unknown bucket: ${range}`);
+
+const picks = payrollPicksForBucket(sizeInfo.bucket);
+const byTier: Record<'S' | 'A' | 'B', PayrollService[]> = { S: [], A: [], B: [] };
+for (const s of picks) byTier[payrollTier(s)].push(s);
+
+const pageTitle = `Best Payroll for ${sizeInfo.label} Trades Shops (2026)`;
+const pageDescription = `Independent payroll recommendations for trades contractors with ${sizeInfo.label}. Modern SMB picks (Gusto, OnPay, Patriot, Hourly.io) with affiliate disclosure and honest legacy-provider caveats.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Payroll', url: '/payroll/' },
+  { name: sizeInfo.label, url: `/payroll/by-size/${range}/` },
+];
+
+const tierMeta = {
+  S: { label: 'Recommended', color: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
+  A: { label: 'Context-specific fit', color: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
+  B: { label: 'Legacy / structural concerns', color: 'bg-amber-100 text-amber-900 ring-amber-300', cardBorder: 'border-amber-300' },
+};
+
+const faqs = [
+  {
+    q: `What's the best payroll for a ${sizeInfo.label} trades shop?`,
+    a: byTier.S.length > 0
+      ? `Based on price + product fit, ${byTier.S[0].name} is the top recommendation for ${sizeInfo.label} trades. ${byTier.S[0].best_for}.${byTier.S.length > 1 ? ` ${byTier.S[1].name} is a strong alternative.` : ''}`
+      : 'Use Gusto as the default starting point. Get a quote and compare against OnPay if you want to verify pricing.',
+  },
+  {
+    q: `What does payroll typically cost for ${sizeInfo.label}?`,
+    a: sizeInfo.bucket === '1-5'
+      ? 'For 1-5 employee shops, modern payroll runs $45-$80/month total (base + per-employee). Patriot is cheapest at $37-$57/mo; Gusto Simple and OnPay land at $46-$70/mo. ADP/Paychex are quote-only but typically come in higher.'
+      : sizeInfo.bucket === '6-20'
+      ? 'For 6-20 employee shops, modern payroll runs $100-$300/month total. Gusto Plus at $80 + $12/employee scales to $164-$320/mo for 7-20 employees. OnPay at $40 + $6/employee runs $76-$160/mo. Legacy ADP/Paychex usually 30-50% more.'
+      : 'For 20+ employee shops, payroll runs $300-$800+/month depending on feature tier. Gusto Plus stays competitive ($80 + $12×N). Rippling per-employee pricing climbs faster. ADP/Paychex pricing is opaque but tend toward higher end.',
+  },
+  {
+    q: `Do I really need payroll software at this size?`,
+    a: 'Yes — once you have any W-2 employees, the tax-filing complexity (quarterly 941, year-end W-2 issuance, multi-state withholdings) creates risk + time cost that almost always exceeds the $40-$70/mo payroll software cost. Hand-filing or check-writing for employees is a false economy.',
+  },
+  {
+    q: `What about my 1099 subcontractors?`,
+    a: 'Most modern payroll (Gusto, OnPay, Patriot) handle 1099 contractors cleanly alongside W-2 employees in the same workflow. Year-end 1099-NEC issuance is automatic. For 1099-only shops (no W-2 employees), Square Payroll has the cheapest contractor-only tier ($6/contractor, no base fee).',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">Payroll · {sizeInfo.label}</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        Best Payroll for {sizeInfo.label} Trades Shops (2026)
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">{sizeInfo.intro}</p>
+    </header>
+
+    {(['S', 'A', 'B'] as const).map((tier) => {
+      const services = byTier[tier];
+      if (services.length === 0) return null;
+      const meta = tierMeta[tier];
+      return (
+        <section class="mb-12">
+          <div class="mb-5 flex items-baseline gap-3">
+            <h2 class="text-2xl font-bold text-slate-900">{meta.label}</h2>
+            <span class={`inline-block rounded-full px-2 py-0.5 text-xs font-bold ring-1 ${meta.color}`}>{services.length}</span>
+          </div>
+
+          <div class="space-y-4">
+            {services.map((s) => (
+              <article class={`rounded-lg border-2 ${meta.cardBorder} bg-white p-5`}>
+                <div class="mb-3 flex items-start justify-between gap-3">
+                  <div class="min-w-0 flex-1">
+                    <h3 class="text-xl font-bold text-slate-900">
+                      <a href={`/payroll/${s.slug}/`} class="hover:text-orange-600">{s.name}</a>
+                    </h3>
+                    <p class="text-sm italic text-slate-500">{s.tagline}</p>
+                  </div>
+                  <div class="shrink-0 text-right text-xs">
+                    <p class="text-slate-500">{s.pricing_summary.split(';')[0].split('—')[0].trim()}</p>
+                  </div>
+                </div>
+
+                {s.reputation_flag && (
+                  <div class="mb-3 rounded-md border-l-4 border-rose-500 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+                    <p class="font-bold uppercase tracking-wider text-xs text-rose-700 mb-1">⚠ Reputation warning</p>
+                    <p class="leading-relaxed">{s.reputation_flag.split('.')[0]}.</p>
+                  </div>
+                )}
+
+                <p class="mb-3 text-sm text-slate-700 leading-relaxed">
+                  <strong class="text-slate-900">Best for:</strong> {s.best_for}
+                </p>
+
+                <div class="flex flex-wrap gap-2">
+                  <a href={`/payroll/${s.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">Read full review →</a>
+                  <a href={s.affiliate_url.startsWith('http') ? s.affiliate_url : s.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md border border-orange-300 bg-white px-4 py-2 text-sm font-semibold text-orange-700 hover:bg-orange-50">Visit {s.name}</a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Frequently asked</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">More for trades shops your size</h2>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/payroll/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">All payroll services</a>
+        <a href="/insurance/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Insurance providers</a>
+        <a href="/lead-gen/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Lead-gen platforms</a>
+      </div>
+    </section>
+  </article>
+</Layout>

@@ -1,0 +1,504 @@
+{
+  "_schema": {
+    "description": "Payroll services for trades contractors. Different shape from insurance/lead-gen — pricing tiers, employee+contractor handling, tax filing, integrations. Schema documents the data shape.",
+    "service_shape": {
+      "slug": "string (URL-safe)",
+      "name": "string",
+      "vendor_url": "string",
+      "affiliate_url": "string ('TBD' until confirmed)",
+      "tagline": "string",
+      "service_type": "modern-saas | embedded | all-in-one-hr | legacy-payroll | peo | specialty",
+      "pricing_model": "tiered-monthly | per-employee | bundled | custom",
+      "starting_price_usd": "number | null (base monthly fee, or null for custom-quoted)",
+      "per_employee_fee_usd": "number | null (typical added cost per employee)",
+      "pricing_summary": "string (e.g. '$40/mo base + $6/employee')",
+      "free_trial_days": "number (0 if none)",
+      "verticals_supported": "string[]",
+      "geographic_coverage": "us-nationwide",
+      "founded": "number",
+      "headquartered": "string",
+      "long_description": "string (800-1500 words)",
+      "how_it_works": "string (200-400 words)",
+      "pros_detail": "ProConItem[] (5-7)",
+      "cons_detail": "ProConItem[] (5-7)",
+      "best_for": "string",
+      "best_team_size": "string",
+      "weaknesses": "string",
+      "reputation_flag": "null | string",
+      "ratings": "{ g2, capterra, trustpilot, reddit_sentiment }",
+      "key_features": "string[]",
+      "integrations": "string[] (QuickBooks, Xero, FSM tools, etc.)",
+      "affiliate_program": "partnerstack | direct | impact | cj | shareasale | none | unknown",
+      "affiliate_payout_note": "string",
+      "verified_date": "YYYY-MM-DD",
+      "service_faqs": "{ q, a }[]"
+    }
+  },
+  "services": [
+    {
+      "slug": "gusto",
+      "name": "Gusto",
+      "vendor_url": "https://gusto.com",
+      "affiliate_url": "TBD",
+      "tagline": "The modern SMB payroll favorite — best affiliate economics in the entire WrenchStack universe ($300-$1,000+ per signup via PartnerStack)",
+      "service_type": "modern-saas",
+      "pricing_model": "tiered-monthly",
+      "starting_price_usd": 40,
+      "per_employee_fee_usd": 6,
+      "pricing_summary": "$40/mo base + $6/employee on Simple; $80/mo + $12/employee on Plus; custom on Premium",
+      "free_trial_days": 0,
+      "verticals_supported": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control", "pool_service", "locksmith", "garage_door", "appliance_repair", "handyman"],
+      "geographic_coverage": "us-nationwide",
+      "founded": 2011,
+      "headquartered": "San Francisco, CA",
+      "long_description": "Gusto is the modern SMB payroll platform that contractors with employees consistently recommend to each other — and the platform with the single highest affiliate-payout economics in the entire WrenchStack universe ($300-$1,000 per signup via PartnerStack with stacking incentives). What sets Gusto apart structurally: it was built for SMB-without-HR-staff use cases (no minimum employee count, no per-call sales team required, full self-service onboarding), the tax-filing automation actually works (federal + state + local withholdings, year-end W-2 and 1099 issuance, quarterly filings — all automatic), and the contractor + W-2 mixed-workforce handling is genuinely good (most trades shops have a mix of W-2 employees and 1099 subcontractors, and Gusto handles both cleanly).\n\nThe market position: Gusto serves the segment of SMB contractors who have outgrown 'I write personal checks to my one employee' but haven't reached 'I need ADP's enterprise complexity.' For a 2-15 employee trades shop, Gusto's combination of features (payroll + tax filing + employee benefits + time tracking + onboarding) at $40-$80/mo base + $6-$12/employee is structurally well-priced compared to legacy alternatives (ADP, Paychex) that often run 2-3x more for comparable feature breadth. The Plus tier ($80/mo + $12/employee) includes the time tracking and PTO management most growing trades shops eventually need.\n\nReddit and small-business-forum sentiment on Gusto is consistently strong. The common refrains: 'paying employees actually works,' 'tax filing automation is the killer feature,' 'support responds to email within hours,' 'the onboarding workflow makes new hires feel professional.' The criticisms — and they exist — concentrate around: (a) limited customization for shops with unusual pay structures (multiple per-job pay rates, complex commission structures), (b) some integration depth gaps with smaller FSM platforms (the major ones are covered — Jobber, Housecall Pro, QuickBooks — but specialty FSM may need Zapier), (c) pricing increases as company grows (the $40 base + $6/employee math is competitive at 5 employees, less so at 25+).\n\nThe affiliate program is the standout in this entire directory. Gusto runs through PartnerStack with documented per-signup payouts of $300-$1,000 depending on tier and stacking bonuses. Top affiliate partners can earn recurring revenue share on top of the per-signup bonus. For editorial publishers, Gusto's affiliate economics are 5-10x better than typical SMB-software affiliates — and importantly, the product genuinely deserves the recommendations the affiliate program incentivizes. Aligned commercial incentives + strong product is the rare combination that lets WrenchStack recommend without ethical compromise.",
+      "how_it_works": "Sign up on Gusto's website (no sales call required for Simple or Plus tiers — full self-service onboarding). Enter business info (EIN, state, bank account, employees). Gusto handles the federal + state + local tax registration where possible. Run your first payroll: enter hours (or import from time-tracking integration), Gusto calculates withholdings, you approve, employees get paid via direct deposit, tax payments process automatically. Year-end W-2s and 1099s issue automatically. Add employees, manage PTO, run reports — all in the dashboard. Integrations with QuickBooks, Xero, Jobber, Housecall Pro, ServiceTitan, and most major FSM platforms push payroll data into your accounting and operational systems.",
+      "pros_detail": [
+        { "title": "Best affiliate economics in WrenchStack universe ($300-$1,000+ per signup via PartnerStack)", "explanation": "Documented PartnerStack program with per-signup bonuses and stacking incentives. Recurring revenue share available at higher partnership tiers. Editorial publishers can earn 5-10x more per Gusto signup than from typical SMB-software affiliates — and the product deserves the recommendation, which is what makes the alignment work." },
+        { "title": "Self-service onboarding without sales calls", "explanation": "Sign up, enter your business info, run payroll same day. No 'schedule a demo' gate, no quoted-pricing-after-call, no minimum-employee thresholds. The full SMB experience is available without sales-team intermediation — a structural improvement over ADP/Paychex." },
+        { "title": "Tax filing automation that actually works", "explanation": "Federal withholdings, state withholdings (in all 50 states), local taxes where applicable, quarterly 941 filings, year-end W-2 and 1099 issuance — all automatic. The few cases that require manual intervention (multi-state employees, unusual local jurisdictions) are flagged proactively in the dashboard." },
+        { "title": "W-2 + 1099 mixed-workforce handling", "explanation": "Most trades shops have a mix of W-2 employees and 1099 subcontractors. Gusto handles both cleanly — same dashboard, separate compliance workflows, accurate year-end tax document generation for both. Some payroll competitors treat 1099 as an afterthought; Gusto treats it as a first-class workflow." },
+        { "title": "Integration depth with major FSM platforms", "explanation": "Native or Zapier-driven integrations with QuickBooks Online/Desktop, Xero, Jobber, Housecall Pro, ServiceTitan, FieldEdge, and most mid-tier FSM platforms. Payroll data flows into accounting; time-tracking data flows into payroll. The integration story is the cleanest in the SMB payroll segment." },
+        { "title": "Employee experience is professional", "explanation": "Employees get a Gusto account with self-service for paystubs, W-2 access, PTO requests, benefits enrollment. The onboarding flow for new hires (I-9 + W-4 collection, direct deposit setup, handbook acknowledgment) makes a small shop feel professional in a way that paper-based or check-writing payroll doesn't." },
+        { "title": "Health benefits + 401(k) bolt-ons available", "explanation": "Plus tier and above support health insurance broker tooling and 401(k) plan integration. For contractors moving from 'we don't offer benefits' to 'we offer benefits,' Gusto provides the infrastructure without requiring a separate broker relationship." }
+      ],
+      "cons_detail": [
+        { "title": "Per-employee pricing climbs at scale", "explanation": "$6-$12/employee/mo is competitive at 5 employees, less so at 25+. A 30-employee shop on Plus tier ($80 + $12*30 = $440/mo) starts to compare unfavorably with ADP's volume-based pricing. Gusto remains a reasonable choice but the math gets tighter at scale." },
+        { "title": "Limited customization for unusual pay structures", "explanation": "Multiple per-job pay rates, complex commission structures, prevailing-wage compliance (some construction projects), tipped employees with tip credit — these edge cases either don't work in Gusto or require manual workarounds. For unusual pay setups, you may need an enterprise payroll system." },
+        { "title": "Some FSM integration gaps with smaller platforms", "explanation": "Major FSM platforms are well-covered. Smaller or specialty FSM platforms (some pest control specialty, some specialty pool tools, some commercial-mechanical platforms) may not have native Gusto integration and need Zapier middleware. The major-platform coverage is excellent; the long tail has gaps." },
+        { "title": "Support quality has declined slightly in 2025", "explanation": "Historical support reputation was 'response within hours.' Recent (2025) forum threads describe response times stretching to 1-2 business days for non-urgent issues. Not a crisis, but a notable shift. Critical issues (failed payroll, tax filing problems) still get fast escalation." },
+        { "title": "Some state tax registration requires manual setup", "explanation": "For most states, Gusto handles tax registration automatically when you onboard. For a handful (Pennsylvania local taxes, some New York City rules, complex multi-state employees), you'll need to register with the state directly before Gusto can file. The dashboard flags this clearly but it's still a setup step." }
+      ],
+      "best_for": "Modern SMB trades shops with 2-25 W-2 employees + optional 1099 subcontractors who want self-service payroll, automatic tax filing, and integrated employee benefits without the complexity of ADP-tier enterprise systems",
+      "best_team_size": "2-50 users (works above and below but sweet spot is mid-SMB)",
+      "weaknesses": "Per-employee pricing climbs at scale, limited customization for unusual pay structures, some FSM-integration gaps with smaller platforms, support response has slowed slightly in 2025 — but for typical SMB trades the combination of features + affiliate economics is unmatched",
+      "reputation_flag": null,
+      "ratings": {
+        "g2": 4.4,
+        "capterra": 4.7,
+        "trustpilot": 4.0,
+        "reddit_sentiment": "strongly positive — most-recommended SMB payroll in r/smallbusiness, r/HVAC, r/Plumbing"
+      },
+      "key_features": ["self_service_onboarding", "tax_filing_automation", "w2_and_1099_handling", "direct_deposit", "year_end_w2_1099", "employee_self_service", "health_benefits_broker", "401k_integration", "time_tracking_integration", "pto_management"],
+      "integrations": ["quickbooks_online", "quickbooks_desktop", "xero", "jobber", "housecall_pro", "servicetitan", "fieldedge", "fieldpulse", "zapier", "google_workspace", "microsoft_365"],
+      "affiliate_program": "partnerstack",
+      "affiliate_payout_note": "PartnerStack program with $300-$1,000+ per-signup payouts, stacking bonuses for top partners, recurring revenue share at higher tiers. Highest affiliate economics in the WrenchStack universe.",
+      "verified_date": "2026-05-28",
+      "service_faqs": [
+        {
+          "q": "Is Gusto worth it for a 2-employee trades shop?",
+          "a": "Yes — at $40 base + $6×2 = $52/mo, Gusto is cost-competitive with even the cheapest manual-payroll alternatives once you factor in tax-filing automation. The setup time investment (60-90 minutes) pays back within the first quarter because you're not manually filing quarterly 941s or hand-calculating withholdings."
+        },
+        {
+          "q": "Does Gusto handle 1099 contractors?",
+          "a": "Yes, and well. 1099 subcontractors get their own workflow alongside W-2 employees in the same dashboard. Year-end 1099-NEC issuance is automatic. For mixed-workforce trades shops (which is most of them), the 1099 handling is one of Gusto's strongest features compared to W-2-only payroll alternatives."
+        },
+        {
+          "q": "How does Gusto compare to ADP?",
+          "a": "Gusto is structurally better for SMB self-service. ADP's strength is enterprise complexity (multi-state, complex compliance, high-volume payroll) that most trades shops don't need. ADP's pricing is opaque and renewal-rate increases are widely complained about. Gusto's pricing is transparent and the product is purpose-built for SMB. Most trades shops doing $250K-$10M revenue with 2-50 employees are better served by Gusto."
+        },
+        {
+          "q": "What integrations matter for trades shops specifically?",
+          "a": "QuickBooks (for accounting), Jobber/Housecall Pro/ServiceTitan (for FSM time-tracking), and Stripe (if you collect payments). Gusto has all three. Also useful: 401(k) bolt-on for shops adding retirement benefits, health insurance broker tooling for shops adding health coverage. These are differentiating features at higher tiers."
+        },
+        {
+          "q": "Why is the affiliate payout so high?",
+          "a": "Customer lifetime value in SMB payroll is meaningful — Gusto retains customers for years, average revenue per customer climbs as employee count grows, and tax-filing relationships create high switching friction. Gusto's customer-acquisition economics support the per-signup payouts. The high affiliate payout is structural, not promotional."
+        }
+      ]
+    },
+    {
+      "slug": "onpay",
+      "name": "OnPay",
+      "vendor_url": "https://onpay.com",
+      "affiliate_url": "TBD",
+      "tagline": "Lean SMB payroll with flat pricing — favorite of small trades shops who don't need Gusto's bolt-ons",
+      "service_type": "modern-saas",
+      "pricing_model": "tiered-monthly",
+      "starting_price_usd": 40,
+      "per_employee_fee_usd": 6,
+      "pricing_summary": "$40/mo base + $6/employee — single flat tier, no upsell tiers",
+      "free_trial_days": 0,
+      "verticals_supported": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control", "handyman"],
+      "geographic_coverage": "us-nationwide",
+      "founded": 2007,
+      "headquartered": "Atlanta, GA",
+      "long_description": "OnPay is the lean alternative to Gusto for SMB trades shops that want payroll done well at a flat price without the upsell tiers. The product is feature-comparable to Gusto's Plus tier — payroll + tax filing + direct deposit + employee self-service + year-end W-2/1099 + multi-state support — at a single price ($40 base + $6/employee) without the Simple/Plus/Premium upsell ladder. For contractors who looked at Gusto's pricing page and thought 'I just want payroll, not the bolt-ons,' OnPay is structurally appropriate.\n\nThe market position: OnPay has built a strong reputation among small trades shops (1-10 employees typically) that prioritize price discipline + clean product + responsive support. Reddit and forum sentiment is consistently positive. The platform doesn't have Gusto's marketing budget or brand recognition, but operators who have used both consistently describe OnPay as 'just as good as Gusto Plus at a lower total cost.'\n\nThe limitations are real but narrow. OnPay's integration breadth is smaller than Gusto's — QuickBooks and Xero are well-covered, but native FSM integrations (Jobber, Housecall Pro, ServiceTitan) are sparser. Zapier middleware fills most gaps but it's an additional step. Benefits administration is more basic — for contractors moving into health insurance + 401(k), Gusto's broker tooling has more polish.\n\nThe affiliate program is direct with documented per-signup payouts in the $100-$200 range — meaningfully smaller than Gusto's $300-$1,000 but still respectable for SMB software. Editorial recommendations of OnPay are unaffected by the smaller affiliate; the product genuinely deserves recommendation for the price-conscious SMB segment.",
+      "how_it_works": "Sign up on OnPay's website, enter business and employee info, run payroll same day. Single pricing tier covers all features (multi-state, contractor handling, tax filing, year-end documents). Direct deposit standard. Employee self-service portal included. Integrations push to QuickBooks, Xero, and major accounting; FSM integration coverage is narrower than Gusto.",
+      "pros_detail": [
+        { "title": "Flat pricing — no upsell tiers", "explanation": "$40/mo + $6/employee includes everything OnPay offers. No 'unlock this feature on Plus tier' upselling. For contractors who hate the upsell-ladder pricing model that Gusto and most modern SaaS use, OnPay's flat-pricing structure is structurally appropriate." },
+        { "title": "Strong feature parity with Gusto Plus at lower total cost", "explanation": "For most SMB trades shops, OnPay's feature set covers everything they actually need: multi-state payroll, contractor handling, tax filing, year-end documents, direct deposit, employee self-service. Total monthly cost typically lands 20-30% below Gusto Plus for equivalent workflow." },
+        { "title": "Strong support reputation", "explanation": "OnPay's support is consistently described in forum sentiment as responsive and knowledgeable. Smaller platform means smaller support team but the per-contractor support quality is high." },
+        { "title": "Established (since 2007) with reliable tax-filing track record", "explanation": "OnPay has been processing payroll for 18+ years. The tax-filing infrastructure is mature. The 'will this platform still exist?' concern doesn't apply." }
+      ],
+      "cons_detail": [
+        { "title": "Narrower FSM integration coverage than Gusto", "explanation": "QuickBooks and Xero are well-covered. Native integrations with Jobber, Housecall Pro, ServiceTitan are sparser — Zapier middleware fills gaps but adds steps. For FSM-integration-dependent contractors, Gusto's breadth is structurally advantageous." },
+        { "title": "More basic benefits administration", "explanation": "OnPay supports basic health insurance brokerage and 401(k) integration but the tooling is less polished than Gusto's. For contractors adding benefits, the Gusto experience is smoother." },
+        { "title": "Lower brand recognition", "explanation": "Less widely-known than Gusto, ADP, or Paychex. Contractors searching for payroll often discover Gusto first; OnPay shows up later. The recognition gap is structural rather than product-driven." },
+        { "title": "Smaller affiliate program payouts ($100-$200 range)", "explanation": "Direct affiliate program exists with documented terms but per-signup payouts are meaningfully smaller than Gusto's PartnerStack. Editorial recommendation strength is unchanged but the commercial alignment is weaker." }
+      ],
+      "best_for": "Price-conscious SMB trades shops (1-15 employees) who want clean modern payroll without upsell tiers, and don't need extensive FSM-integration depth or premium benefits tooling",
+      "best_team_size": "1-25 users",
+      "weaknesses": "Narrower FSM integration coverage, more basic benefits tooling, lower brand recognition, smaller affiliate program — but the price + product combination is structurally strong for the segment it serves",
+      "reputation_flag": null,
+      "ratings": { "g2": 4.8, "capterra": 4.8, "trustpilot": 4.1, "reddit_sentiment": "positive — 'cheaper Gusto with same core features' is a common refrain" },
+      "key_features": ["flat_pricing", "multi_state_payroll", "contractor_handling", "tax_filing_automation", "direct_deposit", "employee_self_service", "year_end_w2_1099"],
+      "integrations": ["quickbooks_online", "xero", "zapier", "google_workspace"],
+      "affiliate_program": "direct",
+      "affiliate_payout_note": "Direct publisher affiliate program with per-signup payouts in $100-$200 range",
+      "verified_date": "2026-05-28",
+      "service_faqs": [
+        { "q": "How does OnPay compare to Gusto?", "a": "Feature-comparable to Gusto Plus at a lower total cost. Trade-offs: narrower FSM integration coverage, more basic benefits tooling. For most SMB trades shops the trade-offs are acceptable; for contractors needing extensive FSM integration depth or premium benefits, Gusto remains the better choice." },
+        { "q": "Is OnPay safe — will my taxes get filed correctly?", "a": "Yes. OnPay has been processing payroll since 2007 with a clean tax-filing track record. The compliance infrastructure is mature. The 'will this platform mess up my taxes?' concern is unfounded." }
+      ]
+    },
+    {
+      "slug": "patriot-payroll",
+      "name": "Patriot Payroll",
+      "vendor_url": "https://www.patriotsoftware.com/payroll/",
+      "affiliate_url": "TBD",
+      "tagline": "Ultra-affordable payroll for 1-3 employee shops — cheapest tax-filing payroll in the market",
+      "service_type": "modern-saas",
+      "pricing_model": "tiered-monthly",
+      "starting_price_usd": 17,
+      "per_employee_fee_usd": 4,
+      "pricing_summary": "$17/mo Basic Payroll (no tax filing) + $4/employee, or $37/mo Full Service with tax filing + $4/employee",
+      "free_trial_days": 30,
+      "verticals_supported": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control", "handyman"],
+      "geographic_coverage": "us-nationwide",
+      "founded": 2002,
+      "headquartered": "Canton, OH",
+      "long_description": "Patriot Payroll is the ultra-affordable payroll platform that serves the very-small-shop segment (1-5 employees) where Gusto's $40 base feels expensive relative to revenue. At $17/mo Basic (you handle tax filing) or $37/mo Full Service (Patriot files taxes), Patriot is the cheapest tax-filing payroll service in the US market. For solo operators with one assistant or a 3-person crew where every dollar of overhead counts, Patriot's pricing is structurally aligned with the business reality.\n\nThe trade-offs are real and worth flagging clearly. Patriot's product is functional but the UX is less polished than Gusto or OnPay — the interface feels like 2015-era software, the mobile experience is weaker, and the integration breadth is narrow. Patriot integrates with QuickBooks Desktop better than most competitors (legacy ProAdvisor partnership) and adequately with QuickBooks Online and Xero, but native FSM-platform integrations are essentially absent. Reports are basic; payroll reminders are functional but not contextually smart.\n\nWhat Patriot does have: a strong tax-filing track record over 20+ years, US-based customer support that responds quickly, an honest customer-service culture (forum sentiment consistently positive on support quality), and a price point that lets very-small shops afford payroll automation without overspending on features they don't need.\n\nThe affiliate program is direct with smaller per-signup payouts than Gusto. Editorial recommendation is structurally strong for the price-conscious very-small-shop segment — Patriot is the right choice for the 1-3-employee operations that Gusto's pricing structure squeezes.",
+      "how_it_works": "Sign up on Patriot's website (30-day free trial, no credit card required). Enter business and employee info. Choose Basic (you file taxes) or Full Service (Patriot files). Run payroll: enter hours, approve, employees get paid via direct deposit. Tax filings happen automatically on Full Service tier. Year-end W-2 and 1099 generation included.",
+      "pros_detail": [
+        { "title": "Cheapest tax-filing payroll in the US market", "explanation": "$37/mo Full Service + $4/employee is structurally the lowest-cost tax-filing payroll available. For a 2-employee shop, total monthly cost is $45 vs Gusto's $52 or OnPay's $52. The price advantage compounds over 12 months." },
+        { "title": "30-day free trial without credit card", "explanation": "Genuinely free trial — no credit card required, no automatic conversion. For very-small shops evaluating payroll automation for the first time, the no-risk trial structure is structurally helpful." },
+        { "title": "20-year operational history with clean tax-filing track record", "explanation": "Founded 2002. Patriot has been processing payroll for two decades with no major tax-filing-failure incidents. The compliance infrastructure is mature." },
+        { "title": "US-based support with strong reputation", "explanation": "Customer support is US-based and consistently described in forum sentiment as responsive and knowledgeable. The smaller customer base means support relationships feel personal in a way that Gusto/ADP can't match." }
+      ],
+      "cons_detail": [
+        { "title": "Less polished UX than modern competitors", "explanation": "The interface feels dated relative to Gusto. Mobile experience is weaker. For contractors who care about the look-and-feel of software, Patriot won't impress." },
+        { "title": "Minimal FSM integration depth", "explanation": "QuickBooks Desktop integration is strong (legacy ProAdvisor partnership), QuickBooks Online and Xero are adequate, but native FSM-platform integrations (Jobber, Housecall Pro, ServiceTitan) are essentially absent. For FSM-integration-dependent contractors, this is disqualifying." },
+        { "title": "Basic reporting and analytics", "explanation": "Payroll reports cover the essentials but the analytics layer is minimal. For shops that want deeper labor-cost analysis, multi-job allocation, or job-costing integration, Patriot's reports are limiting." },
+        { "title": "Limited benefits administration", "explanation": "Health insurance and 401(k) bolt-ons are minimal. For shops adding employee benefits, Patriot won't be the integration hub the way Gusto Plus is." }
+      ],
+      "best_for": "Very-small trades shops (1-5 employees) who want tax-filing payroll automation at the lowest possible price and don't need extensive FSM integration or benefits administration",
+      "best_team_size": "1-10 users",
+      "weaknesses": "Dated UX, minimal FSM integration, basic reporting, limited benefits — but the price + clean tax-filing track record + strong support is structurally right for very-small shops",
+      "reputation_flag": null,
+      "ratings": { "g2": 4.8, "capterra": 4.8, "trustpilot": 4.3, "reddit_sentiment": "positive among 1-3 employee shops — 'cheapest legitimate option' is the consistent refrain" },
+      "key_features": ["ultra_affordable", "tax_filing_automation", "30_day_free_trial", "us_based_support", "20_year_history", "quickbooks_desktop_integration"],
+      "integrations": ["quickbooks_desktop", "quickbooks_online", "xero"],
+      "affiliate_program": "direct",
+      "affiliate_payout_note": "Direct affiliate program with smaller per-signup payouts than Gusto",
+      "verified_date": "2026-05-28",
+      "service_faqs": [
+        { "q": "Is Patriot really that much cheaper than Gusto?", "a": "Yes for very-small shops. At 2 employees: Patriot Full Service = $45/mo, Gusto Simple = $52/mo. At 5 employees: Patriot = $57/mo, Gusto = $70/mo. The savings are real but the trade-off in UX, integration depth, and benefits tooling is also real." },
+        { "q": "Should I pick Basic or Full Service?", "a": "Full Service for almost every contractor — the $20/mo difference covers tax-filing automation which is worth far more than $20 in time savings + risk reduction. Basic only makes sense if you have specific reasons to file taxes yourself (CPA already does it as part of their package, multi-state complexity that Patriot can't handle, etc.)." }
+      ]
+    },
+    {
+      "slug": "hourly",
+      "name": "Hourly.io",
+      "vendor_url": "https://www.hourly.io",
+      "affiliate_url": "TBD",
+      "tagline": "Payroll + pay-as-you-go workers comp combined — the only payroll service with WC built in, structurally relevant for trades",
+      "service_type": "specialty",
+      "pricing_model": "tiered-monthly",
+      "starting_price_usd": 40,
+      "per_employee_fee_usd": 6,
+      "pricing_summary": "$40/mo base + $6/employee + WC premium calculated per actual payroll (vs estimated upfront)",
+      "free_trial_days": 0,
+      "verticals_supported": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control"],
+      "geographic_coverage": "us-regional",
+      "founded": 2018,
+      "headquartered": "Palo Alto, CA",
+      "long_description": "Hourly.io is the structural anomaly in this payroll directory — the only payroll service that bundles pay-as-you-go workers comp insurance directly into the payroll workflow, making the WC premium calculation accurate by-the-pay-period rather than estimated-up-front-then-audited-at-end. For trades contractors specifically (HVAC, roofing, construction, landscaping — trades with high WC class rates and significant audit-period premium volatility), Hourly's structural integration of payroll + WC eliminates one of the most painful operational dynamics in the trades insurance + payroll workflow.\n\nThe model: instead of estimating annual payroll up front, paying WC premium based on the estimate, then getting hit with an end-of-period audit for additional premium when actual payroll exceeds estimate (the Pie Insurance pattern documented in our /insurance/pie-insurance/ review), Hourly calculates WC premium each pay period based on the actual payroll that just ran. The audit-shock dynamic that affects most trades shops on traditional WC arrangements is structurally eliminated. For a trades shop where payroll varies significantly (seasonal landscaping, overtime-heavy HVAC summer months, storm-recovery roofing windows), the cash-flow + audit-shock improvement is meaningful.\n\nThe trade-offs are real and worth flagging. Hourly is available in a limited geographic footprint — roughly 30 states as of 2026, expanding but not nationwide. The platform is younger than Gusto/OnPay/Patriot (founded 2018) so the long-term track record is shorter. The payroll feature breadth is solid but not best-in-class — direct deposit, tax filing, year-end documents all work; benefits administration is more basic than Gusto. And the WC pricing isn't always cheaper than a traditional WC carrier — the value is the integration + audit-shock elimination, not necessarily lower premium.\n\nFor trades contractors specifically, where WC is often the largest insurance expense and payroll + WC together represent 40-60% of monthly overhead, Hourly's integrated model can be structurally transformative. For contractors who already have a long-term WC relationship that works well (Acuity-via-agent, Erie-via-agent), switching to Hourly may not be worth the disruption. For contractors using Pie or another problematic WC carrier, Hourly's audit-elimination model is a structural improvement.",
+      "how_it_works": "Sign up on Hourly's website, enter business + employee info. Hourly underwrites your WC coverage based on trade class and projected payroll. Each pay period, Hourly calculates WC premium based on actual payroll that just ran — you pay WC premium per-pay-period instead of estimated-upfront-then-audited. Payroll features work like Gusto/OnPay — direct deposit, tax filing, year-end W-2/1099. WC and payroll share a single dashboard.",
+      "pros_detail": [
+        { "title": "Pay-as-you-go WC eliminates audit-shock dynamic", "explanation": "End-of-period payroll audits with surprise premium charges are eliminated structurally. For trades contractors who have been burned by Pie Insurance audit patterns or who have variable seasonal payroll, the audit-shock removal is meaningful operational improvement." },
+        { "title": "Integrated payroll + WC dashboard", "explanation": "Single platform manages payroll, WC, and the relationship between them. No double-data-entry, no reconciling payroll-to-WC at audit time, no separate vendor management." },
+        { "title": "Cash-flow improvement for variable-payroll trades", "explanation": "Seasonal landscaping (high summer payroll, low winter), storm-recovery roofing (high during events), overtime-heavy HVAC summer months — variable-payroll patterns work better with pay-as-you-go WC than with estimated-upfront WC." },
+        { "title": "Built specifically for trades and similar high-WC-class businesses", "explanation": "Class-code expertise on HVAC, plumbing, electrical, roofing, landscaping. Underwriting is tuned to trades-specific risk patterns rather than generic SMB." }
+      ],
+      "cons_detail": [
+        { "title": "Limited geographic footprint (~30 states)", "explanation": "Hourly's WC availability is expanding but not nationwide. Check state availability before assuming Hourly is an option. Some monopoly states (Ohio, Washington, Wyoming, North Dakota) and several other markets aren't covered." },
+        { "title": "Younger platform (founded 2018) with shorter track record", "explanation": "Less institutional history than Gusto or legacy WC carriers. The structural model is sound but the long-term experience data is still accumulating." },
+        { "title": "WC pricing isn't always cheaper than traditional carriers", "explanation": "The value is the structural elimination of audit-shock + cash-flow improvement, not necessarily lower total WC premium. For contractors with clean-claim histories on traditional carriers, total WC cost may be similar." },
+        { "title": "Basic benefits administration", "explanation": "Health insurance + 401(k) bolt-ons are minimal compared to Gusto Plus. For trades shops adding employee benefits, Gusto remains the better integration hub." },
+        { "title": "Newer platform means smaller customer base + smaller support team", "explanation": "Smaller support team, less institutional depth on edge cases. Standard payroll + WC works well; unusual situations may take longer to resolve than at established competitors." }
+      ],
+      "best_for": "Trades contractors (HVAC, plumbing, electrical, roofing, landscaping) in Hourly's geographic footprint who want to eliminate WC audit-shock dynamics or who are migrating away from problematic WC carriers (Pie Insurance pattern)",
+      "best_team_size": "2-30 users",
+      "weaknesses": "Limited state availability (~30 states), younger platform with shorter track record, WC pricing not always cheaper than traditional carriers, basic benefits — but for trades specifically, the structural integration of payroll + WC is genuinely differentiating",
+      "reputation_flag": null,
+      "ratings": { "g2": 4.7, "capterra": 4.6, "trustpilot": 4.2, "reddit_sentiment": "positive among trades contractors specifically — 'finally a WC solution that doesn't shock me at audit' is the recurring refrain" },
+      "key_features": ["pay_as_you_go_wc", "integrated_payroll_wc", "trades_specific_class_codes", "no_audit_shock", "direct_deposit", "tax_filing_automation"],
+      "integrations": ["quickbooks_online", "xero", "zapier"],
+      "affiliate_program": "direct",
+      "affiliate_payout_note": "Direct affiliate program with per-signup payouts",
+      "verified_date": "2026-05-28",
+      "service_faqs": [
+        { "q": "Is Hourly available in my state?", "a": "Available in ~30 states as of 2026, expanding. Check state availability on hourly.io. Not available in monopoly states (Ohio, Washington, Wyoming, North Dakota) or some Northeast markets." },
+        { "q": "How does the pay-as-you-go WC actually work?", "a": "Each pay period, Hourly calculates WC premium based on actual payroll that just ran. Premium is debited as part of the payroll run. No estimated-payroll-upfront, no end-of-period audit, no audit-shock. The structural model is genuinely different from traditional WC + payroll." },
+        { "q": "Should I switch to Hourly from my current WC carrier?", "a": "If you have a long-standing relationship with a good WC carrier (Acuity-via-agent, Erie-via-agent) and audit-shock isn't an issue, probably not. If you're using Pie Insurance or another carrier with audit-pattern complaints, or if your payroll varies seasonally enough that audit-shock is a recurring problem, Hourly is structurally better-suited." }
+      ]
+    },
+    {
+      "slug": "quickbooks-payroll",
+      "name": "QuickBooks Payroll",
+      "vendor_url": "https://quickbooks.intuit.com/payroll/",
+      "affiliate_url": "TBD",
+      "tagline": "Payroll embedded in QuickBooks Online — convenient for QBO users, mediocre as standalone product",
+      "service_type": "embedded",
+      "pricing_model": "tiered-monthly",
+      "starting_price_usd": 50,
+      "per_employee_fee_usd": 6,
+      "pricing_summary": "$50/mo Core + $6/employee; $85/mo Premium + $9/employee; $130/mo Elite + $11/employee",
+      "free_trial_days": 30,
+      "verticals_supported": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control", "handyman", "appliance_repair"],
+      "geographic_coverage": "us-nationwide",
+      "founded": 2003,
+      "headquartered": "Mountain View, CA (Intuit subsidiary)",
+      "long_description": "QuickBooks Payroll is the payroll module bundled with (or available as add-on to) QuickBooks Online — the dominant accounting platform for SMB trades contractors. The value proposition is structural rather than feature-driven: payroll data flows directly into QuickBooks Online accounting without any integration layer, journal entries post automatically, employee labor costs allocate to jobs (when set up properly), and W-2/1099 generation pulls from QBO directly. For contractors already running QuickBooks Online as their accounting platform, the integration depth is genuinely seamless in a way no third-party payroll (Gusto, OnPay) can match.\n\nThe trade-offs are also structural. As a standalone payroll product, QBO Payroll is generally less polished than Gusto or OnPay — the UX feels like a bolt-on module rather than a primary product, the employee self-service experience is weaker, the support quality is more variable, and the pricing is higher than competitors for equivalent feature breadth. The Elite tier ($130/mo + $11/employee) includes time tracking and HR support that bring it closer to Gusto Plus parity but at a meaningful premium.\n\nThe pricing math: for a 5-employee shop, QBO Payroll Core = $50 + $30 = $80/mo. Gusto Simple = $40 + $30 = $70/mo. OnPay = $40 + $30 = $70/mo. QBO Payroll runs ~15-20% more expensive than Gusto/OnPay for similar coverage. The premium is what you pay for the QuickBooks integration depth.\n\nThe affiliate program is through Intuit's ProAdvisor + reseller channels, which are oriented at accountants and bookkeepers rather than editorial publishers. For directory sites like WrenchStack, the affiliate economics are less clean than Gusto's PartnerStack. We list QBO Payroll because most trades contractors using QuickBooks Online encounter it directly — and for QBO users specifically, the integration depth often outweighs the price/UX trade-offs.",
+      "how_it_works": "Add Payroll as a module to your existing QuickBooks Online subscription (or sign up new). Enter employee info, run payroll within QBO, payroll data flows automatically into accounting. Tax filing handled on Core+ tiers. Year-end W-2/1099 generation pulls from existing QBO data.",
+      "pros_detail": [
+        { "title": "Seamless QuickBooks Online integration", "explanation": "Payroll data flows directly into QBO accounting without any third-party integration layer. Journal entries post automatically; labor costs allocate to jobs (when set up properly). For QBO-dependent shops, the integration depth is the killer feature." },
+        { "title": "Single-vendor consolidation for QBO users", "explanation": "If you're already on QBO for accounting, adding QBO Payroll keeps everything in one vendor relationship. Reduces vendor management overhead." },
+        { "title": "Mature tax-filing infrastructure", "explanation": "Intuit has been processing payroll taxes for two decades. The compliance side is mature." }
+      ],
+      "cons_detail": [
+        { "title": "Less polished standalone product than Gusto/OnPay", "explanation": "UX feels like a bolt-on module. Employee self-service is weaker. Support quality is more variable. As a standalone payroll, the experience trails modern competitors." },
+        { "title": "15-20% more expensive than equivalent Gusto/OnPay coverage", "explanation": "For a 5-employee shop, QBO Payroll Core = $80/mo vs Gusto Simple at $70/mo. The price premium pays for QuickBooks integration but is significant if you don't need that integration." },
+        { "title": "Limited value if you're not on QuickBooks Online", "explanation": "QBO Payroll without QBO is overpaying for an underwhelming standalone product. The integration value disappears if you're using Xero or another accounting platform." },
+        { "title": "Support quality variability is documented", "explanation": "Intuit support quality is widely described as inconsistent — some contractors get fast helpful responses, others get long waits and unhelpful first-line agents. The variability is structural rather than isolated incidents." }
+      ],
+      "best_for": "Trades contractors already running QuickBooks Online as their accounting platform who value single-vendor consolidation and seamless integration over standalone product polish",
+      "best_team_size": "2-30 users",
+      "weaknesses": "Less polished UX than Gusto/OnPay, 15-20% price premium, support quality variability, value drops without QBO accounting — but for QBO-dependent shops the integration is structurally compelling",
+      "reputation_flag": null,
+      "ratings": { "g2": 3.8, "capterra": 4.0, "trustpilot": 3.5, "reddit_sentiment": "mixed — 'works because I'm on QBO already' vs 'overpriced for what you get'" },
+      "key_features": ["qbo_integration", "tax_filing_automation", "direct_deposit", "tiered_pricing", "ja_costing_allocation"],
+      "integrations": ["quickbooks_online", "quickbooks_desktop", "intuit_proadvisor"],
+      "affiliate_program": "unknown",
+      "affiliate_payout_note": "Affiliate channel primarily through Intuit ProAdvisor + reseller program, less clean for editorial publishers than Gusto's PartnerStack",
+      "verified_date": "2026-05-28",
+      "service_faqs": [
+        { "q": "Should I use QuickBooks Payroll if I'm on QBO?", "a": "Probably yes — the integration depth typically outweighs the price/UX trade-offs. The exception: if you specifically value Gusto's superior employee experience or need features QBO Payroll lacks (more polished mobile, better benefits administration), the Gusto + QBO integration via API is functional enough to justify switching." },
+        { "q": "What if I'm on Xero instead of QBO?", "a": "Don't use QBO Payroll. The integration value disappears and you're left with a less-polished product at higher price. Use Gusto or OnPay (both integrate with Xero) instead." }
+      ]
+    },
+    {
+      "slug": "square-payroll",
+      "name": "Square Payroll",
+      "vendor_url": "https://squareup.com/us/en/payroll",
+      "affiliate_url": "TBD",
+      "tagline": "Payroll embedded in Square ecosystem — convenient for Square-POS users, narrow fit outside that context",
+      "service_type": "embedded",
+      "pricing_model": "tiered-monthly",
+      "starting_price_usd": 35,
+      "per_employee_fee_usd": 6,
+      "pricing_summary": "$35/mo base + $6/employee for W-2 only; $6/contractor for 1099-only",
+      "free_trial_days": 0,
+      "verticals_supported": ["hvac", "plumbing", "electrical", "cleaning", "pest_control", "handyman", "appliance_repair"],
+      "geographic_coverage": "us-nationwide",
+      "founded": 2015,
+      "headquartered": "San Francisco, CA",
+      "long_description": "Square Payroll is the payroll module embedded in the Square ecosystem — the same Square that runs the point-of-sale terminals many home-service businesses use for in-field payment collection. For contractors already on Square POS, Square Payroll's integration is genuinely useful: customer payments flow into Square, employee time-tracking via Square Team Management feeds into payroll, the same dashboard manages both customer-facing and employee-facing financial operations.\n\nThe value proposition is narrow but real. If you're already a Square POS customer, adding Square Payroll consolidates vendors and provides clean data flow. If you're not on Square POS, Square Payroll is mediocre as a standalone product — feature breadth is narrower than Gusto, integration depth with non-Square platforms is limited, and the price advantage isn't large enough to overcome the feature gaps.\n\nOne genuine differentiator: Square Payroll has the cleanest contractor-only ($6/contractor) pricing in the market. For shops running primarily 1099 subcontractors with minimal W-2 employees, the contractor-only tier is $6/contractor with no base fee — meaningfully cheaper than Gusto's $40 base for the same use case. This is the segment where Square Payroll structurally wins.",
+      "how_it_works": "Sign up via existing Square account or new. Add employees + contractors. Square Team Management (free) tracks employee time at job sites; payroll calculates based on tracked hours. Direct deposit + tax filing standard. Year-end W-2/1099 generation included.",
+      "pros_detail": [
+        { "title": "Seamless Square POS + Team Management integration", "explanation": "For contractors already on Square for in-field payment collection, payroll integration is clean — payment data, time-tracking, and payroll all live in one dashboard." },
+        { "title": "Cheapest contractor-only payroll ($6/contractor, no base fee)", "explanation": "For 1099-only payroll (no W-2 employees), Square Payroll is structurally cheapest in the market. No $40 base fee like Gusto's W-2 payroll." },
+        { "title": "Tax filing handled standard", "explanation": "Standard tax filing automation included in base price. Mature Intuit-tier compliance infrastructure." }
+      ],
+      "cons_detail": [
+        { "title": "Limited value outside Square ecosystem", "explanation": "If you're not on Square POS, Square Payroll is mediocre as standalone — feature breadth is narrower, integrations beyond Square are limited, support quality is variable." },
+        { "title": "Narrow integration with major FSM platforms", "explanation": "Jobber, Housecall Pro, ServiceTitan integrations are limited or require Zapier middleware. For FSM-integration-dependent contractors, Gusto's breadth is structurally advantageous." },
+        { "title": "Mixed reputation outside the Square user base", "explanation": "Contractors who aren't already on Square consistently describe Square Payroll as 'fine but unremarkable.' The reputation strength is concentrated among existing Square POS customers." }
+      ],
+      "best_for": "Contractors already on Square POS or running primarily 1099 subcontractors who want the cheapest contractor-only payroll in the market",
+      "best_team_size": "1-15 users",
+      "weaknesses": "Narrow value outside Square ecosystem, limited FSM integration, mediocre as standalone product — works structurally for Square POS users and 1099-only shops",
+      "reputation_flag": null,
+      "ratings": { "g2": 4.0, "capterra": 4.4, "trustpilot": 3.8, "reddit_sentiment": "positive among Square POS users, neutral otherwise" },
+      "key_features": ["square_pos_integration", "team_management_integration", "contractor_only_pricing", "tax_filing_automation"],
+      "integrations": ["square_pos", "square_team_management", "quickbooks_online", "zapier"],
+      "affiliate_program": "unknown",
+      "affiliate_payout_note": "Square affiliate channel; documented terms unclear for editorial publishers",
+      "verified_date": "2026-05-28",
+      "service_faqs": [
+        { "q": "Should I use Square Payroll if I'm not on Square POS?", "a": "Probably not. Without the Square ecosystem integration, you're left with a mediocre standalone payroll product. Use Gusto or OnPay instead." },
+        { "q": "What about 1099-only payroll?", "a": "Square Payroll's contractor-only tier ($6/contractor, no base fee) is the cheapest 1099-payroll in the market. For shops running only 1099 subcontractors with no W-2 employees, this is structurally the right choice." }
+      ]
+    },
+    {
+      "slug": "rippling",
+      "name": "Rippling",
+      "vendor_url": "https://www.rippling.com",
+      "affiliate_url": "TBD",
+      "tagline": "All-in-one HR + IT + payroll platform — comprehensive but overkill for most trades shops",
+      "service_type": "all-in-one-hr",
+      "pricing_model": "per-employee",
+      "starting_price_usd": 8,
+      "per_employee_fee_usd": 8,
+      "pricing_summary": "$8/employee/mo base, modules priced separately (payroll, benefits, IT management, time tracking, recruiting)",
+      "free_trial_days": 0,
+      "verticals_supported": ["general_contractor", "professional_services"],
+      "geographic_coverage": "us-nationwide",
+      "founded": 2016,
+      "headquartered": "San Francisco, CA",
+      "long_description": "Rippling is the comprehensive all-in-one HR + IT + payroll platform that has captured significant mid-market traction in tech companies and professional-services firms. For trades shops specifically, Rippling is structurally overkill — the platform is built for businesses with HR teams, IT management needs (device provisioning, SaaS management), and complex employee lifecycle workflows that most trades shops don't have. A 10-employee plumbing shop doesn't need device provisioning automation or recruiting workflows.\n\nThe pricing reflects the broader scope. Base $8/employee/mo + modular pricing for payroll, benefits, IT management, time tracking, recruiting — total monthly cost for a 10-employee trades shop using payroll + benefits + time tracking lands in the $300-$500/mo range. Compare with Gusto Plus at $80 + $12*10 = $200/mo for largely equivalent payroll + benefits + time tracking coverage.\n\nWe list Rippling for completeness because some larger trades operations (50+ employees, multi-location, complex HR needs) genuinely benefit from Rippling's comprehensive approach. For the typical SMB trades shop in our 2-25 employee target, Rippling is wrong-shape.",
+      "how_it_works": "Sign up, configure modules you need (payroll + benefits + time tracking minimum for trades use case). Per-module pricing applies. Single dashboard for all HR/IT functions. Device provisioning and IT management are differentiating features but typically not needed by trades shops.",
+      "pros_detail": [
+        { "title": "Comprehensive single-platform HR/IT/payroll", "explanation": "For organizations that need device provisioning, SaaS management, recruiting workflows, benefits administration, and payroll all in one platform, Rippling consolidates everything." },
+        { "title": "Strong for mid-market with HR team", "explanation": "Mid-market trades operations (50+ employees, multi-location) with dedicated HR staff benefit from Rippling's workflow depth." }
+      ],
+      "cons_detail": [
+        { "title": "Overkill for typical SMB trades shop", "explanation": "Most trades shops don't need device provisioning, SaaS management, or recruiting workflows. Paying for those modules just to get payroll is structurally wasteful." },
+        { "title": "More expensive than purpose-built SMB payroll", "explanation": "Total cost for 10-employee trades shop using payroll + benefits + time tracking lands $300-$500/mo on Rippling vs $200/mo on Gusto Plus." },
+        { "title": "Sales-team-driven onboarding rather than self-service", "explanation": "Unlike Gusto/OnPay/Patriot, Rippling typically requires a sales call + demo before pricing is finalized. The friction is appropriate for mid-market but wrong shape for SMB trades." }
+      ],
+      "best_for": "Mid-market trades operations (50+ employees, multi-location, dedicated HR staff) needing comprehensive HR/IT/payroll consolidation in a single platform",
+      "best_team_size": "50-500 users",
+      "weaknesses": "Overkill for typical SMB trades shops, more expensive than purpose-built SMB payroll, sales-driven onboarding — wrong shape for the 2-25 employee shop sweet spot",
+      "reputation_flag": null,
+      "ratings": { "g2": 4.8, "capterra": 4.9, "trustpilot": 4.4, "reddit_sentiment": "positive among mid-market tech companies, less applicable to trades" },
+      "key_features": ["all_in_one_hr_it", "device_provisioning", "saas_management", "benefits_administration", "recruiting", "modular_pricing"],
+      "integrations": ["quickbooks_online", "xero", "extensive_saas_marketplace"],
+      "affiliate_program": "direct",
+      "affiliate_payout_note": "Affiliate program exists but oriented at tech-company channels rather than trades publishers",
+      "verified_date": "2026-05-28",
+      "service_faqs": [
+        { "q": "Is Rippling overkill for a 10-employee trades shop?", "a": "Yes. Use Gusto Plus or OnPay instead. Rippling makes sense at 50+ employees or when you genuinely need HR + IT consolidation, which isn't the typical SMB trades use case." }
+      ]
+    },
+    {
+      "slug": "adp-run",
+      "name": "ADP Run",
+      "vendor_url": "https://www.adp.com/what-we-offer/products/run-powered-by-adp.aspx",
+      "affiliate_url": "TBD",
+      "tagline": "Legacy mass-market SMB payroll — solid product with documented aggressive renewal-pricing pattern",
+      "service_type": "legacy-payroll",
+      "pricing_model": "custom",
+      "starting_price_usd": null,
+      "per_employee_fee_usd": null,
+      "pricing_summary": "Sales-quoted pricing — typically $79-$200+/mo base + $5-$10/employee depending on tier and negotiation",
+      "free_trial_days": 0,
+      "verticals_supported": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control", "pool_service", "locksmith", "garage_door", "appliance_repair", "handyman"],
+      "geographic_coverage": "us-nationwide",
+      "founded": 1949,
+      "headquartered": "Roseland, NJ",
+      "long_description": "ADP Run is ADP's SMB-tier payroll product — a market leader by customer count and brand recognition, with mature tax-filing infrastructure and broad payroll feature coverage. The product itself is solid for what it does. The structural concerns are around the sales process, pricing transparency, and renewal-rate increases that have been documented in contractor forum sentiment over many years.\n\nThe sales process: ADP Run pricing is sales-quoted rather than published. You'll get a phone-call demo, a tailored quote, and pricing that depends partly on negotiation. Initial pricing is often competitive — but the documented pattern is that ADP renewal pricing increases significantly each year, often 15-30% annually on accounts with no major change in employee count or feature usage. Cancellation is described in many forum threads as involving retention-call pressure and friction.\n\nFor mid-market trades shops (25+ employees) where the volume math may favor ADP's enterprise underwriting capacity, the product is credible — particularly for shops needing complex multi-state compliance, prevailing-wage compliance, or union compliance that smaller SMB payroll platforms don't handle. For typical 2-25 employee trades shops, the combination of opaque pricing + aggressive renewal pattern + sales-process friction makes ADP a structurally worse choice than Gusto or OnPay.\n\nWe list ADP for completeness because most contractors encounter it via brand recognition and sales outreach. The honest editorial position: ADP works as a product but the commercial relationship is structurally less contractor-friendly than modern SMB-focused alternatives.",
+      "how_it_works": "Phone-call demo + sales-quoted pricing. Onboarding handled by ADP sales team. Multi-tier feature options. Renewal happens annually with potential rate increases.",
+      "pros_detail": [
+        { "title": "Mature tax-filing infrastructure with 75+ year track record", "explanation": "ADP has been processing payroll taxes since 1949. The compliance side is among the most mature in the market." },
+        { "title": "Capacity for mid-market complexity (multi-state, prevailing-wage, union)", "explanation": "ADP can handle complex compliance scenarios that smaller SMB platforms don't — multi-state employee withholdings, prevailing-wage compliance for public-works projects, union-shop reporting. For mid-market trades operations, this depth is valuable." },
+        { "title": "Strong brand recognition", "explanation": "ADP is the household name in payroll. Customers and employees know what ADP is, which provides some intangible professional polish." }
+      ],
+      "cons_detail": [
+        { "title": "Documented aggressive renewal-rate increases", "explanation": "Forum threads consistently document ADP Run renewal-rate increases of 15-30% annually on accounts with no employee-count or feature changes. The pattern is widespread enough to be structural rather than isolated." },
+        { "title": "Opaque sales-quoted pricing", "explanation": "No published pricing. Quote requires phone demo + sales conversation. Negotiated pricing creates inconsistent customer experiences and makes comparison shopping difficult." },
+        { "title": "Cancellation process described as friction-heavy", "explanation": "Retention-call pressure, oral promises not in written contracts, and contract minimum terms not always made explicit upfront. Same pattern as many legacy SMB-software cancellation experiences." },
+        { "title": "Overkill for typical SMB trades shop", "explanation": "For 2-25 employee trades shops, ADP's complexity isn't needed and the pricing pattern makes it more expensive than Gusto or OnPay for equivalent feature coverage." },
+        { "title": "Support quality is variable", "explanation": "Account-management quality varies significantly. Some contractors report excellent dedicated-rep relationships; others describe being passed between unhelpful first-line agents." }
+      ],
+      "best_for": "Mid-market and larger trades operations (25+ employees) needing complex multi-state, prevailing-wage, or union-compliance capacity that smaller SMB platforms don't handle — and contractors who already have an established ADP relationship that's working well",
+      "best_team_size": "25-500 users",
+      "weaknesses": "Documented aggressive renewal-rate increases, opaque sales-quoted pricing, cancellation friction, overkill for SMB — for typical 2-25 employee shops, Gusto/OnPay are structurally better choices",
+      "reputation_flag": null,
+      "ratings": { "g2": 4.5, "capterra": 4.5, "trustpilot": 1.4, "reddit_sentiment": "mixed — strong product reputation undermined by sales/renewal/cancellation friction complaints" },
+      "key_features": ["enterprise_compliance_capacity", "multi_state_payroll", "prevailing_wage", "union_reporting", "mature_tax_infrastructure"],
+      "integrations": ["quickbooks_online", "quickbooks_desktop", "xero", "many_legacy_accounting"],
+      "affiliate_program": "unknown",
+      "affiliate_payout_note": "ADP affiliate channels exist but are oriented at accountant/bookkeeper referrals rather than editorial publishers",
+      "verified_date": "2026-05-28",
+      "service_faqs": [
+        { "q": "Is ADP Run worth it for a 10-employee trades shop?", "a": "Probably not. The pricing pattern + sales-process friction make ADP structurally worse than Gusto or OnPay for typical SMB trades shops. ADP's depth becomes valuable at 25+ employees or with complex compliance needs." },
+        { "q": "What about the renewal-rate-increase pattern?", "a": "Documented widely in forum threads. Existing ADP customers report 15-30% annual increases on accounts with no changes. If you're on ADP currently, shop alternatives at every renewal — don't assume the rate stays competitive." }
+      ]
+    },
+    {
+      "slug": "paychex-flex",
+      "name": "Paychex Flex",
+      "vendor_url": "https://www.paychex.com/payroll/payroll-services",
+      "affiliate_url": "TBD",
+      "tagline": "Legacy SMB payroll competitor to ADP — similar structural concerns around sales process and renewal pricing",
+      "service_type": "legacy-payroll",
+      "pricing_model": "custom",
+      "starting_price_usd": null,
+      "per_employee_fee_usd": null,
+      "pricing_summary": "Sales-quoted pricing — comparable range to ADP Run, varies with negotiation",
+      "free_trial_days": 0,
+      "verticals_supported": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control", "pool_service", "locksmith", "garage_door", "appliance_repair", "handyman"],
+      "geographic_coverage": "us-nationwide",
+      "founded": 1971,
+      "headquartered": "Rochester, NY",
+      "long_description": "Paychex Flex is ADP Run's primary legacy competitor in SMB payroll — same general structural profile, similar product depth, comparable sales-process and renewal-pricing patterns documented in contractor forum sentiment. The product itself is solid for what it does; the commercial relationship has the same structural friction as ADP.\n\nFor most analysis purposes, treat Paychex Flex as ADP-equivalent: capable mid-market compliance, mature tax infrastructure, opaque sales-quoted pricing, documented renewal-rate-increase pattern, and cancellation-friction complaints. The differentiation between Paychex and ADP is mostly relationship-driven (which rep do you work with, what's local market presence like) rather than product-driven.\n\nFor typical SMB trades shops, the same recommendation as ADP applies: Gusto or OnPay are structurally better choices. Paychex Flex becomes credible at 25+ employees with complex compliance needs.",
+      "how_it_works": "Same as ADP — sales-quoted pricing, phone-call demo, sales-team onboarding, annual renewal with potential rate adjustments.",
+      "pros_detail": [
+        { "title": "Mature tax-filing infrastructure", "explanation": "50+ years processing SMB payroll. Compliance infrastructure is mature." },
+        { "title": "Mid-market compliance capacity", "explanation": "Multi-state, prevailing-wage, union — same depth as ADP at the higher end of SMB." }
+      ],
+      "cons_detail": [
+        { "title": "Same renewal-rate-increase pattern as ADP", "explanation": "Documented similar pattern of annual rate increases on accounts with no changes. The legacy-payroll commercial model creates similar friction across the major players." },
+        { "title": "Opaque sales-quoted pricing", "explanation": "No published pricing. Phone-demo + sales process required for quote." },
+        { "title": "Overkill for typical SMB trades shop", "explanation": "Same overkill issue as ADP. Modern SMB payroll (Gusto, OnPay) is structurally better-suited to the 2-25 employee range." }
+      ],
+      "best_for": "Mid-market trades operations needing legacy-payroll compliance depth, or contractors with existing Paychex relationships that work well",
+      "best_team_size": "25-500 users",
+      "weaknesses": "Same structural concerns as ADP Run — renewal pattern, opaque pricing, cancellation friction. For typical SMB trades, Gusto or OnPay is structurally better.",
+      "reputation_flag": null,
+      "ratings": { "g2": 4.2, "capterra": 4.2, "trustpilot": 1.5, "reddit_sentiment": "mixed — similar profile to ADP" },
+      "key_features": ["enterprise_compliance_capacity", "multi_state_payroll", "mature_tax_infrastructure", "hr_advisory_services"],
+      "integrations": ["quickbooks_online", "xero", "many_legacy_accounting"],
+      "affiliate_program": "unknown",
+      "affiliate_payout_note": "Affiliate channels limited for editorial publishers",
+      "verified_date": "2026-05-28",
+      "service_faqs": [
+        { "q": "Paychex Flex vs ADP Run — which is better?", "a": "Functionally equivalent. The choice is usually driven by which local rep you have a better relationship with rather than product differentiation. For typical SMB trades shops, neither is the right choice vs Gusto or OnPay." }
+      ]
+    },
+    {
+      "slug": "justworks",
+      "name": "Justworks",
+      "vendor_url": "https://www.justworks.com",
+      "affiliate_url": "TBD",
+      "tagline": "PEO model bundling payroll + benefits + HR — typically wrong shape for trades shops",
+      "service_type": "peo",
+      "pricing_model": "per-employee",
+      "starting_price_usd": 49,
+      "per_employee_fee_usd": 49,
+      "pricing_summary": "$49-$109/employee/mo (PEO model, all-inclusive)",
+      "free_trial_days": 0,
+      "verticals_supported": ["general_contractor", "professional_services"],
+      "geographic_coverage": "us-nationwide",
+      "founded": 2012,
+      "headquartered": "New York, NY",
+      "long_description": "Justworks operates as a Professional Employer Organization (PEO) — a model where Justworks technically becomes the employer-of-record for your employees, bundling payroll + benefits + workers comp + HR compliance into a single all-inclusive per-employee fee ($49-$109/employee/mo). The model is structurally appropriate for some businesses but typically wrong-shape for trades contractors.\n\nThe PEO trade-off: in exchange for the all-inclusive bundled price, you give up direct employer relationships with your employees (they're co-employed with Justworks), lose flexibility on benefit selection (you take Justworks' bundled benefits, not custom plans), and accept Justworks' HR policies (which may not match how trades shops actually operate). For tech startups and professional-services firms with non-physical work environments and standard W-2 employee patterns, PEOs can simplify HR overhead. For trades shops with W-2 + 1099 mixed workforces, variable seasonal payroll, and trade-specific operational realities, the PEO model adds friction without clear value.\n\nWe list Justworks for completeness because trades contractors occasionally encounter it via marketing or referrals — but for the typical trades shop, the recommendation is clear: stick with standalone payroll (Gusto, OnPay) + standalone WC (NEXT, Acuity, Erie, or Hourly.io for integrated WC+payroll if appropriate). The PEO model adds complexity that trades shops generally don't need.",
+      "how_it_works": "Sign up, employees are co-employed with Justworks. Bundled monthly per-employee fee covers payroll, benefits (health, 401k from Justworks' bundled offerings), workers comp (Justworks-arranged), HR compliance, and basic HR support.",
+      "pros_detail": [
+        { "title": "All-inclusive bundle reduces vendor management", "explanation": "Single vendor, single monthly fee, covers payroll + benefits + WC + HR. For businesses with no in-house HR and minimal complexity, the consolidation is operationally appealing." },
+        { "title": "Strong fit for tech startups and professional services", "explanation": "PEOs work well for non-trades businesses where standard W-2 employee patterns + remote work + benefit-driven hiring are the norm." }
+      ],
+      "cons_detail": [
+        { "title": "Wrong shape for trades shops", "explanation": "Trades businesses have W-2 + 1099 mixed workforces, variable seasonal payroll, trade-specific operational patterns (job-site safety, trade-specific class codes for WC). The PEO bundled model doesn't fit cleanly." },
+        { "title": "Per-employee fee is structurally expensive", "explanation": "$49-$109/employee/mo means a 10-employee shop pays $490-$1,090/mo for Justworks vs ~$140/mo on Gusto Plus. The 'all-inclusive' framing hides the actual cost premium." },
+        { "title": "Loss of direct employer relationship", "explanation": "Co-employment with the PEO changes the legal employer relationship. For trades contractors who value direct employee relationships, this is a real giveaway." },
+        { "title": "Limited benefit customization", "explanation": "You take Justworks' bundled benefits. Customizing health plans, 401(k) matching structures, or PTO policies is limited or impossible." }
+      ],
+      "best_for": "Tech startups, professional services firms, and non-trades businesses with standard W-2 patterns and no in-house HR — NOT typically a fit for trades contractors",
+      "best_team_size": "5-200 users (but wrong-shape for trades regardless of size)",
+      "weaknesses": "PEO model adds complexity trades shops don't need, structurally expensive per-employee, loss of direct employer relationship, limited benefit customization — Gusto + standalone WC is structurally better for almost all trades shops",
+      "reputation_flag": null,
+      "ratings": { "g2": 4.6, "capterra": 4.6, "trustpilot": 4.5, "reddit_sentiment": "positive among tech startups, rarely mentioned by trades contractors" },
+      "key_features": ["peo_model", "all_inclusive_pricing", "bundled_benefits", "hr_compliance"],
+      "integrations": ["quickbooks_online", "xero", "various_saas"],
+      "affiliate_program": "unknown",
+      "affiliate_payout_note": "Affiliate channel oriented at tech-company referrals",
+      "verified_date": "2026-05-28",
+      "service_faqs": [
+        { "q": "Should a trades shop use Justworks?", "a": "Almost certainly not. The PEO model is structurally wrong-shape for trades operations. Use Gusto (or Hourly.io if you want integrated WC+payroll) instead." }
+      ]
+    }
+  ]
+}

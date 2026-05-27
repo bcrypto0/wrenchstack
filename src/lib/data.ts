@@ -4,6 +4,7 @@ import awardsData from '../data/awards.json';
 import reviewsData from '../data/reviews.json';
 import leadGenData from '../data/lead_gen.json';
 import insuranceData from '../data/insurance.json';
+import payrollData from '../data/payroll.json';
 
 export interface ToolPricing {
   starting_at_usd: number | null;
@@ -926,4 +927,85 @@ export function insuranceTier(p: InsuranceProvider): 'S' | 'A' | 'F' {
   ) return 'S';
   return 'A';
 }
+
+// --- Payroll services (Phase 3 multi-category expansion) ---------------------
+
+export type PayrollServiceType = 'modern-saas' | 'embedded' | 'all-in-one-hr' | 'legacy-payroll' | 'peo' | 'specialty';
+
+export interface PayrollRatings {
+  g2: number | null;
+  capterra: number | null;
+  trustpilot: number | null;
+  reddit_sentiment: string;
+}
+
+export interface PayrollService {
+  slug: string;
+  name: string;
+  vendor_url: string;
+  affiliate_url: string;
+  tagline: string;
+  service_type: PayrollServiceType;
+  pricing_model: string;
+  starting_price_usd: number | null;
+  per_employee_fee_usd: number | null;
+  pricing_summary: string;
+  free_trial_days: number;
+  verticals_supported: string[];
+  geographic_coverage: string;
+  founded: number;
+  headquartered: string;
+  long_description: string;
+  how_it_works: string;
+  pros_detail: ProConItem[];
+  cons_detail: ProConItem[];
+  best_for: string;
+  best_team_size: string;
+  weaknesses: string;
+  reputation_flag: string | null;
+  ratings: PayrollRatings;
+  key_features: string[];
+  integrations: string[];
+  affiliate_program: string;
+  affiliate_payout_note: string;
+  verified_date: string;
+  service_faqs: LeadGenFaq[];
+}
+
+export const payrollServices: PayrollService[] = (payrollData as { services: PayrollService[] }).services;
+
+export function getPayrollService(slug: string): PayrollService | undefined {
+  return payrollServices.find((s) => s.slug === slug);
+}
+
+/** Tier classification for payroll services. */
+export function payrollTier(s: PayrollService): 'S' | 'A' | 'B' {
+  if (s.reputation_flag) return 'B';
+  // Gusto leads on affiliate economics + product strength
+  if (s.slug === 'gusto') return 'S';
+  // Modern-saas with strong sentiment → Tier S
+  if (s.service_type === 'modern-saas' && (s.ratings.g2 ?? 0) >= 4.5) return 'S';
+  if (s.service_type === 'specialty' && (s.ratings.g2 ?? 0) >= 4.5) return 'S';
+  // Legacy + PEO → Tier B
+  if (s.service_type === 'legacy-payroll' || s.service_type === 'peo') return 'B';
+  return 'A';
+}
+
+/** Pick the right payroll service for a given employee-count bucket. */
+export type EmployeeBucket = '1-5' | '6-20' | '20+';
+export function payrollPicksForBucket(bucket: EmployeeBucket): PayrollService[] {
+  const all = payrollServices;
+  switch (bucket) {
+    case '1-5':
+      // Recommend cheapest tax-filing + Gusto for benefits
+      return all.filter((s) => ['patriot-payroll', 'gusto', 'onpay', 'square-payroll', 'hourly'].includes(s.slug));
+    case '6-20':
+      // Sweet spot for modern SMB payroll
+      return all.filter((s) => ['gusto', 'onpay', 'hourly', 'quickbooks-payroll', 'patriot-payroll'].includes(s.slug));
+    case '20+':
+      // Mid-market — Gusto Plus, Rippling, possibly legacy options
+      return all.filter((s) => ['gusto', 'rippling', 'adp-run', 'paychex-flex', 'onpay'].includes(s.slug));
+  }
+}
+
 
