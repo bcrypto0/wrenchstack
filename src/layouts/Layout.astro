@@ -108,9 +108,17 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
   <body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
     <header class="border-b border-slate-200 bg-white">
       <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-4">
-        <a href="/" class="flex items-center" aria-label="WrenchStack home">
-          <img src="/logo.png" alt="WrenchStack" height="44" class="h-11 w-auto" />
-        </a>
+        <div class="flex items-center gap-3">
+          <a href="/" class="flex items-center" aria-label="WrenchStack home">
+            <img src="/logo.png" alt="WrenchStack" height="44" class="h-11 w-auto" />
+          </a>
+          <div class="hidden sm:flex items-center gap-1 rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-xs">
+            <a href="/" class="rounded px-2 py-0.5 font-semibold text-slate-900 bg-white shadow-sm" title="United States (current)">🇺🇸 US</a>
+            <a href="/uk/" class="rounded px-2 py-0.5 text-slate-600 hover:text-slate-900" title="United Kingdom">🇬🇧 UK</a>
+            <span class="rounded px-2 py-0.5 text-slate-400" title="Canada — coming soon">🇨🇦 CA</span>
+            <span class="rounded px-2 py-0.5 text-slate-400" title="Australia — coming soon">🇦🇺 AU</span>
+          </div>
+        </div>
         <div class="order-3 w-full md:order-2 md:w-auto md:flex-1 md:max-w-md md:px-6">
           <div class="relative">
             <input
@@ -194,6 +202,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
               <li><a href="/trends-2026/" class="hover:text-slate-900">2026 Market Report</a></li>
               <li><a href="/awards/2026/" class="hover:text-slate-900">2026 Awards</a></li>
               <li><a href="/state/" class="hover:text-slate-900">By state</a></li>
+              <li><a href="/uk/" class="hover:text-slate-900">🇬🇧 UK directory</a></li>
             </ul>
           </div>
           <div>

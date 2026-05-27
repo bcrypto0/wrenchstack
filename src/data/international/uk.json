@@ -1,0 +1,553 @@
+{
+  "_schema": {
+    "description": "United Kingdom trades-vendor coverage. Lighter-touch profiles than full US reviews (400-600 words each rather than 1,200-2,500) — focused on what makes each UK vendor distinct and what UK contractors should know. Cross-market vendors (Bark UK, Hiscox UK, ServiceM8 UK) link to existing US reviews with UK-specific context noted. UK-only vendors (Checkatrade, MyBuilder, BrightPay) get full UK-specific treatment.",
+    "country": "United Kingdom",
+    "country_code": "uk",
+    "last_updated": "2026-05-29",
+    "vendor_shape": {
+      "slug": "string",
+      "name": "string",
+      "category": "software | lead-gen | insurance | payroll | agencies | certification",
+      "vendor_url": "string",
+      "tagline": "string",
+      "market_position": "string (1-2 sentences on UK market position)",
+      "uk_specific_note": "string (what UK contractors need to know — Gas Safe required? CIS deductions? RTI compliance? etc.)",
+      "tier": "S | A | F",
+      "reputation_flag": "null | string",
+      "pros": "string[] (3-5 items)",
+      "cons": "string[] (3-5 items)",
+      "typical_pricing": "string (UK pricing if known)",
+      "is_cross_market": "boolean (true if also covered in US/other markets)",
+      "cross_market_link": "string (URL to existing US review if applicable)"
+    }
+  },
+  "vendors": [
+    {
+      "slug": "checkatrade",
+      "name": "Checkatrade",
+      "category": "lead-gen",
+      "vendor_url": "https://www.checkatrade.com",
+      "tagline": "The UK's largest vetted trades directory — annual subscription model with verification + reviews",
+      "market_position": "Checkatrade is the most recognizable UK trades-directory brand among consumers — 22% market share and 850K+ vetted member businesses. The vetting process (DBS check, insurance verification, reference checks) is the trust mechanism that makes UK homeowners willing to call a stranger from the directory. Annual subscription pricing (£950-£2,000+/year) is meaningfully different from US pay-per-lead models — once you're in, you pay flat regardless of lead volume.",
+      "uk_specific_note": "Vetting requires UK business registration, valid insurance, and the relevant trade certification (Gas Safe for gas work, NICEIC for electrical, etc.). The £200 referral scheme is the closest thing to an affiliate program — no formal publisher partnership.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Strongest consumer-side brand recognition in UK trades — homeowners actively search Checkatrade by name",
+        "Annual subscription means cost predictability vs pay-per-lead variance",
+        "Vetting + review process keeps the competitive pool curated (lower-quality competitors filtered out)",
+        "Postcode-based exclusivity caps prevent endless dilution within a service area"
+      ],
+      "cons": [
+        "£950-£2,000+/year annual subscription is significant up-front commitment for new businesses",
+        "Annual contract structure means low flexibility if the leads don't materialize at expected volume",
+        "Heavy reliance on customer-leaving-reviews — bad early reviews can damage long-term profile",
+        "No formal affiliate program for publishers means most third-party reviews are either marketing puff or anonymous complaints"
+      ],
+      "typical_pricing": "£950-£2,000+/year (postcode + trade dependent)",
+      "is_cross_market": false,
+      "cross_market_link": null
+    },
+    {
+      "slug": "mybuilder",
+      "name": "MyBuilder",
+      "category": "lead-gen",
+      "vendor_url": "https://www.mybuilder.co.uk",
+      "tagline": "UK's largest trades marketplace by tradesperson volume — shortlist-pay model means you only pay when shortlisted",
+      "market_position": "MyBuilder is the largest UK trades marketplace by registered tradesperson count (1.2M tradies, ~35% market share). The shortlist-pay model differentiates it structurally — instead of paying per quote sent (Thumbtack model) or annual subscription (Checkatrade model), you only pay when the customer specifically shortlists you for further conversation. This shifts cost-per-lead economics meaningfully in favor of tradies who have specialty or geographic advantage.",
+      "uk_specific_note": "MyBuilder verification is lighter-touch than Checkatrade — open registration with insurance proof but no DBS checks. Reviews matter more here than vetting does. Strong consumer-side traffic from organic search ('plumber in [postcode]').",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Shortlist-pay model means no payment for quotes that go nowhere — cost-per-lead economics structurally favorable",
+        "Largest UK tradie registration (1.2M) creates network effect for consumers",
+        "Strong organic search position for 'tradesperson in [postcode]' queries",
+        "Founded in Ireland, expanded UK + Ireland coverage with cross-market consistency"
+      ],
+      "cons": [
+        "Lighter vetting than Checkatrade means consumer-side trust signals depend more heavily on individual reviews",
+        "Some categories (smaller specialty trades) have thin consumer demand vs registered tradies",
+        "No formal affiliate program for publishers"
+      ],
+      "typical_pricing": "Pay-per-shortlist, typically £3-£20 depending on job value",
+      "is_cross_market": false,
+      "cross_market_link": null
+    },
+    {
+      "slug": "rated-people",
+      "name": "Rated People",
+      "category": "lead-gen",
+      "vendor_url": "https://www.ratedpeople.com",
+      "tagline": "Pay-per-lead UK trades marketplace — 900K registered tradies",
+      "market_position": "Rated People is the third major UK lead-gen platform after Checkatrade (subscription) and MyBuilder (shortlist-pay). The pay-per-lead model is most similar to US Thumbtack/HomeAdvisor — tradies pay when they decide to pursue a job posting. 900K registered tradies, ~28% UK market share.",
+      "uk_specific_note": "Pay-per-lead pricing typically £5-£35 per lead depending on job size. Review system carries weight with consumers. No DBS verification by default (paid tier required for enhanced verification).",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Pay-per-lead means no annual commitment like Checkatrade",
+        "Strong consumer-side traffic from organic search",
+        "Tradie can choose which leads to pursue — selectivity is structurally available"
+      ],
+      "cons": [
+        "Pay-per-lead means tradies eat cost on leads that don't convert — same problem as US Thumbtack/HomeAdvisor",
+        "Some forum sentiment around lead quality variance — better in major metros than rural areas",
+        "Lighter vetting than Checkatrade means consumer-trust depends on reviews accumulated over time"
+      ],
+      "typical_pricing": "£5-£35 per lead (job size dependent)",
+      "is_cross_market": false,
+      "cross_market_link": null
+    },
+    {
+      "slug": "trustatrader",
+      "name": "TrustATrader",
+      "category": "lead-gen",
+      "vendor_url": "https://www.trustatrader.com",
+      "tagline": "UK trades directory with postcode-capped membership + text-a-trader feature",
+      "market_position": "TrustATrader is a smaller-scale UK lead-gen platform (~8% market share, 400K tradies) that differentiates through postcode-capped membership (limits competition within an area) and the Text-A-Trader feature (consumers SMS the platform rather than calling). For tradies in specific postcodes where capped slots are available, the lower-competition dynamics can deliver better cost-per-customer-acquired math than larger competitors.",
+      "uk_specific_note": "Card payment integration is built-in for tradies who don't have their own payment processing — useful for cash-trade businesses upgrading to card. Postcode membership caps reset periodically as members leave.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Postcode-capped membership limits in-platform competition for the same job",
+        "Text-A-Trader feature differentiates from call-only marketplaces",
+        "Built-in card payment integration removes payment-processing setup overhead"
+      ],
+      "cons": [
+        "Smaller consumer-side traffic than Checkatrade/MyBuilder/Rated People",
+        "Postcode availability is hit-or-miss — popular postcodes often capped",
+        "Less brand recognition outside specific UK regions"
+      ],
+      "typical_pricing": "Subscription-based, varies by postcode and trade category",
+      "is_cross_market": false,
+      "cross_market_link": null
+    },
+    {
+      "slug": "bark-uk",
+      "name": "Bark (UK)",
+      "category": "lead-gen",
+      "vendor_url": "https://www.bark.com",
+      "tagline": "UK-headquartered lead marketplace operating across UK, US, CA, AU, EU — same documented fake-lead pattern globally",
+      "market_position": "Bark is UK-headquartered but operates internationally. The structural complaint pattern (pay-upfront-to-unlock-lead model, documented fake-lead reports across markets) applies to the UK operation the same as our US review. The UK Trustpilot score is 1.6/5 with similar complaint themes to the US.",
+      "uk_specific_note": "Same warning applies to UK as US — see our full US Bark review for the documented complaint pattern. UK contractors specifically: better alternatives include Checkatrade, MyBuilder, Rated People, and Google Local Services Ads (if available in your category).",
+      "tier": "F",
+      "reputation_flag": "Bark UK operates the same pay-upfront-to-unlock-lead model documented in the US Bark review — with widely-reported fake-lead complaints, low Trustpilot score (1.6/5), and active 'Bark scam' search-query patterns. Same structural problems apply.",
+      "pros": [
+        "Operates across 5+ markets (UK/US/CA/AU/EU) — only multi-market option in this directory",
+        "Lower entry cost than Checkatrade annual subscription for testing",
+        "Awin affiliate program available for publishers (single setup covers all 5 markets)"
+      ],
+      "cons": [
+        "Pay-upfront-to-unlock-lead model creates structural information asymmetry — same problem as US",
+        "Documented fake-lead pattern across UK as well as US (Trustpilot 1.6/5)",
+        "We cannot recommend under any UK contractor profile — Checkatrade, MyBuilder, Rated People all offer structurally better alternatives"
+      ],
+      "typical_pricing": "£5-£50 per lead unlock",
+      "is_cross_market": true,
+      "cross_market_link": "/lead-gen/bark/"
+    },
+    {
+      "slug": "hiscox-uk",
+      "name": "Hiscox UK",
+      "category": "insurance",
+      "vendor_url": "https://www.hiscox.co.uk",
+      "tagline": "Long-established UK direct insurer — solid product though 2025 reputation trend warrants watching (same as US)",
+      "market_position": "Hiscox UK is part of the same group as Hiscox US — 120+ year insurance history with strong financial ratings. UK product covers Public Liability, Employers Liability (legally required for any business with employees in UK), Tools & Equipment cover, Professional Indemnity. Same 2025 renewal-rate-trend caveat as US applies in the UK.",
+      "uk_specific_note": "Employers Liability is legally required in the UK for any business with employees — Hiscox includes this standard. UK pricing includes professional indemnity coverage that's optional in the US market. The 2025 reputation trend documented in our US review applies in UK as well.",
+      "tier": "S",
+      "reputation_flag": "Hiscox 2025 reputation has trended downward across markets including UK. Same pattern documented in US — renewal-rate increases on accounts with no claims history, slower-than-historical claims response. Existing UK customers should shop carriers at every renewal.",
+      "pros": [
+        "120+ year UK insurance history — institutional stability is real",
+        "Employers Liability included standard (legally required for UK businesses with employees)",
+        "Professional Indemnity coverage strong — useful for design-build trades and consultancy work",
+        "Online quote-bind path works for standard SMB cases"
+      ],
+      "cons": [
+        "2025 renewal-rate-increase trend documented — existing customers report 20%+ rate hikes with no claims",
+        "Higher base pricing than digital-native UK competitors (Simply Business UK comparison shopping)",
+        "Cancellation friction reported in 2025 forum sentiment"
+      ],
+      "typical_pricing": "£15-£60/month for PL + tools cover on a 1-5 person trades shop",
+      "is_cross_market": true,
+      "cross_market_link": "/insurance/hiscox/"
+    },
+    {
+      "slug": "simply-business-uk",
+      "name": "Simply Business UK",
+      "category": "insurance",
+      "vendor_url": "https://www.simplybusiness.co.uk",
+      "tagline": "UK's largest online business insurance broker — 250K+ tradies, panel of major UK insurers",
+      "market_position": "Simply Business UK was founded in the UK (Travelers acquired it in 2017 and runs it as the UK arm). The broker model shops 1,500+ trade types across a panel of major UK insurers (Aviva, AXA, Zurich, etc.). For UK contractors wanting comparison shopping without agent phone calls, Simply Business UK is the dominant digital broker option — comparable to NEXT/Simply Business US in the US market.",
+      "uk_specific_note": "Strongest position in sole-trader and very-small-business segments. Quote panel automatically includes Employers Liability (legally required) and Professional Indemnity options. UK-specific class codes for trades.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Largest UK online broker for trades — 250K+ tradie customers",
+        "1,500+ trade types covered with UK-specific class codes",
+        "Broker-of-record service handles policy changes, COIs, renewals across multiple carriers",
+        "Travelers ownership provides corporate stability"
+      ],
+      "cons": [
+        "Quote variance across carrier panel can be wide — sometimes confusing",
+        "Claims experience depends on selected underlying carrier",
+        "Less brand recognition than Hiscox or Direct Line in UK consumer perception"
+      ],
+      "typical_pricing": "£10-£50/month typical for sole-trader trades PL + EL package",
+      "is_cross_market": true,
+      "cross_market_link": "/insurance/simply-business/"
+    },
+    {
+      "slug": "axa-business-uk",
+      "name": "AXA Business UK",
+      "category": "insurance",
+      "vendor_url": "https://www.axa.co.uk/business-insurance/tradesman/",
+      "tagline": "Major UK direct insurer — Employers Liability included standard",
+      "market_position": "AXA UK is one of the largest UK insurance carriers and a common pick for trades through broker channels. AXA's UK tradesman product packages Public Liability, Employers Liability (standard, not optional), and Tools cover. Strong claims infrastructure backed by AXA Group's global scale. Cross-market via AXA Ireland.",
+      "uk_specific_note": "Employers Liability included standard is notable — many lower-tier insurers exclude it as optional. AXA's institutional claims handling is consistently solid across UK trade categories.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Major UK carrier with institutional claims-handling depth",
+        "Employers Liability included standard (legally required in UK)",
+        "Strong financial rating and corporate stability",
+        "Cross-market presence (UK + Ireland + EU)"
+      ],
+      "cons": [
+        "Sales process can be slower than digital-native competitors (Simply Business UK)",
+        "Pricing not always cheapest — institutional overhead",
+        "Quote process more agent-mediated than fully digital"
+      ],
+      "typical_pricing": "Varies — broker-quoted, typical £20-£80/mo for trades PL + EL",
+      "is_cross_market": false,
+      "cross_market_link": null
+    },
+    {
+      "slug": "direct-line-business-uk",
+      "name": "Direct Line for Business",
+      "category": "insurance",
+      "vendor_url": "https://www.directlineforbusiness.co.uk",
+      "tagline": "UK direct insurer with 500K+ business policies — modular tradesman policy",
+      "market_position": "Direct Line for Business is one of the most recognized UK direct insurance brands — 500K+ business policies in force. The tradesman policy is modular: you build coverage by adding components (PL, EL, Tools, Goods in Transit, Personal Accident) rather than buying a fixed package. For UK trades businesses with unusual coverage needs, the modular approach offers flexibility.",
+      "uk_specific_note": "UK-only — Direct Line doesn't operate in other markets. Online quoting is mature, phone backup available for complex cases. Strong claims infrastructure.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Strong UK brand recognition (consumer-side awareness translates to trust)",
+        "Modular policy structure — pay only for components you need",
+        "Mature online quoting with phone backup for complex cases",
+        "500K+ business policies = institutional underwriting depth"
+      ],
+      "cons": [
+        "UK-only — no cross-market value for international operators",
+        "Modular pricing can stack up quickly if you need most components",
+        "Less competitive on smallest sole-trader accounts vs Simply Business UK"
+      ],
+      "typical_pricing": "Varies — modular, typical £15-£70/mo trades PL + EL bundle",
+      "is_cross_market": false,
+      "cross_market_link": null
+    },
+    {
+      "slug": "commusoft",
+      "name": "Commusoft",
+      "category": "software",
+      "vendor_url": "https://www.commusoft.com",
+      "tagline": "UK-built FSM for HVAC, plumbing, electrical — strong reputation for UX, fleet tracking integrated",
+      "market_position": "Commusoft is one of the strongest UK-native field service management platforms — built specifically for HVAC/plumbing/electrical/gas trades in the UK market. Modern UI, integrated fleet tracking, Gas Safe certification recording, CIS deductions support for construction sub-contractors. Forum sentiment is consistently 'best UX of the UK FSM stack.'",
+      "uk_specific_note": "Built around UK trades workflow — Gas Safe certificate storage, CIS deductions for construction, HMRC RTI-aligned payroll integration, VAT handling. The UK-specific features matter — generic US FSM platforms don't handle these natively.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "UK-built with native UK trades workflow (Gas Safe, CIS, VAT, HMRC)",
+        "Strongest UX reputation among UK FSM platforms",
+        "Integrated fleet tracking — useful for vans servicing multiple postcodes",
+        "Mature integration with UK accounting (Xero UK, Sage, QuickBooks UK)"
+      ],
+      "cons": [
+        "Higher pricing than smallest UK competitors (£60-£200+/user/mo)",
+        "Best fit for established shops 3-25 employees — overkill for solo plumbers",
+        "Cross-market presence is limited — primarily UK-focused"
+      ],
+      "typical_pricing": "£60-£200+/user/month depending on tier",
+      "is_cross_market": false,
+      "cross_market_link": null
+    },
+    {
+      "slug": "bigchange",
+      "name": "BigChange",
+      "category": "software",
+      "vendor_url": "https://www.bigchange.com",
+      "tagline": "Leeds-built comprehensive FSM — feature-heavy but mixed Trustpilot reputation",
+      "market_position": "BigChange is a Leeds-headquartered UK FSM platform with comprehensive feature coverage — job management, fleet tracking, CRM, financial workflows, customer portal all integrated. The comprehensive depth is genuine. The reputation pattern is unusual: Trustpilot shows bimodal distribution (62% 5-star, 36% 1-star), with the negative reviews concentrating on the learning curve and onboarding experience rather than platform capability.",
+      "uk_specific_note": "Strongest fit for larger UK trade operations (15+ employees) with dedicated admin capacity to manage the platform. For smaller shops, the learning curve is the structural friction.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Comprehensive feature depth — single platform for most trades-business operational needs",
+        "UK-built with strong understanding of UK market patterns",
+        "Mature integration with UK accounting and payroll systems",
+        "Suitable for mid-to-large UK trades operations"
+      ],
+      "cons": [
+        "Steep learning curve documented across Trustpilot reviews — 36% 1-star is meaningful",
+        "Onboarding experience needs dedicated admin time to navigate",
+        "Higher pricing than mid-tier alternatives",
+        "Overkill for solo or 2-3 person trades shops"
+      ],
+      "typical_pricing": "Custom-quoted, varies significantly by feature scope",
+      "is_cross_market": false,
+      "cross_market_link": null
+    },
+    {
+      "slug": "joblogic",
+      "name": "JobLogic",
+      "category": "software",
+      "vendor_url": "https://www.joblogic.com",
+      "tagline": "UK FSM with strong PPM/asset management workflow — strongest for facilities/maintenance contractors",
+      "market_position": "JobLogic is a UK-built FSM platform with particularly strong PPM (planned preventive maintenance) and asset-management workflows. For trades contractors doing maintenance contracts on commercial buildings, facilities management work, or asset-tracking-dependent services, JobLogic's specialty depth shows up. Trustpilot 4.4/309 reviews — solid but not standout.",
+      "uk_specific_note": "PPM workflow is particularly strong for UK contractors with commercial facilities-management contracts. Less specialized for pure residential service-trades work — Commusoft or Powered Now may be better fits there.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Strong PPM and asset-management workflows for facilities/maintenance trades",
+        "UK-built with native UK market understanding",
+        "Solid Trustpilot rating (4.4) across 309 reviews",
+        "Suitable for commercial-services trades contractors"
+      ],
+      "cons": [
+        "UI feels dated compared to Commusoft or modern alternatives",
+        "Mobile/offline experience reported as flaky in some forum threads",
+        "Less specialized for pure residential service-trades use cases"
+      ],
+      "typical_pricing": "Custom-quoted, typical £50-£150+/user/mo",
+      "is_cross_market": false,
+      "cross_market_link": null
+    },
+    {
+      "slug": "powered-now",
+      "name": "Powered Now",
+      "category": "software",
+      "vendor_url": "https://www.powerednow.io",
+      "tagline": "UK FSM built for solo + small electricians, plumbers — accessible pricing, accounting-tight",
+      "market_position": "Powered Now serves the smallest end of the UK FSM market — solo electricians, plumbers, and small trades businesses (1-5 employees). Accessible pricing, tight integration with UK accounting platforms (Xero UK, FreeAgent, QuickBooks UK), HMRC RTI alignment, and CIS deductions. Strong fit for the segment Commusoft and BigChange don't focus on.",
+      "uk_specific_note": "Founder is a UK electrician — the platform's understanding of UK small-trades workflow is genuine. Direct affiliate scheme: £50 per referral (one of few UK FSM platforms with documented publisher partnership).",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Accessible pricing for UK solo + small trades (1-5 employees)",
+        "Founder is a UK electrician — UK trades-specific understanding is real",
+        "Tight integration with UK accounting (Xero UK, FreeAgent, QuickBooks UK)",
+        "Direct £50/referral affiliate scheme (rare among UK FSM)",
+        "HMRC RTI + CIS deductions handled natively"
+      ],
+      "cons": [
+        "Best fit ceiling around 5-10 employees — larger operations need Commusoft/BigChange",
+        "Smaller feature set than mid-market competitors",
+        "Brand recognition lower than Tradify or ServiceM8 in UK market"
+      ],
+      "typical_pricing": "£15-£40/user/month",
+      "is_cross_market": false,
+      "cross_market_link": null
+    },
+    {
+      "slug": "tradify-uk",
+      "name": "Tradify (UK)",
+      "category": "software",
+      "vendor_url": "https://www.tradifyhq.com",
+      "tagline": "NZ-built FSM with strong UK presence — easiest onboarding of major UK platforms",
+      "market_position": "Tradify is NZ-built but has built strong UK + AU presence — consistently mentioned as the easiest UK FSM platform to onboard onto. Quoting, invoicing, scheduling, and basic job management in a clean modern interface. Strong fit for small-to-mid UK trades shops (2-15 employees) that want quick time-to-value without Commusoft-level depth.",
+      "uk_specific_note": "Same Tradify product as US/AU/NZ markets but UK-specific accounting integrations (Xero UK, QuickBooks UK, Sage). Tradify launched a PartnerStack affiliate program in October 2025 — $160/signup. Cross-market vendor with strong UK presence.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Easiest onboarding among major UK FSM platforms",
+        "Clean modern UI suitable for non-technical UK tradies",
+        "Cross-market consistency (UK/AU/NZ/US) for businesses operating in multiple geographies",
+        "PartnerStack affiliate program with documented terms ($160/signup)"
+      ],
+      "cons": [
+        "Less UK-trades-specific than Commusoft (Gas Safe, CIS less specialized)",
+        "NZ origin means UK support timezone considerations",
+        "Cost per user higher than Powered Now at small scale"
+      ],
+      "typical_pricing": "£25-£60/user/month",
+      "is_cross_market": true,
+      "cross_market_link": "/tools/tradify/"
+    },
+    {
+      "slug": "servicem8-uk",
+      "name": "ServiceM8 (UK)",
+      "category": "software",
+      "vendor_url": "https://www.servicem8.com/uk/",
+      "tagline": "AU-built FSM with UK presence — generous affiliate program, strong solo/small-shop fit",
+      "market_position": "ServiceM8 is Australia-built but has meaningful UK presence. Strongest fit is solo and very small UK trades shops (1-5 employees) that want fast job-management + quoting + invoicing at low cost. The £/AU$ pricing translates accessibly, and the cross-market affiliate program (20% recurring + $100/signup) is the most generous in the UK FSM segment.",
+      "uk_specific_note": "Less UK-trades-specialized than Commusoft or Powered Now (no native Gas Safe certificate storage, lighter CIS handling). For UK contractors who don't need those features, ServiceM8 is structurally strong at the entry tier.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Generous affiliate program (20% recurring + $100/signup) — best in UK FSM segment",
+        "Strong solo/small-shop fit with accessible pricing",
+        "Cross-market consistency (AU/NZ/UK/US)",
+        "Mature mobile-first workflow"
+      ],
+      "cons": [
+        "Less UK-specific than native UK platforms (no Gas Safe, lighter CIS)",
+        "AU origin means timezone considerations for UK support",
+        "Best fit ceiling around 10 employees — mid-market UK shops want more depth"
+      ],
+      "typical_pricing": "£25-£200/month tier-based",
+      "is_cross_market": true,
+      "cross_market_link": null
+    },
+    {
+      "slug": "brightpay",
+      "name": "BrightPay",
+      "category": "payroll",
+      "vendor_url": "https://www.brightpay.co.uk",
+      "tagline": "Most-loved UK + Ireland payroll software — HMRC-recognized, RTI + auto-enrolment native",
+      "market_position": "BrightPay is the most-recommended UK payroll software for small businesses — strongest forum sentiment in UK accountancy and trades-business communities. HMRC-recognized, native RTI submissions, auto-enrolment (workplace pension) handling, CIS for construction sub-contractors. £79+VAT/month entry tier. Cross-market with BrightPay Ireland.",
+      "uk_specific_note": "RTI (Real Time Information) submissions are legally required for UK employers — BrightPay handles automatically. Auto-enrolment (workplace pension scheme) compliance built in. Free for single-employee businesses — useful for sole traders.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Most-loved UK payroll software by SMB sentiment",
+        "HMRC-recognized with native RTI submissions",
+        "Auto-enrolment (workplace pension) handled natively",
+        "Free for single-employee businesses (sole traders)",
+        "CIS for construction sub-contractors handled cleanly",
+        "Cross-market with BrightPay Ireland"
+      ],
+      "cons": [
+        "Desktop-software model (with cloud add-on) — not pure-SaaS like Gusto US",
+        "£79+VAT/month entry tier higher than free competitors (Moneysoft)",
+        "Annual licensing rather than monthly subscription"
+      ],
+      "typical_pricing": "Free for 1 employee; £79+VAT/year up to 10 employees; scales from there",
+      "is_cross_market": false,
+      "cross_market_link": null
+    },
+    {
+      "slug": "sage-payroll-uk",
+      "name": "Sage Payroll UK",
+      "category": "payroll",
+      "vendor_url": "https://www.sage.com/en-gb/sage-business-cloud/payroll/",
+      "tagline": "Established UK payroll vendor — cloud-native, scales 1-150 employees",
+      "market_position": "Sage is one of the largest UK accounting/payroll vendors with deep institutional presence. Sage Business Cloud Payroll is the cloud-native SMB offering — HMRC-recognized, RTI compliant, auto-enrolment handled. Strong fit for businesses already on Sage Accounting (high integration depth).",
+      "uk_specific_note": "Sage's UK heritage means deep institutional understanding of UK payroll compliance. Pricing scales meaningfully — larger UK businesses (50+ employees) often consolidate on Sage 50 or Sage 200.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Established UK brand with deep institutional payroll-compliance depth",
+        "Strong integration with Sage Accounting and broader Sage ecosystem",
+        "Cloud-native and scales from SMB to mid-market",
+        "HMRC-recognized with mature RTI infrastructure"
+      ],
+      "cons": [
+        "Pricing higher than BrightPay at SMB tier",
+        "UX dated relative to modern SaaS payroll competitors",
+        "Best value if you're already on Sage Accounting — standalone value weaker"
+      ],
+      "typical_pricing": "£10-£50+/month based on employee count and tier",
+      "is_cross_market": false,
+      "cross_market_link": null
+    },
+    {
+      "slug": "xero-payroll-uk",
+      "name": "Xero Payroll (UK)",
+      "category": "payroll",
+      "vendor_url": "https://www.xero.com/uk/payroll-software/",
+      "tagline": "NZ-built accounting-tight payroll — embedded in Xero UK, strong for Xero-using trades",
+      "market_position": "Xero Payroll UK is embedded in the broader Xero accounting platform — strongest fit for UK trades businesses already running Xero for accounting. HMRC-recognized, RTI compliant, auto-enrolment supported. Cross-market consistency across UK/AU/NZ/IE/US.",
+      "uk_specific_note": "Same Xero product worldwide but UK-specific payroll compliance built in. Value depends heavily on whether you're on Xero accounting — for non-Xero businesses, BrightPay or Sage are usually better fits.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Tight integration with Xero accounting (if you're on it)",
+        "Cross-market consistency for businesses operating multi-geographically",
+        "HMRC-recognized with mature compliance",
+        "Modern UX vs Sage Payroll"
+      ],
+      "cons": [
+        "Value depends on being on Xero accounting — standalone weaker",
+        "Pricing add-on stacks with Xero subscription",
+        "Less UK-specific than BrightPay or Sage"
+      ],
+      "typical_pricing": "£5-£15/month add-on to Xero subscription",
+      "is_cross_market": true,
+      "cross_market_link": null
+    },
+    {
+      "slug": "gas-safe-register",
+      "name": "Gas Safe Register",
+      "category": "certification",
+      "vendor_url": "https://www.gassaferegister.co.uk",
+      "tagline": "Legally required UK certification for any gas work — replaces the old CORGI scheme",
+      "market_position": "Gas Safe Register is the UK's official gas-safety registration body — replaced CORGI in 2009. Any business or individual installing, servicing, or repairing gas appliances in the UK must be Gas Safe registered. Unlicensed gas work is a criminal offense under the Gas Safety (Installation and Use) Regulations 1998.",
+      "uk_specific_note": "Registration is mandatory, not optional. ~140,000 Gas Safe registered businesses operate in the UK. Annual registration fee (~£395 for first engineer, additional per-engineer fees). ACS (Accredited Certification Scheme) certificates required for each gas appliance category (CCN1 core, MET1 metering, CKR1 cookers, CENWAT central heating, etc.).",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Single official UK gas certification — universally recognized",
+        "Strong consumer-side trust signal (Gas Safe logo on tradies' vans, websites, quotes)",
+        "Compliance with UK law — unlicensed gas work is criminal",
+        "Annual reassessment maintains standards"
+      ],
+      "cons": [
+        "Annual fees stack (per-engineer + per-business)",
+        "ACS certificate renewals require time + cost",
+        "No exceptions — every gas worker must be Gas Safe regardless of how minor the work"
+      ],
+      "typical_pricing": "£395 first engineer/year + £64 each additional engineer",
+      "is_cross_market": false,
+      "cross_market_link": null
+    },
+    {
+      "slug": "niceic",
+      "name": "NICEIC",
+      "category": "certification",
+      "vendor_url": "https://niceic.com",
+      "tagline": "UK's largest electrical contractor certification body — ~38,000 certified businesses",
+      "market_position": "NICEIC is the most-recognized UK electrical contractor certification body. Approved Contractor and Domestic Installer schemes cover commercial electrical work, residential electrical work, EV charging point installation, fire alarm/emergency lighting, and renewable energy. Part P compliance (mandatory for some residential electrical work since 2005) typically demonstrated through NICEIC registration.",
+      "uk_specific_note": "Part P registration is mandatory for residential electrical work in England + Wales — most homeowners and insurers require NICEIC (or equivalent ECS/ELECSA/STROMA) for any meaningful electrical work. Annual assessment fees apply.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Most-recognized UK electrical certification (38,000+ businesses)",
+        "Strong consumer-side trust signal for residential electrical work",
+        "Covers expanded electrical specialties (EV charging, renewables, fire alarms)",
+        "Part P compliance pathway"
+      ],
+      "cons": [
+        "Annual assessment fees + scope-extension fees add up",
+        "Assessment visit can be disruptive for solo electricians",
+        "Alternative schemes (ECS, ELECSA, STROMA) sometimes cheaper for specific scopes"
+      ],
+      "typical_pricing": "£500-£1,500+/year depending on scope",
+      "is_cross_market": false,
+      "cross_market_link": null
+    },
+    {
+      "slug": "oftec",
+      "name": "OFTEC",
+      "category": "certification",
+      "vendor_url": "https://www.oftec.org",
+      "tagline": "UK oil-fired heating certification — for technicians installing/servicing oil boilers",
+      "market_position": "OFTEC (Oil Firing Technical Association) is the UK certification body for oil-fired heating installation and servicing. Required for any technician working on oil boilers in the UK — a meaningful market segment in rural areas off the gas grid (~1.7 million UK homes use oil heating). OFTEC technicians can also self-certify their work under building regulations.",
+      "uk_specific_note": "OFTEC registration enables self-certification of installations under building regulations — significant cost/time savings vs requiring building control sign-off. Important UK rural-market signal.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Required certification for UK oil-heating work",
+        "Self-certification under building regulations (cost/time saving)",
+        "Strong fit for rural UK markets off gas grid",
+        "Industry-respected body with long history"
+      ],
+      "cons": [
+        "Narrower market than Gas Safe (oil vs gas) — fewer total customers",
+        "Annual fees apply",
+        "Off-grid rural markets shrinking as gas/electric expand"
+      ],
+      "typical_pricing": "Membership + per-technician registration fees vary",
+      "is_cross_market": false,
+      "cross_market_link": null
+    }
+  ]
+}
