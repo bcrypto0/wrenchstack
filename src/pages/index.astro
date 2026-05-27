@@ -3,11 +3,16 @@ import Layout from '../layouts/Layout.astro';
 import categories from '../data/categories.json';
 import toolsData from '../data/tools.json';
 import featuresData from '../data/features.json';
-import { tools, toolsForVertical, freshnessStats, daysSinceVerified, aggregateRating, formatPrice } from '../lib/data';
+import { tools, toolsForVertical, freshnessStats, daysSinceVerified, aggregateRating, formatPrice, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies } from '../lib/data';
 import FreshnessBadge from '../components/FreshnessBadge.astro';
 
 const verticals = categories.verticals;
 const toolCount = tools.length;
+const leadGenCount = leadGenPlatforms.length;
+const insuranceCount = insuranceProviders.length;
+const payrollCount = payrollServices.length;
+const agencyCount = marketingAgencies.length;
+const totalVendorCount = toolCount + leadGenCount + insuranceCount + payrollCount + agencyCount;
 
 // Compute most-recent pricing-verified date across all tools (for the "Last refreshed" indicator).
 const lastVerifiedDate = tools
@@ -74,26 +79,25 @@ function featureToUrl(slug: string): string {
 ---
 
 <Layout
-  title="WrenchStack — Trades software comparisons that actually help"
-  description={`Compare ${toolCount}+ field service platforms across ${verticals.length} trades. Real pricing, real feature matrices, side-by-side comparisons.`}
+  title="WrenchStack — The trades vendor directory: software, lead-gen, insurance, payroll, marketing"
+  description={`Independent reviews of ${totalVendorCount}+ vendors across software (${toolCount}), lead-gen (${leadGenCount}), insurance (${insuranceCount}), payroll (${payrollCount}), and marketing agencies (${agencyCount}). Honest reputation flags. Real pricing. No lead-gen sales calls.`}
 >
   <section class="bg-gradient-to-b from-white to-slate-50">
     <div class="mx-auto max-w-6xl px-4 py-20 md:py-28">
       <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-6xl">
-        The trades software stack,<br />
-        picked by data.
+        Everything contractors buy,<br />
+        reviewed honestly.
       </h1>
-      <p class="mt-6 max-w-2xl text-lg text-slate-600 md:text-xl">
-        Compare {toolCount}+ field service platforms across {verticals.length} trades.
-        Real pricing, full feature matrices, head-to-head comparisons.
+      <p class="mt-6 max-w-3xl text-lg text-slate-600 md:text-xl">
+        The first independent directory covering all five categories trades contractors actually spend on: software, lead-gen platforms, business insurance, payroll, and marketing agencies. {totalVendorCount}+ vendors compared, with reputation flags on the ones that earn them.
       </p>
 
       <div class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-slate-600">
-        <span><span class="font-bold text-slate-900">{toolCount}+</span> tools tracked</span>
+        <span><span class="font-bold text-slate-900">{totalVendorCount}+</span> vendors tracked</span>
         <span class="text-slate-300">·</span>
-        <span><span class="font-bold text-slate-900">{verticals.length}</span> trades verticals</span>
+        <span><span class="font-bold text-slate-900">5</span> categories</span>
         <span class="text-slate-300">·</span>
-        <span><span class="font-bold text-slate-900">2,400+</span> comparison pages</span>
+        <span><span class="font-bold text-slate-900">{verticals.length}</span> trades</span>
         <span class="text-slate-300">·</span>
         <span class="inline-flex items-center gap-1.5">
           <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 ring-2 ring-emerald-200"></span>
@@ -105,19 +109,58 @@ function featureToUrl(slug: string): string {
           href="/quiz/"
           class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-orange-600"
         >
-          Take the 60-second matching quiz →
-        </a>
-        <a
-          href="/hvac/"
-          class="rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800"
-        >
-          Browse HVAC software
+          Take the matching quiz →
         </a>
         <a
           href="/tools/"
+          class="rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800"
+        >
+          Browse software
+        </a>
+        <a
+          href="/lead-gen/"
           class="rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:border-slate-400"
         >
-          See all tools
+          Lead-gen platforms
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white border-t border-slate-100">
+    <div class="mx-auto max-w-6xl px-4 py-16">
+      <div class="mb-8 flex flex-wrap items-baseline justify-between gap-2">
+        <h2 class="text-2xl font-bold tracking-tight text-slate-900">Pick your category</h2>
+        <a href="/methodology/" class="text-sm font-medium text-orange-600 hover:underline">Why these 5 →</a>
+      </div>
+      <p class="mb-8 max-w-3xl text-slate-600">
+        These are the five categories that absorb the majority of a trades shop's vendor spending. We cover all of them — independently — so you're not stuck with five directories run by five different lead-gen companies.
+      </p>
+      <div class="grid gap-4 md:grid-cols-3 lg:grid-cols-5">
+        <a href="/tools/" class="group rounded-lg border-2 border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm">
+          <div class="text-xs font-bold uppercase tracking-wider text-orange-600">Software</div>
+          <div class="mt-2 text-2xl font-bold text-slate-900 group-hover:text-orange-600">{toolCount} tools</div>
+          <p class="mt-2 text-sm text-slate-600 leading-snug">Field service, CMMS, construction PM, CRM — the operational stack.</p>
+        </a>
+        <a href="/lead-gen/" class="group rounded-lg border-2 border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm">
+          <div class="text-xs font-bold uppercase tracking-wider text-orange-600">Lead-gen</div>
+          <div class="mt-2 text-2xl font-bold text-slate-900 group-hover:text-orange-600">{leadGenCount} platforms</div>
+          <p class="mt-2 text-sm text-slate-600 leading-snug">Google LSA, Service Direct, Thumbtack — and honest warnings on Bark, HomeAdvisor, Angi.</p>
+        </a>
+        <a href="/insurance/" class="group rounded-lg border-2 border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm">
+          <div class="text-xs font-bold uppercase tracking-wider text-orange-600">Insurance</div>
+          <div class="mt-2 text-2xl font-bold text-slate-900 group-hover:text-orange-600">{insuranceCount} providers</div>
+          <p class="mt-2 text-sm text-slate-600 leading-snug">NEXT, Hiscox, Simply Business, Acuity, Erie — direct carriers + brokers + mutuals.</p>
+        </a>
+        <a href="/payroll/" class="group rounded-lg border-2 border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm">
+          <div class="text-xs font-bold uppercase tracking-wider text-orange-600">Payroll</div>
+          <div class="mt-2 text-2xl font-bold text-slate-900 group-hover:text-orange-600">{payrollCount} services</div>
+          <p class="mt-2 text-sm text-slate-600 leading-snug">Gusto, OnPay, Patriot, Hourly.io — modern SMB payroll plus honest ADP/Paychex coverage.</p>
+        </a>
+        <a href="/agencies/" class="group rounded-lg border-2 border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm">
+          <div class="text-xs font-bold uppercase tracking-wider text-orange-600">Agencies</div>
+          <div class="mt-2 text-2xl font-bold text-slate-900 group-hover:text-orange-600">{agencyCount} agencies</div>
+          <p class="mt-2 text-sm text-slate-600 leading-snug">Hook Agency, Plumbing & HVAC SEO — with FrownSquare.com warnings on Townsquare.</p>
         </a>
       </div>
     </div>
@@ -236,48 +279,49 @@ function featureToUrl(slug: string): string {
     </div>
   </section>
 
-  <section class="bg-slate-100">
+  <section class="bg-white border-t border-slate-100">
     <div class="mx-auto max-w-6xl px-4 py-16">
-      <h2 class="mb-8 text-2xl font-bold tracking-tight text-slate-900">
-        Built for how contractors actually buy software
+      <h2 class="mb-3 text-2xl font-bold tracking-tight text-slate-900">
+        The editorial position no competitor can copy
       </h2>
-      <div class="grid gap-6 md:grid-cols-3">
-        <div class="rounded-lg bg-white p-6">
-          <h3 class="mb-1 font-semibold text-slate-900">Verified pricing</h3>
-          <p class="text-sm text-slate-600">
-            Every tier verified directly from vendor pricing pages. Dates stamped, refreshed quarterly. No guesswork on what tools actually cost.
+      <p class="mb-8 max-w-3xl text-slate-600">
+        Every other directory in the trades space is either a single-category lead-gen funnel (Capterra, Software Advice for software; BeltStack for lead-gen; ContractorNerd for insurance) or a vendor publishing its own competitor comparisons. We're the only independent multi-category directory — which means we can name the FTC settlements, document the audit-pattern complaints, and recommend the unaffiliated carriers when they're the best fit.
+      </p>
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div class="rounded-lg border border-rose-200 bg-rose-50 p-5">
+          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-rose-700">⚠ We flag the bad actors</div>
+          <p class="text-sm text-rose-900 leading-relaxed">
+            HomeAdvisor's <strong>$7.2M FTC settlement</strong>. Angi's multiple consent decrees. Bark's "<strong>Bark scam</strong>" search query. Pie Insurance's audit pattern. Townsquare's <strong>FrownSquare.com</strong> complaint site. Marketing 360 lock-ins. We name them — competitors structurally can't.
           </p>
         </div>
-        <div class="rounded-lg bg-white p-6">
-          <h3 class="mb-1 font-semibold text-slate-900">Head-to-head comparisons</h3>
-          <p class="text-sm text-slate-600">
-            Any two tools that share a vertical can be compared side-by-side. Pricing, features, integrations, decision matrix — laid out cleanly without sales-pitch language.
+        <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-5">
+          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-emerald-700">✓ We recommend the unaffiliated</div>
+          <p class="text-sm text-emerald-900 leading-relaxed">
+            <strong>Acuity Insurance</strong> has no affiliate program; we recommend it anyway because it's the best fit for many contractors. <strong>Google LSA</strong> too. <strong>Erie Insurance</strong> too. Recommending the right vendor regardless of commission is the entire credibility flywheel.
           </p>
         </div>
-        <div class="rounded-lg bg-white p-6">
-          <h3 class="mb-1 font-semibold text-slate-900">Organized by how you buy</h3>
-          <p class="text-sm text-slate-600">
-            Filtered by team size, vertical, feature need, and integration requirements — not generic SaaS taxonomy. Find the right pick for your shop in minutes.
+        <div class="rounded-lg border border-slate-200 bg-slate-50 p-5">
+          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-700">📋 Verified, transparent, dated</div>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            Every pricing tier verified directly from vendor pages with a date stamp. Every affiliate relationship disclosed in our <a href="/methodology/" class="underline hover:text-slate-900">per-vendor ledger</a>. The <a href="/methodology/">WrenchStack Score</a> formula is published — same rubric for every tool.
           </p>
         </div>
-        <div class="rounded-lg bg-white p-6">
-          <h3 class="mb-1 font-semibold text-slate-900">Independent scoring</h3>
-          <p class="text-sm text-slate-600">
-            Every tool ranked by the <a href="/methodology/" class="text-orange-600 hover:underline">WrenchStack Score</a> — vertical fit, user ratings, pricing transparency, feature depth, integration coverage. Same formula for every tool.
+        <div class="rounded-lg border border-slate-200 bg-white p-5">
+          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-700">🛠 Built for how contractors actually buy</div>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            Filter by trade, team size, integration need — not generic SaaS taxonomy. <a href="/quiz/" class="text-orange-600 hover:underline">Matching quiz</a>, <a href="/roi-calculator/" class="text-orange-600 hover:underline">ROI calculator</a>, <a href="/cost-of-switch/" class="text-orange-600 hover:underline">cost-of-switch math</a> — tools that make the decision real.
           </p>
         </div>
-        <div class="rounded-lg bg-white p-6">
-          <h3 class="mb-1 font-semibold text-slate-900">ROI calculator</h3>
-          <p class="text-sm text-slate-600">
-            Plug in your team size and revenue, get payback estimates for different platforms.{' '}
-            <a href="/roi-calculator/" class="text-orange-600 hover:underline">Run the calculator →</a>
+        <div class="rounded-lg border border-slate-200 bg-white p-5">
+          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-700">🏆 WrenchStack Awards 2026</div>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            Editorial designations across 18 categories. <a href="/awards/2026/" class="text-orange-600 hover:underline">No vendor paid for placement</a> — same methodology as everything else. Updated annually.
           </p>
         </div>
-        <div class="rounded-lg bg-white p-6">
-          <h3 class="mb-1 font-semibold text-slate-900">Buyer guides by situation</h3>
-          <p class="text-sm text-slate-600">
-            Solo HVAC contractor? Growing roofing team? QuickBooks-heavy plumber? Pre-built picks for{' '}
-            <a href="/best-software-for/" class="text-orange-600 hover:underline">specific buyer profiles →</a>
+        <div class="rounded-lg border border-slate-200 bg-white p-5">
+          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-700">📍 State-level coverage</div>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            <a href="/state/" class="text-orange-600 hover:underline">All 50 states</a> × top 5 trades with licensing context. Software, insurance, and lead-gen recommendations framed for your specific market.
           </p>
         </div>
       </div>
@@ -287,11 +331,11 @@ function featureToUrl(slug: string): string {
   <section class="bg-slate-900 text-white">
     <div class="mx-auto max-w-4xl px-4 py-20 text-center">
       <h2 class="text-3xl font-bold tracking-tight md:text-4xl">
-        Not sure which tool fits your shop?
+        Not sure where to start?
       </h2>
       <p class="mt-4 text-lg text-slate-300">
-        Answer 5 quick questions about your team size, vertical, and must-have features.
-        Get 3 ranked picks tailored to your situation in 60 seconds.
+        Answer 5 quick questions about your trade, team size, and what you need.
+        Get ranked picks in 60 seconds — or browse by category below.
       </p>
       <a
         href="/quiz/"
@@ -302,6 +346,13 @@ function featureToUrl(slug: string): string {
       <p class="mt-4 text-xs text-slate-400">
         No email required. No sales calls. Just answers.
       </p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3 text-sm">
+        <a href="/tools/" class="rounded-md bg-white/10 px-4 py-2 font-semibold text-white hover:bg-white/20">Software</a>
+        <a href="/lead-gen/" class="rounded-md bg-white/10 px-4 py-2 font-semibold text-white hover:bg-white/20">Lead-gen</a>
+        <a href="/insurance/" class="rounded-md bg-white/10 px-4 py-2 font-semibold text-white hover:bg-white/20">Insurance</a>
+        <a href="/payroll/" class="rounded-md bg-white/10 px-4 py-2 font-semibold text-white hover:bg-white/20">Payroll</a>
+        <a href="/agencies/" class="rounded-md bg-white/10 px-4 py-2 font-semibold text-white hover:bg-white/20">Agencies</a>
+      </div>
     </div>
   </section>
 </Layout>
