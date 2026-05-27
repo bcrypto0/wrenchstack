@@ -1,0 +1,67 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { awards } from '../../lib/data';
+
+const pageTitle = `WrenchStack Awards: Best Trades Software`;
+const pageDescription = `WrenchStack's editorial awards for the best trades software, updated annually. No vendor pays for placement.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Awards', url: '/awards/' },
+];
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
+        Editorial awards
+      </p>
+      <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+        WrenchStack Awards
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Each year we publish editorial awards for the best trades software in categories where buyers have clear competing options. No vendor pays for placement. No "shortlist" badges sold.
+      </p>
+    </header>
+
+    <section class="rounded-lg border-2 border-amber-300 bg-gradient-to-br from-amber-50 to-white p-6">
+      <div class="mb-3 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6 text-amber-600">
+          <path d="M12 2l2.39 4.84L20 7.5l-3.91 3.81.93 5.39L12 14.27l-5.02 2.43.93-5.39L4 7.5l5.61-.66L12 2z" />
+        </svg>
+        <span class="text-xs font-bold uppercase tracking-wider text-amber-700">Current edition</span>
+      </div>
+      <h2 class="mb-2 text-2xl font-bold text-slate-900">
+        WrenchStack Awards {awards.year}
+      </h2>
+      <p class="mb-4 text-slate-700">
+        Winners in {awards.categories.length} categories. Published {awards.published_date}.
+      </p>
+      <a
+        href={`/awards/${awards.year}/`}
+        class="inline-block rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+      >
+        See the {awards.year} winners →
+      </a>
+    </section>
+
+    <section class="mt-10 rounded-lg border border-slate-200 bg-slate-50 p-6">
+      <h2 class="mb-3 text-lg font-bold text-slate-900">How awards work at WrenchStack</h2>
+      <ul class="space-y-2 text-sm text-slate-700 leading-relaxed">
+        <li>
+          <strong class="text-slate-900">Editorial selection.</strong> Winners are chosen on a published rubric (vertical fit, user ratings, pricing transparency, feature depth). No vendor can purchase a position.
+        </li>
+        <li>
+          <strong class="text-slate-900">Annual refresh.</strong> Every category is re-evaluated each year. Last year's winner doesn't auto-renew.
+        </li>
+        <li>
+          <strong class="text-slate-900">Transparent affiliate disclosure.</strong> If we earn affiliate commission on a winner, it's flagged on the tool's review page and in our public <a href="/methodology/#affiliate-ledger" class="underline hover:text-slate-900">affiliate ledger</a>.
+        </li>
+        <li>
+          <strong class="text-slate-900">Methodology is public.</strong> See the <a href="/methodology/" class="underline hover:text-slate-900">methodology page</a> for the rubric, data sources, and weights.
+        </li>
+      </ul>
+    </section>
+  </article>
+</Layout>

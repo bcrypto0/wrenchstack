@@ -1,0 +1,83 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import statesData from '../../data/states.json';
+
+interface State {
+  slug: string;
+  name: string;
+  abbr: string;
+  region: string;
+  population: number;
+  licensing_note: string;
+}
+
+const states = (statesData as { states: State[] }).states;
+
+// Group by region for nicer browsing
+const REGION_ORDER = ['Northeast', 'Mid-Atlantic', 'Southeast', 'South', 'Midwest', 'Southwest', 'West'];
+const byRegion: Record<string, State[]> = {};
+for (const s of states) {
+  (byRegion[s.region] ||= []).push(s);
+}
+
+const pageTitle = `Trades Software by State — All 50 States`;
+const pageDescription = `Field service and trades software recommendations broken down by state. Covers HVAC, plumbing, electrical, roofing, and general contracting in all 50 US states with state-specific licensing context.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'States', url: '/state/' },
+];
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
+        State-by-state
+      </p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        Trades Software by State
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Field service software recommendations for HVAC, plumbing, electrical, roofing, and general contractors in all 50 US states. All platforms work nationwide — the per-state pages add licensing context, market characteristics, and state-specific framing.
+      </p>
+    </header>
+
+    <div class="space-y-8">
+      {REGION_ORDER.filter((r) => byRegion[r]).map((region) => (
+        <section>
+          <h2 class="mb-3 text-xl font-bold text-slate-900">{region}</h2>
+          <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {byRegion[region]!.map((state) => (
+              <a
+                href={`/state/${state.slug}/`}
+                class="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-4 py-3 no-underline transition hover:border-orange-300 hover:bg-orange-50"
+              >
+                <span class="font-semibold text-slate-900">{state.name}</span>
+                <span class="text-xs text-slate-500">{state.abbr}</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <section class="mt-16 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">How state pages help you decide</h2>
+      <ul class="space-y-2 text-sm text-slate-700 leading-relaxed">
+        <li>
+          <strong class="text-slate-900">Licensing context.</strong> Every state has its own licensing rules for HVAC, plumbing, electrical, roofing, and GC. State pages summarize the relevant rules so you can confirm your software fits.
+        </li>
+        <li>
+          <strong class="text-slate-900">Market sizing.</strong> The shop sizes and tool budgets that make sense in California aren't the same as Wyoming. State pages frame recommendations around your local market reality.
+        </li>
+        <li>
+          <strong class="text-slate-900">Nationwide platforms.</strong> All field service software in our directory works in all 50 states. The per-state pages don't restrict the tool list — they curate and frame it.
+        </li>
+        <li>
+          <strong class="text-slate-900">Looking for software not by location?</strong> Try our <a href="/quiz/" class="underline hover:text-slate-900">matching quiz</a> or browse <a href="/tools/" class="underline hover:text-slate-900">all tools</a>.
+        </li>
+      </ul>
+    </section>
+  </article>
+</Layout>

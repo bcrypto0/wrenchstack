@@ -12,6 +12,7 @@ import {
 } from '../../../lib/data';
 import WrenchScore from '../../../components/WrenchScore.astro';
 import ToolLogo from '../../../components/ToolLogo.astro';
+import FreshnessBadge from '../../../components/FreshnessBadge.astro';
 
 export async function getStaticPaths() {
   return triosData.trios.flatMap(def => {
@@ -235,8 +236,9 @@ const breadcrumbs = [
                 <p class="text-xs italic text-slate-500">{t.tagline}</p>
               </div>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 flex items-center justify-between gap-2">
               <WrenchScore score={score} size="sm" />
+              <FreshnessBadge tool={t} variant="compact" />
             </div>
             <dl class="space-y-1 text-sm">
               <div class="flex justify-between">

@@ -1,0 +1,102 @@
+---
+import type { Tool, UserReview } from '../lib/data';
+import { reviewsForTool, userRatingForTool } from '../lib/data';
+
+interface Props {
+  tool: Tool;
+}
+
+const { tool } = Astro.props;
+const toolReviews: UserReview[] = reviewsForTool(tool.slug);
+const summary = userRatingForTool(tool.slug);
+
+function ratingStars(rating: number): string {
+  const full = Math.floor(rating);
+  const half = rating - full >= 0.5 ? 1 : 0;
+  const empty = 5 - full - half;
+  return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(empty);
+}
+
+function formatDate(iso: string): string {
+  try {
+    const d = new Date(iso + 'T00:00:00Z');
+    return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  } catch {
+    return iso;
+  }
+}
+---
+
+<section id="user-reviews" class="mb-10 scroll-mt-8">
+  <div class="mb-5 flex items-baseline justify-between gap-4">
+    <h2 class="text-2xl font-bold text-slate-900">User reviews</h2>
+    <a href="#submit-review" class="text-sm font-semibold text-orange-600 hover:underline">Write a review →</a>
+  </div>
+
+  {summary ? (
+    <div class="mb-6 rounded-lg bg-slate-50 p-4">
+      <div class="flex flex-wrap items-baseline gap-3">
+        <span class="text-3xl font-bold text-slate-900">{summary.avg.toFixed(1)}</span>
+        <span class="text-slate-500">/ 5</span>
+        <span class="text-lg text-amber-500">{ratingStars(summary.avg)}</span>
+        <span class="text-sm text-slate-600">· {summary.count} verified review{summary.count === 1 ? '' : 's'}</span>
+      </div>
+    </div>
+  ) : (
+    <div class="mb-6 rounded-lg border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
+      <p class="mb-2 font-semibold text-slate-900">No user reviews yet for {tool.name}</p>
+      <p class="mb-4 text-sm text-slate-600">
+        Be the first {tool.name} customer to share your experience. We hand-moderate every review and verify the reviewer when possible — your input shapes what other contractors see.
+      </p>
+      <a
+        href="#submit-review"
+        class="inline-block rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600"
+      >
+        Write the first review →
+      </a>
+    </div>
+  )}
+
+  {toolReviews.length > 0 && (
+    <div class="space-y-4">
+      {toolReviews.map((r) => (
+        <article class="rounded-lg border border-slate-200 bg-white p-5">
+          <header class="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+            <div class="flex items-baseline gap-3">
+              <span class="text-lg font-bold text-amber-500">{ratingStars(r.rating)}</span>
+              <span class="text-sm font-semibold text-slate-900">{r.rating} / 5</span>
+              {r.verified_buyer && (
+                <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-200">
+                  ✓ Verified buyer
+                </span>
+              )}
+            </div>
+            <span class="text-xs text-slate-500">{formatDate(r.submitted_date)}</span>
+          </header>
+
+          <p class="mb-3 text-xs uppercase tracking-wider text-slate-500">
+            {r.reviewer_role} · {r.team_size} users · {r.vertical}
+          </p>
+
+          <div class="mb-3">
+            <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">Pros</p>
+            <p class="mt-1 text-sm text-slate-700 leading-relaxed">{r.pros}</p>
+          </div>
+
+          <div class="mb-3">
+            <p class="text-xs font-bold uppercase tracking-wider text-rose-700">Cons</p>
+            <p class="mt-1 text-sm text-slate-700 leading-relaxed">{r.cons}</p>
+          </div>
+
+          <div class="text-sm text-slate-600">
+            {r.would_recommend ? (
+              <span class="font-semibold text-emerald-700">✓ Would recommend</span>
+            ) : (
+              <span class="font-semibold text-rose-700">✗ Would not recommend</span>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  )}
+</section>

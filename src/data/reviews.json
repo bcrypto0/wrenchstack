@@ -1,0 +1,21 @@
+{
+  "_schema": {
+    "description": "User reviews of tools — populated via manual moderation queue. Submissions arrive at bilal@wrenchstack.com via the form on each tool page; approved reviews are added here.",
+    "review_shape": {
+      "id": "string (UUID or sequential)",
+      "tool_slug": "string (must match tools.json slug)",
+      "rating": "number 1-5",
+      "reviewer_role": "owner | tech | admin | manager | other",
+      "team_size": "1-3 | 4-10 | 11-25 | 26-50 | 50+",
+      "vertical": "string (must match categories.json slug)",
+      "pros": "string (50-500 chars)",
+      "cons": "string (50-500 chars)",
+      "would_recommend": "boolean",
+      "verified_buyer": "boolean (true if email domain matches vendor or paying customer)",
+      "submitted_date": "YYYY-MM-DD",
+      "moderated_date": "YYYY-MM-DD",
+      "moderator_note": "string (optional internal note)"
+    }
+  },
+  "reviews": []
+}

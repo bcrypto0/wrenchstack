@@ -1,5 +1,7 @@
 import toolsData from '../data/tools.json';
 import categoriesData from '../data/categories.json';
+import awardsData from '../data/awards.json';
+import reviewsData from '../data/reviews.json';
 
 export interface ToolPricing {
   starting_at_usd: number | null;
@@ -680,4 +682,84 @@ function linkifyGlossary(html: string): string {
     alreadyLinked.add(slug);
   }
   return result;
+}
+
+// --- WrenchStack Awards 2026 -------------------------------------------------
+// Editorial awards (no payment for placement). See /awards/2026/ and
+// methodology page for the rubric.
+
+export interface AwardCategory {
+  slug: string;
+  label: string;
+  winner_slug: string;
+  why: string;
+  honorable_mentions: string[];
+  buyer_signal: string;
+}
+
+export interface AwardsData {
+  year: number;
+  published_date: string;
+  methodology_summary: string;
+  categories: AwardCategory[];
+}
+
+export const awards: AwardsData = awardsData as AwardsData;
+
+export interface ToolAward {
+  category: AwardCategory;
+  kind: 'winner' | 'honorable_mention';
+}
+
+/** Returns all awards (wins + HMs) a tool received, in award-list order. */
+export function awardsForTool(toolSlug: string): ToolAward[] {
+  const result: ToolAward[] = [];
+  for (const cat of awards.categories) {
+    if (cat.winner_slug === toolSlug) {
+      result.push({ category: cat, kind: 'winner' });
+    } else if (cat.honorable_mentions.includes(toolSlug)) {
+      result.push({ category: cat, kind: 'honorable_mention' });
+    }
+  }
+  return result;
+}
+
+/** Returns only outright wins for a tool (used for prominent badges). */
+export function winsForTool(toolSlug: string): AwardCategory[] {
+  return awards.categories.filter((c) => c.winner_slug === toolSlug);
+}
+
+// --- User reviews ------------------------------------------------------------
+// Submissions arrive at bilal@wrenchstack.com via Web3Forms (or similar)
+// and are added to reviews.json after manual moderation. Display empty state
+// when no approved reviews exist for a tool yet.
+
+export interface UserReview {
+  id: string;
+  tool_slug: string;
+  rating: number;
+  reviewer_role: 'owner' | 'tech' | 'admin' | 'manager' | 'other';
+  team_size: string;
+  vertical: string;
+  pros: string;
+  cons: string;
+  would_recommend: boolean;
+  verified_buyer: boolean;
+  submitted_date: string;
+  moderated_date: string;
+}
+
+export const reviews: UserReview[] = (reviewsData as { reviews: UserReview[] }).reviews;
+
+export function reviewsForTool(toolSlug: string): UserReview[] {
+  return reviews
+    .filter((r) => r.tool_slug === toolSlug)
+    .sort((a, b) => b.submitted_date.localeCompare(a.submitted_date));
+}
+
+export function userRatingForTool(toolSlug: string): { avg: number; count: number } | null {
+  const rs = reviewsForTool(toolSlug);
+  if (rs.length === 0) return null;
+  const avg = rs.reduce((a, r) => a + r.rating, 0) / rs.length;
+  return { avg, count: rs.length };
 }

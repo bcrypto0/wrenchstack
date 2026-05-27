@@ -1,0 +1,74 @@
+---
+import type { AwardCategory } from '../lib/data';
+
+interface Props {
+  category: AwardCategory;
+  kind?: 'winner' | 'honorable_mention';
+  variant?: 'pill' | 'card';
+  // Hide the year suffix to save space
+  hideYear?: boolean;
+}
+
+const { category, kind = 'winner', variant = 'pill', hideYear = false } = Astro.props;
+
+// Strip "2026" suffix from label for compact display
+const labelClean = hideYear ? category.label.replace(/ 20\d\d$/, '') : category.label;
+
+const isWinner = kind === 'winner';
+
+const colors = isWinner
+  ? {
+      bg: 'bg-amber-50',
+      border: 'border-amber-300',
+      text: 'text-amber-900',
+      ringBg: 'bg-amber-500',
+      label: 'WINNER',
+    }
+  : {
+      bg: 'bg-slate-50',
+      border: 'border-slate-300',
+      text: 'text-slate-800',
+      ringBg: 'bg-slate-500',
+      label: 'HONORABLE MENTION',
+    };
+---
+
+{variant === 'pill' ? (
+  <a
+    href={`/awards/2026/#${category.slug}`}
+    title={isWinner ? `Won ${category.label}` : `Honorable mention: ${category.label}`}
+    class={`inline-flex items-center gap-1.5 rounded-full border ${colors.border} ${colors.bg} px-2.5 py-1 text-xs font-semibold ${colors.text} no-underline hover:brightness-95`}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      class={`h-3.5 w-3.5 ${isWinner ? 'text-amber-600' : 'text-slate-500'}`}
+      aria-hidden="true"
+    >
+      <path d="M12 2l2.39 4.84L20 7.5l-3.91 3.81.93 5.39L12 14.27l-5.02 2.43.93-5.39L4 7.5l5.61-.66L12 2z" />
+    </svg>
+    {labelClean}
+  </a>
+) : (
+  <a
+    href={`/awards/2026/#${category.slug}`}
+    class={`block rounded-lg border ${colors.border} ${colors.bg} p-4 no-underline transition hover:brightness-95`}
+  >
+    <div class="mb-2 flex items-center gap-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class={`h-5 w-5 ${isWinner ? 'text-amber-600' : 'text-slate-500'}`}
+        aria-hidden="true"
+      >
+        <path d="M12 2l2.39 4.84L20 7.5l-3.91 3.81.93 5.39L12 14.27l-5.02 2.43.93-5.39L4 7.5l5.61-.66L12 2z" />
+      </svg>
+      <span class={`text-xs font-bold uppercase tracking-wider ${isWinner ? 'text-amber-700' : 'text-slate-500'}`}>
+        {colors.label}
+      </span>
+    </div>
+    <p class={`text-sm font-semibold ${colors.text}`}>{category.label}</p>
+  </a>
+)}

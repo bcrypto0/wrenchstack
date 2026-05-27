@@ -1,0 +1,254 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import statesData from '../../../../data/states.json';
+import {
+  rankToolsForVertical,
+  getVertical,
+  verticalToUrl,
+  formatPrice,
+  aggregateRating,
+  wrenchStackScore,
+} from '../../../../lib/data';
+import ToolLogo from '../../../../components/ToolLogo.astro';
+import WrenchScore from '../../../../components/WrenchScore.astro';
+import FreshnessBadge from '../../../../components/FreshnessBadge.astro';
+
+interface State {
+  slug: string;
+  name: string;
+  abbr: string;
+  region: string;
+  population: number;
+  licensing_note: string;
+}
+
+const states = (statesData as { states: State[] }).states;
+
+// Top verticals where state-level long-tail SEO is most productive.
+// Slugs match the verticals defined in categories.json
+const TARGET_VERTICALS = ['hvac', 'plumbing', 'electrical', 'roofing', 'general_contractor'];
+
+export async function getStaticPaths() {
+  const states = (statesData as { states: State[] }).states;
+  const TARGET_VERTICALS = ['hvac', 'plumbing', 'electrical', 'roofing', 'general_contractor'];
+  const paths = [];
+  for (const state of states) {
+    for (const verticalSlug of TARGET_VERTICALS) {
+      const vertical = getVertical(verticalSlug);
+      if (!vertical) continue;
+      paths.push({
+        params: { state: state.slug, vertical: verticalToUrl(verticalSlug) },
+        props: { state, verticalSlug },
+      });
+    }
+  }
+  return paths;
+}
+
+interface Props {
+  state: State;
+  verticalSlug: string;
+}
+
+const { state, verticalSlug } = Astro.props;
+const vertical = getVertical(verticalSlug)!;
+
+// Top tools for this vertical
+const allTools = rankToolsForVertical(verticalSlug);
+const topTools = allTools.slice(0, 8);
+const featuredTool = topTools[0];
+
+const pageTitle = `Best ${vertical.name} Software for ${state.name} Contractors (2026)`;
+const pageDescription = `Top field service software for ${vertical.name.toLowerCase()} contractors in ${state.name}. Pricing, features, and licensing context for ${state.abbr} ${vertical.name.toLowerCase()} businesses. Updated 2026.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'States', url: '/state/' },
+  { name: state.name, url: `/state/${state.slug}/` },
+  { name: vertical.name, url: `/state/${state.slug}/${verticalToUrl(verticalSlug)}/` },
+];
+
+// State-specific framing helpers
+function stateMarketContext(): string {
+  const pop = state.population;
+  const popInMillions = (pop / 1_000_000).toFixed(1);
+  const region = state.region;
+  if (pop > 15_000_000) {
+    return `${state.name} is one of the largest contractor markets in the US (${popInMillions}M population). The ${vertical.name.toLowerCase()} sector includes thousands of licensed shops across major metros.`;
+  }
+  if (pop > 5_000_000) {
+    return `${state.name} has a substantial contractor market (${popInMillions}M population) with established ${vertical.name.toLowerCase()} businesses in major cities and growing suburban demand.`;
+  }
+  if (pop > 1_500_000) {
+    return `${state.name} (${popInMillions}M population) has a mid-sized contractor market. ${vertical.name.toLowerCase()} shops range from solo operators in rural areas to multi-truck operations in metro hubs.`;
+  }
+  return `${state.name} (population ${(pop / 1_000).toFixed(0)}K) is a smaller contractor market. ${vertical.name.toLowerCase()} shops here tend to be owner-operated and need software priced for small teams.`;
+}
+
+const faqs = [
+  {
+    q: `What's the best ${vertical.name.toLowerCase()} software for ${state.name} contractors?`,
+    a: `Based on user ratings, vertical fit, and pricing transparency, ${featuredTool.name} ranks at the top for ${vertical.name.toLowerCase()} contractors in ${state.name}. ${featuredTool.tagline}. None of the field service platforms in our directory have ${state.name}-specific limitations — they all work nationwide. The "best" choice comes down to your team size, vertical specialization, and budget. See the ranked list above or take our matching quiz.`,
+  },
+  {
+    q: `Do I need ${vertical.name.toLowerCase()} software that's specific to ${state.name}?`,
+    a: `No. Field service software is nationwide — none of the major platforms restrict by state. However, your software should handle ${state.name}'s licensing context cleanly. ${state.licensing_note} Look for tools that let you record license numbers on quotes/invoices, store certificates of insurance, and track per-tech credentials.`,
+  },
+  {
+    q: `How much should a ${vertical.name.toLowerCase()} business in ${state.name} spend on software?`,
+    a: `For a typical 2-10 user ${vertical.name.toLowerCase()} shop, software costs run $50-$250/user/month or $150-$300/month on flat-rate platforms. Most shops underspend on software relative to revenue — a $1M/year ${vertical.name.toLowerCase()} business typically gets meaningful ROI from spending 0.3-0.8% of revenue on field service software (so $3,000-$8,000/year). Use our <a href="/roi-calculator/" class="underline">ROI calculator</a> to model your specific case.`,
+  },
+  {
+    q: `Which platforms are most popular with ${state.name} contractors?`,
+    a: `Nationwide platforms like ${topTools[0].name}, ${topTools[1]?.name ?? 'Jobber'}, and ${topTools[2]?.name ?? 'Housecall Pro'} have broad adoption across all 50 states including ${state.name}. State-specific market share data isn't published by vendors, but Capterra and G2 review distribution suggests these platforms dominate in ${state.name} the same way they do nationally.`,
+  },
+  {
+    q: `Can I switch ${vertical.name.toLowerCase()} software easily in ${state.name}?`,
+    a: `Migration friction is the same regardless of state. Customer records, quotes, and invoices typically export cleanly via CSV. Historical job data, custom workflows, and integration setups often need rebuilding. Plan for 4-12 weeks of parallel operation. Use our <a href="/cost-of-switch/" class="underline">cost-of-switch calculator</a> to model migration cost specifically for your team size.`,
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a.replace(/<[^>]+>/g, '') },
+  })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
+        {state.name} · {vertical.name}
+      </p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        Best {vertical.name} Software for {state.name} Contractors (2026)
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        {stateMarketContext()} Below: the top platforms used by {vertical.name.toLowerCase()} contractors in {state.abbr}, ranked by vertical fit and user ratings, with {state.name}-specific licensing context.
+      </p>
+    </header>
+
+    <section class="mb-10 rounded-lg border border-blue-200 bg-blue-50 p-6">
+      <h2 class="mb-2 text-base font-bold text-blue-900">{state.name} licensing context for {vertical.name.toLowerCase()} contractors</h2>
+      <p class="text-sm text-blue-900 leading-relaxed">{state.licensing_note}</p>
+      <p class="mt-3 text-xs text-blue-700">
+        License rules change. Verify current requirements with your state board before signing contracts that span jurisdictions.
+      </p>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Top {vertical.name.toLowerCase()} platforms for {state.name}</h2>
+      <div class="space-y-4">
+        {topTools.map((tool, i) => {
+          const rating = aggregateRating(tool);
+          return (
+            <div class="rounded-lg border border-slate-200 bg-white p-5">
+              <div class="mb-3 flex items-start gap-4">
+                <div class="hidden shrink-0 items-center justify-center rounded-full bg-orange-100 text-orange-700 font-bold sm:flex" style="width:36px;height:36px">
+                  {i + 1}
+                </div>
+                <ToolLogo tool={tool} size={48} />
+                <div class="min-w-0 flex-1">
+                  <h3 class="text-lg font-bold text-slate-900">
+                    <a href={`/tools/${tool.slug}/`} class="hover:text-orange-600">{tool.name}</a>
+                  </h3>
+                  <p class="text-sm italic text-slate-500">{tool.tagline}</p>
+                </div>
+                <div class="hidden shrink-0 sm:block">
+                  <WrenchScore score={wrenchStackScore(tool, verticalSlug)} size="sm" />
+                </div>
+              </div>
+
+              <p class="mb-3 text-sm text-slate-700 leading-relaxed">
+                <strong class="text-slate-900">Best for:</strong> {tool.best_for}
+              </p>
+
+              <dl class="grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
+                <div>
+                  <dt class="text-slate-500">Starting price</dt>
+                  <dd class="font-semibold text-slate-900">{formatPrice(tool)}</dd>
+                </div>
+                <div>
+                  <dt class="text-slate-500">User rating</dt>
+                  <dd class="font-semibold text-slate-900">{rating !== null ? `${rating.toFixed(1)} / 5` : '—'}</dd>
+                </div>
+                <div>
+                  <dt class="text-slate-500">Best team size</dt>
+                  <dd class="font-semibold text-slate-900">{tool.best_team_size ?? '—'}</dd>
+                </div>
+                <div>
+                  <dt class="text-slate-500">Pricing verified</dt>
+                  <dd class="font-semibold text-slate-900">
+                    <FreshnessBadge tool={tool} variant="compact" />
+                  </dd>
+                </div>
+              </dl>
+
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a
+                  href={`/tools/${tool.slug}/`}
+                  class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+                >
+                  Read review →
+                </a>
+                <a
+                  href={tool.affiliate_url.startsWith('http') ? tool.affiliate_url : tool.vendor_url}
+                  rel="sponsored nofollow noopener"
+                  target="_blank"
+                  class="rounded-md border border-orange-300 bg-white px-4 py-2 text-sm font-semibold text-orange-700 hover:bg-orange-50"
+                >
+                  Visit {tool.name}
+                </a>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-xl font-bold text-slate-900">How to choose for your {state.name} {vertical.name.toLowerCase()} business</h2>
+      <ul class="space-y-2 text-sm text-slate-700 leading-relaxed">
+        <li><strong class="text-slate-900">Solo operators (1-3 users):</strong> Prioritize free or low-cost tiers, mobile-first UX, and quote-to-invoice speed over advanced dispatching. Joist, Jobber Core, and FieldPulse are common picks.</li>
+        <li><strong class="text-slate-900">Small shops (4-10 users):</strong> The mid-tier sweet spot. Look for QuickBooks integration, recurring service management, and a mobile app techs adopt without resistance. Jobber, Housecall Pro, Workiz dominate here.</li>
+        <li><strong class="text-slate-900">Established shops (10-50 users):</strong> Multi-location, dispatching automation, custom reporting matter more. Service Fusion (flat-rate scales), FieldEdge, and ServiceTitan are typical picks.</li>
+        <li><strong class="text-slate-900">Enterprise ({state.name}-wide or multi-state):</strong> ServiceTitan, BuildOps, FieldEdge enterprise. Plan 3-6 month implementation and dedicated admin time.</li>
+        <li><strong class="text-slate-900">Licensing:</strong> Whatever you pick, confirm it can store license numbers, COIs, and per-tech credentials. {state.name}'s licensing requirements ({state.licensing_note.split('.')[0]}) means you'll be referencing these documents often.</li>
+      </ul>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-xl font-bold text-slate-900">Frequently asked</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed" set:html={f.a} />
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">More for {state.name} contractors</h2>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href={`/state/${state.slug}/`} class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">
+          All trades in {state.abbr} →
+        </a>
+        <a href={`/${verticalToUrl(verticalSlug)}/`} class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">
+          {vertical.name} buyer guide
+        </a>
+        <a href="/quiz/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">
+          Take the matching quiz
+        </a>
+      </div>
+    </section>
+  </article>
+</Layout>

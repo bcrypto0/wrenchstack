@@ -23,13 +23,7 @@ const inboxes = [
     address: 'press@wrenchstack.com',
     role: 'Press, media, syndication, interviews',
     detail: 'Journalists, podcasters, industry publications interested in commenting on trades software market trends, methodology, or data points published on WrenchStack.',
-    sla: 'Reply within 3 business days. Bilal handles all press personally.',
-  },
-  {
-    address: 'bilal@wrenchstack.com',
-    role: 'Direct to founder',
-    detail: 'Best for substantive editorial questions, methodology disputes, ranking complaints that have not been resolved via hello@. I read every message personally.',
-    sla: 'Best-effort reply within 5 business days. Substantive replies on complex disputes take longer.',
+    sla: 'Reply within 3 business days.',
   },
 ];
 
@@ -55,7 +49,7 @@ const policies = [
 
 <Layout
   title="Contact WrenchStack — inboxes, response times, editorial policies"
-  description="Four inboxes for different types of inquiries — corrections, partnerships, press, and direct-to-founder. Published response times. Editorial policies on corrections, ranking disputes, removal requests, and off-record briefings."
+  description="Three inboxes for different types of inquiries — corrections, partnerships, and press. Published response times. Editorial policies on corrections, ranking disputes, removal requests, and off-record briefings."
   breadcrumbs={breadcrumbs}
 >
   <article class="mx-auto max-w-3xl px-4 py-12">
@@ -65,7 +59,7 @@ const policies = [
         Get in touch
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        Four inboxes for different types of inquiries, each with a published response time. Pick the right one and we'll route correctly.
+        Three inboxes for different types of inquiries, each with a published response time. Pick the right one and we'll route correctly.
       </p>
     </header>
 
@@ -99,16 +93,6 @@ const policies = [
           <p class="text-sm text-slate-700 leading-relaxed">{p.text}</p>
         </div>
       ))}
-
-      <h2>Mailing address</h2>
-      <p>
-        We are a remote-first operation. We do not maintain a physical mailing address and ask that you use email for everything. For legal correspondence requiring a postal address, email <a href="mailto:bilal@wrenchstack.com">bilal@wrenchstack.com</a> and we will provide one.
-      </p>
-
-      <h2>Social media</h2>
-      <p>
-        We do not currently maintain official social media accounts. We may add LinkedIn and X presence in 2026; until then, email is the only verified channel for reaching WrenchStack. Anyone claiming to represent WrenchStack on social media without a confirmation email trail from one of the four addresses above is not us.
-      </p>
     </section>
 
     <section class="mt-12 rounded-lg bg-slate-50 p-6 text-sm text-slate-600">
