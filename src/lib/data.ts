@@ -3,6 +3,7 @@ import categoriesData from '../data/categories.json';
 import awardsData from '../data/awards.json';
 import reviewsData from '../data/reviews.json';
 import leadGenData from '../data/lead_gen.json';
+import insuranceData from '../data/insurance.json';
 
 export interface ToolPricing {
   starting_at_usd: number | null;
@@ -852,3 +853,77 @@ export function leadGenTier(p: LeadGenPlatform): 'S' | 'A' | 'F' {
   }
   return 'A';
 }
+
+// --- Insurance providers (Phase 2 multi-category expansion) ------------------
+
+export type ProviderType = 'direct-carrier' | 'broker' | 'mga' | 'mutual-carrier';
+export type DistributionModel = 'direct-digital' | 'agent-only' | 'hybrid';
+
+export interface InsuranceRatings {
+  trustpilot: number | null;
+  bbb: string | null;
+  am_best: string | null;
+  reddit_sentiment: string;
+}
+
+export interface InsuranceProvider {
+  slug: string;
+  name: string;
+  vendor_url: string;
+  affiliate_url: string;
+  tagline: string;
+  provider_type: ProviderType;
+  distribution_model: DistributionModel;
+  insurance_lines: string[];
+  quote_speed: string;
+  typical_premium_range: string;
+  verticals: string[];
+  geographic_coverage: string;
+  states_note: string;
+  founded: number;
+  headquartered: string;
+  long_description: string;
+  how_it_works: string;
+  pros_detail: ProConItem[];
+  cons_detail: ProConItem[];
+  best_for: string;
+  best_team_size: string;
+  weaknesses: string;
+  reputation_flag: string | null;
+  ratings: InsuranceRatings;
+  key_features: string[];
+  affiliate_program: string;
+  affiliate_payout_note: string;
+  verified_date: string;
+  provider_faqs: LeadGenFaq[];
+}
+
+export const insuranceProviders: InsuranceProvider[] = (insuranceData as { providers: InsuranceProvider[] }).providers;
+
+export function getInsuranceProvider(slug: string): InsuranceProvider | undefined {
+  return insuranceProviders.find((p) => p.slug === slug);
+}
+
+export function insuranceProvidersForVertical(verticalSlug: string): InsuranceProvider[] {
+  return insuranceProviders.filter((p) => p.verticals.includes(verticalSlug));
+}
+
+/** Tier classification: S (strong reputation + good affiliate or strong recommendation), A (workable),
+ *  F (reputation_flag warning required). */
+export function insuranceTier(p: InsuranceProvider): 'S' | 'A' | 'F' {
+  if (p.reputation_flag) return 'F';
+  const tp = p.ratings.trustpilot;
+  // Strong sentiment + direct-digital with affiliate → Tier S
+  if (
+    p.affiliate_program !== 'none' && p.affiliate_program !== 'unknown' &&
+    p.distribution_model === 'direct-digital' &&
+    tp !== null && tp >= 4.0
+  ) return 'S';
+  // Agent-only mutual carriers with strongly positive sentiment → Tier S
+  if (
+    p.provider_type === 'mutual-carrier' &&
+    p.ratings.reddit_sentiment.toLowerCase().includes('strongly positive')
+  ) return 'S';
+  return 'A';
+}
+

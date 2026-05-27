@@ -141,7 +141,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
         <nav class="order-2 flex gap-4 text-sm font-medium text-slate-600 md:order-3 md:gap-6">
           <a href="/tools/" class="hover:text-slate-900">Tools</a>
           <a href="/lead-gen/" class="hover:text-slate-900">Lead-gen</a>
-          <a href="/compare/" class="hover:text-slate-900">Compare</a>
+          <a href="/insurance/" class="hover:text-slate-900">Insurance</a>
           <a href="/quiz/" class="font-semibold text-orange-600 hover:text-orange-700">Quiz</a>
         </nav>
       </div>
@@ -177,6 +177,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
             <ul class="space-y-1">
               <li><a href="/tools/" class="hover:text-slate-900">All tools</a></li>
               <li><a href="/lead-gen/" class="hover:text-slate-900">Lead-gen platforms</a></li>
+              <li><a href="/insurance/" class="hover:text-slate-900">Insurance providers</a></li>
               <li><a href="/compare/" class="hover:text-slate-900">Compare two tools</a></li>
               <li><a href="/features/" class="hover:text-slate-900">By feature</a></li>
               <li><a href="/best-software-for/" class="hover:text-slate-900">Buyer guides</a></li>
@@ -240,6 +241,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
           page: { label: 'Page', color: 'bg-slate-100 text-slate-700' },
           comparison: { label: 'Compare', color: 'bg-amber-100 text-amber-800' },
           leadgen: { label: 'Lead-gen', color: 'bg-pink-100 text-pink-800' },
+          insurance: { label: 'Insurance', color: 'bg-cyan-100 text-cyan-800' },
         };
 
         async function ensureIndex() {

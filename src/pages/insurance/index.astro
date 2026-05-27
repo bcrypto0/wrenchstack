@@ -1,0 +1,161 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { insuranceProviders, insuranceTier, type InsuranceProvider } from '../../lib/data';
+
+const pageTitle = `Best Business Insurance for Trades Contractors (2026)`;
+const pageDescription = `Independent reviews of ${insuranceProviders.length} business-insurance providers for HVAC, plumbing, electrical, roofing, and other trades — NEXT, Hiscox, Simply Business, CoverWallet, Acuity, Erie, and more. Honest reputation flags + real affiliate disclosure.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Insurance', url: '/insurance/' },
+];
+
+const tierOrder: Array<'S' | 'A' | 'F'> = ['S', 'A', 'F'];
+const byTier: Record<'S' | 'A' | 'F', InsuranceProvider[]> = { S: [], A: [], F: [] };
+for (const p of insuranceProviders) {
+  byTier[insuranceTier(p)].push(p);
+}
+
+const tierMeta = {
+  S: {
+    label: 'Tier S — strongest recommendations',
+    description: 'Carriers and brokers with the best contractor experience: competitive pricing, strong claims, and either documented affiliate programs (NEXT, Hiscox via CJ, Simply Business, CoverWallet) or such strong reputation we recommend them anyway (Acuity, Erie).',
+    badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300',
+    cardBorder: 'border-emerald-300',
+  },
+  A: {
+    label: 'Tier A — workable depending on profile',
+    description: 'Solid carriers that work for specific contractor profiles (mid-market, multi-line, professional liability, large-coverage limits). Not the standout for typical SMB trades but credible options.',
+    badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300',
+    cardBorder: 'border-blue-300',
+  },
+  F: {
+    label: 'Tier F — listed with reputation warnings',
+    description: 'Providers with documented reputation concerns (Pie audit pattern, Hiscox 2025 renewal trend). Listed for completeness with explicit warnings — proceed with the documented caveats in mind.',
+    badgeColor: 'bg-rose-100 text-rose-900 ring-rose-300',
+    cardBorder: 'border-rose-300',
+  },
+};
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: `Insurance Providers for Trades Contractors`,
+  numberOfItems: insuranceProviders.length,
+  itemListElement: insuranceProviders.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'Service',
+      name: p.name,
+      description: p.tagline,
+      url: `https://wrenchstack.com/insurance/${p.slug}/`,
+    },
+  })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">Insurance</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        Best Business Insurance for Trades Contractors (2026)
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Independent reviews of {insuranceProviders.length} business-insurance providers used by HVAC, plumbing, electrical, roofing, and other residential trades. We flag documented reputation issues honestly (Pie audit pattern, Hiscox 2025 trend) and recommend cult-favorite mutuals (Acuity, Erie) even when there's no affiliate commission.
+      </p>
+    </header>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">The headline filter: agent vs direct</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        The biggest structural choice in contractor insurance: <strong>direct-digital carriers</strong> (NEXT, Hiscox, Simply Business, CoverWallet — quote-and-bind online in 10-15 min, no agent calls) vs <strong>agent-only mutuals</strong> (Acuity, Erie — work with a local independent agent, takes 1-3 days, often cheaper for clean-claim accounts). Most SMB contractors are best served by trying both — get a digital quote from NEXT to establish a baseline, then have a local agent shop Acuity / Erie / regional carriers to see if they can beat it.
+      </p>
+    </section>
+
+    {tierOrder.map((tier) => {
+      const providers = byTier[tier];
+      if (providers.length === 0) return null;
+      const meta = tierMeta[tier];
+      return (
+        <section class="mb-12">
+          <div class="mb-5">
+            <span class={`inline-block rounded-full px-3 py-1 text-xs font-bold ring-1 ${meta.badgeColor}`}>
+              {meta.label}
+            </span>
+            <p class="mt-2 text-sm text-slate-600 leading-relaxed">{meta.description}</p>
+          </div>
+
+          <div class="space-y-4">
+            {providers.map((p) => (
+              <article class={`rounded-lg border-2 ${meta.cardBorder} bg-white p-5`}>
+                <div class="mb-3 flex items-start justify-between gap-3">
+                  <div class="min-w-0 flex-1">
+                    <h3 class="text-xl font-bold text-slate-900">
+                      <a href={`/insurance/${p.slug}/`} class="hover:text-orange-600">{p.name}</a>
+                    </h3>
+                    <p class="text-sm italic text-slate-500">{p.tagline}</p>
+                  </div>
+                  <div class="shrink-0 text-right text-xs">
+                    <p class="font-bold text-slate-900 uppercase tracking-wider">{p.provider_type.replace(/-/g, ' ')}</p>
+                    <p class="text-slate-500">{p.distribution_model.replace(/-/g, ' ')}</p>
+                  </div>
+                </div>
+
+                {p.reputation_flag && (
+                  <div class="mb-3 rounded-md border-l-4 border-rose-500 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+                    <p class="font-bold uppercase tracking-wider text-xs text-rose-700 mb-1">⚠ Reputation warning</p>
+                    <p class="leading-relaxed">{p.reputation_flag.split('.')[0]}.</p>
+                  </div>
+                )}
+
+                <dl class="mb-3 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Quote speed</dt>
+                    <dd class="font-semibold text-slate-900">{p.quote_speed}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Lines</dt>
+                    <dd class="font-semibold text-slate-900">{p.insurance_lines.length}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Trustpilot</dt>
+                    <dd class="font-semibold text-slate-900">{p.ratings.trustpilot !== null ? `${p.ratings.trustpilot.toFixed(1)} / 5` : '—'}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">A.M. Best</dt>
+                    <dd class="font-semibold text-slate-900">{p.ratings.am_best ?? '—'}</dd>
+                  </div>
+                </dl>
+
+                <p class="mb-3 text-sm text-slate-700 leading-relaxed">
+                  <strong class="text-slate-900">Best for:</strong> {p.best_for}
+                </p>
+
+                <div class="flex flex-wrap gap-2">
+                  <a href={`/insurance/${p.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">Read full review →</a>
+                  <a href={p.affiliate_url.startsWith('http') ? p.affiliate_url : p.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md border border-orange-300 bg-white px-4 py-2 text-sm font-semibold text-orange-700 hover:bg-orange-50">Visit {p.name}</a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Where to start</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">
+        For most SMB residential trades, the highest-confidence insurance stack is: <strong>NEXT</strong> (digital baseline quote, 10-minute bind, $25/quote affiliate) + a quick <strong>Simply Business or CoverWallet</strong> comparison to confirm pricing + an <strong>Acuity or Erie</strong> agent quote (if in footprint) to see if a mutual carrier can beat the digital options. Avoid Pie for workers comp; treat Hiscox renewals with caution after the 2025 trend.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/insurance/next-insurance/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Start with NEXT →</a>
+        <a href="/lead-gen/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Lead-gen platforms</a>
+        <a href="/tools/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Software directory</a>
+      </div>
+    </section>
+  </article>
+</Layout>

@@ -1,0 +1,695 @@
+{
+  "_schema": {
+    "description": "Insurance providers for trades contractors — carriers, brokers, and MGAs. Different shape from software tools or lead-gen platforms. Schema documents the data shape.",
+    "provider_shape": {
+      "slug": "string (URL-safe, hyphenated)",
+      "name": "string (display name)",
+      "vendor_url": "string (homepage URL)",
+      "affiliate_url": "string ('TBD' if not yet active)",
+      "tagline": "string (one sentence)",
+      "provider_type": "direct-carrier | broker | mga | mutual-carrier",
+      "distribution_model": "direct-digital | agent-only | hybrid",
+      "insurance_lines": "string[] (general_liability | workers_comp | commercial_auto | tools_equipment | professional_liability | umbrella | bop | inland_marine)",
+      "quote_speed": "string (e.g. '5-10 minutes online')",
+      "typical_premium_range": "string (e.g. '$40-$200/mo for GL on 1-5 person shop')",
+      "verticals": "string[]",
+      "geographic_coverage": "us-nationwide | us-regional | states-excluded",
+      "states_note": "string (state-specific availability notes)",
+      "founded": "number (year)",
+      "headquartered": "string",
+      "long_description": "string (800-1500 words)",
+      "how_it_works": "string (200-400 words)",
+      "pros_detail": "ProConItem[] (5-7)",
+      "cons_detail": "ProConItem[] (5-7)",
+      "best_for": "string",
+      "best_team_size": "string",
+      "weaknesses": "string",
+      "reputation_flag": "null | string (warning for documented issues — Pie audit complaints, Hiscox 2025 trend, etc.)",
+      "ratings": "{ trustpilot, bbb, am_best, reddit_sentiment } (any may be null)",
+      "key_features": "string[]",
+      "affiliate_program": "impact | cj | shareasale | direct | none | unknown",
+      "affiliate_payout_note": "string",
+      "verified_date": "YYYY-MM-DD",
+      "provider_faqs": "{ q, a }[]"
+    }
+  },
+  "providers": [
+    {
+      "slug": "next-insurance",
+      "name": "NEXT Insurance (Ergo NEXT)",
+      "vendor_url": "https://www.nextinsurance.com",
+      "affiliate_url": "TBD",
+      "tagline": "Direct digital insurance built for small contractors — online quote, bind, and certificate-of-insurance in 10 minutes",
+      "provider_type": "direct-carrier",
+      "distribution_model": "direct-digital",
+      "insurance_lines": ["general_liability", "workers_comp", "commercial_auto", "tools_equipment", "professional_liability", "umbrella", "bop"],
+      "quote_speed": "5-10 minutes online",
+      "typical_premium_range": "$40-$200/mo for GL on a 1-5 person residential trades shop; $80-$400/mo with WC added",
+      "verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control", "pool_service", "locksmith", "garage_door", "appliance_repair", "handyman"],
+      "geographic_coverage": "us-nationwide",
+      "states_note": "Available in all 50 states; workers comp coverage varies by state",
+      "founded": 2015,
+      "headquartered": "Palo Alto, CA (acquired by Munich Re's Ergo division 2024)",
+      "long_description": "NEXT Insurance (now Ergo NEXT after Munich Re's acquisition in 2024) is the contractor-favorite digital insurance carrier — the one most often described in forum threads as 'the carrier that actually understands small-shop contractors.' What sets NEXT apart structurally: it's a direct carrier (not a broker reselling other carriers' policies), the entire quote-bind-issue process runs online in 5-10 minutes with no phone calls required, and the policy types are specifically tuned to contractor needs (GL with tool coverage, workers comp by trade class, commercial auto for service vehicles, certificate-of-insurance generation in real-time).\n\nThe market position: NEXT serves the SMB contractor segment that traditional agents have historically under-served. A 2-person plumbing shop needing $1M GL + $50K tools + workers comp for one employee would typically need to call 3-5 agents to get comparable quotes from carriers like The Hartford or Travelers, then wait 1-3 days for binding. With NEXT, the same shop gets a comparable quote in 8 minutes and a bound policy with downloadable COI by end of day. The time savings + transparency are the moat.\n\nPremium pricing tends to be competitive but not always cheapest. NEXT's underwriting algorithm is built for digital-first issuance, which means it doesn't always match the rate a traditional agent could shop down to from a less-known carrier. For the bottom-quartile-cost contractor with a clean claims history, an agent-shopped policy from Acuity or Erie might come in 10-20% lower than NEXT. For the more typical contractor (some claims, average risk profile, busy schedule) NEXT's combination of competitive pricing + 10-minute issuance + instant COI generation is the operational time-saver that justifies the difference.\n\nThe Reddit and small-business-forum sentiment is consistently positive. Contractors describe the claims experience as 'better than expected for a tech-first insurer' — claims open quickly, adjusters respond, payouts process in days not months. The 2024 Munich Re acquisition (Ergo is Munich Re's primary insurance brand globally) added significant financial stability and reinsurance backing — NEXT now has Munich Re's AAA-rated reinsurance capacity behind it, which materially reduces the 'will this carrier still exist in 5 years?' concern that surrounded NEXT in its earlier years.\n\nThe affiliate program runs through Impact with documented terms — approximately $25 per qualified quote with 30-day cookie. For trades contractors getting GL quotes (the most common entry product), the math is: $25 affiliate payout × ~10% quote-to-bind rate × $1,500 average first-year premium = customer-acquisition economics that work for both NEXT and editorial publishers. The Impact program is the cleanest insurance affiliate setup in this directory and a primary reason NEXT is featured prominently.",
+      "how_it_works": "Visit NEXT's website, select your trade and state, answer 8-15 questions about your business (annual revenue, number of employees, vehicles, coverage limits needed), and receive a quote in 5-10 minutes. Quotes are bindable online — pay by credit card or ACH, and your policy is active with downloadable COI within minutes. Need to add a workers comp policy or a vehicle later? Edit your account, get the additional quote, bind it. Claims process is digital-first — file via the NEXT app or website with photo uploads; phone support available for complex claims. Annual renewal is automatic unless cancelled.",
+      "pros_detail": [
+        { "title": "5-10 minute online quote-bind-issue", "explanation": "The fastest path from 'I need insurance' to 'I have a bound policy with downloadable COI' in the entire contractor insurance market. For shops that need to start a project with proof of insurance tomorrow, the speed is operationally decisive." },
+        { "title": "Built specifically for contractors, not generic SMB", "explanation": "Underwriting is contractor-trade-aware (HVAC vs plumbing vs roofing have different risk profiles and pricing). Coverage options match contractor needs (tool theft, mobile equipment, additional insured for GCs). Generic small-business insurers have broader audiences and shallower contractor-specific options." },
+        { "title": "Real affiliate program through Impact", "explanation": "Documented $25/quote payout via Impact network with 30-day cookie. Editorial sites like WrenchStack can recommend NEXT with aligned commercial incentives, which is the rare combination of strong product + working affiliate program." },
+        { "title": "Munich Re ownership = financial stability", "explanation": "The 2024 acquisition by Ergo (Munich Re) added AAA-rated reinsurance backing. The 'will this carrier still exist?' concern that surrounded NEXT in its venture-backed years is now resolved — Munich Re is one of the most stable reinsurers in the world." },
+        { "title": "Instant certificate-of-insurance generation", "explanation": "Need a COI for a new customer or GC? Download it instantly from the dashboard. Need additional-insured-status added for a specific job? Edit the policy online. The COI workflow is one of the daily operational pains contractors deal with; NEXT eliminates the friction." },
+        { "title": "Workers comp by trade class with state-specific compliance", "explanation": "Workers comp is the most state-fragmented insurance line — every state has its own rate filings, monopoly states (Ohio, Washington, Wyoming, North Dakota) require state-fund coverage. NEXT handles the state-specific complexity behind a unified contractor-facing interface." },
+        { "title": "Solid claims experience for tech-first carrier", "explanation": "Reddit sentiment on NEXT claims is consistently positive — claims open within hours, adjusters respond, payouts process in days for routine claims. The horror-stories that surround some tech-first insurance carriers don't appear in NEXT's forum reputation." }
+      ],
+      "cons_detail": [
+        { "title": "Not always the cheapest premium", "explanation": "For bottom-quartile-cost contractors with clean claims histories, an agent-shopped policy from Acuity, Erie, or specialty carriers might come in 10-20% lower than NEXT. The price-versus-time tradeoff: NEXT saves you the time of shopping but you may pay slightly more than the lowest-possible rate." },
+        { "title": "Digital-first means limited human-agent relationship", "explanation": "If you want a long-term relationship with a specific agent who knows your business and shops carriers for you each renewal, NEXT isn't that model. The platform is built for digital self-service. Some contractors prefer the agent relationship even with the time cost." },
+        { "title": "Coverage gaps in some specialty work", "explanation": "Standard contractor lines are well-covered. More specialty needs (large commercial projects with multi-million-dollar GL limits, specialty professional liability for design-build work, large-fleet commercial auto) may need agent-mediated coverage from carriers with deeper underwriting bandwidth." },
+        { "title": "Workers comp availability varies by state", "explanation": "Monopoly states (Ohio, Washington, Wyoming, North Dakota) require state-fund WC and NEXT can't issue policies there. In some other states, NEXT's WC offering is more limited than major carriers. Check WC availability in your state before betting on NEXT for the full coverage stack." },
+        { "title": "Claims-handling depth on complex claims", "explanation": "Routine claims are well-handled. Complex claims (multi-party liability disputes, large-loss claims) benefit from carriers with longer institutional history and deeper adjuster networks. NEXT is improving here but the depth still trails legacy carriers like Travelers and Liberty Mutual." }
+      ],
+      "best_for": "Solo and small-shop residential trades contractors (1-15 employees) who want fast online quote-bind-issue, instant COI generation, and trade-aware coverage without the friction of agent calls and 1-3 day binding wait times",
+      "best_team_size": "1-15 users (works for larger shops too but agent-shopping may price better at scale)",
+      "weaknesses": "Not always the cheapest premium, limited agent-relationship model, coverage gaps in specialty/large-project work, monopoly-state WC limitations — but for typical SMB contractors the speed + transparency justify the tradeoffs",
+      "reputation_flag": null,
+      "ratings": {
+        "trustpilot": 4.6,
+        "bbb": "A+ (BBB-accredited)",
+        "am_best": "A (Excellent) via Munich Re Ergo backing",
+        "reddit_sentiment": "consistently positive — frequently cited as 'best for small contractors' in r/HVAC, r/Plumbing, r/smallbusiness"
+      },
+      "key_features": ["direct_digital_carrier", "10_minute_quote_bind", "instant_coi", "trade_specific_underwriting", "munich_re_backing", "mobile_app_claims"],
+      "affiliate_program": "impact",
+      "affiliate_payout_note": "~$25 per qualified quote via Impact, 30-day cookie. Best near-term affiliate economics in the insurance category.",
+      "verified_date": "2026-05-28",
+      "provider_faqs": [
+        {
+          "q": "How fast can I actually get insured with NEXT?",
+          "a": "5-10 minutes from start of quote to bound policy with downloadable COI, for standard GL on a small residential trades shop. Workers comp adds a few more minutes. Commercial auto can take 15-20 minutes depending on vehicle and driver details."
+        },
+        {
+          "q": "Is NEXT cheaper than going through an agent?",
+          "a": "Sometimes. NEXT's pricing is competitive but not always lowest. An agent shopping multiple carriers (Acuity, Erie, regional mutuals) might find a 10-20% cheaper rate for contractors with clean claims histories. The tradeoff is time — agent-shopping takes days; NEXT takes minutes. For most SMB contractors the time savings justify the slight premium difference."
+        },
+        {
+          "q": "Does NEXT cover workers comp in my state?",
+          "a": "NEXT covers WC in most states but not monopoly states (Ohio, Washington, Wyoming, North Dakota — these require state-fund coverage). In some other states the WC product is more limited than what major carriers offer. Check state availability during the quote process."
+        },
+        {
+          "q": "What happens when I have a claim?",
+          "a": "File via the NEXT app or website with photo uploads. Routine claims (property damage, minor injury) open within hours; adjuster contact within 1-2 business days; payout processing in days for clear-fault claims. Complex claims (multi-party liability, large-loss) take longer — typical for any carrier, but NEXT's depth on complex claims is improving rather than industry-leading."
+        },
+        {
+          "q": "What did the Munich Re acquisition change?",
+          "a": "Operationally, very little for existing customers — the NEXT product and platform continue as before. Financially, NEXT now has Munich Re's AAA-rated reinsurance backing, which materially reduces the 'will this carrier still exist in 5 years?' concern that surrounded venture-backed insurance startups. Ergo (Munich Re's primary insurance brand) is one of the most stable insurers globally."
+        }
+      ]
+    },
+    {
+      "slug": "hiscox",
+      "name": "Hiscox",
+      "vendor_url": "https://www.hiscox.com",
+      "affiliate_url": "TBD",
+      "tagline": "Established direct carrier for SMB contractors with strong digital quoting — though 2025 reputation has deteriorated",
+      "provider_type": "direct-carrier",
+      "distribution_model": "hybrid",
+      "insurance_lines": ["general_liability", "professional_liability", "bop", "cyber", "umbrella"],
+      "quote_speed": "Online quote in 10-15 minutes; phone-agent option for complex cases",
+      "typical_premium_range": "$40-$180/mo for GL on a 1-5 person trades shop",
+      "verticals": ["general_contractor", "electrical", "plumbing", "handyman", "landscaping", "cleaning", "pest_control"],
+      "geographic_coverage": "us-nationwide",
+      "states_note": "Available in all 50 states for GL; some lines have state restrictions",
+      "founded": 1901,
+      "headquartered": "London, UK (US operations in Atlanta, GA)",
+      "long_description": "Hiscox is one of the longer-established direct carriers serving the SMB contractor market — 120+ years of underwriting history, strong financial ratings (A.M. Best A-rated), and a digital quoting experience that pre-dates the NEXT generation of tech-first insurers. The Hiscox brand has historically been associated with reliable claims handling and competitive pricing for small contractors, which is why it's appeared in 'best SMB contractor insurance' editorial coverage for the better part of two decades.\n\nThe 2025 reputation caveat is real and worth surfacing honestly. Over the past 18 months, forum threads on r/smallbusiness and contractor-specific subs have shifted from previously-positive to mixed-to-negative on Hiscox, with recurring complaints about: (1) renewal-rate increases of 20-40% on policies with no claims history, (2) policy non-renewal notices on small contractors that hadn't previously triggered any underwriting flags, (3) slower-than-historical claims response times. The pattern isn't catastrophic — it's not the FTC-level concerns that apply to HomeAdvisor — but it represents a meaningful shift from 'Hiscox is a solid recommendation' to 'Hiscox is fine but watch the renewal pricing.' We're flagging the trend rather than hiding it.\n\nDespite the 2025 caveat, Hiscox remains a credible direct-carrier option, particularly for: (a) contractors who already have an existing Hiscox policy and clean experience, (b) contractors needing professional liability or specialty lines where Hiscox has deeper expertise than NEXT, (c) contractors in markets where NEXT's pricing comes in particularly high and an alternative is needed. The affiliate program runs through Commission Junction (CJ) with documented ~$25/quote payouts, similar to NEXT's Impact program. The product still works for contractor profiles that match Hiscox's underwriting target; the renewal-pricing pattern is the watchpoint.",
+      "how_it_works": "Visit Hiscox's website, select industry (contractor classifications available), answer business questions, and receive a quote in 10-15 minutes. For straightforward GL on common trades, the quote-to-bind path is fully online. For more complex needs (high coverage limits, specialty professional liability, unusual trade combinations), the platform routes you to a phone agent. Policies bind online for simple cases; complex cases require agent-mediated binding. COI generation is digital after binding. Annual renewal happens automatically; this is where the recent rate-increase complaints concentrate.",
+      "pros_detail": [
+        { "title": "120+ year underwriting history with A.M. Best A rating", "explanation": "Long institutional history. Strong financial-strength rating. The 'will this carrier still exist?' question doesn't apply — Hiscox has weathered multiple market cycles and remains a major SMB insurance carrier." },
+        { "title": "Strong professional liability for trades + consultants", "explanation": "Where NEXT focuses on GL + WC + auto for trades, Hiscox has deeper professional liability (E&O) expertise. For design-build contractors, consultants, and trades that need professional-services coverage alongside GL, Hiscox is structurally stronger." },
+        { "title": "CJ affiliate program with documented terms", "explanation": "Real $25/quote payout via Commission Junction with 30-day cookie. Among the few SMB insurance affiliate programs with mature publisher infrastructure. Editorial sites can recommend with aligned incentives, though we're flagging the 2025 reputation trend honestly." },
+        { "title": "Digital quoting that pre-dates tech-first insurers", "explanation": "Hiscox built digital quoting infrastructure before NEXT, CoverWallet, or Embroker existed. The UX isn't quite as polished as NEXT but it's mature and reliable. The 'online quote in 10-15 minutes' workflow has been operating successfully for over a decade." },
+        { "title": "Solid for low-risk professional service trades", "explanation": "Cleaning services, landscaping, handyman work, low-risk consulting — Hiscox's pricing has historically been competitive for these lower-risk trade categories. The underwriting model favors clean operations with low claims history." }
+      ],
+      "cons_detail": [
+        { "title": "2025 renewal-rate-increase pattern", "explanation": "Forum threads document a pattern over the past 18 months of 20-40% renewal-rate increases on policies with no claims history. The pattern isn't universal but it's documented enough to be a structural concern. Existing customers should expect to shop carriers at renewal even if Hiscox has been their long-term provider." },
+        { "title": "Policy non-renewal notices on previously-clean accounts", "explanation": "Multiple contractor forum threads describe receiving non-renewal notices despite no claims, no missed payments, and no underwriting changes. The pattern suggests Hiscox is repositioning its underwriting appetite — which is a contractor's signal that the relationship may be less stable than historically." },
+        { "title": "Slower-than-historical claims response times in 2025", "explanation": "Claims experience that was historically described as 'good' has shifted to 'mixed' in recent threads. Adjuster response times, claim-processing times, and complex-claim resolution have all received more complaints than in prior years." },
+        { "title": "Higher base pricing than digital-native competitors", "explanation": "Even before the 2025 renewal-rate trend, Hiscox's base pricing tends to come in higher than NEXT for comparable coverage on standard trades. The legacy-carrier overhead structure (longer underwriting tail, established broker channels) shows up in slightly higher premiums than tech-first carriers." },
+        { "title": "Less-aggressive coverage for higher-risk trades", "explanation": "Hiscox's underwriting model is built around clean, low-risk contractor profiles. For HVAC and roofing — trades with higher claim frequencies — the pricing tends to be less competitive than carriers like Acuity that specifically serve those higher-risk classes." }
+      ],
+      "best_for": "Lower-risk professional service trades (consulting, design-build, professional services, low-claim landscaping/handyman), contractors who need professional liability alongside GL, and contractors with existing clean Hiscox relationships",
+      "best_team_size": "1-25 users",
+      "weaknesses": "2025 renewal-rate-increase pattern, non-renewal notices on clean accounts, slower-than-historical claims response, higher base pricing than digital-native competitors — Hiscox remains credible but the recent trend warrants watching",
+      "reputation_flag": "Hiscox's 2025 reputation has deteriorated from previously-positive to mixed. Forum threads over the past 18 months document a recurring pattern of 20-40% renewal-rate increases on policies with no claims history, policy non-renewal notices on previously-clean accounts, and slower-than-historical claims response. The product still works for new contractor relationships at quote, but existing customers should expect to shop carriers at renewal and not assume the historical Hiscox experience continues.",
+      "ratings": {
+        "trustpilot": 3.7,
+        "bbb": "A+ (BBB-accredited)",
+        "am_best": "A (Excellent)",
+        "reddit_sentiment": "previously positive, now mixed — 2025 renewal-rate pattern documented in r/smallbusiness threads"
+      },
+      "key_features": ["direct_carrier", "digital_quoting", "professional_liability_strength", "120_year_history", "cj_affiliate"],
+      "affiliate_program": "cj",
+      "affiliate_payout_note": "~$25 per qualified quote via Commission Junction, 30-day cookie",
+      "verified_date": "2026-05-28",
+      "provider_faqs": [
+        {
+          "q": "Is Hiscox still a good insurance option in 2026?",
+          "a": "Mixed answer. For new policies on lower-risk trades (cleaning, landscaping, handyman, professional services), Hiscox's initial quotes remain competitive and the carrier is financially solid. For existing customers, the 2025 pattern of significant renewal-rate increases and non-renewal notices on clean accounts warrants caution — shop carriers at every renewal rather than assuming Hiscox will continue at the historical rate."
+        },
+        {
+          "q": "What's the 2025 reputation issue with Hiscox?",
+          "a": "Over the past 18 months, forum threads have documented a recurring pattern: 20-40% renewal-rate increases on policies with no claims, policy non-renewal notices on previously-clean accounts, and slower-than-historical claims response times. The pattern isn't catastrophic but it represents a clear shift from the 'Hiscox is a reliable long-term provider' reputation that held through 2024."
+        },
+        {
+          "q": "Is Hiscox better than NEXT?",
+          "a": "Different profiles. NEXT is a tech-first carrier with faster quote-bind-issue and trade-specific underwriting for residential trades. Hiscox has longer institutional history and stronger professional liability coverage for design-build and consulting work. For typical SMB residential trades, NEXT is usually the better choice in 2026. For trades that specifically need professional liability or professional services coverage alongside GL, Hiscox remains a credible option."
+        },
+        {
+          "q": "Should I switch from Hiscox?",
+          "a": "If you're getting renewal-rate increases of 20%+ with no claims history, yes — shop carriers. Get quotes from NEXT, Simply Business, CoverWallet, and an Acuity agent in your area. If Hiscox's renewal has stayed competitive (sub-10% rate increase year-over-year, no non-renewal notices), there's no need to switch — the historical Hiscox experience still works for your specific account. The watchpoint is the trend, not necessarily the current state."
+        }
+      ]
+    },
+    {
+      "slug": "simply-business",
+      "name": "Simply Business",
+      "vendor_url": "https://www.simplybusiness.com",
+      "affiliate_url": "TBD",
+      "tagline": "Online insurance broker (Travelers-owned) — shops multiple carriers and lets you compare quotes in one form",
+      "provider_type": "broker",
+      "distribution_model": "direct-digital",
+      "insurance_lines": ["general_liability", "workers_comp", "commercial_auto", "tools_equipment", "bop", "umbrella"],
+      "quote_speed": "Online quote comparison in 10-15 minutes",
+      "typical_premium_range": "$40-$200/mo for GL on a 1-5 person trades shop",
+      "verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control", "handyman"],
+      "geographic_coverage": "us-nationwide",
+      "states_note": "Available in all 50 states; carrier panel varies by state",
+      "founded": 2005,
+      "headquartered": "Northampton, UK (US HQ in Boston, MA; acquired by Travelers 2017)",
+      "long_description": "Simply Business is the online insurance broker model done well — owned by Travelers (one of the largest US commercial insurers) since 2017, the platform shops multiple carriers behind a single quote form and presents the contractor with comparison-ready options. For SMB contractors who want the agent-shopped-multiple-carriers benefit without the agent phone-call cycle, Simply Business is the dominant digital broker option.\n\nThe mechanic: contractor enters business details (trade, employees, revenue, coverage limits needed) into a single form, and Simply Business's underlying carrier panel returns 3-5 quotes from carriers including Travelers (the parent), Liberty Mutual, Markel, Nationwide, and various specialty carriers depending on trade. The contractor compares quotes side-by-side, picks the best fit, and binds online. The Travelers ownership provides reliable claims infrastructure if the contractor selects a Travelers policy; other carriers' claims flow through Simply Business as the broker-of-record.\n\nReddit and small-business-forum sentiment is consistently positive on Simply Business. The common refrain: 'I got 4 quotes from Simply Business and saw which carriers were competitive for my profile, picked the cheapest, was insured in 20 minutes.' The platform doesn't have the same brand recognition as Hiscox or NEXT but it solves a real problem (multi-carrier comparison without agent phone tag) that contractors value.\n\nThe affiliate program is direct — Simply Business runs its own publisher partnerships with documented payouts. Per-quote economics are in the same range as NEXT and Hiscox (~$25-$40 per qualified lead), and the conversion rate is comparable. For editorial publishers like WrenchStack, Simply Business is a strong recommendation candidate: it solves a real contractor problem (comparison shopping), it has stable corporate parent (Travelers), and the affiliate program aligns incentives properly.",
+      "how_it_works": "Visit Simply Business website, enter business details (trade, employees, revenue, location, coverage limits needed) in a single form. The platform runs the request against its carrier panel and returns 3-5 quotes within 5-10 minutes. Compare quotes side-by-side; each quote shows carrier name, premium, coverage limits, and notable terms. Pick a quote, complete carrier-specific binding questions, pay, and receive a bound policy with downloadable COI. Simply Business is the broker-of-record for service inquiries; claims flow through the carrier directly.",
+      "pros_detail": [
+        { "title": "Compare 3-5 quotes in one form", "explanation": "Solves the core SMB contractor problem: 'I want to shop carriers but I don't have time to call 5 agents.' Simply Business handles the carrier-shopping behind a single form. The 10-minute time investment yields comparison-ready options from carriers that would otherwise take days to gather quotes from individually." },
+        { "title": "Travelers ownership = stable parent + carrier backing", "explanation": "Owned by Travelers since 2017. The Travelers ownership provides operational stability, reliable claims handling for Travelers-issued policies, and a corporate parent with deep industry expertise. Lower 'will this broker still exist?' risk than venture-backed alternatives." },
+        { "title": "Direct affiliate program with documented terms", "explanation": "Simply Business runs its own publisher affiliate program with documented per-quote payouts. Editorial sites can recommend with aligned commercial incentives and the affiliate-economics make Simply Business one of the highest-revenue insurance recommendations in this directory." },
+        { "title": "Carrier panel includes well-known carriers", "explanation": "The carrier panel includes Travelers (parent), Liberty Mutual, Markel, Nationwide, and specialty carriers depending on trade. Contractors see brand-name carriers in the comparison set rather than unfamiliar names — which improves comfort with the eventual choice." },
+        { "title": "Broker-of-record means single service contact", "explanation": "Simply Business is your broker-of-record for service questions even after binding a policy with a specific carrier. Need to add a vehicle, modify coverage, or get a COI? Simply Business handles it as broker rather than the contractor calling the carrier directly. Reduces friction on policy changes." }
+      ],
+      "cons_detail": [
+        { "title": "Quote variance can be wide across the carrier panel", "explanation": "The 3-5 quotes can show meaningful price variance ($800-$2,000 annual GL premium spread is common for the same coverage). The variance reflects different carriers' underwriting appetites — but it can be confusing if contractors expect a tight comparison set." },
+        { "title": "Not all carriers available in all states", "explanation": "The carrier panel varies by state. Some specialty carriers aren't available in certain states; some quotes may be limited compared to other states. Geographic coverage is solid but not uniform." },
+        { "title": "Claims experience depends on selected carrier", "explanation": "Simply Business doesn't handle claims — claims flow through the specific carrier whose policy you bound. If you pick a Travelers policy, you get the Travelers claims experience; if you pick a specialty carrier, you get that carrier's experience. Read carrier-specific claims reviews before binding." },
+        { "title": "Less direct-carrier-relationship than going to NEXT or Hiscox directly", "explanation": "Simply Business is a broker layer between you and the underlying carrier. For some contractors who want a direct relationship with a single carrier, the broker layer is unnecessary overhead. For contractors who want multi-carrier comparison, the broker layer is exactly what they want." }
+      ],
+      "best_for": "SMB contractors (1-25 employees) who want multi-carrier comparison without agent phone calls, and prefer the broker-of-record service model for policy changes and renewals",
+      "best_team_size": "1-25 users",
+      "weaknesses": "Quote variance across carrier panel can be wide, carrier availability varies by state, claims experience depends on selected carrier rather than Simply Business directly — but the platform solves a real contractor problem and does it well",
+      "reputation_flag": null,
+      "ratings": {
+        "trustpilot": 4.5,
+        "bbb": "A+ (BBB-accredited)",
+        "am_best": "Underlying carriers rated separately (Travelers A+, Liberty Mutual A, etc.)",
+        "reddit_sentiment": "positive — 'easiest way to actually compare carriers' is a common refrain"
+      },
+      "key_features": ["online_broker", "multi_carrier_panel", "travelers_owned", "broker_of_record_service", "direct_affiliate_program"],
+      "affiliate_program": "direct",
+      "affiliate_payout_note": "Direct publisher affiliate program with documented per-quote payouts (~$25-$40 range)",
+      "verified_date": "2026-05-28",
+      "provider_faqs": [
+        {
+          "q": "Is Simply Business a carrier or a broker?",
+          "a": "Broker — Simply Business shops multiple carriers behind a single form and presents you with comparison-ready quotes. The underlying carriers are companies like Travelers, Liberty Mutual, Markel, and specialty carriers. Simply Business is your broker-of-record for service inquiries; claims flow through the specific carrier whose policy you select."
+        },
+        {
+          "q": "How is Simply Business different from NEXT?",
+          "a": "NEXT is a direct carrier — they underwrite and issue their own policies. Simply Business is a broker — they shop multiple carriers and show you the options. If you want speed + single-carrier simplicity, NEXT. If you want multi-carrier comparison + broker-of-record service, Simply Business."
+        },
+        {
+          "q": "What does the Travelers ownership change?",
+          "a": "Travelers acquired Simply Business in 2017. Operationally, Simply Business continues to run as the broker layer. Travelers' ownership provides corporate stability, deep carrier relationships, and reliable claims infrastructure (when you select a Travelers policy). It doesn't bias the carrier comparison — Simply Business surfaces competitive non-Travelers carriers when they have better quotes."
+        },
+        {
+          "q": "Who handles claims?",
+          "a": "The carrier whose policy you bound, not Simply Business. If you bind a Travelers GL policy, claims flow through Travelers' claims process. If you bind a Markel commercial auto policy, claims flow through Markel. Simply Business handles policy-level service (changes, COIs, renewals) but not claims."
+        }
+      ]
+    },
+    {
+      "slug": "coverwallet",
+      "name": "CoverWallet",
+      "vendor_url": "https://www.coverwallet.com",
+      "affiliate_url": "TBD",
+      "tagline": "Online insurance broker owned by Aon — comparison quoting plus account-management dashboard for multi-policy contractors",
+      "provider_type": "broker",
+      "distribution_model": "direct-digital",
+      "insurance_lines": ["general_liability", "workers_comp", "commercial_auto", "professional_liability", "umbrella", "cyber", "bop"],
+      "quote_speed": "Online quote comparison in 10-15 minutes",
+      "typical_premium_range": "$40-$200/mo for GL on a 1-5 person trades shop",
+      "verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control", "handyman", "appliance_repair"],
+      "geographic_coverage": "us-nationwide",
+      "states_note": "Available in all 50 states; carrier panel varies",
+      "founded": 2015,
+      "headquartered": "New York, NY (acquired by Aon 2020)",
+      "long_description": "CoverWallet is the second-most-prominent online insurance broker in the SMB contractor space (alongside Simply Business), owned by Aon — one of the world's largest insurance brokerages — since 2020. The product combines multi-carrier quote comparison with an account-management dashboard that's particularly useful for contractors managing multiple policy lines (GL + WC + commercial auto + tools + umbrella) across multiple renewal dates.\n\nThe mechanic is similar to Simply Business: enter business details, the platform shops multiple carriers, and the contractor receives 3-5 comparison quotes. Where CoverWallet differs is the multi-policy management layer — the dashboard treats each contractor as an entity with multiple potentially-disparate policies and tracks renewal dates, certificate generation, claims history, and broker-of-record service across all of them. For larger contractors with 4-6 active policies, this management layer is genuinely useful operationally.\n\nThe Aon ownership provides corporate stability and brand recognition in the insurance industry — Aon is a Fortune 500 insurance brokerage with deep carrier relationships globally. For contractors who care about parent-company stability, CoverWallet's Aon backing is comparable to Simply Business's Travelers backing.\n\nThe affiliate program is direct and documented — CoverWallet runs publisher partnerships with per-quote payouts in the $25-$50 range. Combined with strong contractor reputation and the Aon backing, CoverWallet sits alongside NEXT, Hiscox, and Simply Business in the Tier S category for SMB contractor insurance.",
+      "how_it_works": "Visit CoverWallet, enter business details, receive 3-5 carrier comparison quotes in 10-15 minutes. Pick a quote, complete carrier-specific binding questions, bind and pay. The CoverWallet dashboard becomes your central hub for managing all policies — view current coverage, generate COIs, track renewal dates, file claims, request changes. Customer service handles policy-level changes; claims flow through the underlying carrier directly.",
+      "pros_detail": [
+        { "title": "Multi-policy dashboard for contractors with multiple lines", "explanation": "Contractors with 4-6 policies (GL + WC + commercial auto + tools + umbrella + cyber) benefit from a single dashboard tracking all of them. Renewal dates, COIs, claims, changes — all in one place. This is genuinely useful operationally and differentiates CoverWallet from single-policy alternatives." },
+        { "title": "Aon ownership = enterprise-grade broker infrastructure", "explanation": "Owned by Aon (Fortune 500 insurance brokerage). Carrier relationships are deep, claims advocacy is professional, corporate stability is real. The 'will this broker still exist?' risk is essentially zero." },
+        { "title": "Multi-carrier comparison without agent calls", "explanation": "Same core benefit as Simply Business — multi-carrier shopping behind a single form. Saves the contractor the time of calling 4-5 agents individually." },
+        { "title": "Strong professional liability coverage options", "explanation": "CoverWallet's carrier panel includes carriers with deep professional liability capacity (Hiscox among them). For design-build contractors and trades needing E&O alongside GL, the carrier-panel depth is structurally advantageous." },
+        { "title": "Direct affiliate program with documented terms", "explanation": "Per-quote affiliate payouts in the $25-$50 range. Editorial publishers can recommend with aligned incentives." }
+      ],
+      "cons_detail": [
+        { "title": "Quote variance across the carrier panel", "explanation": "Same dynamic as Simply Business — 3-5 quotes can show wide pricing variance. The variance is informative but can be confusing without context." },
+        { "title": "Dashboard complexity can be overkill for single-policy contractors", "explanation": "For a solo contractor with only a GL policy, the multi-policy dashboard is unnecessary overhead. The full CoverWallet value emerges at 3+ active policy lines." },
+        { "title": "Less brand recognition than NEXT or Hiscox", "explanation": "Contractors searching for insurance often encounter NEXT or Hiscox first via SEO. CoverWallet has less brand awareness despite Aon ownership. This is partly editorial responsibility — sites like WrenchStack can correct the under-representation." },
+        { "title": "Claims experience varies by selected carrier", "explanation": "Same caveat as Simply Business — claims flow through the specific carrier whose policy you bound, not through CoverWallet directly. Read the carrier's claims reputation, not CoverWallet's." }
+      ],
+      "best_for": "SMB contractors (1-50 employees) managing 3+ active policies who want multi-carrier comparison plus a single management dashboard across all policies",
+      "best_team_size": "1-50 users",
+      "weaknesses": "Quote variance across panel, less brand recognition than direct carriers, claims experience depends on selected carrier — but for multi-policy contractors the management dashboard is genuinely useful",
+      "reputation_flag": null,
+      "ratings": {
+        "trustpilot": 4.4,
+        "bbb": "A+ (BBB-accredited)",
+        "am_best": "Underlying carriers rated separately",
+        "reddit_sentiment": "positive — particularly cited for multi-policy account management"
+      },
+      "key_features": ["online_broker", "multi_carrier_panel", "aon_owned", "multi_policy_dashboard", "professional_liability_strength", "direct_affiliate_program"],
+      "affiliate_program": "direct",
+      "affiliate_payout_note": "Direct publisher affiliate program with per-quote payouts in the $25-$50 range",
+      "verified_date": "2026-05-28",
+      "provider_faqs": [
+        {
+          "q": "How is CoverWallet different from Simply Business?",
+          "a": "Both are online brokers shopping multi-carrier panels. CoverWallet's differentiation is the multi-policy management dashboard — particularly useful if you have 3+ active policies (GL + WC + commercial auto + tools + umbrella). Simply Business is slightly more streamlined for single-policy comparison shopping. Both have comparable carrier panels and affiliate programs."
+        },
+        {
+          "q": "Who owns CoverWallet?",
+          "a": "Aon — the Fortune 500 insurance brokerage — acquired CoverWallet in 2020. The Aon ownership provides enterprise-grade infrastructure, deep carrier relationships, and corporate stability. CoverWallet operates as Aon's small-business digital broker arm."
+        },
+        {
+          "q": "What does the multi-policy dashboard actually do?",
+          "a": "Tracks all your active policies in one view: current coverage, renewal dates, COI generation, claims history, change requests, and policy documents. For a contractor with 4 active policies across different carriers, this consolidation is genuinely useful operationally. For a contractor with one GL policy, the dashboard is overkill."
+        },
+        {
+          "q": "Is CoverWallet cheaper than going directly to a carrier?",
+          "a": "Not necessarily. CoverWallet shops your business across a carrier panel — sometimes the best carrier on the panel is meaningfully cheaper than a direct-carrier quote (NEXT, Hiscox direct); sometimes it's roughly the same; occasionally the direct-carrier path beats the panel. The value isn't necessarily 'cheaper' — it's comparison shopping + multi-policy management."
+        }
+      ]
+    },
+    {
+      "slug": "embroker",
+      "name": "Embroker",
+      "vendor_url": "https://www.embroker.com",
+      "affiliate_url": "TBD",
+      "tagline": "Mid-market-focused online broker with deeper professional liability and cyber coverage capacity",
+      "provider_type": "broker",
+      "distribution_model": "direct-digital",
+      "insurance_lines": ["general_liability", "professional_liability", "cyber", "workers_comp", "commercial_auto", "umbrella", "directors_officers"],
+      "quote_speed": "Online quote in 15-20 minutes; some lines route to licensed broker",
+      "typical_premium_range": "$60-$300/mo for GL on a mid-market shop with multiple lines",
+      "verticals": ["general_contractor", "electrical", "plumbing", "roofing", "landscaping", "professional_services"],
+      "geographic_coverage": "us-nationwide",
+      "states_note": "Available in all 50 states; specialty lines have state restrictions",
+      "founded": 2015,
+      "headquartered": "San Francisco, CA",
+      "long_description": "Embroker is the online broker pitched at the higher end of the SMB segment — contractors and professional-service businesses that have outgrown the simplest digital-carrier products (NEXT) but aren't ready for full enterprise-broker engagement. The platform's strength is depth on specialty lines (professional liability, cyber, directors-and-officers) that smaller digital carriers don't cover well, combined with a comparison-shopping UX similar to Simply Business and CoverWallet.\n\nFor most residential service trades doing $500K-$5M annual revenue with 5-25 employees, Embroker is one of three competitive online broker options (alongside Simply Business and CoverWallet). The differentiation is mostly at the edges: design-build contractors needing strong professional liability + cyber, mid-market commercial trades with higher coverage limits, and contractors with mixed-line needs (GL + professional liability + commercial auto + umbrella + cyber) where Embroker's specialty depth shows up. For simpler single-line GL needs on smaller shops, the differentiation matters less.\n\nThe affiliate program is direct with documented payout terms in the $25-$50/quote range. Embroker hasn't reached the brand recognition of Simply Business or NEXT, but it has solid Reddit/forum sentiment among mid-market contractors who've worked with it.",
+      "how_it_works": "Visit Embroker, enter detailed business info (revenue, employees, coverage needs, claims history, specialty needs), receive multi-carrier comparison quotes in 15-20 minutes. Specialty lines (cyber, D&O, professional liability) may route to a licensed broker for additional underwriting. Bind online for standard lines; broker-mediated bind for complex cases. Multi-policy dashboard tracks all bound policies.",
+      "pros_detail": [
+        { "title": "Deeper specialty-line coverage than digital-carrier competitors", "explanation": "Professional liability, cyber, D&O — these specialty lines are where Embroker's underwriting depth shows up. NEXT and Simply Business handle them at lower coverage limits; Embroker can go higher and underwrite more complex cases." },
+        { "title": "Multi-carrier comparison with mid-market focus", "explanation": "Carrier panel includes carriers well-suited to mid-market trades — not just the lowest-cost SMB options. For contractors who've outgrown entry-tier carriers, Embroker's panel mix is structurally appropriate." },
+        { "title": "Direct affiliate program with documented payouts", "explanation": "Per-quote affiliate program in the $25-$50 range. Editorial-friendly commercial alignment." },
+        { "title": "Solid mid-market reputation", "explanation": "Reddit and forum sentiment among mid-market contractors is positive. The platform isn't as widely-known as NEXT but operators who have used it consistently describe the experience as solid." }
+      ],
+      "cons_detail": [
+        { "title": "Less competitive on the smallest shops", "explanation": "For 1-2 person solo shops with simple GL needs, NEXT or Simply Business typically come in cheaper. Embroker's underwriting overhead is built for slightly larger accounts." },
+        { "title": "Specialty lines require broker engagement", "explanation": "Pure self-service binding works for standard GL. Specialty lines (cyber, D&O, large-limit professional liability) route to a licensed broker for additional underwriting — adds friction to what would otherwise be a fully digital experience." },
+        { "title": "Lower brand recognition", "explanation": "Less widely-known than NEXT, Hiscox, Simply Business, or CoverWallet. Contractors searching for insurance often encounter the more-known brands first." }
+      ],
+      "best_for": "Mid-market trades and design-build contractors ($500K-$5M revenue, 5-25 employees) with multi-line needs including specialty coverage (professional liability, cyber, D&O)",
+      "best_team_size": "5-50 users",
+      "weaknesses": "Less competitive on smallest shops, specialty lines require broker engagement, lower brand recognition — works best for mid-market with multi-line specialty needs",
+      "reputation_flag": null,
+      "ratings": {
+        "trustpilot": 4.2,
+        "bbb": "A+ (BBB-accredited)",
+        "am_best": "Underlying carriers rated separately",
+        "reddit_sentiment": "positive among mid-market contractors who've used it"
+      },
+      "key_features": ["online_broker", "specialty_lines_depth", "mid_market_focus", "direct_affiliate_program"],
+      "affiliate_program": "direct",
+      "affiliate_payout_note": "Direct publisher affiliate program with per-quote payouts in $25-$50 range",
+      "verified_date": "2026-05-28",
+      "provider_faqs": [
+        { "q": "When does Embroker make more sense than Simply Business?", "a": "When you need specialty coverage depth (professional liability, cyber, D&O) at higher limits, or when you're a mid-market contractor ($1M+ revenue) with multi-line needs. For simpler single-line GL on smaller shops, Simply Business or NEXT typically wins on price and speed." },
+        { "q": "What's the multi-line strength?", "a": "Embroker's underwriting depth allows it to package GL + professional liability + cyber + D&O + umbrella into a single program with consistent renewal dates. For contractors managing 5-6 separate policies across multiple carriers, the consolidation reduces administrative overhead at renewal." }
+      ]
+    },
+    {
+      "slug": "insureon",
+      "name": "Insureon",
+      "vendor_url": "https://www.insureon.com",
+      "affiliate_url": "TBD",
+      "tagline": "Online broker with dominant SEO presence — solid quoting infrastructure but no clear differentiation vs Simply Business or CoverWallet",
+      "provider_type": "broker",
+      "distribution_model": "direct-digital",
+      "insurance_lines": ["general_liability", "workers_comp", "commercial_auto", "professional_liability", "bop", "tools_equipment", "umbrella"],
+      "quote_speed": "Online quote in 10-15 minutes",
+      "typical_premium_range": "$40-$200/mo for GL on a 1-5 person trades shop",
+      "verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control", "handyman"],
+      "geographic_coverage": "us-nationwide",
+      "states_note": "Available in all 50 states",
+      "founded": 1997,
+      "headquartered": "Chicago, IL",
+      "long_description": "Insureon is the online insurance broker that dominates SEO for contractor-insurance search terms — searching 'small business insurance' or 'contractor insurance quotes' on Google reliably surfaces Insureon's content in the top results. The platform has been operating since 1997 (longer than NEXT, Simply Business, or CoverWallet) and built its position through extensive content marketing and partnership channels rather than carrier-side innovation.\n\nThe functional experience is comparable to Simply Business and CoverWallet — enter business details, receive multi-carrier comparison quotes, bind online. Where Insureon differs is mostly at the brand-recognition and SEO-content level rather than the core product. For contractors who arrive at Insureon via Google search and don't know to compare it with Simply Business or CoverWallet, the platform delivers a solid quote-bind experience.\n\nFor editorial purposes, Insureon's positioning is honest-but-undifferentiated: it works fine, it's been around longer than most competitors, and the carrier panel is reasonable. There's no specific reason to choose Insureon over Simply Business or CoverWallet, but no specific reason to avoid it either. The affiliate program exists but documented payout terms are less clear than the Tier S brokers.",
+      "how_it_works": "Visit Insureon, enter business details, receive 3-4 multi-carrier quotes in 10-15 minutes. Bind online for standard cases. Insureon is the broker-of-record; claims flow through the specific carrier.",
+      "pros_detail": [
+        { "title": "Long operational history (since 1997)", "explanation": "Longer-running than NEXT, Simply Business, or CoverWallet. Operational maturity and broker relationships are deep." },
+        { "title": "Dominant SEO presence", "explanation": "Contractors searching for insurance online frequently encounter Insureon first. The platform has high awareness in the contractor-search funnel." },
+        { "title": "Multi-carrier panel like other brokers", "explanation": "Same core benefit as Simply Business/CoverWallet — comparison shopping behind a single form." }
+      ],
+      "cons_detail": [
+        { "title": "No clear differentiation vs Simply Business or CoverWallet", "explanation": "The functional experience is similar to other major online brokers. Insureon doesn't offer specific advantages (multi-policy dashboard like CoverWallet, Travelers-ownership-stability like Simply Business) that distinguish it." },
+        { "title": "Less clear affiliate program documentation", "explanation": "Affiliate program exists but per-quote payout terms are less transparent than Simply Business's or CoverWallet's documented programs." },
+        { "title": "SEO-driven traffic doesn't always mean better product", "explanation": "Insureon's strength is partly SEO content marketing. The platform itself is fine but not structurally better than competitors with weaker SEO presence." }
+      ],
+      "best_for": "SMB contractors who arrived at Insureon via Google search and want a straightforward multi-carrier broker quote experience",
+      "best_team_size": "1-25 users",
+      "weaknesses": "No clear differentiation from competitors, less documented affiliate terms — solid but undifferentiated middle-of-pack option",
+      "reputation_flag": null,
+      "ratings": { "trustpilot": 4.0, "bbb": "A+ (BBB-accredited)", "am_best": "Underlying carriers rated separately", "reddit_sentiment": "neutral — adequate experiences reported, no strong sentiment either direction" },
+      "key_features": ["online_broker", "multi_carrier_panel", "long_history", "strong_seo_presence"],
+      "affiliate_program": "unknown",
+      "affiliate_payout_note": "Affiliate program exists but documented payout terms unclear; outreach required",
+      "verified_date": "2026-05-28",
+      "provider_faqs": [
+        { "q": "Should I use Insureon or Simply Business?", "a": "Functionally similar experiences. Simply Business has Travelers ownership for stability + clearer affiliate terms. Insureon has longer history. For most contractors, either delivers a reasonable multi-carrier quote experience." }
+      ]
+    },
+    {
+      "slug": "thimble",
+      "name": "Thimble",
+      "vendor_url": "https://www.thimble.com",
+      "affiliate_url": "TBD",
+      "tagline": "On-demand monthly insurance for project-based contractors — pay only for active coverage windows",
+      "provider_type": "direct-carrier",
+      "distribution_model": "direct-digital",
+      "insurance_lines": ["general_liability", "professional_liability"],
+      "quote_speed": "Online quote in 2-5 minutes (the fastest in the market)",
+      "typical_premium_range": "$10-$80/mo for monthly GL; $5-$25 per project for project-based",
+      "verticals": ["handyman", "cleaning", "landscaping", "general_contractor", "pest_control", "appliance_repair", "garage_door"],
+      "geographic_coverage": "us-nationwide",
+      "states_note": "Available in all 50 states",
+      "founded": 2016,
+      "headquartered": "New York, NY",
+      "long_description": "Thimble is the on-demand monthly-or-project-based insurance carrier built for the segment of contractors that traditional annual-policy carriers don't serve well: side-hustle handymen, weekend cleaners, gig workers in trades, contractors with seasonal businesses, and pros doing specific one-off projects that need short-window coverage. The product breaks the annual-policy convention — instead of paying for 12 months of coverage upfront, you pay for the month or project window when you actually need it.\n\nFor steady-employment contractors with year-round work, Thimble isn't the right fit — annual carriers like NEXT or Hiscox will be cheaper over a 12-month window. Where Thimble wins structurally: (a) a handyman starting up who isn't sure if the business will sustain 12 months of coverage, (b) a contractor needing project-specific COI for a particular GC requirement, (c) a gig-economy trade worker (one-off appliance install, one-time cleaning) who genuinely needs coverage for hours not months, (d) a seasonal landscaper who pauses operations in winter and wants to stop paying premiums during the off-season.\n\nThe quote-bind experience is the fastest in the entire insurance category — 2-5 minutes from start to bound policy with downloadable COI. The carrier rating (A.M. Best A) and financial stability are solid via Thimble's underlying carrier partnerships. Affiliate program documentation is less clear than NEXT or Hiscox.",
+      "how_it_works": "Choose monthly or project-based coverage, enter trade and basic business info, receive quote in 2-5 minutes. Pay by credit card for the active window. Coverage activates immediately with downloadable COI. Cancel anytime by simply not renewing the next month. Project-based coverage activates and expires automatically for the specified window.",
+      "pros_detail": [
+        { "title": "Fastest quote-bind in the entire insurance market", "explanation": "2-5 minutes from start to bound policy with COI. Even NEXT's 10-minute experience is slower. The speed is operationally decisive for project-based contractors needing immediate COI." },
+        { "title": "Month-to-month or project-based pricing flexibility", "explanation": "No annual commitment. For seasonal businesses or project-based contractors, the ability to pause coverage during inactive periods is structurally valuable." },
+        { "title": "Strong fit for gig and side-hustle contractors", "explanation": "The annual-policy model doesn't fit weekend handymen, gig appliance installers, or side-hustle cleaning pros. Thimble is the only mainstream carrier that serves this segment well." }
+      ],
+      "cons_detail": [
+        { "title": "More expensive per month than annual policies", "explanation": "Month-to-month or project-based pricing carries a premium over annual policies — for steady-employment contractors with year-round work, NEXT or Hiscox will be cheaper over 12 months." },
+        { "title": "Limited insurance lines", "explanation": "Primarily GL + professional liability. No workers comp, no commercial auto, no specialty lines. For full coverage stacks, contractors need to layer Thimble for GL + another carrier for other lines." },
+        { "title": "Best for irregular work, not steady operations", "explanation": "The model is structurally fit for irregular or seasonal work. Contractors with steady year-round operations get worse economics than from annual carriers." }
+      ],
+      "best_for": "Solo handymen, gig-economy trades workers, seasonal contractors, side-hustle pros, and contractors needing project-specific short-window coverage",
+      "best_team_size": "1-5 users",
+      "weaknesses": "More expensive per month than annual policies, limited insurance lines (GL + PL only), wrong fit for steady year-round operations",
+      "reputation_flag": null,
+      "ratings": { "trustpilot": 4.4, "bbb": "A+ (BBB-accredited)", "am_best": "A (Excellent) via underlying carrier", "reddit_sentiment": "positive for the gig/side-hustle segment it serves" },
+      "key_features": ["on_demand_monthly", "project_based_coverage", "5_minute_quote_bind", "no_annual_commitment"],
+      "affiliate_program": "unknown",
+      "affiliate_payout_note": "Affiliate program exists but documented terms unclear",
+      "verified_date": "2026-05-28",
+      "provider_faqs": [
+        { "q": "Is Thimble cheaper than NEXT?", "a": "Depends on your work pattern. For year-round steady work, NEXT is cheaper over 12 months. For seasonal, project-based, or gig work, Thimble's ability to pause coverage during inactive periods can make it cheaper overall." },
+        { "q": "Why is the quote so fast?", "a": "Thimble's underwriting is built for short-window coverage with simpler risk profiles. Less detailed business information is required because the policy windows are smaller. The 2-5 minute speed is the structural product, not just UX polish." }
+      ]
+    },
+    {
+      "slug": "the-hartford",
+      "name": "The Hartford",
+      "vendor_url": "https://www.thehartford.com",
+      "affiliate_url": "TBD",
+      "tagline": "Long-established direct carrier with strong AARP partnership — solid product, less competitive pricing than digital-native alternatives",
+      "provider_type": "direct-carrier",
+      "distribution_model": "hybrid",
+      "insurance_lines": ["general_liability", "workers_comp", "commercial_auto", "bop", "professional_liability", "umbrella"],
+      "quote_speed": "Online quote in 15-20 minutes; phone-agent often required for full bind",
+      "typical_premium_range": "$60-$250/mo for GL on a 1-5 person trades shop",
+      "verticals": ["hvac", "plumbing", "electrical", "general_contractor", "landscaping", "cleaning", "pest_control", "handyman"],
+      "geographic_coverage": "us-nationwide",
+      "states_note": "Available in all 50 states",
+      "founded": 1810,
+      "headquartered": "Hartford, CT",
+      "long_description": "The Hartford is one of the oldest US insurance carriers (founded 1810) and one of the most recognizable SMB-business-insurance brands — partly through its long AARP partnership for personal lines and partly through extensive marketing of its small-business segment. The product is solid, the financial strength is A.M. Best A+ rated, and claims handling has a long institutional track record.\n\nThe trade-off versus digital-native carriers: pricing tends to come in higher than NEXT or Simply Business for comparable coverage on standard trades, and the quote-bind workflow is more cumbersome — online quoting works for simple cases but full bind often requires phone-agent involvement. For contractors who value brand-name carrier backing and don't mind paying a 10-25% premium over digital-native pricing, The Hartford is a credible option.\n\nThe affiliate program isn't a primary channel for The Hartford — they focus on direct customer acquisition and broker partnerships rather than editorial publisher relationships. Editorial recommendations of The Hartford are unaffected by affiliate considerations.",
+      "how_it_works": "Visit The Hartford, enter business details, receive online quote in 15-20 minutes. Full binding often requires phone-agent engagement, particularly for workers comp and commercial auto. Annual renewal with carrier-direct policy management.",
+      "pros_detail": [
+        { "title": "Long institutional history + A+ financial rating", "explanation": "Founded 1810. A.M. Best A+ rated. Among the most stable SMB insurance carriers in the US market. The 'will this carrier exist?' concern doesn't apply." },
+        { "title": "Strong claims handling reputation", "explanation": "Claims experience is consistently described as professional and reliable. The institutional depth on claims handling exceeds most digital-native carriers." },
+        { "title": "Comprehensive insurance lines", "explanation": "Covers most contractor insurance needs in one carrier relationship — GL, WC, commercial auto, professional liability, umbrella. Single-carrier consolidation is operationally valuable for some contractors." }
+      ],
+      "cons_detail": [
+        { "title": "Higher pricing than digital-native carriers", "explanation": "Premium typically 10-25% above NEXT or Simply Business for comparable coverage. The legacy-carrier cost structure (broker channels, agent relationships, traditional underwriting) shows up in higher pricing." },
+        { "title": "Slower quote-bind workflow", "explanation": "Full binding often requires phone-agent engagement. The 15-20 minute online portion is just the start; complete bind can take 1-3 business days for complex cases." },
+        { "title": "Less competitive on small simplest accounts", "explanation": "For 1-2 person solo trades shops with simple GL needs, the digital-native carriers (NEXT, Simply Business) are usually meaningfully cheaper and faster. The Hartford's value emerges at slightly larger accounts." }
+      ],
+      "best_for": "Mid-market trades contractors (10+ employees) who value brand-name carrier backing, comprehensive single-carrier coverage, and don't mind paying a premium for legacy-carrier reliability",
+      "best_team_size": "5-100 users",
+      "weaknesses": "Higher pricing than digital-native competitors, slower bind workflow, less competitive on small accounts — solid product but pricing-competitive options exist",
+      "reputation_flag": null,
+      "ratings": { "trustpilot": 3.8, "bbb": "A+ (BBB-accredited)", "am_best": "A+ (Superior)", "reddit_sentiment": "neutral to positive — solid carrier reputation, higher pricing noted" },
+      "key_features": ["direct_carrier", "long_history", "comprehensive_lines", "strong_claims_reputation"],
+      "affiliate_program": "none",
+      "affiliate_payout_note": "Not a primary affiliate-channel carrier; editorial recommendations are unaffected by commercial alignment",
+      "verified_date": "2026-05-28",
+      "provider_faqs": [
+        { "q": "Should I pick The Hartford over NEXT?", "a": "For most SMB residential trades, NEXT is faster and cheaper. The Hartford makes more sense for mid-market contractors (10+ employees) who value the legacy-carrier brand and comprehensive single-carrier coverage." }
+      ]
+    },
+    {
+      "slug": "travelers",
+      "name": "Travelers",
+      "vendor_url": "https://www.travelers.com",
+      "affiliate_url": "TBD",
+      "tagline": "Top-3 US commercial insurer with deep trades expertise — accessed primarily through agents or via Simply Business broker channel",
+      "provider_type": "direct-carrier",
+      "distribution_model": "agent-only",
+      "insurance_lines": ["general_liability", "workers_comp", "commercial_auto", "bop", "professional_liability", "umbrella", "inland_marine"],
+      "quote_speed": "Agent-mediated quoting — typically 1-3 business days",
+      "typical_premium_range": "Competitive for mid-market and larger accounts; varies with agent-shopping",
+      "verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "pest_control"],
+      "geographic_coverage": "us-nationwide",
+      "states_note": "Available in all 50 states",
+      "founded": 1853,
+      "headquartered": "Hartford, CT (parent: The Travelers Companies, Inc.)",
+      "long_description": "Travelers is one of the three largest US commercial insurance carriers and one of the deepest underwriters in the trades-contractor segment specifically. The product is institutional-grade — claims handling, underwriting depth, capacity for high coverage limits, and specialty trade classes (commercial roofing, large GC, multi-state operations) are areas where Travelers structurally outperforms digital-native alternatives. The trade-off: access is primarily through licensed agents rather than direct-digital channels.\n\nFor SMB residential trades, the typical path to a Travelers policy is either: (a) a local independent agent who shops Travelers along with other carriers, or (b) the Simply Business broker channel (Simply Business is owned by Travelers and surfaces Travelers quotes in its comparison panel). For contractors who already have a Travelers policy through an established agent relationship, the relationship is usually worth keeping. For contractors shopping for new coverage, Travelers is often competitive at the mid-market and larger end of the SMB segment but less so on the smallest accounts where digital-native carriers (NEXT) have structural cost advantages.\n\nThere's no direct affiliate program for editorial publishers — Travelers acquires customers through agents and broker partnerships rather than direct content-marketing channels. Our editorial recommendation is structural-fit-based, not commercially-aligned.",
+      "how_it_works": "Access Travelers either through a local independent agent (who will shop your business across multiple carriers including Travelers) or via Simply Business's broker channel (Simply Business is Travelers-owned and surfaces Travelers quotes in its comparison panel). Direct self-service quoting is limited; full underwriting typically requires agent involvement. Claims flow through Travelers' direct claims infrastructure.",
+      "pros_detail": [
+        { "title": "Top-3 US commercial insurance carrier with deep trades expertise", "explanation": "Among the largest commercial insurers in the US. Deep underwriting bandwidth on specialty trade classes (commercial roofing, large GC, multi-state operations). Institutional-grade claims handling." },
+        { "title": "Strong financial rating (A.M. Best A++ Superior)", "explanation": "Highest tier of financial strength rating. Among the most stable commercial insurers globally." },
+        { "title": "Accessible via Simply Business broker channel", "explanation": "Even though Travelers is primarily agent-distributed, the Simply Business platform (Travelers-owned) lets SMB contractors access Travelers quotes through digital comparison shopping." },
+        { "title": "Capacity for higher coverage limits", "explanation": "Travelers can underwrite higher GL limits, larger commercial auto fleets, and complex multi-state operations that digital-native carriers can't handle. For larger contractors, this capacity matters." }
+      ],
+      "cons_detail": [
+        { "title": "Agent-only direct access is friction for digital-first contractors", "explanation": "For contractors who want self-service online quoting and binding, Travelers' direct path is too friction-y. The Simply Business broker channel reduces this friction for SMB cases." },
+        { "title": "Less competitive on smallest accounts", "explanation": "For 1-2 person solo trades shops with simple GL needs, digital-native carriers (NEXT, Simply Business with non-Travelers carriers) are usually cheaper and faster than Travelers' direct quoting." },
+        { "title": "No direct affiliate program for editorial publishers", "explanation": "Travelers acquires customers through agents and broker partnerships, not content publishers. Editorial recommendations are structural-fit-based without aligned commercial incentives." }
+      ],
+      "best_for": "Mid-market and larger trades contractors (15+ employees, $2M+ revenue) needing institutional-grade coverage capacity, multi-state operations, or higher coverage limits than digital-native carriers offer",
+      "best_team_size": "10-500 users",
+      "weaknesses": "Agent-only direct access, less competitive on smallest accounts, no direct affiliate program — institutional-quality carrier but accessibility is limited for the smallest SMB segment",
+      "reputation_flag": null,
+      "ratings": { "trustpilot": 3.6, "bbb": "A+ (BBB-accredited)", "am_best": "A++ (Superior)", "reddit_sentiment": "positive among mid-market contractors who have agent relationships" },
+      "key_features": ["top_3_us_carrier", "deep_trades_expertise", "high_coverage_capacity", "institutional_claims", "simply_business_access"],
+      "affiliate_program": "none",
+      "affiliate_payout_note": "No direct editorial-publisher affiliate program; Travelers quotes accessible via Simply Business broker affiliate",
+      "verified_date": "2026-05-28",
+      "provider_faqs": [
+        { "q": "How do I get a Travelers quote?", "a": "Either through a local independent agent who shops multiple carriers including Travelers, or through the Simply Business platform (Simply Business is Travelers-owned and surfaces Travelers quotes in its comparison panel). Direct self-service quoting on travelers.com is limited; agent involvement is typically required for full underwriting." },
+        { "q": "Is Travelers better than NEXT for small contractors?", "a": "For 1-5 person residential trades shops with simple needs, NEXT is typically cheaper and faster. For 15+ employee operations needing institutional-grade claims handling and higher coverage capacity, Travelers' underwriting depth justifies the agent-mediated overhead." }
+      ]
+    },
+    {
+      "slug": "liberty-mutual",
+      "name": "Liberty Mutual",
+      "vendor_url": "https://www.libertymutual.com",
+      "affiliate_url": "TBD",
+      "tagline": "Major commercial carrier with mid-market trades capacity — mixed reputation on renewal pricing and customer service",
+      "provider_type": "direct-carrier",
+      "distribution_model": "hybrid",
+      "insurance_lines": ["general_liability", "workers_comp", "commercial_auto", "bop", "professional_liability", "umbrella"],
+      "quote_speed": "Mixed — online quoting available; complex cases route to phone",
+      "typical_premium_range": "$60-$220/mo for GL on a 1-5 person trades shop; varies",
+      "verticals": ["hvac", "plumbing", "electrical", "general_contractor", "landscaping", "cleaning", "pest_control"],
+      "geographic_coverage": "us-nationwide",
+      "states_note": "Available in all 50 states",
+      "founded": 1912,
+      "headquartered": "Boston, MA",
+      "long_description": "Liberty Mutual is one of the largest US commercial insurers (Fortune 100) with deep underwriting bandwidth and broad trades-segment presence. The product is institutionally solid and the financial strength is unquestionable (A.M. Best A rated, Fortune 100 parent), but the SMB-contractor reputation has been mixed in recent years — particularly around renewal-rate increases and customer-service responsiveness.\n\nFor mid-market trades contractors who have established Liberty Mutual relationships and clean claims experience, the carrier delivers stable coverage. For SMB contractors shopping new coverage, Liberty Mutual is usually a credible option but rarely the standout — typical pricing comes in at parity or slightly above NEXT/Hiscox for simple cases, and the customer-service experience receives more mixed reviews than the Tier S alternatives. The carrier is included in many broker panels (Simply Business, CoverWallet) so most contractors will see Liberty Mutual quotes in comparison-shopping anyway.\n\nAffiliate availability through editorial channels is limited — Liberty Mutual focuses on direct-customer and broker-mediated acquisition.",
+      "how_it_works": "Mixed direct + broker access. Online quoting available for simple SMB cases; complex cases route to phone or agent. Available in most broker comparison panels (Simply Business, CoverWallet). Annual renewal with carrier-direct policy management.",
+      "pros_detail": [
+        { "title": "Fortune 100 parent with deep underwriting capacity", "explanation": "Among the largest US commercial insurers. Institutional-grade underwriting and claims infrastructure." },
+        { "title": "Available across most broker comparison panels", "explanation": "Liberty Mutual quotes appear in Simply Business, CoverWallet, and other broker panels — meaning contractors comparison-shopping will see Liberty Mutual options without specifically seeking them out." },
+        { "title": "Broad coverage line availability", "explanation": "GL, WC, commercial auto, BOP, professional liability, umbrella — comprehensive single-carrier coverage for mid-market contractors." }
+      ],
+      "cons_detail": [
+        { "title": "Mixed reputation on renewal pricing", "explanation": "Forum threads note frequent significant renewal-rate increases on accounts with no claims history. The pattern is less acute than Hiscox's 2025 trend but is a documented concern." },
+        { "title": "Customer-service responsiveness receives mixed reviews", "explanation": "Claims experience and account-service quality is described inconsistently — some contractors report excellent experiences, others report slow response and difficult policy modifications." },
+        { "title": "Rarely the standout in comparison shopping", "explanation": "When Liberty Mutual quotes appear in broker panels alongside Travelers, NEXT, and specialty carriers, the Liberty Mutual quote is rarely the cheapest. The carrier wins when it's an established relationship, not on new-shop pricing." }
+      ],
+      "best_for": "Mid-market contractors with established Liberty Mutual relationships and clean claims history; or contractors selecting Liberty Mutual as the best option from a broker comparison panel",
+      "best_team_size": "5-100 users",
+      "weaknesses": "Mixed reputation on renewal pricing, inconsistent customer-service responsiveness, rarely the cheapest in comparison shopping — solid carrier but doesn't typically win on new-shop pricing or service quality",
+      "reputation_flag": null,
+      "ratings": { "trustpilot": 1.7, "bbb": "A+ (BBB-accredited) — but consumer complaint volume is moderate", "am_best": "A (Excellent)", "reddit_sentiment": "mixed — solid institutional carrier with variable customer-service experience" },
+      "key_features": ["fortune_100_parent", "broad_lines", "broker_panel_presence", "institutional_capacity"],
+      "affiliate_program": "none",
+      "affiliate_payout_note": "Limited direct editorial affiliate program; accessible via broker channels",
+      "verified_date": "2026-05-28",
+      "provider_faqs": [
+        { "q": "Should I choose Liberty Mutual when I see it in a broker comparison?", "a": "Compare the actual quote against other options on the panel. Liberty Mutual is rarely the standout-best option but is sometimes the best-fit for specific trade classes or geographic markets. Don't pick it just because the brand is familiar; pick it if the specific quote wins on coverage + price." }
+      ]
+    },
+    {
+      "slug": "acuity",
+      "name": "Acuity Insurance",
+      "vendor_url": "https://www.acuity.com",
+      "affiliate_url": "TBD",
+      "tagline": "Mutual carrier with cult-favorite contractor reputation — agent-only access, no affiliate program, but worth recommending honestly",
+      "provider_type": "mutual-carrier",
+      "distribution_model": "agent-only",
+      "insurance_lines": ["general_liability", "workers_comp", "commercial_auto", "bop", "tools_equipment", "umbrella", "inland_marine"],
+      "quote_speed": "Agent-mediated quoting — typically 1-3 business days",
+      "typical_premium_range": "Often the lowest competitive option for clean-claim trades shops",
+      "verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "pest_control"],
+      "geographic_coverage": "us-regional",
+      "states_note": "Available in ~28 states — strong in the Midwest and Mid-Atlantic; not available everywhere",
+      "founded": 1925,
+      "headquartered": "Sheboygan, WI",
+      "long_description": "Acuity is the carrier that experienced trades contractors quietly recommend to each other — a Wisconsin-based mutual insurance company that has built one of the strongest reputations in the contractor segment despite minimal direct-to-contractor marketing. The company sells exclusively through independent agents (no direct-digital path), which means it doesn't appear in the comparison panels of Simply Business or CoverWallet, and most contractors don't discover Acuity unless their agent surfaces it during shopping.\n\nWhat makes Acuity distinctive: (a) consistently competitive pricing for clean-claims contractor accounts — agent-shopped quotes from Acuity frequently come in 10-25% below digital-native carriers on the same coverage, (b) strong claims handling reputation in forum and BBB feedback, (c) mutual-carrier structure (policyholders are the owners), which aligns long-term incentives differently than stock carriers, and (d) genuine specialty depth on trades-segment underwriting — they actually understand contractor risk profiles rather than treating contractors as a generic SMB class.\n\nThe trade-offs are real. Acuity is agent-only, so getting a quote requires working with a local independent agent in your state (or an aligned agency that operates online). The geographic footprint is roughly 28 states — strong in the Midwest, Mid-Atlantic, and parts of the South, weaker on the coasts. There's no editorial affiliate program — Acuity doesn't run publisher partnerships, doesn't pay editorial sites for recommendations, doesn't surface itself in content marketing channels. We recommend Acuity here despite the absence of affiliate alignment because the contractor experience is structurally that strong. This is the credibility flywheel: independent editorial sites can recommend the carriers their readers should actually use, regardless of whether commission flows.",
+      "how_it_works": "Find a local independent agent in your state (or an aligned digital agency that quotes Acuity). The agent will collect your business details, request a quote from Acuity along with any other carriers they shop, and present comparison options. If Acuity wins, the agent binds the policy and is your service contact thereafter. Claims flow through Acuity directly with the agent as relationship manager.",
+      "pros_detail": [
+        { "title": "Consistently competitive pricing for clean-claim trades", "explanation": "Agent-shopped Acuity quotes frequently come in 10-25% below digital-native carriers on the same coverage for contractors with clean claims histories. The mutual-carrier cost structure shows up in pricing rather than marketing spend." },
+        { "title": "Strong claims-handling reputation", "explanation": "Reddit, BBB, and contractor forum sentiment is consistently positive on Acuity claims. Adjusters respond, claims process, payouts arrive. The institutional culture appears genuinely contractor-friendly." },
+        { "title": "Mutual carrier = policyholder-aligned incentives", "explanation": "Acuity is a mutual carrier — policyholders are the owners, not stockholders. The structural incentive alignment shows up in longer-term renewal stability and pricing discipline." },
+        { "title": "Trades-specific underwriting depth", "explanation": "Acuity actually understands contractor risk profiles, has trade-specific class codes properly calibrated, and underwrites the differences between HVAC vs roofing vs plumbing with appropriate nuance. The trades-focus is genuine institutional expertise." },
+        { "title": "Top-tier industry reputation in unrelated contexts", "explanation": "Acuity wins industry awards (workplace, claims handling) and is repeatedly named on 'Best Insurance Companies' lists by independent ranking sources. The external reputation aligns with the contractor-side experience." }
+      ],
+      "cons_detail": [
+        { "title": "Agent-only access — no direct digital path", "explanation": "Getting an Acuity quote requires working with an independent agent. No online self-service quoting. For digital-first contractors who want 10-minute self-service binding, Acuity isn't accessible." },
+        { "title": "Only available in ~28 states", "explanation": "Strong in the Midwest, Mid-Atlantic, and parts of the South. Weaker on the West Coast, Northeast, and some Southeast markets. Check state availability with a local agent before assuming Acuity is an option." },
+        { "title": "No editorial affiliate program", "explanation": "Acuity doesn't pay editorial publishers for recommendations. We recommend them anyway because the contractor experience is structurally strong — but readers should know there's no aligned commercial incentive. This is the credibility flywheel in action." },
+        { "title": "Less brand recognition than national carriers", "explanation": "Acuity doesn't have the marketing budget of The Hartford or Travelers. Contractors searching for insurance online won't typically encounter Acuity unless an agent surfaces it. The under-recognition is partly editorial responsibility for sites like WrenchStack to correct." }
+      ],
+      "best_for": "Trades contractors in Acuity's geographic footprint (~28 states, Midwest/Mid-Atlantic strongest) with clean claims histories, who value working with a local independent agent and want pricing-competitive coverage from a financially-strong mutual carrier",
+      "best_team_size": "1-50 users",
+      "weaknesses": "Agent-only access, geographic footprint of only ~28 states, no editorial affiliate program, lower brand recognition than national competitors — but contractor experience is genuinely among the best in the market",
+      "reputation_flag": null,
+      "ratings": { "trustpilot": 4.5, "bbb": "A+ (BBB-accredited)", "am_best": "A+ (Superior)", "reddit_sentiment": "strongly positive — frequently described as 'best-kept secret in contractor insurance' in forum threads" },
+      "key_features": ["mutual_carrier", "agent_distributed", "trades_specific_underwriting", "cult_favorite_reputation", "competitive_pricing"],
+      "affiliate_program": "none",
+      "affiliate_payout_note": "No editorial affiliate program. Our recommendation is unaffected — we recommend Acuity despite the absence of commercial alignment because the contractor experience is structurally strong.",
+      "verified_date": "2026-05-28",
+      "provider_faqs": [
+        { "q": "Why do you recommend Acuity if there's no affiliate?", "a": "Because the contractor experience is genuinely strong, and our editorial credibility depends on recommending what readers should actually use rather than what pays us. The credibility flywheel — recommending the right carriers regardless of commercial alignment — is the entire moat that lets us be trusted at all. Acuity is one of the carriers that proves we mean it." },
+        { "q": "How do I get an Acuity quote?", "a": "Find an independent insurance agent in your state who writes Acuity. Use Acuity's agent locator on acuity.com, or ask local contractors who their agent is and whether the agent works with Acuity. The agent will request a quote on your behalf — typical turnaround 1-3 business days." },
+        { "q": "Is Acuity available in my state?", "a": "Available in ~28 states. Strong in the Midwest (Wisconsin, Minnesota, Illinois, Indiana, Iowa, Michigan, Missouri, Ohio), Mid-Atlantic (Pennsylvania, Virginia, Maryland), and parts of the South. Not available in many coastal markets. Check the Acuity agent locator for your specific state." },
+        { "q": "What makes a mutual carrier different?", "a": "In a mutual carrier, policyholders are the owners — not external stockholders. The structural incentive alignment is different: profits get reinvested or returned to policyholders rather than paid as dividends to outside investors. The result tends to be longer-term pricing stability and customer-aligned underwriting decisions. Erie Insurance and State Farm are also mutuals (or near-mutuals); the model has a long track record in the US insurance market." }
+      ]
+    },
+    {
+      "slug": "erie-insurance",
+      "name": "Erie Insurance",
+      "vendor_url": "https://www.erieinsurance.com",
+      "affiliate_url": "TBD",
+      "tagline": "Regional mutual carrier in the Mid-Atlantic — cult-favorite for trades contractors in its footprint",
+      "provider_type": "mutual-carrier",
+      "distribution_model": "agent-only",
+      "insurance_lines": ["general_liability", "workers_comp", "commercial_auto", "bop", "umbrella"],
+      "quote_speed": "Agent-mediated quoting — typically 1-3 business days",
+      "typical_premium_range": "Frequently the lowest competitive option for trades in its footprint",
+      "verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "pest_control"],
+      "geographic_coverage": "us-regional",
+      "states_note": "Available in only 12 states + DC — Mid-Atlantic, parts of Midwest, parts of Northeast. NOT available in most of US.",
+      "founded": 1925,
+      "headquartered": "Erie, PA",
+      "long_description": "Erie Insurance is the regional mutual carrier with cult-favorite status among trades contractors in its 12-state footprint (Pennsylvania, Maryland, Virginia, West Virginia, Ohio, Indiana, Illinois, Wisconsin, Kentucky, Tennessee, North Carolina, New York, plus DC). Founded the same year as Acuity (1925) and structured similarly as a mutual carrier, Erie shares many of the structural advantages — policyholder-aligned incentives, strong claims handling, competitive pricing for clean-claim accounts, no aggressive renewal-pricing patterns.\n\nFor trades contractors in Erie's footprint, the platform is consistently named alongside Acuity as 'the carrier my agent shopped that surprised me with the lowest quote.' The Mid-Atlantic geographic concentration means Erie has deep institutional understanding of regional contractor patterns — Pennsylvania residential construction, Virginia HVAC seasonality, North Carolina roofing storm exposure. The trade-off is geographic: contractors outside the 12-state footprint can't access Erie at all, period. This is a hard limitation, not a soft one.\n\nThe same caveats as Acuity apply: agent-only distribution, no editorial affiliate program, lower brand recognition than national carriers. We recommend Erie here for contractors in its footprint because the contractor experience is structurally among the best in the market — credibility flywheel in action.",
+      "how_it_works": "Find an Erie agent in your state via Erie's agent locator on erieinsurance.com. Agent collects business details, requests Erie quote alongside other carriers they shop, presents comparison. If Erie wins, agent binds and is your service relationship. Claims flow through Erie directly with the agent as relationship manager.",
+      "pros_detail": [
+        { "title": "Frequently the lowest quote for clean-claim trades in footprint", "explanation": "Erie consistently surprises agents and contractors with competitive pricing on trades-segment business in its 12-state footprint. The mutual-carrier structure + regional focus + clean-claim underwriting model translates to genuine pricing competitiveness." },
+        { "title": "Strong claims-handling and customer-service reputation", "explanation": "Erie has won J.D. Power awards for claims satisfaction and customer service repeatedly. The institutional culture is consistently described as professional and contractor-friendly." },
+        { "title": "Mutual carrier with policyholder-aligned structure", "explanation": "Same structural advantage as Acuity — policyholders are owners, profits reinvest rather than dividend out, long-term renewal stability. The model works." },
+        { "title": "Regional depth = institutional understanding of local trades", "explanation": "Erie's underwriters and claims adjusters know the regional contractor patterns intimately. Pennsylvania residential construction, Virginia HVAC seasonality, North Carolina roofing exposure to storm patterns — this is genuine institutional expertise from operating in the region for 100 years." }
+      ],
+      "cons_detail": [
+        { "title": "Available in only 12 states + DC", "explanation": "Mid-Atlantic + parts of Midwest + parts of Northeast. Contractors outside this footprint can't access Erie at all. This is the hard limitation." },
+        { "title": "Agent-only distribution", "explanation": "No direct-digital quoting. Working with a local Erie agent is required. Same friction as Acuity for digital-first contractors." },
+        { "title": "No editorial affiliate program", "explanation": "Erie doesn't pay editorial publishers for recommendations. We recommend anyway because the contractor experience is structurally strong." },
+        { "title": "Lower brand recognition outside footprint", "explanation": "Contractors not in Erie's 12-state footprint typically have never heard of the carrier. Inside the footprint, brand recognition is strong via long regional presence + dealer-network advertising." }
+      ],
+      "best_for": "Trades contractors in Erie's 12-state footprint (Mid-Atlantic + parts of Midwest + Northeast) with clean claims histories who value working with a local agent and want pricing-competitive coverage from a financially-strong regional mutual",
+      "best_team_size": "1-50 users",
+      "weaknesses": "Only available in 12 states + DC, agent-only distribution, no editorial affiliate program — but for contractors in the footprint, often the best combination of price + claims experience in the market",
+      "reputation_flag": null,
+      "ratings": { "trustpilot": 4.4, "bbb": "A+ (BBB-accredited)", "am_best": "A+ (Superior)", "reddit_sentiment": "strongly positive among contractors in footprint — 'best price + best claims I've had'" },
+      "key_features": ["regional_mutual", "12_state_footprint", "agent_distributed", "competitive_pricing", "strong_claims_reputation"],
+      "affiliate_program": "none",
+      "affiliate_payout_note": "No editorial affiliate program. Recommendation is structural-fit-based, not commercially-aligned.",
+      "verified_date": "2026-05-28",
+      "provider_faqs": [
+        { "q": "Which states is Erie available in?", "a": "Pennsylvania, Maryland, Virginia, West Virginia, Ohio, Indiana, Illinois, Wisconsin, Kentucky, Tennessee, North Carolina, New York, plus Washington DC. Twelve states + DC total. Outside this footprint, Erie isn't an option." },
+        { "q": "How does Erie compare to Acuity?", "a": "Similar structural profile (regional mutual carrier, agent-distributed, strong contractor reputation, competitive pricing). Different geographic footprints — Acuity covers ~28 states with Midwest focus; Erie covers 12 states with Mid-Atlantic focus. Both are worth getting quotes from if available in your area. Many contractors get both quotes via the same independent agent and pick the better deal." },
+        { "q": "Why is Erie's reputation so good?", "a": "Combination of factors: mutual-carrier structure aligns long-term incentives, regional concentration enables deep institutional expertise, conservative underwriting + clean-claim focus translates to competitive pricing, claims-handling culture is institutionally strong (J.D. Power awards), agent-distribution means contractors have a real relationship manager rather than calling a 1-800 number. The combination has compounded over 100 years of regional operation." }
+      ]
+    },
+    {
+      "slug": "pie-insurance",
+      "name": "Pie Insurance",
+      "vendor_url": "https://www.pieinsurance.com",
+      "affiliate_url": "TBD",
+      "tagline": "Workers comp-focused MGA — competitive entry pricing but documented audit/billing complaint pattern at renewal",
+      "provider_type": "mga",
+      "distribution_model": "direct-digital",
+      "insurance_lines": ["workers_comp"],
+      "quote_speed": "Online quote in 5-10 minutes",
+      "typical_premium_range": "$30-$200/mo for WC on a 1-5 person trades shop initial quote",
+      "verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control", "handyman"],
+      "geographic_coverage": "us-nationwide",
+      "states_note": "Available in 38 states; not in monopoly states (OH, WA, WY, ND)",
+      "founded": 2017,
+      "headquartered": "Washington, DC",
+      "long_description": "Pie Insurance is the workers-comp-focused managed general agent (MGA) that built its market position on competitive entry-pricing for SMB workers comp and a fast online quote-bind experience similar to NEXT. The product has real value at the initial-quote stage — Pie's pricing for clean-claim trades shops often comes in 10-30% below traditional workers-comp options. The structural problem isn't initial pricing — it's what happens at audit and renewal.\n\nThe documented complaint pattern, accumulated across Reddit, BBB filings, and contractor forum threads over 2023-2025: (1) initial premiums are competitive and binding is fast, (2) end-of-policy-period payroll audits result in significant additional premium charges based on auditor interpretations that contractors describe as aggressive, (3) renewal quotes come in 30-70% above initial premium with no claims history, (4) dispute and refund processes are described as slow, opaque, and prone to denial of legitimate disputes. The pattern is widespread enough that 'Pie audit' is an active concerned search query in r/smallbusiness.\n\nThe operational dynamic: Pie's MGA structure means they underwrite policies on behalf of an underlying carrier (Sirius Point at present). The aggressive audit interpretations may be driven by the MGA-carrier reinsurance dynamics — the audit-recovery becomes a meaningful component of overall profitability, which creates incentives to interpret audits expansively. This isn't unique to Pie (workers comp audits are a known industry friction point) but Pie's complaint volume on the issue is substantially higher than peer carriers.\n\nWe list Pie in this directory because workers comp coverage is essential and Pie's name appears prominently in SMB workers-comp searches — but we cannot recommend it without the reputation_flag warning. NEXT, Acuity (in footprint), Simply Business, and CoverWallet are structurally better workers-comp paths for most SMB trades contractors. If you're using Pie currently, document everything before audit, scrutinize audit results aggressively, and shop carriers at renewal.",
+      "how_it_works": "Visit Pie, enter payroll details and trade classification, receive workers comp quote in 5-10 minutes. Bind online with credit card or ACH. Pay monthly or annual premium. At end of policy period, Pie conducts payroll audit and may bill additional premium based on audited payroll exceeding initial estimates. Renewal quote comes in with annual rate adjustment.",
+      "pros_detail": [
+        { "title": "Competitive initial pricing for clean-claim trades", "explanation": "Pie's initial quotes for SMB workers comp frequently come in 10-30% below traditional carriers. The competitive entry pricing is what brings contractors to the platform." },
+        { "title": "Fast online quote-bind experience", "explanation": "5-10 minute quote-to-bind workflow with online payment. Operationally similar to NEXT's experience for WC specifically." },
+        { "title": "Trade-specific WC underwriting", "explanation": "Pie's class-code calibration is contractor-aware. The underwriting handles the differences between HVAC vs roofing vs cleaning with appropriate nuance." }
+      ],
+      "cons_detail": [
+        { "title": "Documented aggressive payroll audit pattern", "explanation": "Forum threads, BBB complaints, and contractor reviews consistently describe end-of-period payroll audits that result in significant additional premium charges based on auditor interpretations contractors describe as aggressive. The pattern is widespread enough to be a structural feature, not isolated incidents." },
+        { "title": "Significant renewal-rate increases on clean accounts", "explanation": "Renewal quotes frequently come in 30-70% above initial premium with no claims history. Contractors describe being surprised at the magnitude of the increase relative to the no-claims experience." },
+        { "title": "Slow and opaque dispute process for audit charges", "explanation": "When contractors dispute audit results, the process is described as slow, opaque, and prone to denial of legitimate disputes. The friction creates working-capital tie-up while disputes are pending." },
+        { "title": "MGA structure may drive audit-recovery incentives", "explanation": "Pie operates as an MGA on behalf of an underlying carrier. The structural incentives around audit recovery may differ from direct-carrier alignment. This isn't unique to Pie (MGA structures are common) but the audit complaint volume is substantially higher than peer carriers." },
+        { "title": "Pie-specific complaints disproportionate to market share", "explanation": "Workers comp audits are an industry-wide friction point, but Pie's complaint volume on the issue is notably higher than carriers of comparable size. The pattern is documented enough to be a Pie-specific concern, not just industry baseline." }
+      ],
+      "best_for": "We cannot recommend Pie for contractors who have alternatives. If using Pie currently, document everything before audit, scrutinize audit results aggressively, and shop carriers at every renewal. NEXT, Acuity (in footprint), Simply Business, and CoverWallet offer structurally better workers-comp paths.",
+      "best_team_size": "—",
+      "weaknesses": "Aggressive payroll audit interpretations, significant renewal-rate increases on clean accounts, slow audit-dispute process, complaint volume disproportionate to market share — competitive initial pricing isn't worth the renewal/audit pattern",
+      "reputation_flag": "Pie Insurance has a documented complaint pattern around aggressive end-of-period payroll audits and significant renewal-rate increases on accounts with no claims history. Forum threads, BBB complaints, and contractor reviews consistently describe audit results that exceed contractor expectations by meaningful amounts, slow and opaque audit-dispute processes, and 30-70% renewal-rate increases on clean accounts. The pattern is widespread enough to be structural rather than isolated. We list Pie for completeness but cannot recommend it — NEXT, Acuity (in footprint), Simply Business, and CoverWallet offer structurally better workers-comp paths for most SMB trades contractors.",
+      "ratings": { "trustpilot": 2.8, "bbb": "B (not BBB-accredited) — moderate complaint volume", "am_best": "A- (Excellent) via underlying carrier", "reddit_sentiment": "negative on audit/renewal experience despite positive initial-quote pricing" },
+      "key_features": ["workers_comp_focused", "competitive_initial_pricing", "online_quote_bind", "mga_structure"],
+      "affiliate_program": "unknown",
+      "affiliate_payout_note": "Affiliate program documentation unclear; our recommendation is unaffected",
+      "verified_date": "2026-05-28",
+      "provider_faqs": [
+        { "q": "Why is Pie's initial pricing so competitive?", "a": "Workers comp pricing depends heavily on initial payroll estimates and class-code assignments. Pie's initial quotes are calibrated to win on price at the entry point. The structural problem is what happens at the end-of-period audit — when audited payroll exceeds initial estimates (which it often does for growing trades shops), additional premium becomes due. The Pie pattern is that the audit interpretations are described as aggressive, which is where most of the complaint volume concentrates." },
+        { "q": "Should I cancel my Pie policy?", "a": "If your policy hasn't audited yet: read your policy carefully, document your payroll precisely, and plan to scrutinize the audit results when they arrive. Don't cancel mid-policy without consulting a workers comp specialist agent — early cancellation can trigger short-rate cancellation penalties. At renewal: shop carriers aggressively. Get quotes from NEXT, Simply Business, CoverWallet, and a local Acuity agent if available." },
+        { "q": "What should I do at audit?", "a": "Document everything before the audit period: payroll records, employee classifications, subcontractor 1099s, certificates of insurance from subcontractors (Pie can charge you for uninsured subs). Review audit results line-by-line. Dispute aggressively interpretations that don't match your records. The dispute process is slow but legitimate disputes do sometimes succeed when contractors maintain rigorous documentation." }
+      ]
+    }
+  ]
+}

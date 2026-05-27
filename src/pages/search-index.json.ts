@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { tools, verticals, getTool, verticalToUrl, priceTier, freshnessTier, leadGenPlatforms, leadGenTier } from '../lib/data';
+import { tools, verticals, getTool, verticalToUrl, priceTier, freshnessTier, leadGenPlatforms, leadGenTier, insuranceProviders, insuranceTier } from '../lib/data';
 import featuresData from '../data/features.json';
 import migrationsData from '../data/migrations.json';
 
@@ -59,6 +59,20 @@ export const GET: APIRoute = () => {
       bestFor: p.best_for,
       verticals: p.verticals,
       tier: leadGenTier(p),
+    });
+  }
+
+  // Insurance providers (13)
+  for (const p of insuranceProviders) {
+    items.push({
+      type: 'insurance',
+      name: p.name,
+      slug: p.slug,
+      url: `/insurance/${p.slug}/`,
+      tagline: p.tagline,
+      bestFor: p.best_for,
+      verticals: p.verticals,
+      tier: insuranceTier(p),
     });
   }
 

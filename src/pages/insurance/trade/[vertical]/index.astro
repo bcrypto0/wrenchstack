@@ -1,0 +1,193 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import {
+  insuranceProviders,
+  insuranceTier,
+  verticalToUrl,
+  getVertical,
+  type InsuranceProvider,
+} from '../../../../lib/data';
+
+export async function getStaticPaths() {
+  const TARGET_VERTICALS = [
+    'hvac', 'plumbing', 'electrical', 'roofing',
+    'general_contractor', 'landscaping', 'cleaning', 'pest_control',
+  ];
+  return TARGET_VERTICALS.map((slug) => {
+    const v = getVertical(slug);
+    if (!v) return null;
+    return {
+      params: { vertical: verticalToUrl(slug) },
+      props: { verticalSlug: slug },
+    };
+  }).filter((p): p is NonNullable<typeof p> => !!p);
+}
+
+interface Props {
+  verticalSlug: string;
+}
+
+const { verticalSlug } = Astro.props;
+const vertical = getVertical(verticalSlug)!;
+
+const providersForVertical = insuranceProviders.filter((p) => p.verticals.includes(verticalSlug));
+const byTier: Record<'S' | 'A' | 'F', InsuranceProvider[]> = { S: [], A: [], F: [] };
+for (const p of providersForVertical) {
+  byTier[insuranceTier(p)].push(p);
+}
+
+const pageTitle = `Best Insurance for ${vertical.name} Contractors (2026)`;
+const pageDescription = `Independent reviews of business-insurance providers for ${vertical.name.toLowerCase()} contractors — NEXT, Hiscox, Simply Business, Acuity, Erie. Honest reputation flags, real affiliate disclosure, agent-vs-direct framing.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Insurance', url: '/insurance/' },
+  { name: vertical.name, url: `/insurance/trade/${verticalToUrl(verticalSlug)}/` },
+];
+
+const tierMeta = {
+  S: { label: 'Recommended', color: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
+  A: { label: 'Workable depending on profile', color: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
+  F: { label: 'Reputation warning applies', color: 'bg-rose-100 text-rose-900 ring-rose-300', cardBorder: 'border-rose-300' },
+};
+
+function tradeIntro(slug: string): string {
+  switch (slug) {
+    case 'hvac':
+      return 'HVAC contractors face elevated workers-comp class rates (refrigerant handling, ladder work, electrical exposure) and benefit from carriers that price the trade properly rather than averaging across SMB classes. Workers comp is usually the largest line; GL plus commercial auto follow.';
+    case 'plumbing':
+      return 'Plumbing has moderate workers-comp class rates but high water-damage liability exposure. Carriers that understand plumbing-specific risk patterns (water-damage claims handling, completed-operations coverage) are structurally better fits than generic SMB underwriting.';
+    case 'electrical':
+      return 'Electrical work carries higher injury and property-damage exposure than most trades. Workers comp and GL are both critical lines. State-specific licensing requirements interact with insurance underwriting — make sure your policy reflects your licensed class accurately.';
+    case 'roofing':
+      return 'Roofing has the highest workers-comp class rates of any common trade — heights, ladders, weather exposure. Many carriers refuse residential roofing entirely or charge significantly elevated WC premiums. Specialty carriers and brokers who actually understand roofing risk are essential.';
+    case 'general_contractor':
+      return 'GCs have unusually broad insurance needs — GL with completed-operations, builder\'s risk for projects in progress, professional liability for design-build work, commercial auto, umbrella, plus workers comp covering varied subcontractor exposure. Multi-line carriers and brokers add real value here.';
+    case 'landscaping':
+      return 'Landscaping has moderate WC class rates but seasonal payroll variation that creates audit-period premium volatility. Carriers that handle seasonal businesses cleanly (no penalty for off-season layoffs) are structurally better fits.';
+    case 'cleaning':
+      return 'Cleaning has lower WC class rates than most trades but higher property-damage liability exposure (customer-property damage claims, chemical-handling incidents). GL coverage with damage-to-property-being-worked-on coverage matters here.';
+    case 'pest_control':
+      return 'Pest control combines moderate WC class rates with chemical-handling liability exposure (pesticide application, contamination claims). Specialty professional liability for pest-control work is worth confirming on any policy.';
+    default:
+      return `Insurance recommendations for ${vertical.name.toLowerCase()} contractors.`;
+  }
+}
+
+const faqs = [
+  {
+    q: `Which insurance provider is best for ${vertical.name.toLowerCase()} contractors?`,
+    a: byTier.S.length > 0
+      ? `Based on contractor experience and structural fit, ${byTier.S[0].name} is the top recommendation for ${vertical.name.toLowerCase()} work. ${byTier.S[0].best_for}.${byTier.S.length > 1 ? ` Get comparison quotes from ${byTier.S.slice(1, 3).map(p => p.name).join(' and ')} to confirm pricing.` : ''} For most shops, the recommended stack is a digital baseline quote (NEXT) + a broker comparison (Simply Business or CoverWallet) + an agent quote from Acuity or Erie if in footprint.`
+      : `Get quotes from NEXT (digital baseline) + Simply Business or CoverWallet (broker comparison) + Acuity or Erie via local agent (if in footprint). Avoid Pie for workers comp.`,
+  },
+  {
+    q: `What does typical insurance cost for ${vertical.name.toLowerCase()} contractors?`,
+    a: `GL on a 1-5 person residential trades shop typically runs $40-$200/month. Adding workers comp + commercial auto + tools brings total monthly insurance spend to $150-$500/month for a small shop. Premiums vary dramatically by trade class, state, claims history, and coverage limits — the only way to know your actual cost is to get quotes.`,
+  },
+  {
+    q: `Should I use a digital carrier or an agent?`,
+    a: `Both have a place. Digital carriers (NEXT, Simply Business) give you a fast baseline quote in 10-15 minutes. Local agents shopping multiple carriers (often surfacing Acuity or Erie that don't appear in digital channels) can sometimes find 10-25% cheaper rates for clean-claim accounts. The right approach for most contractors is to get both — digital quote first for the baseline, then have an agent shop to see if they can beat it.`,
+  },
+  {
+    q: `What insurance lines do I actually need?`,
+    a: `Minimum for most ${vertical.name.toLowerCase()} contractors: General liability (most customers and GCs require it), workers comp (required by law in most states if you have employees), and commercial auto (if you drive a work vehicle). Tools & equipment coverage is recommended. Professional liability is essential for design-build or consulting work. Umbrella coverage adds cost but provides catastrophic-claim protection — typical recommendation at $1M+.`,
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
+        Insurance · {vertical.name}
+      </p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        Best Insurance for {vertical.name} Contractors (2026)
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">{tradeIntro(verticalSlug)}</p>
+    </header>
+
+    {(['S', 'A', 'F'] as const).map((tier) => {
+      const providers = byTier[tier];
+      if (providers.length === 0) return null;
+      const meta = tierMeta[tier];
+      return (
+        <section class="mb-12">
+          <div class="mb-5 flex items-baseline gap-3">
+            <h2 class="text-2xl font-bold text-slate-900">{meta.label}</h2>
+            <span class={`inline-block rounded-full px-2 py-0.5 text-xs font-bold ring-1 ${meta.color}`}>{providers.length}</span>
+          </div>
+
+          <div class="space-y-4">
+            {providers.map((p) => (
+              <article class={`rounded-lg border-2 ${meta.cardBorder} bg-white p-5`}>
+                <div class="mb-3 flex items-start justify-between gap-3">
+                  <div class="min-w-0 flex-1">
+                    <h3 class="text-xl font-bold text-slate-900">
+                      <a href={`/insurance/${p.slug}/`} class="hover:text-orange-600">{p.name}</a>
+                    </h3>
+                    <p class="text-sm italic text-slate-500">{p.tagline}</p>
+                  </div>
+                  <div class="shrink-0 text-right text-xs">
+                    <p class="font-bold text-slate-900 uppercase tracking-wider">{p.provider_type.replace(/-/g, ' ')}</p>
+                    <p class="text-slate-500">{p.distribution_model.replace(/-/g, ' ')}</p>
+                  </div>
+                </div>
+
+                {p.reputation_flag && (
+                  <div class="mb-3 rounded-md border-l-4 border-rose-500 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+                    <p class="font-bold uppercase tracking-wider text-xs text-rose-700 mb-1">⚠ Reputation warning</p>
+                    <p class="leading-relaxed">{p.reputation_flag.split('.')[0]}.</p>
+                  </div>
+                )}
+
+                <p class="mb-3 text-sm text-slate-700 leading-relaxed">
+                  <strong class="text-slate-900">Best for {vertical.name.toLowerCase()}:</strong> {p.best_for}
+                </p>
+
+                <div class="flex flex-wrap gap-2">
+                  <a href={`/insurance/${p.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">Read full review →</a>
+                  <a href={p.affiliate_url.startsWith('http') ? p.affiliate_url : p.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md border border-orange-300 bg-white px-4 py-2 text-sm font-semibold text-orange-700 hover:bg-orange-50">Visit {p.name}</a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Frequently asked for {vertical.name.toLowerCase()} contractors</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">More for {vertical.name.toLowerCase()} contractors</h2>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href={`/${verticalToUrl(verticalSlug)}/`} class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">{vertical.name} software directory →</a>
+        <a href={`/lead-gen/trade/${verticalToUrl(verticalSlug)}/`} class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Lead-gen for {vertical.name.toLowerCase()}</a>
+        <a href="/insurance/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">All insurance providers</a>
+      </div>
+    </section>
+  </article>
+</Layout>
