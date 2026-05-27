@@ -1,0 +1,167 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import nzData from '../../data/international/nz.json';
+
+interface NzVendor {
+  slug: string;
+  name: string;
+  category: string;
+  vendor_url: string;
+  tagline: string;
+  market_position: string;
+  nz_specific_note?: string | null;
+  tier: 'S' | 'A' | 'F';
+  reputation_flag: string | null;
+  pros: string[];
+  cons: string[];
+  typical_pricing: string;
+  is_cross_market: boolean;
+  cross_market_link: string | null;
+}
+
+const vendors = (nzData as { vendors: NzVendor[] }).vendors;
+
+const categories = ['software', 'lead-gen', 'insurance', 'payroll', 'certification'];
+const categoryMeta: Record<string, { label: string; description: string }> = {
+  'software': { label: 'Field service software', description: 'NZ-built FSM ecosystem — Fergus (founded by NZ plumber), NextMinute (4.9★ ratings), and globally-scaled Tradify (NZ-origin). Native ACC, GST, PAYE handling.' },
+  'lead-gen': { label: 'Lead-generation platforms', description: 'Smaller NZ market — Builderscrack dominates as the leading NZ-only marketplace.' },
+  'insurance': { label: 'Business insurance', description: 'NZ-licensed insurance with IAG family (NZI, AMI) and major underwriter Vero. PL coverage typically NZ$1-5M standard.' },
+  'payroll': { label: 'Payroll software', description: 'IRD-compliant NZ payroll — iPayroll, Smartly. KiwiSaver + ACC levy handling native.' },
+  'certification': { label: 'Required certifications', description: 'NZ mandatory licensing — EWRB for electrical (38K registered), PGDB for plumbing/gas/drainage (combined multi-discipline body).' },
+};
+
+const vendorsByCategory: Record<string, NzVendor[]> = {};
+categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
+
+const pageTitle = 'NZ Trades Vendor Directory — WrenchStack New Zealand';
+const pageDescription = `WrenchStack's New Zealand trades vendor directory: ${vendors.length} platforms across software, lead-gen, insurance, payroll, and required certifications. Built for NZ contractors with native NZ compliance (ACC, GST, PAYE, EWRB, PGDB).`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'New Zealand', url: '/nz/' },
+];
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <article class="mx-auto max-w-5xl px-4 py-12">
+
+    <header class="mb-10">
+      <div class="mb-3 flex items-center gap-2">
+        <span class="text-2xl" aria-hidden="true">🇳🇿</span>
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">New Zealand</p>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        New Zealand Trades Vendor Directory
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Independent reviews of {vendors.length} New Zealand-relevant vendors across 5 categories. NZ has unusually strong native FSM software (Fergus, NextMinute, Tradify all NZ-origin), mandatory licensing schemes (EWRB for electrical, PGDB combining plumbing+gas+drainage), and IRD-compliant payroll requirements with KiwiSaver + ACC handling.
+      </p>
+    </header>
+
+    <section class="mb-10 grid gap-3 grid-cols-2 sm:grid-cols-5">
+      {categories.map(c => (
+        <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+          <div class="text-2xl font-bold text-slate-900">{vendorsByCategory[c].length}</div>
+          <div class="mt-1 text-xs text-slate-600 capitalize">{c.replace('-', ' ')}</div>
+        </div>
+      ))}
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">What's different about NZ trades vendor selection</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        New Zealand's trades market is smaller than US/UK/AU/CA but with a disproportionately strong native FSM software ecosystem — Fergus, NextMinute, and Tradify are all NZ-built (Tradify scaled internationally; the others stayed AU/NZ-focused). Licensing is structurally simpler than fragmented AU/CA — single national bodies (EWRB for electrical, PGDB for plumbing/gas/drainage) cover the entire country. Payroll requires native IRD/KiwiSaver/ACC handling that international platforms don't match.
+      </p>
+    </section>
+
+    {categories.map(c => {
+      const cat = categoryMeta[c];
+      const cv = vendorsByCategory[c];
+      if (cv.length === 0) return null;
+      return (
+        <section class="mb-12">
+          <div class="mb-5">
+            <h2 class="text-2xl font-bold text-slate-900 capitalize">{cat.label}</h2>
+            <p class="mt-1 text-sm text-slate-600 leading-relaxed">{cat.description}</p>
+          </div>
+          <div class="space-y-4">
+            {cv.map(v => {
+              const tierColor = v.tier === 'S' ? 'border-emerald-300' : v.tier === 'F' ? 'border-rose-300' : 'border-blue-300';
+              const tierLabel = v.tier === 'S' ? 'Recommended' : v.tier === 'F' ? 'Reputation warning' : 'Workable';
+              const tierBadge = v.tier === 'S' ? 'bg-emerald-100 text-emerald-900' : v.tier === 'F' ? 'bg-rose-100 text-rose-900' : 'bg-blue-100 text-blue-900';
+              return (
+                <article class={`rounded-lg border-2 ${tierColor} bg-white p-5`}>
+                  <div class="mb-3 flex items-start justify-between gap-3">
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-center gap-2 mb-1 flex-wrap">
+                        <h3 class="text-xl font-bold text-slate-900">{v.name}</h3>
+                        <span class={`rounded-full px-2 py-0.5 text-xs font-bold ${tierBadge}`}>Tier {v.tier} · {tierLabel}</span>
+                        {v.is_cross_market && (
+                          <span class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">Cross-market</span>
+                        )}
+                      </div>
+                      <p class="text-sm italic text-slate-500">{v.tagline}</p>
+                    </div>
+                  </div>
+
+                  {v.reputation_flag && (
+                    <div class="mb-3 rounded-md border-l-4 border-rose-500 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+                      <p class="font-bold uppercase tracking-wider text-xs text-rose-700 mb-1">⚠ Reputation warning</p>
+                      <p class="leading-relaxed">{v.reputation_flag}</p>
+                    </div>
+                  )}
+
+                  <p class="mb-3 text-sm text-slate-700 leading-relaxed">{v.market_position}</p>
+
+                  {v.nz_specific_note && (
+                    <div class="mb-3 rounded-md bg-slate-50 px-4 py-3">
+                      <p class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">NZ-specific note</p>
+                      <p class="text-sm text-slate-700 leading-relaxed">{v.nz_specific_note}</p>
+                    </div>
+                  )}
+
+                  <div class="mb-3 grid gap-3 sm:grid-cols-2">
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1">Pros</p>
+                      <ul class="space-y-1 text-sm text-slate-700">
+                        {v.pros.slice(0, 4).map(p => <li class="leading-snug">+ {p}</li>)}
+                      </ul>
+                    </div>
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-rose-700 mb-1">Cons</p>
+                      <ul class="space-y-1 text-sm text-slate-700">
+                        {v.cons.slice(0, 4).map(con => <li class="leading-snug">− {con}</li>)}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="mb-3 text-xs text-slate-600">
+                    <strong class="text-slate-900">Typical NZ pricing:</strong> {v.typical_pricing}
+                  </div>
+
+                  <div class="flex flex-wrap gap-2">
+                    <a href={v.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600">Visit {v.name} →</a>
+                    {v.cross_market_link && (
+                      <a href={v.cross_market_link} class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Full review (US market context)</a>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">NZ research is an active expansion</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">
+        {vendors.length} NZ vendors covered today. Want an NZ vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Back to US directory →</a>
+        <a href="/for-vendors/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Submit an NZ vendor</a>
+      </div>
+    </section>
+  </article>
+</Layout>
