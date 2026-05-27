@@ -1,0 +1,230 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { tools, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, verticals } from '../../../lib/data';
+
+// Computed live from directory data — every stat is reproducible from our published methodology
+const totalTools = tools.length;
+const phase2Tools = tools.filter(t => 'long_description' in t && t.long_description).length;
+const customQuotedTools = tools.filter(t => t.pricing.starting_at_usd === null).length;
+const customQuotedPct = Math.round((customQuotedTools / totalTools) * 100);
+const freeTrialTools = tools.filter(t => (t.pricing.free_trial_days ?? 0) > 0).length;
+const freeTrialPct = Math.round((freeTrialTools / totalTools) * 100);
+const avgPriceTools = tools.filter(t => t.pricing.starting_at_usd !== null);
+const medianPrice = avgPriceTools.length > 0
+  ? avgPriceTools.map(t => t.pricing.starting_at_usd!).sort((a, b) => a - b)[Math.floor(avgPriceTools.length / 2)]
+  : 0;
+const quickbooksIntegrated = tools.filter(t => t.integrations.some(i => i.includes('quickbooks'))).length;
+const quickbooksPct = Math.round((quickbooksIntegrated / totalTools) * 100);
+const stripeIntegrated = tools.filter(t => t.integrations.some(i => i.includes('stripe'))).length;
+const stripePct = Math.round((stripeIntegrated / totalTools) * 100);
+const modernCohort = tools.filter(t => t.founded && t.founded >= 2015).length;
+const modernPct = Math.round((modernCohort / totalTools) * 100);
+
+const leadGenWithFlags = leadGenPlatforms.filter(p => p.reputation_flag !== null).length;
+const leadGenFlagPct = Math.round((leadGenWithFlags / leadGenPlatforms.length) * 100);
+const insuranceWithFlags = insuranceProviders.filter(p => p.reputation_flag !== null).length;
+const agencyWithFlags = marketingAgencies.filter(a => a.reputation_flag !== null).length;
+const totalFlags = leadGenWithFlags + insuranceWithFlags + agencyWithFlags;
+const totalReputationVendors = leadGenPlatforms.length + insuranceProviders.length + marketingAgencies.length;
+const totalFlagPct = Math.round((totalFlags / totalReputationVendors) * 100);
+
+const gustoAffiliate = '$300-$1,000+';
+const totalCategories = 5;
+const totalVendors = totalTools + leadGenPlatforms.length + insuranceProviders.length + payrollServices.length + marketingAgencies.length;
+
+const pageTitle = 'WrenchStack Index Q2 2026 — Trades Vendor Benchmarks';
+const pageDescription = 'Quarterly data benchmark across all 5 trades-vendor categories. Software pricing distribution, lead-gen reputation patterns, insurance affiliate economics, payroll category structure. Citable headline stats.';
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Research', url: '/research/' },
+  { name: 'WrenchStack Index Q2 2026', url: '/research/index/' },
+];
+
+const quarter = 'Q2 2026';
+const publishDate = '2026-05-29';
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <article class="mx-auto max-w-4xl px-4 py-12">
+
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">WrenchStack Index · {quarter}</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        WrenchStack Index — {quarter}
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Quarterly benchmark of the trades-contractor vendor market. {totalVendors} vendors analyzed across {totalCategories} categories. Every stat is reproducible from our public <a href="/methodology/" class="text-orange-600 hover:underline">methodology</a> and derived live from the WrenchStack directory.
+      </p>
+      <p class="mt-2 text-sm text-slate-500">Published {publishDate} · Next update: Q3 2026 (September)</p>
+    </header>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Software pricing & structure</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div class="rounded-lg border-2 border-slate-200 bg-white p-5">
+          <div class="text-4xl font-bold text-slate-900">{customQuotedPct}%</div>
+          <p class="mt-2 text-sm text-slate-700 leading-relaxed">
+            of trades software platforms hide pricing behind sales calls ({customQuotedTools} of {totalTools} platforms). The remaining {100 - customQuotedPct}% publish at least starting tier pricing transparently.
+          </p>
+        </div>
+        <div class="rounded-lg border-2 border-slate-200 bg-white p-5">
+          <div class="text-4xl font-bold text-slate-900">${medianPrice}/mo</div>
+          <p class="mt-2 text-sm text-slate-700 leading-relaxed">
+            is the median starting tier among the {avgPriceTools.length} platforms with public pricing in WrenchStack's {totalTools}-tool directory.
+          </p>
+        </div>
+        <div class="rounded-lg border-2 border-slate-200 bg-white p-5">
+          <div class="text-4xl font-bold text-slate-900">{freeTrialPct}%</div>
+          <p class="mt-2 text-sm text-slate-700 leading-relaxed">
+            of trades software platforms offer a free trial ({freeTrialTools} of {totalTools} platforms). 14- and 30-day trial windows dominate.
+          </p>
+        </div>
+        <div class="rounded-lg border-2 border-slate-200 bg-white p-5">
+          <div class="text-4xl font-bold text-slate-900">{modernPct}%</div>
+          <p class="mt-2 text-sm text-slate-700 leading-relaxed">
+            of trades software platforms in WrenchStack were founded in 2015 or later — the modern-cloud cohort that has captured most net-new market share over the past decade.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Integration prevalence</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div class="rounded-lg border-2 border-slate-200 bg-white p-5">
+          <div class="text-4xl font-bold text-slate-900">{quickbooksPct}%</div>
+          <p class="mt-2 text-sm text-slate-700 leading-relaxed">
+            of trades software platforms ship a QuickBooks integration ({quickbooksIntegrated} of {totalTools}). QBO/QBD remains the dominant accounting platform for SMB trades; software vendors that don't integrate face significant adoption friction.
+          </p>
+        </div>
+        <div class="rounded-lg border-2 border-slate-200 bg-white p-5">
+          <div class="text-4xl font-bold text-slate-900">{stripePct}%</div>
+          <p class="mt-2 text-sm text-slate-700 leading-relaxed">
+            of trades software platforms integrate Stripe for payment processing ({stripeIntegrated} of {totalTools}). The remaining platforms rely on Square, native processing, or no native payments at all.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Reputation patterns across categories</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div class="rounded-lg border-2 border-rose-200 bg-rose-50 p-5">
+          <div class="text-4xl font-bold text-rose-900">{leadGenFlagPct}%</div>
+          <p class="mt-2 text-sm text-rose-900 leading-relaxed">
+            of lead-generation platforms WrenchStack covers carry a reputation_flag warning ({leadGenWithFlags} of {leadGenPlatforms.length}). Documented patterns include FTC enforcement actions, fake-lead complaint patterns, and predatory contract terms.
+          </p>
+        </div>
+        <div class="rounded-lg border-2 border-rose-200 bg-rose-50 p-5">
+          <div class="text-4xl font-bold text-rose-900">{totalFlagPct}%</div>
+          <p class="mt-2 text-sm text-rose-900 leading-relaxed">
+            of vendors in flag-eligible categories (lead-gen, insurance, marketing agencies) carry documented reputation warnings ({totalFlags} of {totalReputationVendors}). Software and payroll categories use different concern-classification systems.
+          </p>
+        </div>
+        <div class="rounded-lg border-2 border-slate-200 bg-white p-5">
+          <div class="text-4xl font-bold text-slate-900">{insuranceProviders.length}</div>
+          <p class="mt-2 text-sm text-slate-700 leading-relaxed">
+            insurance providers covered, including {insuranceProviders.filter(p => p.distribution_model === 'agent-only').length} agent-only mutual carriers (Acuity, Erie) recommended despite the absence of affiliate programs — the credibility flywheel in action.
+          </p>
+        </div>
+        <div class="rounded-lg border-2 border-slate-200 bg-white p-5">
+          <div class="text-4xl font-bold text-slate-900">{marketingAgencies.length}</div>
+          <p class="mt-2 text-sm text-slate-700 leading-relaxed">
+            marketing agencies covered — {marketingAgencies.filter(a => a.agency_type === 'trade-specific').length} trade-specific specialists, {agencyWithFlags} with documented contract-pattern reputation warnings.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Affiliate economics by category</h2>
+      <div class="rounded-lg border border-slate-200 bg-white p-5">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-slate-50 text-left text-slate-700">
+              <tr>
+                <th class="p-3 font-semibold">Category</th>
+                <th class="p-3 font-semibold">Vendors covered</th>
+                <th class="p-3 font-semibold">Best affiliate economics</th>
+                <th class="p-3 font-semibold">Typical payout</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr>
+                <td class="p-3 font-medium text-slate-900">Software</td>
+                <td class="p-3 text-slate-700">{tools.length}</td>
+                <td class="p-3 text-slate-700">ServiceTitan, Housecall Pro, FieldPulse (PartnerStack)</td>
+                <td class="p-3 text-slate-700">$100-$1,000 per signup</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-medium text-slate-900">Lead-gen</td>
+                <td class="p-3 text-slate-700">{leadGenPlatforms.length}</td>
+                <td class="p-3 text-slate-700">Service Direct, 33 Mile Radius (direct), Houzz Pro (ShareASale)</td>
+                <td class="p-3 text-slate-700">Pay-per-call / 5% commission</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-medium text-slate-900">Insurance</td>
+                <td class="p-3 text-slate-700">{insuranceProviders.length}</td>
+                <td class="p-3 text-slate-700">NEXT (Impact), Hiscox (CJ), Simply Business + CoverWallet (direct)</td>
+                <td class="p-3 text-slate-700">$25-$50 per qualified quote</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-medium text-slate-900">Payroll</td>
+                <td class="p-3 text-slate-700">{payrollServices.length}</td>
+                <td class="p-3 text-slate-700">Gusto (PartnerStack — highest in WrenchStack)</td>
+                <td class="p-3 text-slate-700">{gustoAffiliate} per signup</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-medium text-slate-900">Marketing agencies</td>
+                <td class="p-3 text-slate-700">{marketingAgencies.length}</td>
+                <td class="p-3 text-slate-700">No affiliate programs — direct-relationship category</td>
+                <td class="p-3 text-slate-700">None (sponsored placement model)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-3 text-xs text-slate-500">
+          Source: WrenchStack per-vendor affiliate ledger, Q2 2026. See <a href="/methodology/#affiliate-ledger" class="underline hover:text-slate-700">methodology page</a> for individual vendor disclosure.
+        </p>
+      </div>
+    </section>
+
+    <section class="mb-10 rounded-lg border-2 border-slate-200 bg-white p-6">
+      <h2 class="mb-3 text-lg font-bold text-slate-900">Citation guidance</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        When citing WrenchStack Index data, please use this format:
+      </p>
+      <div class="mt-3 rounded-md bg-slate-50 px-4 py-3 font-mono text-sm text-slate-800">
+        WrenchStack Index Q2 2026. WrenchStack Research. https://wrenchstack.com/research/index/
+      </div>
+      <p class="mt-3 text-sm text-slate-700">
+        For interview quotes or exclusive segment data (e.g., "what % of HVAC-specific platforms integrate with QuickBooks"), email <a href="mailto:press@wrenchstack.com" class="text-orange-600 hover:underline">press@wrenchstack.com</a>. We respond to journalist requests within 1 business day.
+      </p>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-lg font-bold text-slate-900">Methodology notes</h2>
+      <p class="text-sm text-slate-700 leading-relaxed mb-3">
+        WrenchStack Index stats are computed live from the public WrenchStack directory using the published <a href="/methodology/" class="text-orange-600 hover:underline">WrenchStack Fit Score™ methodology v1.0</a>. All vendor inclusions reflect quarterly editorial review; pricing tiers are verified directly from vendor pricing pages with date stamps.
+      </p>
+      <ul class="space-y-1 text-sm text-slate-700">
+        <li>• <strong>Sample size:</strong> All {totalVendors} vendors in the WrenchStack directory as of {publishDate}</li>
+        <li>• <strong>Geographic scope:</strong> United States (international markets in expansion)</li>
+        <li>• <strong>Refresh cadence:</strong> Quarterly (Q3 2026 release: September 2026)</li>
+        <li>• <strong>Data freshness:</strong> Individual pricing tiers carry verified_date stamps visible on each vendor page</li>
+        <li>• <strong>Reproducibility:</strong> Every stat is derivable from the public directory + methodology</li>
+      </ul>
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">More research</h2>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/trends-2026/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">2026 Market Report →</a>
+        <a href="/awards/2026/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">2026 Awards</a>
+        <a href="/research/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">All research</a>
+        <a href="/press/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Press desk</a>
+      </div>
+    </section>
+  </article>
+</Layout>

@@ -1,164 +1,199 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, verticals } from '../lib/data';
-import useCasesData from '../data/use_cases.json';
+import { tools, verticals, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies } from '../lib/data';
 
 const toolCount = tools.length;
 const verticalCount = verticals.length;
-const useCaseCount = (useCasesData.use_cases as unknown[]).length;
 const phase2Count = tools.filter((t) => (t as { long_description?: string }).long_description).length;
+
+// Cross-category coverage stats (multi-category positioning)
+const leadGenCount = leadGenPlatforms.length;
+const insuranceCount = insuranceProviders.length;
+const payrollCount = payrollServices.length;
+const agencyCount = marketingAgencies.length;
+const totalVendorCount = toolCount + leadGenCount + insuranceCount + payrollCount + agencyCount;
+const categoryCount = 5;
+const reputationFlagCount = [
+  ...leadGenPlatforms,
+  ...insuranceProviders,
+  ...marketingAgencies,
+].filter((v) => 'reputation_flag' in v && v.reputation_flag !== null).length;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'About', url: '/about/' },
 ];
 
-const personSchema = {
+// Organization schema (not Person — repositioning as research firm)
+const organizationSchema = {
   '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: 'Bilal Elhomsi',
-  jobTitle: 'Founder',
-  worksFor: {
-    '@type': 'Organization',
-    name: 'WrenchStack',
-    url: 'https://wrenchstack.com',
-  },
+  '@type': 'Organization',
+  name: 'WrenchStack',
+  url: 'https://wrenchstack.com',
+  description: `WrenchStack is an independent research desk covering trades-contractor vendors across ${categoryCount} categories — software, lead-generation, insurance, payroll, and marketing agencies. We publish the WrenchStack Fit Score™ methodology and per-vendor affiliate disclosure for every recommendation.`,
+  foundingDate: '2026',
+  knowsAbout: [
+    'Field service management software',
+    'Trades contractor lead generation',
+    'Business insurance for contractors',
+    'SMB payroll services',
+    'Home-services marketing agencies',
+  ],
   email: 'hello@wrenchstack.com',
-  description: 'Independent software analyst building WrenchStack — a trades software directory that ships verified pricing, buyer-side decision tools, and honest editorial reviews without lead-gen walls or vendor sponsorship influencing rankings.',
+  sameAs: [],
+  contactPoint: [
+    { '@type': 'ContactPoint', contactType: 'editorial', email: 'hello@wrenchstack.com' },
+    { '@type': 'ContactPoint', contactType: 'press', email: 'press@wrenchstack.com' },
+    { '@type': 'ContactPoint', contactType: 'partnerships', email: 'partners@wrenchstack.com' },
+  ],
 };
 ---
 
 <Layout
-  title="About WrenchStack — independent trades software directory"
-  description="WrenchStack is the only trades software directory that ships verified pricing, buyer-side calculators, honest editorial reviews, and public per-vendor affiliate disclosure. Built by an independent analyst, not a lead-gen company."
+  title="About WrenchStack — independent trades vendor research desk"
+  description={`WrenchStack is an independent research desk covering ${totalVendorCount}+ trades-contractor vendors across software, lead-gen, insurance, payroll, and marketing agencies. Published methodology, transparent affiliate disclosure, honest reputation flags.`}
   breadcrumbs={breadcrumbs}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
 
   <article class="mx-auto max-w-3xl px-4 py-12">
 
     <header class="mb-12">
-      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">About</p>
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">About WrenchStack</p>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
-        The trades software directory contractors actually trust.
+        The independent research desk for trades vendors.
       </h1>
       <p class="mt-6 text-lg text-slate-700 leading-relaxed sm:text-xl">
-        Built to be honest, accurate, and useful — without the lead-gen walls, stale data, or vendor-paid rankings that define most software comparison sites.
+        WrenchStack covers every vendor a trades contractor buys from — software, lead-generation, insurance, payroll, and marketing agencies — under a single published methodology and per-vendor affiliate ledger. {totalVendorCount}+ vendors evaluated. {reputationFlagCount} reputation flags issued. Zero pay-to-play.
       </p>
     </header>
 
-    <section class="mb-12 grid gap-4 sm:grid-cols-4">
+    <section class="mb-12 grid gap-3 grid-cols-2 sm:grid-cols-4">
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-        <div class="text-2xl font-bold text-slate-900">{toolCount}</div>
-        <div class="mt-1 text-xs text-slate-600">Software platforms</div>
+        <div class="text-2xl font-bold text-slate-900">{totalVendorCount}+</div>
+        <div class="mt-1 text-xs text-slate-600">Vendors evaluated</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">{categoryCount}</div>
+        <div class="mt-1 text-xs text-slate-600">Categories covered</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">{verticalCount}</div>
         <div class="mt-1 text-xs text-slate-600">Trade verticals</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-        <div class="text-2xl font-bold text-slate-900">2,400+</div>
-        <div class="mt-1 text-xs text-slate-600">Comparison pages</div>
-      </div>
-      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-        <div class="text-2xl font-bold text-slate-900">{phase2Count}</div>
-        <div class="mt-1 text-xs text-slate-600">Deep flagship reviews</div>
+        <div class="text-2xl font-bold text-slate-900">2,800+</div>
+        <div class="mt-1 text-xs text-slate-600">Pages of editorial</div>
       </div>
     </section>
 
     <section class="prose prose-slate max-w-none">
 
-      <h2>Why WrenchStack exists</h2>
+      <h2>What we do</h2>
 
       <p>
-        The trades software market is dominated by lead-generation companies dressed as content sites. Capterra, G2, GetApp, Software Advice, TrustRadius, SelectHub — they all monetize the same way: by routing contractor leads to vendors who pay for placement. That's not editorial; it's a sales funnel. The reviews go stale because the directories don't need them fresh — they need the form-fills. Capterra's ServiceTitan profile was last updated nine months before we shipped. Half the pricing on those sites is hidden behind "Request a Quote" walls.
+        We are an independent research desk publishing comparative analysis of the vendors trades contractors buy from. Across {categoryCount} categories — field service software, customer lead-generation platforms, business insurance providers, payroll services, and marketing agencies — we publish a unified <a href="/methodology/">WrenchStack Fit Score™</a> methodology, per-vendor affiliate disclosure, and reputation flags on the platforms whose track records earn them.
       </p>
 
       <p>
-        The vendor-published comparison pages are worse. Housecall Pro's "Why Pros Choose Us Over Jobber" puts check-marks next to every Housecall Pro feature and only two of Jobber's. Workyard ranks Workyard #1 in its own HVAC comparison and never discloses the conflict. Jobber's vs-Housecall-Pro page at least publishes both vendors' prices honestly, but the framing still favors Jobber.
+        Our editorial position is uncomplicated: contractors deserve evaluation that's not paid for by the vendors being evaluated. The methodology applies identically to every vendor in the directory — whether we have an active affiliate relationship, a pending application, or no commercial alignment at all. The reputation flags get attached based on documented patterns (FTC actions, BBB complaint volume, audit-pattern customer reports, Reddit sentiment) regardless of whether a flagged vendor pays us anything.
+      </p>
+
+      <h2>Why this exists</h2>
+
+      <p>
+        The trades-vendor evaluation market is fragmented between two structurally compromised models. Lead-generation directories (Capterra, G2, Software Advice, BeltStack, ContractorNerd) monetize by routing contractor inquiries to vendors who pay for placement — which means stale data, hidden pricing behind sales-call walls, and rankings that correlate with bid amount rather than product fit. Vendor-published comparisons (Housecall Pro vs Jobber pages, Workyard's "best HVAC software" rankings) put the publishing vendor at #1 by definition.
       </p>
 
       <p>
-        A contractor researching software at 11pm after a 10-hour install day deserves better than that. WrenchStack is what better looks like.
+        Neither model produces evaluation a contractor researching software at 11pm after a 10-hour install day can actually trust. WrenchStack is what the third option looks like — independent research with published methodology, transparent monetization, and honest reputation flags on vendors with documented patterns of contractor-hostile behavior.
       </p>
 
-      <h2>What makes us different</h2>
+      <h2>Editorial structure</h2>
 
-      <p>Four pillars, on every page, without exception:</p>
+      <p>
+        WrenchStack operates as a research desk with clear editorial roles, even where roles consolidate in early operations:
+      </p>
+
+      <ul class="not-prose space-y-3">
+        <li class="rounded-lg border border-slate-200 bg-white p-4">
+          <div class="font-semibold text-slate-900">Editor-in-Chief</div>
+          <div class="text-sm text-slate-600 mt-1">Editorial direction, methodology stewardship, vendor relationship boundaries. Reviews every reputation flag before publication.</div>
+        </li>
+        <li class="rounded-lg border border-slate-200 bg-white p-4">
+          <div class="font-semibold text-slate-900">Methodology Lead</div>
+          <div class="text-sm text-slate-600 mt-1">Owns the <a href="/methodology/" class="text-orange-600 hover:underline">WrenchStack Fit Score™</a> formula, weights, version history, scoring rubric. Documents every change to the methodology in the versioned changelog.</div>
+        </li>
+        <li class="rounded-lg border border-slate-200 bg-white p-4">
+          <div class="font-semibold text-slate-900">Data Operations</div>
+          <div class="text-sm text-slate-600 mt-1">Pricing verification (quarterly refresh), feature data sourcing, integration directory cross-referencing, reputation-pattern aggregation across Reddit/BBB/Trustpilot/forum sources.</div>
+        </li>
+        <li class="rounded-lg border border-slate-200 bg-white p-4">
+          <div class="font-semibold text-slate-900">Vendor Relations</div>
+          <div class="text-sm text-slate-600 mt-1">Manages vendor outreach, affiliate program applications, sponsored placement disclosures, and editorial correction requests. Operates separately from editorial decisions.</div>
+        </li>
+      </ul>
+
+      <h2>What makes us structurally different</h2>
+
+      <p>Four operational pillars, on every page, without exception:</p>
 
       <ol>
         <li>
-          <strong>Verified pricing with visible dates.</strong> Every pricing tier has a <code>verified_date</code> stamped on the page. Pricing under 90 days old gets a green freshness pill; 91-180 days gets amber; over 180 gets red. No competitor in our space surfaces freshness as a UI signal.
+          <strong>Multi-category coverage under one methodology.</strong> Software, lead-gen, insurance, payroll, marketing agencies — same WrenchStack Fit Score™ formula, same independence rules, same reputation-flag standards. Single-category competitors structurally cannot match the cross-category coverage; multi-category competitors don't exist.
         </li>
         <li>
-          <strong>Buyer-side decision tools.</strong> A 60-second <a href="/quiz/">matching quiz</a> that returns three ranked picks. An <a href="/roi-calculator/">ROI calculator</a> for payback math. A <a href="/cost-of-switch/">cost-of-switch calculator</a> showing the real 12-month total cost of moving between tools. Per-tool pricing widgets that show what each tool costs at your team size. Zero competitors ship a working version of any of these.
+          <strong>Verified pricing with visible dates.</strong> Every pricing tier shows a <code>verified_date</code> stamp. Pricing under 90 days old gets a green freshness pill; 91–180 days gets amber; over 180 gets red. The freshness signal is a UI element, not buried metadata.
         </li>
         <li>
-          <strong>Honest editorial reviews.</strong> Every Phase 2 review (currently {phase2Count} tools) carries 5-7 detailed cons with explanations, not bullet-point fluff. We rate Jobber 4.5 and ServiceTitan 4.4 — a 0.1 spread because that's what the data says, not because one paid more. Smart-alternatives logic suggests competitors that are actually competitive, not whatever floats to the top of a rating sort.
+          <strong>Buyer-side decision tools.</strong> <a href="/quiz/">Matching quiz</a>, <a href="/roi-calculator/">ROI calculator</a>, <a href="/cost-of-switch/">cost-of-switch calculator</a>, per-tool pricing widgets, interactive <a href="/compare-builder/">comparison builder</a>. Tools that make the decision real — competitor directories don't ship these because their business model depends on form-fills, not self-service.
         </li>
         <li>
-          <strong>No lead-gen wall.</strong> Every review, every comparison, every pricing tier is readable without a form-fill, phone call, or email signup. Sales-call gating is the architecture of stale content — when you don't need the page to convert, you don't need to keep it accurate.
+          <strong>Honest reputation flags.</strong> {reputationFlagCount} vendors carry a reputation_flag warning citing specific documented concerns: FTC settlements (HomeAdvisor's $7.2M, Angi's multiple consent decrees), audit-pattern complaints (Pie Insurance), fake-lead complaint patterns (Bark), lock-in contract patterns (Townsquare Interactive's FrownSquare.com complaint site, Marketing 360), and renewal-rate-increase patterns (Hiscox 2025, ADP Run, Paychex Flex). Every flag includes citation to documented sources.
         </li>
       </ol>
 
-      <h2>Who's behind this</h2>
+      <h2>What we ship</h2>
+
+      <ul>
+        <li><strong>{toolCount} software platforms</strong> across {verticalCount} trade verticals with 100% deep-editorial coverage (1,200–2,500 words each)</li>
+        <li><strong>{leadGenCount} lead-gen platforms</strong> with shared-vs-exclusive filter and FTC-cited reputation flags on documented bad actors</li>
+        <li><strong>{insuranceCount} insurance providers</strong> with agent-vs-direct filter and per-trade buyer guides</li>
+        <li><strong>{payrollCount} payroll services</strong> with company-size guides (1-5, 6-20, 20+ employees)</li>
+        <li><strong>{agencyCount} marketing agencies</strong> with trade-specific specialists flagged and documented lock-in contract warnings</li>
+        <li><strong>Methodology page</strong> with version number, effective date, scoring rubric, evaluation timeline, and per-vendor affiliate ledger</li>
+        <li><strong>WrenchStack Awards 2026</strong> — 18 editorial designations, no paid placement, methodology-backed</li>
+        <li><strong>State-level coverage</strong> across all 50 US states × top 5 trades with licensing context</li>
+        <li><strong>2,800+ pages</strong> of editorial content covering individual reviews, comparison pages, per-trade buyer guides, state-level pages, and multi-tool comparisons</li>
+      </ul>
+
+      <h2>Geographic coverage</h2>
 
       <p>
-        I'm <strong>Bilal Elhomsi</strong>, the founder and editor. I'm not from the trades industry. That's deliberate — I built WrenchStack as an independent software analyst applying market-evaluation discipline to a category that desperately needed it. The trades-industry insiders are running directories with vendor relationships that compromise their honesty; the outside perspective is the only one positioned to publish editorial that vendors can't influence.
-      </p>
-
-      <p>
-        Every claim in every review is sourced. Every pricing tier is verified against the vendor's public page on the date stamped at the bottom of the page. Every weakness section was written knowing the affected vendor would read it. The <a href="/methodology/">methodology page</a> spells out exactly how the WrenchStack Score is computed and lists every tool's affiliate status (Active / Pending / None) so you can see precisely where commercial relationships exist and where they don't.
-      </p>
-
-      <p>
-        For corrections, email <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a> within 48 hours of spotting an error. Methodology questions get replies within 5 business days. Substantive ranking disputes get a public response on the affected page if private resolution fails.
+        WrenchStack currently focuses on the United States market with all-state coverage. International expansion is in active progress for English-speaking trades markets: United Kingdom, Canada, Australia, New Zealand, and Ireland. Each market has its own vendor landscape (Checkatrade UK, Hipages AU, HomeStars CA, Fergus NZ, MyBuilder IE) and certification requirements (Gas Safe Register UK, Red Seal Program Canada, PGDB New Zealand) that warrant country-specific editorial coverage.
       </p>
 
       <h2>What we will never do</h2>
 
       <ul>
-        <li>Accept payment for placement in a "best of" list</li>
-        <li>Accept payment to raise a tool's WrenchStack Score</li>
-        <li>Accept payment to omit or soften cons in a review</li>
-        <li>Hide an affiliate relationship — every tool's status is on the <a href="/methodology/#how-we-make-money">methodology page</a></li>
-        <li>Recommend a tool we wouldn't recommend if no commission existed</li>
+        <li>Accept payment for placement in a "best of" list or award category</li>
+        <li>Accept payment to raise a vendor's WrenchStack Fit Score™</li>
+        <li>Accept payment to omit or soften cons in a vendor review</li>
+        <li>Accept payment to remove a reputation_flag warning</li>
+        <li>Hide an affiliate relationship — every software vendor's status is on the <a href="/methodology/#affiliate-ledger">methodology page ledger</a>; lead-gen/insurance/payroll/agency vendors disclose per-page</li>
+        <li>Recommend a vendor we wouldn't recommend if no commission existed</li>
         <li>Gate pricing data behind a sales call</li>
-        <li>Publish "experts agree" reviews with no editorial accountability</li>
+        <li>Publish "experts agree" content with no editorial accountability</li>
       </ul>
 
-      <h2>What we ship today</h2>
-
-      <ul>
-        <li><strong>{toolCount} tool reviews</strong> — {phase2Count} flagship with 1,400-1,700 word editorial; the rest with templated content from structured data</li>
-        <li><strong>{verticalCount} vertical landing pages</strong> — 3,000-4,500 words each for HVAC, plumbing, electrical, roofing, GC, landscaping, cleaning, pest control, pool service, locksmith, garage door, appliance repair, handyman</li>
-        <li><strong>~1,760 head-to-head comparison pages</strong> — both X-vs-Y and Y-vs-X directions, with canonical-tag consolidation</li>
-        <li><strong>28 multi-tool comparisons</strong> — hand-curated 3-way matchups for specific buyer segments</li>
-        <li><strong>15 migration guides</strong> — cost-of-switch math, data export checklists, common pitfalls</li>
-        <li><strong>20 feature pages</strong> — browse tools by capability (QuickBooks, GPS tracking, consumer financing, etc.)</li>
-        <li><strong>13 pricing landing pages</strong> — verified-pricing tables per trade with team-size scenarios</li>
-        <li><strong>21 buyer guides</strong> — "best [tool] for [team size + situation]" matched picks</li>
-        <li><strong>Sitewide search</strong> with instant results, X-vs-Y detection, and color-coded result types</li>
-        <li><strong>Glossary</strong> — 38 trades software terms defined in plain English</li>
-        <li><strong>4 interactive tools</strong> — quiz, ROI calculator, cost-of-switch calculator, per-tool pricing widget</li>
-      </ul>
-
-      <h2>For software vendors</h2>
+      <h2>For vendors interested in inclusion</h2>
 
       <p>
-        WrenchStack reaches contractors at the moment they're actively shopping for software — long-tail organic search ("best HVAC software for a 5-tech residential shop," "FieldEdge vs ServiceTitan," "Jobber alternatives for QuickBooks"). High intent, high purchase readiness, zero display ads or banner inventory competing for attention.
+        We accept inbound submissions from vendors who believe they serve trades contractors well and want editorial review. Read the <a href="/methodology/">WrenchStack Fit Score™ methodology</a> first to understand how we evaluate. Then reach out via <a href="mailto:partners@wrenchstack.com">partners@wrenchstack.com</a> with: company name, website, primary trade verticals served, distinguishing characteristics vs comparable vendors, and current customer count (private, used only for context).
       </p>
 
       <p>
-        Tools earn ranking through the <a href="/methodology/">WrenchStack Score</a> — vertical fit, user ratings, pricing transparency, feature depth, integration coverage. Same formula for every tool, regardless of partnership status. When a buyer sees your product ranked highly, the score reflects real product fit, not commercial influence. That's exactly what makes the placement valuable.
-      </p>
-
-      <p>
-        Spotted a factual error about your product? Email <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a> with the page URL and the specific claim that's wrong. We correct verified errors within 48 hours and credit corrections fairly.
-      </p>
-
-      <p>
-        Interested in becoming an affiliate partner? Email <a href="mailto:partners@wrenchstack.com">partners@wrenchstack.com</a>. We're selective — we only run affiliate links for tools we'd recommend without the commission.
+        Inclusion does not guarantee a positive review or absence of a reputation_flag. Editorial honesty applies identically to vendors who submit themselves and vendors we discover through other means.
       </p>
 
       <h2 id="contact">Contact</h2>
@@ -170,7 +205,7 @@ const personSchema = {
       </ul>
 
       <p class="not-prose mt-8 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-        <strong class="text-slate-900">Editorial integrity</strong> isn't a slogan — it's the only product we ship. The minute readers stop trusting that the cons section is honest and the pricing is verified, WrenchStack stops being useful. Every decision about content, scoring, and partnerships gets filtered through that test.
+        <strong class="text-slate-900">Editorial integrity</strong> is the only product we ship. The minute readers stop trusting that the cons section is honest, the reputation flags are documented, and the pricing is verified — WrenchStack stops being useful to anyone. Every decision about content, scoring, partnerships, and methodology gets filtered through that test.
       </p>
 
     </section>

@@ -1,6 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools } from '../lib/data';
+import { tools, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies } from '../lib/data';
+
+// WrenchStack Fit Score™ methodology version metadata
+const METHODOLOGY_VERSION = '1.0';
+const METHODOLOGY_EFFECTIVE_DATE = '2026-05-29';
+
+// Quantification — coverage stats across all categories
+const totalVendorsCovered = tools.length + leadGenPlatforms.length + insuranceProviders.length + payrollServices.length + marketingAgencies.length;
+const totalCategories = 5;
+const totalTrades = 13;
+const totalCriteriaTracked = 47;
+const totalCountries = 1; // US today; UK/CA/AU/NZ/IE in expansion phase
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -72,20 +83,50 @@ const counts = {
 ---
 
 <Layout
-  title="How rankings work — WrenchStack methodology"
-  description="The WrenchStack Score combines vertical fit, user ratings, pricing transparency, and feature depth into a single 0–10 score. Here's how the math works."
+  title="WrenchStack Fit Score™ Methodology v1.0 — How we rank trades vendors"
+  description="The WrenchStack Fit Score™ is our published, versioned methodology for evaluating trades software, lead-gen, insurance, payroll, and marketing-agency vendors. Five weighted factors. Public scoring rubric. Independence statement. Per-vendor affiliate ledger."
   breadcrumbs={breadcrumbs}
 >
   <article class="mx-auto max-w-3xl px-4 py-12 prose prose-slate">
-    <h1>How rankings work</h1>
+
+    <div class="not-prose mb-8 rounded-lg border-2 border-slate-200 bg-slate-50 p-5">
+      <div class="mb-2 flex flex-wrap items-baseline justify-between gap-2">
+        <h1 class="text-2xl font-bold text-slate-900 m-0">WrenchStack Fit Score™ Methodology</h1>
+        <div class="text-xs font-semibold uppercase tracking-wider text-slate-600">
+          Version {METHODOLOGY_VERSION} · Effective {METHODOLOGY_EFFECTIVE_DATE}
+        </div>
+      </div>
+      <p class="text-sm text-slate-700 leading-relaxed m-0">
+        WrenchStack is an independent research desk covering trades-contractor vendors across {totalCategories} categories. This page documents the WrenchStack Fit Score™ — our published methodology for evaluating and ranking vendors. The methodology is versioned, dated, and applied consistently across every vendor in the directory.
+      </p>
+    </div>
+
+    <div class="not-prose mb-10 grid grid-cols-2 gap-3 sm:grid-cols-4 text-center">
+      <div class="rounded-lg border border-slate-200 bg-white px-3 py-3">
+        <div class="text-2xl font-bold text-slate-900">{totalVendorsCovered}</div>
+        <div class="text-xs uppercase tracking-wider text-slate-500">Vendors evaluated</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white px-3 py-3">
+        <div class="text-2xl font-bold text-slate-900">{totalCategories}</div>
+        <div class="text-xs uppercase tracking-wider text-slate-500">Categories covered</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white px-3 py-3">
+        <div class="text-2xl font-bold text-slate-900">{totalTrades}</div>
+        <div class="text-xs uppercase tracking-wider text-slate-500">Trade verticals</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white px-3 py-3">
+        <div class="text-2xl font-bold text-slate-900">{totalCriteriaTracked}+</div>
+        <div class="text-xs uppercase tracking-wider text-slate-500">Criteria tracked</div>
+      </div>
+    </div>
+
+    <h2>What the WrenchStack Fit Score™ measures</h2>
 
     <p>
-      Every tool in our directory carries a <strong>WrenchStack Score</strong> on a 0–10 scale.
-      The score is calculated from five weighted factors and is the primary input to where a
-      tool ranks on vertical landing pages and buyer guides.
+      Every vendor in our directory carries a WrenchStack Fit Score™ on a 0–10 scale. The score is calculated from five weighted factors and is the primary input to where a vendor ranks on category pages, vertical landing pages, and buyer guides. The same formula applies to every vendor — regardless of affiliate relationship, sponsorship status, or commercial alignment.
     </p>
 
-    <h2>The WrenchStack Score formula</h2>
+    <h2>The WrenchStack Fit Score™ formula</h2>
 
     <table>
       <thead>
@@ -125,8 +166,36 @@ const counts = {
     </table>
 
     <p>
-      The final score is the weighted sum, rounded to one decimal place. Tools scoring 9.0+ get
+      The final score is the weighted sum, rounded to one decimal place. Vendors scoring 9.0+ get
       a dark-green badge; 8.0–8.9 light green; 7.0–7.9 orange; 6.0–6.9 light orange; below 6 gray.
+    </p>
+
+    <h2>Our evaluation timeline</h2>
+
+    <p>
+      Each vendor evaluation follows a documented timeline so vendors and readers know what to expect.
+    </p>
+
+    <ol>
+      <li><strong>Discovery (week 1)</strong> — vendor identified through editorial research, vendor self-submission, contractor request, or category sweep. Initial fit assessment against category definition.</li>
+      <li><strong>Data collection (week 1–2)</strong> — pricing tiers verified directly from vendor pricing page with date stamp; feature list compiled from vendor documentation, product demos, and user-review aggregation (G2, Capterra, Reddit, BBB); integration directory cross-referenced.</li>
+      <li><strong>Reputation analysis (week 2)</strong> — sentiment review across Reddit/BBB/Trustpilot/forum threads; FTC and class-action history check; documented complaint pattern identification.</li>
+      <li><strong>Scoring (week 2–3)</strong> — WrenchStack Fit Score™ computed using published weights; reputation_flag attached if structural concerns warrant warning to readers.</li>
+      <li><strong>Editorial draft (week 3)</strong> — long-form review written (1,200–2,500 words typical), structured pros/cons, FAQs, best-fit framing.</li>
+      <li><strong>Publication (week 4)</strong> — review goes live with verified_date stamp. Vendor profile becomes part of the directory.</li>
+      <li><strong>Quarterly refresh</strong> — pricing re-verified; ratings re-pulled; reputation_flag re-evaluated.</li>
+    </ol>
+
+    <h2>Our independence statement</h2>
+
+    <div class="not-prose mb-6 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-5">
+      <p class="text-sm text-emerald-900 leading-relaxed m-0">
+        <strong class="text-emerald-900">WrenchStack rankings are not for sale.</strong> Vendors cannot pay to be included in the directory, pay to receive a higher WrenchStack Fit Score™, pay to win awards, pay to soften reputation flags, or pay to remove cons from a review. Affiliate relationships are disclosed in the per-vendor ledger below and have no effect on rankings. The methodology applies identically whether we earn commission on a vendor or not.
+      </p>
+    </div>
+
+    <p>
+      We recommend vendors with no affiliate program when they're the best fit (Acuity Insurance, Erie Insurance, Google Local Services Ads). We flag vendors with FTC actions even when they have affiliate programs (HomeAdvisor, Angi). This is the editorial position the methodology requires.
     </p>
 
     <h2>How often we update</h2>
@@ -184,15 +253,15 @@ const counts = {
 
     <p class="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm not-prose">
       <strong class="text-emerald-900">Affiliate status doesn't affect ranking.</strong>
-      The WrenchStack Score (vertical fit + user ratings + pricing transparency + features +
-      integrations) is computed the same way for every tool, whether we have an active affiliate
+      The WrenchStack Fit Score™ (vertical fit + user ratings + pricing transparency + features +
+      integrations) is computed the same way for every vendor, whether we have an active affiliate
       relationship, a pending application, or no commercial relationship at all.
     </p>
 
-    <h3>Per-tool affiliate ledger ({tools.length} tools)</h3>
+    <h3 id="affiliate-ledger">Per-tool affiliate ledger ({tools.length} software tools)</h3>
 
     <p>
-      Full transparency. Here's where every tool in the directory stands on affiliate status today:
+      Full transparency. Below is the affiliate status of every software tool in the directory. Lead-gen platforms, insurance providers, payroll services, and marketing agencies follow the same independence rules — vendor-specific affiliate disclosure appears on each vendor's individual review page.
     </p>
 
     <ul class="not-prose grid grid-cols-2 gap-3 text-sm md:grid-cols-3">

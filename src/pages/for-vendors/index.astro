@@ -1,0 +1,258 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { tools, verticals, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies } from '../../lib/data';
+
+const totalVendorCount = tools.length + leadGenPlatforms.length + insuranceProviders.length + payrollServices.length + marketingAgencies.length;
+const categoryCount = 5;
+const verticalCount = verticals.length;
+
+const pageTitle = 'Submit your product for review — WrenchStack vendor program';
+const pageDescription = 'WrenchStack accepts submissions from trades-contractor vendors across software, lead-gen, insurance, payroll, and marketing agencies. Published methodology. No pay-to-play. Editorial review within 5 business days.';
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'For vendors', url: '/for-vendors/' },
+];
+
+const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | undefined) ?? 'b5170603-ae15-4e9d-b2a3-10e0bef38253';
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <article class="mx-auto max-w-4xl px-4 py-12">
+
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">For vendors</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        Submit your product for editorial review
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        WrenchStack covers {totalVendorCount}+ vendors across {categoryCount} categories serving trades contractors. If your platform serves trades businesses and you believe it deserves coverage, submit it below — we respond within 5 business days.
+      </p>
+    </header>
+
+    <section class="mb-10 grid gap-3 grid-cols-2 sm:grid-cols-4">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">{totalVendorCount}+</div>
+        <div class="mt-1 text-xs text-slate-600">Vendors evaluated</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">{verticalCount}</div>
+        <div class="mt-1 text-xs text-slate-600">Trade verticals served</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">2,800+</div>
+        <div class="mt-1 text-xs text-slate-600">Pages of editorial content</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">5</div>
+        <div class="mt-1 text-xs text-slate-600">Business-day SLA</div>
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">How editorial review works</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        <div class="rounded-lg border border-slate-200 bg-white p-5">
+          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-orange-600">1. Submit</div>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            Send us your company name, website, primary trade verticals served, distinguishing characteristics vs comparable vendors, and current customer count. Form below — or email <a href="mailto:partners@wrenchstack.com" class="text-orange-600 hover:underline">partners@wrenchstack.com</a> directly.
+          </p>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-5">
+          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-orange-600">2. Editorial review</div>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            Our editorial team evaluates whether your platform fits an existing or planned category. Within 5 business days, we respond with: editorial fit assessment, expected publication timeline, methodology reference, and any clarifying questions.
+          </p>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-5">
+          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-orange-600">3. Data collection</div>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            Pricing tiers verified directly from your public pricing page. Feature list compiled from documentation, product demos, and user-review aggregation. Reputation patterns reviewed across Reddit, BBB, Trustpilot, and forum sources. <a href="/methodology/" class="text-orange-600 hover:underline">Full methodology →</a>
+          </p>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-5">
+          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-orange-600">4. Publication</div>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            Your review publishes with the same structure as every other vendor in your category: long-form editorial, pros/cons, pricing breakdown, FAQs, and verified_date stamp. You'll see the WrenchStack Fit Score™, integration matrix, and (where applicable) reputation_flag context. We notify you when live.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-10 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-6">
+      <h2 class="mb-3 text-lg font-bold text-emerald-900">What inclusion means — and doesn't</h2>
+      <ul class="space-y-2 text-sm text-emerald-900 leading-relaxed">
+        <li><strong>✓ Inclusion is editorial.</strong> We evaluate, write, and publish — independent of whether you have an affiliate program or sponsor placements.</li>
+        <li><strong>✓ Same methodology applies.</strong> Your WrenchStack Fit Score™ comes from the same formula as every other vendor in your category.</li>
+        <li><strong>✓ Affiliate relationships disclosed.</strong> If you run a program we join, it's flagged in our per-vendor ledger. Recommendation isn't conditional on it.</li>
+        <li><strong>✗ Inclusion does not guarantee a positive review.</strong> If our research surfaces concerns (FTC actions, audit-pattern complaints, customer-hostile contract terms), the review will document them with citations.</li>
+        <li><strong>✗ Inclusion does not guarantee absence of a reputation_flag.</strong> Reputation flags get attached based on documented patterns regardless of vendor relationship.</li>
+        <li><strong>✗ Inclusion is not for sale.</strong> We don't accept payment to be included, to influence ranking, to remove cons, or to soften reputation flags. See <a href="/methodology/" class="underline">methodology</a> for the full list.</li>
+      </ul>
+    </section>
+
+    <section id="submit" class="mb-10 scroll-mt-8">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Submission form</h2>
+
+      <div class="rounded-lg border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-white p-6">
+        <form
+          id="vendor-submission-form"
+          action="https://api.web3forms.com/submit"
+          method="POST"
+          class="space-y-5"
+        >
+          <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+          <input type="hidden" name="subject" value="New vendor submission: WrenchStack" />
+          <input type="hidden" name="from_name" value="WrenchStack Vendor Submission" />
+          <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off" />
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="vs-company" class="block text-sm font-semibold text-slate-900">Company name <span class="text-rose-600">*</span></label>
+              <input type="text" id="vs-company" name="company_name" required maxlength="80" class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+            </div>
+            <div>
+              <label for="vs-website" class="block text-sm font-semibold text-slate-900">Website URL <span class="text-rose-600">*</span></label>
+              <input type="url" id="vs-website" name="website" required placeholder="https://yourcompany.com" class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+            </div>
+            <div>
+              <label for="vs-category" class="block text-sm font-semibold text-slate-900">Category <span class="text-rose-600">*</span></label>
+              <select id="vs-category" name="category" required class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500">
+                <option value="">— Select —</option>
+                <option>Software (FSM / CMMS / Construction PM / CRM)</option>
+                <option>Lead-generation platform</option>
+                <option>Business insurance</option>
+                <option>Payroll service</option>
+                <option>Marketing agency</option>
+                <option>Other (please describe below)</option>
+              </select>
+            </div>
+            <div>
+              <label for="vs-trades" class="block text-sm font-semibold text-slate-900">Primary trades served <span class="text-rose-600">*</span></label>
+              <input type="text" id="vs-trades" name="trades_served" required placeholder="e.g. HVAC, plumbing, roofing" class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+            </div>
+            <div>
+              <label for="vs-markets" class="block text-sm font-semibold text-slate-900">Geographic markets <span class="text-rose-600">*</span></label>
+              <input type="text" id="vs-markets" name="geographic_markets" required placeholder="e.g. US nationwide, UK, AU" class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+            </div>
+            <div>
+              <label for="vs-customers" class="block text-sm font-semibold text-slate-900">Current customer count (approximate)</label>
+              <input type="text" id="vs-customers" name="customer_count" placeholder="e.g. 500, 5000, confidential" class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+            </div>
+          </div>
+
+          <div>
+            <label for="vs-pitch" class="block text-sm font-semibold text-slate-900">What makes your platform distinct? <span class="text-rose-600">*</span></label>
+            <textarea id="vs-pitch" name="distinguishing_features" required rows="4" minlength="100" maxlength="800" placeholder="What does your platform do better than the obvious comparable vendors? 100-800 characters." class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"></textarea>
+          </div>
+
+          <div>
+            <label for="vs-affiliate" class="block text-sm font-semibold text-slate-900">Affiliate or partnership program URL (optional)</label>
+            <input type="url" id="vs-affiliate" name="affiliate_program_url" placeholder="https://yourcompany.com/affiliate (if any)" class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+            <p class="mt-1 text-xs text-slate-500">Optional. Inclusion doesn't depend on affiliate availability.</p>
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="vs-name" class="block text-sm font-semibold text-slate-900">Your name <span class="text-rose-600">*</span></label>
+              <input type="text" id="vs-name" name="contact_name" required maxlength="60" class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+            </div>
+            <div>
+              <label for="vs-email" class="block text-sm font-semibold text-slate-900">Your email <span class="text-rose-600">*</span></label>
+              <input type="email" id="vs-email" name="contact_email" required class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+            </div>
+            <div>
+              <label for="vs-role" class="block text-sm font-semibold text-slate-900">Your role at the company</label>
+              <input type="text" id="vs-role" name="contact_role" placeholder="e.g. Founder, Head of Marketing, BD" class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <button type="submit" class="rounded-md bg-orange-500 px-6 py-3 text-sm font-semibold text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
+              Submit for editorial review →
+            </button>
+            <p class="text-xs text-slate-500">
+              We respond within 5 business days. By submitting you confirm the information provided is accurate.
+            </p>
+          </div>
+
+          <div id="vendor-submission-status" class="hidden rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
+            Thanks — your submission was received. Our editorial team will review and respond within 5 business days at the email you provided.
+          </div>
+        </form>
+
+        <script>
+          (() => {
+            const form = document.getElementById('vendor-submission-form');
+            const status = document.getElementById('vendor-submission-status');
+            if (!form || !status) return;
+            form.addEventListener('submit', async (e) => {
+              e.preventDefault();
+              const fd = new FormData(form as HTMLFormElement);
+              if (fd.get('botcheck')) return;
+              try {
+                const res = await fetch((form as HTMLFormElement).action, {
+                  method: 'POST',
+                  body: fd,
+                  headers: { Accept: 'application/json' },
+                });
+                const data = await res.json();
+                if (data.success) {
+                  (form as HTMLFormElement).reset();
+                  (form as HTMLFormElement).style.display = 'none';
+                  status.classList.remove('hidden');
+                } else {
+                  alert('Submission failed: ' + (data.message || 'unknown error'));
+                }
+              } catch (err) {
+                alert('Submission failed — please email partners@wrenchstack.com instead.');
+              }
+            });
+          })();
+        </script>
+      </div>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-lg font-bold text-slate-900">Frequently asked by vendors</h2>
+      <div class="space-y-3">
+        <details class="rounded-lg border border-slate-200 bg-white p-4">
+          <summary class="cursor-pointer font-semibold text-slate-900">Do I have to pay to be listed?</summary>
+          <p class="mt-3 text-sm text-slate-700">No. Inclusion is editorial and free. We do not accept payment for inclusion, ranking, awards, or content modifications. Where we have an affiliate relationship with a listed vendor, it's disclosed transparently in our per-vendor ledger.</p>
+        </details>
+        <details class="rounded-lg border border-slate-200 bg-white p-4">
+          <summary class="cursor-pointer font-semibold text-slate-900">How long does editorial review take?</summary>
+          <p class="mt-3 text-sm text-slate-700">Initial review response within 5 business days. Full editorial publication typically 3-4 weeks from submission to live page, depending on data collection complexity and editorial queue.</p>
+        </details>
+        <details class="rounded-lg border border-slate-200 bg-white p-4">
+          <summary class="cursor-pointer font-semibold text-slate-900">Can I review or approve the editorial before it publishes?</summary>
+          <p class="mt-3 text-sm text-slate-700">No. Vendor review/approval would undermine editorial independence. We do verify factual claims against your public materials (pricing pages, documentation) and welcome corrections to factual errors after publication.</p>
+        </details>
+        <details class="rounded-lg border border-slate-200 bg-white p-4">
+          <summary class="cursor-pointer font-semibold text-slate-900">What if the review surfaces concerns about our product?</summary>
+          <p class="mt-3 text-sm text-slate-700">Our reviews include both pros and cons — sometimes the cons are significant. Where we document patterns warranting a reputation_flag (FTC actions, BBB complaint volume, audit-pattern complaints, customer-hostile contract terms), the warning appears prominently. Concerns get cited to documented sources.</p>
+        </details>
+        <details class="rounded-lg border border-slate-200 bg-white p-4">
+          <summary class="cursor-pointer font-semibold text-slate-900">Can I update my listing after publication?</summary>
+          <p class="mt-3 text-sm text-slate-700">Yes — for factual updates (pricing changes, new features, new integrations, geographic expansion), email <a href="mailto:partners@wrenchstack.com" class="text-orange-600 hover:underline">partners@wrenchstack.com</a> with documentation. We refresh on a quarterly cadence and incorporate factual updates promptly.</p>
+        </details>
+        <details class="rounded-lg border border-slate-200 bg-white p-4">
+          <summary class="cursor-pointer font-semibold text-slate-900">Do you cover international vendors?</summary>
+          <p class="mt-3 text-sm text-slate-700">US-market vendors are our current focus with all-state coverage. International expansion to UK, Canada, Australia, New Zealand, and Ireland is in active progress. Non-US vendors are welcome to submit; the editorial timeline depends on category readiness in your market.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Questions before submitting?</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">
+        Read the WrenchStack Fit Score™ methodology to understand how we evaluate vendors. Browse existing reviews in your category to see what published editorial looks like. Or email the partnerships desk directly.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/methodology/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Read methodology →</a>
+        <a href="mailto:partners@wrenchstack.com" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Email partnerships desk</a>
+        <a href="/about/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">About WrenchStack</a>
+      </div>
+    </section>
+  </article>
+</Layout>
