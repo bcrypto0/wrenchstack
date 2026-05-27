@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { tools, verticals, getTool, verticalToUrl, priceTier, freshnessTier, leadGenPlatforms, leadGenTier, insuranceProviders, insuranceTier, payrollServices, payrollTier } from '../lib/data';
+import { tools, verticals, getTool, verticalToUrl, priceTier, freshnessTier, leadGenPlatforms, leadGenTier, insuranceProviders, insuranceTier, payrollServices, payrollTier, marketingAgencies, agencyTier } from '../lib/data';
 import featuresData from '../data/features.json';
 import migrationsData from '../data/migrations.json';
 
@@ -87,6 +87,20 @@ export const GET: APIRoute = () => {
       bestFor: s.best_for,
       verticals: s.verticals_supported,
       tier: payrollTier(s),
+    });
+  }
+
+  // Marketing agencies (10)
+  for (const a of marketingAgencies) {
+    items.push({
+      type: 'agency',
+      name: a.name,
+      slug: a.slug,
+      url: `/agencies/${a.slug}/`,
+      tagline: a.tagline,
+      bestFor: a.best_for,
+      verticals: a.verticals_specialty,
+      tier: agencyTier(a),
     });
   }
 

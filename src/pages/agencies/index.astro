@@ -1,0 +1,149 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { marketingAgencies, agencyTier, type MarketingAgency } from '../../lib/data';
+
+const pageTitle = `Best Marketing Agencies for Trades Contractors (2026)`;
+const pageDescription = `Independent reviews of ${marketingAgencies.length} digital marketing agencies serving HVAC, plumbing, electrical, roofing, and other trades. Trade-specific specialists (Hook Agency, Plumbing & HVAC SEO), home-services generalists, and honest reputation warnings on Townsquare and Marketing 360.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Marketing agencies', url: '/agencies/' },
+];
+
+const tierOrder: Array<'S' | 'A' | 'F'> = ['S', 'A', 'F'];
+const byTier: Record<'S' | 'A' | 'F', MarketingAgency[]> = { S: [], A: [], F: [] };
+for (const a of marketingAgencies) byTier[agencyTier(a)].push(a);
+
+const tierMeta = {
+  S: { label: 'Tier S — strongest recommendations', description: 'Trade-specific specialists (Hook Agency for roofing, Plumbing & HVAC SEO for plumbing/HVAC) and the strongest home-services generalists (Blue Corona, Adapt Digital). Best combination of expertise + reputation + accessible pricing for typical SMB trades operations.', badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
+  A: { label: 'Tier A — context-specific fit', description: 'Solid agencies that work for specific contractor profiles — construction-focused (Builder Funnel), enterprise-scale (Scorpion), generalist mid-tier (Lemonade Stand), or lead-gen-hybrid (Service Direct). Not standout for typical SMB but credible in their niches.', badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
+  F: { label: 'Tier F — listed with reputation warnings', description: 'Agencies with documented lock-in contract patterns + customer-complaint sites + ROI issues (Townsquare Interactive with FrownSquare.com, Marketing 360). Listed for completeness — we cannot recommend.', badgeColor: 'bg-rose-100 text-rose-900 ring-rose-300', cardBorder: 'border-rose-300' },
+};
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Marketing Agencies for Trades Contractors',
+  numberOfItems: marketingAgencies.length,
+  itemListElement: marketingAgencies.map((a, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'ProfessionalService',
+      name: a.name,
+      description: a.tagline,
+      url: `https://wrenchstack.com/agencies/${a.slug}/`,
+    },
+  })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">Marketing agencies</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        Best Marketing Agencies for Trades Contractors (2026)
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Independent reviews of {marketingAgencies.length} digital marketing agencies serving trades contractors. Trade-specific specialists (Hook Agency, Plumbing & HVAC SEO), home-services generalists (Adapt Digital, Lemonade Stand), and honest reputation warnings on Townsquare Interactive (FrownSquare.com complaint pattern) and Marketing 360 (lock-in contracts + ROI complaints).
+      </p>
+    </header>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">The headline filter: trade-specific vs generalist</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        Trade-specific agencies (Hook Agency for roofing, Plumbing & HVAC SEO for plumbing/HVAC) have deep playbooks built around the specific customer-journey dynamics of their trade. Generalist home-services agencies (Adapt Digital, Lemonade Stand, Blue Corona) cover most trades at a broader-but-shallower level. For most SMB contractors, the trade-specific option (if available in your trade) delivers higher ROI per retainer; for trades without trade-specific specialists or for multi-trade operations, the generalist option is appropriate.
+      </p>
+    </section>
+
+    {tierOrder.map((tier) => {
+      const agencies = byTier[tier];
+      if (agencies.length === 0) return null;
+      const meta = tierMeta[tier];
+      return (
+        <section class="mb-12">
+          <div class="mb-5">
+            <span class={`inline-block rounded-full px-3 py-1 text-xs font-bold ring-1 ${meta.badgeColor}`}>{meta.label}</span>
+            <p class="mt-2 text-sm text-slate-600 leading-relaxed">{meta.description}</p>
+          </div>
+
+          <div class="space-y-4">
+            {agencies.map((a) => (
+              <article class={`rounded-lg border-2 ${meta.cardBorder} bg-white p-5`}>
+                <div class="mb-3 flex items-start justify-between gap-3">
+                  <div class="min-w-0 flex-1">
+                    <h3 class="text-xl font-bold text-slate-900">
+                      <a href={`/agencies/${a.slug}/`} class="hover:text-orange-600">{a.name}</a>
+                    </h3>
+                    <p class="text-sm italic text-slate-500">{a.tagline}</p>
+                  </div>
+                  <div class="shrink-0 text-right text-xs">
+                    <p class="font-bold text-slate-900 uppercase tracking-wider">{a.agency_type.replace(/-/g, ' ')}</p>
+                    <p class="text-slate-500">{a.typical_retainer_usd}</p>
+                  </div>
+                </div>
+
+                {a.reputation_flag && (
+                  <div class="mb-3 rounded-md border-l-4 border-rose-500 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+                    <p class="font-bold uppercase tracking-wider text-xs text-rose-700 mb-1">⚠ Reputation warning</p>
+                    <p class="leading-relaxed">{a.reputation_flag.split('.')[0]}.</p>
+                  </div>
+                )}
+
+                <dl class="mb-3 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Minimum contract</dt>
+                    <dd class="font-semibold text-slate-900">{a.minimum_contract_months}-month{a.minimum_contract_months === 1 ? '' : 's'}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Google rating</dt>
+                    <dd class="font-semibold text-slate-900">{a.ratings.google !== null ? `${a.ratings.google.toFixed(1)} / 5` : '—'}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Trustpilot</dt>
+                    <dd class="font-semibold text-slate-900">{a.ratings.trustpilot !== null ? `${a.ratings.trustpilot.toFixed(1)} / 5` : '—'}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Services</dt>
+                    <dd class="font-semibold text-slate-900">{a.services_offered.length}</dd>
+                  </div>
+                </dl>
+
+                <p class="mb-3 text-sm text-slate-700 leading-relaxed">
+                  <strong class="text-slate-900">Best for:</strong> {a.best_for}
+                </p>
+
+                <div class="flex flex-wrap gap-2">
+                  <a href={`/agencies/${a.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">Read full review →</a>
+                  <a href={a.affiliate_url.startsWith('http') ? a.affiliate_url : a.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md border border-orange-300 bg-white px-4 py-2 text-sm font-semibold text-orange-700 hover:bg-orange-50">Visit {a.name.split(' ')[0]}</a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Where to start</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">
+        For most SMB contractors, the recommendation depends on your trade and stage: <strong>Roofing → Hook Agency</strong>. <strong>Plumbing or HVAC → Plumbing & HVAC SEO</strong>. <strong>Other home-services trades → Adapt Digital Solutions or Lemonade Stand</strong>. <strong>Established multi-location operations → Blue Corona</strong>. Avoid Townsquare Interactive and Marketing 360 — the contract structures and complaint patterns aren't worth the lower entry pricing.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/agencies/hook-agency/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Start with Hook (roofing) →</a>
+        <a href="/payroll/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Payroll services</a>
+        <a href="/insurance/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Insurance providers</a>
+      </div>
+    </section>
+
+    <section class="mt-10 rounded-lg border border-slate-200 bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">Editorial note on agency monetization</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        Unlike software, insurance, lead-gen, or payroll — agencies in this directory have <strong>no affiliate programs</strong>. Agency relationships are direct sales rather than publisher-affiliate. Our recommendations here are unaffected by commercial alignment because there isn't any. The honest editorial position is the only revenue model — we recommend the agencies our readers should actually use because that's the only way the directory remains credible. Future monetization on this category may be sponsored placement (clearly labeled) after 6+ months of authority-building, but that's not active today.
+      </p>
+    </section>
+  </article>
+</Layout>

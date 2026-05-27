@@ -1,0 +1,443 @@
+{
+  "_schema": {
+    "description": "Marketing agencies serving trades contractors. Different shape from software/insurance/payroll — retainer-based relationships with 3-12 month minimum commitments, $2K-$15K/mo typical spend, results-oriented evaluation criteria.",
+    "agency_shape": {
+      "slug": "string (URL-safe)",
+      "name": "string",
+      "vendor_url": "string",
+      "affiliate_url": "string (TBD — agencies typically don't run affiliate programs; sponsored placement is the monetization model)",
+      "tagline": "string",
+      "agency_type": "trade-specific | home-services-focus | generalist | lead-gen-hybrid",
+      "services_offered": "string[] (seo | ppc | web_design | content | local_seo | reputation_management | social_media | email | lead_gen)",
+      "pricing_model": "monthly-retainer | performance-based | hybrid | project-based",
+      "typical_retainer_usd": "string (e.g. '$2,500-$8,000/mo')",
+      "minimum_contract_months": "number (1 = no minimum, 6+ = lock-in concern)",
+      "verticals_specialty": "string[] (slugs from categories.json)",
+      "geographic_coverage": "us-nationwide | us-regional",
+      "founded": "number",
+      "headquartered": "string",
+      "long_description": "string (800-1500 words)",
+      "how_it_works": "string",
+      "pros_detail": "ProConItem[] (5-7)",
+      "cons_detail": "ProConItem[] (5-7)",
+      "best_for": "string",
+      "best_team_size": "string (contractor team size/revenue band)",
+      "weaknesses": "string",
+      "reputation_flag": "null | string (lock-in contracts, FrownSquare.com complaints, ROI issues)",
+      "ratings": "{ google, trustpilot, bbb, reddit_sentiment }",
+      "key_features": "string[]",
+      "affiliate_program": "none | sponsored-placement | unknown",
+      "affiliate_payout_note": "string",
+      "verified_date": "YYYY-MM-DD",
+      "agency_faqs": "{ q, a }[]"
+    }
+  },
+  "agencies": [
+    {
+      "slug": "hook-agency",
+      "name": "Hook Agency",
+      "vendor_url": "https://hookagency.com",
+      "affiliate_url": "TBD",
+      "tagline": "Roofing-specialist digital marketing agency with strongest reputation in the roofing-contractor segment",
+      "agency_type": "trade-specific",
+      "services_offered": ["seo", "ppc", "web_design", "content", "local_seo", "reputation_management"],
+      "pricing_model": "monthly-retainer",
+      "typical_retainer_usd": "$2,500-$8,000/mo (varies by service scope)",
+      "minimum_contract_months": 3,
+      "verticals_specialty": ["roofing", "general_contractor"],
+      "geographic_coverage": "us-nationwide",
+      "founded": 2015,
+      "headquartered": "Minneapolis, MN",
+      "long_description": "Hook Agency is the roofing-specialist digital marketing firm that consistently ranks at the top of contractor-recommended-agency lists in r/Roofing and roofers-only forum sentiment. Founded by Tim Brown in Minneapolis, the agency built its position through deep specialization in roofing-contractor digital marketing — SEO targeting roofing-specific keywords, PPC campaigns optimized for storm-restoration lead capture, web design tuned to roofing-customer decision patterns, and reputation management focused on Google reviews + Yelp + Angi profiles where roofers compete.\n\nThe value proposition is structural rather than feature-based. Generic digital marketing agencies serve dozens of industries with templated playbooks; Hook Agency serves roofing contractors with playbooks built specifically for roofing-customer journeys. The result is consistently higher ROI on retainers — forum sentiment describes typical client experiences as 'spent $4K/mo and got 12-20 qualified roofing leads, closed 6-8 jobs at $15K avg = $90K-$120K monthly revenue from $4K spend.' Not every client achieves that ratio, but the consistent pattern of trade-specific expertise translating into real ROI is documented.\n\nHook Agency's content marketing is also worth noting — the agency publishes extensively on roofing marketing topics (blog posts, YouTube videos, podcast). The content marketing is heavy-handed self-promotional (they rank themselves #1 in 'best roofing marketing agencies' lists they author), but the underlying expertise is real. For roofing contractors evaluating agency partnerships, Hook Agency's own published thinking is a useful resource even outside the engagement decision.\n\nThe limitations: pricing skews higher than generalist alternatives ($2,500-$8,000/mo retainer ranges). The agency works best with established roofing operations ($1M+ revenue, established geographic markets) rather than startup or solo roofers. And the trade-specific focus on roofing means contractors in other trades (HVAC, plumbing, electrical) should consider trade-specific alternatives (Plumbing & HVAC SEO for those trades) rather than asking Hook Agency to serve outside its specialty.\n\nNo affiliate program — agency relationships are direct-relationship-driven rather than publisher-affiliate-driven. Sponsored placement on third-party directories is the typical monetization model, and Hook Agency has not historically participated in that. Editorial recommendation is structural-fit-based without commercial alignment.",
+      "how_it_works": "Reach out via Hook Agency website for discovery call. Initial call covers your roofing operation (size, geography, current marketing, competitive position). Agency proposes service scope and retainer level. Engagement typically starts at $2,500-$4,000/mo for SEO + reputation management; scales to $5,000-$8,000/mo for full-service (SEO + PPC + web + content + reputation). Minimum 3-month engagement; most clients run 12+ months once results materialize. Monthly reporting on lead volume, ranking changes, ROI calculations.",
+      "pros_detail": [
+        { "title": "Strongest reputation in the roofing-contractor segment", "explanation": "Forum sentiment, particularly in r/Roofing and roofers-focused communities, consistently ranks Hook Agency at or near the top of recommended digital marketing agencies. The recommendation density is unusual — most agencies receive mixed feedback; Hook's reputation is consistently positive." },
+        { "title": "Genuine trade-specific expertise", "explanation": "The team understands roofing customer journeys, storm-restoration lead patterns, insurance-claim workflow, and the specific marketing dynamics that drive roofing contractor revenue. Generic agencies running templated playbooks don't have this depth." },
+        { "title": "Published content demonstrates real thinking", "explanation": "Hook Agency publishes extensively on roofing marketing (blog, YouTube, podcast). The content is self-promotional but the underlying expertise is real and the published thinking is a useful resource for contractors even outside engagement." },
+        { "title": "Consistent positive ROI reports from clients", "explanation": "Client-reported ROI patterns are consistently positive: $3K-$5K monthly retainers translating to $50K-$120K monthly revenue from acquired leads. Not every client achieves these results but the pattern is documented across multiple client reports." }
+      ],
+      "cons_detail": [
+        { "title": "Higher pricing than generalist alternatives", "explanation": "$2,500-$8,000/mo retainer ranges are above generalist home-services agencies. The trade-specific expertise justifies the premium for established roofing operations but makes the agency wrong-fit for startup or solo roofers." },
+        { "title": "Specialty focus limits trade coverage", "explanation": "Trade-specific focus on roofing means non-roofing contractors (HVAC, plumbing, electrical) should consider trade-specific alternatives — Plumbing & HVAC SEO for those trades — rather than asking Hook Agency to work outside its specialty." },
+        { "title": "Self-promotional content tone", "explanation": "The agency's published content marketing is heavy-handed self-promotional (they rank themselves #1 in 'best roofing marketing agencies' lists they author). Sophisticated readers see through this; less-sophisticated readers may take the self-ranking at face value." },
+        { "title": "3-month minimum engagement", "explanation": "Not a long lock-in by agency standards (Townsquare and Marketing 360 push 12-month minimums) but still a real commitment. Most clients run 12+ months voluntarily; the 3-month minimum is the floor." }
+      ],
+      "best_for": "Established roofing operations ($1M+ revenue, established geographic markets, professional dispatch capacity) ready to scale marketing spend from $0-$50K/year to $30K-$100K/year",
+      "best_team_size": "Roofing shops with $1M+ revenue, 5+ employees, established service area",
+      "weaknesses": "Higher pricing than generalists, roofing-only specialty limits other-trade fit, self-promotional content tone — but for established roofing operations the trade expertise is genuinely worth the premium",
+      "reputation_flag": null,
+      "ratings": {
+        "google": 4.8,
+        "trustpilot": null,
+        "bbb": "A+ (BBB-accredited)",
+        "reddit_sentiment": "strongly positive in r/Roofing — most-recommended roofing marketing agency"
+      },
+      "key_features": ["roofing_specialty", "seo_ppc_web_content", "reputation_management", "storm_restoration_expertise", "minneapolis_based"],
+      "affiliate_program": "none",
+      "affiliate_payout_note": "Agency relationships are direct-relationship-driven; no editorial affiliate program. Recommendation is structural-fit-based.",
+      "verified_date": "2026-05-28",
+      "agency_faqs": [
+        { "q": "Is Hook Agency only for roofers?", "a": "Effectively yes. The agency's playbooks and expertise are built around roofing-contractor dynamics. Other trades (HVAC, plumbing, electrical) are better served by trade-specific alternatives or generalist home-services agencies." },
+        { "q": "What does a typical retainer cost?", "a": "$2,500-$8,000/mo depending on service scope. Entry-tier ($2,500-$4,000) typically covers SEO + reputation management. Full-service ($5,000-$8,000) adds PPC + web design + content marketing. Pricing scales with service breadth." },
+        { "q": "How long until I see results?", "a": "PPC results show within weeks (paid traffic flowing immediately). SEO results take 3-6 months for ranking improvements + 6-12 months for substantial organic traffic gains. Reputation management compounds over 6-12 months. Plan for a 12-month engagement to see full-cycle results." },
+        { "q": "Should I work with Hook Agency or run marketing in-house?", "a": "In-house marketing makes sense when you have time, expertise, and an organizational appetite for becoming a marketing operation alongside running a roofing business. Most roofing contractors don't have those three. Hook Agency's value is delegating marketing operations to specialists who do it full-time across many roofing clients — the expertise compounds in ways in-house marketing can't match for a single shop." }
+      ]
+    },
+    {
+      "slug": "plumbing-hvac-seo",
+      "name": "Plumbing & HVAC SEO",
+      "vendor_url": "https://www.plumbingandhvacseo.com",
+      "affiliate_url": "TBD",
+      "tagline": "Trade-specific SEO and PPC agency for plumbing + HVAC contractors — owner-operator feel, strong forum reputation",
+      "agency_type": "trade-specific",
+      "services_offered": ["seo", "ppc", "local_seo", "web_design", "content"],
+      "pricing_model": "monthly-retainer",
+      "typical_retainer_usd": "$1,500-$5,000/mo",
+      "minimum_contract_months": 3,
+      "verticals_specialty": ["plumbing", "hvac"],
+      "geographic_coverage": "us-nationwide",
+      "founded": 2014,
+      "headquartered": "St. Petersburg, FL",
+      "long_description": "Plumbing & HVAC SEO is the trade-specific marketing agency that operates the same way Hook Agency does for roofing but for plumbing and HVAC contractors specifically. Founded by Josh Crouch, the agency built its position through deep specialization — plumbing-specific keyword targeting, HVAC seasonal campaign planning (peak summer, peak winter), emergency-service PPC optimization, and Google Business Profile reputation management for trades where 'plumber near me at 11pm' searches drive meaningful revenue.\n\nThe agency operates with an owner-operator feel — smaller team than Hook Agency, more direct founder involvement in client accounts, accessible pricing ($1,500-$5,000/mo retainer ranges) that fits earlier-stage plumbing and HVAC operations. Forum sentiment in r/Plumbing and r/HVAC consistently mentions Plumbing & HVAC SEO as 'the agency that actually understands trade-specific dynamics' — a recurring complaint about generalist agencies is that they don't know what 'emergency plumber' searches look like or how HVAC seasonality affects PPC budget pacing.\n\nWhat differentiates the agency operationally: monthly reporting that ties marketing spend to actual lead volume + closed jobs (rather than vanity metrics like 'page 1 ranking' or 'website traffic'), a willingness to recommend Google LSA as a primary channel alongside (or sometimes instead of) traditional SEO/PPC, and an explicit willingness to push back when a client's expectations don't match their actual market position. Forum threads describe the agency as 'they'll tell you no if your shop isn't ready for what you're asking for' — which is a meaningful trust signal in an industry where most agencies will say yes to any retainer.\n\nThe limitations: smaller team means smaller client capacity (waiting list during peak seasons). Pricing scales below Hook Agency's range, which means the depth of service is also somewhat narrower at the bottom end. Geographic coverage is nationwide but the Florida HQ means some local-market expertise gaps in markets far from the Southeast. And the trade-specific focus on plumbing + HVAC means contractors in other trades should look elsewhere.",
+      "how_it_works": "Discovery call covers plumbing/HVAC operation (size, geography, current marketing, competitive position). Agency proposes service scope and retainer. Engagement typically starts at $1,500-$2,500/mo for SEO + GBP management; scales to $4,000-$5,000/mo for full-service. Monthly reporting tied to lead volume + closed jobs. 3-month minimum.",
+      "pros_detail": [
+        { "title": "Genuine plumbing + HVAC trade expertise", "explanation": "Owner Josh Crouch and team understand trade-specific marketing dynamics — emergency-service PPC, HVAC seasonality, plumbing-customer decision patterns. Generic agencies don't have this depth." },
+        { "title": "Accessible pricing for earlier-stage shops", "explanation": "$1,500-$5,000/mo retainer ranges fit shops doing $500K-$3M revenue that can't justify Hook Agency-tier pricing. Entry-tier accessibility without sacrificing trade-specific expertise." },
+        { "title": "Honest pushback when expectations don't match reality", "explanation": "Forum sentiment describes the agency as willing to say no when a client's expectations don't match their actual market position. Most agencies will say yes to any retainer; this honesty is a real trust signal." },
+        { "title": "Lead-volume + closed-jobs reporting (not vanity metrics)", "explanation": "Monthly reports tie marketing spend to actual business outcomes (leads, closed jobs, revenue impact) rather than vanity metrics like rankings or traffic. The ROI framing is what plumbing/HVAC owners actually care about." },
+        { "title": "Strong forum reputation in r/Plumbing and r/HVAC", "explanation": "Consistent positive sentiment in trade-specific subreddits. Most-recommended trade-specific marketing agency for plumbing/HVAC." }
+      ],
+      "cons_detail": [
+        { "title": "Smaller team = limited client capacity", "explanation": "Smaller agency size means client capacity is bounded. Wait lists during peak seasons (especially summer for HVAC). Faster-growing shops may need to plan engagement timing." },
+        { "title": "Trade-specific focus means non-plumbing-HVAC contractors should look elsewhere", "explanation": "Roofing, electrical, landscaping, etc. — not their specialty. Use Hook Agency for roofing or other trade-specific alternatives." },
+        { "title": "Service depth narrower at the entry tier", "explanation": "At $1,500/mo entry tier, service scope is mostly SEO + GBP management. Full multi-channel campaigns require higher retainers. Don't expect agency-level depth on entry-tier engagements." },
+        { "title": "Florida HQ creates some geographic-market-expertise gaps", "explanation": "Nationwide coverage but Southeast-concentrated experience. For unusually local-market-dependent campaigns (e.g., specific Northeast market dynamics), the geographic expertise may be slightly less deep than a local agency in those markets." }
+      ],
+      "best_for": "Plumbing and HVAC contractors with $500K-$3M revenue looking for trade-specific marketing expertise at accessible retainer pricing",
+      "best_team_size": "Plumbing/HVAC shops with $500K-$3M revenue, 3-15 employees",
+      "weaknesses": "Limited client capacity, trade-specific focus, narrower service depth at entry tier — but trade-specific expertise at accessible pricing is structurally hard to beat for the segment served",
+      "reputation_flag": null,
+      "ratings": { "google": 4.9, "trustpilot": null, "bbb": "A+ (BBB-accredited)", "reddit_sentiment": "strongly positive in r/Plumbing and r/HVAC" },
+      "key_features": ["plumbing_hvac_specialty", "owner_operator", "seasonal_campaign_expertise", "honest_pushback", "outcome_based_reporting"],
+      "affiliate_program": "none",
+      "affiliate_payout_note": "No affiliate program; agency relationships are direct.",
+      "verified_date": "2026-05-28",
+      "agency_faqs": [
+        { "q": "Is this better than Hook Agency?", "a": "Different focus. Hook Agency is roofing-specialist; Plumbing & HVAC SEO is plumbing/HVAC-specialist. Use whichever matches your trade. Pricing is comparable at full-service tier; Plumbing & HVAC SEO is more accessible at entry tier." },
+        { "q": "How does this differ from a generalist home-services agency?", "a": "Trade-specific dynamics — emergency-service PPC optimization, HVAC seasonal campaign pacing, plumbing customer decision patterns — that generalist agencies don't optimize for. The trade-specific expertise translates to higher ROI on retainer for plumbing/HVAC shops specifically." }
+      ]
+    },
+    {
+      "slug": "blue-corona",
+      "name": "Blue Corona (now part of EverCommerce)",
+      "vendor_url": "https://www.bluecorona.com",
+      "affiliate_url": "TBD",
+      "tagline": "Established home-services marketing agency with mid-market reach and comprehensive service scope",
+      "agency_type": "home-services-focus",
+      "services_offered": ["seo", "ppc", "web_design", "content", "local_seo", "reputation_management", "email", "social_media"],
+      "pricing_model": "monthly-retainer",
+      "typical_retainer_usd": "$3,000-$10,000/mo",
+      "minimum_contract_months": 3,
+      "verticals_specialty": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control"],
+      "geographic_coverage": "us-nationwide",
+      "founded": 2008,
+      "headquartered": "Gaithersburg, MD",
+      "long_description": "Blue Corona is one of the longer-established home-services marketing agencies, founded 2008 and now operating as part of EverCommerce (the same parent that owns ServiceTitan and several other home-services-tech companies). The agency covers the full spectrum of digital marketing services — SEO, PPC, web design, content, reputation management, email, social — for home-services contractors across most major trades.\n\nThe positioning is mid-market home-services with comprehensive service scope. Blue Corona's clients tend to be established contractor operations ($2M+ revenue, multiple service locations or large single-location operations) that have outgrown trade-specific boutique agencies and need integrated multi-channel marketing operations. The retainer range ($3,000-$10,000/mo) reflects the comprehensive service scope.\n\nThe EverCommerce acquisition (which happened in stages over 2019-2022) brought operational consolidation and tighter integration with EverCommerce's other home-services properties (ServiceTitan FSM, Updater for moves, etc.). For contractors already in the EverCommerce ecosystem, the integrated marketing + operational tooling has structural appeal. For contractors not in that ecosystem, the parent-company integration is operationally neutral.\n\nForum sentiment on Blue Corona is solid-but-mixed — established clients consistently describe acceptable-to-good results; some clients describe pricing-relative-to-results concerns particularly at the higher end of the retainer range. The agency is competitive but not standout-best for any specific use case. We list Blue Corona in this directory because it's a meaningful player in the home-services marketing segment that contractors regularly encounter via referrals or SEO outreach.",
+      "how_it_works": "Discovery call covers operation scale and marketing needs. Agency proposes integrated multi-channel service scope. Retainer typically starts at $3,000/mo for foundational services; scales to $10,000/mo for comprehensive multi-channel operations. Monthly reporting + quarterly business reviews.",
+      "pros_detail": [
+        { "title": "Comprehensive multi-channel service scope", "explanation": "SEO + PPC + web + content + reputation + email + social in single agency relationship. For established contractors needing integrated marketing operations, the consolidation reduces vendor management overhead." },
+        { "title": "Long operational history (since 2008)", "explanation": "Established agency with mature operations. Lower 'will this agency still exist?' risk than newer entrants." },
+        { "title": "EverCommerce parent integration for ServiceTitan customers", "explanation": "Tighter integration with ServiceTitan + other EverCommerce properties. For contractors already in that ecosystem, the integrated tooling has structural advantage." }
+      ],
+      "cons_detail": [
+        { "title": "Pricing scales high at full-service tier", "explanation": "$10,000/mo upper-tier retainer requires established operations to justify. For smaller contractors, the pricing is above the affordability threshold." },
+        { "title": "Solid but rarely standout-best results", "explanation": "Forum sentiment is solid-but-mixed rather than strongly positive. The agency delivers acceptable results; it rarely produces the exceptional-ROI reports that Hook Agency or Plumbing & HVAC SEO clients sometimes report." },
+        { "title": "Acquisition-integration uncertainty", "explanation": "Multiple acquisitions over the past several years (independent → EverCommerce stages → larger parent company). Existing clients have generally reported acceptable continuity but acquisition transitions create some organizational friction risk." }
+      ],
+      "best_for": "Established home-services contractor operations ($2M+ revenue, multi-location or large single-location) needing comprehensive multi-channel marketing operations in a single agency relationship",
+      "best_team_size": "Home-services operations $2M+ revenue, 10+ employees, established geographic markets",
+      "weaknesses": "Higher pricing at full-service tier, solid-but-not-standout results, acquisition-integration uncertainty — but for established operations needing comprehensive multi-channel scope, the integration is genuinely useful",
+      "reputation_flag": null,
+      "ratings": { "google": 4.5, "trustpilot": 3.9, "bbb": "A+ (BBB-accredited)", "reddit_sentiment": "solid-but-mixed — generally positive established clients, some pricing-relative-to-results concerns" },
+      "key_features": ["multi_channel_scope", "evercommerce_integration", "long_history", "mid_market_focus"],
+      "affiliate_program": "none",
+      "affiliate_payout_note": "No editorial affiliate program",
+      "verified_date": "2026-05-28",
+      "agency_faqs": [
+        { "q": "Should I work with Blue Corona or a trade-specific specialist?", "a": "Depends on stage and trade focus. Earlier-stage shops in roofing or plumbing/HVAC are often better served by trade specialists (Hook Agency, Plumbing & HVAC SEO). Established multi-location operations needing integrated multi-channel scope are reasonable fit for Blue Corona." }
+      ]
+    },
+    {
+      "slug": "adapt-digital-solutions",
+      "name": "Adapt Digital Solutions",
+      "vendor_url": "https://www.adaptdigitalsolutions.com",
+      "affiliate_url": "TBD",
+      "tagline": "Contractor-focused digital marketing agency known for the dominant 'contractor lead generation' SEO mega-guide",
+      "agency_type": "home-services-focus",
+      "services_offered": ["seo", "ppc", "web_design", "content", "local_seo", "reputation_management"],
+      "pricing_model": "monthly-retainer",
+      "typical_retainer_usd": "$2,000-$8,000/mo",
+      "minimum_contract_months": 3,
+      "verticals_specialty": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control"],
+      "geographic_coverage": "us-nationwide",
+      "founded": 2014,
+      "headquartered": "San Diego, CA",
+      "long_description": "Adapt Digital Solutions is the contractor-focused marketing agency that has built its market position partly through the dominant SEO position of its 'Contractor Lead Generation' mega-guide — a 8,000+ word content piece that ranks at or near the top of Google for the highest-intent contractor-marketing search terms. The content-marketing strategy is unusually well-executed for the agency segment: the mega-guide genuinely teaches contractor lead-gen rather than gating value behind a sales call, which builds inbound credibility before any commercial conversation happens.\n\nThe agency itself operates as a generalist home-services digital marketing firm — SEO, PPC, web design, content, reputation management across HVAC, plumbing, electrical, roofing, and adjacent trades. Pricing runs $2,000-$8,000/mo retainer range. The team is smaller than Blue Corona but larger than the owner-operator specialists (Hook Agency, Plumbing & HVAC SEO). The result is mid-tier service depth at accessible pricing for established SMB contractors.\n\nThe content-marketing-first positioning is the agency's main moat. Most marketing agencies talk about their results; Adapt Digital published a multi-thousand-word public guide demonstrating what contractor lead-gen actually looks like. The 'they teach what they sell' positioning generates inbound credibility that translates into engagement decisions. Forum sentiment is generally positive — fewer specific client-result anecdotes than Hook Agency receives, but consistent moderate-positive sentiment without significant complaint volume.",
+      "how_it_works": "Discovery call after inbound (often via the mega-guide). Agency proposes service scope and retainer. Engagement typically starts at $2,000-$3,000/mo for SEO + content; scales to $7,000-$8,000/mo for full-service multi-channel. Monthly reporting.",
+      "pros_detail": [
+        { "title": "Content-marketing-first positioning demonstrates expertise", "explanation": "The 'Contractor Lead Generation' mega-guide ranks at the top of Google and demonstrates real expertise. Prospective clients can evaluate the agency's thinking before any sales conversation." },
+        { "title": "Generalist home-services coverage at accessible pricing", "explanation": "Covers most major trades at $2,000-$8,000/mo retainer ranges. Mid-tier service depth without the high-end pricing of larger agencies." },
+        { "title": "Solid moderate-positive reputation without significant complaints", "explanation": "Forum sentiment is consistently moderate-positive without the complaint patterns that affect lower-tier agencies. The agency does what it says it does." }
+      ],
+      "cons_detail": [
+        { "title": "Fewer specific high-ROI client anecdotes than trade specialists", "explanation": "Trade specialists (Hook Agency, Plumbing & HVAC SEO) have more specific high-ROI client-result reports in forum sentiment. Adapt Digital's results are consistent-acceptable rather than standout-exceptional." },
+        { "title": "Generalist focus means less depth than trade specialists for specialty trades", "explanation": "For roofing-only operations, Hook Agency's roofing-specific expertise beats Adapt Digital's generalist coverage. For plumbing/HVAC-only, Plumbing & HVAC SEO's trade-specific depth beats Adapt Digital. The trade-off is breadth vs depth." }
+      ],
+      "best_for": "SMB contractors across most home-services trades looking for content-marketing-credible mid-tier digital marketing without the high-end pricing of larger agencies",
+      "best_team_size": "Contractors $500K-$5M revenue, 3-25 employees, across most home-services trades",
+      "weaknesses": "Fewer standout-result anecdotes than trade specialists, generalist focus means less depth than specialists for specialty trades — but the content-marketing-first positioning + accessible pricing is structurally strong",
+      "reputation_flag": null,
+      "ratings": { "google": 4.7, "trustpilot": null, "bbb": "A+ (BBB-accredited)", "reddit_sentiment": "consistently moderate-positive without significant complaint patterns" },
+      "key_features": ["content_marketing_first", "generalist_home_services", "accessible_pricing", "mid_tier_depth"],
+      "affiliate_program": "none",
+      "affiliate_payout_note": "No editorial affiliate program",
+      "verified_date": "2026-05-28",
+      "agency_faqs": [
+        { "q": "Is the Contractor Lead Generation guide worth reading?", "a": "Yes — it's a genuinely good resource on contractor lead-gen fundamentals. Read it before any agency conversation as a baseline education." }
+      ]
+    },
+    {
+      "slug": "lemonade-stand",
+      "name": "Lemonade Stand",
+      "vendor_url": "https://www.lemonadestand.com",
+      "affiliate_url": "TBD",
+      "tagline": "Service-business-focused digital marketing agency with broad trade coverage",
+      "agency_type": "home-services-focus",
+      "services_offered": ["seo", "ppc", "web_design", "content", "local_seo"],
+      "pricing_model": "monthly-retainer",
+      "typical_retainer_usd": "$2,000-$6,000/mo",
+      "minimum_contract_months": 3,
+      "verticals_specialty": ["hvac", "plumbing", "electrical", "general_contractor", "landscaping", "cleaning", "pest_control", "handyman"],
+      "geographic_coverage": "us-nationwide",
+      "founded": 2014,
+      "headquartered": "Boise, ID",
+      "long_description": "Lemonade Stand is a service-business-focused digital marketing agency serving home-services trades, professional services, and adjacent service businesses. Founded 2014, headquartered in Boise, the agency runs mid-tier retainers ($2,000-$6,000/mo) with broad trade coverage and generalist multi-channel service scope (SEO, PPC, web, content, local SEO).\n\nThe positioning is solid generalist — not as trade-specific as Hook Agency or Plumbing & HVAC SEO, not as comprehensive as Blue Corona, but a credible mid-tier option for SMB contractors who want a real agency partner without the deepest specialty or broadest scope. Forum sentiment is moderate-positive without significant complaint patterns. The agency works competently within its positioning.\n\nFor most contractors evaluating Lemonade Stand, the question is comparison: Adapt Digital Solutions is roughly comparable on pricing and scope. The choice between them often comes down to which agency's intake conversation goes better — both are reasonable starting points for SMB home-services contractors needing mid-tier multi-channel marketing.",
+      "how_it_works": "Inbound or referral discovery call. Agency proposes service scope at retainer level matching contractor needs. Standard monthly engagement with reporting + quarterly reviews.",
+      "pros_detail": [
+        { "title": "Mid-tier pricing with broad trade coverage", "explanation": "$2,000-$6,000/mo retainer ranges fit most SMB contractors across home-services trades. Generalist coverage avoids trade-specialist limitations." },
+        { "title": "Consistent moderate-positive sentiment", "explanation": "Forum sentiment is consistent and moderate-positive without significant complaint patterns. The agency delivers what it promises." }
+      ],
+      "cons_detail": [
+        { "title": "Lacks the specialty depth of trade-specific agencies", "explanation": "Generalist focus means less depth than Hook Agency or Plumbing & HVAC SEO for those trade specialties." },
+        { "title": "Lacks the comprehensive scope of larger agencies", "explanation": "Service scope is narrower than Blue Corona's full multi-channel offering." },
+        { "title": "Less brand recognition than larger competitors", "explanation": "Smaller market presence than Blue Corona or Scorpion. Earlier in the consideration funnel for most contractors." }
+      ],
+      "best_for": "SMB home-services contractors looking for mid-tier multi-channel marketing without trade-specialist depth or comprehensive-scope pricing",
+      "best_team_size": "Contractors $500K-$3M revenue, 3-15 employees",
+      "weaknesses": "Lacks both trade specialist depth and large agency scope — competitive mid-tier option but rarely the standout choice",
+      "reputation_flag": null,
+      "ratings": { "google": 4.6, "trustpilot": null, "bbb": "A+ (BBB-accredited)", "reddit_sentiment": "moderate-positive without significant patterns" },
+      "key_features": ["mid_tier_pricing", "broad_trade_coverage", "service_business_focus"],
+      "affiliate_program": "none",
+      "affiliate_payout_note": "No editorial affiliate program",
+      "verified_date": "2026-05-28",
+      "agency_faqs": [
+        { "q": "Lemonade Stand vs Adapt Digital Solutions?", "a": "Comparable mid-tier options. Run intake conversations with both and pick whichever agency's communication style and proposed scope matches better. Pricing and capability are roughly similar." }
+      ]
+    },
+    {
+      "slug": "builder-funnel",
+      "name": "Builder Funnel",
+      "vendor_url": "https://www.builderfunnel.com",
+      "affiliate_url": "TBD",
+      "tagline": "Construction-skewed digital marketing agency focused on builders and remodelers (not service trades)",
+      "agency_type": "home-services-focus",
+      "services_offered": ["seo", "ppc", "web_design", "content", "local_seo"],
+      "pricing_model": "monthly-retainer",
+      "typical_retainer_usd": "$2,500-$8,000/mo",
+      "minimum_contract_months": 3,
+      "verticals_specialty": ["general_contractor"],
+      "geographic_coverage": "us-nationwide",
+      "founded": 2012,
+      "headquartered": "Colorado Springs, CO",
+      "long_description": "Builder Funnel is a marketing agency focused specifically on builders, remodelers, and adjacent construction contractors — NOT service trades like HVAC, plumbing, or electrical. The agency's playbooks are built around construction-customer journeys (longer sales cycles, higher project values, design-build decision patterns) rather than service-trade emergency-call dynamics.\n\nFor general contractors and residential remodelers, Builder Funnel's construction-specific expertise can be a structural advantage over generalist agencies that treat all contractor marketing the same. For service-trade contractors (HVAC, plumbing, electrical, roofing), Builder Funnel is wrong-shape — use trade-specific alternatives or service-trade-focused generalists.\n\nThe agency operates at mid-to-upper-tier retainer pricing ($2,500-$8,000/mo). Forum sentiment is moderate-positive within the construction-contractor community. We list Builder Funnel for completeness because some users in this directory are GCs or remodelers for whom Builder Funnel is structurally appropriate — but most service-trade contractors should look elsewhere.",
+      "how_it_works": "Discovery call covers construction-business operation. Agency proposes service scope. Engagement typically $2,500-$8,000/mo retainer range. Monthly reporting.",
+      "pros_detail": [
+        { "title": "Construction-specific expertise for builders and remodelers", "explanation": "Playbooks built around construction-customer journeys, design-build decision patterns, longer sales cycles. Service-trade generalists don't have this depth for construction-specific marketing." }
+      ],
+      "cons_detail": [
+        { "title": "Wrong shape for service-trade contractors", "explanation": "HVAC, plumbing, electrical, roofing service work — the agency's construction-skewed playbooks don't fit service-trade emergency-call dynamics." },
+        { "title": "Higher pricing than service-trade-focused alternatives", "explanation": "$2,500-$8,000/mo retainer ranges at the upper end of the SMB market." }
+      ],
+      "best_for": "Residential builders, large remodelers, design-build contractors — NOT service-trade contractors (HVAC, plumbing, electrical, roofing service)",
+      "best_team_size": "Builders + remodelers $1M-$10M revenue",
+      "weaknesses": "Wrong shape for service trades, higher pricing — fits a narrow segment (builders + remodelers) and is wrong-shape for most contractors in this directory",
+      "reputation_flag": null,
+      "ratings": { "google": 4.7, "trustpilot": null, "bbb": "A+ (BBB-accredited)", "reddit_sentiment": "positive within construction-contractor community, not applicable to service trades" },
+      "key_features": ["construction_specialty", "design_build_focus", "mid_upper_tier_pricing"],
+      "affiliate_program": "none",
+      "affiliate_payout_note": "No editorial affiliate program",
+      "verified_date": "2026-05-28",
+      "agency_faqs": [
+        { "q": "Is Builder Funnel right for HVAC/plumbing/electrical contractors?", "a": "No. Use Plumbing & HVAC SEO for plumbing/HVAC or Hook Agency for roofing or Adapt Digital/Lemonade Stand for generalist service-trade marketing." }
+      ]
+    },
+    {
+      "slug": "scorpion",
+      "name": "Scorpion",
+      "vendor_url": "https://www.scorpion.co",
+      "affiliate_url": "TBD",
+      "tagline": "Enterprise home-services marketing agency for large-scale operations — high retainers, comprehensive scope",
+      "agency_type": "home-services-focus",
+      "services_offered": ["seo", "ppc", "web_design", "content", "local_seo", "reputation_management", "social_media", "email", "lead_gen"],
+      "pricing_model": "monthly-retainer",
+      "typical_retainer_usd": "$5,000-$25,000+/mo",
+      "minimum_contract_months": 6,
+      "verticals_specialty": ["hvac", "plumbing", "electrical", "roofing", "general_contractor"],
+      "geographic_coverage": "us-nationwide",
+      "founded": 2001,
+      "headquartered": "Valencia, CA",
+      "long_description": "Scorpion is the enterprise-tier home-services marketing agency — large operation, comprehensive service scope, high retainer pricing ($5,000-$25,000+/mo), and minimum 6-month engagement. The agency serves established and large home-services operations ($5M+ revenue, multi-location, dedicated marketing budget capacity) that need integrated multi-channel marketing operations at scale.\n\nThe positioning is enterprise — Scorpion's typical client profile is meaningfully different from the SMB-trades focus of Hook Agency, Plumbing & HVAC SEO, or Adapt Digital. Scorpion's clients have dedicated marketing roles internally, multi-location operations, complex compliance + multi-state operations, and marketing budgets that justify $10K-$25K/mo retainer ranges.\n\nFor SMB contractors in our typical 2-25 employee range, Scorpion is overkill and structurally wrong-priced. For mid-market and larger home-services operations (50+ employees, $5M+ revenue), Scorpion's enterprise capacity is structurally appropriate. We list Scorpion for completeness — most contractors in this directory should look at SMB-focused alternatives first.",
+      "how_it_works": "Enterprise sales process — discovery + strategic-planning conversations before pricing. Engagement typically starts at $5,000/mo and scales meaningfully. Minimum 6-month commitment.",
+      "pros_detail": [
+        { "title": "Enterprise-scale multi-channel capacity", "explanation": "For large-operation contractors needing integrated marketing at multi-location scale, Scorpion's enterprise capacity is appropriate where smaller agencies aren't." },
+        { "title": "Long operational history with deep home-services expertise", "explanation": "Founded 2001 with concentrated home-services focus. Mature operations and deep market expertise." }
+      ],
+      "cons_detail": [
+        { "title": "Enterprise pricing — overkill for SMB", "explanation": "$5,000-$25,000+/mo retainer ranges and 6-month minimum commitment fit established large operations, not typical SMB contractors." },
+        { "title": "Sales-process-driven engagement", "explanation": "Unlike SMB-focused agencies that can engage on inbound discovery calls, Scorpion uses an enterprise sales process. More friction; longer pre-engagement timeline." },
+        { "title": "6-month minimum lock-in", "explanation": "Longer minimum commitment than SMB-focused alternatives. For contractors uncertain about long-term agency fit, the 6-month commitment is structurally significant." }
+      ],
+      "best_for": "Large home-services operations ($5M+ revenue, multi-location, dedicated internal marketing capacity) needing enterprise-scale multi-channel marketing operations",
+      "best_team_size": "Enterprise contractors $5M+ revenue, 50+ employees, multi-location",
+      "weaknesses": "Enterprise pricing, sales-process friction, 6-month minimum lock-in — wrong shape for typical SMB contractors in this directory",
+      "reputation_flag": null,
+      "ratings": { "google": 4.5, "trustpilot": 4.0, "bbb": "A+ (BBB-accredited)", "reddit_sentiment": "less applicable to SMB; mid-market and enterprise sentiment is generally positive" },
+      "key_features": ["enterprise_scale", "comprehensive_multi_channel", "long_history", "multi_location_capacity"],
+      "affiliate_program": "none",
+      "affiliate_payout_note": "No editorial affiliate program",
+      "verified_date": "2026-05-28",
+      "agency_faqs": [
+        { "q": "Is Scorpion right for a 10-employee plumbing shop?", "a": "No. Use Plumbing & HVAC SEO or Adapt Digital Solutions instead. Scorpion's enterprise pricing and scope are overkill for SMB operations." }
+      ]
+    },
+    {
+      "slug": "townsquare-interactive",
+      "name": "Townsquare Interactive",
+      "vendor_url": "https://www.townsquareinteractive.com",
+      "affiliate_url": "TBD",
+      "tagline": "SMB digital marketing service with documented lock-in contract complaints (FrownSquare.com)",
+      "agency_type": "generalist",
+      "services_offered": ["web_design", "seo", "local_seo", "reputation_management", "social_media"],
+      "pricing_model": "monthly-retainer",
+      "typical_retainer_usd": "$250-$1,500/mo (low-tier marketing services)",
+      "minimum_contract_months": 12,
+      "verticals_specialty": [],
+      "geographic_coverage": "us-nationwide",
+      "founded": 2014,
+      "headquartered": "Charlotte, NC",
+      "long_description": "Townsquare Interactive is the low-tier SMB digital marketing service operated by Townsquare Media (the radio + entertainment company). The product positioning targets very-small businesses (often via cold sales calls from Townsquare's existing radio-advertising customer base) at low-tier pricing ($250-$1,500/mo) with 12-month minimum commitments. The structural problem isn't the product — it's the documented complaint pattern around contract lock-in, oral promises that don't match written contracts, retention-call friction, and ROI issues.\n\nThe complaint pattern is widely documented. FrownSquare.com is an active complaint-aggregation site operated by former Townsquare Interactive customers (the site has existed for several years and continues to receive new complaints). BBB filings, Trustpilot reviews, and small-business forum threads consistently describe a recurring pattern: cold sales call from Townsquare rep → oral promises about results + cancellation flexibility → 12-month written contract with terms not matching oral promises → underperforming marketing results → cancellation attempts blocked by retention pressure + contract-term enforcement → contractor frustration.\n\nThe pattern is structural rather than isolated. Townsquare Interactive's sales-process and contract-design choices create the friction that drives the complaint volume. We list Townsquare in this directory because contractors encounter it via Townsquare's aggressive outbound sales (especially in markets where Townsquare's radio properties have local market presence) — but we cannot recommend it under any contractor profile. The contractor-favored alternatives (Hook Agency, Plumbing & HVAC SEO, Adapt Digital, Lemonade Stand) all have structurally better contract terms, transparent pricing, and accountable service quality.\n\nIf a Townsquare Interactive sales rep contacts your shop, our editorial recommendation is to decline politely and pursue alternatives. If you're already in a Townsquare contract, document everything in writing, file complaints with BBB and your state attorney general for any documented misrepresentation, and plan to not renew at term end.",
+      "how_it_works": "Outbound sales call (often from Townsquare's radio-advertising customer base). Oral pitch followed by 12-month written contract. Service scope is low-tier digital marketing — web design, basic SEO, basic local listing management, reputation management at low-touch level.",
+      "pros_detail": [
+        { "title": "Low-tier pricing accessible to very-small businesses", "explanation": "$250-$1,500/mo pricing is accessible to businesses that can't afford mid-tier agency retainers. The pricing positioning is genuinely lower than most alternatives." }
+      ],
+      "cons_detail": [
+        { "title": "Documented FrownSquare.com complaint site", "explanation": "Active complaint-aggregation site (FrownSquare.com) operated by former customers. The complaint volume is widespread enough to require a dedicated complaint-aggregation site, which is itself a signal." },
+        { "title": "12-month minimum contract with documented friction", "explanation": "12-month minimum commitment is longer than most SMB-focused alternatives. Cancellation attempts mid-term face retention pressure and contract-enforcement friction." },
+        { "title": "Oral-promises-vs-written-contract pattern", "explanation": "Forum threads document a recurring pattern: sales rep oral promises about results + cancellation flexibility don't appear in the written contract. Verbal misrepresentation that isn't legally enforceable." },
+        { "title": "Service quality matches low-tier pricing — but worse than alternatives at similar prices", "explanation": "Lemonade Stand and Adapt Digital offer mid-tier service quality at $2,000/mo entry tier. Townsquare's $1,000/mo doesn't proportionally deliver less service — it delivers structurally worse results from the customer-success perspective." },
+        { "title": "Aggressive outbound sales process", "explanation": "Cold-call-driven sales to Townsquare's radio-advertising customer base. The pressure-driven sales process is structurally aligned with low-quality customer experience." }
+      ],
+      "best_for": "We cannot recommend Townsquare Interactive under any contractor profile. Use Adapt Digital Solutions, Lemonade Stand, or trade-specific alternatives instead.",
+      "best_team_size": "—",
+      "weaknesses": "FrownSquare.com complaint site, 12-month lock-in contracts, oral-vs-written-promises pattern, aggressive outbound sales — structural problems documented across BBB, Trustpilot, and forum sentiment",
+      "reputation_flag": "Townsquare Interactive has a documented complaint pattern around 12-month lock-in contracts, oral promises during sales that don't appear in written contracts, and aggressive retention friction when customers try to cancel. FrownSquare.com is an active complaint-aggregation site operated by former customers and continues to receive new complaints. We cannot recommend Townsquare under any contractor profile — Adapt Digital Solutions, Lemonade Stand, Hook Agency (roofing), or Plumbing & HVAC SEO (plumbing/HVAC) all offer structurally better contract terms and service quality at comparable or moderately higher pricing.",
+      "ratings": { "google": 3.5, "trustpilot": 1.7, "bbb": "B (not BBB-accredited) — high complaint volume", "reddit_sentiment": "overwhelmingly negative — FrownSquare.com is the recurring reference" },
+      "key_features": ["low_tier_pricing", "12_month_lock_in", "townsquare_media_parent"],
+      "affiliate_program": "none",
+      "affiliate_payout_note": "No editorial affiliate program",
+      "verified_date": "2026-05-28",
+      "agency_faqs": [
+        { "q": "What is FrownSquare.com?", "a": "An active complaint-aggregation site operated by former Townsquare Interactive customers documenting their dissatisfaction with the service, contract terms, and cancellation experience. The site has existed for several years and continues to receive new complaints — a signal that the underlying problems persist." },
+        { "q": "What should I do if I'm already in a Townsquare contract?", "a": "Document everything in writing. Save all original sales-call recordings or notes about oral promises. File complaints with BBB and your state attorney general if you can document specific misrepresentations. Plan to not renew at term end. Look at Adapt Digital, Lemonade Stand, or trade-specific alternatives for your post-contract marketing." }
+      ]
+    },
+    {
+      "slug": "marketing-360",
+      "name": "Marketing 360",
+      "vendor_url": "https://www.marketing360.com",
+      "affiliate_url": "TBD",
+      "tagline": "Marketing platform + agency service with documented lock-in contract + ROI complaint pattern",
+      "agency_type": "generalist",
+      "services_offered": ["web_design", "seo", "ppc", "social_media", "email", "reputation_management", "local_seo"],
+      "pricing_model": "monthly-retainer",
+      "typical_retainer_usd": "$500-$3,000/mo",
+      "minimum_contract_months": 6,
+      "verticals_specialty": [],
+      "geographic_coverage": "us-nationwide",
+      "founded": 2009,
+      "headquartered": "Fort Collins, CO",
+      "long_description": "Marketing 360 is a digital marketing platform + agency service hybrid — proprietary marketing software bundled with agency service delivery, sold to SMBs across many industries including home-services contractors. The structural concerns are similar to (though somewhat less severe than) Townsquare Interactive: documented complaint patterns around contract lock-in, ROI underperformance, and cancellation friction.\n\nThe complaint pattern is documented in forum threads across r/smallbusiness, contractor-specific subs, and BBB filings: oral promises during sales about expected ROI don't materialize, cancellation requires navigating retention-call pressure + contract-term enforcement, and the proprietary platform creates technical lock-in (websites built on Marketing 360's platform are harder to migrate elsewhere). The complaint volume is meaningful though smaller than Townsquare's — no FrownSquare-equivalent complaint site, but enough recurring negative sentiment to constitute a structural concern.\n\nMarketing 360's product is functional — the proprietary marketing platform genuinely exists and provides real services. The issue isn't whether the platform works; it's whether the commercial relationship (lock-in contracts, ROI promises that don't match results, cancellation friction) is acceptable. For most contractors evaluating digital marketing agencies, structurally better alternatives exist at comparable or moderately higher prices.\n\nWe list Marketing 360 in this directory because contractors encounter it via marketing outreach. The honest editorial position: the product works as advertised at a basic level, but the contract structure and ROI patterns documented in customer complaints make it a structurally less-good choice than Adapt Digital, Lemonade Stand, or trade-specific alternatives.",
+      "how_it_works": "Inbound or outbound discovery. Sales process emphasizes the proprietary marketing platform. Contract typically 6-12 month minimum with platform + service bundle.",
+      "pros_detail": [
+        { "title": "Proprietary marketing platform integrates services", "explanation": "Bundled platform + agency services provide a single-vendor relationship for SMBs that don't want to manage multiple marketing vendors." },
+        { "title": "Long operational history (since 2009)", "explanation": "Mature operations and product. Lower 'will this exist?' risk than newer entrants." }
+      ],
+      "cons_detail": [
+        { "title": "Documented lock-in contract + ROI complaint pattern", "explanation": "Forum threads consistently document patterns of oral promises about ROI that don't materialize, cancellation friction, and contract-term enforcement that surprises customers. The pattern is widespread enough to constitute a structural concern." },
+        { "title": "Proprietary platform creates technical lock-in", "explanation": "Websites built on Marketing 360's platform are technically harder to migrate elsewhere. The lock-in dynamic compounds the contract-term lock-in." },
+        { "title": "Less ROI than alternatives at similar prices", "explanation": "For comparable retainer pricing, Adapt Digital Solutions or Lemonade Stand consistently deliver more substantive results based on forum sentiment." }
+      ],
+      "best_for": "We cannot recommend Marketing 360 for most contractor profiles. Adapt Digital Solutions, Lemonade Stand, or trade-specific alternatives offer structurally better contract terms and service quality at comparable pricing.",
+      "best_team_size": "—",
+      "weaknesses": "Documented lock-in + ROI complaint pattern, proprietary-platform technical lock-in, less ROI than alternatives at similar prices",
+      "reputation_flag": "Marketing 360 has a documented complaint pattern around lock-in contracts (6-12 month minimums), oral promises about ROI that don't materialize, and cancellation friction. The proprietary marketing platform creates additional technical lock-in (websites built on it are harder to migrate). Forum threads in r/smallbusiness and contractor-specific subs consistently describe these patterns. We cannot recommend Marketing 360 for most contractor profiles — structurally better alternatives exist at comparable pricing.",
+      "ratings": { "google": 4.3, "trustpilot": 2.8, "bbb": "A+ (BBB-accredited) — but moderate complaint volume", "reddit_sentiment": "mixed-to-negative — recurring lock-in and ROI complaint themes" },
+      "key_features": ["proprietary_platform", "bundled_platform_service", "long_history", "lock_in_contracts"],
+      "affiliate_program": "none",
+      "affiliate_payout_note": "No editorial affiliate program",
+      "verified_date": "2026-05-28",
+      "agency_faqs": [
+        { "q": "Is Marketing 360 worth the lock-in for the platform?", "a": "Almost certainly not. Better alternatives exist at comparable prices without the lock-in. Use Adapt Digital Solutions, Lemonade Stand, or trade-specific alternatives." }
+      ]
+    },
+    {
+      "slug": "service-direct-marketing",
+      "name": "Service Direct (Marketing Hybrid)",
+      "vendor_url": "https://www.servicedirect.com",
+      "affiliate_url": "TBD",
+      "tagline": "Cross-listed from /lead-gen/ — Service Direct also offers marketing agency services alongside its pay-per-call lead platform",
+      "agency_type": "lead-gen-hybrid",
+      "services_offered": ["lead_gen", "ppc", "seo"],
+      "pricing_model": "hybrid",
+      "typical_retainer_usd": "Variable — pay-per-call lead spend + optional retainer for additional marketing services",
+      "minimum_contract_months": 1,
+      "verticals_specialty": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "pest_control"],
+      "geographic_coverage": "us-nationwide",
+      "founded": 2006,
+      "headquartered": "Austin, TX",
+      "long_description": "Service Direct is cross-listed here from our /lead-gen/service-direct/ review because the company also operates a marketing-services arm alongside its core pay-per-call lead-gen platform. For contractors already using Service Direct for pay-per-call leads, the marketing services bolt-on extends the relationship with additional PPC and SEO services on top of the lead-gen foundation.\n\nThe value proposition for contractors who are already Service Direct lead-gen customers: vendor consolidation, single-vendor reporting across lead-gen + marketing, and the operational efficiency of working with one team that understands your service-area and call-tracking setup. For contractors not already on Service Direct lead-gen, the marketing services standalone offering is less differentiated — competitive home-services agencies (Adapt Digital, Lemonade Stand) offer comparable marketing service scope without the lead-gen attachment.\n\nThe affiliate program — relevant only on the lead-gen side, not the marketing-services side — runs as a direct publisher partnership with documented payout terms. This is the same affiliate relationship cited in our /lead-gen/service-direct/ review.",
+      "how_it_works": "Existing Service Direct lead-gen customers can add marketing-services retainer to their existing relationship. New customers can engage on marketing services standalone (less common — most engagement starts via the lead-gen platform first).",
+      "pros_detail": [
+        { "title": "Vendor consolidation for existing Service Direct customers", "explanation": "Single-vendor relationship across pay-per-call leads + PPC + SEO. Operational efficiency for contractors already using Service Direct lead-gen." },
+        { "title": "Affiliate program on the lead-gen side", "explanation": "Real publisher affiliate program documented in /lead-gen/service-direct/. The marketing-services side is editorial-only without commercial alignment." }
+      ],
+      "cons_detail": [
+        { "title": "Marketing services are not strongly differentiated for non-lead-gen customers", "explanation": "If you're not already using Service Direct lead-gen, the marketing services standalone are competitive with but not standout-better than Adapt Digital or Lemonade Stand." },
+        { "title": "Smaller marketing team than dedicated agencies", "explanation": "Service Direct's primary business is lead-gen. The marketing services team is smaller than dedicated marketing agencies like Blue Corona or Scorpion." }
+      ],
+      "best_for": "Existing Service Direct lead-gen customers wanting to extend the vendor relationship with additional marketing services",
+      "best_team_size": "Established Service Direct lead-gen customers in service-trades verticals",
+      "weaknesses": "Marketing services standalone are less differentiated than dedicated marketing agencies; primary value is vendor consolidation for existing lead-gen customers",
+      "reputation_flag": null,
+      "ratings": { "google": 4.5, "trustpilot": null, "bbb": "A+ (BBB-accredited)", "reddit_sentiment": "positive on lead-gen side (cross-referenced from /lead-gen/service-direct/); marketing-services-side sentiment is sparse" },
+      "key_features": ["lead_gen_hybrid", "vendor_consolidation_value", "cross_listed_from_lead_gen"],
+      "affiliate_program": "direct",
+      "affiliate_payout_note": "Affiliate program on lead-gen side (see /lead-gen/service-direct/); marketing-services side is editorial-only",
+      "verified_date": "2026-05-28",
+      "agency_faqs": [
+        { "q": "Should I use Service Direct for marketing instead of dedicated agencies?", "a": "Only if you're already a Service Direct lead-gen customer and want vendor consolidation. For marketing services standalone, dedicated agencies (Adapt Digital, Lemonade Stand) or trade-specific specialists (Hook, Plumbing & HVAC SEO) are typically better choices." }
+      ]
+    }
+  ]
+}

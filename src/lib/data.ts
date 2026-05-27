@@ -5,6 +5,7 @@ import reviewsData from '../data/reviews.json';
 import leadGenData from '../data/lead_gen.json';
 import insuranceData from '../data/insurance.json';
 import payrollData from '../data/payroll.json';
+import agenciesData from '../data/agencies.json';
 
 export interface ToolPricing {
   starting_at_usd: number | null;
@@ -1007,5 +1008,68 @@ export function payrollPicksForBucket(bucket: EmployeeBucket): PayrollService[] 
       return all.filter((s) => ['gusto', 'rippling', 'adp-run', 'paychex-flex', 'onpay'].includes(s.slug));
   }
 }
+
+// --- Marketing agencies (Phase 4 multi-category expansion) -------------------
+
+export type AgencyType = 'trade-specific' | 'home-services-focus' | 'generalist' | 'lead-gen-hybrid';
+
+export interface AgencyRatings {
+  google: number | null;
+  trustpilot: number | null;
+  bbb: string | null;
+  reddit_sentiment: string;
+}
+
+export interface MarketingAgency {
+  slug: string;
+  name: string;
+  vendor_url: string;
+  affiliate_url: string;
+  tagline: string;
+  agency_type: AgencyType;
+  services_offered: string[];
+  pricing_model: string;
+  typical_retainer_usd: string;
+  minimum_contract_months: number;
+  verticals_specialty: string[];
+  geographic_coverage: string;
+  founded: number;
+  headquartered: string;
+  long_description: string;
+  how_it_works: string;
+  pros_detail: ProConItem[];
+  cons_detail: ProConItem[];
+  best_for: string;
+  best_team_size: string;
+  weaknesses: string;
+  reputation_flag: string | null;
+  ratings: AgencyRatings;
+  key_features: string[];
+  affiliate_program: string;
+  affiliate_payout_note: string;
+  verified_date: string;
+  agency_faqs: LeadGenFaq[];
+}
+
+export const marketingAgencies: MarketingAgency[] = (agenciesData as { agencies: MarketingAgency[] }).agencies;
+
+export function getMarketingAgency(slug: string): MarketingAgency | undefined {
+  return marketingAgencies.find((a) => a.slug === slug);
+}
+
+export function agenciesForVertical(verticalSlug: string): MarketingAgency[] {
+  return marketingAgencies.filter((a) => a.verticals_specialty.includes(verticalSlug) || a.agency_type === 'home-services-focus');
+}
+
+/** Tier classification for marketing agencies. */
+export function agencyTier(a: MarketingAgency): 'S' | 'A' | 'F' {
+  if (a.reputation_flag) return 'F';
+  // Trade-specific with strong reputation → Tier S
+  if (a.agency_type === 'trade-specific' && a.ratings.reddit_sentiment.toLowerCase().includes('strongly positive')) return 'S';
+  // Home-services with strong reputation + content credibility → Tier S
+  if (a.slug === 'hook-agency' || a.slug === 'plumbing-hvac-seo' || a.slug === 'blue-corona' || a.slug === 'adapt-digital-solutions') return 'S';
+  return 'A';
+}
+
 
 
