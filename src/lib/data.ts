@@ -2,6 +2,7 @@ import toolsData from '../data/tools.json';
 import categoriesData from '../data/categories.json';
 import awardsData from '../data/awards.json';
 import reviewsData from '../data/reviews.json';
+import leadGenData from '../data/lead_gen.json';
 
 export interface ToolPricing {
   starting_at_usd: number | null;
@@ -762,4 +763,92 @@ export function userRatingForTool(toolSlug: string): { avg: number; count: numbe
   if (rs.length === 0) return null;
   const avg = rs.reduce((a, r) => a + r.rating, 0) / rs.length;
   return { avg, count: rs.length };
+}
+
+// --- Lead-gen platforms (Phase 1 multi-category expansion) -------------------
+
+export type LeadModel =
+  | 'exclusive'
+  | 'shared'
+  | 'pay-per-call'
+  | 'marketplace-bid'
+  | 'directory-listing'
+  | 'display-ads';
+
+export type PricingModel =
+  | 'pay-per-lead'
+  | 'pay-per-quote'
+  | 'pay-per-call'
+  | 'pay-per-click'
+  | 'subscription'
+  | 'marketplace-bid';
+
+export interface LeadGenRatings {
+  trustpilot: number | null;
+  bbb: string | null;
+  reddit_sentiment: string;
+}
+
+export interface LeadGenFaq {
+  q: string;
+  a: string;
+}
+
+export interface LeadGenPlatform {
+  slug: string;
+  name: string;
+  vendor_url: string;
+  affiliate_url: string;
+  tagline: string;
+  lead_model: LeadModel;
+  pricing_model: PricingModel;
+  typical_cost: string;
+  exclusivity: string;
+  verticals: string[];
+  geographic_coverage: string;
+  founded: number;
+  headquartered: string;
+  long_description: string;
+  how_it_works: string;
+  pros_detail: ProConItem[];
+  cons_detail: ProConItem[];
+  best_for: string;
+  best_team_size: string;
+  weaknesses: string;
+  reputation_flag: string | null;
+  ratings: LeadGenRatings;
+  key_features: string[];
+  affiliate_program: string;
+  affiliate_payout_note: string;
+  verified_date: string;
+  platform_faqs: LeadGenFaq[];
+}
+
+export const leadGenPlatforms: LeadGenPlatform[] = (leadGenData as { platforms: LeadGenPlatform[] }).platforms;
+
+export function getLeadGenPlatform(slug: string): LeadGenPlatform | undefined {
+  return leadGenPlatforms.find((p) => p.slug === slug);
+}
+
+export function leadGenPlatformsForVertical(verticalSlug: string): LeadGenPlatform[] {
+  return leadGenPlatforms.filter((p) => p.verticals.includes(verticalSlug));
+}
+
+export function leadGenPlatformsByModel(model: LeadModel): LeadGenPlatform[] {
+  return leadGenPlatforms.filter((p) => p.lead_model === model);
+}
+
+/** Tier classification based on reputation_flag + ratings. */
+export function leadGenTier(p: LeadGenPlatform): 'S' | 'A' | 'F' {
+  if (p.reputation_flag) return 'F';
+  const tp = p.ratings.trustpilot;
+  if (tp !== null && tp < 2.5) return 'F';
+  // Tier S: strongly positive sentiment + exclusive/pay-per-call models + real affiliate
+  if (
+    (p.lead_model === 'exclusive' || p.lead_model === 'pay-per-call' || p.lead_model === 'directory-listing') &&
+    p.ratings.reddit_sentiment.toLowerCase().includes('positive')
+  ) {
+    return 'S';
+  }
+  return 'A';
 }

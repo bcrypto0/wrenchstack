@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { tools, verticals, getTool, verticalToUrl, priceTier, freshnessTier } from '../lib/data';
+import { tools, verticals, getTool, verticalToUrl, priceTier, freshnessTier, leadGenPlatforms, leadGenTier } from '../lib/data';
 import featuresData from '../data/features.json';
 import migrationsData from '../data/migrations.json';
 
@@ -45,6 +45,20 @@ export const GET: APIRoute = () => {
       slug: v.slug,
       url: `/${verticalToUrl(v.slug)}/`,
       tagline: `Best ${v.name.toLowerCase()} software compared`,
+    });
+  }
+
+  // Lead-gen platforms (13)
+  for (const p of leadGenPlatforms) {
+    items.push({
+      type: 'leadgen',
+      name: p.name,
+      slug: p.slug,
+      url: `/lead-gen/${p.slug}/`,
+      tagline: p.tagline,
+      bestFor: p.best_for,
+      verticals: p.verticals,
+      tier: leadGenTier(p),
     });
   }
 

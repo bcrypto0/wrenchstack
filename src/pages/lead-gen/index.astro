@@ -1,0 +1,203 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import {
+  leadGenPlatforms,
+  leadGenTier,
+  type LeadGenPlatform,
+} from '../../lib/data';
+
+const pageTitle = `Best Lead-Gen Platforms for Trades Contractors (2026)`;
+const pageDescription = `Independent reviews of 13 lead-generation platforms for HVAC, plumbing, electrical, roofing, and other residential trades — including Google LSA, Service Direct, Thumbtack, Angi, Bark, and more. Honest reputation flags, real affiliate disclosure, exclusive-vs-shared comparison.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Lead-gen platforms', url: '/lead-gen/' },
+];
+
+// Group by tier for editorial structure
+const tierOrder: Array<'S' | 'A' | 'F'> = ['S', 'A', 'F'];
+const byTier: Record<'S' | 'A' | 'F', LeadGenPlatform[]> = { S: [], A: [], F: [] };
+for (const p of leadGenPlatforms) {
+  byTier[leadGenTier(p)].push(p);
+}
+
+const tierMeta = {
+  S: {
+    label: 'Tier S — strongest contractor experience',
+    description: 'Exclusive leads or pay-per-call models with working dispute systems and positive contractor sentiment.',
+    badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300',
+    cardBorder: 'border-emerald-300',
+  },
+  A: {
+    label: 'Tier A — workable with discipline',
+    description: 'Shared-lead or marketplace models. Can work for the right contractor profile but require selectivity, cost discipline, and realistic expectations.',
+    badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300',
+    cardBorder: 'border-blue-300',
+  },
+  F: {
+    label: 'Tier F — not recommended (with reasons)',
+    description: 'Platforms with documented FTC actions, predatory practices, or structural contractor-hostile design. Listed for completeness with explicit warnings — we cannot recommend them.',
+    badgeColor: 'bg-rose-100 text-rose-900 ring-rose-300',
+    cardBorder: 'border-rose-300',
+  },
+};
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: `Lead-Gen Platforms for Trades Contractors`,
+  numberOfItems: leadGenPlatforms.length,
+  itemListElement: leadGenPlatforms.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'Service',
+      name: p.name,
+      description: p.tagline,
+      url: `https://wrenchstack.com/lead-gen/${p.slug}/`,
+    },
+  })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
+        Lead-gen platforms
+      </p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        Best Lead-Gen Platforms for Trades Contractors (2026)
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Independent reviews of {leadGenPlatforms.length} lead-generation platforms used by HVAC, plumbing, electrical, roofing, and other residential trades. We flag platforms with FTC actions and documented predatory practices honestly — and we recommend the contractor-friendly alternatives even when there's no affiliate commission.
+      </p>
+    </header>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">The single most important filter: shared vs exclusive leads</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        Almost every disagreement contractors have about lead-gen platforms boils down to one factor: <strong>shared</strong> (3-5 contractors quote the same customer, customer picks one) vs <strong>exclusive</strong> (each lead goes to one contractor only). Shared-lead platforms have lower per-lead pricing but 5-15% conversion rates because customers price-shop across the bids. Exclusive-lead platforms cost more per lead but convert at 30-50% because there's no quote-bid competition. For most residential service trades, exclusive-lead platforms (Google LSA, Service Direct, 33 Mile Radius) deliver better cost-per-acquired-customer than shared-lead alternatives.
+      </p>
+    </section>
+
+    {tierOrder.map((tier) => {
+      const platforms = byTier[tier];
+      if (platforms.length === 0) return null;
+      const meta = tierMeta[tier];
+      return (
+        <section class="mb-12">
+          <div class="mb-5">
+            <span class={`inline-block rounded-full px-3 py-1 text-xs font-bold ring-1 ${meta.badgeColor}`}>
+              {meta.label}
+            </span>
+            <p class="mt-2 text-sm text-slate-600 leading-relaxed">{meta.description}</p>
+          </div>
+
+          <div class="space-y-4">
+            {platforms.map((p) => (
+              <article class={`rounded-lg border-2 ${meta.cardBorder} bg-white p-5`}>
+                <div class="mb-3 flex items-start justify-between gap-3">
+                  <div class="min-w-0 flex-1">
+                    <h3 class="text-xl font-bold text-slate-900">
+                      <a href={`/lead-gen/${p.slug}/`} class="hover:text-orange-600">{p.name}</a>
+                    </h3>
+                    <p class="text-sm italic text-slate-500">{p.tagline}</p>
+                  </div>
+                  <div class="shrink-0 text-right text-xs">
+                    <p class="font-bold text-slate-900 uppercase tracking-wider">{p.lead_model.replace(/-/g, ' ')}</p>
+                    <p class="text-slate-500">{p.typical_cost}</p>
+                  </div>
+                </div>
+
+                {p.reputation_flag && (
+                  <div class="mb-3 rounded-md border-l-4 border-rose-500 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+                    <p class="font-bold uppercase tracking-wider text-xs text-rose-700 mb-1">⚠ Reputation warning</p>
+                    <p class="leading-relaxed">{p.reputation_flag.split('.')[0]}.</p>
+                  </div>
+                )}
+
+                <dl class="mb-3 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Pricing model</dt>
+                    <dd class="font-semibold text-slate-900">{p.pricing_model.replace(/-/g, ' ')}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Exclusivity</dt>
+                    <dd class="font-semibold text-slate-900">{p.exclusivity.split('—')[0].trim()}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Trustpilot</dt>
+                    <dd class="font-semibold text-slate-900">
+                      {p.ratings.trustpilot !== null ? `${p.ratings.trustpilot.toFixed(1)} / 5` : '—'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Affiliate program</dt>
+                    <dd class="font-semibold text-slate-900">{p.affiliate_program === 'none' ? 'None' : p.affiliate_program === 'unknown' ? 'Unknown' : p.affiliate_program.charAt(0).toUpperCase() + p.affiliate_program.slice(1)}</dd>
+                  </div>
+                </dl>
+
+                <p class="mb-3 text-sm text-slate-700 leading-relaxed">
+                  <strong class="text-slate-900">Best for:</strong> {p.best_for}
+                </p>
+
+                <div class="flex flex-wrap gap-2">
+                  <a
+                    href={`/lead-gen/${p.slug}/`}
+                    class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+                  >
+                    Read full review →
+                  </a>
+                  <a
+                    href={p.affiliate_url.startsWith('http') ? p.affiliate_url : p.vendor_url}
+                    rel="sponsored nofollow noopener"
+                    target="_blank"
+                    class="rounded-md border border-orange-300 bg-white px-4 py-2 text-sm font-semibold text-orange-700 hover:bg-orange-50"
+                  >
+                    Visit {p.name}
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Where to start</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">
+        For most residential service trades, the highest-ROI lead-gen stack is: <strong>Google LSA</strong> (exclusive, Google-verified, no contract) + <strong>Service Direct</strong> (exclusive pay-per-call, real affiliate program) + <strong>CallRail</strong> (call tracking to measure which channels actually work). Add <strong>33 Mile Radius</strong> if you do roofing or restoration. Avoid HomeAdvisor, Angi, and Bark.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/lead-gen/google-local-services-ads/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">
+          Start with Google LSA →
+        </a>
+        <a href="/tools/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">
+          Software directory
+        </a>
+      </div>
+    </section>
+
+    <section class="mt-10 rounded-lg border border-slate-200 bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">Editorial independence on lead-gen reviews</h2>
+      <ul class="space-y-2 text-sm text-slate-700 leading-relaxed">
+        <li>
+          <strong class="text-slate-900">No paid placements.</strong> Vendors cannot purchase tier positioning, featured listings, or warning removals.
+        </li>
+        <li>
+          <strong class="text-slate-900">FTC and class-action history is documented.</strong> When platforms have public regulatory or legal track records (HomeAdvisor's $7.2M FTC settlement, Angi's multiple consent decrees), we cite them with the warning context.
+        </li>
+        <li>
+          <strong class="text-slate-900">Affiliate disclosure is per-platform.</strong> Where we earn commission on a recommendation (Service Direct, 33 Mile Radius, Houzz Pro, CallRail), it's disclosed. Where we don't (Google LSA, Thumbtack), we recommend anyway when the platform fits.
+        </li>
+        <li>
+          <strong class="text-slate-900">Reputation flags are honest.</strong> The 'we cannot recommend' designations (HomeAdvisor, Angi, Bark) reflect documented patterns. Vendor pressure to soften flags isn't a factor — our methodology is published.
+        </li>
+      </ul>
+    </section>
+  </article>
+</Layout>
