@@ -1,0 +1,169 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import caData from '../../data/international/ca.json';
+
+interface CaVendor {
+  slug: string;
+  name: string;
+  category: string;
+  vendor_url: string;
+  tagline: string;
+  market_position: string;
+  ca_specific_note?: string | null;
+  au_specific_note?: string | null;
+  tier: 'S' | 'A' | 'F';
+  reputation_flag: string | null;
+  pros: string[];
+  cons: string[];
+  typical_pricing: string;
+  is_cross_market: boolean;
+  cross_market_link: string | null;
+}
+
+const vendors = (caData as { vendors: CaVendor[] }).vendors;
+
+const categories = ['software', 'lead-gen', 'insurance', 'payroll', 'certification'];
+const categoryMeta: Record<string, { label: string; description: string }> = {
+  'software': { label: 'Field service software', description: 'Jobber leads — Canadian-founded (Edmonton, 2011), the CA success story in trades software. Plus cross-market Housecall Pro and ServiceTitan with CA presence.' },
+  'lead-gen': { label: 'Lead-generation platforms', description: 'HomeStars dominates (owned by Angi/IAC — same corporate concerns apply). TrustedPros is the independent CA-only alternative.' },
+  'insurance': { label: 'Business insurance', description: 'CA-built insurance brokers — Zensurance leads with 100K+ businesses and 50+ insurer panel. APOLLO for 24/7 digital purchase. TruShield for trade-specialty focus.' },
+  'payroll': { label: 'Payroll software', description: 'CA-built payroll with Quebec capability — Wagepoint accessible at small scale, Payworks for mid-market, Knit People for modern UI.' },
+  'certification': { label: 'National + provincial certifications', description: 'Red Seal Program is the national interprovincial standard (cross-province mobility). HRAI for HVAC industry recognition. TSSA for Ontario gas/elevator licensing.' },
+};
+
+const vendorsByCategory: Record<string, CaVendor[]> = {};
+categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
+
+const pageTitle = 'CA Trades Vendor Directory — WrenchStack Canada';
+const pageDescription = `WrenchStack's Canada trades vendor directory: ${vendors.length} platforms across software, lead-gen, insurance, payroll, and national/provincial licensing. Jobber Canadian-founded coverage, Red Seal Program, Quebec-capable payroll, CRA-compliant tooling.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Canada', url: '/ca/' },
+];
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <article class="mx-auto max-w-5xl px-4 py-12">
+
+    <header class="mb-10">
+      <div class="mb-3 flex items-center gap-2">
+        <span class="text-2xl" aria-hidden="true">🇨🇦</span>
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">Canada</p>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        Canada Trades Vendor Directory
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Independent reviews of {vendors.length} Canada-relevant vendors across 5 categories — built for CA contractors with native CA compliance context. Jobber's Canadian heritage (Edmonton-founded), Red Seal Program national standard, Quebec-capable payroll (Wagepoint, Payworks), CRA compliance, GST/PST/HST handling, ROE generation, and provincial licensing patterns (TSSA Ontario, BC Safety Authority, Alberta Apprenticeship).
+      </p>
+    </header>
+
+    <section class="mb-10 grid gap-3 grid-cols-2 sm:grid-cols-5">
+      {categories.map(c => (
+        <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+          <div class="text-2xl font-bold text-slate-900">{vendorsByCategory[c].length}</div>
+          <div class="mt-1 text-xs text-slate-600 capitalize">{c.replace('-', ' ')}</div>
+        </div>
+      ))}
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">What's different about CA trades vendor selection</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        CA trades vendor selection has three important structural differences from US. First, <strong>Jobber is Canadian-born</strong> (Edmonton, 2011) — for CA contractors, this means native CA support timezones, CAD pricing, and product understanding of CA trades workflows that US-origin platforms don't match. Second, <strong>Red Seal Program is the only national trade standard</strong> — provincial Apprenticeship Boards handle most administration, but Red Seal endorsement provides cross-province mobility that no provincial-only certification does. Third, <strong>Quebec payroll is structurally complex</strong> — different deductions, RQ (Revenu Québec) handling separate from CRA, French-language requirements — most CA payroll software handles Quebec poorly; Wagepoint and Payworks are the exceptions.
+      </p>
+    </section>
+
+    {categories.map(c => {
+      const cat = categoryMeta[c];
+      const cv = vendorsByCategory[c];
+      if (cv.length === 0) return null;
+      return (
+        <section class="mb-12">
+          <div class="mb-5">
+            <h2 class="text-2xl font-bold text-slate-900 capitalize">{cat.label}</h2>
+            <p class="mt-1 text-sm text-slate-600 leading-relaxed">{cat.description}</p>
+          </div>
+          <div class="space-y-4">
+            {cv.map(v => {
+              const tierColor = v.tier === 'S' ? 'border-emerald-300' : v.tier === 'F' ? 'border-rose-300' : 'border-blue-300';
+              const tierLabel = v.tier === 'S' ? 'Recommended' : v.tier === 'F' ? 'Reputation warning' : 'Workable';
+              const tierBadge = v.tier === 'S' ? 'bg-emerald-100 text-emerald-900' : v.tier === 'F' ? 'bg-rose-100 text-rose-900' : 'bg-blue-100 text-blue-900';
+              return (
+                <article class={`rounded-lg border-2 ${tierColor} bg-white p-5`}>
+                  <div class="mb-3 flex items-start justify-between gap-3">
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-center gap-2 mb-1 flex-wrap">
+                        <h3 class="text-xl font-bold text-slate-900">{v.name}</h3>
+                        <span class={`rounded-full px-2 py-0.5 text-xs font-bold ${tierBadge}`}>Tier {v.tier} · {tierLabel}</span>
+                        {v.is_cross_market && (
+                          <span class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">Cross-market</span>
+                        )}
+                      </div>
+                      <p class="text-sm italic text-slate-500">{v.tagline}</p>
+                    </div>
+                  </div>
+
+                  {v.reputation_flag && (
+                    <div class="mb-3 rounded-md border-l-4 border-rose-500 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+                      <p class="font-bold uppercase tracking-wider text-xs text-rose-700 mb-1">⚠ Reputation warning</p>
+                      <p class="leading-relaxed">{v.reputation_flag}</p>
+                    </div>
+                  )}
+
+                  <p class="mb-3 text-sm text-slate-700 leading-relaxed">{v.market_position}</p>
+
+                  {v.ca_specific_note && (
+                    <div class="mb-3 rounded-md bg-slate-50 px-4 py-3">
+                      <p class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">CA-specific note</p>
+                      <p class="text-sm text-slate-700 leading-relaxed">{v.ca_specific_note}</p>
+                    </div>
+                  )}
+
+                  <div class="mb-3 grid gap-3 sm:grid-cols-2">
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1">Pros</p>
+                      <ul class="space-y-1 text-sm text-slate-700">
+                        {v.pros.slice(0, 4).map(p => <li class="leading-snug">+ {p}</li>)}
+                      </ul>
+                    </div>
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-rose-700 mb-1">Cons</p>
+                      <ul class="space-y-1 text-sm text-slate-700">
+                        {v.cons.slice(0, 4).map(con => <li class="leading-snug">− {con}</li>)}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="mb-3 text-xs text-slate-600">
+                    <strong class="text-slate-900">Typical CA pricing:</strong> {v.typical_pricing}
+                  </div>
+
+                  <div class="flex flex-wrap gap-2">
+                    <a href={v.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600">Visit {v.name} →</a>
+                    {v.cross_market_link && (
+                      <a href={v.cross_market_link} class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Full review (US market context)</a>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">CA research is an active expansion</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">
+        {vendors.length} CA vendors covered today across {categories.length} categories. We're actively expanding CA depth — full editorial reviews of CA-only vendors (Zensurance, Wagepoint, HomeStars) at the same depth as our US reviews are in the editorial queue. Want a CA vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Back to US directory →</a>
+        <a href="/for-vendors/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Submit a CA vendor</a>
+        <a href="/methodology/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Methodology</a>
+      </div>
+    </section>
+  </article>
+</Layout>
