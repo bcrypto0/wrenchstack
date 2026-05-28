@@ -19,7 +19,8 @@
     "restoration",
     "painting",
     "flooring",
-    "waste_removal"
+    "waste_removal",
+    "fire_protection"
   ],
   "tools": [
     {
@@ -3447,7 +3448,8 @@
         "hvac",
         "plumbing",
         "electrical",
-        "roofing"
+        "roofing",
+        "fire_protection"
       ],
       "pricing": {
         "starting_at_usd": 89,
@@ -3491,7 +3493,8 @@
         "hvac": 9,
         "plumbing": 8,
         "electrical": 8,
-        "roofing": 7
+        "roofing": 7,
+        "fire_protection": 9
       },
       "long_description": "ServiceTrade is the leading commercial service contractor platform, built specifically for commercial HVAC, refrigeration, fire & life safety, and commercial plumbing operations with recurring service agreement business models. Founded in 2012 in Durham, North Carolina, the company has captured significant market share among commercial mechanical contractors 10-100 employees by focusing exclusively on commercial workflows rather than spreading across residential service.\n\nWhat separates ServiceTrade from general FSM is the commercial service agreement architecture. Commercial contractors don't bill jobs — they bill maintenance agreements with scheduled service visits, deficiency follow-up work, and asset-level service histories. ServiceTrade models all of this as first-class concepts: service agreements with auto-generated work orders, deficiency tracking that converts inspection findings into recommended-repair quotes, asset-level service history (every piece of equipment at every customer location has its own record), and customer portals optimized for facility manager users (not residential homeowners).\n\nPricing is Select $89/tech/month, Premium $119/tech/month, and custom-quoted Enterprise tier. Most commercial contractors land in the Premium tier with the deficiency-to-quote workflow and customer portal. Enterprise tier adds advanced reporting, multi-region operations, and custom integrations.\n\nIntegrations include QuickBooks, Sage Intacct, NetSuite, and Zapier — the accounting integrations matter because commercial contractors typically run more sophisticated accounting (job costing, work-in-progress tracking, AIA progress billing) than residential operators. Sage Intacct and NetSuite integration is rare among FSM platforms; ServiceTrade's presence in this segment reflects the commercial focus.\n\nThe trade-off: ServiceTrade is commercial-only positioning. Residential service operations get features they won't use (service agreements, deficiency tracking, asset hierarchies) and miss residential-specific features (homeowner-friendly portals, residential marketing automation, etc.). For commercial mechanical contractors specifically, ServiceTrade is consistently the strongest commercial-only platform in the market.",
       "pros_detail": [
@@ -3712,7 +3715,8 @@
         "plumbing",
         "electrical",
         "roofing",
-        "general_contractor"
+        "general_contractor",
+        "fire_protection"
       ],
       "pricing": {
         "starting_at_usd": null,
@@ -3753,7 +3757,8 @@
         "plumbing": 8,
         "electrical": 8,
         "roofing": 7,
-        "general_contractor": 7
+        "general_contractor": 7,
+        "fire_protection": 8
       },
       "long_description": "BuildOps is the leading project management platform built specifically for commercial mechanical, electrical, and plumbing contractors — the trades that work on commercial buildings rather than residential homes. Founded in 2018 in Los Angeles, the company has scaled rapidly by addressing a real gap: commercial mechanical contractors historically had to choose between residential-focused FSM (ServiceTitan, Jobber) that didn't handle project work, or general commercial GC software (Procore) that didn't have trade-specific service-work features. BuildOps offers both in one platform.\n\nThe product handles two distinct workflows under one roof. The project side covers commercial construction work — sub-contractor coordination on the commercial GC's behalf, AIA progress billing for project owners, BIM coordination for MEP design, equipment tracking, and project scheduling with critical path management. The service side covers ongoing commercial maintenance contracts — property managers and building owners need commercial HVAC, electrical, and plumbing service across portfolios of buildings, and BuildOps handles the service-call workflow, recurring maintenance contracts, and per-building service history that residential FSM tools don't.\n\nPricing is custom-quoted but typically lands $250-450 per user per month with implementation fees $15K-$50K. The platform is venture-backed (raised $300M+ from investors including Tiger Global) and positioned as the commercial mechanical-electrical-plumbing equivalent of what ServiceTitan is to residential trades.\n\nThe trade-off: BuildOps is the wrong choice for pure residential service work (ServiceTitan, Jobber, or Housecall Pro fit better) and for general commercial construction not focused on MEP trades (Procore is broader). Best for commercial mechanical, electrical, plumbing, and HVAC contractors doing $3M+ revenue with mixed service + project work where the integrated workflow saves real operational overhead.",
       "pros_detail": [
@@ -11569,6 +11574,534 @@
         {
           "q": "Can I try Trash Flow before buying?",
           "a": "Yes — Trash Flow offers a free 90-day trial license and includes 90 days of free technical support after purchase, making it one of the lower-risk waste platforms to evaluate before committing."
+        }
+      ]
+    },
+    {
+      "slug": "inspect-point",
+      "name": "Inspect Point",
+      "vendor_url": "https://www.inspectpoint.com",
+      "affiliate_url": "TBD",
+      "tagline": "All-in-one fire and life-safety platform — from NFPA inspection to collection",
+      "verticals": [
+        "fire_protection"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Silver",
+          "Gold",
+          "Platinum"
+        ],
+        "pricing_note": "No public pricing — demo/quote. Support tiers: Silver (email), Gold (premium email), Platinum (premium email + phone), with onboarding and training included. Trusted by 15,000+ fire professionals.",
+        "verified_date": "2026-05-28"
+      },
+      "key_features": [
+        "inspection_checklists",
+        "deficiency_tracking",
+        "compliance_tracking",
+        "offline_mode",
+        "mobile_app",
+        "estimates_quotes",
+        "invoicing",
+        "ai_assistant"
+      ],
+      "integrations": [
+        "quickbooks"
+      ],
+      "best_for": "Fire and life-safety contractors that want one platform spanning NFPA inspections, deficiency-to-quote conversion, scheduling, and billing across alarm, sprinkler, extinguisher, and suppression work",
+      "best_team_size": "3-200",
+      "weaknesses": "No public pricing (demo/quote); Capterra reviews are mixed on support responsiveness and on some requested features not being available, so validate the specific workflows you need before committing",
+      "vertical_fit": {
+        "fire_protection": 9
+      },
+      "long_description": "Inspect Point is one of the most established all-in-one platforms for fire and life-safety contractors, built to run the business end to end — from the NFPA inspection in the field to collecting payment in the office. It ships with a comprehensive library of NFPA and UL-C inspection templates covering fire alarm, sprinkler, extinguisher, special hazards, doors and dampers, backflow, and chemical suppression, so inspectors work from code-aligned forms rather than improvising. Its mobile app captures data on-site and works offline, and the platform has added embedded AI to speed inspection workflows.\n\nBeyond inspections, Inspect Point handles the full operation: team management, deficiency tracking that converts into quotes, payment collection, and reporting. That breadth — inspection through collection — is its core pitch, and the scale behind it is real: the vendor says more than 15,000 fire professionals use it. Support is tiered (Silver email, Gold premium email, Platinum premium email plus phone), with onboarding and training included.\n\nThe caveats come from its own reviews. Inspect Point does not publish pricing (demo and quote), and Capterra feedback is mixed: some users praise the invoicing and proposal features but report slow support responses and that certain requested capabilities aren't offered. For a fire contractor that wants a proven, NFPA-deep, inspection-to-collection platform, Inspect Point is a leading option — but it is worth validating your must-have workflows and the support tier you'll need during the demo.",
+      "pros_detail": [
+        {
+          "title": "Deep NFPA & UL-C template library",
+          "explanation": "Pre-built, code-aligned forms for fire alarm, sprinkler, extinguisher, special hazards, doors/dampers, backflow, and chemical suppression mean inspectors work from compliant templates rather than building them — the core of fire-inspection software."
+        },
+        {
+          "title": "Inspection-to-collection in one platform",
+          "explanation": "It spans the full operation — field inspection, deficiency tracking, quoting, scheduling, payment collection, and reporting — so a contractor can run the business without stitching separate tools together."
+        },
+        {
+          "title": "Offline-capable mobile app",
+          "explanation": "Inspectors can capture data on-site even without connectivity (common in mechanical rooms and basements), then sync later — important reliability for field fire work."
+        },
+        {
+          "title": "Proven at scale",
+          "explanation": "The vendor reports 15,000+ fire professionals on the platform, a strong signal that it is mature and battle-tested in real fire-protection operations."
+        },
+        {
+          "title": "Deficiency-to-quote conversion",
+          "explanation": "Turning inspection deficiencies into quotes is where fire-protection revenue lives. Inspect Point builds that conversion into the workflow, helping contractors capture repair work that inspections surface."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "No public pricing",
+          "explanation": "Pricing is demo-and-quote only, so you cannot evaluate cost without a sales conversation, and the right support tier (Silver/Gold/Platinum) affects the total."
+        },
+        {
+          "title": "Mixed support feedback",
+          "explanation": "Capterra reviews include reports of slow responses to questions. For a platform this central to compliance work, response time matters — clarify SLAs and consider a higher support tier."
+        },
+        {
+          "title": "Some requested features unavailable",
+          "explanation": "Some users report that industry-specific feature requests were met with \"not offered at this time.\" Validate your must-have capabilities exist today rather than assuming they are on the roadmap."
+        },
+        {
+          "title": "Breadth can mean restrictions",
+          "explanation": "A few reviewers liked invoicing and proposals but felt other areas had restrictions. Confirm the depth of the specific modules you will rely on during evaluation."
+        },
+        {
+          "title": "Fire-specific",
+          "explanation": "It is purpose-built for fire and life safety, not a general field-service tool, so it is only relevant to fire-protection businesses."
+        }
+      ],
+      "implementation_notes": "Expect a demo and quote rather than a published price, and decide which support tier (Silver/Gold/Platinum) you need — phone support is Platinum-only. During evaluation, validate that the specific NFPA forms and any industry-specific features you rely on exist today, given mixed feedback on feature requests. Onboarding and training are included; plan to migrate customers, sites, devices, and recurring inspection schedules. Connect QuickBooks for accounting and configure the deficiency-to-quote workflow early, since that is where repair revenue is captured. Clarify support response SLAs up front.",
+      "tool_faqs": [
+        {
+          "q": "How much does Inspect Point cost?",
+          "a": "Inspect Point does not publish pricing — it is demo-and-quote based, and your support tier (Silver email, Gold premium email, Platinum premium email + phone) affects the total. Onboarding and training are included. Get a written quote that specifies modules and support level before committing."
+        },
+        {
+          "q": "What does Inspect Point cover?",
+          "a": "It is an all-in-one fire and life-safety platform spanning NFPA/UL-C inspections (fire alarm, sprinkler, extinguisher, special hazards, doors/dampers, backflow, chemical suppression), deficiency tracking and quoting, scheduling, payments, and reporting — inspection to collection in one system."
+        },
+        {
+          "q": "Does Inspect Point work offline?",
+          "a": "Yes — its mobile app captures inspection data on-site even without connectivity and syncs later, which matters for fire work in mechanical rooms, basements, and other low-signal areas."
+        },
+        {
+          "q": "What do reviews say about Inspect Point?",
+          "a": "Reviews are mixed. Users praise invoicing and proposal features and the depth of NFPA templates, but some report slow support responses and that certain requested features aren’t available. Validate your must-have workflows and clarify support SLAs during the demo."
+        },
+        {
+          "q": "Inspect Point vs ServiceTrade for fire protection?",
+          "a": "Both serve fire/life-safety contractors. Inspect Point is inspection-led and NFPA-deep with inspection-to-collection breadth; ServiceTrade is a broader commercial-service platform strong across fire and other mechanical trades. Inspection-heavy fire shops often lean Inspect Point; contractors running fire alongside other commercial service may prefer ServiceTrade."
+        }
+      ]
+    },
+    {
+      "slug": "buildingreports",
+      "name": "BuildingReports",
+      "vendor_url": "https://www.buildingreports.com",
+      "affiliate_url": "TBD",
+      "tagline": "Compliance inspection-reporting platform for fire, life-safety, and security systems",
+      "verticals": [
+        "fire_protection"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Custom quote"
+        ],
+        "pricing_note": "No public pricing — demo/quote. Vendor positions its pricing as not user-license-based, claiming savings versus per-seat solutions. 15+ years in compliance reporting, with 600+ inspection companies in its network and 120M+ devices inspected to date.",
+        "verified_date": "2026-05-28"
+      },
+      "key_features": [
+        "inspection_checklists",
+        "compliance_tracking",
+        "deficiency_tracking",
+        "mobile_app",
+        "regulatory_compliance",
+        "customer_portal",
+        "reporting",
+        "asset_management"
+      ],
+      "integrations": [
+        "quickbooks"
+      ],
+      "best_for": "Fire, life-safety, and security inspection companies whose priority is consistent, device-level, audit-ready compliance reports for commercial and industrial buildings",
+      "best_team_size": "5-500",
+      "weaknesses": "Reporting-and-compliance specialist rather than a full FSM — contractors who also need deep scheduling, dispatch, and billing may pair it with another system; no public pricing",
+      "vertical_fit": {
+        "fire_protection": 9
+      },
+      "long_description": "BuildingReports is the long-standing specialist in compliance inspection reporting for fire, life-safety, and security systems. Where general FSM tools treat an inspection as a checklist, BuildingReports is built around the deliverable that matters in this trade: a consistently formatted, device-level, audit-ready inspection report that satisfies authorities having jurisdiction. Its flagship ScanSeries suite provides device-specific applications for inspecting and reporting on fire and life-safety and security systems, documenting each device against regulatory standards.\n\nThe platform's depth shows in details like its smoke-sensitivity database, which lets inspectors test results against the manufacturer's sensitivity ranges — the kind of device-level rigor that separates true compliance reporting from a generic form. Its scale is the headline credential: more than 15 years in the market, 600+ inspection companies in its network, 330,000 buildings represented, 1.85 million inspections, and over 120 million devices inspected to date, which is why it bills itself as the most trusted name in compliance reporting.\n\nBuildingReports is a reporting-and-compliance specialist rather than a full field-service platform, so contractors who also need deep scheduling, dispatch, and billing may run it alongside another system. It does not publish pricing (demo and quote) but positions its model as not user-license-based, claiming savings versus per-seat tools. For an inspection company whose core need is bulletproof, consistent compliance reporting at scale, BuildingReports is the category's most established choice.",
+      "pros_detail": [
+        {
+          "title": "Built for compliance reporting",
+          "explanation": "BuildingReports is purpose-built around audit-ready, device-level inspection reports that satisfy authorities having jurisdiction — the actual deliverable in fire/life-safety inspection, not a generic checklist."
+        },
+        {
+          "title": "Device-level ScanSeries rigor",
+          "explanation": "The ScanSeries suite provides device-specific inspection applications and includes a smoke-sensitivity database to test results against manufacturer ranges, giving a depth of documentation generic tools lack."
+        },
+        {
+          "title": "Massive proven track record",
+          "explanation": "15+ years, 600+ inspection companies, 330,000 buildings, 1.85M inspections, and 120M+ devices inspected to date make it one of the most battle-tested platforms in the category."
+        },
+        {
+          "title": "Consistent, professional reports",
+          "explanation": "Consistently formatted reports and online report access for customers eliminate handwritten paperwork and make a contractor look credible to building owners and AHJs alike."
+        },
+        {
+          "title": "Pricing not tied to user seats",
+          "explanation": "The vendor positions pricing as not user-license-based, claiming savings versus per-seat tools — potentially attractive for companies with many inspectors."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Reporting specialist, not full FSM",
+          "explanation": "BuildingReports centers on inspection and compliance reporting. Contractors who also need deep scheduling, dispatch, quoting, and billing may need to pair it with a separate field-service or accounting system."
+        },
+        {
+          "title": "No public pricing",
+          "explanation": "Pricing is demo-and-quote only. While positioned as not per-seat, you still need a sales conversation to get a number and confirm the model fits your size."
+        },
+        {
+          "title": "Network/ecosystem model",
+          "explanation": "Its strength is a compliance-reporting network and standardized device reporting; companies wanting a single all-in-one operational platform may find the scope narrower than a full FSM suite."
+        },
+        {
+          "title": "Learning the device-level workflow",
+          "explanation": "Device-by-device inspection and reporting is rigorous by design; getting full value requires setting up devices and templates and training inspectors on the workflow."
+        },
+        {
+          "title": "Best for commercial/industrial",
+          "explanation": "Its focus is commercial and industrial building compliance. A very small residential-leaning operation may not need this depth."
+        }
+      ],
+      "implementation_notes": "Expect a demo and quote; ask how the not-per-seat pricing model maps to your number of inspectors and inspection volume. Onboarding centers on setting up buildings, devices, and the ScanSeries device-level inspection workflow, plus configuring report formats for your AHJs. Decide whether BuildingReports will be your system of record for reporting only (paired with a separate FSM/accounting tool for scheduling and billing) or a larger part of operations. Train inspectors on device-level capture and leverage the customer report portal to differentiate with building owners.",
+      "tool_faqs": [
+        {
+          "q": "What is BuildingReports?",
+          "a": "BuildingReports is a compliance inspection-reporting platform for fire, life-safety, and security systems. Its ScanSeries suite produces consistent, device-level, audit-ready reports for commercial and industrial buildings, with a 15+ year track record and 120M+ devices inspected to date."
+        },
+        {
+          "q": "How much does BuildingReports cost?",
+          "a": "It does not publish pricing — it is demo-and-quote based. The vendor positions its pricing as not user-license-based, claiming savings versus per-seat solutions, but you need a sales conversation to get a number for your inspection volume."
+        },
+        {
+          "q": "Is BuildingReports a full field-service platform?",
+          "a": "Not exactly. It is a compliance-reporting specialist focused on device-level inspection and reporting. Contractors who also need deep scheduling, dispatch, quoting, and billing often pair it with a field-service or accounting system rather than using it as a single all-in-one."
+        },
+        {
+          "q": "What makes BuildingReports different from a generic inspection app?",
+          "a": "Device-level rigor and compliance focus. ScanSeries inspects and documents each device against regulatory standards, and a smoke-sensitivity database lets inspectors test results against manufacturer ranges. That produces consistent, audit-ready reports that satisfy authorities having jurisdiction — beyond a generic checklist."
+        },
+        {
+          "q": "Who uses BuildingReports?",
+          "a": "Fire, life-safety, and security inspection companies serving commercial and industrial buildings. With 600+ inspection companies in its network and 330,000 buildings represented, it is widely used where consistent, defensible compliance reporting at scale is the priority."
+        }
+      ]
+    },
+    {
+      "slug": "uptick",
+      "name": "Uptick",
+      "vendor_url": "https://www.uptickhq.com/us",
+      "affiliate_url": "TBD",
+      "tagline": "Fire and security inspection software for asset-heavy compliance contractors",
+      "verticals": [
+        "fire_protection"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Per-user (desk + field)"
+        ],
+        "pricing_note": "No public number — simple per-user monthly fee for desk and field users; customer and sub-contractor licenses are unlimited and free. Monthly invoicing, no annual prepay, cancel anytime. Positioned as one of the more expensive options. 1,000+ companies; Capterra 2025 \"Best Ease of Use\" (Preventive Maintenance).",
+        "verified_date": "2026-05-28"
+      },
+      "key_features": [
+        "inspection_checklists",
+        "compliance_tracking",
+        "asset_management",
+        "recurring_scheduling",
+        "deficiency_tracking",
+        "mobile_app",
+        "customer_portal",
+        "route_optimization"
+      ],
+      "integrations": [
+        "quickbooks"
+      ],
+      "best_for": "Established fire and security contractors managing large volumes of recurring, asset-based compliance inspections that want deep, purpose-built workflows and can absorb a learning curve",
+      "best_team_size": "10-500",
+      "headquartered": "Melbourne, Australia",
+      "weaknesses": "Among the most expensive options, and reviews consistently cite a steep learning curve, dense data-heavy screens, and migration challenges; the depth that powers large operations is overkill for a small shop",
+      "vertical_fit": {
+        "fire_protection": 9
+      },
+      "long_description": "Uptick is an Australian-born fire and security inspection platform that has become the category leader across Australia, New Zealand, and the UK and has expanded into the United States and Canada. It is built for asset-heavy compliance work — tracking every device and asset across a portfolio of buildings, scheduling the recurring inspections those assets require, capturing deficiencies, and routing technicians efficiently. For contractors running high volumes of mandated, recurring inspections, that depth is the draw.\n\nIts pricing model is unusually clean for the category: a simple per-user monthly fee for desk and field users, with unlimited free customer and sub-contractor licenses, monthly invoicing, no annual prepayment, and the ability to cancel anytime. With 1,000+ companies on the platform and a Capterra 2025 “Best Ease of Use” award in Preventive Maintenance, Uptick has real market traction and recognition.\n\nThe honest counterpoint, reflected consistently in public reviews, is that Uptick is one of the most expensive options on the market and carries a steep learning curve — dense, field-heavy screens and non-trivial data migration. The same depth that makes it powerful for large, asset-heavy operations makes it heavier than a small shop needs. For an established compliance contractor with serious recurring-inspection volume, Uptick is a top-tier, purpose-built choice; smaller or simpler operations should weigh the cost and ramp-up against lighter alternatives.",
+      "pros_detail": [
+        {
+          "title": "Deep asset and compliance management",
+          "explanation": "Uptick is built to track every device/asset across a building portfolio and manage the recurring inspections they require, which is exactly what high-volume compliance contracting demands."
+        },
+        {
+          "title": "Clean, predictable pricing model",
+          "explanation": "A simple per-user monthly fee with unlimited free customer and sub-contractor licenses, monthly billing, no annual prepay, and cancel-anytime is unusually transparent for a category dominated by opaque quotes."
+        },
+        {
+          "title": "Category leader internationally",
+          "explanation": "It is the #1 fire & security software in Australia, New Zealand, and the UK with 1,000+ companies, signaling a mature, well-resourced platform now expanding in North America."
+        },
+        {
+          "title": "Recognized ease-of-use award",
+          "explanation": "Uptick won Capterra’s 2025 “Best Ease of Use” in Preventive Maintenance — notable given the category’s complexity, even though some users still report a learning curve."
+        },
+        {
+          "title": "Efficient technician routing and scheduling",
+          "explanation": "Recurring-inspection scheduling plus routing helps large operations keep mandated inspections on time and minimize drive time across many sites."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Among the most expensive",
+          "explanation": "Public sources consistently note Uptick is one of the priciest options in the category. The per-user model is clean, but the rate is high — confirm the total for your desk and field headcount."
+        },
+        {
+          "title": "Steep learning curve",
+          "explanation": "Reviews repeatedly cite dense, field-heavy screens and a non-trivial ramp-up. Budget real training time before expecting full productivity."
+        },
+        {
+          "title": "Migration challenges",
+          "explanation": "Users report data migration into Uptick can be difficult. Plan migration carefully and lean on onboarding support to avoid a rough transition."
+        },
+        {
+          "title": "Overkill for small shops",
+          "explanation": "The asset-heavy depth that powers large operations is more than a small fire shop needs; lighter tools may deliver value faster at lower cost."
+        },
+        {
+          "title": "No public price",
+          "explanation": "Although the model is per-user and transparent in structure, the actual rate is not published — you still need a quote to know the number."
+        }
+      ],
+      "implementation_notes": "Plan for a real onboarding: Uptick is powerful but reviews consistently flag a learning curve, dense screens, and migration difficulty. Scope your desk vs field user counts (pricing is per-user; customer and sub-contractor licenses are free) and get the rate in writing, since Uptick runs expensive. Invest in training before go-live and lean on onboarding support for data migration of buildings, assets/devices, and recurring inspection schedules. The payoff is strongest for asset-heavy operations with high recurring-inspection volume; smaller shops should weigh the ramp-up against lighter tools.",
+      "tool_faqs": [
+        {
+          "q": "How much does Uptick cost?",
+          "a": "Uptick uses a simple per-user monthly fee for desk and field users, with unlimited free customer and sub-contractor licenses, monthly invoicing, no annual prepay, and cancel-anytime. It does not publish the rate, and it is positioned as one of the more expensive options — get a quote for your headcount."
+        },
+        {
+          "q": "Where is Uptick from and where does it operate?",
+          "a": "Uptick is Australian-born (headquartered in Melbourne) and is the #1 fire & security software in Australia, New Zealand, and the UK. It has expanded into the United States and Canada, with 1,000+ companies on the platform."
+        },
+        {
+          "q": "Is Uptick hard to learn?",
+          "a": "Reviews consistently mention a steep learning curve, dense data-heavy screens, and migration challenges, even though Uptick won Capterra’s 2025 Best Ease of Use award in Preventive Maintenance. Budget training time and plan data migration carefully before go-live."
+        },
+        {
+          "q": "Who is Uptick best for?",
+          "a": "Established fire and security contractors managing large volumes of recurring, asset-based compliance inspections across many buildings. Its depth in asset management, recurring scheduling, and routing suits high-volume operations more than small or simple shops."
+        },
+        {
+          "q": "Uptick vs Inspect Point?",
+          "a": "Both are dedicated fire/life-safety platforms. Uptick excels at asset-heavy, high-volume recurring compliance with clean per-user pricing but a steep learning curve and premium price; Inspect Point is NFPA-template-deep with inspection-to-collection breadth and tiered support. Large asset-heavy operations may lean Uptick; many US fire shops also shortlist Inspect Point — trial both."
+        }
+      ]
+    },
+    {
+      "slug": "zenfire",
+      "name": "ZenFire",
+      "vendor_url": "https://zentrades.pro/zenfire",
+      "affiliate_url": "TBD",
+      "tagline": "Fire-protection inspection and management software (part of the ZenTrades suite)",
+      "verticals": [
+        "fire_protection"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Per-user (quote)"
+        ],
+        "pricing_note": "No public number — user-based pricing via demo/quote. Part of ZenTrades (a multi-trade suite covering fire, electrical, HVAC, and plumbing). Vendor highlights frequent updates and not charging extra for new feature development.",
+        "verified_date": "2026-05-28"
+      },
+      "key_features": [
+        "inspection_checklists",
+        "compliance_tracking",
+        "recurring_scheduling",
+        "deficiency_tracking",
+        "mobile_app",
+        "photo_documentation",
+        "estimates_quotes",
+        "reporting"
+      ],
+      "integrations": [
+        "quickbooks"
+      ],
+      "best_for": "Fire-protection contractors that want a modern, automation-focused inspection platform and value a vendor shipping frequent updates without charging for new features",
+      "best_team_size": "3-100",
+      "weaknesses": "No public pricing and a smaller market presence than the incumbents; as part of a broader multi-trade suite, depth on the most fire-specific edge cases is worth validating against specialists",
+      "vertical_fit": {
+        "fire_protection": 8
+      },
+      "long_description": "ZenFire is the fire-protection product within ZenTrades, a multi-trade software suite that also serves electrical, HVAC, and plumbing contractors. It is purpose-built around the compliance-driven core of fire work: fire alarm, extinguisher, and sprinkler inspections, with automated recurring-inspection scheduling, compliance-status tracking, and audit-ready record-keeping so teams don't miss mandated inspections or scramble during audits. Inspectors capture data on mobile devices, attach photos and videos directly to the inspection, and the software compiles comprehensive reports in real time rather than requiring manual write-ups afterward.\n\nZenFire leans modern and automation-forward. The vendor emphasizes a fast development cadence — shipping frequent updates and not charging extra for new feature development — and markets meaningful reductions in administrative time through customizable digital checklists and forms aligned to industry standards. For a contractor who wants a current-generation tool actively being built out, that momentum is part of the appeal.\n\nThe trade-offs are market presence and pricing transparency. ZenFire is smaller and newer than incumbents like Inspect Point, BuildingReports, and Uptick, and it does not publish pricing (user-based, via quote). Because it sits inside a broader multi-trade suite, fire contractors should validate that the most fire-specific edge cases and NFPA forms they need are as deep as a dedicated specialist. For a modern, automation-minded fire shop comfortable with a newer vendor, ZenFire is a credible alternative worth trialing.",
+      "pros_detail": [
+        {
+          "title": "Automated recurring inspections",
+          "explanation": "ZenFire automates recurring fire-inspection scheduling and tracks compliance status, keeping records audit-ready so teams don’t miss mandated inspections — the operational heart of fire-protection work."
+        },
+        {
+          "title": "Modern mobile capture with media",
+          "explanation": "Inspectors record data on mobile devices and attach photos and videos directly to inspections, then the software compiles reports in real time, cutting manual write-up time."
+        },
+        {
+          "title": "Active development, no feature upcharge",
+          "explanation": "The vendor highlights frequent updates and not charging extra for new feature development, so customers benefit from ongoing improvements without surprise costs."
+        },
+        {
+          "title": "Standards-aligned digital checklists",
+          "explanation": "Customizable inspection checklists crafted to align with industry standards and regulatory requirements help inspectors stay compliant while reducing administrative overhead."
+        },
+        {
+          "title": "Part of a multi-trade suite",
+          "explanation": "Because ZenFire sits within ZenTrades (fire, electrical, HVAC, plumbing), contractors working across trades can potentially consolidate on one vendor."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "No public pricing",
+          "explanation": "ZenFire uses user-based pricing available only via demo/quote, so you need a sales conversation to learn the cost and confirm it fits your team size."
+        },
+        {
+          "title": "Smaller market presence",
+          "explanation": "It is newer and less established than Inspect Point, BuildingReports, or Uptick. That can mean a smaller user community and reference base to learn from."
+        },
+        {
+          "title": "Validate fire-specific depth",
+          "explanation": "As part of a broad multi-trade suite, the most fire-specific edge cases and NFPA forms should be validated against dedicated specialists during evaluation."
+        },
+        {
+          "title": "Maturing track record",
+          "explanation": "A fast update cadence is a plus, but a younger product means some workflows may still be evolving — confirm the features you depend on are stable today."
+        },
+        {
+          "title": "Fire-specific within a suite",
+          "explanation": "ZenFire is the fire module of ZenTrades; single-trade fire shops should confirm they are buying the fire-focused depth they need, not a generalized version."
+        }
+      ],
+      "implementation_notes": "Expect a demo and a user-based quote. During evaluation, validate that the NFPA forms and fire-specific workflows you depend on are as deep as you need, given ZenFire sits within a broader multi-trade suite and is newer than the incumbents. Onboarding focuses on importing customers, sites, and devices and configuring recurring-inspection schedules and digital checklists. Take advantage of the mobile photo/video capture and real-time reporting in technician training. Confirm pricing per user and the update/roadmap cadence the vendor highlights.",
+      "tool_faqs": [
+        {
+          "q": "What is ZenFire?",
+          "a": "ZenFire is the fire-protection inspection and management product within ZenTrades, a multi-trade suite (fire, electrical, HVAC, plumbing). It automates recurring fire-alarm, extinguisher, and sprinkler inspections, tracks compliance, and compiles audit-ready reports from mobile capture in real time."
+        },
+        {
+          "q": "How much does ZenFire cost?",
+          "a": "ZenFire does not publish pricing — it uses a user-based model available via demo/quote. The vendor emphasizes frequent updates and not charging extra for new feature development. Get a written quote for your team size before committing."
+        },
+        {
+          "q": "How does ZenFire compare to Inspect Point or Uptick?",
+          "a": "ZenFire is a newer, modern, automation-focused option within a multi-trade suite, while Inspect Point and Uptick are larger, more established fire specialists. ZenFire may appeal to contractors who want an actively-developed current-generation tool; validate fire-specific depth and references against the incumbents during a trial."
+        },
+        {
+          "q": "Does ZenFire support photos and video on inspections?",
+          "a": "Yes — inspectors capture data on mobile devices and attach photos and videos directly to inspections, and the software compiles comprehensive reports in real time, reducing manual report writing."
+        },
+        {
+          "q": "Is ZenFire only for fire protection?",
+          "a": "ZenFire is the fire-focused product, but it is part of ZenTrades, which also serves electrical, HVAC, and plumbing. Contractors working across trades may consolidate on the suite; single-trade fire shops should confirm they get the fire-specific depth they need."
+        }
+      ]
+    },
+    {
+      "slug": "essential-fire",
+      "name": "Essential",
+      "vendor_url": "https://www.withessential.com",
+      "affiliate_url": "TBD",
+      "tagline": "Modern, automation-first fire-protection software with transparent pricing",
+      "verticals": [
+        "fire_protection"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Month-to-month"
+        ],
+        "pricing_note": "Transparent pricing with no setup fees — implementation and data migration are included at no extra cost; no long-term contracts, pay month-to-month after go-live. Book a demo for a quote based on team size. US-based support 8AM-9PM ET with a sub-2-minute average response time per the vendor.",
+        "verified_date": "2026-05-28"
+      },
+      "key_features": [
+        "inspection_checklists",
+        "compliance_tracking",
+        "automated_followup",
+        "recurring_scheduling",
+        "deficiency_tracking",
+        "estimates_quotes",
+        "invoicing",
+        "mobile_app"
+      ],
+      "integrations": [
+        "quickbooks"
+      ],
+      "best_for": "Fire-protection contractors who want a modern, automation-first platform with transparent month-to-month pricing, no setup fees, and fast US-based support",
+      "best_team_size": "2-100",
+      "weaknesses": "A newer entrant with a smaller track record than the incumbents; pricing is still quote-based (transparent terms, but no published number), so validate depth and references against established specialists",
+      "vertical_fit": {
+        "fire_protection": 8
+      },
+      "long_description": "Essential is a modern, automation-first platform built from the ground up for fire-protection contractors — and built by people who know the trade, since the founding team has deep roots in fire and life safety (the founder's parents own a fire and life-safety business). That domain DNA shows up in the product's focus on automating the unglamorous parts of running a fire shop: customer outreach, inspection due-date tracking, appointment reminders, quote follow-ups, and invoice collection all work out of the box, with built-in templates supporting NFPA 25, NFPA 72, and other standards.\n\nWhere Essential differentiates is its commercial terms and support. Pricing is transparent with no setup fees — implementation and data migration are included at no extra cost — there are no long-term contracts, and you pay month-to-month only after go-live. Support is US-based, available 8AM–9PM ET, with an average response time the company puts at under two minutes. For a contractor burned by opaque quotes, setup fees, and slow support elsewhere, that package is a deliberate contrast.\n\nThe trade-off is maturity. Essential is a newer entrant with a smaller track record than Inspect Point, BuildingReports, or Uptick, and while its terms are transparent, the actual price is still quote-based. For a fire shop that values modern automation, clean terms, and responsive support — and is comfortable with a younger vendor — Essential is a compelling option to trial against the incumbents.",
+      "pros_detail": [
+        {
+          "title": "Automation-first out of the box",
+          "explanation": "Essential automates customer outreach, inspection due-date tracking, appointment reminders, quote follow-ups, and invoice collection by default — reducing the manual chasing that eats fire-shop admin time."
+        },
+        {
+          "title": "Transparent terms, no setup fees",
+          "explanation": "Implementation and data migration are included at no extra cost, with no long-term contracts and month-to-month billing after go-live — a deliberate contrast to the setup fees and lock-in common in the category."
+        },
+        {
+          "title": "Fast, US-based support",
+          "explanation": "Support is US-based, 8AM–9PM ET, with a sub-2-minute average response time per the vendor — a strong differentiator given support complaints elsewhere in the category."
+        },
+        {
+          "title": "Built by fire-industry insiders",
+          "explanation": "The founding team has deep roots in fire and life safety (the founder’s parents run a fire business), which shows in product decisions aligned to how fire shops actually operate."
+        },
+        {
+          "title": "NFPA-aligned templates",
+          "explanation": "Built-in templates support NFPA 25, NFPA 72, and other standards, so inspectors work from compliant forms rather than building them."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Newer, smaller track record",
+          "explanation": "Essential is a younger entrant than Inspect Point, BuildingReports, or Uptick, so it has a smaller user base and reference pool. Validate depth and stability against the incumbents."
+        },
+        {
+          "title": "Price still quote-based",
+          "explanation": "Terms are transparent (no setup fees, month-to-month, included migration), but the actual price requires a demo and quote based on team size — there is no published number."
+        },
+        {
+          "title": "Validate edge-case depth",
+          "explanation": "As a modern, automation-led platform, confirm it covers the most specialized inspection types and NFPA forms your work requires as thoroughly as a long-established specialist."
+        },
+        {
+          "title": "Smaller ecosystem",
+          "explanation": "A newer vendor typically has fewer third-party integrations and a smaller partner ecosystem than incumbents — check the integrations you need exist."
+        },
+        {
+          "title": "Fire-specific",
+          "explanation": "Essential is purpose-built for fire protection and is not a general field-service tool, so it is only relevant to fire/life-safety businesses."
+        }
+      ],
+      "implementation_notes": "Essential includes implementation and data migration at no extra cost and bills month-to-month after go-live, so the financial on-ramp is low-risk — but you still book a demo for a team-size-based quote. During evaluation, validate that the inspection types and NFPA forms you rely on are covered as deeply as you need, given Essential is newer than the incumbents. Lean on the included migration to move customers, sites, devices, and schedules, and configure the out-of-the-box automations (due-date tracking, reminders, follow-ups, collections) early since they are the core value. Confirm the integrations you require are supported.",
+      "tool_faqs": [
+        {
+          "q": "What is Essential fire-protection software?",
+          "a": "Essential is a modern, automation-first platform built specifically for fire-protection contractors, with NFPA 25/72 templates and out-of-the-box automation for customer outreach, inspection due-date tracking, reminders, quote follow-ups, and invoice collection. It was built by a team with deep roots in the fire and life-safety industry."
+        },
+        {
+          "q": "How much does Essential cost?",
+          "a": "Essential has transparent terms — no setup fees, implementation and data migration included, no long-term contracts, and month-to-month billing after go-live — but the actual price is quote-based on team size, so you book a demo for a number."
+        },
+        {
+          "q": "What makes Essential different from incumbents?",
+          "a": "Its commercial terms and support. Essential includes implementation/migration free, charges no setup fee, requires no long-term contract, and offers US-based support 8AM–9PM ET with a sub-2-minute average response per the vendor — a deliberate contrast to opaque quotes, setup fees, and slow support reported elsewhere."
+        },
+        {
+          "q": "Is Essential a safe choice given it is newer?",
+          "a": "It is a younger entrant with a smaller track record than Inspect Point, BuildingReports, or Uptick. The low-risk terms (month-to-month, included migration, no setup fee) reduce the downside of trying it, but validate feature depth and ask for references during evaluation."
+        },
+        {
+          "q": "Does Essential support NFPA standards?",
+          "a": "Yes — Essential includes built-in templates supporting NFPA 25, NFPA 72, and other standards, so inspectors work from compliant forms. Confirm coverage of any specialized inspection types your work requires during the demo."
         }
       ]
     }
