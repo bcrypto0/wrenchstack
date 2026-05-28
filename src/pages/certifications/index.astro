@@ -1,0 +1,115 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { INTL_MARKETS, type IntlVendor } from '../../lib/intl';
+import ukData from '../../data/international/uk.json';
+import auData from '../../data/international/au.json';
+import caData from '../../data/international/ca.json';
+import nzData from '../../data/international/nz.json';
+import ieData from '../../data/international/ie.json';
+
+const sources: Record<string, { vendors: IntlVendor[] }> = {
+  uk: ukData as { vendors: IntlVendor[] },
+  au: auData as { vendors: IntlVendor[] },
+  ca: caData as { vendors: IntlVendor[] },
+  nz: nzData as { vendors: IntlVendor[] },
+  ie: ieData as { vendors: IntlVendor[] },
+};
+
+const order = ['uk', 'au', 'ca', 'nz', 'ie'];
+const marketsData = order.map((code) => ({
+  market: INTL_MARKETS[code],
+  certs: sources[code].vendors.filter((v) => v.category === 'certification'),
+}));
+const totalCerts = marketsData.reduce((n, m) => n + m.certs.length, 0);
+
+const pageTitle = 'Trades Certification & Licensing by Country (2026) — UK, Australia, Canada, NZ, Ireland';
+const pageDescription = `The trade-certification and licensing bodies that matter across ${marketsData.length} markets — ${totalCerts} schemes covering gas, electrical, plumbing, and building work. Which are legally mandatory, who runs them, and how to verify a licence.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Certifications', url: '/certifications/' },
+];
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'International trades certification and licensing bodies',
+  numberOfItems: totalCerts,
+  itemListElement: marketsData.flatMap((m) =>
+    m.certs.map((c) => ({ '@type': 'ListItem', name: `${c.name} (${m.market.name})`, url: `/${m.market.code}/${c.slug}/` })),
+  ),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">Certification &amp; Licensing</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        Trades Certification &amp; Licensing by Country
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Unlike software or insurance, trade certification is often a legal requirement, not a competitive edge — and the rules differ sharply by country (and sometimes by state or province). This is the map of the {totalCerts} key certification and licensing bodies across the {marketsData.length} English-speaking markets we cover, for gas, electrical, plumbing, and building work. Each links to a full breakdown and the official body.
+      </p>
+    </header>
+
+    <section class="mb-10 grid gap-3 grid-cols-2 sm:grid-cols-5">
+      {marketsData.map((m) => (
+        <a href={`#${m.market.code}`} class="rounded-lg border border-slate-200 bg-white p-4 text-center no-underline transition hover:border-orange-300 hover:bg-orange-50">
+          <div class="text-2xl" aria-hidden="true">{m.market.flag}</div>
+          <div class="mt-1 text-2xl font-bold text-slate-900">{m.certs.length}</div>
+          <div class="text-xs text-slate-600">{m.market.name}</div>
+        </a>
+      ))}
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-2 text-base font-bold text-slate-900">Why certification works differently abroad</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        In most of these markets, gas, electrical, and (often) plumbing work for hire is restricted to licensed or registered practitioners — doing it unlicensed is a criminal offense, not just a reputational risk. The schemes also double as consumer-trust signals: homeowners are taught to check for the Gas Safe, NICEIC, RGI, ECRA/ESA, or equivalent registration before hiring. A few schemes (like Canada's Red Seal or the HVAC institute HRAI) are about portable qualification and industry standing rather than a legal licence. The US is the outlier: there is no single national trades-licensing body — it is regulated state by state.
+      </p>
+    </section>
+
+    {marketsData.map((m) => (
+      <section id={m.market.code} class="mb-12 scroll-mt-6">
+        <div class="mb-4 flex items-center gap-2">
+          <span class="text-2xl" aria-hidden="true">{m.market.flag}</span>
+          <h2 class="text-2xl font-bold text-slate-900">{m.market.name}</h2>
+        </div>
+        <p class="mb-5 text-sm text-slate-600 leading-relaxed">{m.market.certContext}</p>
+        <div class="grid gap-4 sm:grid-cols-2">
+          {m.certs.map((c) => (
+            <article class="rounded-lg border border-slate-200 bg-white p-5">
+              <h3 class="text-lg font-bold text-slate-900">{c.name}</h3>
+              <p class="mt-1 text-sm italic text-slate-500">{c.tagline}</p>
+              {c.reputation_flag && (
+                <p class="mt-2 rounded-md border-l-4 border-rose-400 bg-rose-50 px-3 py-2 text-xs text-rose-900 leading-snug">{c.reputation_flag}</p>
+              )}
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href={`/${m.market.code}/${c.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">Details →</a>
+                <a href={c.vendor_url} rel="nofollow noopener" target="_blank" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Official site →</a>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div class="mt-4">
+          <a href={`/${m.market.code}/`} class="text-sm font-medium text-orange-600 hover:underline">All {m.market.name} vendors →</a>
+        </div>
+      </section>
+    ))}
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Working in the US instead?</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">
+        US trades licensing is regulated state by state rather than through a single national body. Browse our US directory and state-by-state pages for software, lead-gen, insurance, and more.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">US directory →</a>
+        <a href="/state/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">US states</a>
+        <a href="/methodology/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Methodology</a>
+      </div>
+    </section>
+  </article>
+</Layout>
