@@ -47,11 +47,11 @@ const itemListSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">Why AI receptionists are the highest-ROI AI for trades</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Field-based contractors miss a large share of inbound calls — they're on a roof, under a sink, or driving between jobs. Every missed call that goes to voicemail is a caller who dials the next contractor on the list. An AI receptionist answers 24/7, qualifies the caller, and books the job, turning missed calls into booked revenue. That's why it's the first AI category we cover in depth, spanning the budget end (Rosie, Goodcall) through hybrid (Smith.ai) to the enterprise front office (Avoca). Estimating, scheduling, and marketing AI categories are in the editorial queue.
+        Field-based contractors miss a large share of inbound calls — they're on a roof, under a sink, or driving between jobs. Every missed call that goes to voicemail is a caller who dials the next contractor on the list. An AI receptionist answers 24/7, qualifies the caller, and books the job, turning missed calls into booked revenue. That's why it's the first AI category we cover in depth, spanning the budget end (Rosie, Goodcall) through hybrid (Smith.ai) to the enterprise front office (Avoca) and trades-native sales agents (Sameday). Beyond the phone, we also cover AI estimating and measurement, route-optimization scheduling, and AI review and reputation marketing.
       </p>
     </section>
 
-    {grouped.map(({ category, tools }) => {
+    {grouped.filter(({ tools }) => tools.length > 0).map(({ category, tools }) => {
       const meta = AI_CATEGORY_META[category];
       return (
         <section class="mb-12">
@@ -71,7 +71,7 @@ const itemListSchema = {
                     <p class="text-sm italic text-slate-500">{t.tagline}</p>
                   </div>
                   <div class="shrink-0 text-right text-xs">
-                    <p class="font-bold text-slate-900">{t.starting_price_usd !== null ? `From $${t.starting_price_usd}/mo` : 'Custom quote'}</p>
+                    <p class="font-bold text-slate-900">{t.starting_price_usd === null ? 'Custom quote' : t.starting_price_usd === 0 ? 'Free tier' : `From $${t.starting_price_usd}/mo`}</p>
                     {t.free_trial_days > 0 && <p class="text-slate-500">{t.free_trial_days}-day trial</p>}
                   </div>
                 </div>
