@@ -18,7 +18,8 @@
     "moving",
     "restoration",
     "painting",
-    "flooring"
+    "flooring",
+    "waste_removal"
   ],
   "tools": [
     {
@@ -2743,7 +2744,8 @@
         "electrical",
         "landscaping",
         "cleaning",
-        "handyman"
+        "handyman",
+        "waste_removal"
       ],
       "pricing": {
         "starting_at_usd": 39,
@@ -2793,7 +2795,8 @@
         "electrical": 9,
         "landscaping": 10,
         "cleaning": 9,
-        "handyman": 9
+        "handyman": 9,
+        "waste_removal": 7
       },
       "long_description": "Jobber is the most-used field service management platform for small-to-mid trades businesses in North America, serving 250,000+ contractors across 50+ countries since launching in 2011 from Edmonton, Canada. The product targets the underserved gap between paper-based operations (where most independent contractors still live) and enterprise platforms like ServiceTitan or BuildOps (which are overkill until you cross $1M revenue).\n\nWhat's made Jobber dominant in its segment isn't any unique feature — it's the consistent execution on UX. The mobile app is genuinely the best in the category for field techs to actually use day-to-day; the client portal is clean enough that homeowners actually log in to it; the quoting flow takes minutes instead of the hour-plus that competitor products require. Jobber has won the \"best vibes\" battle for years, which matters more than spec sheets when you're trying to get a non-technical 5-person crew adopted.\n\nThe four-tier pricing structure (Core $39 → Connect $119 → Grow $199 → Plus $399) maps to common growth inflection points: Core for solo, Connect when you hire your first office staffer, Grow when you add a second technician, Plus when you cross 5+ techs and need real reporting. Most shops grow into the $119 tier within 6 months of starting. The big trade-off vs Housecall Pro is the lack of built-in consumer financing — Jobber outsources that to third-party integrations rather than embedding Wisetack natively.",
       "pros_detail": [
@@ -2888,7 +2891,8 @@
         "electrical",
         "cleaning",
         "handyman",
-        "appliance_repair"
+        "appliance_repair",
+        "waste_removal"
       ],
       "pricing": {
         "starting_at_usd": 65,
@@ -2935,7 +2939,8 @@
         "electrical": 9,
         "cleaning": 8,
         "handyman": 8,
-        "appliance_repair": 8
+        "appliance_repair": 8,
+        "waste_removal": 7
       },
       "long_description": "Housecall Pro is the second-largest FSM platform serving small-to-mid residential trades, with about 35,000 customers concentrated in HVAC, plumbing, electrical, and cleaning. Founded in 2013 in San Diego, the product has carved out its position by going deeper on consumer-facing features than competitors — built-in payment processing, embedded consumer financing through Wisetack, native Google Local Services Ads integration, and one of the strongest automated review-request systems in the category.\n\nThe pitch to contractors is essentially \"we handle the commerce stack for you.\" Where Jobber requires you to bolt on Stripe + Wisetack + Mailchimp + Google Ads, Housecall Pro packages those into the platform. For shops that don't want to manage 6 vendor relationships, that integration premium is real.\n\nThree pricing tiers (Basic $65 → Essentials $169 → MAX $499) with the value cliff between Basic and Essentials being substantial — Basic lacks team management, automated marketing, and most reporting. MAX adds advanced reporting, custom workflows, and revenue rules but the per-user price gets expensive quickly past 5-10 users. The biggest trade-off vs Jobber is UX polish — Housecall Pro's interface can feel cluttered as features were layered over the years, while Jobber maintained a cleaner design discipline.\n\nHousecall Pro is the right pick for residential HVAC/plumbing/electrical shops that want consumer financing baked in (closes 25-40% more $5K+ tickets) and don't want to manage payment processing as a separate vendor. It's the wrong pick for landscapers, cleaners, and multi-vertical shops where Jobber's broader fit matters more.",
       "pros_detail": [
@@ -3176,7 +3181,8 @@
         "hvac",
         "plumbing",
         "cleaning",
-        "handyman"
+        "handyman",
+        "waste_removal"
       ],
       "pricing": {
         "starting_at_usd": 65,
@@ -3226,7 +3232,8 @@
         "hvac": 8,
         "plumbing": 8,
         "cleaning": 7,
-        "handyman": 8
+        "handyman": 8,
+        "waste_removal": 8
       },
       "long_description": "Workiz is the only major FSM platform built explicitly for on-demand service businesses — locksmiths, garage door companies, junk removal operators, appliance repair shops — rather than the scheduled-recurring service model most platforms assume. Founded in 2015 in San Diego, the product treats inbound calls as the central workflow rather than calendar appointments, which fundamentally changes how the software is structured.\n\nWorkiz's bet is that on-demand service requires fundamentally different software. When a customer locks themselves out of their car, they call now, they want service in 30 minutes, and the conversion happens on the first phone call — there's no quote-and-callback cycle, no scheduling 3 weeks out, no maintenance plan to upsell. The platform is built around that reality: a native phone system with caller ID lookup, AI dispatcher that routes calls to the closest available tech, click-to-call from any customer record, SMS-first communication, and Google Local Services + Angi integration baked in.\n\nFour pricing tiers (Lite $65 → Standard $169 → Pro $299 → Ultimate custom) put Workiz in roughly the same price band as Housecall Pro at the lower tiers but with the AI phone agent feature appearing at higher tiers — AI answers calls, qualifies leads, and books jobs without human intervention, the most aggressive call-handling automation on the market. The trade-off: for scheduled-recurring service businesses (commercial HVAC service agreements, recurring landscaping maintenance), Workiz's model is awkward — Jobber or ServiceTitan handle that work better.",
       "pros_detail": [
@@ -11035,6 +11042,533 @@
         {
           "q": "Is the 1% payment processing rate real?",
           "a": "Broadlume advertises integrated payment processing as low as 1%. As with any \"as low as\" rate, the effective rate depends on your card mix and volume, so confirm the actual rate for your business in writing rather than assuming the headline number."
+        }
+      ]
+    },
+    {
+      "slug": "servicecore",
+      "name": "ServiceCore",
+      "vendor_url": "https://servicecore.com",
+      "affiliate_url": "TBD",
+      "tagline": "All-in-one software for septic, grease, portable-toilet, and roll-off dumpster businesses",
+      "verticals": [
+        "waste_removal"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Custom quote"
+        ],
+        "pricing_note": "No public pricing — demo required. Per-truck pricing model with possible setup fees; total cost depends on contract terms and fleet size. QuickBooks-compatible. The vendor reports processing over 3.5 million jobs and tracking 550,000+ units across its customer base.",
+        "verified_date": "2026-05-28"
+      },
+      "key_features": [
+        "scheduling",
+        "dispatching",
+        "route_optimization",
+        "inventory",
+        "automated_billing",
+        "job_management",
+        "customer_management",
+        "mobile_app"
+      ],
+      "integrations": [
+        "quickbooks"
+      ],
+      "best_for": "Septic, grease-trap, portable-toilet, and roll-off dumpster operators who want one system for scheduling, routing, asset/inventory tracking, and billing",
+      "best_team_size": "3-100",
+      "weaknesses": "No public pricing (demo plus per-truck model) makes budgeting harder up front; it is purpose-built for liquid-waste and container businesses, so it is not a fit for trades outside septic, portable sanitation, and dumpster work",
+      "vertical_fit": {
+        "waste_removal": 10
+      },
+      "long_description": "ServiceCore is the leading all-in-one platform purpose-built for the liquid-waste and container side of the waste industry — septic pumping, grease-trap cleaning, portable-toilet rental, and roll-off dumpster businesses. Where a generic field-service tool treats every job as a visit, ServiceCore is built around what these operators actually manage: routes, trucks, and physical assets (tanks, toilets, dumpsters) that get placed, serviced, and picked up on recurring cycles. It unifies scheduling, dispatch, route optimization, inventory/asset tracking, and automated billing in one system, and it is QuickBooks-compatible for accounting.\n\nThe platform's scale is a credibility signal: the vendor reports processing over 3.5 million jobs and tracking more than 550,000 units across its customer base. Operators consistently describe it as user-friendly — easy for office staff to learn and for drivers to use in the field, with turn-by-turn directions and an iPad driver app frequently praised in reviews.\n\nServiceCore does not publish pricing; it uses a per-truck model quoted after a demo, so total cost depends on fleet size, contract terms, and any setup fees. That makes upfront budgeting harder and means very small operators should confirm the per-truck math works at their size. ServiceCore also acquired Docket (a dumpster/waste-hauling product) in 2023, so dumpster-focused businesses may be pointed to either product — worth clarifying during the demo. For a septic, grease, portable, or roll-off business that wants a dedicated system rather than a generic FSM, ServiceCore is the category benchmark.",
+      "pros_detail": [
+        {
+          "title": "Purpose-built for liquid-waste and containers",
+          "explanation": "ServiceCore is designed around septic, grease, portable-toilet, and roll-off workflows — routes, trucks, and physical assets on recurring cycles — rather than generic visits. That domain fit is the main reason operators choose it over a horizontal FSM tool."
+        },
+        {
+          "title": "Asset and inventory tracking",
+          "explanation": "Tracking where every tank, toilet, and dumpster is placed and when it is due for service is core to these businesses. ServiceCore manages that inventory directly, which protects revenue and prevents lost or unbilled units."
+        },
+        {
+          "title": "Strong routing and driver experience",
+          "explanation": "Route optimization plus a well-reviewed iPad driver app with turn-by-turn directions make daily field operations smoother — a frequently praised part of the product."
+        },
+        {
+          "title": "Proven at scale",
+          "explanation": "The vendor reports 3.5M+ jobs processed and 550K+ units tracked, indicating a mature, battle-tested platform rather than an unproven newcomer."
+        },
+        {
+          "title": "QuickBooks-compatible billing",
+          "explanation": "Automated billing that works with QuickBooks keeps invoicing and accounting connected, important for recurring-service businesses with high invoice volume."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "No public pricing",
+          "explanation": "ServiceCore requires a demo and quotes per truck, so there is no published price to evaluate. Budgeting and comparison-shopping require going through sales first."
+        },
+        {
+          "title": "Per-truck model can pinch small operators",
+          "explanation": "A per-truck pricing model is logical for fleets but means a very small operator should confirm the math works at one or two trucks before committing."
+        },
+        {
+          "title": "Narrow by design",
+          "explanation": "It is built for septic, grease, portable, and dumpster businesses — not general trades. A contractor outside those niches will not find it relevant."
+        },
+        {
+          "title": "Product overlap with Docket",
+          "explanation": "ServiceCore acquired Docket (a dumpster/waste-hauling product) in 2023. Dumpster-focused buyers may be steered to either product, so clarify which one fits during the demo."
+        },
+        {
+          "title": "Setup and onboarding effort",
+          "explanation": "Migrating customers, assets, and recurring schedules into a dedicated system takes setup time; plan for onboarding rather than expecting same-day use."
+        }
+      ],
+      "implementation_notes": "Expect a demo and a per-truck quote rather than a published price — come prepared with your truck count, asset counts (tanks, toilets, dumpsters), and recurring-service patterns so the quote is accurate. Onboarding centers on importing customers and assets and configuring recurring schedules, routes, and billing rules; connect QuickBooks for accounting. Train drivers on the iPad app early since field adoption drives the value. If your business is primarily roll-off dumpsters, ask whether ServiceCore or its Docket product is the better fit. Confirm setup fees and contract terms in writing.",
+      "tool_faqs": [
+        {
+          "q": "What does ServiceCore cost?",
+          "a": "ServiceCore does not publish pricing — it requires a demo and quotes on a per-truck model, with total cost depending on fleet size, contract terms, and any setup fees. Come to the demo with your truck and asset counts so the quote reflects your operation, and get terms in writing."
+        },
+        {
+          "q": "What businesses is ServiceCore for?",
+          "a": "It is purpose-built for septic pumping, grease-trap cleaning, portable-toilet rental, and roll-off dumpster businesses — the liquid-waste and container side of the waste industry. It is not a general field-service tool for unrelated trades."
+        },
+        {
+          "q": "How is ServiceCore different from a generic FSM tool?",
+          "a": "Generic FSM tools manage jobs and visits; ServiceCore is built around routes, trucks, and physical assets (tanks, toilets, dumpsters) on recurring service cycles, with asset tracking and per-truck routing. That domain fit is why septic and container operators choose it over a horizontal platform."
+        },
+        {
+          "q": "What is the relationship between ServiceCore and Docket?",
+          "a": "ServiceCore acquired Docket, a dumpster-rental/waste-hauling product, in 2023. Both still exist, with ServiceCore spanning septic/grease/portable/dumpster and Docket focused on dumpster and hauling. If you run a roll-off dumpster business, ask during the demo which product is the better fit."
+        },
+        {
+          "q": "Does ServiceCore work with QuickBooks?",
+          "a": "Yes — ServiceCore is QuickBooks-compatible, so its automated billing connects to QuickBooks for accounting. That keeps high-volume recurring invoicing and your books in sync."
+        }
+      ]
+    },
+    {
+      "slug": "docket",
+      "name": "Docket",
+      "vendor_url": "https://www.yourdocket.com",
+      "affiliate_url": "TBD",
+      "tagline": "Dumpster-rental and waste-hauling software for roll-off and trash-route businesses",
+      "verticals": [
+        "waste_removal"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Custom quote"
+        ],
+        "pricing_note": "No public pricing — demo required, per-truck pricing model. Founded 2019 in Dayton, Ohio; acquired by ServiceCore in 2023 and positioned as a dumpster-rental and waste-hauling specialist.",
+        "verified_date": "2026-05-28"
+      },
+      "key_features": [
+        "scheduling",
+        "dispatching",
+        "asset_tracking",
+        "automated_billing",
+        "payment_processing",
+        "driver_tracking",
+        "customer_portal",
+        "website_builder"
+      ],
+      "integrations": [
+        "quickbooks"
+      ],
+      "best_for": "Roll-off dumpster rental and commercial/residential trash-route haulers that want asset tracking, dispatch, billing, and customer payments in one platform",
+      "best_team_size": "1-50",
+      "founded": 2019,
+      "headquartered": "Dayton, Ohio",
+      "weaknesses": "No public pricing (per-truck, demo); now part of ServiceCore, which also serves dumpster businesses, so the long-term split between the two products is worth confirming before committing",
+      "vertical_fit": {
+        "waste_removal": 9
+      },
+      "long_description": "Docket is a dumpster-rental and waste-hauling platform built to run roll-off dumpster rentals alongside commercial and residential trash routes in one system. Founded in 2019 in Dayton, Ohio, it manages the full customer-and-job workflow — lead to job completion — with asset tracking for containers, dispatch and driver management, automated billing, and multiple ways to take payment (admin website, mobile app, or a customer dashboard). It also lets haulers build a modern, mobile-friendly website to capture rentals online.\n\nIn 2023, Docket was acquired by ServiceCore, the broader septic/grease/portable/dumpster platform. Docket continues as a distinct, dumpster-and-hauling-focused product, which means buyers evaluating either should ask which fits best — Docket leans toward roll-off rental and trash routes, while ServiceCore spans the wider liquid-waste and container space. Reviewers highlight fast, friendly support and helpful onboarding resources.\n\nLike its peers, Docket does not publish pricing and uses a per-truck model quoted after a demo, so cost depends on fleet size and terms. For a roll-off dumpster or trash-route hauler that wants asset tracking, dispatch, online rentals, and integrated payments in a purpose-built tool, Docket is a strong, modern option — with the caveat that its overlap with parent ServiceCore is worth clarifying up front.",
+      "pros_detail": [
+        {
+          "title": "Built for dumpster rental and trash routes",
+          "explanation": "Docket runs roll-off dumpster rentals and commercial/residential trash routes in one system, with the asset tracking and workflow these businesses need — purpose-built rather than a generic FSM tool."
+        },
+        {
+          "title": "Flexible payment collection",
+          "explanation": "Customers can pay three ways — on the admin website, in the mobile app, or via a personalized client dashboard — which speeds cash collection for high-volume rental businesses."
+        },
+        {
+          "title": "Built-in website for online rentals",
+          "explanation": "Docket lets haulers build a modern, mobile-friendly website to capture dumpster rentals online, turning the site into a booking channel rather than just a brochure."
+        },
+        {
+          "title": "Strong support reputation",
+          "explanation": "Reviewers consistently praise fast, friendly support and helpful how-to resources, which lowers the risk of adoption for a small hauler without IT staff."
+        },
+        {
+          "title": "Backed by ServiceCore",
+          "explanation": "Since its 2023 acquisition by ServiceCore, Docket sits within a larger, well-established waste-software company — adding stability and a broader product family behind it."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "No public pricing",
+          "explanation": "Docket requires a demo and quotes per truck, so there is no published price. Budgeting and comparison require a sales conversation first."
+        },
+        {
+          "title": "Overlaps with parent ServiceCore",
+          "explanation": "ServiceCore (Docket’s parent) also serves dumpster businesses. The two products overlap, so confirm which one is the right fit and how the roadmaps relate before committing."
+        },
+        {
+          "title": "Dumpster/hauling focus",
+          "explanation": "Docket is centered on roll-off rental and trash routes. Businesses needing septic, grease, or portable-sanitation depth may be better served by ServiceCore or another dedicated tool."
+        },
+        {
+          "title": "Per-truck model for small operators",
+          "explanation": "Per-truck pricing suits fleets; a one-truck operator should confirm the cost makes sense at their scale."
+        },
+        {
+          "title": "Newer brand",
+          "explanation": "Founded in 2019, Docket is younger than some incumbents. The ServiceCore backing offsets this, but it has a shorter standalone track record than decades-old waste software."
+        }
+      ],
+      "implementation_notes": "Expect a demo and per-truck quote. Onboarding focuses on importing customers and containers, configuring dispatch and routes, setting up the payment options (website, app, customer dashboard), and optionally building your rental website. Because Docket and parent ServiceCore overlap on dumpster businesses, clarify during the demo which product fits your mix of roll-off rentals vs broader waste services. Connect QuickBooks for accounting and confirm contract terms and any setup fees in writing.",
+      "tool_faqs": [
+        {
+          "q": "How much does Docket cost?",
+          "a": "Docket does not publish pricing — it requires a demo and quotes on a per-truck model, so cost depends on fleet size and terms. Bring your truck and container counts to the demo for an accurate quote and get terms in writing."
+        },
+        {
+          "q": "Is Docket the same as ServiceCore?",
+          "a": "Not the same, but related: ServiceCore acquired Docket in 2023. Docket continues as a distinct, dumpster-rental-and-hauling-focused product, while ServiceCore spans the broader septic/grease/portable/dumpster space. If you run roll-off dumpsters or trash routes, Docket is aimed at you; confirm the best fit during the demo."
+        },
+        {
+          "q": "Can customers book and pay online with Docket?",
+          "a": "Yes. Docket includes a website builder to capture dumpster rentals online and lets customers pay three ways — on the admin website, in the mobile app, or via a personalized client dashboard — which speeds booking and cash collection."
+        },
+        {
+          "q": "What kind of waste business is Docket for?",
+          "a": "Roll-off dumpster rental companies and commercial/residential trash-route haulers. It manages containers as tracked assets, handles dispatch and driver management, and runs billing and payments — purpose-built for hauling rather than generic field service."
+        },
+        {
+          "q": "Docket vs ServiceCore?",
+          "a": "Both are dedicated waste tools under the same company. Docket focuses on dumpster rental and trash routes; ServiceCore covers the wider liquid-waste and container space (septic, grease, portable toilets, dumpsters). Choose Docket for roll-off/hauling-centric operations and ServiceCore for a broader liquid-waste mix — and confirm during the demo."
+        }
+      ]
+    },
+    {
+      "slug": "starlight-software",
+      "name": "Starlight Software",
+      "vendor_url": "https://www.starlightsoftwaresolutions.com",
+      "affiliate_url": "TBD",
+      "tagline": "Roll-off and commercial waste & recycling management software",
+      "verticals": [
+        "waste_removal"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Custom quote"
+        ],
+        "pricing_note": "No public pricing — demo/quote. Positioned at the premium end of waste software (reviewers note it as among the more expensive options). Free trial available; no free version.",
+        "verified_date": "2026-05-28"
+      },
+      "key_features": [
+        "scheduling",
+        "dispatching",
+        "route_planning",
+        "automated_billing",
+        "asset_tracking",
+        "customer_management",
+        "reporting",
+        "mobile_app"
+      ],
+      "integrations": [
+        "quickbooks"
+      ],
+      "best_for": "Roll-off and commercial waste/recycling operators that want a comprehensive, dedicated waste-management platform and are willing to invest at the premium end",
+      "best_team_size": "5-200",
+      "weaknesses": "Among the more expensive options in the category, and some users report uneven feature depth or development pace despite a responsive support team; no public pricing",
+      "vertical_fit": {
+        "waste_removal": 8
+      },
+      "long_description": "Starlight Software (Starlight Roll-off) is a dedicated waste-and-recycling management platform aimed at roll-off and commercial operations. It covers the core of a hauling business — scheduling, dispatch, route planning, asset/container tracking, automated billing, and reporting — and is built specifically for the way roll-off and commercial waste companies run, rather than as a generic field-service tool retrofitted to waste.\n\nUser sentiment is genuinely mixed, which is worth being upfront about. Some customers credit it with an immediate, positive impact on customer service and say they would be lost without it; others, who chose it partly on reputation, describe it as the most expensive option they evaluated and cite frustration with the pace of development, while still acknowledging strong individual support staff. That split suggests Starlight can be a great fit for operations whose needs line up with its strengths, and a frustrating one for those expecting the breadth or polish of a top-tier incumbent.\n\nStarlight does not publish pricing and sits at the premium end; there is a free trial but no free version. For a roll-off or commercial waste operator evaluating dedicated platforms, Starlight belongs on the shortlist alongside ServiceCore, Docket, and Trash Flow — but it is one to trial carefully and reference-check, given the cost and the mixed feedback on development.",
+      "pros_detail": [
+        {
+          "title": "Dedicated waste/recycling platform",
+          "explanation": "Starlight is purpose-built for roll-off and commercial waste and recycling, with the scheduling, routing, asset tracking, and billing those operations need rather than a generic tool adapted to waste."
+        },
+        {
+          "title": "Reported customer-service impact",
+          "explanation": "Some customers credit Starlight with an immediate, positive impact on their own customer-service satisfaction, indicating it can meaningfully improve operations when it fits."
+        },
+        {
+          "title": "Responsive support staff",
+          "explanation": "Even critical reviewers acknowledge strong individual support people, so day-to-day help tends to be a relative bright spot."
+        },
+        {
+          "title": "Comprehensive feature set",
+          "explanation": "It covers scheduling, dispatch, route planning, asset/container tracking, automated billing, and reporting in one platform, suitable for a full roll-off/commercial operation."
+        },
+        {
+          "title": "Free trial available",
+          "explanation": "A free trial lets you evaluate the platform before committing, which is valuable given the premium price and the mixed user feedback."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Premium price",
+          "explanation": "Reviewers describe Starlight as among the most expensive options they evaluated. For a small operator, the cost may be hard to justify versus alternatives."
+        },
+        {
+          "title": "Mixed development feedback",
+          "explanation": "Some users report frustration with the pace of feature development and depth, feeling the product underdelivered relative to its reputation. Validate that the features you need are mature before buying."
+        },
+        {
+          "title": "No public pricing",
+          "explanation": "There is no published price; you must go through a demo/quote, which makes budgeting and comparison harder."
+        },
+        {
+          "title": "No free version",
+          "explanation": "Beyond a trial, there is no free tier, so ongoing use is a paid commitment at the premium end."
+        },
+        {
+          "title": "Reference-check recommended",
+          "explanation": "Given the split in reviews, this is a tool to reference-check with operators similar to you, rather than buying on reputation alone."
+        }
+      ],
+      "implementation_notes": "Use the free trial and reference-check with operators whose business resembles yours, given the mixed feedback and premium price. Confirm in writing which features are mature versus on the roadmap, and validate the specific workflows you depend on (routing, billing, asset tracking) during evaluation. Expect a demo/quote rather than published pricing. Plan onboarding to migrate customers, containers, and routes, and connect QuickBooks for accounting. Clarify the support model and your point of contact, since support quality is a relative strength worth locking in.",
+      "tool_faqs": [
+        {
+          "q": "How much does Starlight Software cost?",
+          "a": "Starlight does not publish pricing — it is demo/quote based and sits at the premium end of waste software; reviewers describe it as among the more expensive options. There is a free trial but no free version. Get a written quote and confirm what is included before committing."
+        },
+        {
+          "q": "Is Starlight Software worth the premium price?",
+          "a": "It depends on fit. Some operators credit it with a real positive impact and strong support; others felt it underdelivered for the cost and cited development pace. Trial it, reference-check with similar operators, and confirm the features you need are mature before paying the premium."
+        },
+        {
+          "q": "What does Starlight Software do?",
+          "a": "It is a dedicated roll-off and commercial waste/recycling platform covering scheduling, dispatch, route planning, asset/container tracking, automated billing, and reporting — built specifically for how waste-hauling operations run."
+        },
+        {
+          "q": "How does Starlight compare to ServiceCore or Trash Flow?",
+          "a": "All are dedicated waste tools. ServiceCore spans septic/grease/portable/dumpster with a strong driver app; Trash Flow is an established, modular hauler platform; Starlight targets roll-off and commercial waste/recycling at a premium price with mixed development feedback. Trial the shortlist and match to your waste mix and budget."
+        },
+        {
+          "q": "Does Starlight offer a free trial?",
+          "a": "Yes — Starlight offers a free trial, though there is no permanently free version. Given the premium price and mixed reviews, take advantage of the trial to validate the workflows you rely on before committing."
+        }
+      ]
+    },
+    {
+      "slug": "routeware",
+      "name": "Routeware",
+      "vendor_url": "https://routeware.com",
+      "affiliate_url": "TBD",
+      "tagline": "Enterprise waste-collection and recycling management for municipal and private haulers",
+      "verticals": [
+        "waste_removal"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Custom enterprise quote"
+        ],
+        "pricing_note": "No public pricing — custom enterprise quote. Reports cite $100K+/year for enterprise deployments depending on fleet size and modules. Built for larger municipal public-works departments and private waste-hauling operations.",
+        "verified_date": "2026-05-28"
+      },
+      "key_features": [
+        "route_optimization",
+        "dispatching",
+        "fleet_management",
+        "automated_billing",
+        "customer_portal",
+        "reporting",
+        "vehicle_tracking",
+        "work_order_management"
+      ],
+      "integrations": [
+        "quickbooks"
+      ],
+      "best_for": "Larger municipal and private waste-collection operations that need enterprise routing, fleet, and billing across residential, commercial, and specialty waste streams",
+      "best_team_size": "25-1000",
+      "weaknesses": "Enterprise scope and pricing (reports of $100K+/year) put it well beyond small haulers; it is collection- and route-centric for waste operations rather than a general field-service or rental tool",
+      "vertical_fit": {
+        "waste_removal": 8
+      },
+      "long_description": "Routeware sits at the enterprise end of the waste-software market, serving large municipal public-works departments and private waste-hauling organizations. Its pitch is consolidation at scale: bring collection operations, customer operations, and business operations together so a large hauler can replace a patchwork of disconnected systems with one platform and one data set. It spans residential and commercial waste, site services, and specialty streams such as medical waste, with route optimization, fleet and vehicle tracking, dispatch, billing, customer self-service portals, and reporting.\n\nThis is software for operations that run real fleets and high collection volume. The depth in routing, vehicle telematics, and customer/business operations is aimed at organizations where shaving miles off routes and unifying data across departments translates into significant savings — the kind of scale where an enterprise platform earns its keep.\n\nThat scale defines its limits, too. Routeware does not publish pricing, and reports put enterprise deployments at $100K+/year depending on fleet size and modules, so it is well beyond what a small roll-off or junk-removal business would consider. It is also collection- and route-centric for waste operations rather than a general field-service or dumpster-rental tool. For a municipality or large private hauler that needs enterprise routing, fleet, and billing across multiple waste streams, Routeware is built for exactly that; smaller operators should look at ServiceCore, Docket, Trash Flow, or a generalist FSM.",
+      "pros_detail": [
+        {
+          "title": "Enterprise-grade routing and fleet",
+          "explanation": "Routeware’s depth in route optimization, vehicle tracking, and fleet management is built for large collection operations where efficiency gains across many trucks produce significant savings."
+        },
+        {
+          "title": "Unifies collection, customer, and business ops",
+          "explanation": "It brings collection, customer, and business operations into one platform and data set, replacing the patchwork of disconnected systems large haulers often run."
+        },
+        {
+          "title": "Handles multiple waste streams",
+          "explanation": "Residential, commercial, site services, and specialty streams like medical waste are all supported, fitting complex municipal and private operations rather than a single service line."
+        },
+        {
+          "title": "Customer self-service tools",
+          "explanation": "Built-in customer portals and self-service tools reduce call-center load and improve resident/customer experience at scale."
+        },
+        {
+          "title": "Built for municipal and private haulers",
+          "explanation": "It is designed for public-works departments and large private waste organizations, so it meets the reporting, scale, and operational needs those buyers require."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Enterprise pricing",
+          "explanation": "Reports put enterprise deployments at $100K+/year depending on fleet size and modules. That cost only makes sense at significant scale and rules it out for small operators."
+        },
+        {
+          "title": "No public pricing",
+          "explanation": "There is no published price; every deal is a custom enterprise quote, which means a sales process and longer evaluation cycle."
+        },
+        {
+          "title": "Overkill for small haulers",
+          "explanation": "A small roll-off or junk-removal business does not need enterprise routing and fleet depth. ServiceCore, Docket, or Trash Flow are far better matched to that scale."
+        },
+        {
+          "title": "Collection/route-centric",
+          "explanation": "Routeware is oriented to waste collection and routing operations, not general field service or dumpster-rental sales, so its fit narrows to collection-heavy operations."
+        },
+        {
+          "title": "Implementation complexity",
+          "explanation": "An enterprise platform that unifies multiple departments requires a substantial implementation, integration, and change-management effort — not a quick rollout."
+        }
+      ],
+      "implementation_notes": "Treat Routeware as an enterprise platform selection. Expect a custom quote scoped to fleet size and modules, a substantial implementation, and integration/change-management across departments. Map your waste streams (residential, commercial, specialty), fleet, and existing systems before engaging, and plan a phased rollout. This only pencils out at meaningful collection scale; small operators should evaluate lighter dedicated tools instead. Confirm modules, support, and total annual cost in writing during procurement.",
+      "tool_faqs": [
+        {
+          "q": "How much does Routeware cost?",
+          "a": "Routeware does not publish pricing — it is a custom enterprise quote. Reports put enterprise deployments at $100K+/year depending on fleet size and modules. It is priced and scoped for large municipal and private operations, not small haulers."
+        },
+        {
+          "q": "Who is Routeware for?",
+          "a": "Larger municipal public-works departments and private waste-hauling organizations that run real fleets and need enterprise routing, fleet management, billing, and customer self-service across residential, commercial, and specialty waste streams."
+        },
+        {
+          "q": "Is Routeware right for a small junk-removal business?",
+          "a": "No. Its enterprise scope and pricing are well beyond a small operator. A junk-removal, roll-off, or septic business should look at ServiceCore, Docket, or Trash Flow, or a generalist FSM like Workiz, Housecall Pro, or Jobber."
+        },
+        {
+          "q": "What does Routeware unify?",
+          "a": "It brings collection operations, customer operations, and business operations into a single platform and data set — replacing the disconnected systems large haulers often run with one user experience across routing, fleet, billing, and customer self-service."
+        },
+        {
+          "q": "Does Routeware handle specialty waste?",
+          "a": "Yes — alongside residential and commercial collection it supports site services and specialty streams such as medical waste, which is part of why it fits complex municipal and large private operations rather than single-service businesses."
+        }
+      ]
+    },
+    {
+      "slug": "trash-flow",
+      "name": "Trash Flow",
+      "vendor_url": "https://trashflow.com",
+      "affiliate_url": "TBD",
+      "tagline": "Modular billing, routing, and dispatch software for residential, commercial, and roll-off haulers",
+      "verticals": [
+        "waste_removal"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Modular licensing"
+        ],
+        "pricing_note": "No public pricing — modular licensing (add modules as you grow). Includes 90 days of free technical support after purchase, with ongoing support via an annual contract, and offers a free 90-day trial license.",
+        "verified_date": "2026-05-28"
+      },
+      "key_features": [
+        "automated_billing",
+        "route_planning",
+        "dispatching",
+        "asset_tracking",
+        "mobile_app",
+        "online_invoicing",
+        "reporting",
+        "customer_management"
+      ],
+      "integrations": [
+        "quickbooks"
+      ],
+      "best_for": "Residential and commercial trash haulers, roll-off operators, and landfills/transfer stations that want proven, modular billing and routing they can expand over time",
+      "best_team_size": "1-200",
+      "weaknesses": "Route-optimization is a relative weak spot and some users find certain reports hard to decipher; the interface is established and traditional rather than modern",
+      "vertical_fit": {
+        "waste_removal": 8
+      },
+      "long_description": "Trash Flow is a long-established, modular software platform for residential and commercial trash haulers, roll-off operators, and landfills/transfer stations. Its design philosophy is modularity: start with the core you need — billing, routing, dispatch — and add modules (in-truck mobile apps, container tracking, scale-house management, electronic billing) as the business grows. That makes it adaptable from a small hauler up to operations running scale houses and transfer stations.\n\nIts strongest reputation is in billing and longevity. Customers praise how much faster billing becomes and how customers take to online payment options, and the platform has notably loyal long-term users — some reporting 20-plus years on it with consistently strong support. For a hauler whose pain is invoicing high volumes accurately and getting paid, that billing depth is the draw.\n\nThe trade-offs are modern polish and a couple of feature gaps. Users cite route optimization as an area that could be stronger and note that some reports take effort to decipher, and the interface reflects the platform's age rather than a sleek modern UI. Trash Flow does not publish pricing (modular licensing), but it lowers evaluation risk with a free 90-day trial license and 90 days of free technical support after purchase. For an established or growing hauler that values proven, expandable billing and routing over a modern interface, Trash Flow is a credible, lower-risk-to-try option.",
+      "pros_detail": [
+        {
+          "title": "Proven, modular platform",
+          "explanation": "Trash Flow lets haulers start with core billing/routing/dispatch and add modules (in-truck apps, container tracking, scale house, e-billing) as they grow, so the software scales with the business instead of forcing a big upfront purchase."
+        },
+        {
+          "title": "Strong billing",
+          "explanation": "Billing is its standout strength — customers report invoicing becoming much faster and embracing online payment options, which matters for high-volume recurring hauling revenue."
+        },
+        {
+          "title": "Exceptional longevity and loyalty",
+          "explanation": "Some customers report 20-plus years on Trash Flow with consistently strong support — a rare durability signal that it remains dependable as a long-term system of record."
+        },
+        {
+          "title": "Handles landfills and scale houses",
+          "explanation": "Beyond collection, modules cover scale-house management and transfer stations, fitting operations that go beyond simple curbside or roll-off service."
+        },
+        {
+          "title": "Low-risk to evaluate",
+          "explanation": "A free 90-day trial license plus 90 days of free technical support after purchase make it unusually low-risk to try before fully committing."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Route optimization could be stronger",
+          "explanation": "Users specifically cite route optimization as a relative weak spot. Operations that depend heavily on squeezing efficiency from routing may want to validate this area or compare with routing-focused tools."
+        },
+        {
+          "title": "Some reports hard to decipher",
+          "explanation": "A few users report that certain reports take effort to read and interpret, so getting clean management reporting may require setup or learning."
+        },
+        {
+          "title": "Traditional interface",
+          "explanation": "Trash Flow’s age shows in the interface, which is functional but not a modern, sleek UI. Teams that prize a polished experience may find it dated."
+        },
+        {
+          "title": "No public pricing",
+          "explanation": "Pricing is modular and not published, so you need to scope modules and get a quote rather than seeing a price upfront."
+        },
+        {
+          "title": "Module sprawl to manage",
+          "explanation": "The modular model is flexible but means deciding which modules you need and how they fit together; mapping the right combination takes some upfront thought."
+        }
+      ],
+      "implementation_notes": "Take advantage of the free 90-day trial license to validate the workflows you depend on, especially billing and routing. Scope which modules you need now versus later (core billing/routing/dispatch first, then in-truck app, container tracking, scale house, e-billing as you grow) so you do not over-buy. Plan onboarding to migrate customers, containers, and routes, and connect QuickBooks for accounting. Lean on the 90 days of included support to get configured. If routing efficiency is mission-critical, test the route features carefully during the trial.",
+      "tool_faqs": [
+        {
+          "q": "How much does Trash Flow cost?",
+          "a": "Trash Flow does not publish pricing — it uses modular licensing, so cost depends on which modules you select. It lowers evaluation risk with a free 90-day trial license and includes 90 days of free technical support after purchase, with ongoing support via an annual contract. Scope your modules and get a quote."
+        },
+        {
+          "q": "What is Trash Flow best at?",
+          "a": "Billing and longevity. Customers consistently praise faster invoicing and online payments, and the platform has unusually loyal long-term users (some 20-plus years). It is a strong fit for haulers whose main pain is accurate, high-volume billing."
+        },
+        {
+          "q": "What types of waste operations does Trash Flow support?",
+          "a": "Residential and commercial trash haulers, roll-off operators, and landfills/transfer stations. Its modules cover billing, routing, dispatch, in-truck apps, container tracking, and scale-house management, so it spans collection through disposal facilities."
+        },
+        {
+          "q": "What are Trash Flow’s weak points?",
+          "a": "Users cite route optimization as a relative weakness and note some reports are hard to decipher, and the interface is traditional rather than modern. If routing efficiency or slick UI is a priority, validate those areas during the free trial or compare alternatives."
+        },
+        {
+          "q": "Can I try Trash Flow before buying?",
+          "a": "Yes — Trash Flow offers a free 90-day trial license and includes 90 days of free technical support after purchase, making it one of the lower-risk waste platforms to evaluate before committing."
         }
       ]
     }
