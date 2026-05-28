@@ -8,9 +8,10 @@ export function getStaticPaths() {
   const paths: { params: { pair: string }; props: { a: IntlVendor; b: IntlVendor } }[] = [];
   for (let i = 0; i < vendors.length; i++) {
     for (let j = i + 1; j < vendors.length; j++) {
-      const a = vendors[i];
-      const b = vendors[j];
-      if (a.category !== b.category) continue;
+      const v1 = vendors[i];
+      const v2 = vendors[j];
+      if (v1.category !== v2.category) continue;
+      const [a, b] = [v1, v2].sort((x, y) => x.slug.localeCompare(y.slug));
       paths.push({ params: { pair: `${a.slug}-vs-${b.slug}` }, props: { a, b } });
     }
   }

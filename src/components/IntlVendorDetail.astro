@@ -149,6 +149,23 @@ const faqSchema = {
       </div>
     </section>
 
+    {sameCategory.length > 0 && (
+      <section class="mb-10">
+        <h2 class="mb-5 text-2xl font-bold text-slate-900">Compare {vendor.name} head-to-head</h2>
+        <div class="grid gap-3 sm:grid-cols-2">
+          {sameCategory.map((s) => {
+            const [s1, s2] = [vendor.slug, s.slug].sort((x, y) => x.localeCompare(y));
+            return (
+              <a href={`/${market.code}/compare/${s1}-vs-${s2}/`} class="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-4 py-3 no-underline transition hover:border-orange-300 hover:bg-orange-50">
+                <span class="text-sm font-semibold text-slate-900">{vendor.name} <span class="text-slate-400">vs</span> {s.name}</span>
+                <span class="text-orange-600" aria-hidden="true">→</span>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
     {related.length > 0 && (
       <section class="mb-10">
         <h2 class="mb-5 text-2xl font-bold text-slate-900">Other {market.name} vendors</h2>
