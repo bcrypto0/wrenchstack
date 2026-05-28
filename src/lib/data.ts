@@ -8,6 +8,7 @@ import payrollData from '../data/payroll.json';
 import agenciesData from '../data/agencies.json';
 import aiToolsData from '../data/ai_tools.json';
 import paymentsData from '../data/payments.json';
+import financingData from '../data/financing.json';
 
 export interface ToolPricing {
   starting_at_usd: number | null;
@@ -1204,6 +1205,69 @@ export function paymentsByModel(): Array<{ model: PaymentPricingModel; processor
   return order
     .map((model) => ({ model, processors: paymentProcessors.filter((p) => p.pricing_model === model) }))
     .filter((g) => g.processors.length > 0);
+}
+
+// --- Financing providers (Phase 2 new category: consumer/contractor financing)
+// Point-of-sale financing and lender marketplaces that let contractors offer
+// monthly payments on big-ticket jobs. Grouped by financing MODEL.
+
+export type FinancingModel = 'embedded-pos' | 'marketplace' | 'lender' | 'card';
+
+export interface FinancingRatings {
+  trustpilot: number | null;
+  bbb: string | null;
+  reddit_sentiment: string;
+}
+
+export interface FinancingProvider {
+  slug: string;
+  name: string;
+  vendor_url: string;
+  affiliate_url: string;
+  tagline: string;
+  financing_model: FinancingModel;
+  pricing_summary: string;
+  apr_range: string;
+  loan_range: string;
+  contractor_cost: string;
+  verticals_supported: string[];
+  founded: number | null;
+  headquartered: string;
+  long_description: string;
+  how_it_works: string;
+  pros_detail: ProConItem[];
+  cons_detail: ProConItem[];
+  best_for: string;
+  best_team_size: string;
+  weaknesses: string;
+  reputation_flag: string | null;
+  ratings: FinancingRatings;
+  key_features: string[];
+  integrations: string[];
+  affiliate_program: string;
+  affiliate_payout_note: string;
+  verified_date: string;
+  faqs: LeadGenFaq[];
+}
+
+export const financingProviders: FinancingProvider[] = (financingData as { providers: FinancingProvider[] }).providers;
+
+export function getFinancingProvider(slug: string): FinancingProvider | undefined {
+  return financingProviders.find((p) => p.slug === slug);
+}
+
+export const FINANCING_MODEL_META: Record<FinancingModel, { label: string; blurb: string }> = {
+  'embedded-pos': { label: 'Embedded Point-of-Sale Financing', blurb: 'Offer monthly payments inside your own checkout or invoice. The contractor pays a merchant or dealer fee; the customer applies in seconds with a soft credit check. Best for closing big-ticket jobs at the moment of decision.' },
+  'marketplace': { label: 'Financing Marketplaces', blurb: 'Send customers a link to compare prequalified offers from many lenders with a soft credit check. Often free (or subscription-based) for the contractor, and you typically get paid upfront.' },
+  'lender': { label: 'Direct Lenders', blurb: 'Lenders that fund home-improvement loans directly.' },
+  'card': { label: 'Promotional Credit Cards', blurb: 'Private-label or 0% promotional cards for home-improvement purchases.' },
+};
+
+export function financingByModel(): Array<{ model: FinancingModel; providers: FinancingProvider[] }> {
+  const order: FinancingModel[] = ['embedded-pos', 'marketplace', 'lender', 'card'];
+  return order
+    .map((model) => ({ model, providers: financingProviders.filter((p) => p.financing_model === model) }))
+    .filter((g) => g.providers.length > 0);
 }
 
 

@@ -1,0 +1,227 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { financingProviders, FINANCING_MODEL_META, type FinancingProvider } from '../../../lib/data';
+
+export async function getStaticPaths() {
+  return financingProviders.map((p) => ({
+    params: { slug: p.slug },
+    props: { provider: p },
+  }));
+}
+
+interface Props { provider: FinancingProvider; }
+const { provider } = Astro.props;
+const modelLabel = FINANCING_MODEL_META[provider.financing_model].label;
+
+const siblings = financingProviders.filter((p) => p.slug !== provider.slug).slice(0, 6);
+
+const pageTitle = `${provider.name} Review (2026): Fees, Rates & Pros & Cons for Contractors`;
+const pageDescription = `${provider.name} contractor financing review. ${provider.tagline}. ${provider.reputation_flag ? 'Includes documented consumer-cost context. ' : ''}Real fees, APRs, and honest trade-offs. Updated 2026.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Financing', url: '/financing/' },
+  { name: provider.name, url: `/financing/${provider.slug}/` },
+];
+
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FinancialProduct',
+  name: provider.name,
+  description: provider.tagline,
+  ...(provider.ratings.trustpilot !== null && {
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: provider.ratings.trustpilot.toFixed(1),
+      bestRating: '5',
+      reviewCount: 50,
+    },
+  }),
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: provider.faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-8">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-amber-600">Financing · {modelLabel}</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">{provider.name} Review</h1>
+      <p class="mt-3 text-lg italic text-slate-600">{provider.tagline}</p>
+
+      <div class="mt-5 flex flex-wrap items-center gap-2">
+        <span class="inline-block rounded-full bg-amber-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-amber-900 ring-1 ring-amber-300">{modelLabel}</span>
+      </div>
+
+      <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
+        {provider.founded !== null && <span>Founded {provider.founded}</span>}
+        {provider.headquartered && <span>HQ {provider.headquartered}</span>}
+        <span>Verified: {provider.verified_date}</span>
+        {provider.ratings.trustpilot !== null && <span>Trustpilot {provider.ratings.trustpilot.toFixed(1)} / 5</span>}
+      </div>
+
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href={provider.affiliate_url.startsWith('http') ? provider.affiliate_url : provider.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-amber-500 px-5 py-3 text-sm font-semibold text-white hover:bg-amber-600">Visit {provider.name} →</a>
+        <a href="/financing/" class="rounded-md border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50">See all financing</a>
+      </div>
+    </header>
+
+    {provider.reputation_flag && (
+      <section class="mb-10 rounded-lg border-2 border-rose-300 bg-rose-50 p-6">
+        <div class="mb-2 flex items-center gap-2">
+          <span class="text-xl">⚠</span>
+          <h2 class="text-lg font-bold text-rose-900">Consumer-cost / reputation warning</h2>
+        </div>
+        <p class="text-sm text-rose-900 leading-relaxed">{provider.reputation_flag}</p>
+      </section>
+    )}
+
+    <nav class="mb-8 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 md:sticky md:top-2 md:z-30 md:bg-white/95 md:backdrop-blur">
+      <div class="text-xs font-semibold uppercase tracking-wider text-slate-700">Jump to</div>
+      <div class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-sm">
+        <a href="#terms" class="text-amber-600 hover:underline">Fees & terms</a>
+        <span class="text-slate-300">·</span>
+        <a href="#how-it-works" class="text-amber-600 hover:underline">How it works</a>
+        <span class="text-slate-300">·</span>
+        <a href="#pros-cons" class="text-amber-600 hover:underline">Pros & Cons</a>
+        <span class="text-slate-300">·</span>
+        <a href="#features" class="text-amber-600 hover:underline">Features</a>
+        <span class="text-slate-300">·</span>
+        <a href="#faqs" class="text-amber-600 hover:underline">FAQs</a>
+      </div>
+    </nav>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
+      <p class="text-slate-700 leading-relaxed">
+        <strong class="text-slate-900">{provider.name}</strong> is best for {provider.best_for}. {provider.weaknesses}.
+      </p>
+    </section>
+
+    <section id="terms" class="mb-10 scroll-mt-8">
+      <h2 class="mb-3 text-2xl font-bold text-slate-900">Fees & terms</h2>
+      <div class="rounded-lg border border-slate-200 bg-white p-5">
+        <p class="font-semibold text-slate-900">{provider.pricing_summary}.</p>
+        <dl class="mt-3 grid gap-3 sm:grid-cols-3 text-sm">
+          <div>
+            <dt class="text-xs font-bold uppercase tracking-wider text-slate-500">Cost to contractor</dt>
+            <dd class="text-slate-800">{provider.contractor_cost}</dd>
+          </div>
+          <div>
+            <dt class="text-xs font-bold uppercase tracking-wider text-slate-500">Customer APR</dt>
+            <dd class="text-slate-800">{provider.apr_range}</dd>
+          </div>
+          <div>
+            <dt class="text-xs font-bold uppercase tracking-wider text-slate-500">Loan size</dt>
+            <dd class="text-slate-800">{provider.loan_range}</dd>
+          </div>
+        </dl>
+        <p class="mt-3 text-sm text-slate-700"><strong class="text-slate-900">Affiliate disclosure:</strong> {provider.affiliate_payout_note}.</p>
+      </div>
+    </section>
+
+    <section class="mb-10 prose prose-slate max-w-none">
+      <h2>About {provider.name}</h2>
+      {provider.long_description.split('\n\n').map((p) => <p>{p}</p>)}
+    </section>
+
+    <section id="how-it-works" class="mb-10 scroll-mt-8">
+      <h2 class="mb-3 text-2xl font-bold text-slate-900">How it works</h2>
+      <div class="rounded-lg border border-slate-200 bg-white p-5">
+        <p class="text-slate-700 leading-relaxed">{provider.how_it_works}</p>
+      </div>
+    </section>
+
+    <section id="pros-cons" class="mb-10 scroll-mt-8">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Pros & cons</h2>
+      <div class="mb-6">
+        <h3 class="mb-3 text-sm font-bold uppercase tracking-wider text-emerald-700">What works</h3>
+        <ul class="space-y-3">
+          {provider.pros_detail.map((p) => (
+            <li class="rounded-lg border-l-4 border-emerald-400 bg-emerald-50 px-4 py-3">
+              <p class="font-semibold text-emerald-900">{p.title}</p>
+              <p class="mt-1 text-sm text-emerald-900 leading-relaxed">{p.explanation}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3 class="mb-3 text-sm font-bold uppercase tracking-wider text-rose-700">What doesn't</h3>
+        <ul class="space-y-3">
+          {provider.cons_detail.map((c) => (
+            <li class="rounded-lg border-l-4 border-rose-400 bg-rose-50 px-4 py-3">
+              <p class="font-semibold text-rose-900">{c.title}</p>
+              <p class="mt-1 text-sm text-rose-900 leading-relaxed">{c.explanation}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section id="features" class="mb-10 scroll-mt-8">
+      <h2 class="mb-3 text-2xl font-bold text-slate-900">Features & integrations</h2>
+      <div class="rounded-lg border border-slate-200 bg-white p-5">
+        <div class="mb-3">
+          <p class="mb-1 text-xs font-bold uppercase tracking-wider text-slate-500">Key features</p>
+          <div class="flex flex-wrap gap-1">
+            {provider.key_features.map((f) => (
+              <span class="rounded-md bg-amber-50 px-2 py-0.5 text-xs text-amber-800">{f.replace(/_/g, ' ')}</span>
+            ))}
+          </div>
+        </div>
+        <div>
+          <p class="mb-1 text-xs font-bold uppercase tracking-wider text-slate-500">Integrations</p>
+          <div class="flex flex-wrap gap-1">
+            {provider.integrations.map((i) => (
+              <span class="rounded-md bg-slate-100 px-2 py-0.5 text-xs">{i.replace(/_/g, ' ')}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faqs" class="mb-10 scroll-mt-8">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Frequently asked</h2>
+      <div class="space-y-3">
+        {provider.faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Other financing options</h2>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {siblings.map((s) => (
+          <a href={`/financing/${s.slug}/`} class="block rounded-lg border border-slate-200 bg-white p-4 no-underline transition hover:border-amber-300 hover:bg-amber-50">
+            <p class="mb-1 font-semibold text-slate-900">{s.name}</p>
+            <p class="text-xs text-slate-500 line-clamp-2">{s.tagline}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Browse more</h2>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/financing/" class="rounded-md bg-amber-500 px-5 py-3 text-sm font-semibold text-white hover:bg-amber-600">All financing</a>
+        <a href="/payments/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Payments</a>
+        <a href="/tools/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Software directory</a>
+      </div>
+    </section>
+  </article>
+</Layout>

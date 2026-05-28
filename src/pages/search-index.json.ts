@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { tools, verticals, getTool, verticalToUrl, priceTier, freshnessTier, leadGenPlatforms, leadGenTier, insuranceProviders, insuranceTier, payrollServices, payrollTier, marketingAgencies, agencyTier, aiTools, paymentProcessors } from '../lib/data';
+import { tools, verticals, getTool, verticalToUrl, priceTier, freshnessTier, leadGenPlatforms, leadGenTier, insuranceProviders, insuranceTier, payrollServices, payrollTier, marketingAgencies, agencyTier, aiTools, paymentProcessors, financingProviders } from '../lib/data';
 import featuresData from '../data/features.json';
 import migrationsData from '../data/migrations.json';
 
@@ -124,6 +124,19 @@ export const GET: APIRoute = () => {
       name: p.name,
       slug: p.slug,
       url: `/payments/${p.slug}/`,
+      tagline: p.tagline,
+      bestFor: p.best_for,
+      verticals: p.verticals_supported,
+    });
+  }
+
+  // Financing providers
+  for (const p of financingProviders) {
+    items.push({
+      type: 'financing',
+      name: p.name,
+      slug: p.slug,
+      url: `/financing/${p.slug}/`,
       tagline: p.tagline,
       bestFor: p.best_for,
       verticals: p.verticals_supported,
