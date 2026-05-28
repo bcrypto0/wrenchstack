@@ -133,6 +133,132 @@
       "typical_pricing": "Annual registration + inspection fees vary",
       "is_cross_market": false,
       "cross_market_link": null
+    },
+    {
+      "slug": "tradify-ie",
+      "name": "Tradify",
+      "category": "software",
+      "vendor_url": "https://www.tradify.com",
+      "tagline": "Simple job-management app for sole traders and small trades teams — popular across Ireland and the UK",
+      "market_position": "Tradify is a job-management app built for sole traders and small trades teams — plumbers, electricians, and other tradespeople — and is widely used across Ireland, the UK, Australia, and New Zealand. It focuses on speed and ease: quoting, scheduling, job tracking, and invoicing without heavy configuration, and it integrates with Xero, QuickBooks, and Sage for accounting.",
+      "ie_specific_note": "Tradify integrates with Xero and Sage, both common in Ireland, which keeps quoting/invoicing and VAT/accounting connected. It is not Irish-compliance-specific (no native ROS payroll or PAYE Modernisation), so an Irish shop should pair it with an Irish payroll tool like BrightPay.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Fast and easy for sole traders and small teams",
+        "Strong quoting, scheduling, and invoicing",
+        "Integrates with Xero, QuickBooks, and Sage",
+        "Well-reviewed and popular across IE/UK/AU/NZ"
+      ],
+      "cons": [
+        "Not Irish-compliance-specific (pair with Irish payroll for ROS/PAYE)",
+        "Per-user pricing adds up as the team grows",
+        "Aimed at small teams, not large or complex operations"
+      ],
+      "typical_pricing": "Per-user monthly (small-team tiers); free trial available",
+      "is_cross_market": true,
+      "cross_market_link": "/tools/tradify/"
+    },
+    {
+      "slug": "servicem8-ie",
+      "name": "ServiceM8",
+      "category": "software",
+      "vendor_url": "https://www.servicem8.com",
+      "tagline": "iOS-first job-management app for small trades — low-cost entry and a strong mobile workflow",
+      "market_position": "ServiceM8 is an iOS-first (Apple-only) job-management app for small trades — scheduling, quoting, invoicing, and job cards — with a low-cost entry point and unlimited users on paid plans. It is popular with small electrical, plumbing, HVAC, and handyman operators who run a mobile-first workflow, and integrates with Xero and QuickBooks.",
+      "ie_specific_note": "ServiceM8 is Apple-only (no Android), so confirm your crew uses iPhones/iPads before committing. It connects to Xero and QuickBooks for Irish VAT and accounting, but it is not Irish-compliance-specific — pair it with an Irish payroll tool for ROS/PAYE.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Low-cost entry with unlimited users on paid plans",
+        "Strong mobile-first workflow for small trades",
+        "Integrates with Xero and QuickBooks",
+        "Quick to set up for sole traders and small teams"
+      ],
+      "cons": [
+        "iOS/Apple-only — no Android (a hard limit for some crews)",
+        "Not Irish-compliance-specific (no native ROS/PAYE)",
+        "Aimed at small operations, not larger or complex firms"
+      ],
+      "typical_pricing": "Low-cost tiers; unlimited users on paid plans; iOS-only",
+      "is_cross_market": true,
+      "cross_market_link": "/tools/servicem8/"
+    },
+    {
+      "slug": "joblogic-ie",
+      "name": "Joblogic",
+      "category": "software",
+      "vendor_url": "https://www.joblogic.com",
+      "tagline": "Compliance-focused field service management for domestic and commercial trades — strong certificates and PPM",
+      "market_position": "Joblogic is an all-in-one field service management platform with strong compliance features — asset registers, planned preventive maintenance (PPM), and certificate workflows — popular with UK and Irish firms doing domestic and light-commercial service work in gas, electrical, and HVAC. It targets the mid-market shop that needs documented compliance, not just scheduling.",
+      "ie_specific_note": "Joblogic's certificate and compliance workflows suit Irish gas and electrical contractors who must document certs (and align with RGI/Safe Electric obligations). It is UK/Ireland-focused; confirm Irish VAT/accounting integration and pair it with Irish payroll for ROS.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Strong compliance, certificate, and PPM workflows",
+        "All-in-one for domestic and commercial service trades",
+        "Established UK/Ireland presence and asset registers",
+        "Good fit for gas/electrical/HVAC service firms"
+      ],
+      "cons": [
+        "More setup than lightweight apps like Tradify or ServiceM8",
+        "Mid-market-oriented (more than a sole trader needs)",
+        "Not a payroll/ROS solution — pair accordingly"
+      ],
+      "typical_pricing": "Per-user monthly; mid-market tiers",
+      "is_cross_market": true,
+      "cross_market_link": "/uk/joblogic/"
+    },
+    {
+      "slug": "commusoft-ie",
+      "name": "Commusoft",
+      "category": "software",
+      "vendor_url": "https://www.commusoft.co.uk",
+      "tagline": "All-in-one FSM for service and maintenance trades — strong for gas/heating, used across the UK and Ireland",
+      "market_position": "Commusoft is an all-in-one field service management platform built for service and maintenance trades — especially gas/heating, plumbing, and electrical — with job management, scheduling, invoicing, service reminders, and maintenance-contract features. It has a strong UK presence and serves Irish firms doing recurring service and maintenance work.",
+      "ie_specific_note": "Commusoft is a strong fit for Irish gas/heating service firms that run maintenance contracts and need service reminders and documented certificates. It is UK-built (not Irish-native compliance), so pair it with Irish payroll/ROS and confirm VAT/accounting integration.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "All-in-one for service and maintenance trades",
+        "Strong gas/heating fit with maintenance-contract features",
+        "Service reminders and certificate workflows",
+        "Established platform serving UK and Ireland"
+      ],
+      "cons": [
+        "UK-built — not Irish-native compliance",
+        "Comprehensive feature set means more setup",
+        "Pricing scales with features and users"
+      ],
+      "typical_pricing": "Per-user monthly; tiered by features",
+      "is_cross_market": true,
+      "cross_market_link": "/uk/commusoft/"
+    },
+    {
+      "slug": "tradesman-ie",
+      "name": "Tradesman.ie",
+      "category": "lead-gen",
+      "vendor_url": "https://tradesman.ie",
+      "tagline": "One of Ireland's largest trades directories — homeowners get up to 3 free quotes from rated tradesmen",
+      "market_position": "Tradesman.ie is one of the largest Irish trades directories, connecting homeowners with rated tradesmen who respond with quotes (up to three free quotes per job). The vendor reports 6,000+ active tradesmen providing quotes daily. It is an Irish-only platform with strong domestic consumer-search presence, complementing MyBuilder.ie and Onlinetradesmen.ie.",
+      "ie_specific_note": "Irish-only directory with a quote-request model — homeowners post a job and receive multiple quotes, so tradespeople compete on a shared-lead basis. Strong Irish consumer audience, but expect competition per lead and lighter vetting than UK Checkatrade.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "One of the largest Irish trades directories (6,000+ active tradesmen)",
+        "Up-to-3-quotes model drives homeowner demand",
+        "Strong Irish domestic consumer audience",
+        "Independent Irish operator"
+      ],
+      "cons": [
+        "Irish-only — no cross-market value",
+        "Shared-lead competition (homeowner gets multiple quotes)",
+        "Lighter vetting than UK Checkatrade",
+        "No publisher affiliate program"
+      ],
+      "typical_pricing": "Lead/quote-based; varies by trade and job value",
+      "is_cross_market": false,
+      "cross_market_link": null
     }
   ]
 }
