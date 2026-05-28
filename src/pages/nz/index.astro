@@ -140,6 +140,7 @@ const breadcrumbs = [
                   </div>
 
                   <div class="flex flex-wrap gap-2">
+                    <a href={`/nz/${v.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">Full NZ review →</a>
                     <a href={v.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600">Visit {v.name} →</a>
                     {v.cross_market_link && (
                       <a href={v.cross_market_link} class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Full review (US market context)</a>

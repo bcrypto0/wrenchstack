@@ -1,0 +1,175 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { INTL_CATEGORY_LABELS, intlNote, intlTierMeta, type IntlVendor, type IntlMarket } from '../lib/intl';
+
+interface Props {
+  vendor: IntlVendor;
+  market: IntlMarket;
+  siblings: IntlVendor[];
+}
+const { vendor, market, siblings } = Astro.props;
+
+const categoryLabel = INTL_CATEGORY_LABELS[vendor.category] ?? vendor.category;
+const note = intlNote(vendor, market);
+const tier = intlTierMeta(vendor.tier);
+
+// Related vendors: same category first, then the rest of the market.
+const sameCategory = siblings.filter((s) => s.category === vendor.category);
+const otherCategory = siblings.filter((s) => s.category !== vendor.category);
+const related = [...sameCategory, ...otherCategory].slice(0, 6);
+
+const pageTitle = `${vendor.name} ${market.name} Review (2026): ${categoryLabel} for ${market.name} Trades`;
+const pageDescription = `${vendor.name} for ${market.name} trades — ${vendor.tagline}. Market position, ${market.name}-specific compliance notes, pros and cons, and typical pricing. Independent WrenchStack review.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: market.name, url: `/${market.code}/` },
+  { name: vendor.name, url: `/${market.code}/${vendor.slug}/` },
+];
+
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: `${vendor.name} (${market.name})`,
+  description: vendor.tagline,
+  category: categoryLabel,
+};
+
+// Data-derived FAQ (no fabricated facts — built from the vendor's own fields).
+const faqs: { q: string; a: string }[] = [
+  {
+    q: `Is ${vendor.name} a good fit for ${market.name} trades?`,
+    a: `${vendor.market_position} ${note}`.trim(),
+  },
+  {
+    q: `What does ${vendor.name} cost in ${market.name}?`,
+    a: `${vendor.typical_pricing}. Pricing and availability can change by region — confirm current ${market.name} pricing on the vendor's site before committing.`,
+  },
+];
+if (vendor.tier === 'F' && vendor.reputation_flag) {
+  faqs.push({ q: `Is ${vendor.name} reputable?`, a: `We flag a caution: ${vendor.reputation_flag} Weigh this against the pros before relying on it.` });
+} else if (vendor.tier === 'S') {
+  faqs.push({ q: `Is ${vendor.name} recommended?`, a: `Yes — it is a Tier S (Recommended) pick in our ${market.name} directory for ${categoryLabel.toLowerCase()}, based on market fit and reputation. Still compare it against the alternatives for your specific trade and region.` });
+}
+if (vendor.is_cross_market && vendor.cross_market_link) {
+  faqs.push({ q: `Does ${vendor.name} operate outside ${market.name}?`, a: `Yes — ${vendor.name} is a cross-market vendor with presence beyond ${market.name}. See our full review in US-market context for deeper editorial detail, then weigh the ${market.name}-specific notes above.` });
+}
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-8">
+      <div class="mb-3 flex items-center gap-2">
+        <span class="text-xl" aria-hidden="true">{market.flag}</span>
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">{categoryLabel} · {market.name}</p>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">{vendor.name}</h1>
+      <p class="mt-3 text-lg italic text-slate-600">{vendor.tagline}</p>
+
+      <div class="mt-5 flex flex-wrap items-center gap-2">
+        <span class={`rounded-full px-3 py-1 text-xs font-bold ${tier.badge}`}>Tier {vendor.tier} · {tier.label}</span>
+        {vendor.is_cross_market && <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Cross-market vendor</span>}
+      </div>
+
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href={vendor.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Visit {vendor.name} →</a>
+        {vendor.cross_market_link && (
+          <a href={vendor.cross_market_link} class="rounded-md border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50">Full review (US market context)</a>
+        )}
+        <a href={`/${market.code}/`} class="rounded-md border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50">All {market.name} vendors</a>
+      </div>
+    </header>
+
+    {vendor.reputation_flag && (
+      <section class="mb-8 rounded-lg border-2 border-rose-300 bg-rose-50 p-5">
+        <p class="mb-1 text-xs font-bold uppercase tracking-wider text-rose-700">⚠ Reputation warning</p>
+        <p class="text-sm text-rose-900 leading-relaxed">{vendor.reputation_flag}</p>
+      </section>
+    )}
+
+    <section class="mb-8">
+      <h2 class="mb-3 text-2xl font-bold text-slate-900">Market position</h2>
+      <p class="text-slate-700 leading-relaxed">{vendor.market_position}</p>
+    </section>
+
+    {note && (
+      <section class="mb-8 rounded-lg bg-slate-50 p-6">
+        <h2 class="mb-2 text-lg font-bold text-slate-900">{market.name}-specific note</h2>
+        <p class="text-slate-700 leading-relaxed">{note}</p>
+      </section>
+    )}
+
+    <section class="mb-8 grid gap-5 sm:grid-cols-2">
+      <div>
+        <h2 class="mb-3 text-sm font-bold uppercase tracking-wider text-emerald-700">Pros</h2>
+        <ul class="space-y-2">
+          {vendor.pros.map((p) => (
+            <li class="rounded-lg border-l-4 border-emerald-400 bg-emerald-50 px-4 py-2 text-sm text-emerald-900 leading-snug">+ {p}</li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2 class="mb-3 text-sm font-bold uppercase tracking-wider text-rose-700">Cons</h2>
+        <ul class="space-y-2">
+          {vendor.cons.map((c) => (
+            <li class="rounded-lg border-l-4 border-rose-400 bg-rose-50 px-4 py-2 text-sm text-rose-900 leading-snug">− {c}</li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="mb-8 rounded-lg border border-slate-200 bg-white p-5">
+      <h2 class="mb-2 text-sm font-bold uppercase tracking-wider text-slate-500">Typical {market.name} pricing</h2>
+      <p class="text-slate-800">{vendor.typical_pricing}</p>
+    </section>
+
+    <section class="mb-8 rounded-lg bg-orange-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">Why this matters for {market.name} trades</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">{market.certContext}</p>
+      <p class="mt-2 text-sm text-slate-700 leading-relaxed">{market.intro}</p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Frequently asked</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    {related.length > 0 && (
+      <section class="mb-10">
+        <h2 class="mb-5 text-2xl font-bold text-slate-900">Other {market.name} vendors</h2>
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {related.map((s) => (
+            <a href={`/${market.code}/${s.slug}/`} class="block rounded-lg border border-slate-200 bg-white p-4 no-underline transition hover:border-orange-300 hover:bg-orange-50">
+              <p class="mb-1 font-semibold text-slate-900">{s.name}</p>
+              <p class="text-xs text-slate-500 capitalize">{(INTL_CATEGORY_LABELS[s.category] ?? s.category)}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Browse more</h2>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href={`/${market.code}/`} class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">{market.flag} All {market.name} vendors</a>
+        <a href="/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">US directory</a>
+        <a href="/methodology/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Methodology</a>
+      </div>
+    </section>
+  </article>
+</Layout>
