@@ -17,6 +17,144 @@
   ],
   "tools": [
     {
+      "slug": "kickserv",
+      "name": "Kickserv",
+      "vendor_url": "https://www.kickserv.com",
+      "affiliate_url": "TBD",
+      "tagline": "QuickBooks-friendly field service software for small service businesses",
+      "verticals": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "landscaping",
+        "cleaning",
+        "handyman",
+        "appliance_repair"
+      ],
+      "pricing": {
+        "starting_at_usd": 60,
+        "tiers": [
+          "Start",
+          "Run",
+          "Scale"
+        ],
+        "tier_prices_usd": [
+          60,
+          119,
+          199
+        ],
+        "pricing_note": "Seat-based tiers: Start (5 users), Run (10 users), Scale (20 users). QuickBooks sync included on all plans.",
+        "verified_date": "2026-05-28",
+        "free_trial_days": 14
+      },
+      "key_features": [
+        "scheduling",
+        "dispatching",
+        "invoicing",
+        "estimates_quotes",
+        "customer_portal",
+        "payment_processing",
+        "quickbooks_integration"
+      ],
+      "integrations": [
+        "quickbooks",
+        "stripe",
+        "mailchimp"
+      ],
+      "best_for": "Small service businesses (1-15 employees) that run their books in QuickBooks and want affordable, simple scheduling and invoicing",
+      "best_team_size": "1-15",
+      "weaknesses": "Reporting flexibility is limited; mobile app draws reliability complaints; QuickBooks Online sync doesn't transfer everything; no native consumer financing or phone system; thin inventory and automation",
+      "g2_rating": 4.4,
+      "capterra_rating": 4.4,
+      "founded": 2006,
+      "headquartered": "Woodland Hills, California",
+      "vertical_fit": {
+        "hvac": 7,
+        "plumbing": 7,
+        "electrical": 7,
+        "landscaping": 7,
+        "cleaning": 7,
+        "handyman": 8,
+        "appliance_repair": 7
+      },
+      "long_description": "Kickserv is one of the oldest field service platforms still serving small trades businesses, launched in 2006 and built from day one around tight QuickBooks integration. It targets solo operators and small shops (typically 1-15 employees) that want straightforward scheduling, estimating, and invoicing without the price tag or learning curve of enterprise platforms like ServiceTitan. For a shop that already runs its books in QuickBooks and just needs a simple way to schedule jobs and get paid, Kickserv is one of the most affordable on-ramps off paper and spreadsheets.\n\nThe product's defining strength is ease of use. The drag-and-drop calendar, contact management, and one-screen job-to-invoice flow are genuinely simple, and the QuickBooks sync (Online and Desktop) ships on every plan rather than being gated behind a higher tier — unusual in this market. Three tiers map to headcount rather than features: Start ($60/mo, 5 users), Run ($119/mo, 10 users), and Scale ($199/mo, 20 users), so the forcing function as you grow is seats, not capability.\n\nThe trade-offs are real. Reporting is shallow compared to Jobber or ServiceTitan, the mobile app draws consistent complaints about reliability, and the QuickBooks Online sync doesn't carry everything across cleanly. There's no native consumer financing and no built-in phone system. Kickserv is best understood as the affordable, QuickBooks-native simple option — not the deepest or most modern platform, but a dependable, low-cost way for a small shop to get organized and get paid faster.",
+      "pros_detail": [
+        {
+          "title": "Genuinely easy to learn",
+          "explanation": "The drag-and-drop scheduling calendar and one-screen job-to-invoice flow are simple enough that non-technical owners and crews adopt it without much training. For a shop coming off paper or spreadsheets, that low learning curve is the whole point."
+        },
+        {
+          "title": "QuickBooks integration on every plan",
+          "explanation": "Two-way QuickBooks sync (Online and Desktop) is included even on the entry Start tier, not gated behind a higher plan. For the many small trades shops that already live in QuickBooks, that makes Kickserv one of the most natural add-ons in the market."
+        },
+        {
+          "title": "Affordable, seat-based pricing",
+          "explanation": "Start is $60/mo for up to 5 users — cheap for a full FSM with QuickBooks sync. Because tiers scale by seats (5/10/20) rather than locking core features behind upgrades, small shops aren't forced to pay enterprise prices for basic capability."
+        },
+        {
+          "title": "Transparent public pricing",
+          "explanation": "All three tiers and their user caps are published on the site — no mandatory sales call to learn what it costs. You can self-serve the entire evaluation, which is still surprisingly rare among field service vendors."
+        },
+        {
+          "title": "Mobile app for iOS and Android",
+          "explanation": "Field techs can schedule, track time, capture digital signatures, and take payments from the app on every plan. It covers the day-to-day field workflow that a small shop needs."
+        },
+        {
+          "title": "Mature, stable vendor",
+          "explanation": "Operating since 2006, Kickserv is an established product rather than a venture-fragile startup. For owners who want a dependable tool that will still be here in five years, that longevity is reassuring."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Limited reporting flexibility",
+          "explanation": "Reporting covers the basics but lacks the multi-dimensional, customizable reporting of Jobber's higher tiers or ServiceTitan. Shops that want deep job-profitability or technician-performance analysis will hit the ceiling, typically past ~$1M revenue."
+        },
+        {
+          "title": "Mobile app reliability complaints",
+          "explanation": "User reviews consistently flag the mobile app as occasionally glitchy. For a tool whose main job is keeping field techs organized, intermittent app issues are a real friction point — trial it with your actual crew before committing."
+        },
+        {
+          "title": "QuickBooks Online sync isn't perfect",
+          "explanation": "The QuickBooks integration is a core selling point, but users report that the QuickBooks Online sync doesn't transfer everything cleanly. Expect to verify that customers, invoices, and payments flow the way you need, and budget for occasional manual reconciliation."
+        },
+        {
+          "title": "No native consumer financing",
+          "explanation": "Big-ticket HVAC replacements and similar high-ticket jobs convert better with in-app financing offers. Kickserv has none built in, so shops doing large repairs lose the close-rate lift that platforms like Housecall Pro get from embedded Wisetack financing."
+        },
+        {
+          "title": "No built-in phone system",
+          "explanation": "There's no native VoIP, call recording, or dispatcher call routing. Shops that rely on inbound phone volume (the Workiz use case) will need a separate phone tool, adding cost and setup."
+        },
+        {
+          "title": "Thin advanced features",
+          "explanation": "Inventory is light, there's no membership/service-agreement management, and automation is basic. Kickserv is built for simple small shops — businesses that scale past ~15 techs or want recurring-membership programs will outgrow it."
+        }
+      ],
+      "implementation_notes": "Kickserv is built for self-service setup — most small shops are scheduling real jobs within a few days. The onboarding flow walks through importing customers (CSV or QuickBooks sync), setting up services and price items, and connecting payments. Because the QuickBooks integration is the main reason most shops choose Kickserv, configure and test that sync first: confirm customers, invoices, and payments flow the way you expect before committing, since the QuickBooks Online sync is known to leave some details behind. Plan for a few days of data import and configuration, then run parallel with your old system (or paper) for two to three weeks before fully cutting over. Field-tech training is light — the mobile app is simple enough that most techs are productive within a shift, though set expectations about occasional app hiccups. Shops migrating from another FSM platform should budget extra time to clean up historical job data and recurring jobs, which rarely transfer cleanly. There are no required setup fees, and the 14-day free trial is enough to validate the QuickBooks workflow end to end.",
+      "tool_faqs": [
+        {
+          "q": "Is Kickserv a good fit if I use QuickBooks?",
+          "a": "Yes — QuickBooks is Kickserv's core strength, with Online and Desktop sync included on every plan (including the $60 Start tier). The one caveat: users report the QuickBooks Online sync doesn't transfer absolutely everything, so test the flow with your own data during the free trial and confirm customers, invoices, and payments land correctly before you commit."
+        },
+        {
+          "q": "How much does Kickserv cost?",
+          "a": "Three seat-based tiers: Start at $60/mo (up to 5 users), Run at $119/mo (up to 10 users), and Scale at $199/mo (up to 20 users). There's a 14-day free trial with no setup fees. Pricing scales with how many users you add rather than gating core features behind upgrades."
+        },
+        {
+          "q": "Kickserv vs Jobber — which should I pick?",
+          "a": "Jobber has the better mobile app, deeper features, and stronger multi-vertical polish, and it's built to grow with you. Kickserv wins on lower cost and QuickBooks-first simplicity. A QuickBooks-centric small shop on a tight budget leans Kickserv; a shop that wants the best field app and room to scale leans Jobber. Both publish pricing, so you can trial each before deciding."
+        },
+        {
+          "q": "What size business is Kickserv best for?",
+          "a": "Solo operators up to roughly 15 employees — small shops getting off paper and spreadsheets that want simple scheduling, estimating, and invoicing tied to QuickBooks. Past ~15 techs or ~$1M in revenue, the shallow reporting and thin advanced features start to feel limiting, and most shops graduate to Jobber or ServiceTitan."
+        },
+        {
+          "q": "Does Kickserv have a mobile app?",
+          "a": "Yes — iOS and Android apps let field techs schedule, track time, capture digital signatures, and take payments. The app covers the core field workflow, but it does draw recurring reliability complaints in user reviews, so it's worth trialing with your actual techs before rolling it out shop-wide."
+        }
+      ]
+    },
+    {
       "slug": "jobber",
       "name": "Jobber",
       "vendor_url": "https://getjobber.com",
