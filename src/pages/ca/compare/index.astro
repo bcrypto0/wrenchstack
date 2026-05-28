@@ -1,0 +1,8 @@
+---
+import IntlComparisonHub from '../../../components/IntlComparisonHub.astro';
+import { INTL_MARKETS, type IntlVendor } from '../../../lib/intl';
+import data from '../../../data/international/ca.json';
+
+const vendors = (data as { vendors: IntlVendor[] }).vendors;
+---
+<IntlComparisonHub market={INTL_MARKETS.ca} vendors={vendors} />

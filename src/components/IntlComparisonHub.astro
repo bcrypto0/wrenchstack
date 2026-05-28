@@ -1,0 +1,101 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { INTL_CATEGORY_LABELS, type IntlVendor, type IntlMarket } from '../lib/intl';
+
+interface Props {
+  market: IntlMarket;
+  vendors: IntlVendor[];
+}
+const { market, vendors } = Astro.props;
+
+const compareVendors = vendors.filter((v) => v.category !== 'certification');
+
+interface Pair { a: IntlVendor; b: IntlVendor; }
+const pairs: Pair[] = [];
+for (let i = 0; i < compareVendors.length; i++) {
+  for (let j = i + 1; j < compareVendors.length; j++) {
+    const v1 = compareVendors[i];
+    const v2 = compareVendors[j];
+    if (v1.category !== v2.category) continue;
+    const [a, b] = [v1, v2].sort((x, y) => x.slug.localeCompare(y.slug));
+    pairs.push({ a, b });
+  }
+}
+
+const categoryOrder = ['software', 'lead-gen', 'insurance', 'payroll'];
+const groups = categoryOrder
+  .map((cat) => ({
+    cat,
+    label: INTL_CATEGORY_LABELS[cat] ?? cat,
+    pairs: pairs.filter((p) => p.a.category === cat),
+  }))
+  .filter((g) => g.pairs.length > 0);
+
+const pageTitle = `Compare ${market.name} Trades Software & Services (2026) — ${pairs.length} Head-to-Head`;
+const pageDescription = `${pairs.length} side-by-side comparisons of ${market.name} trades vendors across field service software, lead generation, insurance, and payroll — tier, pros and cons, ${market.name}-specific notes, and pricing, head to head.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: market.name, url: `/${market.code}/` },
+  { name: 'Compare', url: `/${market.code}/compare/` },
+];
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: `${market.name} trades vendor comparisons`,
+  numberOfItems: pairs.length,
+  itemListElement: pairs.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: `${p.a.name} vs ${p.b.name}`,
+    url: `/${market.code}/compare/${p.a.slug}-vs-${p.b.slug}/`,
+  })),
+};
+---
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+
+  <section class="mx-auto max-w-5xl px-4 py-12">
+    <header class="mb-10">
+      <div class="mb-3 flex items-center gap-2">
+        <span class="text-xl" aria-hidden="true">{market.flag}</span>
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">{market.name} · Head-to-head</p>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">Compare {market.name} trades vendors, side by side</h1>
+      <p class="mt-4 max-w-3xl text-lg text-slate-600 leading-relaxed">
+        {pairs.length} head-to-head comparisons across {market.name} field service software, lead generation, insurance, and payroll — each with a data-derived "which should you choose?" verdict, tier, pros and cons, {market.name}-specific compliance notes, and typical pricing.
+      </p>
+    </header>
+
+    {groups.map((g) => (
+      <section class="mb-12">
+        <div class="mb-4 flex items-baseline justify-between border-b border-slate-200 pb-2">
+          <h2 class="text-2xl font-bold text-slate-900">{g.label}</h2>
+          <span class="text-sm text-slate-500">{g.pairs.length} {g.pairs.length === 1 ? 'pair' : 'pairs'}</span>
+        </div>
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {g.pairs.map(({ a, b }) => {
+            const flagged = a.reputation_flag || b.reputation_flag;
+            return (
+              <a href={`/${market.code}/compare/${a.slug}-vs-${b.slug}/`} class="group rounded-lg border border-slate-200 bg-white p-4 no-underline transition hover:border-orange-400 hover:bg-orange-50">
+                <div class="text-sm font-semibold text-slate-900 group-hover:text-orange-600">{a.name} <span class="text-slate-400">vs</span> {b.name}</div>
+                {flagged && <div class="mt-1 text-xs text-rose-700">⚠ Reputation note inside</div>}
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    ))}
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">More {market.name}</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">See every {market.name} vendor with a full review, or the certification and licensing bodies that matter for {market.name} trades.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href={`/${market.code}/`} class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">{market.flag} All {market.name} vendors</a>
+        <a href="/certifications/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Certifications by country</a>
+        <a href="/compare/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">US comparisons</a>
+      </div>
+    </section>
+  </section>
+</Layout>

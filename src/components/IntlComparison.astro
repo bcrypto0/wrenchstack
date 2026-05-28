@@ -32,6 +32,7 @@ const pageDescription = `${a.name} vs ${b.name} compared for ${market.name} trad
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: market.name, url: `/${market.code}/` },
+  { name: 'Compare', url: `/${market.code}/compare/` },
   { name: `${a.name} vs ${b.name}`, url: `/${market.code}/compare/${a.slug}-vs-${b.slug}/` },
 ];
 
