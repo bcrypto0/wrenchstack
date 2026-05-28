@@ -81,9 +81,13 @@ const faqs = [
   },
   {
     q: `What's the cheapest ${verticalLower} software?`,
-    a: freeTier
-      ? `${freeTier.name} has a free tier with limited features. ${cheapestPublic?.name} (${formatPrice(cheapestPublic!)}) is the cheapest paid option with full features.`
-      : `${cheapestPublic?.name} at ${formatPrice(cheapestPublic!)} is the cheapest paid option with full features. There's no genuinely free option in this category for established businesses.`,
+    a: cheapestPublic
+      ? (freeTier
+          ? `${freeTier.name} has a free tier with limited features. ${cheapestPublic.name} (${formatPrice(cheapestPublic)}) is the cheapest paid option with full features.`
+          : `${cheapestPublic.name} at ${formatPrice(cheapestPublic)} is the cheapest paid option with full features. There's no genuinely free option in this category for established businesses.`)
+      : (freeTier
+          ? `${freeTier.name} offers a free tier. Most other ${verticalLower} platforms in this category are custom-quoted rather than publicly priced, so request quotes to compare full-featured options.`
+          : `Most ${verticalLower} platforms in this category are custom-quoted rather than publicly priced — request quotes from the vendors to compare. See the pricing table above for what each publishes.`),
   },
   {
     q: `Per-user pricing vs flat-rate pricing — which is better?`,

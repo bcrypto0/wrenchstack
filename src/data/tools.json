@@ -13,7 +13,8 @@
     "locksmith",
     "garage_door",
     "appliance_repair",
-    "handyman"
+    "handyman",
+    "solar"
   ],
   "tools": [
     {
@@ -508,6 +509,434 @@
         {
           "q": "What are the limits of Contractor+?",
           "a": "It's lighter than mature FSM platforms on advanced dispatching, deep reporting, membership management, and integrations, and it's a younger product without the long track record of the incumbents. For a solo or small team focused on estimating, invoicing, and getting paid, that's an acceptable trade; for a growing multi-crew shop, a more mature platform is usually the better fit."
+        }
+      ]
+    },
+    {
+      "slug": "aurora-solar",
+      "name": "Aurora Solar",
+      "vendor_url": "https://aurorasolar.com",
+      "affiliate_url": "TBD",
+      "tagline": "The market-leading AI solar design and sales platform",
+      "verticals": [
+        "solar"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Contact sales"
+        ],
+        "tier_prices_usd": null,
+        "pricing_note": "No public pricing — contact-sales only. Reviewers note it can be expensive for small shops, and permit-ready electrical output (SLD, wire sizing) often requires add-ons like AutoCAD or PVCase ($1,000-$2,000/yr).",
+        "verified_date": "2026-05-28"
+      },
+      "key_features": [
+        "solar_design",
+        "3d_modeling",
+        "production_estimates",
+        "proposals",
+        "sales_workflow"
+      ],
+      "integrations": [
+        "financing",
+        "crm"
+      ],
+      "best_for": "Residential and light-commercial solar contractors that want the deepest, most accurate AI design and proposal platform and can absorb premium, contact-sales pricing",
+      "best_team_size": "5-500",
+      "weaknesses": "No public pricing (contact-sales only); can be expensive for small shops; lacks permit-ready electrical output (single-line diagrams, wire sizing) natively — many users add AutoCAD or PVCase",
+      "g2_rating": 4.5,
+      "capterra_rating": 4.4,
+      "founded": 2013,
+      "headquartered": "San Francisco, California",
+      "vertical_fit": {
+        "solar": 10
+      },
+      "long_description": "Aurora Solar is the dominant design-and-sales platform in residential solar — the closest thing the category has to a default. Founded in 2013 in San Francisco, it has raised over $537 million (a 2022 Series D valued it at $4 billion), serves 7,000+ solar companies, and has processed more than 20 million project designs. Its core strength is speed and accuracy of design: Aurora's AI builds a usable 3D roof model from satellite or LIDAR imagery in under 15 seconds, cutting 40-55 minutes of manual modeling per design and feeding straight into a production estimate and a homeowner-ready proposal.\n\nFor a solar sales org, that design-to-proposal speed is the whole game — reps can model a roof, estimate production, and present a financed proposal while the homeowner is still at the table. Aurora pairs the design engine with proposal generation, sales-mode editing, and lender integrations, which is why it's the platform most scaling solar companies standardize on.\n\nThe trade-offs are real. Aurora has no public pricing — it's contact-sales only, and multiple reviewers describe it as expensive for small shops or complex non-standard projects. And it's a design-and-sales tool, not an engineering tool: it lacks native permit-ready electrical output (single-line diagrams, wire sizing, conduit, voltage-drop), so many teams bolt on AutoCAD (~$2,000/yr) or PVCase (~$990/yr) plus manual work for stamped permit packages. Its ratings are strong (G2 4.5 across 247 reviews, Capterra 4.4) and reflect a deeply entrenched market leader.",
+      "pros_detail": [
+        {
+          "title": "Fastest, most accurate AI design",
+          "explanation": "Aurora builds a usable 3D roof model from satellite/LIDAR in under 15 seconds, saving 40-55 minutes per design versus manual modeling. For a high-volume sales org, that throughput is the single biggest reason it leads the category."
+        },
+        {
+          "title": "Market leader with deep resources",
+          "explanation": "$537M raised, a $4B valuation, 7,000+ companies, and 20M+ designs processed mean Aurora isn't going anywhere and keeps investing heavily in the product — a real consideration when standardizing your whole sales org on one tool."
+        },
+        {
+          "title": "Design-to-proposal in one flow",
+          "explanation": "Roof model, production estimate, savings model, and a homeowner-ready proposal live in one workflow, so reps can go from address to financed proposal in a single sitting."
+        },
+        {
+          "title": "Strong, well-reviewed product",
+          "explanation": "G2 4.5 across 247 reviews (a 'Leader' badge) and Capterra 4.4 reflect broad, durable satisfaction among solar sales teams — the largest independent review base of any solar design tool."
+        },
+        {
+          "title": "Lender and CRM integrations",
+          "explanation": "Aurora plugs into solar financing and CRM tooling so monthly-payment options and deal data flow into the proposal and your pipeline, which matters because nearly every residential deal is financed."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "No public pricing",
+          "explanation": "Aurora is contact-sales only, so you can't self-serve a price or quickly compare cost — added friction versus a free tool like OpenSolar or per-proposal pricing like Solo."
+        },
+        {
+          "title": "Expensive for small shops",
+          "explanation": "Multiple reviewers describe Aurora as prohibitively expensive for small companies or those doing complex non-standard projects. The value is clearest at scale, not for a one or two-rep operation."
+        },
+        {
+          "title": "Weak permit-ready electrical output",
+          "explanation": "Aurora lacks native single-line diagram generation, wire sizing, conduit, and voltage-drop analysis. Teams needing stamped permit packages commonly add AutoCAD (~$2,000/yr) or PVCase (~$990/yr) plus 2-3 hours of manual work per project."
+        },
+        {
+          "title": "Design-and-sales, not full ops",
+          "explanation": "Aurora isn't a lead-to-PTO operations platform — install tracking and interconnection workflow live elsewhere (e.g. Enerflo). It's the design/proposal core, not the whole back office."
+        },
+        {
+          "title": "Add-on costs stack up",
+          "explanation": "Between contact-sales base pricing and the electrical-design add-ons most teams need, the all-in cost is higher than the headline. Model the full stack, not just Aurora itself."
+        }
+      ],
+      "implementation_notes": "Aurora is built for sales orgs, so onboarding centers on getting reps productive in the design-and-proposal flow rather than heavy data migration. Expect a sales-led purchase (no self-serve signup) followed by configuration of your equipment catalog, pricing, financing partners, and proposal templates, then rep training on the design-to-proposal workflow. Most teams are producing proposals quickly because the AI modeling removes the hardest manual step. The piece to plan for is engineering and permitting: because Aurora doesn't produce stamped electrical packages natively, decide up front how you'll handle permit-ready output — whether that's AutoCAD/PVCase add-ons, an in-house engineering team, or an outsourced design partner — and budget the extra software cost and per-project hours. Larger orgs should also plan CRM and lender integration setup so deal and financing data flow cleanly from Aurora into the rest of the pipeline.",
+      "tool_faqs": [
+        {
+          "q": "How much does Aurora Solar cost?",
+          "a": "Aurora doesn't publish pricing — it's contact-sales only, quoted based on your team and usage. Reviewers consistently note it's expensive for small shops, and you should also budget for permit-ready electrical add-ons (AutoCAD ~$2,000/yr or PVCase ~$990/yr) that Aurora doesn't cover natively."
+        },
+        {
+          "q": "Aurora Solar vs OpenSolar — which should I use?",
+          "a": "Aurora is the deepest, most polished design platform and the market leader, but it's premium contact-sales pricing. OpenSolar offers a genuinely free, full-featured alternative funded by hardware/finance partners. Larger, well-capitalized sales orgs that want the best design engine lean Aurora; cost-conscious shops or those just starting lean OpenSolar. Many evaluate both."
+        },
+        {
+          "q": "Does Aurora handle permits and electrical design?",
+          "a": "Not fully. Aurora is a design-and-sales tool and lacks native single-line diagrams, wire sizing, conduit, and voltage-drop analysis. Teams needing stamped permit packages typically add AutoCAD or PVCase plus manual work, so confirm your permitting workflow before assuming Aurora covers it end to end."
+        },
+        {
+          "q": "Is Aurora Solar worth it for a small installer?",
+          "a": "It can be hard to justify. Aurora's value is clearest for scaling sales orgs that benefit from its design throughput; small one-or-two-rep shops often find it expensive relative to free OpenSolar or per-proposal Solo. Evaluate based on your design volume and whether the speed pays for the premium."
+        },
+        {
+          "q": "What makes Aurora the market leader?",
+          "a": "A combination of the fastest accurate AI roof modeling (usable 3D from satellite in under 15 seconds), the deepest design-to-proposal workflow, heavy funding ($537M raised, $4B valuation), and the largest install base (7,000+ companies, 20M+ designs). That scale and product depth are why most growing solar companies standardize on it."
+        }
+      ]
+    },
+    {
+      "slug": "opensolar",
+      "name": "OpenSolar",
+      "vendor_url": "https://www.opensolar.com",
+      "affiliate_url": "TBD",
+      "tagline": "Free, full-featured solar design and sales software",
+      "verticals": [
+        "solar"
+      ],
+      "pricing": {
+        "starting_at_usd": 0,
+        "tiers": [
+          "Free"
+        ],
+        "tier_prices_usd": [
+          0
+        ],
+        "pricing_note": "Free for the full design/sales/project-management feature set — no seat limits, no design caps, no subscription. As of 2026, charges apply for some API access and third-party connectors. OpenSolar monetizes via hardware distributors, lenders, and finance partners, not installer subscriptions.",
+        "verified_date": "2026-05-28"
+      },
+      "key_features": [
+        "solar_design",
+        "3d_modeling",
+        "production_estimates",
+        "proposals",
+        "project_management"
+      ],
+      "integrations": [
+        "financing",
+        "hardware_distributors"
+      ],
+      "best_for": "Solar contractors of any size that want a genuinely free, full-featured design and sales platform and are comfortable with a partner-funded business model",
+      "best_team_size": "1-500",
+      "weaknesses": "Some advanced API access and third-party connectors are now paid; partner-funded model means hardware/finance partners get in-platform placement; permit-ready electrical depth is limited like most design-first tools",
+      "founded": 2017,
+      "headquartered": "Sydney, Australia",
+      "vertical_fit": {
+        "solar": 9
+      },
+      "long_description": "OpenSolar is the one genuinely free full-featured platform in solar design and sales. Founded in 2017 in Sydney, it offers design, sales, and project-management software at $0 — no licensing fees, no seat limits, no design caps, no long-term contracts — and is used by more than 28,000 solar professionals across 185+ countries. In January 2026 it launched OS 3.0, billed as the first free AI-powered solar operating system, including an AI assistant (Ada) with voice-activated design.\n\nThe obvious question is how free software is any good — and the answer is the business model, not charity. Hardware distributors, financing companies, and equipment lenders pay OpenSolar for preferred placement and access to its large installer network; that partner revenue funds product development. Installers get a full-featured platform; partners get a distribution channel. For a cost-conscious installer, that means a credible alternative to Aurora's premium pricing without giving up core design-to-proposal capability.\n\nThe trade-offs follow from the model. As of April 2026, OpenSolar began charging for some API access and connectors that move data in and out of the platform, so 'free' now has edges. The partner-funded model also means hardware and finance partners are surfaced inside the tool — useful, but not neutral. And like most design-first tools, its permit-ready electrical depth is limited. Still, for the price, the value is unmatched, and the broad global user base signals real satisfaction among residential and light-commercial installers.",
+      "pros_detail": [
+        {
+          "title": "Genuinely free, full-featured",
+          "explanation": "Design, sales, and project management at $0 with no seat limits or design caps is unique in the category. For a small or new installer, it removes software cost as a barrier to running professional proposals."
+        },
+        {
+          "title": "Huge global user base",
+          "explanation": "28,000+ solar professionals across 185+ countries use it, which signals real-world satisfaction and a healthy partner ecosystem funding ongoing development."
+        },
+        {
+          "title": "Modern AI design (OS 3.0)",
+          "explanation": "The 2026 OS 3.0 release added AI-powered, voice-activated design (Ada), keeping a free tool surprisingly current with the AI features the paid leaders tout."
+        },
+        {
+          "title": "Strong design-to-proposal flow",
+          "explanation": "OpenSolar covers roof modeling, production estimates, and homeowner proposals — the core sales workflow — at a quality that holds up against paid competitors for residential and light-commercial work."
+        },
+        {
+          "title": "Integrated financing options",
+          "explanation": "Lender integrations let reps present financed monthly-payment options in the proposal, which matters because nearly all residential solar deals are financed."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "'Free' now has paid edges",
+          "explanation": "As of 2026, some API access and third-party connectors that move data in and out of OpenSolar are paid. The core platform is still free, but integration-heavy operations may hit charges."
+        },
+        {
+          "title": "Partner-funded model isn't neutral",
+          "explanation": "Because hardware distributors and lenders pay for placement, those partners are surfaced inside the platform. That's the trade for free software — useful, but be aware the defaults aren't vendor-neutral."
+        },
+        {
+          "title": "Limited permit-ready electrical depth",
+          "explanation": "Like most design-first tools, OpenSolar focuses on the sales proposal rather than stamped engineering. Teams needing permit-ready single-line diagrams and wire sizing will likely need additional tooling."
+        },
+        {
+          "title": "Less hand-holding than paid platforms",
+          "explanation": "A free, partner-funded model means support and onboarding are lighter than a premium contact-sales vendor. Self-sufficient teams do fine; those wanting white-glove implementation may not."
+        },
+        {
+          "title": "Not a full lead-to-PTO ops platform",
+          "explanation": "OpenSolar covers design, sales, and project management but isn't a complete operations platform connecting financing, install tracking, and interconnection the way Enerflo aims to. Larger orgs may still need additional systems."
+        }
+      ],
+      "implementation_notes": "OpenSolar is self-serve and free to start, so onboarding is the lowest-friction in the category — you can create an account, configure your equipment and pricing, and produce a proposal without a sales call. Plan time to set up your component catalog, pricing, proposal templates, and financing partners so proposals reflect your real offers. Because the platform is partner-funded, review which hardware and finance partners are surfaced by default and adjust to match how you actually sell. If your operation is integration-heavy, check the 2026 API/connector pricing before assuming everything is free, and budget accordingly. As with other design-first tools, decide separately how you'll produce permit-ready electrical packages, since OpenSolar isn't built for stamped engineering. Support is lighter than a premium vendor, so lean on its documentation and community for setup.",
+      "tool_faqs": [
+        {
+          "q": "Is OpenSolar genuinely free?",
+          "a": "Yes — the core design, sales, and project-management platform is free with no seat limits or design caps. It makes money from hardware distributors, lenders, and finance partners who pay for placement and network access. As of 2026, some API access and third-party connectors are paid, but the main platform remains free to use."
+        },
+        {
+          "q": "How is OpenSolar free — what's the catch?",
+          "a": "The model is partner-funded, not ad-supported or a limited trial. Hardware and finance partners pay OpenSolar for preferred placement and access to its 28,000+ installer network. The trade-off is that those partners are surfaced inside the tool, so the defaults aren't vendor-neutral — worth knowing, but the software itself is fully featured."
+        },
+        {
+          "q": "OpenSolar vs Aurora Solar?",
+          "a": "Aurora is the premium market leader with the deepest design engine and contact-sales pricing; OpenSolar is the free, full-featured alternative funded by partners. Cost-conscious shops and newer installers often start with OpenSolar; larger, well-funded sales orgs that want the most polished design platform lean Aurora. Both produce strong residential proposals, so many teams trial both."
+        },
+        {
+          "q": "Can OpenSolar handle permits and electrical design?",
+          "a": "Only partially. Like most solar design tools, OpenSolar optimizes the sales proposal rather than stamped engineering, so permit-ready single-line diagrams and wire sizing usually require additional tooling. Confirm your permitting workflow separately rather than assuming the free platform covers it end to end."
+        },
+        {
+          "q": "Who should use OpenSolar?",
+          "a": "Cost-conscious residential and light-commercial solar contractors of any size who want a professional design-and-proposal workflow without a software bill, and who are comfortable with a partner-funded model and lighter support. Integration-heavy or enterprise teams should check the 2026 API/connector pricing and whether they need a fuller ops platform."
+        }
+      ]
+    },
+    {
+      "slug": "enerflo",
+      "name": "Enerflo",
+      "vendor_url": "https://enerflo.com",
+      "affiliate_url": "TBD",
+      "tagline": "All-in-one lead-to-PTO operations platform for residential solar",
+      "verticals": [
+        "solar"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Flat monthly — contact sales"
+        ],
+        "tier_prices_usd": null,
+        "pricing_note": "Flat monthly subscription for unlimited users and deals (distinct from per-user or per-deal competitors). Pricing is not public — book a discovery call with an Enerflo consultant.",
+        "verified_date": "2026-05-28"
+      },
+      "key_features": [
+        "sales_workflow",
+        "pv_design",
+        "proposals",
+        "financing_integration",
+        "install_tracking"
+      ],
+      "integrations": [
+        "financing",
+        "crm"
+      ],
+      "best_for": "Residential solar dealers, EPCs, and vertically integrated companies that want to unify sales, design, financing, and install tracking into one lead-to-PTO workflow with flat per-company pricing",
+      "best_team_size": "10-500",
+      "weaknesses": "Pricing not public (discovery call required); residential-solar-specific (not for other trades); it's an integration-and-workflow layer, so value depends on connecting your existing tools well",
+      "founded": 2019,
+      "headquartered": "Huntington Beach, California",
+      "vertical_fit": {
+        "solar": 8
+      },
+      "long_description": "Enerflo takes a different angle than the design-first solar tools: it's an all-in-one operations platform that unifies the entire residential solar lifecycle — sales, design, financing, and install tracking — into one lead-to-PTO workflow. Founded in 2019 in Huntington Beach, California, it's built for sales dealers, master dealers, installers, EPCs, and vertically integrated companies that have outgrown a pile of disconnected point tools and want a single source of truth from first contact to permission-to-operate.\n\nRather than replacing your design or CRM outright, Enerflo connects the solar tools you already use into one seamless workflow, layering on a Sales Core (deal pipeline, AI-powered PV design, title check, proposals, financing integrations), an Install Tracker for project management, a Customer Portal, a Virtual Sales Rep for self-serve web quoting, and DOMO-powered reporting. The pitch is reducing soft costs and shortening project timelines by eliminating the handoff gaps between tools.\n\nIts pricing model is a notable differentiator: a flat monthly subscription for unlimited users and deals, rather than charging per opportunity or per seat like many competitors — attractive for scaling dealers whose headcount and deal volume swing month to month. The trade-offs: pricing isn't public (you book a discovery call), it's residential-solar-specific, and because it's fundamentally an integration-and-workflow layer, the value you get depends on how well you connect and configure your underlying tools.",
+      "pros_detail": [
+        {
+          "title": "Unifies the whole lead-to-PTO lifecycle",
+          "explanation": "Sales, design, financing, and install tracking in one workflow eliminates the handoff gaps between disconnected tools — the soft-cost and timeline killer for scaling solar operations."
+        },
+        {
+          "title": "Flat per-company pricing",
+          "explanation": "A flat monthly subscription for unlimited users and deals (vs per-seat or per-opportunity) is attractive for dealers whose headcount and volume fluctuate, removing the penalty for growth."
+        },
+        {
+          "title": "Connects your existing tools",
+          "explanation": "Rather than forcing a rip-and-replace, Enerflo integrates the design, financing, and CRM tools you already use, so you keep what works and unify the workflow on top."
+        },
+        {
+          "title": "Built for dealer/EPC structures",
+          "explanation": "Purpose-built for the layered sales-dealer, master-dealer, installer, and EPC structures common in residential solar — a workflow reality generic CRMs handle poorly."
+        },
+        {
+          "title": "Strong reporting and self-serve quoting",
+          "explanation": "DOMO-powered dashboards give full pipeline visibility, and the Virtual Sales Rep enables web-based self-serve quoting — capabilities that help larger operations scale without proportional overhead."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Pricing not public",
+          "explanation": "Enerflo requires a discovery call to get pricing, so you can't quickly self-serve a number or compare cost up front — friction relative to transparent or free competitors."
+        },
+        {
+          "title": "Residential-solar-specific",
+          "explanation": "Enerflo is built for residential solar dealers and EPCs. It's not a fit for other trades, and even commercial solar isn't its focus — a narrow (if deep) lane."
+        },
+        {
+          "title": "Value depends on your tool stack",
+          "explanation": "Because Enerflo is an integration-and-workflow layer over your existing tools, the payoff depends heavily on how well you connect and configure them. A poorly integrated stack limits the benefit."
+        },
+        {
+          "title": "Onboarding complexity",
+          "explanation": "Unifying sales, design, financing, and install tracking is inherently more involved to set up than a single-purpose design tool. Expect a real implementation, not a same-day launch."
+        },
+        {
+          "title": "Overkill for small teams",
+          "explanation": "The platform's value compounds with scale and organizational complexity. A small one-or-two-rep shop may be better served by a focused design/proposal tool like OpenSolar or Solo."
+        }
+      ],
+      "implementation_notes": "Enerflo is an operations platform, so onboarding is more involved than a standalone design tool — plan a real implementation with Enerflo's team. The work centers on connecting your existing solar stack (design, financing, CRM) into Enerflo's Sales Core and configuring your deal pipeline, proposal flow, financing integrations, Install Tracker stages, and reporting. Because the platform's value comes from eliminating handoffs between tools, prioritize getting those integrations clean and mapping your actual lead-to-PTO process into the system rather than accepting defaults. Dealer/EPC operations should configure their dealer hierarchy and permissions early. Budget time for team training across both sales reps (Sales Core, Virtual Sales Rep) and operations staff (Install Tracker, reporting). Pricing and scope are set via a discovery call, so confirm exactly which capabilities and integrations are included before committing. The payoff for the heavier setup is a single source of truth from first contact to permission-to-operate.",
+      "tool_faqs": [
+        {
+          "q": "What is Enerflo?",
+          "a": "Enerflo is an all-in-one operations platform for residential solar that unifies sales, design, financing, and install tracking into one lead-to-PTO workflow. It's built for sales dealers, master dealers, installers, EPCs, and vertically integrated companies, and it connects the solar tools you already use rather than replacing them outright."
+        },
+        {
+          "q": "How much does Enerflo cost?",
+          "a": "Enerflo charges a flat monthly subscription for unlimited users and deals — distinct from competitors that charge per seat or per opportunity. Exact pricing isn't public; you book a discovery call with an Enerflo consultant to get a quote scoped to your operation."
+        },
+        {
+          "q": "Enerflo vs Aurora Solar — are they competitors?",
+          "a": "They solve different problems. Aurora is a design-and-proposal tool (the best AI roof modeling); Enerflo is an operations platform that can sit on top of your design tool and unify the whole lifecycle (sales, financing, install tracking, reporting). Many solar companies use a design tool for proposals and an ops platform like Enerflo to run the business — they can be complementary."
+        },
+        {
+          "q": "Is Enerflo good for a small solar company?",
+          "a": "Its value compounds with scale and organizational complexity (dealer/EPC structures, high deal volume). A small one-or-two-rep shop may get more immediate value from a focused design/proposal tool like OpenSolar or Solo, and grow into an ops platform like Enerflo as headcount and deal volume increase."
+        },
+        {
+          "q": "Does Enerflo replace my CRM and design tools?",
+          "a": "Not necessarily — Enerflo is designed to connect your existing solar tools (design, financing, CRM) into one workflow rather than force a rip-and-replace. That means you keep tools that work, but it also means the value you get depends on how well those integrations are set up and configured."
+        }
+      ]
+    },
+    {
+      "slug": "solo",
+      "name": "Solo",
+      "vendor_url": "https://gosolo.io",
+      "affiliate_url": "TBD",
+      "tagline": "Fast, accurate solar proposals with managed design",
+      "verticals": [
+        "solar"
+      ],
+      "pricing": {
+        "starting_at_usd": null,
+        "tiers": [
+          "Per proposal (~$29-$32)"
+        ],
+        "tier_prices_usd": null,
+        "pricing_note": "Per-proposal pricing of roughly $29-$32/proposal; reaches ~$1,600-$8,000+/month at typical volumes. No monthly minimums or annual commitment, with volume discounts as usage rises.",
+        "verified_date": "2026-05-28"
+      },
+      "key_features": [
+        "solar_proposals",
+        "managed_design",
+        "financing_integration",
+        "in_app_editing",
+        "production_estimates"
+      ],
+      "integrations": [
+        "financing",
+        "crm"
+      ],
+      "best_for": "Residential solar sales teams that want fast, highly accurate proposals via managed design without building an in-house design team, and that prefer per-proposal pricing",
+      "best_team_size": "5-200",
+      "weaknesses": "Per-proposal pricing gets expensive at high volume; residential-only; no in-house electrical engineering; monthly cost can be unpredictable since it scales with proposal volume",
+      "founded": 2018,
+      "headquartered": "Lehi, Utah",
+      "vertical_fit": {
+        "solar": 8
+      },
+      "long_description": "Solo (gosolo.io) attacks the solar proposal problem with a managed-design model: rather than asking your reps to build every design themselves, Solo pairs software with 25+ in-house designers who turn around proposals in under 15 minutes, marketed at DNV-certified 99.9% production accuracy. Founded in 2018 in Lehi, Utah (and backed by a growth investment from Bregal Sagemount), it's aimed at residential solar sales teams that want speed and accuracy without standing up their own design department.\n\nThe pitch is that proposal accuracy is a revenue problem, not just an operations one: an inaccurate proposal that engineering and permitting can't actually build leads to change orders and cancellations after the sale. Solo's managed design plus in-app tools — reps can update system size, equipment, pricing, and financing live during the homeowner conversation — aim to close that gap, with integrated financing from 7+ lenders and integration with 70+ tools. Solo also offers Solo Studio, a full in-house design suite for teams that want to design themselves with managed support as backup.\n\nThe trade-offs are pricing and scope. Solo charges per proposal (roughly $29-$32 each), which can reach $1,600-$8,000+/month at typical volumes and makes monthly cost scale directly with activity — predictable per-unit but potentially steep and variable. It's residential-only, and it doesn't provide in-house electrical engineering, so permit-ready stamped output still lives elsewhere. Internal surveys cite 98% customer satisfaction, with praise centered on speed and financing integration.",
+      "pros_detail": [
+        {
+          "title": "Managed design removes a bottleneck",
+          "explanation": "25+ in-house designers turn proposals around in under 15 minutes, so sales teams don't need to build (or staff) a design department. For a growing org, that outsourced throughput is the core value."
+        },
+        {
+          "title": "High production accuracy",
+          "explanation": "Solo markets DNV-certified 99.9% production accuracy. Accurate proposals reduce post-sale change orders and cancellations caused by designs engineering and permitting can't actually build — an underrated revenue protector."
+        },
+        {
+          "title": "In-conversation editing",
+          "explanation": "Reps can adjust system size, equipment, pricing, and financing live with the homeowner, keeping the deal moving in the moment rather than going back to the office to revise."
+        },
+        {
+          "title": "Integrated financing and broad integrations",
+          "explanation": "Financing from 7+ lenders is built in, and Solo integrates with 70+ tools, so monthly-payment options and deal data flow into the workflow you already run."
+        },
+        {
+          "title": "Per-proposal pricing with no lock-in",
+          "explanation": "No monthly minimums or annual commitment means you pay for what you use, with volume discounts — low risk to start and scalable for teams that don't want a fixed subscription."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Expensive at high volume",
+          "explanation": "At ~$29-$32 per proposal, costs reach $1,600-$8,000+/month at typical volumes. High-volume teams may find a flat-rate platform cheaper, so model your proposal count against the per-unit price."
+        },
+        {
+          "title": "Unpredictable monthly cost",
+          "explanation": "Because billing scales with proposal volume, monthly spend moves with your activity. That's fair per-unit but harder to budget than a flat subscription."
+        },
+        {
+          "title": "Residential-only scope",
+          "explanation": "Solo is built for residential solar proposals. Commercial projects and other trades are out of scope, so it's a focused tool rather than a broad platform."
+        },
+        {
+          "title": "No in-house electrical engineering",
+          "explanation": "Solo focuses on the sales proposal, not stamped engineering. Permit-ready single-line diagrams and electrical design still require separate tooling or an engineering partner."
+        },
+        {
+          "title": "Reliance on a managed-service queue",
+          "explanation": "The managed-design model means you depend on Solo's design team for turnaround. It's fast (under 15 minutes), but for teams that want full in-house control, Solo Studio exists as the alternative path."
+        }
+      ],
+      "implementation_notes": "Solo is lighter to adopt than a full ops platform because the managed-design model offloads the hardest work to Solo's designers — you submit the job and get a proposal back quickly. Onboarding focuses on configuring your equipment catalog, pricing, financing lenders, and proposal templates so the managed designs reflect your real offers, plus training reps on the in-app editing flow for live homeowner conversations. Connect Solo to your CRM and the other tools in your stack (it integrates with 70+) so deal and proposal data flow cleanly. The main decision during setup is the per-proposal economics: estimate your monthly proposal volume and model the ~$29-$32-per-proposal cost against a flat-rate alternative so there are no billing surprises. Teams that want to bring design in-house can layer in Solo Studio, but most start with managed design for speed. As with other proposal tools, plan your permit-ready electrical output separately, since Solo doesn't provide in-house engineering.",
+      "tool_faqs": [
+        {
+          "q": "How does Solo's pricing work?",
+          "a": "Solo charges per proposal — roughly $29-$32 each — with no monthly minimums or annual commitment and volume discounts as usage rises. At typical volumes that works out to about $1,600-$8,000+/month. The model is predictable per-unit but scales directly with how many proposals you generate, so model your volume before committing."
+        },
+        {
+          "q": "What is managed design in Solo?",
+          "a": "Instead of your reps building every design, Solo's 25+ in-house designers produce the proposal for you in under 15 minutes at a marketed 99.9% production accuracy. It removes the need to staff your own design team. Teams that prefer to design in-house can use Solo Studio, with managed design available as backup."
+        },
+        {
+          "q": "Solo vs Aurora Solar?",
+          "a": "Aurora is a do-it-yourself design platform (you build designs in-house) with contact-sales pricing; Solo is a managed-design service (Solo's team builds your proposals) priced per proposal. Teams that don't want to staff designers and value fast turnaround lean Solo; teams that want full in-house design control and volume at a fixed cost lean Aurora. Compare your proposal volume and whether you want to own design."
+        },
+        {
+          "q": "Does Solo handle commercial solar or permits?",
+          "a": "No on both fully. Solo is residential-only and focuses on the sales proposal, not stamped engineering — it doesn't provide in-house electrical engineering, so permit-ready output requires separate tooling or an engineering partner. If you do commercial work, Solo isn't the fit."
+        },
+        {
+          "q": "Is Solo worth it for a high-volume team?",
+          "a": "It depends on the math. The managed-design speed and accuracy are valuable, but at ~$29-$32 per proposal, high-volume teams can spend $8,000+/month, where a flat-rate platform might be cheaper. Estimate your monthly proposal count and compare per-proposal cost against flat-rate alternatives before scaling on Solo."
         }
       ]
     },
