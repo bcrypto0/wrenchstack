@@ -9,6 +9,7 @@ import {
   type Tool,
 } from '../../../lib/data';
 import FreshnessBadge from '../../../components/FreshnessBadge.astro';
+import { isComparisonIndexable } from '../../../lib/compare-index.mjs';
 
 export async function getStaticPaths() {
   // Generate both directions per pair (e.g. jobber-vs-servicetitan AND
@@ -344,6 +345,10 @@ const pageDescription = `${a.name} vs ${b.name} compared head-to-head: pricing, 
 const canonicalSlugs = [a.slug, b.slug].sort();
 const canonical = `https://wrenchstack.com/compare/${canonicalSlugs.join('-vs-')}/`;
 
+// Keep only canonical-direction, high-demand pairs in the index; noindex the
+// reverse-order dupes and long-tail pairs (see compare-index.mjs / SEO audit).
+const noindex = !isComparisonIndexable(a.slug, b.slug);
+
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Compare', url: '/compare/' },
@@ -351,7 +356,7 @@ const breadcrumbs = [
 ];
 ---
 
-<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} canonical={canonical}>
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} canonical={canonical} noindex={noindex}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <article class="mx-auto max-w-5xl px-4 py-12">
