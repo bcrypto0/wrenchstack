@@ -1,0 +1,113 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { INTL_CATEGORY_LABELS, intlNote, intlTierMeta, type IntlVendor, type IntlMarket } from '../lib/intl';
+
+interface Props {
+  market: IntlMarket;
+  a: IntlVendor;
+  b: IntlVendor;
+}
+const { market, a, b } = Astro.props;
+
+const categoryLabel = INTL_CATEGORY_LABELS[a.category] ?? a.category;
+const tierRank = { S: 3, A: 2, F: 1 } as const;
+
+// Honest, data-derived verdict.
+let verdict: string;
+if (a.reputation_flag && !b.reputation_flag) {
+  verdict = `${b.name} is the safer default — ${a.name} carries a reputation caution (see below), while ${b.name} does not. Choose ${a.name} only if its specific strengths clearly outweigh that, and read the warning first.`;
+} else if (b.reputation_flag && !a.reputation_flag) {
+  verdict = `${a.name} is the safer default — ${b.name} carries a reputation caution (see below), while ${a.name} does not. Choose ${b.name} only if its specific strengths clearly outweigh that, and read the warning first.`;
+} else if (tierRank[a.tier] > tierRank[b.tier]) {
+  verdict = `${a.name} edges ahead on our ${market.name} tiering (Tier ${a.tier} vs ${b.tier}), but both are workable — the right pick depends on your trade, region, and the ${market.name}-specific notes below.`;
+} else if (tierRank[b.tier] > tierRank[a.tier]) {
+  verdict = `${b.name} edges ahead on our ${market.name} tiering (Tier ${b.tier} vs ${a.tier}), but both are workable — the right pick depends on your trade, region, and the ${market.name}-specific notes below.`;
+} else {
+  verdict = `${a.name} and ${b.name} are closely matched (both Tier ${a.tier}) for ${market.name} ${categoryLabel.toLowerCase()}. The right choice comes down to fit: weigh the pros, cons, pricing, and ${market.name}-specific notes for each against your trade and region.`;
+}
+
+const pageTitle = `${a.name} vs ${b.name}: ${categoryLabel} for ${market.name} Trades (2026)`;
+const pageDescription = `${a.name} vs ${b.name} compared for ${market.name} trades — tier, market position, pros and cons, ${market.name}-specific notes, and typical pricing, side by side. Which should you choose?`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: market.name, url: `/${market.code}/` },
+  { name: `${a.name} vs ${b.name}`, url: `/${market.code}/compare/${a.slug}-vs-${b.slug}/` },
+];
+
+const cols = [a, b];
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <header class="mb-8">
+      <div class="mb-3 flex items-center gap-2">
+        <span class="text-xl" aria-hidden="true">{market.flag}</span>
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">{categoryLabel} · {market.name} · Head-to-head</p>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">{a.name} <span class="text-slate-400">vs</span> {b.name}</h1>
+      <p class="mt-3 text-lg text-slate-600 leading-relaxed">Two {market.name} {categoryLabel.toLowerCase()} options, compared side by side for {market.name} trades.</p>
+    </header>
+
+    <section class="mb-8 rounded-lg bg-orange-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">Which should you choose?</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">{verdict}</p>
+    </section>
+
+    <section class="mb-10 grid gap-5 sm:grid-cols-2">
+      {cols.map((v) => {
+        const tier = intlTierMeta(v.tier);
+        const note = intlNote(v, market);
+        return (
+          <div class={`rounded-lg border-2 ${tier.border} bg-white p-5`}>
+            <div class="mb-2 flex items-center gap-2 flex-wrap">
+              <h2 class="text-xl font-bold text-slate-900">{v.name}</h2>
+              <span class={`rounded-full px-2 py-0.5 text-xs font-bold ${tier.badge}`}>Tier {v.tier} · {tier.label}</span>
+            </div>
+            <p class="mb-3 text-sm italic text-slate-500">{v.tagline}</p>
+
+            {v.reputation_flag && (
+              <p class="mb-3 rounded-md border-l-4 border-rose-400 bg-rose-50 px-3 py-2 text-xs text-rose-900 leading-snug">⚠ {v.reputation_flag}</p>
+            )}
+
+            <p class="mb-3 text-sm text-slate-700 leading-relaxed">{v.market_position}</p>
+
+            <p class="mb-1 text-xs font-bold uppercase tracking-wider text-emerald-700">Pros</p>
+            <ul class="mb-3 space-y-1 text-sm text-slate-700">
+              {v.pros.slice(0, 4).map((p) => <li class="leading-snug">+ {p}</li>)}
+            </ul>
+
+            <p class="mb-1 text-xs font-bold uppercase tracking-wider text-rose-700">Cons</p>
+            <ul class="mb-3 space-y-1 text-sm text-slate-700">
+              {v.cons.slice(0, 4).map((c) => <li class="leading-snug">− {c}</li>)}
+            </ul>
+
+            {note && (
+              <div class="mb-3 rounded-md bg-slate-50 px-3 py-2">
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">{market.name} note</p>
+                <p class="text-xs text-slate-700 leading-relaxed">{note}</p>
+              </div>
+            )}
+
+            <div class="mb-3 text-xs text-slate-600"><strong class="text-slate-900">Typical {market.name} pricing:</strong> {v.typical_pricing}</div>
+
+            <div class="flex flex-wrap gap-2">
+              <a href={`/${market.code}/${v.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">Full review →</a>
+              <a href={v.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Visit →</a>
+            </div>
+          </div>
+        );
+      })}
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">More {market.name} options</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">See all {market.name} {categoryLabel.toLowerCase()} vendors and the rest of the {market.name} directory.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href={`/${market.code}/`} class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">{market.flag} All {market.name} vendors</a>
+        <a href="/certifications/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Certifications by country</a>
+        <a href="/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">US directory</a>
+      </div>
+    </section>
+  </article>
+</Layout>
