@@ -1,0 +1,136 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { paymentProcessors, paymentsByModel, PAYMENT_MODEL_META } from '../../lib/data';
+
+const grouped = paymentsByModel();
+
+const pageTitle = `Best Payment Processing for Contractors & Trades (2026)`;
+const pageDescription = `Independent comparison of payment processors for trades businesses — Square, Stripe, Helcim, Stax — by pricing model (flat-rate vs interchange-plus vs subscription). Real rates, honest trade-offs, and how to stop overpaying on card fees.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Payments', url: '/payments/' },
+];
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Payment Processors for Trades Contractors',
+  numberOfItems: paymentProcessors.length,
+  itemListElement: paymentProcessors.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'FinancialProduct',
+      name: p.name,
+      description: p.tagline,
+      url: `https://wrenchstack.com/payments/${p.slug}/`,
+    },
+  })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-teal-600">Payments</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        Best Payment Processing for Contractors & Trades (2026)
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Every contractor takes payments — and most overpay on card fees without realizing it. We compare the processors trades actually use, organized by the one thing that decides your cost: the <strong>pricing model</strong>. Real rates, honest trade-offs, affiliate-transparent.
+      </p>
+    </header>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">The headline filter: pricing model</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        Payment cost is decided by the pricing model, not the brand. <strong>Flat-rate</strong> (Square, Stripe) is simplest and best at low volume. <strong>Interchange-plus</strong> (Helcim) is the most transparent and usually cheapest as you grow, with no monthly fee. <strong>Subscription/membership</strong> (Stax) drops the percentage markup entirely and wins at high volume once the monthly fee is amortized. The right pick depends on your monthly card volume and average ticket — and for big-ticket trades, steering large invoices to <strong>ACH</strong> beats every card model.
+      </p>
+    </section>
+
+    {grouped.map(({ model, processors }) => {
+      const meta = PAYMENT_MODEL_META[model];
+      return (
+        <section class="mb-12">
+          <div class="mb-5">
+            <span class="inline-block rounded-full bg-teal-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-teal-900 ring-1 ring-teal-300">{meta.label}</span>
+            <p class="mt-2 text-sm text-slate-600 leading-relaxed">{meta.blurb}</p>
+          </div>
+
+          <div class="space-y-4">
+            {processors.map((p) => (
+              <article class="rounded-lg border-2 border-teal-200 bg-white p-5">
+                <div class="mb-3 flex items-start justify-between gap-3">
+                  <div class="min-w-0 flex-1">
+                    <h3 class="text-xl font-bold text-slate-900">
+                      <a href={`/payments/${p.slug}/`} class="hover:text-teal-600">{p.name}</a>
+                    </h3>
+                    <p class="text-sm italic text-slate-500">{p.tagline}</p>
+                  </div>
+                  <div class="shrink-0 text-right text-xs">
+                    <p class="font-bold text-slate-900">{p.monthly_fee}</p>
+                    <p class="text-slate-500">monthly</p>
+                  </div>
+                </div>
+
+                {p.reputation_flag && (
+                  <div class="mb-3 rounded-md border-l-4 border-rose-500 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+                    <p class="font-bold uppercase tracking-wider text-xs text-rose-700 mb-1">⚠ Reputation warning</p>
+                    <p class="leading-relaxed">{p.reputation_flag.split('.')[0]}.</p>
+                  </div>
+                )}
+
+                <p class="mb-3 rounded-md bg-slate-50 px-4 py-2 text-sm text-slate-700 leading-relaxed">
+                  <strong class="text-slate-900">Rates:</strong> {p.pricing_summary}.
+                </p>
+
+                <dl class="mb-3 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Model</dt>
+                    <dd class="font-semibold text-slate-900 capitalize">{p.pricing_model.replace(/-/g, ' ')}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Founded</dt>
+                    <dd class="font-semibold text-slate-900">{p.founded ?? '—'}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Capterra</dt>
+                    <dd class="font-semibold text-slate-900">{p.ratings.capterra !== null ? `${p.ratings.capterra.toFixed(1)} / 5` : '—'}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Best team size</dt>
+                    <dd class="font-semibold text-slate-900">{p.best_team_size}</dd>
+                  </div>
+                </dl>
+
+                <p class="mb-3 text-sm text-slate-700 leading-relaxed">
+                  <strong class="text-slate-900">Best for:</strong> {p.best_for}
+                </p>
+
+                <div class="flex flex-wrap gap-2">
+                  <a href={`/payments/${p.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">Read full review →</a>
+                  <a href={p.affiliate_url.startsWith('http') ? p.affiliate_url : p.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md border border-teal-300 bg-white px-4 py-2 text-sm font-semibold text-teal-700 hover:bg-teal-50">Visit {p.name}</a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Where to start</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">
+        Low volume or want the simplest setup? <strong>Square</strong> or <strong>Stripe</strong> (flat-rate, no monthly fee). Processing real volume and want the lowest transparent cost with no monthly fee? <strong>Helcim</strong> (interchange-plus). High-volume, big-ticket shop that can amortize a subscription? <strong>Stax</strong>. And for large invoices on any processor, push customers to <strong>ACH</strong> — it beats card fees by a wide margin on big-ticket jobs.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/payments/helcim/" class="rounded-md bg-teal-500 px-5 py-3 text-sm font-semibold text-white hover:bg-teal-600">See Helcim →</a>
+        <a href="/payroll/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Payroll</a>
+        <a href="/tools/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Software directory</a>
+      </div>
+    </section>
+  </article>
+</Layout>

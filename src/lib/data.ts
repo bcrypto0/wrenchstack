@@ -7,6 +7,7 @@ import insuranceData from '../data/insurance.json';
 import payrollData from '../data/payroll.json';
 import agenciesData from '../data/agencies.json';
 import aiToolsData from '../data/ai_tools.json';
+import paymentsData from '../data/payments.json';
 
 export interface ToolPricing {
   starting_at_usd: number | null;
@@ -1141,6 +1142,68 @@ export function aiToolsByCategory(): Array<{ category: AiToolCategory; tools: Ai
   return order
     .map((category) => ({ category, tools: aiTools.filter((t) => t.ai_category === category) }))
     .filter((g) => g.tools.length > 0);
+}
+
+// --- Payment processors (Phase 2 new category: payments) ----------------------
+// Trade-agnostic — every contractor takes payments. Grouped by pricing MODEL
+// (flat-rate / interchange-plus / subscription), which is the core buyer decision.
+
+export type PaymentPricingModel = 'flat-rate' | 'interchange-plus' | 'subscription' | 'tiered';
+
+export interface PaymentRatings {
+  g2: number | null;
+  capterra: number | null;
+  trustpilot: number | null;
+  reddit_sentiment: string;
+}
+
+export interface PaymentProcessor {
+  slug: string;
+  name: string;
+  vendor_url: string;
+  affiliate_url: string;
+  tagline: string;
+  pricing_model: PaymentPricingModel;
+  pricing_summary: string;
+  monthly_fee: string;
+  verticals_supported: string[];
+  founded: number | null;
+  headquartered: string;
+  long_description: string;
+  how_it_works: string;
+  pros_detail: ProConItem[];
+  cons_detail: ProConItem[];
+  best_for: string;
+  best_team_size: string;
+  weaknesses: string;
+  reputation_flag: string | null;
+  ratings: PaymentRatings;
+  key_features: string[];
+  integrations: string[];
+  affiliate_program: string;
+  affiliate_payout_note: string;
+  verified_date: string;
+  faqs: LeadGenFaq[];
+}
+
+export const paymentProcessors: PaymentProcessor[] = (paymentsData as { processors: PaymentProcessor[] }).processors;
+
+export function getPaymentProcessor(slug: string): PaymentProcessor | undefined {
+  return paymentProcessors.find((p) => p.slug === slug);
+}
+
+export const PAYMENT_MODEL_META: Record<PaymentPricingModel, { label: string; blurb: string }> = {
+  'flat-rate': { label: 'Flat-Rate Processors', blurb: 'Simple, predictable per-transaction rates (for example 2.6% + 10 cents). Easiest to understand and start with; best for lower-volume shops where simplicity beats squeezing out basis points.' },
+  'interchange-plus': { label: 'Interchange-Plus Processors', blurb: 'You pay the interchange cost set by the card networks plus a transparent fixed markup. Usually the cheapest and most transparent model, especially for higher-volume businesses.' },
+  'subscription': { label: 'Subscription / Membership Pricing', blurb: 'A flat monthly fee plus interchange and a small per-transaction fee, with no percentage markup on processing. Saves money once monthly volume is high enough to amortize the subscription.' },
+  'tiered': { label: 'Tiered Pricing', blurb: 'Rates bucketed into qualified, mid, and non-qualified tiers — generally the least transparent model; included for completeness.' },
+};
+
+export function paymentsByModel(): Array<{ model: PaymentPricingModel; processors: PaymentProcessor[] }> {
+  const order: PaymentPricingModel[] = ['flat-rate', 'interchange-plus', 'subscription', 'tiered'];
+  return order
+    .map((model) => ({ model, processors: paymentProcessors.filter((p) => p.pricing_model === model) }))
+    .filter((g) => g.processors.length > 0);
 }
 
 

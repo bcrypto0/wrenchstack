@@ -1,0 +1,457 @@
+{
+  "_schema": "Payment processors for trades/contractors — Phase 2 category added 2026-05-28. Trade-agnostic; grouped by pricing_model. Rates are verified-as-of verified_date and change often — re-verify quarterly. affiliate_url stays 'TBD' until tracking is confirmed.",
+  "processors": [
+    {
+      "slug": "square",
+      "name": "Square",
+      "vendor_url": "https://squareup.com",
+      "affiliate_url": "TBD",
+      "tagline": "Flat-rate payments and POS, the default for small service businesses",
+      "pricing_model": "flat-rate",
+      "pricing_summary": "Flat-rate. In-person 2.6% + 15¢ (free plan); online/invoice 3.3% + 30¢; keyed/card-on-file 3.5% + 15¢. Paid plans ($49/mo and $149/mo per location) lower in-person rates to 2.5% and 2.4%. No monthly fee on the free plan",
+      "monthly_fee": "$0 (free plan); $49 or $149/mo for lower rates",
+      "verticals_supported": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "landscaping",
+        "cleaning",
+        "handyman",
+        "painting"
+      ],
+      "founded": 2009,
+      "headquartered": "San Francisco, California",
+      "long_description": "Square is the default payment processor for small service businesses — a flat-rate, no-monthly-fee system that's genuinely easy to set up, with free card readers, invoicing, and a POS app that works out of the box. Founded in 2009 in San Francisco, it removed the friction of traditional merchant accounts (no application gauntlet, no statements full of mystery fees) and made card acceptance something a solo contractor can turn on the same day.\n\nFor trades, Square's appeal is simplicity and ubiquity: predictable flat rates, free hardware to start, built-in invoicing with card-on-file, and tight ties to the broader Square ecosystem (banking, payroll, loans). Many FSM tools also integrate with it. In-person cards run 2.6% + 15¢ on the free plan, with paid plans ($49/$149 per month per location) buying lower in-person rates for higher-volume shops.\n\nThe trade-offs are cost at scale and a recent rate hike. Flat-rate pricing is the most expensive model once you process meaningful volume — interchange-plus (Helcim) or subscription pricing (Stax) usually beats it above roughly $10K-$25K/month. And in January 2026 Square raised free-plan online/invoice rates from 2.9% + 30¢ to 3.3% + 30¢ (a 14% increase), which drew criticism and matters for contractors who invoice a lot online. Square is also known to hold or freeze funds on accounts it flags as risky. For a low-to-mid-volume shop that values simplicity, Square is the easy default; high-volume shops should price-compare the alternatives.",
+      "how_it_works": "You sign up online with no traditional merchant-account application, get free or low-cost card readers, and can accept payments the same day — in person (tap/dip/swipe), online, via invoices, or keyed/card-on-file. Pricing is flat-rate per transaction with no monthly fee on the free plan, so what you see is what you pay; paid plans lower in-person rates. Money typically lands in your bank in 1-2 business days (or instantly for a fee). Square also bundles invoicing, a POS app, and add-ons like banking, payroll, and capital loans, and integrates with many field-service tools, so a contractor can run payments and adjacent tasks in one ecosystem.",
+      "pros_detail": [
+        {
+          "title": "Easiest setup in payments",
+          "explanation": "No merchant-account application or underwriting gauntlet — sign up online and accept cards the same day with free or cheap hardware. For a solo contractor, that frictionless start is the whole appeal."
+        },
+        {
+          "title": "Predictable flat-rate pricing, no monthly fee",
+          "explanation": "Flat rates with no monthly fee on the free plan mean no mystery statements or hidden line items. You always know your cost per transaction, which is rare in payments."
+        },
+        {
+          "title": "All-in-one ecosystem",
+          "explanation": "Invoicing, POS, card-on-file, plus optional banking, payroll, and capital loans live in one ecosystem, and many FSM tools integrate with Square — convenient for a small shop that wants fewer vendors."
+        },
+        {
+          "title": "Free hardware and invoicing",
+          "explanation": "A free mobile reader and built-in invoicing (with saved cards for recurring/maintenance billing) cover the core needs of a service business without extra cost to start."
+        },
+        {
+          "title": "Ubiquitous and trusted",
+          "explanation": "Square is a known, widely-trusted brand, so customers recognize it and contractors can find help, integrations, and documentation easily."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Most expensive model at volume",
+          "explanation": "Flat-rate is the priciest pricing model once you process real volume. Above roughly $10K-$25K/month, interchange-plus (Helcim) or subscription pricing (Stax) typically beats Square materially — model your effective rate."
+        },
+        {
+          "title": "2026 online rate increase",
+          "explanation": "In January 2026 Square raised free-plan online/invoice rates from 2.9% + 30¢ to 3.3% + 30¢. For contractors who invoice heavily online, that 14% jump is a real cost increase worth reacting to."
+        },
+        {
+          "title": "Fund holds and account freezes",
+          "explanation": "Square is known to hold or freeze funds on accounts its risk system flags, sometimes with little warning. For a contractor depending on cash flow, an unexpected hold is a serious risk."
+        },
+        {
+          "title": "Paid plans to get better rates",
+          "explanation": "Lower in-person rates require the $49 or $149/month plans. Once you're paying monthly for rate reductions, it's worth comparing against interchange-plus or subscription processors."
+        },
+        {
+          "title": "Less suited to high-ticket invoicing",
+          "explanation": "On big-ticket jobs (HVAC replacements, roofs), a percentage-based flat rate gets expensive fast. ACH or interchange-plus/subscription models save meaningfully on large invoices."
+        }
+      ],
+      "best_for": "Solo and low-to-mid-volume service businesses that want the simplest possible setup with predictable flat-rate pricing and free hardware",
+      "best_team_size": "1-20",
+      "weaknesses": "Flat-rate is the most expensive model at higher volume; 2026 online-rate increase; known for fund holds/account freezes on flagged accounts",
+      "reputation_flag": null,
+      "ratings": {
+        "g2": null,
+        "capterra": null,
+        "trustpilot": null,
+        "reddit_sentiment": "very popular for simplicity; recent online-rate increase and fund-hold stories draw criticism"
+      },
+      "key_features": [
+        "flat_rate_pricing",
+        "pos",
+        "invoicing",
+        "card_on_file",
+        "free_hardware",
+        "next_day_deposit"
+      ],
+      "integrations": [
+        "quickbooks",
+        "fsm_tools"
+      ],
+      "affiliate_program": "unknown",
+      "affiliate_payout_note": "No confirmed affiliate program — we currently earn nothing from Square",
+      "verified_date": "2026-05-28",
+      "faqs": [
+        {
+          "q": "What are Square's payment processing fees?",
+          "a": "On the free plan: in-person 2.6% + 15¢, online/invoice 3.3% + 30¢ (raised from 2.9% + 30¢ in January 2026), and keyed/card-on-file 3.5% + 15¢. Paid plans ($49/mo and $149/mo per location) lower in-person rates to 2.5% and 2.4%. There's no monthly fee on the free plan."
+        },
+        {
+          "q": "Is Square the cheapest payment processor for contractors?",
+          "a": "Only at low volume. Flat-rate pricing is simple but the most expensive model as you scale — above roughly $10K-$25K/month in card volume, interchange-plus (Helcim) or subscription pricing (Stax) usually saves meaningful money. Square wins on simplicity, not on price at scale."
+        },
+        {
+          "q": "Does Square hold or freeze funds?",
+          "a": "It can. Square is known to hold or freeze funds on accounts its risk system flags, sometimes with little warning, which is a real cash-flow risk for contractors. If you process large or irregular amounts, it's worth understanding Square's risk policies and keeping a backup processor or buffer."
+        },
+        {
+          "q": "Should a contractor use Square or process payments through their FSM?",
+          "a": "Many FSM tools (Jobber, Housecall Pro) have built-in payments at similar flat rates, which keeps everything in one system. Square makes sense if you want a standalone, ubiquitous processor with a POS and ecosystem, or if your FSM's payment rates are higher. Compare effective rates and where you'd rather manage payments."
+        },
+        {
+          "q": "Is Square good for big-ticket jobs?",
+          "a": "Less so. On a $15,000 HVAC or roofing invoice, a 3.3% online card fee is ~$495 — so for high-ticket work, ACH (bank transfer) or a cheaper processing model saves real money. Square supports ACH and invoicing, but high-ticket contractors should weigh interchange-plus or subscription processors that lower the percentage cost."
+        }
+      ]
+    },
+    {
+      "slug": "stripe",
+      "name": "Stripe",
+      "vendor_url": "https://stripe.com",
+      "affiliate_url": "TBD",
+      "tagline": "Developer-friendly flat-rate payments, strongest for online and integrations",
+      "pricing_model": "flat-rate",
+      "pricing_summary": "Flat-rate, no monthly fee. Online 2.9% + 30¢; in-person (Stripe Terminal) 2.7% + 5¢; international cards +1.5%; ACH is far cheaper (good for recurring and large invoices). No setup or monthly fees on standard accounts",
+      "monthly_fee": "$0",
+      "verticals_supported": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "roofing",
+        "landscaping",
+        "handyman"
+      ],
+      "founded": 2010,
+      "headquartered": "South San Francisco, California",
+      "long_description": "Stripe is the developer-first payments giant — the infrastructure behind millions of online businesses, processing over $1.9 trillion in 2025 at a ~$159B valuation. Founded in 2010 by the Collison brothers (now dual-headquartered in South San Francisco and Dublin), it's flat-rate and no-monthly-fee like Square, but its center of gravity is online payments, subscriptions/recurring billing, and deep integrations rather than walk-up retail.\n\nFor most trades, Stripe isn't the tool you swipe a card on at the kitchen table — it's the engine that powers online payments inside other software. If your FSM, website, or booking tool takes cards, there's a good chance Stripe is under the hood. Where it shines directly for contractors is online invoicing, recurring/maintenance-plan billing, and especially ACH bank payments, which are dramatically cheaper than cards on big-ticket jobs (Stripe Billing ACH can cut a large-invoice fee by 80%+ versus card).\n\nThe trade-offs: Stripe is less of a turnkey in-person/retail solution than Square (its Terminal hardware exists but the experience is more developer-oriented), and getting the most out of it often assumes some technical setup or a tool that integrates it. Standard online cards run 2.9% + 30¢; in-person via Terminal is 2.7% + 5¢. For a contractor whose payments are mostly online/invoiced or who wants the cheapest path on large recurring/ACH payments, Stripe is excellent; for simple walk-up card-swiping, Square is friendlier.",
+      "how_it_works": "Stripe is most often used through other software — your website, FSM, or booking tool integrates Stripe to take cards and ACH online — but you can also use Stripe Invoicing and Billing directly to send online invoices, set up recurring/maintenance-plan charges, and collect ACH bank payments. For in-person, Stripe Terminal provides hardware. Pricing is flat-rate with no monthly or setup fees: 2.9% + 30¢ online, 2.7% + 5¢ in-person, with ACH priced far lower (a flat or small-percentage fee capped low), which is why it's attractive for large invoices and subscriptions. Funds settle to your bank on a rolling basis.",
+      "pros_detail": [
+        {
+          "title": "Cheapest path on large/recurring payments via ACH",
+          "explanation": "Stripe ACH bank payments cost a fraction of card fees — on a $1,000+ invoice, ACH can be ~$5 versus ~$29 on a card. For high-ticket trades and recurring maintenance plans, that's a major saving."
+        },
+        {
+          "title": "Best for online and recurring billing",
+          "explanation": "Stripe Billing handles subscriptions and recurring charges cleanly — ideal for membership/maintenance-plan revenue — and online payments are its core strength."
+        },
+        {
+          "title": "Powers most software integrations",
+          "explanation": "If your FSM, website, or booking tool takes payments, it likely uses Stripe. Standardizing on it can mean one processor across all your online payment touchpoints."
+        },
+        {
+          "title": "No monthly or setup fees",
+          "explanation": "Standard accounts have no monthly or setup fees, so you only pay per transaction — predictable and cheap to start, like Square but tuned for online."
+        },
+        {
+          "title": "Reliable, well-documented, trusted",
+          "explanation": "As the infrastructure behind millions of businesses, Stripe is highly reliable and exceptionally well-documented, with strong fraud tooling — a safe foundation to build payments on."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Not turnkey for walk-up in-person",
+          "explanation": "Stripe Terminal exists, but the in-person experience is more developer-oriented than Square's plug-and-play readers. For a contractor who mostly swipes cards on-site, Square is friendlier out of the box."
+        },
+        {
+          "title": "Assumes some technical setup",
+          "explanation": "Getting full value from Stripe often means using it through a tool that integrates it, or doing some configuration. A non-technical solo contractor may find Square simpler to use directly."
+        },
+        {
+          "title": "Flat-rate cost at card volume",
+          "explanation": "Like Square, Stripe's card flat-rate (2.9% + 30¢ online) is expensive at high card volume versus interchange-plus or subscription models. The savings come from ACH, not cards."
+        },
+        {
+          "title": "Support is largely self-serve",
+          "explanation": "Stripe leans on documentation and online support rather than hand-holding. For contractors who want a phone rep, that can feel impersonal versus a relationship-based processor."
+        },
+        {
+          "title": "Fraud/risk holds possible",
+          "explanation": "Like other large processors, Stripe can flag and hold funds on accounts it deems risky. Understand its risk policies if you process large or irregular amounts."
+        }
+      ],
+      "best_for": "Contractors whose payments are mostly online or invoiced, who want cheap ACH on big-ticket and recurring billing, or whose software already runs on Stripe",
+      "best_team_size": "1-500",
+      "weaknesses": "Less turnkey for walk-up in-person payments than Square; assumes some technical setup or an integrating tool; card flat-rate is expensive at high volume (savings come from ACH)",
+      "reputation_flag": null,
+      "ratings": {
+        "g2": null,
+        "capterra": null,
+        "trustpilot": null,
+        "reddit_sentiment": "developer/online favorite; best for online + integrations + ACH, less for in-person retail"
+      },
+      "key_features": [
+        "flat_rate_pricing",
+        "online_payments",
+        "ach_payments",
+        "recurring_billing",
+        "invoicing",
+        "developer_api"
+      ],
+      "integrations": [
+        "quickbooks",
+        "fsm_tools",
+        "websites"
+      ],
+      "affiliate_program": "unknown",
+      "affiliate_payout_note": "No confirmed affiliate program — we currently earn nothing from Stripe",
+      "verified_date": "2026-05-28",
+      "faqs": [
+        {
+          "q": "What are Stripe's fees?",
+          "a": "Flat-rate with no monthly or setup fees: 2.9% + 30¢ for online card payments, 2.7% + 5¢ for in-person via Stripe Terminal, and +1.5% for international cards. ACH bank payments are far cheaper than cards, which is where Stripe saves contractors money on large and recurring invoices."
+        },
+        {
+          "q": "Is Stripe good for contractors?",
+          "a": "Yes, in specific cases: if your payments are mostly online/invoiced, you bill recurring maintenance plans, or you want cheap ACH on big-ticket jobs, Stripe is excellent. For simple walk-up card swiping at the kitchen table, Square is more turnkey. Many contractors actually use Stripe indirectly, since it powers payments inside their FSM or website."
+        },
+        {
+          "q": "Stripe vs Square for a trades business?",
+          "a": "Square is the easier turnkey choice for in-person card payments and POS; Stripe is stronger for online payments, recurring billing, ACH, and integrations. If you swipe a lot of cards on-site, lean Square; if you invoice online, bill memberships, or want cheap ACH on large jobs, lean Stripe. Both are flat-rate with no monthly fee."
+        },
+        {
+          "q": "How much can ACH save on a big invoice?",
+          "a": "A lot. On a $1,000+ invoice, Stripe ACH can cost around $5 versus roughly $29 on a credit card — and the savings grow with invoice size since ACH fees are flat or capped while card fees are a percentage. For high-ticket trades (HVAC, roofing), steering large invoices to ACH meaningfully cuts processing cost."
+        },
+        {
+          "q": "Do I need a developer to use Stripe?",
+          "a": "Not necessarily — Stripe Invoicing and Billing can be used directly without code, and most contractors use Stripe through a tool (FSM, website) that already integrates it. But getting full value, or a custom in-person setup, can involve some technical configuration. If you want zero setup, Square is simpler."
+        }
+      ]
+    },
+    {
+      "slug": "helcim",
+      "name": "Helcim",
+      "vendor_url": "https://www.helcim.com",
+      "affiliate_url": "TBD",
+      "tagline": "Transparent interchange-plus pricing with no monthly fee or contracts",
+      "pricing_model": "interchange-plus",
+      "pricing_summary": "Interchange-plus, no monthly fee, no contracts. Starts at interchange + 0.40% + 8¢ in-person and interchange + 0.50% + 25¢ online; average effective ~1.93% + 8¢ in-person and ~2.49% + 25¢ online. Automatic volume discounts above $50K/mo",
+      "monthly_fee": "$0",
+      "verticals_supported": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "roofing",
+        "landscaping",
+        "handyman"
+      ],
+      "founded": 2006,
+      "headquartered": "Calgary, Canada",
+      "long_description": "Helcim is widely considered the most transparent payment processor in the industry — and for a higher-volume contractor, often the cheapest. Founded in 2006 in Calgary, it uses interchange-plus pricing: you pay the card networks' actual interchange cost plus a small, published markup, with no monthly fee, no contracts, and no cancellation fees. That structure exposes the true cost of each transaction instead of burying it in a flat rate, and it gets cheaper automatically as your volume grows (volume discounts kick in above $50K/month).\n\nFor trades, the appeal is real savings without games: average effective rates run about 1.93% + 8¢ in person and 2.49% + 25¢ online — meaningfully below flat-rate processors like Square on equivalent volume — plus invoicing, a virtual terminal, recurring billing, and a customer portal. There's no monthly fee, so even smaller shops can benefit, and the transparency makes it easy to verify you're being charged fairly.\n\nThe trade-offs: interchange-plus statements are slightly more complex to read than a single flat rate (the cost varies by card type), so it rewards a contractor willing to understand their effective rate. And while Helcim is a beloved, highly-transparent processor, it's still a payment processor — reviews are mixed in spots, with some users reporting account closures with little warning (a risk common across the industry). For a contractor processing meaningful volume who wants the lowest transparent cost and no contract, Helcim is one of the best picks; the simplicity-first crowd may still prefer Square.",
+      "how_it_works": "You sign up (a quick underwriting step, since it's a real merchant account) with no monthly fee or contract. Helcim charges interchange-plus: the card networks' published interchange cost passed straight through, plus Helcim's small fixed markup, itemized on your statement so you can see exactly what you pay. You accept payments in person (free or low-cost hardware/app), online, by invoice, via a virtual terminal, or on recurring schedules, and a customer portal lets clients pay and save cards. As your monthly volume rises, automatic volume discounts lower the markup — no renegotiation needed. Funds settle to your bank on a standard schedule.",
+      "pros_detail": [
+        {
+          "title": "Most transparent pricing in payments",
+          "explanation": "Interchange-plus passes through the card networks' true cost plus a published markup, itemized on your statement. You can verify exactly what you pay — the opposite of opaque flat-rate or tiered pricing."
+        },
+        {
+          "title": "Usually cheapest at real volume",
+          "explanation": "Average effective rates (~1.93% + 8¢ in-person) beat flat-rate processors on equivalent volume, and automatic volume discounts above $50K/month lower costs further as you grow — no renegotiation."
+        },
+        {
+          "title": "No monthly fee, no contract",
+          "explanation": "Unlike subscription processors, Helcim has no monthly fee, and no contracts or cancellation fees — so even smaller shops can use it and leave freely if it doesn't fit."
+        },
+        {
+          "title": "Full toolset included",
+          "explanation": "Invoicing, virtual terminal, recurring billing, and a customer portal come included, covering the ways a contractor actually collects: on-site, online, and recurring maintenance billing."
+        },
+        {
+          "title": "Volume discounts are automatic",
+          "explanation": "Rates step down automatically as monthly volume rises, so a growing shop keeps getting cheaper without having to call and negotiate a new deal."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Statements are more complex",
+          "explanation": "Interchange-plus costs vary by card type, so statements are less dead-simple than a single flat rate. It rewards a contractor willing to understand their effective rate rather than wanting one headline number."
+        },
+        {
+          "title": "Account-closure complaints",
+          "explanation": "Some users report account closures with little warning. This risk exists across payment processors, but it's a reason to keep a backup option and understand Helcim's underwriting/risk policies."
+        },
+        {
+          "title": "Real merchant-account signup",
+          "explanation": "Because it's a true merchant account with interchange-plus, signup involves underwriting rather than the instant, no-questions setup of Square. Slightly more friction up front."
+        },
+        {
+          "title": "Less of a retail POS ecosystem",
+          "explanation": "Helcim is excellent for service-business invoicing and payments, but it isn't the broad retail POS + banking + payroll ecosystem that Square is. Shops wanting that bundle may prefer Square."
+        },
+        {
+          "title": "Savings need some volume to matter",
+          "explanation": "At very low volume, the difference versus a flat-rate processor is small, and simplicity may win. The transparency and savings compound as your processing volume grows."
+        }
+      ],
+      "best_for": "Higher-volume contractors who want the lowest transparent processing cost with no monthly fee or contract, and don't mind reading an interchange-plus statement",
+      "best_team_size": "1-200",
+      "weaknesses": "Interchange-plus statements are more complex than a flat rate; some account-closure complaints; real merchant-account underwriting at signup; not a broad retail-POS ecosystem like Square",
+      "reputation_flag": null,
+      "ratings": {
+        "g2": null,
+        "capterra": null,
+        "trustpilot": null,
+        "reddit_sentiment": "praised as the most transparent processor and often cheapest at volume; some account-closure complaints"
+      },
+      "key_features": [
+        "interchange_plus_pricing",
+        "invoicing",
+        "virtual_terminal",
+        "recurring_billing",
+        "customer_portal",
+        "volume_discounts"
+      ],
+      "integrations": [
+        "quickbooks",
+        "xero"
+      ],
+      "affiliate_program": "unknown",
+      "affiliate_payout_note": "No confirmed affiliate program — we currently earn nothing from Helcim",
+      "verified_date": "2026-05-28",
+      "faqs": [
+        {
+          "q": "What is interchange-plus pricing?",
+          "a": "Interchange-plus means you pay the card networks' actual interchange cost (which varies by card type) plus a small, fixed, published markup from the processor. It's the most transparent model because the markup is visible and consistent — unlike flat-rate (one blended price) or tiered (opaque buckets). Helcim's markup starts at 0.40% + 8¢ in-person."
+        },
+        {
+          "q": "Is Helcim cheaper than Square?",
+          "a": "Usually yes, at meaningful volume. Helcim's average effective rate (~1.93% + 8¢ in-person) is below Square's flat 2.6% + 15¢, and volume discounts lower it further above $50K/month, with no monthly fee. At very low volume the gap is small and Square's simplicity may win, but as you process more, Helcim's transparent pricing typically saves real money."
+        },
+        {
+          "q": "Does Helcim have monthly fees or contracts?",
+          "a": "No — Helcim has no monthly fee, no contracts, and no cancellation fees. You pay only interchange-plus per transaction. That's a key difference from subscription processors like Stax, which charge a monthly fee in exchange for no percentage markup."
+        },
+        {
+          "q": "Helcim vs Stax — which transparent model is cheaper?",
+          "a": "Both avoid flat-rate markups but differently: Helcim is interchange-plus with no monthly fee (great across a wide volume range), while Stax charges a monthly subscription ($99+) plus interchange and a flat per-transaction fee (better only at high volume where the subscription is amortized). Lower-and-mid-volume shops usually prefer Helcim; very high-volume shops should compare both on their actual numbers."
+        },
+        {
+          "q": "Are there downsides to Helcim?",
+          "a": "Two main ones: interchange-plus statements are more complex than a single flat rate (cost varies by card type), and some users report account closures with little warning — a risk common across processors. It's also a real merchant account, so signup involves underwriting rather than instant setup. For transparency and savings at volume, most find it worth those trade-offs."
+        }
+      ]
+    },
+    {
+      "slug": "stax",
+      "name": "Stax",
+      "vendor_url": "https://staxpayments.com",
+      "affiliate_url": "TBD",
+      "tagline": "Subscription (membership) pricing — flat monthly fee, no percentage markup",
+      "pricing_model": "subscription",
+      "pricing_summary": "Subscription pricing: $99/mo (up to $150K/yr volume), $139/mo ($150K-$250K), $199+/mo ($250K+), plus interchange and a flat per-transaction fee (8¢ terminal / 15¢ online or mobile). No percentage markup on processing",
+      "monthly_fee": "$99+",
+      "verticals_supported": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "roofing",
+        "landscaping"
+      ],
+      "founded": 2014,
+      "headquartered": "Orlando, Florida",
+      "long_description": "Stax (formerly Fattmerchant, renamed in 2021) pioneered the subscription, or 'membership,' pricing model in payments: you pay a flat monthly fee and then process at interchange plus a small flat per-transaction fee, with no percentage markup on top. Founded in 2014 in Orlando, it now serves 30,000+ businesses processing $30B+. The model's promise is that on high volume, paying a fixed subscription instead of a percentage markup can save serious money — the more you process, the more the math favors it.\n\nFor a high-volume contractor (think busy multi-crew operations doing big-ticket work), Stax can deliver the lowest effective rate of the models here, because you're cutting out the percentage markup entirely and paying near-wholesale interchange plus a few cents per transaction. Plans scale by annual volume: $99/month up to $150K/year, $139/month to $250K, and $199+/month above that.\n\nThe trade-offs are real and show in the reviews (Capterra ~3.1, Trustpilot ~3.6). The subscription only pays off at sufficient volume — below it, you're paying $99+/month for nothing versus a no-monthly-fee processor like Helcim or Square. And the most common complaints are about unexpected/hidden fees and customer service, which undercuts the 'transparent' promise for some users. Stax is a genuinely strong fit for the right high-volume business, but it requires running your real numbers and going in clear-eyed about the service-and-fee complaints; lower-volume shops are usually better off with Helcim (interchange-plus, no monthly fee) or Square (simplicity).",
+      "how_it_works": "You choose a subscription tier based on your annual processing volume and pay that flat monthly fee. From there, transactions cost interchange (the card networks' wholesale cost) plus a small flat per-transaction fee — 8¢ on terminals, 15¢ on online/mobile — with no percentage markup added by Stax. You accept payments via terminals, a virtual terminal, online, invoices, and recurring billing through Stax's platform. Because there's no percentage markup, your effective rate falls as your average ticket and volume rise, which is why the model favors high-volume, higher-ticket businesses. You'll want to confirm all fees up front, as complaints about unexpected charges are the main reputational issue.",
+      "pros_detail": [
+        {
+          "title": "No percentage markup on processing",
+          "explanation": "Stax charges a monthly subscription instead of a percentage on top of interchange, so you pay near-wholesale interchange plus a few cents per transaction. On high volume, eliminating the percentage markup can save serious money."
+        },
+        {
+          "title": "Cheapest model at high volume",
+          "explanation": "For busy, higher-ticket contractors, the subscription math can deliver the lowest effective rate of the models here — the more you process, the better it gets relative to flat-rate or even interchange-plus."
+        },
+        {
+          "title": "Flat, predictable per-transaction cost",
+          "explanation": "Beyond interchange, you pay a fixed 8¢/15¢ per transaction rather than a percentage, which makes large-ticket jobs (HVAC, roofing) dramatically cheaper to process than on a flat-rate card fee."
+        },
+        {
+          "title": "Full payments platform",
+          "explanation": "Terminals, virtual terminal, online payments, invoicing, and recurring billing are included, covering how a service business actually collects across on-site, online, and recurring."
+        },
+        {
+          "title": "Established and high-volume-proven",
+          "explanation": "With 30,000+ businesses and $30B+ processed, Stax is a proven platform for the high-volume use case its model is built for."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "Only pays off at sufficient volume",
+          "explanation": "Below the volume where the subscription amortizes, you're paying $99+/month for little benefit versus a no-monthly-fee processor. A lower-volume shop usually loses money on Stax — run your real numbers first."
+        },
+        {
+          "title": "Hidden/unexpected fee complaints",
+          "explanation": "The most common negative reviews cite unexpected or hidden fees, which undercuts the model's transparency promise. Confirm every fee in writing before signing, and watch your early statements closely."
+        },
+        {
+          "title": "Customer-service complaints",
+          "explanation": "Poor customer service is the other recurring complaint (Capterra ~3.1, Trustpilot ~3.6). For a contractor who needs responsive support on payment issues, that's a real consideration."
+        },
+        {
+          "title": "Monthly commitment",
+          "explanation": "The flat monthly fee is a fixed cost regardless of how much you process in a given month — tougher for seasonal trades with slow periods than a no-monthly-fee processor."
+        },
+        {
+          "title": "Wrong fit for small shops",
+          "explanation": "Stax is built for high volume. Solo operators and small shops are almost always better served by Helcim (interchange-plus, no monthly fee) or Square (simple flat-rate), not a subscription."
+        }
+      ],
+      "best_for": "High-volume, higher-ticket contractors who process enough to amortize a monthly subscription and want to eliminate percentage markup on processing",
+      "best_team_size": "10-500",
+      "weaknesses": "Only saves money at sufficient volume (monthly fee is dead weight below it); recurring complaints about hidden fees and customer service (Capterra ~3.1); monthly commitment is hard for seasonal trades",
+      "reputation_flag": null,
+      "ratings": {
+        "g2": null,
+        "capterra": 3.1,
+        "trustpilot": 3.6,
+        "reddit_sentiment": "subscription model praised for high-volume savings; recurring complaints about unexpected fees and support"
+      },
+      "key_features": [
+        "subscription_pricing",
+        "interchange_passthrough",
+        "virtual_terminal",
+        "invoicing",
+        "recurring_billing",
+        "terminals"
+      ],
+      "integrations": [
+        "quickbooks"
+      ],
+      "affiliate_program": "unknown",
+      "affiliate_payout_note": "No confirmed affiliate program — we currently earn nothing from Stax",
+      "verified_date": "2026-05-28",
+      "faqs": [
+        {
+          "q": "How does Stax subscription pricing work?",
+          "a": "You pay a flat monthly fee based on your annual volume ($99/mo up to $150K/yr, $139/mo to $250K, $199+/mo above), and then process at interchange plus a small flat per-transaction fee (8¢ terminal, 15¢ online/mobile) with no percentage markup. The model saves money at high volume by eliminating the percentage cut processors normally take."
+        },
+        {
+          "q": "Is Stax cheaper than Square or Helcim?",
+          "a": "Only at sufficient volume. Because Stax charges a monthly fee but no percentage markup, it can be the cheapest option for high-volume, higher-ticket contractors — but below the break-even point, the monthly fee makes it more expensive than no-monthly-fee Helcim or simple Square. Run your actual monthly volume and average ticket through the math before switching."
+        },
+        {
+          "q": "What are the main complaints about Stax?",
+          "a": "Two recurring ones: unexpected or hidden fees and poor customer service (Capterra ~3.1, Trustpilot ~3.6). The fee complaints are notable because they undercut the transparency the subscription model promises — so confirm every fee in writing up front and review your first statements carefully."
+        },
+        {
+          "q": "Who should use Stax?",
+          "a": "High-volume, higher-ticket contractors (busy multi-crew operations, lots of large invoices) who process enough to amortize the $99+/month subscription and benefit from eliminating percentage markup. Solo operators and lower-volume shops are usually better off with Helcim (interchange-plus, no monthly fee) or Square (simplicity)."
+        },
+        {
+          "q": "Is the monthly fee a problem for seasonal trades?",
+          "a": "It can be. Because the subscription is a fixed monthly cost regardless of volume, a seasonal business pays it through slow months when processing is low, which erodes the savings. Seasonal or variable-volume contractors should weigh that against a no-monthly-fee model like Helcim before committing to a subscription."
+        }
+      ]
+    }
+  ]
+}
