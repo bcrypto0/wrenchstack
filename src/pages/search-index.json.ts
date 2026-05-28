@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { tools, verticals, getTool, verticalToUrl, priceTier, freshnessTier, leadGenPlatforms, leadGenTier, insuranceProviders, insuranceTier, payrollServices, payrollTier, marketingAgencies, agencyTier } from '../lib/data';
+import { tools, verticals, getTool, verticalToUrl, priceTier, freshnessTier, leadGenPlatforms, leadGenTier, insuranceProviders, insuranceTier, payrollServices, payrollTier, marketingAgencies, agencyTier, aiTools } from '../lib/data';
 import featuresData from '../data/features.json';
 import migrationsData from '../data/migrations.json';
 
@@ -101,6 +101,19 @@ export const GET: APIRoute = () => {
       bestFor: a.best_for,
       verticals: a.verticals_specialty,
       tier: agencyTier(a),
+    });
+  }
+
+  // AI tools
+  for (const t of aiTools) {
+    items.push({
+      type: 'ai',
+      name: t.name,
+      slug: t.slug,
+      url: `/ai-tools/${t.slug}/`,
+      tagline: t.tagline,
+      bestFor: t.best_for,
+      verticals: t.verticals_supported,
     });
   }
 

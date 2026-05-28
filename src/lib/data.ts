@@ -6,6 +6,7 @@ import leadGenData from '../data/lead_gen.json';
 import insuranceData from '../data/insurance.json';
 import payrollData from '../data/payroll.json';
 import agenciesData from '../data/agencies.json';
+import aiToolsData from '../data/ai_tools.json';
 
 export interface ToolPricing {
   starting_at_usd: number | null;
@@ -1069,6 +1070,77 @@ export function agencyTier(a: MarketingAgency): 'S' | 'A' | 'F' {
   // Home-services with strong reputation + content credibility → Tier S
   if (a.slug === 'hook-agency' || a.slug === 'plumbing-hvac-seo' || a.slug === 'blue-corona' || a.slug === 'adapt-digital-solutions') return 'S';
   return 'A';
+}
+
+// --- AI tools (Phase 1 net-new category: AI front office for trades) ----------
+// Distinct from FSM software — AI receptionists, estimating, marketing, etc.
+// Many vendors are early-stage with volatile or sales-quoted pricing, so
+// starting_price_usd / founded / headquartered are nullable and the template
+// renders them conditionally.
+
+export type AiToolCategory =
+  | 'ai-receptionist'
+  | 'ai-estimating'
+  | 'ai-marketing'
+  | 'ai-scheduling'
+  | 'ai-all-in-one';
+
+export interface AiToolRatings {
+  g2: number | null;
+  capterra: number | null;
+  trustpilot: number | null;
+  reddit_sentiment: string;
+}
+
+export interface AiTool {
+  slug: string;
+  name: string;
+  vendor_url: string;
+  affiliate_url: string;
+  tagline: string;
+  ai_category: AiToolCategory;
+  pricing_summary: string;
+  starting_price_usd: number | null;
+  free_trial_days: number;
+  verticals_supported: string[];
+  founded: number | null;
+  headquartered: string;
+  long_description: string;
+  how_it_works: string;
+  pros_detail: ProConItem[];
+  cons_detail: ProConItem[];
+  best_for: string;
+  best_team_size: string;
+  weaknesses: string;
+  reputation_flag: string | null;
+  ratings: AiToolRatings;
+  key_features: string[];
+  integrations: string[];
+  affiliate_program: string;
+  affiliate_payout_note: string;
+  verified_date: string;
+  ai_faqs: LeadGenFaq[];
+}
+
+export const aiTools: AiTool[] = (aiToolsData as { ai_tools: AiTool[] }).ai_tools;
+
+export function getAiTool(slug: string): AiTool | undefined {
+  return aiTools.find((t) => t.slug === slug);
+}
+
+export const AI_CATEGORY_META: Record<AiToolCategory, { label: string; blurb: string }> = {
+  'ai-receptionist': { label: 'AI Receptionists & Call Answering', blurb: 'AI voice agents that answer inbound calls 24/7, book jobs, and stop missed-call revenue leakage — the highest-ROI AI category for trades, since service businesses miss a large share of inbound calls.' },
+  'ai-estimating': { label: 'AI Estimating & Measurement', blurb: 'AI that measures from photos or satellite imagery and generates priced quotes in minutes.' },
+  'ai-scheduling': { label: 'AI Scheduling & Dispatch', blurb: 'AI that books appointments against live availability and optimizes crew routes.' },
+  'ai-marketing': { label: 'AI Marketing & Reviews', blurb: 'AI for review collection, before/after imagery, and marketing content.' },
+  'ai-all-in-one': { label: 'AI All-in-One Assistants', blurb: 'Broad AI assistants spanning calls, follow-up, and back-office tasks.' },
+};
+
+export function aiToolsByCategory(): Array<{ category: AiToolCategory; tools: AiTool[] }> {
+  const order: AiToolCategory[] = ['ai-receptionist', 'ai-estimating', 'ai-scheduling', 'ai-marketing', 'ai-all-in-one'];
+  return order
+    .map((category) => ({ category, tools: aiTools.filter((t) => t.ai_category === category) }))
+    .filter((g) => g.tools.length > 0);
 }
 
 
