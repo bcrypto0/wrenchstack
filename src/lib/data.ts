@@ -9,6 +9,7 @@ import agenciesData from '../data/agencies.json';
 import aiToolsData from '../data/ai_tools.json';
 import paymentsData from '../data/payments.json';
 import financingData from '../data/financing.json';
+import accountingData from '../data/accounting.json';
 
 export interface ToolPricing {
   starting_at_usd: number | null;
@@ -1268,6 +1269,68 @@ export function financingByModel(): Array<{ model: FinancingModel; providers: Fi
   return order
     .map((model) => ({ model, providers: financingProviders.filter((p) => p.financing_model === model) }))
     .filter((g) => g.providers.length > 0);
+}
+
+// --- Accounting software (Phase 2 new category: accounting) -------------------
+// Trade-agnostic. Grouped by positioning (full double-entry / invoicing-first / free).
+
+export type AccountingPositioning = 'full-accounting' | 'invoicing-first' | 'free' | 'enterprise';
+
+export interface AccountingRatings {
+  g2: number | null;
+  capterra: number | null;
+  trustpilot: number | null;
+  reddit_sentiment: string;
+}
+
+export interface AccountingSoftware {
+  slug: string;
+  name: string;
+  vendor_url: string;
+  affiliate_url: string;
+  tagline: string;
+  positioning: AccountingPositioning;
+  pricing_summary: string;
+  starting_price_usd: number | null;
+  free_trial_days: number;
+  verticals_supported: string[];
+  founded: number | null;
+  headquartered: string;
+  long_description: string;
+  how_it_works: string;
+  pros_detail: ProConItem[];
+  cons_detail: ProConItem[];
+  best_for: string;
+  best_team_size: string;
+  weaknesses: string;
+  reputation_flag: string | null;
+  ratings: AccountingRatings;
+  key_features: string[];
+  integrations: string[];
+  affiliate_program: string;
+  affiliate_payout_note: string;
+  verified_date: string;
+  faqs: LeadGenFaq[];
+}
+
+export const accountingSoftware: AccountingSoftware[] = (accountingData as { software: AccountingSoftware[] }).software;
+
+export function getAccountingSoftware(slug: string): AccountingSoftware | undefined {
+  return accountingSoftware.find((a) => a.slug === slug);
+}
+
+export const ACCOUNTING_POSITION_META: Record<AccountingPositioning, { label: string; blurb: string }> = {
+  'full-accounting': { label: 'Full Double-Entry Accounting', blurb: 'Complete accounting — bank reconciliation, A/R and A/P, reporting — that scales with the business. The standard once you have employees, inventory, or an accountant. Every major FSM integrates with these.' },
+  'invoicing-first': { label: 'Invoicing-First Accounting', blurb: 'Built around invoicing, time tracking, and getting paid, with lighter bookkeeping. Great for solo and small service businesses that prioritize billing over deep accounting.' },
+  'free': { label: 'Free Accounting', blurb: 'Core accounting and invoicing at no monthly cost, monetized through payments and payroll add-ons. Best for very small or new businesses watching every dollar.' },
+  'enterprise': { label: 'Mid-Market / Enterprise Accounting', blurb: 'Heavier accounting for larger or multi-entity operations.' },
+};
+
+export function accountingByPosition(): Array<{ position: AccountingPositioning; software: AccountingSoftware[] }> {
+  const order: AccountingPositioning[] = ['full-accounting', 'invoicing-first', 'free', 'enterprise'];
+  return order
+    .map((position) => ({ position, software: accountingSoftware.filter((a) => a.positioning === position) }))
+    .filter((g) => g.software.length > 0);
 }
 
 
