@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { tools, verticals, getTool, verticalToUrl, priceTier, freshnessTier, leadGenPlatforms, leadGenTier, insuranceProviders, insuranceTier, payrollServices, payrollTier, marketingAgencies, agencyTier, aiTools, paymentProcessors, financingProviders, accountingSoftware } from '../lib/data';
+import { tools, verticals, getTool, verticalToUrl, priceTier, freshnessTier, leadGenPlatforms, leadGenTier, insuranceProviders, insuranceTier, payrollServices, payrollTier, marketingAgencies, agencyTier, aiTools, paymentProcessors, financingProviders, accountingSoftware, bankingProviders } from '../lib/data';
 import featuresData from '../data/features.json';
 import migrationsData from '../data/migrations.json';
 
@@ -153,6 +153,19 @@ export const GET: APIRoute = () => {
       tagline: a.tagline,
       bestFor: a.best_for,
       verticals: a.verticals_supported,
+    });
+  }
+
+  // Banking providers
+  for (const p of bankingProviders) {
+    items.push({
+      type: 'banking',
+      name: p.name,
+      slug: p.slug,
+      url: `/banking/${p.slug}/`,
+      tagline: p.tagline,
+      bestFor: p.best_for,
+      verticals: p.verticals_supported,
     });
   }
 

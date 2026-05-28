@@ -10,6 +10,7 @@ import aiToolsData from '../data/ai_tools.json';
 import paymentsData from '../data/payments.json';
 import financingData from '../data/financing.json';
 import accountingData from '../data/accounting.json';
+import bankingData from '../data/banking.json';
 
 export interface ToolPricing {
   starting_at_usd: number | null;
@@ -1331,6 +1332,67 @@ export function accountingByPosition(): Array<{ position: AccountingPositioning;
   return order
     .map((position) => ({ position, software: accountingSoftware.filter((a) => a.positioning === position) }))
     .filter((g) => g.software.length > 0);
+}
+
+// --- Banking providers (Phase 2 new category: business banking) ---------------
+// Fintech business-banking platforms (FDIC-insured via partner banks). Grouped
+// by focus (self-employed / business-checking / credit-and-lending).
+
+export type BankingFocus = 'self-employed' | 'business-checking' | 'credit-and-lending';
+
+export interface BankingRatings {
+  trustpilot: number | null;
+  bbb: string | null;
+  reddit_sentiment: string;
+}
+
+export interface BankingProvider {
+  slug: string;
+  name: string;
+  vendor_url: string;
+  affiliate_url: string;
+  tagline: string;
+  banking_focus: BankingFocus;
+  pricing_summary: string;
+  monthly_fee: string;
+  apy: string;
+  verticals_supported: string[];
+  founded: number | null;
+  headquartered: string;
+  long_description: string;
+  how_it_works: string;
+  pros_detail: ProConItem[];
+  cons_detail: ProConItem[];
+  best_for: string;
+  best_team_size: string;
+  weaknesses: string;
+  reputation_flag: string | null;
+  ratings: BankingRatings;
+  key_features: string[];
+  integrations: string[];
+  affiliate_program: string;
+  affiliate_payout_note: string;
+  verified_date: string;
+  faqs: LeadGenFaq[];
+}
+
+export const bankingProviders: BankingProvider[] = (bankingData as { providers: BankingProvider[] }).providers;
+
+export function getBankingProvider(slug: string): BankingProvider | undefined {
+  return bankingProviders.find((p) => p.slug === slug);
+}
+
+export const BANKING_FOCUS_META: Record<BankingFocus, { label: string; blurb: string }> = {
+  'self-employed': { label: 'Self-Employed & Solo Banking', blurb: 'Banking built for 1099 and solo operators — automatic tax set-aside, bookkeeping, and contractor payments in one app.' },
+  'business-checking': { label: 'Small-Business Checking', blurb: 'No-fee business checking for growing operations, with a strong app, integrations, and (with Relay) multi-account cash management for methods like Profit First.' },
+  'credit-and-lending': { label: 'Banking + Credit & Lending', blurb: 'Business checking paired with revolving credit lines and higher-yield savings — for shops that want banking and working capital in one place.' },
+};
+
+export function bankingByFocus(): Array<{ focus: BankingFocus; providers: BankingProvider[] }> {
+  const order: BankingFocus[] = ['self-employed', 'business-checking', 'credit-and-lending'];
+  return order
+    .map((focus) => ({ focus, providers: bankingProviders.filter((p) => p.banking_focus === focus) }))
+    .filter((g) => g.providers.length > 0);
 }
 
 
