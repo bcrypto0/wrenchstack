@@ -150,10 +150,12 @@ export function wrenchStackScore(t: Tool, verticalSlug?: string): number {
 }
 
 export function getLogoUrl(t: Tool, size = 64): string {
-  // Use Clearbit Logo API (free, no auth required) with the vendor's domain.
+  // Use Google's favicon service (reliable, free, no auth) for the vendor's
+  // brand mark. ToolLogo falls back to a clean monogram if this fails to load.
+  void size;
   try {
     const url = new URL(t.vendor_url);
-    return `https://logo.clearbit.com/${url.hostname}?size=${size}`;
+    return `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=128`;
   } catch {
     return '';
   }
