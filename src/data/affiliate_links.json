@@ -13,7 +13,7 @@
     "summary": "3 LIVE, several pending, and 6 confirmed dead (customer-only/rejected). Stop re-applying to the dead ones — that was the wasted-effort risk.",
     "live": ["servicetitan", "workiz", "servicefusion"],
     "do_not_retry": ["housecall-pro (rejected by PartnerStack + Network)", "buildops (customer-only)", "knowify (customer-only)", "buildertrend (customer-only)", "jobnimbus (customer-only)", "houzz-pro (customer login wall)"],
-    "re_check_possible_win": "servicem8 — the CONSULTANT program ($99/yr cert) was correctly rejected, but a separate PartnerStack AFFILIATE route reportedly pays 80% of the first 12 months. Re-check market.partnerstack.com/page/servicem8.",
+    "verified_win_2026_05_28": "servicem8 — CONFIRMED via primary source: a SEPARATE PartnerStack AFFILIATE program (not the rejected consultant one) pays 80% of the referred customer's first 12 months, 90-day cookie, open to publishers. ACTION: apply via the existing PartnerStack account.",
     "strategy": "Prioritize RECURRING/lifetime programs over one-time bounties — they compound. Top unjoined recurring targets (see audit doc for URLs): Contractor+ (50% lifetime), QuoteIQ (40% lifetime), GoCanvas (30%, Content-Partner track), FieldPulse (25% lifetime), Commusoft (15% x 2yr), GorillaDesk (20% x 12mo, applied 2026-05-28), Connecteam (+10% ongoing).",
     "data_corrections": "ServiceTitan is a CUSTOMER-referral program (not publisher-tracked) — EV cautious. Service Fusion pays a GIFT CARD, not cash. Jobber's 60% recurring is monthly-plans-only (annual plans pay flat $30-300); PartnerStack route = 90-day cookie. Connecteam = bounty + 10% ongoing, not just 25% year-1."
   },
@@ -88,17 +88,21 @@
       "notes": "LIVE. Partner team (Orit Mendels) replied with 5 qualifying questions on 2026-05-21; answers sent. Link issued: partner.workiz.com/wrenchstack"
     },
     "servicem8": {
-      "status": "re_check",
+      "status": "not_applied",
+      "verified_viable": "2026-05-28 — CONFIRMED a real publisher affiliate program, separate from the rejected consultant program",
       "network": "partnerstack (affiliate) — NOT the direct consultant program",
       "signup_url": "https://market.partnerstack.com/page/servicem8",
       "info_url": "https://www.servicem8.com/us/partners",
       "affiliate_link": null,
       "commission_terms": {
-        "recurring_pct_first_12_months": 80,
-        "note": "Reportedly 80% of the customer's first 12 months via PartnerStack — verify in dashboard"
+        "pct_of_first_12_months": 80,
+        "recurring": false,
+        "cookie_window_days": 90,
+        "cookie_resets_on_reclick": true,
+        "note": "80% of the referred customer's first 12 months of subscription (a one-time payout spread across that year, not perpetual). Open to publishers/content sites — no customer or consultant gating."
       },
       "priority": 2,
-      "notes": "RE-CHECK. The 2026-05-24 attempt rejected ServiceM8's CONSULTANT/implementation partner program ($99/yr + certification course — wrong shape). A SEPARATE PartnerStack affiliate route reportedly pays 80% of the first 12 months. If real, this is one of the best recurring deals in the portfolio. Verify and apply via PartnerStack."
+      "notes": "VERIFIED 2026-05-28 at market.partnerstack.com/page/servicem8. This is a SEPARATE program from the consultant/implementation one rejected 2026-05-24 (that one required $99/yr + a certification course). The PartnerStack affiliate program is open to publishers, pays 80% of the first 12 months, 90-day cookie. APPLY via the existing PartnerStack account (same as Jobber/Connecteam) — one of the highest one-time payouts in the portfolio (~several hundred to ~$1,000+ per referred customer by plan)."
     },
     "servicefusion": {
       "status": "approved",
