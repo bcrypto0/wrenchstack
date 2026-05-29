@@ -27,6 +27,7 @@ import FreshnessBadge from '../../../components/FreshnessBadge.astro';
 import AwardBadge from '../../../components/AwardBadge.astro';
 import UserReviews from '../../../components/UserReviews.astro';
 import ReviewSubmissionForm from '../../../components/ReviewSubmissionForm.astro';
+import AffiliateDisclosure from '../../../components/AffiliateDisclosure.astro';
 import { awardsForTool, awards, userRatingForTool, reviewsForTool } from '../../../lib/data';
 
 export async function getStaticPaths() {
@@ -476,6 +477,8 @@ const breadcrumbs = [
           </span>
         )}
       </div>
+
+      <AffiliateDisclosure />
 
       {smartAlts.length > 0 && (
         <div class="mt-6 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
