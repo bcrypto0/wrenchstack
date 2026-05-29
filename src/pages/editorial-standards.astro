@@ -1,0 +1,127 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { tools, verticals } from '../lib/data';
+
+const lastUpdated = 'May 29, 2026';
+const toolCount = tools.length;
+const verticalCount = verticals.length;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Editorial Standards', url: '/editorial-standards/' },
+];
+---
+
+<Layout
+  title="Editorial Standards & How We Research — WrenchStack"
+  description="How WrenchStack researches, verifies, and publishes: our sourcing, fact-checking, independence, reputation-flag, and corrections standards. Vendor-funded, never vendor-influenced."
+  breadcrumbs={breadcrumbs}
+>
+  <article class="mx-auto max-w-3xl px-4 py-12 prose prose-slate">
+    <div class="not-prose mb-8">
+      <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-orange-600">How we work</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl m-0">Editorial Standards</h1>
+      <p class="mt-3 text-sm text-slate-500">Last updated: {lastUpdated}</p>
+    </div>
+
+    <p>
+      WrenchStack is an independent research publication covering the software and services that trades
+      and field-service businesses buy. We are not a vendor, not a lead broker, and not for sale. These
+      are the standards every page on this site is held to. If we ever fall short of them, email
+      <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a> and we'll fix it.
+    </p>
+
+    <div class="not-prose my-6 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-5">
+      <p class="m-0 text-sm leading-relaxed text-emerald-900">
+        <strong>The one rule everything else serves:</strong> a vendor cannot pay us for a higher score,
+        a better ranking, inclusion in a "best of" list, a softer review, or the removal of a reputation
+        warning. We earn affiliate commissions on some sign-ups, and that never changes what we publish.
+      </p>
+    </div>
+
+    <h2>How we research</h2>
+    <p>
+      Every vendor goes through the same documented process before it's published, regardless of whether
+      we have a commercial relationship with it:
+    </p>
+    <ol>
+      <li><strong>Identify.</strong> Vendors enter the directory through editorial research, category sweeps, contractor requests, or vendor submissions — never by paying for placement.</li>
+      <li><strong>Collect from primary sources.</strong> Pricing comes from the vendor's own public pricing page; features from official documentation and product demos; integrations from official integration directories.</li>
+      <li><strong>Aggregate third-party signal.</strong> We pull user ratings from G2 and Capterra and read sentiment across Reddit, BBB, Trustpilot, and trade forums.</li>
+      <li><strong>Score consistently.</strong> Every vendor is rated with the same published <a href="/methodology/">WrenchStack Fit Score™</a> formula and weights.</li>
+      <li><strong>Write and review.</strong> Each review is drafted, checked against the standards on this page, and published with a verification date.</li>
+    </ol>
+    <p>
+      The full step-by-step timeline and the scoring weights are documented on our
+      <a href="/methodology/">methodology page</a>, which is versioned and carries a public changelog.
+    </p>
+
+    <h2>How we verify</h2>
+    <ul>
+      <li><strong>Pricing is dated.</strong> Every pricing figure carries a <em>verified date</em> and is re-checked quarterly. Anything older than 90 days is flagged for re-verification before it ranks.</li>
+      <li><strong>Primary sources win.</strong> When a vendor's claim contradicts its own public page, we publish what the public page says until the page changes.</li>
+      <li><strong>No fabricated signals.</strong> We do not invent review counts, ratings, or testimonials. Where we have no first-party reviews for a tool, we say so rather than manufacture them.</li>
+      <li><strong>Custom-quoted pricing is labeled.</strong> For enterprise tools without public pricing, we cite user-reported ranges from public sources and mark them as such — never a number we made up.</li>
+    </ul>
+
+    <h2>Our sources</h2>
+    <p>
+      Primary sources are vendor pricing pages, official product documentation, and integration
+      directories. Third-party sources include G2 and Capterra (ratings), and BBB, the FTC, Trustpilot,
+      Reddit, and trade forums (reputation and sentiment). When we attach a reputation warning to a
+      vendor, we cite the documented basis for it.
+    </p>
+
+    <h2>How reputation flags work</h2>
+    <p>
+      Some vendors carry a reputation warning. We apply these based on <strong>documented patterns</strong>
+      — FTC settlements or actions, class-action history, high BBB complaint volume, or consistent
+      customer-reported problems (for example, lead-quality complaints or aggressive lock-in contracts).
+      A flag is applied on the evidence alone. We flag vendors we earn commissions from, and we recommend
+      vendors we earn nothing from, when that's where the evidence points.
+    </p>
+
+    <h2>Independence and how we make money</h2>
+    <p>
+      WrenchStack is reader-focused and affiliate-funded: when you sign up with some vendors through our
+      links, we may earn a commission, at no extra cost to you. That funding pays for the research; it
+      does not influence it. The same Fit Score formula, the same reputation standards, and the same
+      editorial scrutiny apply to every vendor — affiliate partner or not. See our
+      <a href="/disclosure/">affiliate disclosure</a> and the per-vendor affiliate ledger on the
+      <a href="/methodology/#affiliate-ledger">methodology page</a>.
+    </p>
+
+    <h2>Corrections</h2>
+    <p>
+      If we get something wrong — a price, a feature, a claim — we correct it within 48 hours of
+      confirmation, and the correction is noted on the page with a date. We never silently edit a
+      substantive error away. Spotted one? Email
+      <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a> with the page URL and what's wrong.
+    </p>
+
+    <h2>Who is accountable</h2>
+    <p>
+      WrenchStack operates as a research desk with defined editorial roles — Editor-in-Chief, Methodology
+      Lead, Data Operations, and Vendor Relations — even where those roles consolidate in early
+      operations. Every review is held to the standards on this page; vendor relationships are managed
+      separately from editorial scoring. Editorial questions and accountability go to
+      <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a>. Learn more
+      <a href="/about/">about WrenchStack</a>.
+    </p>
+
+    <h2>Keeping {toolCount}+ tools across {verticalCount} trades current</h2>
+    <p>
+      Coverage at this scale only stays useful if it stays fresh. We use data tooling and automation to
+      track pricing and structure information across the directory, and a quarterly refresh cycle to
+      re-verify pricing, re-pull ratings, and re-evaluate reputation flags. The standards on this page
+      govern what gets published — the tooling helps us hold the line at scale, it doesn't replace the
+      judgment.
+    </p>
+
+    <div class="not-prose mt-10 rounded-lg border border-slate-200 bg-slate-50 p-5 text-sm text-slate-600">
+      Related: <a href="/methodology/" class="font-medium text-slate-900 hover:underline">WrenchStack Fit Score™ Methodology</a>
+      · <a href="/disclosure/" class="font-medium text-slate-900 hover:underline">Affiliate disclosure</a>
+      · <a href="/about/" class="font-medium text-slate-900 hover:underline">About</a>
+    </div>
+  </article>
+</Layout>
