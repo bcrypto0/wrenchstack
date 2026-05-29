@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { tools, verticals, aggregateRating, verticalToUrl, type Tool } from '../../lib/data';
+import { isComparisonIndexable } from '../../lib/compare-index.mjs';
 
 interface Pair {
   a: Tool;
@@ -15,6 +16,10 @@ for (let i = 0; i < tools.length; i++) {
     const b = tools[j];
     if (!a.verticals.some((v) => b.verticals.includes(v))) continue;
     const [first, second] = [a, b].sort((x, y) => x.slug.localeCompare(y.slug));
+    // Only surface indexable comparisons (see compare-index.mjs) so crawl budget
+    // and internal PageRank concentrate on the ~150 pages that can rank, instead
+    // of bleeding into ~1,800 noindexed long-tail pairs.
+    if (!isComparisonIndexable(first.slug, second.slug)) continue;
     pairs.push({ a: first, b: second });
   }
 }
@@ -54,7 +59,7 @@ const pairsByVertical = verticals.map((v) => ({
       const scoreQ = (aggregateRating(q.a) ?? 0) + (aggregateRating(q.b) ?? 0);
       return scoreQ - scoreP;
     }),
-}));
+})).filter((g) => g.pairs.length > 0);
 
 // All pairs alphabetical (for the full browse list)
 const allPairsAlphabetical = [...pairs].sort((p, q) => {
