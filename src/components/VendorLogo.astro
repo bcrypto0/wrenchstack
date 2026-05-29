@@ -1,0 +1,41 @@
+---
+// Generic vendor logo — favicon from the vendor's domain with a clean monogram
+// fallback. Unlike ToolLogo (which takes a Tool), this takes name + url, so it
+// works for any category: lead-gen, insurance, payroll, agencies, AI tools,
+// payments, financing, accounting, banking, and international vendors.
+interface Props {
+  name: string;
+  url: string;
+  size?: number;
+  class?: string;
+}
+const { name, url, size = 40, class: className = '' } = Astro.props;
+
+let logoUrl = '';
+try {
+  logoUrl = `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=128`;
+} catch {
+  logoUrl = '';
+}
+const initial = (name.trim().charAt(0) || '?').toUpperCase();
+---
+
+<div class={`inline-flex shrink-0 items-center justify-center overflow-hidden rounded-lg bg-slate-100 ${className}`} style={`width: ${size}px; height: ${size}px;`}>
+  {logoUrl ? (
+    <img
+      src={logoUrl}
+      alt={`${name} logo`}
+      width={size}
+      height={size}
+      loading="lazy"
+      class="h-full w-full object-contain"
+      onerror="this.style.display='none'; this.parentElement.querySelector('.logo-fallback').style.display='flex';"
+    />
+  ) : null}
+  <div
+    class="logo-fallback h-full w-full items-center justify-center bg-slate-900 font-bold text-white"
+    style={logoUrl ? 'display: none;' : 'display: flex;'}
+  >
+    <span style={`font-size: ${size * 0.45}px;`}>{initial}</span>
+  </div>
+</div>
