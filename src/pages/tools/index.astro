@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { tools, verticals, aggregateRating, formatPrice, verticalToUrl, priceTier, teamSizeBucket, freshnessTier, type Tool } from '../../lib/data';
+import { tools, verticals, aggregateRating, formatPrice, verticalToUrl, priceTier, teamSizeBucket, freshnessTier, winsForTool, type Tool } from '../../lib/data';
 import FreshnessBadge from '../../components/FreshnessBadge.astro';
 import ToolLogo from '../../components/ToolLogo.astro';
 
@@ -180,6 +180,7 @@ const itemListSchema = {
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {flagshipTools.map((t) => {
           const r = aggregateRating(t);
+          const won = winsForTool(t.slug).length > 0;
           return (
             <a
               href={`/tools/${t.slug}/`}
@@ -198,6 +199,12 @@ const itemListSchema = {
                   </div>
                 </div>
               </div>
+              {won && (
+                <span class="mt-2 inline-flex items-center gap-1 rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-amber-800">
+                  <svg viewBox="0 0 24 24" fill="currentColor" class="h-3 w-3 text-amber-600" aria-hidden="true"><path d="M12 2l2.39 4.84L20 7.5l-3.91 3.81.93 5.39L12 14.27l-5.02 2.43.93-5.39L4 7.5l5.61-.66L12 2z" /></svg>
+                  WrenchStack Pick
+                </span>
+              )}
               <p class="mt-2 text-sm text-slate-500 leading-snug">{t.tagline}</p>
               <p class="mt-3 text-sm font-medium text-slate-700">{formatPrice(t)}</p>
               <p class="mt-1 text-xs text-slate-500">Best for: {t.best_for.slice(0, 80)}{t.best_for.length > 80 ? '…' : ''}</p>
