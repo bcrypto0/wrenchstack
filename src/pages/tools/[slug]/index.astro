@@ -330,12 +330,17 @@ const productSchema = {
     price: tool.pricing.starting_at_usd ?? undefined,
     priceCurrency: 'USD',
   },
-  ...(rating !== null && {
+  // Only emit aggregateRating from REAL first-party reviews. Emitting a
+  // fabricated reviewCount (e.g. a baseline of 50 with zero real reviews) is a
+  // Google structured-data violation. reviews.json is currently empty, so no
+  // aggregateRating is emitted until genuine reviews exist. The G2/Capterra
+  // ratings still display on-page, attributed to their third-party source.
+  ...(userRating && {
     aggregateRating: {
       '@type': 'AggregateRating',
-      ratingValue: rating.toFixed(1),
+      ratingValue: userRating.avg.toFixed(1),
       bestRating: '5',
-      reviewCount: userRating ? userRating.count + 50 : 50,
+      reviewCount: userRating.count,
     },
   }),
   ...(userReviews.length > 0 && {
@@ -367,7 +372,7 @@ const faqSchema = {
 };
 
 const pageTitle = `${tool.name} Review (2026): Pricing, Features, Pros & Cons`;
-const pageDescription = `${tool.name} review: pricing tiers, key features, pros and cons, integrations, and honest weaknesses. ${tool.tagline}. Updated 2026.`;
+const pageDescription = `${tool.name} review: pricing tiers, key features, pros and cons, integrations, and honest weaknesses. ${tool.tagline}. Updated ${new Date().getFullYear()}.`;
 
 const reviewSchema = rating !== null ? {
   '@context': 'https://schema.org',

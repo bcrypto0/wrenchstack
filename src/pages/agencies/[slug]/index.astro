@@ -20,7 +20,7 @@ const agencyVerticals = agency.verticals_specialty
 const siblings = marketingAgencies.filter((a) => a.slug !== agency.slug).slice(0, 6);
 
 const pageTitle = `${agency.name} Review (2026): Services, Pricing, Pros & Cons`;
-const pageDescription = `${agency.name} digital marketing agency review for trades contractors. ${agency.tagline}. ${agency.reputation_flag ? 'Includes documented reputation context. ' : ''}Updated 2026.`;
+const pageDescription = `${agency.name} digital marketing agency review for trades contractors. ${agency.tagline}. ${agency.reputation_flag ? 'Includes documented reputation context. ' : ''}Updated ${new Date().getFullYear()}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },

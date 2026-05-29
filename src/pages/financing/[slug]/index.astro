@@ -16,7 +16,7 @@ const modelLabel = FINANCING_MODEL_META[provider.financing_model].label;
 const siblings = financingProviders.filter((p) => p.slug !== provider.slug).slice(0, 6);
 
 const pageTitle = `${provider.name} Review (2026): Fees, Rates & Pros & Cons for Contractors`;
-const pageDescription = `${provider.name} contractor financing review. ${provider.tagline}. ${provider.reputation_flag ? 'Includes documented consumer-cost context. ' : ''}Real fees, APRs, and honest trade-offs. Updated 2026.`;
+const pageDescription = `${provider.name} contractor financing review. ${provider.tagline}. ${provider.reputation_flag ? 'Includes documented consumer-cost context. ' : ''}Real fees, APRs, and honest trade-offs. Updated ${new Date().getFullYear()}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },

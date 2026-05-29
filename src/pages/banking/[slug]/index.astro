@@ -16,7 +16,7 @@ const focusLabel = BANKING_FOCUS_META[provider.banking_focus].label;
 const siblings = bankingProviders.filter((p) => p.slug !== provider.slug).slice(0, 6);
 
 const pageTitle = `${provider.name} Review (2026): Fees, APY & Pros & Cons for Contractors`;
-const pageDescription = `${provider.name} business banking review for trades. ${provider.tagline}. Real fees, APY, and the cash-deposit and freeze caveats. Updated 2026.`;
+const pageDescription = `${provider.name} business banking review for trades. ${provider.tagline}. Real fees, APY, and the cash-deposit and freeze caveats. Updated ${new Date().getFullYear()}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },

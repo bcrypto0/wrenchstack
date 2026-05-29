@@ -1,17 +1,27 @@
 {
-  "_note": "Real commission data sourced 2026-05-20 from program pages + third-party affiliate aggregators. Verify rates inside dashboard once approved — public pages can lag actual program terms.",
+  "_note": "Internal tracker (NOT rendered on the site). Commission data sourced 2026-05-20, reconciled 2026-05-28 against actual application verdicts. Verify rates inside each dashboard once approved — public pages lag actual terms. The FULLER, current ledger (incl. Tradify/Synchroteam/WorkWave/Skimmer/GorillaDesk applications + the recurring-first apply queue) lives in MEMORY.md and docs/affiliate-audit-2026-05-27.md.",
   "_status_legend": {
-    "not_applied": "Haven't applied yet",
+    "not_applied": "Haven't applied yet (and viable)",
     "applied": "Application submitted, waiting",
     "approved": "Approved, link active",
-    "rejected": "Rejected (try direct outreach or skip)",
+    "rejected": "Rejected by the program (don't retry without traffic data)",
+    "not_viable": "Wrong program shape for a directory (customer-only / consultant-only) — do NOT apply",
+    "re_check": "Worth a fresh look — a viable route may exist that an earlier attempt missed",
     "expired": "Was approved, link no longer valid"
+  },
+  "_reconciled_2026_05_28": {
+    "summary": "3 LIVE, several pending, and 6 confirmed dead (customer-only/rejected). Stop re-applying to the dead ones — that was the wasted-effort risk.",
+    "live": ["servicetitan", "workiz", "servicefusion"],
+    "do_not_retry": ["housecall-pro (rejected by PartnerStack + Network)", "buildops (customer-only)", "knowify (customer-only)", "buildertrend (customer-only)", "jobnimbus (customer-only)", "houzz-pro (customer login wall)"],
+    "re_check_possible_win": "servicem8 — the CONSULTANT program ($99/yr cert) was correctly rejected, but a separate PartnerStack AFFILIATE route reportedly pays 80% of the first 12 months. Re-check market.partnerstack.com/page/servicem8.",
+    "strategy": "Prioritize RECURRING/lifetime programs over one-time bounties — they compound. Top unjoined recurring targets (see audit doc for URLs): Contractor+ (50% lifetime), QuoteIQ (40% lifetime), GoCanvas (30%, Content-Partner track), FieldPulse (25% lifetime), Commusoft (15% x 2yr), GorillaDesk (20% x 12mo, applied 2026-05-28), Connecteam (+10% ongoing).",
+    "data_corrections": "ServiceTitan is a CUSTOMER-referral program (not publisher-tracked) — EV cautious. Service Fusion pays a GIFT CARD, not cash. Jobber's 60% recurring is monthly-plans-only (annual plans pay flat $30-300); PartnerStack route = 90-day cookie. Connecteam = bounty + 10% ongoing, not just 25% year-1."
   },
   "programs": {
     "jobber": {
-      "status": "not_applied",
-      "network": "direct (also via CJ.com)",
-      "signup_url": "https://saasaffiliate.com/partner/jobber-affiliate-program/",
+      "status": "applied",
+      "network": "partnerstack (primary) — also CJ.com",
+      "signup_url": "https://jobber.partnerstack.com/?group=baseaffiliate",
       "alt_signup_url": "https://signup.cj.com/member/signup/publisher/?cid=5275645",
       "affiliate_link": null,
       "commission_terms": {
@@ -21,27 +31,27 @@
         "connect_annual_usd": 150,
         "grow_annual_usd": 300,
         "monthly_recurring_pct": 60,
-        "cookie_window_days": 30,
+        "monthly_recurring_note": "60% recurring applies to MONTHLY plans only; annual plans pay the flat per-tier amounts above",
+        "cookie_window_days": 90,
+        "cookie_note": "90-day via PartnerStack (30-day via CJ/direct)",
         "payout_terms": "Net 30 via PayPal/Stripe; $50 minimum"
       },
       "priority": 1,
-      "notes": "Jobber has the broadest applicability across all 13 verticals. Highest-volume affiliate for us. 60% recurring on monthly is unusual and great."
+      "notes": "Applied via PartnerStack 2026-05-24, pending. Broadest applicability across all verticals; highest-volume affiliate for us."
     },
     "housecall-pro": {
-      "status": "not_applied",
+      "status": "rejected",
       "network": "partnerstack",
       "signup_url": "https://dash.partnerstack.com/application?company=housecallpro&group=paidaffiliates",
       "info_url": "https://www.housecallpro.com/paid-affiliates/",
       "affiliate_link": null,
       "commission_terms": {
-        "per_qualified_lead_usd_max": 350,
-        "per_enrollment_usd": 180,
+        "per_sale_usd_range": "40-400 (varies by plan tier)",
         "per_new_lead_usd": 10,
-        "cookie_window_days": 90,
-        "cookie_resets_on_reclick": true
+        "cookie_window_days": 90
       },
-      "priority": 2,
-      "notes": "Generous tiered structure. 90-day cookie is excellent. PartnerStack = unified dashboard with Connecteam and others."
+      "priority": 99,
+      "notes": "REJECTED by PartnerStack (and PartnerStack Network) May 2026. Do NOT retry now — reapply only after ~90 days of real organic traffic data. Generous terms ($40-400/sale by plan + 90-day cookie) make it worth a future re-try."
     },
     "servicetitan": {
       "status": "approved",
@@ -60,7 +70,7 @@
         "eligibility": "Referral must be 3+ techs, 1+ office FTE, in eligible vertical"
       },
       "priority": 3,
-      "notes": "LIVE. MASSIVE payout — $500 per demo + up to $10k per signup. Approved instantly on signup 2026-05-21."
+      "notes": "LIVE link wired. CAVEAT: this is a CUSTOMER-referral program, not a publisher-tracked affiliate — conversions require qualified business referrals (3+ techs), not anonymous directory clicks. The $10k cap is real but treat projected EV cautiously."
     },
     "workiz": {
       "status": "approved",
@@ -77,28 +87,18 @@
       "priority": 4,
       "notes": "LIVE. Partner team (Orit Mendels) replied with 5 qualifying questions on 2026-05-21; answers sent. Link issued: partner.workiz.com/wrenchstack"
     },
-    "buildops": {
-      "status": "not_applied",
-      "network": "direct",
-      "signup_url": "https://buildops.com/lp/refer/",
+    "servicem8": {
+      "status": "re_check",
+      "network": "partnerstack (affiliate) — NOT the direct consultant program",
+      "signup_url": "https://market.partnerstack.com/page/servicem8",
+      "info_url": "https://www.servicem8.com/us/partners",
       "affiliate_link": null,
       "commission_terms": {
-        "per_meeting_taken_usd": 500,
-        "deal_required": false
+        "recurring_pct_first_12_months": 80,
+        "note": "Reportedly 80% of the customer's first 12 months via PartnerStack — verify in dashboard"
       },
-      "priority": 5,
-      "notes": "$500 just for a meeting (no deal required) — easiest content placement: 'book a free consultation'. High EV per click."
-    },
-    "knowify": {
-      "status": "not_applied",
-      "network": "direct",
-      "signup_url": "https://knowify.com/referral-program/",
-      "affiliate_link": null,
-      "commission_terms": {
-        "per_annual_signup_usd": 1000
-      },
-      "priority": 6,
-      "notes": "Construction contractors. $1k flat per annual signup."
+      "priority": 2,
+      "notes": "RE-CHECK. The 2026-05-24 attempt rejected ServiceM8's CONSULTANT/implementation partner program ($99/yr + certification course — wrong shape). A SEPARATE PartnerStack affiliate route reportedly pays 80% of the first 12 months. If real, this is one of the best recurring deals in the portfolio. Verify and apply via PartnerStack."
     },
     "servicefusion": {
       "status": "approved",
@@ -110,14 +110,27 @@
       "username": "bcrypto.eth@gmail.com",
       "commission_terms": {
         "per_qualified_referral_gift_card_usd": 500,
-        "payout_format": "gift card (per official welcome email 2026-05-21)"
+        "payout_format": "GIFT CARD (per official welcome email 2026-05-21), not cash — verify exact terms in dashboard"
       },
       "priority": 7,
-      "notes": "LIVE link wired. Welcome email says $500 gift card per qualified referral — contradicts earlier $150+recurring web research. Verify exact terms in dashboard after CEO logs in."
+      "notes": "LIVE link wired. Payout is a gift card, not cash — factor that into revenue forecasts."
+    },
+    "connecteam": {
+      "status": "applied",
+      "network": "partnerstack",
+      "signup_url": "https://market.partnerstack.com/page/connecteam",
+      "affiliate_link": null,
+      "commission_terms": {
+        "bounty_usd_range": "200-300",
+        "recurring_pct_ongoing": 10,
+        "note": "Hybrid: $200-300 bounty PLUS 10% recurring ongoing (better than the previously-documented '25% year-1')"
+      },
+      "priority": 6,
+      "notes": "Applied via PartnerStack 2026-05-24, pending. Field-team management; same PartnerStack dashboard as the Jobber application."
     },
     "fieldedge": {
-      "status": "not_applied",
-      "network": "direct (customer-only?)",
+      "status": "applied",
+      "network": "direct",
       "signup_url": "https://fieldedge.com/referral-partner-program-registration/",
       "info_url": "https://fieldedge.com/customer-referral/",
       "affiliate_link": null,
@@ -126,10 +139,33 @@
         "wait_period_days": 90
       },
       "priority": 8,
-      "notes": "Note: rewards are ACCOUNT CREDIT for FieldEdge customers, not cash payouts. Less useful unless they have a separate cash partner track. Confirm during signup."
+      "notes": "Applied 2026-05-24, pending. CAVEAT: rewards appear to be ACCOUNT CREDIT for existing FieldEdge customers, not publisher cash — likely not viable for a directory. Confirm there's a cash publisher track; if not, skip."
+    },
+    "buildops": {
+      "status": "not_viable",
+      "network": "direct (customer referral form)",
+      "signup_url": "https://buildops.com/lp/refer/",
+      "affiliate_link": null,
+      "commission_terms": {
+        "per_meeting_taken_usd": 500,
+        "deal_required": false
+      },
+      "priority": 99,
+      "notes": "NOT VIABLE — the $500/meeting is a CUSTOMER referral form, not a publisher affiliate program. Do not apply. (A LinkedIn media-partnership ask to Oliver Moorhouse at BuildOps is the alternative path, tracked in MEMORY.)"
+    },
+    "knowify": {
+      "status": "not_viable",
+      "network": "direct",
+      "signup_url": "https://knowify.com/referral-program/",
+      "affiliate_link": null,
+      "commission_terms": {
+        "per_annual_signup_usd": 1000
+      },
+      "priority": 99,
+      "notes": "NOT VIABLE — customer-only referral program (must be an active Knowify user). Do not apply."
     },
     "buildertrend": {
-      "status": "not_applied",
+      "status": "not_viable",
       "network": "direct (Refer-a-builder)",
       "signup_url": "https://share.buildertrend.com/",
       "ambassador_url": "https://buildertrend.com/ambassadors/",
@@ -137,37 +173,19 @@
       "commission_terms": {
         "per_builder_referred_usd_max": 250
       },
-      "priority": 9,
-      "notes": "Lower payout but construction/contractor focus is unique. Worth applying for vertical coverage."
-    },
-    "connecteam": {
-      "status": "not_applied",
-      "network": "partnerstack",
-      "signup_url": "https://market.partnerstack.com/page/connecteam",
-      "affiliate_link": null,
-      "commission_terms": {
-        "recurring_pct_first_year": 25
-      },
-      "priority": 10,
-      "notes": "Field team management. 25% revenue share for 1 year. Same PartnerStack dashboard as Housecall Pro."
+      "priority": 99,
+      "notes": "NOT VIABLE — customer-only ('share your love for Buildertrend with fellow builders'); the email submission returned 'You are not eligible to participate.' Do not apply."
     }
   },
-  "_priority_to_apply_in_order": [
-    "jobber",
-    "housecall-pro",
-    "buildops",
-    "workiz",
-    "knowify",
-    "servicetitan",
-    "servicefusion",
-    "connecteam",
-    "buildertrend",
-    "fieldedge"
+  "_next_actions_in_order": [
+    "servicem8 (RE-CHECK PartnerStack 80%/12mo affiliate route — possible best-in-portfolio recurring win)",
+    "Then work the recurring-first apply queue in docs/affiliate-audit-2026-05-27.md: GorillaDesk (applied 2026-05-28), FieldPulse, QuoteIQ, Contractor+, GoCanvas (Content-Partner), Commusoft",
+    "Watch for approvals on the pending applications: jobber, connecteam, fieldedge, tradify, synchroteam, workwave, skimmer, gorilladesk"
   ],
   "_total_estimated_ev_per_signup_usd": {
     "low_end_blend": 200,
     "mid_blend": 500,
     "high_end_blend": 1500,
-    "_explanation": "Per 10 signups across the portfolio, expect blended EV $5-15k depending on tool mix. ServiceTitan alone can deliver one $10k payday."
+    "_explanation": "Per 10 signups across the portfolio, expect blended EV $5-15k depending on tool mix. NOTE: ServiceTitan's $10k is a customer-referral, not a click-tracked affiliate — discount it in forecasts."
   }
 }

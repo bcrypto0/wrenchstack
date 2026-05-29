@@ -20,7 +20,7 @@ const tier = payrollTier(service);
 const siblings = payrollServices.filter((s) => s.slug !== service.slug).slice(0, 6);
 
 const pageTitle = `${service.name} Review (2026): Pricing, Features, Pros & Cons`;
-const pageDescription = `${service.name} payroll review for trades contractors. ${service.tagline}. ${service.reputation_flag ? 'Includes documented reputation context. ' : ''}Updated 2026.`;
+const pageDescription = `${service.name} payroll review for trades contractors. ${service.tagline}. ${service.reputation_flag ? 'Includes documented reputation context. ' : ''}Updated ${new Date().getFullYear()}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },

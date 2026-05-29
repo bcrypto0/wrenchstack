@@ -29,7 +29,7 @@ const providerVerticals = provider.verticals
 const siblings = insuranceProviders.filter((p) => p.slug !== provider.slug).slice(0, 6);
 
 const pageTitle = `${provider.name} Review (2026): Coverage, Pricing, Pros & Cons`;
-const pageDescription = `${provider.name} review for trades contractors. ${provider.tagline}. ${provider.reputation_flag ? 'Includes documented reputation context. ' : ''}Updated 2026.`;
+const pageDescription = `${provider.name} review for trades contractors. ${provider.tagline}. ${provider.reputation_flag ? 'Includes documented reputation context. ' : ''}Updated ${new Date().getFullYear()}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },

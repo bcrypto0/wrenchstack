@@ -16,7 +16,7 @@ const positionLabel = ACCOUNTING_POSITION_META[software.positioning].label;
 const siblings = accountingSoftware.filter((a) => a.slug !== software.slug).slice(0, 6);
 
 const pageTitle = `${software.name} Review (2026): Pricing, Pros & Cons for Contractors`;
-const pageDescription = `${software.name} accounting review for trades. ${software.tagline}. Real pricing, FSM integration notes, and honest trade-offs. Updated 2026.`;
+const pageDescription = `${software.name} accounting review for trades. ${software.tagline}. Real pricing, FSM integration notes, and honest trade-offs. Updated ${new Date().getFullYear()}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },

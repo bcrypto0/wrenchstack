@@ -16,7 +16,7 @@ const catLabel = AI_CATEGORY_META[tool.ai_category].label;
 const siblings = aiTools.filter((t) => t.slug !== tool.slug).slice(0, 6);
 
 const pageTitle = `${tool.name} Review (2026): Pricing, Features, Pros & Cons`;
-const pageDescription = `${tool.name} review for trades contractors. ${tool.tagline}. ${tool.reputation_flag ? 'Includes documented reputation context. ' : ''}Independent, affiliate-transparent. Updated 2026.`;
+const pageDescription = `${tool.name} review for trades contractors. ${tool.tagline}. ${tool.reputation_flag ? 'Includes documented reputation context. ' : ''}Independent, affiliate-transparent. Updated ${new Date().getFullYear()}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
