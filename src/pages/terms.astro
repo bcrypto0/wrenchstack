@@ -1,0 +1,107 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const lastUpdated = 'May 29, 2026';
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Terms of Use', url: '/terms/' },
+];
+---
+
+<Layout
+  title="Terms of Use — WrenchStack"
+  description="The terms governing use of WrenchStack. Our content is independent editorial research provided for information only; do your own due diligence before buying."
+  breadcrumbs={breadcrumbs}
+>
+  <article class="mx-auto max-w-3xl px-4 py-12">
+    <header class="mb-8">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">Legal</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Terms of Use</h1>
+      <p class="mt-3 text-sm text-slate-500">Last updated: {lastUpdated}</p>
+    </header>
+
+    <section class="prose prose-slate max-w-none">
+      <p>
+        These Terms of Use govern your access to and use of WrenchStack (wrenchstack.com, the "Site"), an
+        independent research publication operated by WrenchStack ("WrenchStack," "we," "us"). By using the
+        Site, you agree to these terms. If you don't agree, please don't use the Site.
+      </p>
+
+      <h2>1. What WrenchStack is — and isn't</h2>
+      <p>
+        WrenchStack publishes independent editorial research, comparisons, and opinion about software and
+        service vendors for trades and field-service businesses. Our content is provided for general
+        informational purposes only. It is <strong>not</strong> professional, legal, financial, insurance, or
+        accounting advice, and it is not a substitute for your own research. Before purchasing any product or
+        service, verify current details directly with the vendor and consider your own circumstances.
+      </p>
+
+      <h2>2. Accuracy and "as is" availability</h2>
+      <p>
+        We work hard to keep information accurate and current — for example, we stamp pricing with a verified
+        date — but vendor pricing, features, and terms change frequently and without notice to us. The Site and
+        all content are provided "as is" and "as available," without warranties of any kind, express or implied,
+        including accuracy, completeness, fitness for a particular purpose, or non-infringement. We do not
+        warrant that the Site will be uninterrupted or error-free.
+      </p>
+
+      <h2>3. Affiliate relationships</h2>
+      <p>
+        WrenchStack earns affiliate commissions when readers sign up with some of the vendors we cover, via
+        outbound links. This does not affect our editorial assessments: our <a href="/methodology/">WrenchStack
+        Fit Score™ methodology</a> and our reputation flags are applied identically regardless of whether a
+        vendor pays us. See our <a href="/disclosure/">Affiliate Disclosure</a> for details.
+      </p>
+
+      <h2>4. Third-party links and content</h2>
+      <p>
+        The Site links to third-party websites we don't operate or control. We're not responsible for the
+        content, products, policies, or practices of those sites. Following an external link is at your own risk
+        and subject to that site's own terms and privacy policy.
+      </p>
+
+      <h2>5. Intellectual property</h2>
+      <p>
+        The content, design, compilation, and original analysis on the Site — including the WrenchStack Fit
+        Score™ name and methodology — are owned by WrenchStack and protected by intellectual-property laws.
+        You may link to our pages and quote brief excerpts with attribution. You may not scrape, bulk-copy,
+        republish, or create derivative works from substantial portions of the Site without our prior written
+        permission. Vendor names and logos are the property of their respective owners and are used for
+        identification and editorial purposes.
+      </p>
+
+      <h2>6. Acceptable use</h2>
+      <p>You agree not to misuse the Site, including by attempting to disrupt it, accessing it through automated
+        scraping that burdens our infrastructure, or using its content in ways that infringe our rights or
+        mislead others about its source.</p>
+
+      <h2>7. Limitation of liability</h2>
+      <p>
+        To the fullest extent permitted by law, WrenchStack and its operators will not be liable for any
+        indirect, incidental, consequential, or special damages, or for any business, purchasing, or financial
+        decision you make based on the Site. Your use of the Site and reliance on its content is at your own
+        risk.
+      </p>
+
+      <h2>8. Changes to the Site and these terms</h2>
+      <p>
+        We may change, suspend, or discontinue any part of the Site, and we may update these terms from time to
+        time. Material changes will be reflected in the "Last updated" date above. Continued use after a change
+        means you accept the updated terms.
+      </p>
+
+      <h2>9. Governing law</h2>
+      <p>
+        These terms are governed by applicable law, without regard to conflict-of-laws principles. Where a
+        specific jurisdiction is required, it will be the jurisdiction in which WrenchStack is operated. Nothing
+        in these terms limits any non-waivable consumer rights you may have under your local law.
+      </p>
+
+      <h2>10. Contact</h2>
+      <p>
+        Questions about these terms? Email <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a>.
+      </p>
+    </section>
+  </article>
+</Layout>

@@ -1,0 +1,127 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const lastUpdated = 'May 29, 2026';
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Privacy Policy', url: '/privacy/' },
+];
+---
+
+<Layout
+  title="Privacy Policy — WrenchStack"
+  description="How WrenchStack collects, uses, and protects information. We use privacy-friendly, cookieless analytics, never sell personal data, and only collect what you choose to send us."
+  breadcrumbs={breadcrumbs}
+>
+  <article class="mx-auto max-w-3xl px-4 py-12">
+    <header class="mb-8">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">Legal</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Privacy Policy</h1>
+      <p class="mt-3 text-sm text-slate-500">Last updated: {lastUpdated}</p>
+    </header>
+
+    <section class="prose prose-slate max-w-none">
+      <p>
+        WrenchStack ("WrenchStack," "we," "us") is an independent research publication covering
+        software and service vendors for trades and field-service businesses. This policy explains what
+        information we collect, how we use it, and the choices you have. We keep our data practices
+        deliberately minimal.
+      </p>
+
+      <h2>The short version</h2>
+      <ul>
+        <li>We use <strong>privacy-friendly, cookieless analytics</strong> — no personal profiles, no cross-site tracking.</li>
+        <li>We only collect personal information you <strong>choose to send us</strong> (e.g., when you email us or submit a form).</li>
+        <li>We <strong>never sell</strong> your personal information.</li>
+        <li>We don't run user accounts, and we don't operate a newsletter at this time.</li>
+      </ul>
+
+      <h2>Information we collect</h2>
+      <h3>1. Analytics data</h3>
+      <p>
+        We use <a href="https://plausible.io/data-policy" rel="nofollow noopener" target="_blank">Plausible Analytics</a>,
+        a privacy-first analytics tool that does not use cookies and does not collect personal or
+        identifiable information. It reports aggregate metrics only — page views, referring sites, country
+        (derived from IP and then discarded), and device type. We cannot identify individual visitors from
+        this data.
+      </p>
+      <h3>2. Information you provide</h3>
+      <p>
+        If you contact us by email or submit a form (for example, the vendor-submission form), we receive the
+        information you choose to include — typically your name, email address, and your message. Form
+        submissions are processed by <a href="https://web3forms.com/privacy" rel="nofollow noopener" target="_blank">Web3Forms</a>
+        and delivered to our inbox. We use this only to respond to you.
+      </p>
+
+      <h2>Cookies and outbound affiliate links</h2>
+      <p>
+        WrenchStack itself does not set tracking or advertising cookies. Our analytics are cookieless.
+      </p>
+      <p>
+        However, WrenchStack earns affiliate commissions on some outbound links (see our
+        <a href="/disclosure/">Affiliate Disclosure</a>). When you click an affiliate link and leave our site,
+        the destination vendor or its affiliate network (for example, PartnerStack) may set its own cookies to
+        attribute the referral. Those cookies are governed by the destination's privacy policy, not ours, and
+        we do not control or have access to them.
+      </p>
+
+      <h2>How we use information</h2>
+      <ul>
+        <li>To respond to questions, corrections, and vendor inquiries you send us.</li>
+        <li>To understand, in aggregate, which content is useful so we can improve it.</li>
+        <li>To detect and prevent abuse of the site.</li>
+      </ul>
+
+      <h2>Third-party services</h2>
+      <p>We rely on a small number of service providers, each with its own privacy policy:</p>
+      <ul>
+        <li><strong>Cloudflare</strong> — hosting, content delivery, and security.</li>
+        <li><strong>Plausible Analytics</strong> — cookieless, aggregate site analytics.</li>
+        <li><strong>Web3Forms</strong> — processing form submissions.</li>
+        <li><strong>Affiliate networks and vendors</strong> — only when you click an outbound affiliate link and leave our site.</li>
+      </ul>
+
+      <h2>What we do not do</h2>
+      <ul>
+        <li>We do not sell, rent, or trade your personal information.</li>
+        <li>We do not build advertising profiles or run third-party ad networks.</li>
+        <li>We do not share the contents of your messages except as needed to respond to you.</li>
+      </ul>
+
+      <h2>Your rights</h2>
+      <p>
+        Depending on where you live, you may have rights under laws such as the EU/UK GDPR or the California
+        Consumer Privacy Act (CCPA) — including the right to access, correct, or delete personal information we
+        hold about you, and the right to know that we do not sell it. Because we collect so little, in most cases
+        the only personal data we hold is an email thread you started. To exercise any right, email
+        <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a> and we'll act on it.
+      </p>
+
+      <h2>Data retention</h2>
+      <p>
+        We retain email and form correspondence only as long as needed to handle your request and keep a
+        reasonable record, then delete it. Aggregate analytics contain no personal data and are retained for
+        trend analysis.
+      </p>
+
+      <h2>Children</h2>
+      <p>
+        WrenchStack is a business-to-business publication and is not directed at children. We do not knowingly
+        collect personal information from anyone under 16.
+      </p>
+
+      <h2>Changes to this policy</h2>
+      <p>
+        We may update this policy as our practices or the law evolve. Material changes will be reflected in the
+        "Last updated" date above.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Questions about this policy or your data? Email
+        <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a>.
+      </p>
+    </section>
+  </article>
+</Layout>
