@@ -326,11 +326,16 @@ const productSchema = {
   name: tool.name,
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web, iOS, Android',
-  offers: {
-    '@type': 'Offer',
-    price: tool.pricing.starting_at_usd ?? undefined,
-    priceCurrency: 'USD',
-  },
+  // Only emit a valid Offer when there's a real public price (incl. $0 free).
+  // Custom-quoted tools have no price, so we omit offers rather than ship an
+  // empty/invalid Offer (which Google flags as an incomplete Product snippet).
+  ...(tool.pricing.starting_at_usd !== null && {
+    offers: {
+      '@type': 'Offer',
+      price: tool.pricing.starting_at_usd,
+      priceCurrency: 'USD',
+    },
+  }),
   // Only emit aggregateRating from REAL first-party reviews. Emitting a
   // fabricated reviewCount (e.g. a baseline of 50 with zero real reviews) is a
   // Google structured-data violation. reviews.json is currently empty, so no
@@ -362,6 +367,14 @@ const productSchema = {
   }),
 };
 
+// Only emit the SoftwareApplication schema when it carries at least one of
+// offers / aggregateRating / review — otherwise Google flags it as an
+// incomplete Product snippet. Custom-quoted tools with no first-party reviews
+// have none, so we skip it (the page still ranks; it just isn't eligible for a
+// product rich result, which is correct — we have nothing to show in one).
+const emitProductSchema =
+  tool.pricing.starting_at_usd !== null || !!userRating || userReviews.length > 0;
+
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -375,30 +388,11 @@ const faqSchema = {
 const pageTitle = `${tool.name} Review (2026): Pricing, Features, Pros & Cons`;
 const pageDescription = `${tool.name} review: pricing tiers, key features, pros and cons, integrations, and honest weaknesses. ${tool.tagline}. Updated ${new Date().getFullYear()}.`;
 
-const reviewSchema = rating !== null ? {
-  '@context': 'https://schema.org',
-  '@type': 'Review',
-  itemReviewed: {
-    '@type': 'SoftwareApplication',
-    name: tool.name,
-    applicationCategory: 'BusinessApplication',
-    operatingSystem: 'Web, iOS, Android',
-  },
-  reviewRating: {
-    '@type': 'Rating',
-    ratingValue: rating.toFixed(1),
-    bestRating: '5',
-  },
-  author: {
-    '@type': 'Organization',
-    name: 'WrenchStack',
-  },
-  publisher: {
-    '@type': 'Organization',
-    name: 'WrenchStack',
-  },
-  reviewBody: `${tool.tagline}. Best for: ${tool.best_for}. Watch out for: ${tool.weaknesses}`,
-} : null;
+// (Removed the standalone Review schema: it recast the third-party G2/Capterra
+// aggregate as WrenchStack's own review rating, and its embedded SoftwareApplication
+// had no offers/rating — which is what Google flagged as an incomplete Product
+// snippet. Honest review-stars should come from real first-party reviews, which the
+// productSchema's aggregateRating already emits once reviews.json has entries.)
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -408,8 +402,7 @@ const breadcrumbs = [
 ---
 
 <Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
-  <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
-  {reviewSchema && <script type="application/ld+json" set:html={JSON.stringify(reviewSchema)} />}
+  {emitProductSchema && <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />}
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <article class="mx-auto max-w-4xl px-4 py-12">
