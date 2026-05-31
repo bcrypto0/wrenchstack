@@ -25,6 +25,19 @@ const ogImageUrl = ogImage ?? new URL('/og-default.svg', Astro.site).toString();
 const fullTitle = title.endsWith('WrenchStack') ? title : `${title} | WrenchStack`;
 const isHomepage = Astro.url.pathname === '/';
 
+// Country/region switcher — detect the active market from the URL path.
+const COUNTRIES = [
+  { code: 'us', flag: '🇺🇸', label: 'United States', href: '/' },
+  { code: 'uk', flag: '🇬🇧', label: 'United Kingdom', href: '/uk/' },
+  { code: 'ca', flag: '🇨🇦', label: 'Canada', href: '/ca/' },
+  { code: 'au', flag: '🇦🇺', label: 'Australia', href: '/au/' },
+  { code: 'nz', flag: '🇳🇿', label: 'New Zealand', href: '/nz/' },
+  { code: 'ie', flag: '🇮🇪', label: 'Ireland', href: '/ie/' },
+];
+const intlMatch = Astro.url.pathname.match(/^\/(uk|ca|au|nz|ie)(?:\/|$)/);
+const currentCountryCode = intlMatch ? intlMatch[1] : 'us';
+const currentCountry = COUNTRIES.find((c) => c.code === currentCountryCode) ?? COUNTRIES[0];
+
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
@@ -108,14 +121,24 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
           <a href="/" class="flex items-center" aria-label="WrenchStack home">
             <img src="/logo.png" alt="WrenchStack" height="44" class="h-11 w-auto" />
           </a>
-          <div class="hidden sm:flex items-center gap-1 rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-xs">
-            <a href="/" class="rounded px-2 py-0.5 font-semibold text-slate-900 bg-white shadow-sm" title="United States (current)">🇺🇸 US</a>
-            <a href="/uk/" class="rounded px-2 py-0.5 text-slate-600 hover:text-slate-900" title="United Kingdom">🇬🇧 UK</a>
-            <a href="/ca/" class="rounded px-2 py-0.5 text-slate-600 hover:text-slate-900" title="Canada">🇨🇦 CA</a>
-            <a href="/au/" class="rounded px-2 py-0.5 text-slate-600 hover:text-slate-900" title="Australia">🇦🇺 AU</a>
-            <a href="/nz/" class="rounded px-2 py-0.5 text-slate-600 hover:text-slate-900" title="New Zealand">🇳🇿 NZ</a>
-            <a href="/ie/" class="rounded px-2 py-0.5 text-slate-600 hover:text-slate-900" title="Ireland">🇮🇪 IE</a>
-          </div>
+          <details id="country-switcher" class="group relative">
+            <summary class="flex cursor-pointer list-none items-center gap-1.5 rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 [&::-webkit-details-marker]:hidden" aria-label="Choose country or region">
+              <span>{currentCountry.flag} {currentCountry.label}</span>
+              <svg class="h-3.5 w-3.5 text-slate-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+            </summary>
+            <div class="absolute left-0 z-50 mt-1 w-48 overflow-hidden rounded-md border border-slate-200 bg-white py-1 shadow-lg">
+              {COUNTRIES.map((c) => (
+                <a
+                  href={c.href}
+                  class={`flex items-center justify-between px-3 py-2 text-xs hover:bg-orange-50 ${c.code === currentCountryCode ? 'font-semibold text-slate-900' : 'text-slate-600 hover:text-slate-900'}`}
+                  aria-current={c.code === currentCountryCode ? 'true' : undefined}
+                >
+                  <span>{c.flag} {c.label}</span>
+                  {c.code === currentCountryCode && <span class="text-orange-600" aria-hidden="true">✓</span>}
+                </a>
+              ))}
+            </div>
+          </details>
         </div>
         <div class="order-3 w-full md:order-2 md:w-auto md:flex-1 md:max-w-md md:px-6">
           <div class="relative">
@@ -483,6 +506,20 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
           if (!input.contains(e.target as Node) && !resultsBox!.contains(e.target as Node)) {
             hideResults();
           }
+        });
+      })();
+    </script>
+
+    <script>
+      // Country dropdown: close on outside-click or Escape (native <details> stays open otherwise).
+      (() => {
+        const cs = document.getElementById('country-switcher') as HTMLDetailsElement | null;
+        if (!cs) return;
+        document.addEventListener('click', (e) => {
+          if (!cs.contains(e.target as Node)) cs.removeAttribute('open');
+        });
+        document.addEventListener('keydown', (e) => {
+          if ((e as KeyboardEvent).key === 'Escape') cs.removeAttribute('open');
         });
       })();
     </script>
