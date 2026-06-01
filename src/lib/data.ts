@@ -464,6 +464,27 @@ export function smartAlternatives(t: Tool, n: number = 6): ScoredAlternative[] {
   return scored.sort((a, b) => b.score - a.score).slice(0, n);
 }
 
+// --- Competitor-routing -----------------------------------------------------
+// A tool is "monetized" when it has a real tracking link (affiliate_url is an
+// http URL); otherwise its CTA falls back to the plain vendor site and earns
+// nothing. When a reader lands on an UNMONETIZED tool, surface the best-matching
+// tool we DO earn on — using the SAME honest matcher as smartAlternatives, so
+// the suggestion is always a genuine comparable (shared vertical + type +
+// price tier), never a forced mismatch. This NEVER alters scores, rankings, or
+// the tool's own rating — it only adds an "also consider" CTA. If no genuine
+// comparable earns commission, returns null and nothing is shown.
+export function isMonetized(t: Tool): boolean {
+  return typeof t.affiliate_url === 'string' && t.affiliate_url.startsWith('http');
+}
+
+export function bestMonetizedAlternative(t: Tool): ScoredAlternative | null {
+  if (isMonetized(t)) return null; // already earns — no routing needed
+  // Consider all matched candidates (not just the top 6), then take the
+  // highest-ranked one that actually has a tracking link.
+  const ranked = smartAlternatives(t, tools.length);
+  return ranked.find((a) => isMonetized(a.tool)) ?? null;
+}
+
 // --- Freshness signal: every tool's pricing has a verified_date. Surfacing
 // "how fresh is this data?" as a UI pill is our single biggest direct
 // attack on competitors' staleness (e.g. Capterra's ServiceTitan profile is

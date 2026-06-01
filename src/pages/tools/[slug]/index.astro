@@ -12,6 +12,7 @@ import {
   readingTimeMinutes,
   linkifyTools,
   smartAlternatives,
+  bestMonetizedAlternative,
   type Tool,
 } from '../../../lib/data';
 
@@ -71,6 +72,11 @@ const strongVerticals = Object.entries(tool.vertical_fit ?? {})
 // alternatives to FSM platforms on every page.
 const smartAlts = smartAlternatives(tool, 6);
 const topCompetitor: Tool | undefined = smartAlts[0]?.tool;
+
+// Competitor-routing: if THIS tool isn't monetized, the best-matching tool we
+// DO earn on (same honest matcher). Renders an "also consider" CTA near the top.
+// Null when the tool is already monetized or has no comparable monetized match.
+const monetizedPick = bestMonetizedAlternative(tool);
 
 const verticalsForThisTool = tool.verticals
   .map((v) => verticals.find((x) => x.slug === v))
@@ -472,6 +478,39 @@ const breadcrumbs = [
       </div>
 
       <AffiliateDisclosure />
+
+      {monetizedPick && (
+        <aside class="mt-6 rounded-lg border border-orange-200 bg-orange-50/70 p-4">
+          <div class="flex items-start gap-3">
+            <div class="hidden shrink-0 sm:block">
+              <ToolLogo tool={monetizedPick.tool} size={40} />
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="text-xs font-semibold uppercase tracking-wider text-orange-700">Also worth comparing</div>
+              <p class="mt-1 text-sm leading-relaxed text-slate-700">
+                Considering {tool.name}? <a href={`/tools/${monetizedPick.tool.slug}/`} class="font-semibold text-slate-900 hover:text-orange-700">{monetizedPick.tool.name}</a> ({formatPrice(monetizedPick.tool)}) is a comparable option in the same trades.
+              </p>
+              <p class="mt-1 text-xs italic text-slate-500">{monetizedPick.tool.tagline}</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <a
+                  href={monetizedPick.tool.affiliate_url}
+                  rel="sponsored nofollow noopener"
+                  target="_blank"
+                  class="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600"
+                >
+                  Visit {monetizedPick.tool.name} →
+                </a>
+                <a
+                  href={`/compare/${[tool.slug, monetizedPick.tool.slug].sort().join('-vs-')}/`}
+                  class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:border-orange-400 hover:bg-orange-50"
+                >
+                  Compare side-by-side →
+                </a>
+              </div>
+            </div>
+          </div>
+        </aside>
+      )}
 
       {smartAlts.length > 0 && (
         <div class="mt-6 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
