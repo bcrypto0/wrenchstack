@@ -148,7 +148,8 @@ const faqSchema = {
       </div>
     </section>
 
-    {sameCategory.length > 0 && (
+    {/* Certifications have no head-to-head compare pages (excluded from the compare route), so don't link to them — those links 404. */}
+    {vendor.category !== 'certification' && sameCategory.length > 0 && (
       <section class="mb-10">
         <h2 class="mb-5 text-2xl font-bold text-slate-900">Compare {vendor.name} head-to-head</h2>
         <div class="grid gap-3 sm:grid-cols-2">
