@@ -17,9 +17,12 @@ interface Props {
   ogImage?: string;
   noindex?: boolean;
   breadcrumbs?: BreadcrumbItem[];
+  lang?: string;
+  dir?: 'ltr' | 'rtl';
+  alternateUrls?: { hreflang: string; href: string }[];
 }
 
-const { title, description, canonical, ogImage, noindex = false, breadcrumbs } = Astro.props;
+const { title, description, canonical, ogImage, noindex = false, breadcrumbs, lang = 'en', dir = 'ltr', alternateUrls = [] } = Astro.props;
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
 const ogImageUrl = ogImage ?? new URL('/og-default.svg', Astro.site).toString();
 const fullTitle = title.endsWith('WrenchStack') ? title : `${title} | WrenchStack`;
@@ -88,7 +91,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang} dir={dir}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -98,6 +101,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
+    {alternateUrls.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
     {noindex && <meta name="robots" content="noindex,nofollow" />}
 
     <meta property="og:type" content="website" />
@@ -119,6 +123,12 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
     <link rel="preconnect" href="https://plausible.io" />
   </head>
   <body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
+    <div id="geo-banner" class="hidden border-b border-orange-200 bg-orange-50 text-slate-800">
+      <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2 text-sm">
+        <p id="geo-banner-text" class="min-w-0"></p>
+        <button type="button" id="geo-banner-close" aria-label="Dismiss" class="shrink-0 rounded px-2 py-0.5 text-slate-500 hover:bg-orange-100 hover:text-slate-800">✕</button>
+      </div>
+    </div>
     <header class="border-b border-slate-200 bg-white">
       <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-4">
         <div class="flex items-center gap-3">
@@ -529,6 +539,50 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
         document.addEventListener('keydown', (e) => {
           if ((e as KeyboardEvent).key === 'Escape') cs.removeAttribute('open');
         });
+      })();
+    </script>
+    <script>
+      // Geo-banner: detect the visitor's country via Cloudflare's free /cdn-cgi/trace and, if we
+      // cover that market and they're not already on it, offer the local directory. Client-side +
+      // dismissible, so it never affects Googlebot (which sees the default page) — SEO-safe.
+      (() => {
+        const banner = document.getElementById('geo-banner');
+        const textEl = document.getElementById('geo-banner-text');
+        const closeEl = document.getElementById('geo-banner-close');
+        if (!banner || !textEl || !closeEl) return;
+        try { if (localStorage.getItem('geo-banner-dismissed') === '1') return; } catch (e) {}
+        const MARKETS: Record<string, [string, string, string]> = {
+          SA: ['\u{1F1F8}\u{1F1E6}', 'Saudi Arabia', '/sa/'],
+          AE: ['\u{1F1E6}\u{1F1EA}', 'the UAE', '/ae/'],
+          QA: ['\u{1F1F6}\u{1F1E6}', 'Qatar', '/qa/'],
+          KW: ['\u{1F1F0}\u{1F1FC}', 'Kuwait', '/kw/'],
+          GB: ['\u{1F1EC}\u{1F1E7}', 'the UK', '/uk/'],
+          CA: ['\u{1F1E8}\u{1F1E6}', 'Canada', '/ca/'],
+          AU: ['\u{1F1E6}\u{1F1FA}', 'Australia', '/au/'],
+          NZ: ['\u{1F1F3}\u{1F1FF}', 'New Zealand', '/nz/'],
+          IE: ['\u{1F1EE}\u{1F1EA}', 'Ireland', '/ie/'],
+        };
+        closeEl.addEventListener('click', () => {
+          banner.classList.add('hidden');
+          try { localStorage.setItem('geo-banner-dismissed', '1'); } catch (e) {}
+        });
+        fetch('/cdn-cgi/trace').then((r) => r.text()).then((txt) => {
+          const m = txt.match(/loc=([A-Z]{2})/);
+          const loc = m && m[1];
+          const entry = loc ? MARKETS[loc] : undefined;
+          if (!entry) return;
+          const [flag, name, href] = entry;
+          if (location.pathname.startsWith(href)) return; // already on that market
+          const span = document.createElement('span');
+          span.textContent = flag + ' Browsing from ' + name + '? ';
+          const a = document.createElement('a');
+          a.href = href;
+          a.className = 'font-semibold text-orange-700 underline hover:text-orange-800';
+          a.textContent = 'See our ' + name.replace(/^the /, '') + ' directory →';
+          textEl.appendChild(span);
+          textEl.appendChild(a);
+          banner.classList.remove('hidden');
+        }).catch(() => {});
       })();
     </script>
   </body>

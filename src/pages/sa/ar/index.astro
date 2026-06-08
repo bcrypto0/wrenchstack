@@ -1,0 +1,129 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import saData from '../../../data/international/sa.json';
+
+interface SaVendor {
+  slug: string; name: string; category: string; vendor_url: string;
+  tagline: string; tier: 'S' | 'A' | 'F';
+  is_cross_market: boolean;
+}
+const vendors = (saData as { vendors: SaVendor[] }).vendors;
+
+// Concise Arabic positioning per vendor (the detailed reviews remain in English for now).
+const ar: Record<string, string> = {
+  'oracle-aconex': 'معيار التحكم بالوثائق والتعاون على المشاريع العملاقة (معتمد على مشاريع البحر الأحمر).',
+  'oracle-primavera-p6': 'أداة الجدولة ومراقبة المشاريع المعتمدة في الأعمال الحكومية والعملاقة الكبرى.',
+  'autodesk-construction-cloud': 'العمود الفقري لنمذجة معلومات البناء (BIM) في نيوم والبحر الأحمر والقدية.',
+  'procore': 'منصة إدارة مشاريع عالمية قوية، لكنها أقل توافقاً مع متطلبات هيئة الزكاة من الأنظمة المحلية.',
+  'planradar': 'أداة فحص الموقع وإدارة الملاحظات الأيسر للمقاولين المتوسطين، بدعم عربي وموقع سعودي.',
+  'bentley-systems': 'نمذجة البنية التحتية والأعمال المدنية الكبرى ضمن المشاريع العملاقة.',
+  'first-bit-erp': 'أقوى نظام تخطيط موارد إنشائي سعودي — جداول كميات وتكاليف، متوافق مع هيئة الزكاة.',
+  'pact-erp': 'نظام تخطيط موارد للمقاولات بمكتب في الرياض — تكاليف المشاريع والمشتريات.',
+  'medad-erp': 'نظام موارد سعودي للمنشآت الصغيرة والمتوسطة، معتمد من هيئة الزكاة (المرحلة الثانية).',
+  'onyx-pro-erp': 'نظام موارد عربي راسخ وواسع الاستخدام بين المقاولين السعوديين.',
+  'qoyod': 'محاسبة سحابية وفوترة إلكترونية معتمدة من هيئة الزكاة، بأسعار معلنة بالريال (٦٠–٦٠٠ ريال/شهر).',
+  'wafeq': 'محاسبة حديثة بأرباح وخسائر لكل مشروع، متوافقة مع هيئة الزكاة وبأسعار معلنة.',
+  'daftra': 'منصة عربية أولاً لإدارة المقاولات والمحاسبة مع دعم الفاتورة الإلكترونية.',
+  'fsm-grid': 'منصة متخصصة لإدارة الخدمة الميدانية للكهروميكانيك والصيانة، بدعم عربي.',
+  'focus-softnet-centra': 'نظام CAFM وإدارة خدمة ميدانية لشركات إدارة المرافق والصيانة.',
+  'saudi-council-of-engineers': 'الهيئة السعودية للمهندسين — التسجيل إلزامي لمزاولة الهندسة وتجديد الإقامة.',
+  'contractor-classification': 'تصنيف المقاولين — مطلوب للتقدم على المشاريع الحكومية (درجات ١–٦).',
+  'balady': 'منصة بلدي — إصدار رخص البناء البلدية إلكترونياً.',
+  'saudi-building-code': 'كود البناء السعودي — المعيار الوطني الإلزامي للبناء.',
+  'zatca-fatoora': 'فاتورة (هيئة الزكاة) — الفوترة الإلكترونية الإلزامية للمنشآت.',
+  'qiwa-nitaqat': 'قوى ونطاقات — امتثال العمالة والسعودة المرتبط بالمنافسات والتأشيرات.',
+  'saudi-contractors-authority': 'الهيئة السعودية للمقاولين — التسجيل لاستلام المشاريع الحكومية.',
+  'etimad': 'اعتماد — منصة المنافسات والمشتريات والمدفوعات الحكومية.',
+};
+
+const tierAr: Record<string, string> = { S: 'موصى به', A: 'مقبول', F: 'تنبيه' };
+const cats = [
+  { key: 'software', label: 'برامج المقاولات والإنشاءات', desc: 'من منصات المشاريع العملاقة (أوراكل، أوتوديسك) إلى أنظمة تخطيط الموارد السعودية (فرست بت، باكت) والمحاسبة المعتمدة من هيئة الزكاة (قيود، وافِق) وأدوات الخدمة الميدانية.' },
+  { key: 'certification', label: 'التراخيص والامتثال', desc: 'الجهات السعودية التي يتعامل معها كل مقاول — الهيئة السعودية للمهندسين، تصنيف المقاولين، بلدي، كود البناء السعودي، هيئة الزكاة، قوى/نطاقات، واعتماد.' },
+];
+
+const enUrl = new URL('/sa/', Astro.site).toString();
+const arUrl = new URL('/sa/ar/', Astro.site).toString();
+const pageTitle = 'دليل برامج المقاولات والإنشاءات في السعودية';
+const pageDescription = 'دليل مستقل لبرامج المقاولات والإنشاءات في السعودية: منصات إدارة المشاريع، أنظمة تخطيط الموارد المتوافقة مع هيئة الزكاة، وأدوات الخدمة الميدانية — مع جهات الترخيص والامتثال المحلية.';
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  lang="ar"
+  dir="rtl"
+  alternateUrls={[{ hreflang: 'en', href: enUrl }, { hreflang: 'ar', href: arUrl }, { hreflang: 'x-default', href: enUrl }]}
+>
+  <article class="mx-auto max-w-5xl px-4 py-12">
+
+    <div class="mb-6 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl" aria-hidden="true">🇸🇦</span>
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">المملكة العربية السعودية</p>
+      </div>
+      <a href="/sa/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">English</a>
+    </div>
+
+    <header class="mb-10">
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">دليل برامج المقاولات والإنشاءات في السعودية</h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        مراجعات مستقلة لـ {vendors.length} منتجاً ذا صلة بالسوق السعودي — مُعدّة لطفرة الإنشاءات ضمن رؤية ٢٠٣٠. منصات المشاريع العملاقة (أوراكل أكونكس، بريمافيرا، أوتوديسك)، وأنظمة تخطيط الموارد السعودية (فرست بت، باكت)، والمحاسبة المعتمدة من هيئة الزكاة (قيود، وافِق)، وأدوات الخدمة الميدانية — مع سياق الامتثال المحلي (الهيئة السعودية للمهندسين، تصنيف المقاولين، بلدي، كود البناء السعودي، الفوترة الإلكترونية، نطاقات) الذي تتجاهله البرامج الأجنبية.
+      </p>
+    </header>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">ما الذي يميّز اختيار البرامج في السعودية</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        يختلف اختيار برامج الإنشاءات في السعودية اختلافاً جوهرياً عن الأسواق الغربية. أولاً، <strong>الفوترة الإلكترونية (فاتورة) إلزامية</strong> — يجب أن يتكامل برنامج الفوترة مع منصة هيئة الزكاة (معرّف فريد، ختم تشفيري، رمز QR، تخليص لحظي)، لذا فإن الأدوات الأجنبية لا تستوفي المتطلبات؛ اختر نظاماً معتمداً للمرحلة الثانية. ثانياً، يجب أن يكون البرنامج <strong>عربياً وبالريال السعودي</strong>، مع احتساب ضريبة القيمة المضافة ١٥٪. ثالثاً، يتطلب العمل الحكومي <strong>تصنيف المقاولين</strong> والتسجيل في <strong>اعتماد</strong>، بينما يربط نظام <strong>نطاقات</strong> للسعودة قدرتك على الفوز بالمنافسات وتجديد التأشيرات. ومحرّك الطلب فريد: <strong>المشاريع العملاقة لرؤية ٢٠٣٠</strong> (نيوم، البحر الأحمر، القدية، روشن) التي تفرض نمذجة معلومات البناء عبر سلسلة التوريد.
+      </p>
+    </section>
+
+    {cats.map((cat) => {
+      const cv = vendors.filter((v) => v.category === cat.key);
+      if (cv.length === 0) return null;
+      return (
+        <section class="mb-12">
+          <div class="mb-5">
+            <h2 class="text-2xl font-bold text-slate-900">{cat.label}</h2>
+            <p class="mt-1 text-sm text-slate-600 leading-relaxed">{cat.desc}</p>
+          </div>
+          <div class="grid gap-3 sm:grid-cols-2">
+            {cv.map((v) => {
+              const isCert = v.category === 'certification';
+              const tierColor = v.tier === 'S' ? 'border-emerald-300' : v.tier === 'F' ? 'border-rose-300' : 'border-blue-300';
+              const tierBadge = v.tier === 'S' ? 'bg-emerald-100 text-emerald-900' : v.tier === 'F' ? 'bg-rose-100 text-rose-900' : 'bg-blue-100 text-blue-900';
+              const label = isCert ? 'جهة رسمية' : tierAr[v.tier];
+              return (
+                <article class={`rounded-lg border-2 ${tierColor} bg-white p-4`}>
+                  <div class="mb-1 flex items-center gap-2 flex-wrap">
+                    <h3 class="text-lg font-bold text-slate-900">{v.name}</h3>
+                    <span class={`rounded-full px-2 py-0.5 text-xs font-bold ${tierBadge}`}>{label}</span>
+                  </div>
+                  <p class="text-sm text-slate-700 leading-relaxed">{ar[v.slug] ?? v.tagline}</p>
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    <a href={`/sa/${v.slug}/`} class="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-700">التفاصيل (بالإنجليزية) ←</a>
+                    <a href={v.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-orange-600">{isCert ? 'الموقع الرسمي' : 'زيارة الموقع'} ←</a>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="mb-10 rounded-lg border border-slate-200 bg-white p-5 text-sm text-slate-600">
+      <p>المراجعات التفصيلية لكل منتج متاحة حالياً <a href="/sa/" class="font-medium text-orange-600 hover:underline">بالإنجليزية</a>، ونعمل على توسيع المحتوى العربي تباعاً.</p>
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">هل أنت مزوّد برامج سعودي؟</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">إذا كنت تطوّر برامج للمقاولات أو تخطيط الموارد أو المحاسبة أو الخدمة الميدانية للسوق السعودي/الخليجي وترغب في المراجعة أو الإدراج، تواصل معنا عبر <a href="/for-vendors/" class="underline">برنامج المزوّدين</a>.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/for-vendors/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">العمل معنا ←</a>
+        <a href="/sa/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">English directory</a>
+      </div>
+    </section>
+  </article>
+</Layout>
