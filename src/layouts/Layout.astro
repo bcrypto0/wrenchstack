@@ -34,8 +34,11 @@ const COUNTRIES = [
   { code: 'nz', flag: '🇳🇿', label: 'New Zealand', href: '/nz/' },
   { code: 'ie', flag: '🇮🇪', label: 'Ireland', href: '/ie/' },
   { code: 'sa', flag: '🇸🇦', label: 'Saudi Arabia', href: '/sa/' },
+  { code: 'ae', flag: '🇦🇪', label: 'United Arab Emirates', href: '/ae/' },
+  { code: 'qa', flag: '🇶🇦', label: 'Qatar', href: '/qa/' },
+  { code: 'kw', flag: '🇰🇼', label: 'Kuwait', href: '/kw/' },
 ];
-const intlMatch = Astro.url.pathname.match(/^\/(uk|ca|au|nz|ie|sa)(?:\/|$)/);
+const intlMatch = Astro.url.pathname.match(/^\/(uk|ca|au|nz|ie|sa|ae|qa|kw)(?:\/|$)/);
 const currentCountryCode = intlMatch ? intlMatch[1] : 'us';
 const currentCountry = COUNTRIES.find((c) => c.code === currentCountryCode) ?? COUNTRIES[0];
 
@@ -240,6 +243,9 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
               <li><a href="/nz/" class="hover:text-slate-900">🇳🇿 New Zealand directory</a></li>
               <li><a href="/ie/" class="hover:text-slate-900">🇮🇪 Ireland directory</a></li>
               <li><a href="/sa/" class="hover:text-slate-900">🇸🇦 Saudi Arabia directory</a></li>
+              <li><a href="/ae/" class="hover:text-slate-900">🇦🇪 UAE directory</a></li>
+              <li><a href="/qa/" class="hover:text-slate-900">🇶🇦 Qatar directory</a></li>
+              <li><a href="/kw/" class="hover:text-slate-900">🇰🇼 Kuwait directory</a></li>
               <li><a href="/certifications/" class="hover:text-slate-900">Certifications by country</a></li>
             </ul>
           </div>

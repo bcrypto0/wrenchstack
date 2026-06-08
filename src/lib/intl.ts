@@ -79,6 +79,30 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     intro: 'Saudi construction & trades software selection is shaped by Vision 2030\'s giga-project boom (NEOM, Red Sea, Qiddiya, ROSHN), mandatory ZATCA e-invoicing (Fatoora), Arabic/RTL and Saudi-Riyal requirements, contractor classification (Grades 1–6), Saudi Building Code compliance, and Saudization (Nitaqat) labour rules.',
     certContext: 'Engineering practice requires Saudi Council of Engineers (SCE) registration; contractors need a MOMRAH classification grade to bid public work; permits run through Balady under the mandatory Saudi Building Code; and accounting/invoicing must integrate with ZATCA\'s Fatoora e-invoicing — so local software has to handle Arabic, SAR and 15% VAT.',
   },
+  ae: {
+    code: 'ae',
+    name: 'United Arab Emirates',
+    flag: '🇦🇪',
+    noteField: 'ae_specific_note',
+    intro: 'UAE construction & trades software selection is shaped by Dubai\'s BIM mandate, a 5% VAT (Federal Tax Authority), the upcoming Peppol e-invoicing model, Emiratisation labour quotas, a Dubai-vs-Abu-Dhabi regulatory split (Dubai Municipality contractor classification vs Abu Dhabi DMT + Estidama), and AED pricing.',
+    certContext: 'Dubai Municipality (reshaped by Dubai Law No. 7 of 2025) and federal MOEI handle contractor registration/classification; VAT is 5% via the Federal Tax Authority; e-invoicing follows a decentralised Peppol model (mandatory for large taxpayers from 2027); Emiratisation (MOHRE/Nafis) governs labour; and Abu Dhabi adds the mandatory Estidama Pearl rating.',
+  },
+  qa: {
+    code: 'qa',
+    name: 'Qatar',
+    flag: '🇶🇦',
+    noteField: 'qa_specific_note',
+    intro: 'Qatar construction & trades software selection is shaped by a post-World-Cup, LNG-funded pipeline, the Ashghal QCS 2014 construction standard, Monaqasat contractor classification, Qatarization (Law No. 12 of 2024), Qatari-Riyal pricing, and — unlike Saudi — no VAT and no mandatory e-invoicing yet.',
+    certContext: 'Government work is gated by a Monaqasat (Ministry of Finance) classification certificate; the General Tax Authority administers tax (no VAT yet, with a draft e-invoicing law); Qatarization governs labour; Baladiya issues permits to the QCS 2014 code maintained by Ashghal; and Kahramaa accredits MEP/utility contractors.',
+  },
+  kw: {
+    code: 'kw',
+    name: 'Kuwait',
+    flag: '🇰🇼',
+    noteField: 'kw_specific_note',
+    intro: 'Kuwait construction & trades software selection is shaped by the New Kuwait 2035 / Silk City pipeline, CAPT contractor classification, Kuwaitization labour quotas, the mandatory KFSD fire code, Kuwaiti-Dinar pricing, and — like Qatar — no VAT and no e-invoicing mandate.',
+    certContext: 'The Central Agency for Public Tenders (CAPT) classifies contractors and gates public work; the Ministry of Finance levies 15% corporate income tax on foreign-owned entities (no VAT); the Public Authority for Manpower enforces Kuwaitization; Kuwait Municipality issues permits; and the Kuwait Fire Force owns the mandatory KFSD fire-safety code.',
+  },
 };
 
 export const INTL_CATEGORY_LABELS: Record<string, string> = {

@@ -1,0 +1,484 @@
+{
+  "vendors": [
+    {
+      "slug": "oracle-aconex",
+      "name": "Oracle Aconex",
+      "category": "software",
+      "vendor_url": "https://www.oracle.com/construction-engineering/aconex/",
+      "tagline": "Document control & project collaboration for mega-projects",
+      "market_position": "The document-control and collaboration standard on large UAE projects (Oracle runs a dedicated .ae site; users include Dubai Airports and major EPC contractors). Built for the multi-party coordination big builds demand.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Industry-standard common data environment",
+        "Deep document, RFI and submittal control",
+        "Neutral, auditable record across all parties"
+      ],
+      "cons": [
+        "Enterprise pricing — quote-only",
+        "Overkill for small contractors",
+        "Not an accounting / VAT tool"
+      ],
+      "typical_pricing": "Enterprise — quote-only.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "A backbone for main contractors and PMCs on large jobs, not a back-office tool — pair it with a VAT-compliant accounting system."
+    },
+    {
+      "slug": "oracle-primavera-p6",
+      "name": "Oracle Primavera P6",
+      "category": "software",
+      "vendor_url": "https://www.oracle.com/construction-engineering/primavera-p6/",
+      "tagline": "Critical-path scheduling & cost control for large projects",
+      "market_position": "The de-facto scheduling and project-controls tool on major UAE projects, sold through long-established Dubai resellers and usually paired with Aconex.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Industry-standard critical-path scheduling",
+        "Handles huge multi-project programmes",
+        "Often mandated by government / EPC clients"
+      ],
+      "cons": [
+        "Needs a trained planner",
+        "Enterprise / quote-only pricing",
+        "Heavy for small firms"
+      ],
+      "typical_pricing": "Enterprise — quote-only.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "Government and large private clients frequently mandate Primavera-format programmes — often a contractual requirement, not a choice."
+    },
+    {
+      "slug": "autodesk-construction-cloud",
+      "name": "Autodesk Construction Cloud",
+      "category": "software",
+      "vendor_url": "https://construction.autodesk.com/",
+      "tagline": "BIM, design collaboration & construction management",
+      "market_position": "Central to Dubai’s BIM mandate (BIM model submission required for many new permits since Jan 2024) and used across major UAE developments. The BIM + construction-management standard.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Market-leading BIM and design collaboration",
+        "Strong field + design + document integration",
+        "Required where clients mandate BIM"
+      ],
+      "cons": [
+        "Enterprise / subscription pricing — quote-only",
+        "BIM depth wasted on simple jobs",
+        "English-first UI"
+      ],
+      "typical_pricing": "Per-product subscription — quote-only.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "If you build in Dubai above the BIM thresholds (or any government project), BIM submission to ISO 19650 / IFC is required — Autodesk is the default environment."
+    },
+    {
+      "slug": "procore",
+      "name": "Procore",
+      "category": "software",
+      "vendor_url": "https://www.procore.com/en-ae",
+      "tagline": "All-in-one construction project management",
+      "market_position": "Opened its MENA office in Dubai (Internet City), backed by Abu Dhabi’s Mubadala. A strong, well-designed project platform for mid-to-large UAE builds — but lighter on local compliance than the UAE-native ERPs.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Comprehensive, well-designed project management",
+        "Strong field + financials + document tools",
+        "Large global ecosystem and integrations"
+      ],
+      "cons": [
+        "No public pricing — quote-only",
+        "No native Arabic / local e-invoicing",
+        "Priced for established firms"
+      ],
+      "typical_pricing": "Quote-only (no public price).",
+      "is_cross_market": true,
+      "cross_market_link": "/tools/procore/",
+      "ae_specific_note": "Procore handles project management, not UAE VAT — you’ll still need an FTA-compliant accounting tool (First Bit, Focus, Zoho Books) alongside it."
+    },
+    {
+      "slug": "bentley-systems",
+      "name": "Bentley Systems",
+      "category": "software",
+      "vendor_url": "https://www.bentley.com/",
+      "tagline": "Infrastructure BIM & 4D construction modelling",
+      "market_position": "Infrastructure-grade BIM (ProjectWise, SYNCHRO, OpenRoads) with a Dubai office, used across UAE highways, utilities and large civil works.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Deep infrastructure and civil BIM",
+        "4D scheduling and digital twins",
+        "Standard on large infrastructure programmes"
+      ],
+      "cons": [
+        "Enterprise / quote-only pricing",
+        "Specialist — steep learning curve",
+        "English-first"
+      ],
+      "typical_pricing": "Enterprise — quote-only.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "Most relevant for infrastructure and civil packages rather than standard building fit-out."
+    },
+    {
+      "slug": "planradar",
+      "name": "PlanRadar",
+      "category": "software",
+      "vendor_url": "https://www.planradar.com/",
+      "tagline": "Site inspections, snagging & defect management",
+      "market_position": "Runs its MENA HQ in Dubai — the most accessible mid-market site-execution tool in the UAE, with Arabic support and one of the few published price cards.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Arabic-supported and fast to deploy",
+        "Affordable per-user model with a free trial",
+        "Strong for snagging, QA and handover"
+      ],
+      "cons": [
+        "Site execution, not full project/financials",
+        "Not an accounting tool",
+        "Heavy scheduling/BIM needs go elsewhere"
+      ],
+      "typical_pricing": "Published (global USD card): ~$35 Basic / ~$119 Starter / ~$179 Pro per user/mo; Enterprise custom.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "The strongest entry point for UAE SMB contractors who want digital snagging and inspections without an enterprise rollout."
+    },
+    {
+      "slug": "first-bit-erp",
+      "name": "First Bit ERP",
+      "category": "software",
+      "vendor_url": "https://firstbit.ae/",
+      "tagline": "Construction ERP: estimating, cost control & accounting",
+      "market_position": "A UAE-focused construction ERP (Dubai support team) — estimation, cost control, retention and accounting, FTA-approved for VAT since 2017 and now handling corporate tax.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Purpose-built for construction (BOQ, costing)",
+        "Arabic + local tax handling",
+        "Regional support team"
+      ],
+      "cons": [
+        "Quote-based pricing",
+        "ERP implementation takes time",
+        "Best for established contractors"
+      ],
+      "typical_pricing": "Quote-based (cloud + on-prem).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "The best \"one local differentiator\" pick in the UAE: a construction ERP already built around FTA VAT and Arabic, rather than a US tool bolted onto separate invoicing."
+    },
+    {
+      "slug": "focus-softnet",
+      "name": "Focus Softnet",
+      "category": "software",
+      "vendor_url": "https://www.focussoftnet.com/ae",
+      "tagline": "ERP/CRM with construction project costing",
+      "market_position": "A Dubai-rooted ERP house operating in the UAE since 1995 with 6,000+ local customers — UAE-VAT-compliant ERP/CRM with construction project costing and CAFM.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Established regional ERP house",
+        "Arabic + local tax/compliance",
+        "Construction + CAFM modules"
+      ],
+      "cons": [
+        "Quote-only pricing",
+        "Broad suite — more than small firms need",
+        "Implementation effort"
+      ],
+      "typical_pricing": "Quote-based.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "Strong local install base and support; shortlist it against First Bit and PACT on construction-specific depth."
+    },
+    {
+      "slug": "pact-erp",
+      "name": "PACT ERP",
+      "category": "software",
+      "vendor_url": "https://pactsoft.ae/",
+      "tagline": "Contracting ERP: BOQ, procurement & payroll",
+      "market_position": "A regional contracting ERP with a Dubai office (Silicon Oasis) — BOQ, project costing, procurement and payroll, UAE-VAT-compliant.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Construction/contracting-specific ERP",
+        "Project cost control + procurement",
+        "Arabic-capable, GCC support"
+      ],
+      "cons": [
+        "Quote-only pricing",
+        "ERP setup effort",
+        "Smaller ecosystem than the global tools"
+      ],
+      "typical_pricing": "Quote-based.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "A solid contracting-ERP alternative for UAE firms that want project costing plus FTA-ready accounting in one system."
+    },
+    {
+      "slug": "sage-uae",
+      "name": "Sage (200 / 300)",
+      "category": "software",
+      "vendor_url": "https://www.sage.com/en-ae/",
+      "tagline": "Mid-market ERP/accounting fitted to UAE construction cost control",
+      "market_position": "A global mid-market ERP widely deployed for UAE construction cost control via Sage Middle East and many Dubai/Abu Dhabi partners, with native UAE VAT.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Mature mid-market ERP/accounting",
+        "Built-in UAE VAT + multi-currency",
+        "Large UAE partner network"
+      ],
+      "cons": [
+        "Sold via partners — quote-only",
+        "Construction depth depends on the partner fit-out",
+        "Not a site/BIM tool"
+      ],
+      "typical_pricing": "Partner quote.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "Best where finance and cost control are the priority and a local partner tailors it to your contracting workflow."
+    },
+    {
+      "slug": "zoho",
+      "name": "Zoho (Projects / Books / FSM)",
+      "category": "software",
+      "vendor_url": "https://www.zoho.com/",
+      "tagline": "Affordable PM + accounting + field service for SMB trades",
+      "market_position": "The pragmatic SMB stack — Projects for management, Books (FTA-listed) for UAE VAT accounting, and FSM for field service — popular with smaller UAE trades and contracting firms.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Very affordable, published pricing",
+        "Zoho Books is FTA-accredited for UAE VAT",
+        "Arabic support; huge app ecosystem"
+      ],
+      "cons": [
+        "Not construction-specialised",
+        "Project depth lighter than a true construction ERP",
+        "You assemble several apps"
+      ],
+      "typical_pricing": "Published per-user tiers (USD) on zoho.com; Books has a free tier.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "The cheapest compliant on-ramp for small UAE contractors: Zoho Books keeps you FTA-VAT-correct, with Projects/FSM layered on as you grow."
+    },
+    {
+      "slug": "horizon-fms",
+      "name": "Horizon FMS (FIT)",
+      "category": "software",
+      "vendor_url": "https://fit.ae/horizon-fms",
+      "tagline": "UAE CAFM / facilities management — assets, PPM, work orders",
+      "market_position": "A UAE-built CAFM/facilities-management platform for FM and maintenance contractors — assets, PPM, work orders and contracts, with UAE VAT.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "UAE vendor (fit.ae) with local support",
+        "CAFM: assets, planned maintenance, contracts",
+        "UAE VAT / project accounting marketed"
+      ],
+      "cons": [
+        "Quote-only pricing",
+        "FM-focused, not construction PM",
+        "Smaller brand than the globals"
+      ],
+      "typical_pricing": "Quote-based.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "A locally-built option for UAE facilities-management and MEP-maintenance firms that want CAFM with local support."
+    },
+    {
+      "slug": "fsm-grid",
+      "name": "FSM Grid",
+      "category": "software",
+      "vendor_url": "https://www.fsmglobal.com/fsm-grid/",
+      "tagline": "Field-service management for MEP & maintenance",
+      "market_position": "A field-service platform with an active Dubai/UAE presence, frequently listed among top FSM tools in the Emirates for dispatch and work-order management.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Purpose-built FSM (dispatch, work orders)",
+        "Predictive-maintenance / IoT capability",
+        "Good fit for MEP, HVAC and FM contractors"
+      ],
+      "cons": [
+        "Quote-based tiers",
+        "Not an accounting tool",
+        "Arabic / local support — confirm with vendor"
+      ],
+      "typical_pricing": "Quote-based.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "Native Arabic and VAT support weren’t independently confirmed — verify with the vendor before relying on them for compliant invoicing."
+    },
+    {
+      "slug": "dubai-municipality",
+      "name": "Dubai Municipality (Contractor Licensing)",
+      "category": "certification",
+      "vendor_url": "https://www.dm.gov.ae/",
+      "tagline": "Contractor classification, licensing & building permits in Dubai",
+      "market_position": "The Dubai authority for contractor classification, licensing and building permits. Dubai Law No. 7 of 2025 (in force Jan 2026) introduces a mandatory central Contractor Register and capability-based classification.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Contractor classification + building permits in Dubai",
+        "New central Contractor Register under Dubai Law No. 7 of 2025",
+        "Linked to the Invest in Dubai platform"
+      ],
+      "cons": [
+        "Dubai Law 7/2025 compliance deadline by Jan 2027",
+        "Fines up to AED 100k (AED 200k repeat)",
+        "Permits must meet Dubai building standards + BIM"
+      ],
+      "typical_pricing": "Government licensing/permit fees.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "As of mid-2026, existing Dubai contractors must comply with the new registration/classification regime by Jan 2027 — keep your registration current."
+    },
+    {
+      "slug": "moei",
+      "name": "Ministry of Energy & Infrastructure (MOEI)",
+      "category": "certification",
+      "vendor_url": "https://www.moei.gov.ae/en/services/new-contractor-registration",
+      "tagline": "Federal registration & e-qualification of contractors",
+      "market_position": "The federal body that registers and e-qualifies consultants, contractors and suppliers for federal engineering projects across the UAE.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Registers contractors/consultants for federal projects",
+        "E-qualification for federal engineering work",
+        "Low registration fee (AED 500)"
+      ],
+      "cons": [
+        "Separate from emirate-level classification",
+        "Required for federal-project eligibility",
+        "Must be kept current"
+      ],
+      "typical_pricing": "AED 500 registration (federal).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "UAE compliance splits federal (MOEI) vs emirate (Dubai Municipality / Abu Dhabi DMT) — you may need registration at more than one level."
+    },
+    {
+      "slug": "uae-vat-fta",
+      "name": "UAE VAT (Federal Tax Authority)",
+      "category": "certification",
+      "vendor_url": "https://tax.gov.ae/en/taxes/vat.aspx",
+      "tagline": "VAT at 5% — administered by the FTA since 2018",
+      "market_position": "The Federal Tax Authority administers UAE VAT at a flat 5% (live since 2018). Construction services are generally standard-rated, so your accounting tool must handle 5% VAT and FTA filing.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Single federal VAT regime (5%)",
+        "Clear FTA filing rules",
+        "Construction services generally standard-rated"
+      ],
+      "cons": [
+        "Accounting software must be FTA-VAT-correct",
+        "Different math from Saudi’s 15%",
+        "Penalties for incorrect filing"
+      ],
+      "typical_pricing": "Government (VAT registration is free).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "A Saudi-tuned (15%) product will mis-rate every UAE invoice — choose software set up for UAE’s 5% and FTA returns (First Bit, Focus, Sage, Zoho Books)."
+    },
+    {
+      "slug": "uae-einvoicing",
+      "name": "UAE E-Invoicing (Peppol)",
+      "category": "certification",
+      "vendor_url": "https://mof.gov.ae/",
+      "tagline": "Decentralised Peppol model — phasing in from 2026",
+      "market_position": "Unlike Saudi’s live ZATCA clearance model, UAE e-invoicing uses a decentralised Peppol approach and isn’t mandatory yet — pilot in 2026, large taxpayers (≥AED 50M) from Jan 2027, others through 2027.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Modern Peppol / Accredited-Service-Provider model",
+        "B2B & B2G only (B2C exempt)",
+        "Time to prepare before the mandate"
+      ],
+      "cons": [
+        "NOT mandatory yet (large taxpayers from Jan 2027)",
+        "Different model from Saudi’s ZATCA clearance",
+        "Pick \"Peppol-ASP-ready\" software now"
+      ],
+      "typical_pricing": "Government mandate (no fee; phased rollout).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "As of mid-2026 you don’t need e-invoicing to operate, but buy software that is \"Peppol-ready\" so you’re covered when the mandate lands."
+    },
+    {
+      "slug": "mohre-emiratisation",
+      "name": "MOHRE & Emiratisation (Nafis)",
+      "category": "certification",
+      "vendor_url": "https://www.mohre.gov.ae/",
+      "tagline": "Federal labour rules + Emiratisation quotas",
+      "market_position": "The federal labour regulator enforces Emiratisation quotas (with steep per-position fines) while the Nafis programme subsidises Emirati hiring. Payroll/HR software must track Emirati ratios and integrate WPS.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Centralises labour contracts and work permits",
+        "Nafis offers salary subsidies for hiring Emiratis",
+        "Clear quota framework"
+      ],
+      "cons": [
+        "Per-vacancy fines (AED 108k→120k) for missed quotas",
+        "Quotas expanding to smaller firms",
+        "Requires Emirati-headcount tracking + WPS"
+      ],
+      "typical_pricing": "Government (service fees apply).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "Emiratisation is the UAE equivalent of Saudi’s Nitaqat — a different ruleset, so UAE payroll tools must track Emirati headcount, not Saudi GOSI banding."
+    },
+    {
+      "slug": "abu-dhabi-dmt-estidama",
+      "name": "Abu Dhabi DMT & Estidama",
+      "category": "certification",
+      "vendor_url": "https://www.dmt.gov.ae/",
+      "tagline": "Abu Dhabi permits + mandatory Estidama Pearl rating",
+      "market_position": "Abu Dhabi’s Department of Municipalities & Transport runs building permits and the mandatory Estidama Pearl sustainability rating (minimum 1 Pearl for all buildings, 2 Pearl for government) — required to get a permit.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Abu Dhabi building permits and regulation",
+        "Estidama Pearl sustainability rating system",
+        "Clear minimum standards (1 Pearl all, 2 Pearl government)"
+      ],
+      "cons": [
+        "Separate from Dubai’s regime",
+        "Estidama Pearl is a permit gate",
+        "Per-emirate configuration needed"
+      ],
+      "typical_pricing": "Government permit fees.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "If you work across Dubai and Abu Dhabi, your workflows and software often need per-emirate configuration — the UAE is not a single national stack."
+    },
+    {
+      "slug": "dubai-bim-mandate",
+      "name": "Dubai BIM Mandate",
+      "category": "certification",
+      "vendor_url": "https://www.dm.gov.ae/",
+      "tagline": "BIM model submission required for many Dubai permits",
+      "market_position": "Dubai Municipality requires BIM model submission for new building permits above set thresholds (since Jan 2024), to ISO 19650 / IFC — driving BIM adoption down the supply chain.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "BIM submission required for larger Dubai permits since Jan 2024",
+        "Standards: ISO 19650, IFC, IDS, BCF",
+        "Covers hospitals, universities, all government projects"
+      ],
+      "cons": [
+        "Thresholds: e.g. >20 floors / >20,000 m² (architectural)",
+        "Requires BIM-capable design tooling",
+        "Adds upfront modelling effort"
+      ],
+      "typical_pricing": "Part of the permit process.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ae_specific_note": "If you design or sub-contract on qualifying Dubai projects, BIM-capable tools (Autodesk, Bentley) aren’t optional — the permit depends on it."
+    }
+  ]
+}
