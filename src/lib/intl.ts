@@ -71,6 +71,14 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     intro: 'Irish trades vendor selection is shaped by statutory registration (RGI for gas, Safe Electric for electrical), Revenue PAYE Modernisation real-time reporting, RCT for construction subcontractors, and VAT.',
     certContext: 'Gas work requires Registered Gas Installer (RGI) status and electrical work requires Safe Electric registration, while payroll/accounting must handle Revenue PAYE Modernisation (real-time reporting), RCT, and VAT.',
   },
+  sa: {
+    code: 'sa',
+    name: 'Saudi Arabia',
+    flag: '🇸🇦',
+    noteField: 'sa_specific_note',
+    intro: 'Saudi construction & trades software selection is shaped by Vision 2030\'s giga-project boom (NEOM, Red Sea, Qiddiya, ROSHN), mandatory ZATCA e-invoicing (Fatoora), Arabic/RTL and Saudi-Riyal requirements, contractor classification (Grades 1–6), Saudi Building Code compliance, and Saudization (Nitaqat) labour rules.',
+    certContext: 'Engineering practice requires Saudi Council of Engineers (SCE) registration; contractors need a MOMRAH classification grade to bid public work; permits run through Balady under the mandatory Saudi Building Code; and accounting/invoicing must integrate with ZATCA\'s Fatoora e-invoicing — so local software has to handle Arabic, SAR and 15% VAT.',
+  },
 };
 
 export const INTL_CATEGORY_LABELS: Record<string, string> = {

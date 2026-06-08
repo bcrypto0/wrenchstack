@@ -1,0 +1,583 @@
+{
+  "vendors": [
+    {
+      "slug": "oracle-aconex",
+      "name": "Oracle Aconex",
+      "category": "software",
+      "vendor_url": "https://www.oracle.com/sa/construction-engineering/aconex/",
+      "tagline": "Document control & project collaboration for mega-projects",
+      "market_position": "The common-data-environment standard on Saudi giga-projects — Red Sea Global runs Aconex alongside Primavera across 23,000+ users. It handles the document control, RFIs, transmittals and multi-party collaboration that NEOM-scale work demands.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Proven on the largest Saudi giga-projects (Red Sea Global and others)",
+        "Deep document control, RFI and submittal workflow",
+        "Neutral, fully auditable record across all project parties",
+        "Arabic supported"
+      ],
+      "cons": [
+        "Enterprise pricing — quote-only and costly",
+        "Overkill for SMB contractors",
+        "Implementation- and training-heavy",
+        "Not an accounting / ZATCA e-invoicing tool"
+      ],
+      "typical_pricing": "Enterprise — quote-only (no public SAR pricing).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "A collaboration backbone for main contractors and project-management consultants on large projects, not a back-office system for small firms. ZATCA e-invoicing is handled separately by your accounting/ERP."
+    },
+    {
+      "slug": "oracle-primavera-p6",
+      "name": "Oracle Primavera P6",
+      "category": "software",
+      "vendor_url": "https://www.oracle.com/sa/construction-engineering/primavera-p6/",
+      "tagline": "Critical-path scheduling & cost control for large projects",
+      "market_position": "The de-facto scheduling and portfolio-management tool on major Saudi projects, usually paired with Aconex. Built for the multi-thousand-activity programmes that giga-project main contractors and PMCs run.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Industry-standard critical-path scheduling",
+        "Handles enormous, multi-project programmes",
+        "Widely required by giga-project clients and PMCs",
+        "Deep cost and resource management (with Unifier)"
+      ],
+      "cons": [
+        "Steep learning curve — needs a trained planner",
+        "Enterprise/quote-only pricing",
+        "Heavy for small contractors",
+        "Not an invoicing tool"
+      ],
+      "typical_pricing": "Enterprise — quote-only.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "If you bid on government or giga-project work, clients frequently mandate Primavera-format programmes — it is often a contractual requirement, not a choice."
+    },
+    {
+      "slug": "autodesk-construction-cloud",
+      "name": "Autodesk Construction Cloud",
+      "category": "software",
+      "vendor_url": "https://construction.autodesk.com/",
+      "tagline": "BIM, design collaboration & construction management",
+      "market_position": "The BIM backbone on NEOM, Red Sea and Qiddiya. Combines design collaboration (BIM 360 / Forma), field management and document control — the standard where giga-project clients mandate BIM-to-fabrication workflows.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Market-leading BIM and design collaboration",
+        "Used across the flagship Saudi giga-projects",
+        "Strong field + design + document integration",
+        "Required where clients mandate BIM (e.g. ROSHN)"
+      ],
+      "cons": [
+        "Enterprise pricing — quote-only",
+        "BIM depth is wasted on simple fit-out/MEP jobs",
+        "Partial Arabic; English-first UI",
+        "Not a ZATCA invoicing tool"
+      ],
+      "typical_pricing": "Enterprise — quote-only (per-product / per-seat).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "Giga-project clients increasingly require BIM-to-fabrication integration (ROSHN cites ~15% rework reduction). If you sub-contract into those projects, expect to work inside Autodesk's environment."
+    },
+    {
+      "slug": "procore",
+      "name": "Procore",
+      "category": "software",
+      "vendor_url": "https://www.procore.com/en-ae/project-management",
+      "tagline": "All-in-one construction project management",
+      "market_position": "The global construction-management leader, with a regional office serving the UAE/Gulf. Strong for field, financials and document management on mid-to-large commercial builds — but lighter on Saudi-specific localisation than the local ERPs.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Comprehensive, well-designed project management",
+        "Strong field + financials + document tools",
+        "Large global ecosystem and integrations",
+        "Regional (UAE) presence and support"
+      ],
+      "cons": [
+        "No public pricing — quote-only (reported AED 80k+/yr enterprise, third-party estimate)",
+        "No native Arabic UI or ZATCA e-invoicing shown",
+        "Priced for established firms, not small contractors",
+        "Less localised than Saudi-native ERPs"
+      ],
+      "typical_pricing": "Quote-only; third parties report ~AED 80k+/yr at enterprise tier (unconfirmed by Procore).",
+      "is_cross_market": true,
+      "cross_market_link": "/tools/procore/",
+      "sa_specific_note": "Procore is excellent project software but isn't built around Saudi compliance — you'll still need a ZATCA-certified accounting tool (Qoyod, Wafeq, First Bit) alongside it for e-invoicing and VAT."
+    },
+    {
+      "slug": "planradar",
+      "name": "PlanRadar",
+      "category": "software",
+      "vendor_url": "https://www.planradar.com/sa-en/",
+      "tagline": "Site inspections, snagging & defect management",
+      "market_position": "The most accessible mid-market site-execution tool with a genuine Saudi presence and full Arabic site. Handles snagging, inspections, defect tracking and handover documentation — reachable for SMB contractors where Aconex and Procore are not.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Arabic-language Saudi site and support",
+        "Affordable, per-user model with a 30-day trial",
+        "Fast to deploy — usable on day one",
+        "Strong for snagging, inspections and handover"
+      ],
+      "cons": [
+        "Focused on site execution, not full project/financial management",
+        "Not an accounting/ZATCA tool",
+        "Pricing not published on the page (per-user, quote)",
+        "Less suited to heavy scheduling/BIM needs"
+      ],
+      "typical_pricing": "Per-user subscription (quote / 30-day free trial); no public SAR price.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "The strongest entry point for small and mid-size Saudi contractors who need digital snagging and inspections without an enterprise rollout — and it works in Arabic out of the box."
+    },
+    {
+      "slug": "bentley-systems",
+      "name": "Bentley Systems",
+      "category": "software",
+      "vendor_url": "https://www.bentley.com/",
+      "tagline": "Infrastructure BIM & 4D construction modelling",
+      "market_position": "Infrastructure-grade BIM (OpenBuildings, SYNCHRO 4D) used on Saudi giga-projects for the asset-lifecycle and 4D-scheduling end of the work — strongest where the project is heavy civil/infrastructure rather than vertical building.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Deep infrastructure and civil BIM",
+        "4D (time) and asset-lifecycle modelling",
+        "Used on large Saudi infrastructure programmes",
+        "Strong digital-twin capability"
+      ],
+      "cons": [
+        "Enterprise pricing — quote-only",
+        "Specialist tool, steep learning curve",
+        "English-first",
+        "Not for small contractors or back-office"
+      ],
+      "typical_pricing": "Enterprise — quote-only.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "Most relevant if you work on infrastructure, utilities or large civil packages within the giga-projects rather than standard building fit-out."
+    },
+    {
+      "slug": "first-bit-erp",
+      "name": "First Bit ERP",
+      "category": "software",
+      "vendor_url": "https://firstbit.sa/en/",
+      "tagline": "Construction-specific ERP: BOQ, estimating & project costing",
+      "market_position": "The strongest Saudi-native construction ERP — genuine BOQ, estimating, project costing, procurement and payroll, with 2,000+ Middle East clients. Built around how Gulf contracting firms actually run, with ZATCA, withholding tax and Arabic baked in.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Purpose-built for construction (BOQ, costing, subcontracts)",
+        "ZATCA e-invoicing + withholding-tax handling",
+        "Arabic and English; KSA + UAE offices and support",
+        "2,000+ regional clients — proven locally"
+      ],
+      "cons": [
+        "Quote-based pricing (demo required)",
+        "ERP implementation takes time and setup",
+        "Heavier than a simple accounting app",
+        "Best value for established contracting firms"
+      ],
+      "typical_pricing": "Quote-based (demo); no public SAR price.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "The best \"one local differentiator\" pick — a construction ERP that already speaks Saudi compliance (ZATCA, WHT) and Arabic, rather than a US tool bolted onto a separate invoicing system."
+    },
+    {
+      "slug": "pact-erp",
+      "name": "PACT ERP",
+      "category": "software",
+      "vendor_url": "https://pactsoft.sa/industry/construction-contracting/",
+      "tagline": "Contracting ERP: planning, cost control & procurement",
+      "market_position": "A Gulf-native contracting ERP (Riyadh HQ, with UAE/Bahrain/Qatar reach) covering project planning, cost control, procurement and payroll for contracting companies. Arabic-capable and tuned to the regional contracting workflow.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Construction/contracting-specific ERP",
+        "Project cost control and procurement built in",
+        "Arabic support; Riyadh HQ",
+        "Regional GCC footprint"
+      ],
+      "cons": [
+        "Quote-only pricing",
+        "ZATCA support not explicitly stated — confirm before buying",
+        "ERP setup effort",
+        "Smaller ecosystem than the global tools"
+      ],
+      "typical_pricing": "Quote-based (demo).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "Confirm ZATCA Phase-2 e-invoicing support directly during the demo — it's standard for the category but not loudly published on the site."
+    },
+    {
+      "slug": "medad-erp",
+      "name": "Medad ERP",
+      "category": "software",
+      "vendor_url": "https://www.medaderp.com/en",
+      "tagline": "Saudi SME/contracting ERP: finance, HR & inventory",
+      "market_position": "A Riyadh-based SME and contracting ERP covering finance, HR, inventory and sales, with ZATCA Phase-2 approval. A practical all-in-one for small-to-mid Saudi contracting and trade businesses that want local compliance without enterprise weight.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "ZATCA Phase-2 approved e-invoicing",
+        "Arabic-first, Saudi-built",
+        "Covers finance + HR + inventory in one",
+        "Aimed at SME budgets and complexity"
+      ],
+      "cons": [
+        "Quote-only pricing",
+        "Less construction-specialised than First Bit/PACT",
+        "Smaller brand/ecosystem",
+        "Demo required to evaluate"
+      ],
+      "typical_pricing": "Quote-based (demo).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "A solid Saudi-native option for smaller contracting firms whose first priority is ZATCA-compliant finance + HR rather than heavy project controls."
+    },
+    {
+      "slug": "onyx-pro-erp",
+      "name": "Onyx Pro ERP",
+      "category": "software",
+      "vendor_url": "https://ultimate-sa.com/en/onyx-erp",
+      "tagline": "Long-established ERP widely used by Saudi contractors",
+      "market_position": "A long-running Arabic ERP with deep adoption among Saudi contractors and SMEs — finance, projects and inventory with ZATCA support. Familiar and widely supported locally, if less modern than the newer cloud tools.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Established, widely used in KSA",
+        "Arabic-first with local support network",
+        "ZATCA e-invoicing support",
+        "Broad ERP coverage"
+      ],
+      "cons": [
+        "Older interface vs newer cloud ERPs",
+        "Quote-only pricing",
+        "Can feel heavy/legacy",
+        "Demo required"
+      ],
+      "typical_pricing": "Quote-based.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "Often shortlisted for its large local install base and support availability — worth comparing against newer cloud ERPs (First Bit, Medad) on usability before deciding."
+    },
+    {
+      "slug": "qoyod",
+      "name": "Qoyod",
+      "category": "software",
+      "vendor_url": "https://www.qoyod.com/en/",
+      "tagline": "Cloud accounting & ZATCA e-invoicing for contractors",
+      "market_position": "A Saudi-native (Riyadh, 2016) cloud accounting platform, ZATCA Phase-2 certified, with one of the few publicly published price lists in the market. Strong for project firms and O&M contractors that need clean, compliant books without an ERP.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "ZATCA Phase-2 certified e-invoicing",
+        "Published, affordable SAR pricing (rare in this market)",
+        "Arabic-first, Saudi-built",
+        "Fast to set up for SMB contractors"
+      ],
+      "cons": [
+        "Accounting-focused, not full project/construction management",
+        "Trades firms may still need a separate PM tool",
+        "Less suited to giga-project complexity"
+      ],
+      "typical_pricing": "Published: SAR 60 / 120 / 240 / 600 per month (+VAT).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "One of only two vendors here that publish SAR pricing. Pairs well with a site tool like PlanRadar: Qoyod for compliant books + e-invoicing, PlanRadar for site execution."
+    },
+    {
+      "slug": "wafeq",
+      "name": "Wafeq",
+      "category": "software",
+      "vendor_url": "https://www.wafeq.com/en-sa/",
+      "tagline": "Modern accounting with per-project P&L & cost centres",
+      "market_position": "A Saudi/Gulf-native accounting platform (KSA + UAE), ZATCA-compliant, with per-project profit-and-loss and cost-centre tracking that suits contractors. Modern UI, bilingual, and one of the few with published starting pricing.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "ZATCA-compliant e-invoicing",
+        "Per-project P&L and cost centres — useful for contractors",
+        "Bilingual Arabic/English, modern interface",
+        "Published starting price + free tier"
+      ],
+      "cons": [
+        "Accounting, not construction project management",
+        "Project-costing depth is lighter than a full ERP",
+        "Larger contractors may outgrow it"
+      ],
+      "typical_pricing": "Published: from SAR 119/month (Starter); free tier available.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "The per-project P&L is the standout for trades/contracting use — it gives small firms job-level profitability without a heavy ERP, while staying ZATCA-compliant."
+    },
+    {
+      "slug": "daftra",
+      "name": "Daftra",
+      "category": "software",
+      "vendor_url": "https://www.daftra.com/",
+      "tagline": "Arabic-first contractor management & accounting",
+      "market_position": "An Arabic-first MENA platform with a dedicated contractor-management module — project tracking, statements, materials and labour costing — plus ZATCA support. Strong for Arabic-language SMEs that want one tool for jobs and books.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Arabic-first, built for the MENA SME",
+        "Dedicated contracting/project module",
+        "ZATCA e-invoicing support",
+        "Combines jobs, materials, labour and accounting"
+      ],
+      "cons": [
+        "Pricing not clearly published (tiered SaaS)",
+        "Less construction-specialised than a true construction ERP",
+        "Breadth can mean shallower depth per module"
+      ],
+      "typical_pricing": "Tiered SaaS — pricing not publicly fixed (quote/sign-up).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "A good fit for smaller Arabic-language contracting firms that want a single affordable system covering both project tracking and ZATCA-compliant accounting."
+    },
+    {
+      "slug": "fsm-grid",
+      "name": "FSM Grid",
+      "category": "software",
+      "vendor_url": "https://www.fsmglobal.com/fsm-grid/",
+      "tagline": "AI field-service management for MEP & maintenance",
+      "market_position": "A dedicated field-service platform — dispatch, work orders, IoT-driven predictive maintenance — with Arabic among its supported languages and regional operations. The standout where most Saudi FSM is generic Zoho/Dynamics rather than purpose-built.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Purpose-built field-service management (dispatch, work orders)",
+        "Arabic among supported languages",
+        "IoT / predictive-maintenance capability",
+        "Strong fit for MEP, HVAC and facilities contractors"
+      ],
+      "cons": [
+        "Quote-based tiers (SMB / Pro / Enterprise)",
+        "Not an accounting/ZATCA tool",
+        "Less name-recognition than the big ERPs",
+        "Best value once you have a real field workforce"
+      ],
+      "typical_pricing": "Tiered (SMB / Pro / Enterprise) — quote-based.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "If your business is service and maintenance (MEP, HVAC, FM) rather than building, this is more fit-for-purpose than a construction ERP — pair it with a ZATCA accounting tool for invoicing."
+    },
+    {
+      "slug": "focus-softnet-centra",
+      "name": "Focus Softnet (Centra CAFM)",
+      "category": "software",
+      "vendor_url": "https://www.focussoftnet.com/sa/centra-cafm-software",
+      "tagline": "CAFM + field-service ERP for facilities & MEP firms",
+      "market_position": "A regional ERP house (Dubai-HQ, strong KSA presence) whose Centra CAFM covers computer-aided facilities management and field service for FM and MEP-service companies, with Arabic and ZATCA-ready accounting in the wider suite.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "CAFM + field service in one regional suite",
+        "Arabic support; established KSA presence",
+        "Ties into ZATCA-ready Focus accounting modules",
+        "Good for facilities-management contractors"
+      ],
+      "cons": [
+        "Quote-only pricing",
+        "Broad suite — can be more than a small firm needs",
+        "Implementation effort",
+        "Less specialised than a pure FSM tool"
+      ],
+      "typical_pricing": "Quote-based.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "Worth shortlisting for facilities-management and MEP-maintenance firms that want CAFM and accounting from one regional vendor with local support."
+    },
+    {
+      "slug": "saudi-council-of-engineers",
+      "name": "Saudi Council of Engineers (SCE)",
+      "category": "certification",
+      "vendor_url": "https://www.saudieng.sa/",
+      "tagline": "الهيئة السعودية للمهندسين — engineering profession regulator",
+      "market_position": "The regulator of the engineering profession in Saudi Arabia. SCE registration and accreditation is mandatory to legally practise engineering — and is tied to engineers' Iqama (residence permit) renewal.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Mandatory for legal engineering practice in KSA",
+        "Registration is tied to professional accreditation",
+        "Required for many tendering and licensing steps"
+      ],
+      "cons": [
+        "Non-registration blocks legal practice and Iqama renewal",
+        "Accreditation/renewal is an administrative process",
+        "Requirements differ by grade and discipline"
+      ],
+      "typical_pricing": "Membership / accreditation fees (see saudieng.sa).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "If your firm employs engineers, their SCE status directly affects your ability to operate and renew their residence — keep it current."
+    },
+    {
+      "slug": "contractor-classification",
+      "name": "Contractor Classification (MOMRAH)",
+      "category": "certification",
+      "vendor_url": "https://momah.gov.sa/en/e-services/submit-classification",
+      "tagline": "تصنيف المقاولين — grades contractors for public work",
+      "market_position": "The national contractor-classification system run by the Ministry of Municipalities & Housing. It grades contractors by financial, technical and administrative capacity (Special category + Grades 1–6). No government body may award a project to an unclassified contractor.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Required to bid on government/public projects",
+        "Grade signals capacity to clients (Grade 1 highest)",
+        "Certificate now issued electronically"
+      ],
+      "cons": [
+        "Unclassified = locked out of public tenders",
+        "Higher grades require proven financials and track record",
+        "Classification must be maintained/renewed"
+      ],
+      "typical_pricing": "Government e-service (application via MOMRAH).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "Your classification grade caps the project value you can bid on for public work — software that tracks financials and project history cleanly helps when you apply to move up a grade."
+    },
+    {
+      "slug": "balady",
+      "name": "Balady Platform",
+      "category": "certification",
+      "vendor_url": "https://balady.gov.sa/en",
+      "tagline": "بلدي — national municipal e-permitting",
+      "market_position": "The national municipal e-services portal for building permits and related approvals — fully online. Construction work requires Balady permits, and the platform handles permit issuance, inquiry and modification.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Single online portal for building permits",
+        "Digital permit issuance and inquiry",
+        "Integrates with the wider municipal services"
+      ],
+      "cons": [
+        "Permit submissions must meet Saudi Building Code",
+        "Process is fully digital — paperwork must be in order",
+        "Delays if documentation is incomplete"
+      ],
+      "typical_pricing": "Government e-service (permit fees apply).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "Permit-ready documentation (SBC-compliant drawings, classifications) speeds Balady approvals — keeping project documents organised in your PM/ERP tool pays off here."
+    },
+    {
+      "slug": "saudi-building-code",
+      "name": "Saudi Building Code (SBC)",
+      "category": "certification",
+      "vendor_url": "https://sbc.gov.sa/",
+      "tagline": "كود البناء السعودي — the mandatory national building code",
+      "market_position": "The national building code, legally mandatory under Royal Decree. Compliance with SBC (structural, mechanical/HVAC, electrical, plumbing, energy and fire codes) is required to obtain building permits.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "The single national standard for building compliance",
+        "Required for permit approval",
+        "Covers structural, MEP, energy and fire safety"
+      ],
+      "cons": [
+        "Legally mandatory — non-compliance blocks permits",
+        "Sub-codes are detailed and discipline-specific",
+        "Design/BIM tooling must be SBC-aware"
+      ],
+      "typical_pricing": "Public code (reference via sbc.gov.sa).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "SBC replaces US codes (IBC/IRC/NEC) — drawings, MEP specs and permit submissions must conform to SBC, so design and QA tools need Saudi-code templates, not US ones."
+    },
+    {
+      "slug": "zatca-fatoora",
+      "name": "ZATCA E-Invoicing (Fatoora)",
+      "category": "certification",
+      "vendor_url": "https://zatca.gov.sa/en/E-Invoicing/Pages/default.aspx",
+      "tagline": "فاتورة — mandatory e-invoicing & tax integration",
+      "market_position": "The Zakat, Tax & Customs Authority runs Saudi Arabia's mandatory e-invoicing system (Fatoora). Phase 2 requires API integration, real-time clearance, UUID, cryptographic stamp and QR on invoices — for all VAT-registered businesses, rolled out in waves.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Defines what compliant invoicing software must do",
+        "Phase-2-certified tools handle it automatically",
+        "QR + cryptographic stamp standardise B2B invoices"
+      ],
+      "cons": [
+        "Mandatory and fineable — not optional",
+        "Requires API-integrated, certified software",
+        "Freeform/US invoicing tools cannot comply"
+      ],
+      "typical_pricing": "Government mandate (no fee; software must be compliant).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "This is the single biggest reason US/Western accounting tools don't work in KSA. Choose a ZATCA Phase-2-certified system — Qoyod, Wafeq, First Bit, Medad, Daftra all qualify."
+    },
+    {
+      "slug": "qiwa-nitaqat",
+      "name": "Qiwa & Nitaqat (Saudization)",
+      "category": "certification",
+      "vendor_url": "https://www.qiwa.sa/",
+      "tagline": "قوى / نطاقات — labour & Saudization compliance",
+      "market_position": "Qiwa is the digital labour portal (contracts, work permits) and Nitaqat is the Saudization quota system it calculates. A firm's Nitaqat band (Platinum/Green/Red) controls its ability to get visas, renew Iqamas and bid on government work.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Centralises employment contracts and work permits",
+        "Nitaqat band affects tenders and visas",
+        "Fully digital labour compliance"
+      ],
+      "cons": [
+        "A low/Red band blocks visas, renewals and tenders",
+        "Construction quotas are demanding to hit",
+        "Requires tracking Saudi-vs-expat headcount"
+      ],
+      "typical_pricing": "Government platform (service fees apply).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "Nitaqat has no US equivalent — HR/payroll software used in KSA must track nationality ratios and Qiwa-documented contracts, not just hours and pay."
+    },
+    {
+      "slug": "saudi-contractors-authority",
+      "name": "Saudi Contractors Authority (Muqawil)",
+      "category": "certification",
+      "vendor_url": "https://sca.sa/en",
+      "tagline": "الهيئة السعودية للمقاولين — contracting-sector authority",
+      "market_position": "The authority that develops and regulates the contracting sector (public-facing portal \"Muqawil\"). Registration is required by the Ministry of Finance to receive government projects, and the body provides sector support and development programmes.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Registration needed to receive government projects",
+        "Sector development and support programmes",
+        "Recognised representative body for contractors"
+      ],
+      "cons": [
+        "Another registration to maintain",
+        "Government-work eligibility depends on it",
+        "Overlaps with classification requirements"
+      ],
+      "typical_pricing": "Membership/registration (see sca.sa).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "Together with MOMRAH classification and Etimad registration, SCA membership is part of the \"can I legally win public work?\" checklist for Saudi contractors."
+    },
+    {
+      "slug": "etimad",
+      "name": "Etimad Platform",
+      "category": "certification",
+      "vendor_url": "https://portal.etimad.sa/en-us",
+      "tagline": "اعتماد — government tenders, procurement & payments",
+      "market_position": "The Ministry of Finance's unified portal for government tenders, procurement and payments. Suppliers and contractors must be registered on Etimad to bid on, contract for, or get paid on public projects.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Single portal for all government tenders & payments",
+        "Required to bid on and get paid for public work",
+        "Transparent, digital procurement pipeline"
+      ],
+      "cons": [
+        "Registration prerequisite for public projects",
+        "Competitive, process-driven tendering",
+        "Must keep company data current"
+      ],
+      "typical_pricing": "Government platform (registration required).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "sa_specific_note": "Etimad is where Saudi public-sector work is actually won and paid — clean, classification-ready financials (from your ERP/accounting tool) make registration and bidding far smoother."
+    }
+  ]
+}
