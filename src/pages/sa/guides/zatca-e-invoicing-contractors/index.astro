@@ -1,0 +1,224 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import saData from '../../../../data/international/sa.json';
+
+interface SaVendor {
+  slug: string; name: string; category: string; vendor_url: string;
+  tagline: string; tier: 'S' | 'A' | 'F'; typical_pricing: string;
+}
+const vendors = (saData as { vendors: SaVendor[] }).vendors;
+const softwareCount = vendors.filter(v => v.category === 'software').length;
+
+// ZATCA-relevant rows, driven by our own verified vendor data.
+const zatcaReady = [
+  { slug: 'qoyod', name: 'Qoyod', status: 'ZATCA Phase-2 certified', fit: 'Cloud accounting + e-invoicing for SMB contractors and O&M firms', pricing: 'Published: SAR 60–600/mo (+VAT)' },
+  { slug: 'wafeq', name: 'Wafeq', status: 'ZATCA-compliant', fit: 'Accounting with per-project P&L and cost centres — job-level profitability', pricing: 'Published: from SAR 119/mo; free tier' },
+  { slug: 'first-bit-erp', name: 'First Bit ERP', status: 'ZATCA e-invoicing + withholding tax', fit: 'Full construction ERP — BOQ, estimating, project costing, subcontracts', pricing: 'Quote-based' },
+  { slug: 'medad-erp', name: 'Medad ERP', status: 'ZATCA Phase-2 approved', fit: 'Saudi SME ERP — finance, HR, inventory in one', pricing: 'Quote-based' },
+  { slug: 'daftra', name: 'Daftra', status: 'ZATCA e-invoicing support', fit: 'Arabic-first contractor management + accounting in one tool', pricing: 'Tiered SaaS (not public)' },
+  { slug: 'onyx-pro-erp', name: 'Onyx Pro ERP', status: 'ZATCA e-invoicing support', fit: 'Long-established Arabic ERP with a large Saudi install base', pricing: 'Quote-based' },
+  { slug: 'pact-erp', name: 'PACT ERP', status: 'Confirm ZATCA support in the demo', fit: 'Contracting ERP — planning, cost control, procurement', pricing: 'Quote-based' },
+];
+const zatcaCount = 6; // vendors in our directory explicitly advertising ZATCA support (PACT unconfirmed)
+
+const notInvoicing = [
+  { slug: 'oracle-aconex', name: 'Oracle Aconex' },
+  { slug: 'oracle-primavera-p6', name: 'Oracle Primavera P6' },
+  { slug: 'autodesk-construction-cloud', name: 'Autodesk Construction Cloud' },
+  { slug: 'procore', name: 'Procore' },
+  { slug: 'planradar', name: 'PlanRadar' },
+  { slug: 'bentley-systems', name: 'Bentley Systems' },
+];
+
+const faqs = [
+  { q: 'Does ZATCA e-invoicing apply to construction companies?', a: 'Yes. E-invoicing applies to all VAT-registered businesses in Saudi Arabia, including contractors and construction firms. Phase 1 (Generation) has applied since 4 December 2021 — handwritten, Word or Excel invoices stopped being acceptable then. Phase 2 (Integration) is being rolled out in waves by revenue, and the thresholds have dropped low enough to reach small contracting businesses.' },
+  { q: 'What is the Wave 24 deadline and who is in it?', a: 'Wave 24 covers businesses whose VAT-taxable revenue exceeded SAR 375,000 in any of 2022, 2023 or 2024, with an integration deadline of 30 June 2026. ZATCA notifies targeted taxpayers directly — if your contracting business is above that threshold and you have not checked your notifications, do it now.' },
+  { q: 'What does Phase 2 (Integration) actually require?', a: 'Your invoicing system must integrate with ZATCA’s Fatoora platform via API and issue invoices in the required XML (or PDF/A-3 with embedded XML) format, carrying a UUID, cryptographic stamp and QR code. Standard (B2B) invoices are cleared with ZATCA in near real time before being valid; simplified (B2C) invoices must be reported within 24 hours.' },
+  { q: 'Is Procore, Aconex or Primavera ZATCA-compliant?', a: 'The question doesn’t apply — these are project-management, document-control and scheduling platforms, not invoicing systems, so ZATCA e-invoicing doesn’t apply to them. The compliant invoice must come from your accounting/ERP layer (e.g. Qoyod, Wafeq, First Bit, Medad). Most Saudi contractors run a PM tool and a ZATCA-certified accounting tool side by side.' },
+  { q: 'How does e-invoicing handle progress claims, advance payments and retention?', a: 'These are the construction-specific flows to test before you buy: a progress claim (mustakhlas) must still produce a compliant tax invoice against the contract; advance payments need compliant advance invoices with correct offsetting on later claims; retention affects when amounts fall due, not your VAT obligations on issued invoices. A generic invoicing tool can be ZATCA-certified yet still handle these flows poorly — make the vendor demo YOUR billing scenarios.' },
+  { q: 'What happens if we miss the deadline?', a: 'ZATCA applies penalties for e-invoicing violations, and enforcement typically starts with notification and escalates. Beyond fines, non-compliant invoices create VAT-recovery problems for your clients — large project owners increasingly refuse them. Treat the integration deadline as a hard project date with 2–3 months of lead time for onboarding and testing.' },
+];
+
+const pageTitle = 'ZATCA Phase 2 E-Invoicing for Construction Companies in Saudi Arabia (2026 Guide)';
+const pageDescription = 'Wave 24 deadline 30 June 2026 (SAR 375k threshold): what ZATCA Phase 2 integration requires from Saudi contractors — progress claims, advance payments, retention — and which construction software is actually ZATCA-ready. Independent, verified June 2026.';
+
+const enUrl = new URL('/sa/guides/zatca-e-invoicing-contractors/', Astro.site).toString();
+const arUrl = new URL('/sa/ar/guides/zatca-e-invoicing-contractors/', Astro.site).toString();
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Saudi Arabia', url: '/sa/' },
+  { name: 'ZATCA e-invoicing for contractors', url: '/sa/guides/zatca-e-invoicing-contractors/' },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle,
+  description: pageDescription,
+  datePublished: '2026-06-11',
+  dateModified: '2026-06-11',
+  inLanguage: 'en',
+  author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
+  publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
+  mainEntityOfPage: enUrl,
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  breadcrumbs={breadcrumbs}
+  alternateUrls={[{ hreflang: 'en', href: enUrl }, { hreflang: 'ar', href: arUrl }, { hreflang: 'x-default', href: enUrl }]}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-8">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">🇸🇦 Saudi Arabia · Compliance guide</p>
+        <a href="/sa/ar/guides/zatca-e-invoicing-contractors/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">العربية</a>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+        ZATCA Phase 2 E-Invoicing for Construction Companies
+      </h1>
+      <p class="mt-3 text-lg text-slate-600 leading-relaxed">
+        What the Fatoora integration mandate means for Saudi contractors — progress claims, advance payments, retention — and which construction software is actually ZATCA-ready.
+      </p>
+      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published &amp; verified June 2026 · Not tax advice — confirm your status with ZATCA or your tax advisor.</p>
+    </header>
+
+    <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ The short version</h2>
+      <p class="text-slate-800 leading-relaxed">
+        If your contracting business had VAT-taxable revenue over <strong>SAR 375,000</strong> in any of 2022, 2023 or 2024, you may be in <strong>Wave 24</strong> of ZATCA's Phase 2 rollout — with an integration deadline of <strong>30 June 2026</strong>. By that date your invoicing must run through software that integrates with ZATCA's Fatoora platform (XML invoices, UUID, cryptographic stamp, QR, real-time clearance). Project-management platforms like Procore or Aconex do <em>not</em> satisfy this — the compliant invoice must come from a certified accounting/ERP system.
+      </p>
+    </section>
+
+    <section class="mb-10 grid gap-3 sm:grid-cols-3">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">30 Jun 2026</div>
+        <div class="mt-1 text-xs text-slate-600">Wave 24 integration deadline</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">SAR 375k</div>
+        <div class="mt-1 text-xs text-slate-600">Wave 24 revenue threshold (any of 2022–24)</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">{zatcaCount} of {softwareCount}</div>
+        <div class="mt-1 text-xs text-slate-600">construction platforms in our Saudi directory advertising ZATCA support (June 2026)</div>
+      </div>
+    </section>
+
+    <section class="mb-10 prose prose-slate max-w-none">
+      <h2>What Phase 2 actually requires</h2>
+      <p>
+        Saudi e-invoicing arrived in two phases. <strong>Phase 1 (Generation)</strong>, in force since 4 December 2021, ended manual invoicing: handwritten invoices, Word and Excel stopped counting — invoices must be generated by a compliant electronic system. <strong>Phase 2 (Integration)</strong>, rolling out in waves since January 2023, is the harder step: your system must <em>integrate with ZATCA's Fatoora platform</em> via API.
+      </p>
+      <p>In practice, Phase 2 means your invoicing software must:</p>
+      <ul>
+        <li>issue invoices in the required <strong>XML format</strong> (or PDF/A-3 with embedded XML);</li>
+        <li>carry a <strong>UUID</strong>, a <strong>cryptographic stamp</strong> and a <strong>QR code</strong> on every invoice;</li>
+        <li><strong>clear standard (B2B) invoices with ZATCA in near real time</strong> — the invoice isn't valid until cleared;</li>
+        <li>report simplified (B2C) invoices to ZATCA within 24 hours;</li>
+        <li>onboard your devices/solution with ZATCA (CSID) through the Fatoora portal.</li>
+      </ul>
+      <p>
+        ZATCA assigns businesses to <strong>waves by revenue</strong> and notifies them directly, typically about six months ahead. Thresholds started with the giants (Wave 1: over SAR 3 billion) and have stepped down ever since — by <strong>Wave 24 the threshold is SAR 375,000</strong>, which puts ordinary small contracting businesses squarely in scope.
+      </p>
+
+      <h2>Why construction billing makes this harder</h2>
+      <p>
+        A café issues simple invoices; a contractor doesn't. Construction billing has structures that generic invoicing tools handle badly even when they're technically "ZATCA-certified". Before you commit to any system, make the vendor demo <em>your</em> flows:
+      </p>
+      <ul>
+        <li><strong>Progress claims (المستخلصات):</strong> can the system raise a compliant tax invoice against a contract for each certified progress claim — with correct cumulative quantities, previous-claim deductions and VAT?</li>
+        <li><strong>Advance payments:</strong> can it issue a compliant advance-payment invoice, then offset that advance correctly across later claims?</li>
+        <li><strong>Retention (محتجزات الضمان):</strong> retention changes when money falls due — your system must keep VAT treatment correct on invoiced amounts while tracking retained balances to final account.</li>
+        <li><strong>Supply-and-install contracts:</strong> mixed goods + services billing on one contract, still producing clean XML.</li>
+        <li><strong>Subcontractor chain:</strong> matching incoming subcontractor e-invoices to certificates, and handling withholding tax where it applies.</li>
+      </ul>
+
+      <h2>Which construction software is ZATCA-ready?</h2>
+      <p>
+        From the {softwareCount} construction-software platforms in our <a href="/sa/">Saudi directory</a>, these are the ones advertising ZATCA e-invoicing capability — with our notes on fit. (Always verify a vendor against <a href="https://zatca.gov.sa/en/E-Invoicing/SolutionProviders/Pages/SolutionProvidersDirectory.aspx" rel="nofollow noopener" target="_blank">ZATCA's official solution-provider directory</a> before signing.)
+      </p>
+    </section>
+
+    <section class="mb-10 overflow-x-auto">
+      <table class="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
+        <thead class="bg-slate-50 text-left text-slate-700">
+          <tr>
+            <th class="p-3 font-semibold">Platform</th>
+            <th class="p-3 font-semibold">ZATCA status</th>
+            <th class="p-3 font-semibold">Best fit</th>
+            <th class="p-3 font-semibold">Pricing</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          {zatcaReady.map((v) => (
+            <tr>
+              <td class="p-3 font-semibold text-slate-900"><a href={`/sa/${v.slug}/`} class="text-orange-700 hover:underline">{v.name}</a></td>
+              <td class="p-3 text-slate-700">{v.status}</td>
+              <td class="p-3 text-slate-600">{v.fit}</td>
+              <td class="p-3 text-slate-600">{v.pricing}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="mt-3 text-xs text-slate-500">Source: WrenchStack Saudi directory, verified June 2026. Statuses reflect what each vendor publishes; confirm certification scope for your wave during the demo.</p>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">And the tools that DON'T need to comply</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        {notInvoicing.map((v, i) => (<><a href={`/sa/${v.slug}/`} class="font-medium text-orange-700 hover:underline">{v.name}</a>{i < notInvoicing.length - 1 ? ', ' : ''}</>))} are project-management, BIM and site tools — <strong>not invoicing systems</strong> — so ZATCA e-invoicing doesn't apply to them. The standard Saudi setup is one of these for running the project, paired with a ZATCA-certified accounting/ERP tool from the table above for billing. Don't reject a great PM platform for "missing ZATCA" — and don't assume your PM platform covers it.
+      </p>
+    </section>
+
+    <section class="mb-10 prose prose-slate max-w-none">
+      <h2>Compliance checklist for contractors</h2>
+      <ol>
+        <li><strong>Confirm your wave.</strong> Check whether VAT-taxable revenue exceeded SAR 375,000 in 2022, 2023 or 2024, and look for ZATCA's notification (Fatoora portal / registered contacts).</li>
+        <li><strong>Pick certified software early.</strong> Shortlist from the table above; cross-check ZATCA's solution-provider directory. Leave 2–3 months for onboarding before your deadline.</li>
+        <li><strong>Demo YOUR billing flows.</strong> Progress claims, advances, retention, supply-and-install — in the demo, on your real contract structure.</li>
+        <li><strong>Onboard with Fatoora.</strong> Device/solution onboarding (CSID issuance) through the portal, done by your vendor or accountant.</li>
+        <li><strong>Run a clearance test.</strong> Issue real cleared invoices in a controlled batch before switching the whole business over.</li>
+        <li><strong>Train the back office.</strong> The people raising claims need to know what now blocks an invoice (missing buyer VAT number, wrong format) — fix at source, not at month-end.</li>
+      </ol>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Frequently asked questions</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
+      <strong class="text-slate-700">Sources &amp; verification:</strong> ZATCA e-invoicing guidance (zatca.gov.sa) · Wave 24 threshold and deadline as published by ZATCA and reported by certified solution providers (verified June 2026) · vendor capabilities from each vendor's published documentation, June 2026. This guide is general information, not tax advice — confirm your obligations with ZATCA or a licensed advisor. Spotted an error? <a href="/contact/" class="underline">Tell us</a> and we'll correct it.
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Compare the ZATCA-ready options side by side</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">Independent reviews of {vendors.length} Saudi construction vendors — pricing, pros and cons, and compliance context, with no pay-to-play.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/sa/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">🇸🇦 Saudi directory →</a>
+        <a href="/sa/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Compare vendors</a>
+        <a href="/for-vendors/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Are you a vendor? Work with us</a>
+      </div>
+    </section>
+  </article>
+</Layout>

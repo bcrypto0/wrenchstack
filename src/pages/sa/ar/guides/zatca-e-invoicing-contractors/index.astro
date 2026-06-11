@@ -1,0 +1,225 @@
+---
+import Layout from '../../../../../layouts/Layout.astro';
+import saData from '../../../../../data/international/sa.json';
+
+interface SaVendor {
+  slug: string; name: string; category: string;
+}
+const vendors = (saData as { vendors: SaVendor[] }).vendors;
+const softwareCount = vendors.filter(v => v.category === 'software').length;
+
+// نفس بيانات النسخة الإنجليزية — من دليلنا السعودي الموثّق.
+const zatcaReady = [
+  { slug: 'qoyod', name: 'قيود (Qoyod)', status: 'معتمد من هيئة الزكاة — المرحلة الثانية', fit: 'محاسبة سحابية وفوترة إلكترونية للمقاولين والمنشآت الصغيرة والمتوسطة', pricing: 'أسعار معلنة: ٦٠–٦٠٠ ريال/شهر (+الضريبة)' },
+  { slug: 'wafeq', name: 'وافِق (Wafeq)', status: 'متوافق مع هيئة الزكاة', fit: 'محاسبة حديثة بأرباح وخسائر لكل مشروع — ربحية على مستوى كل عقد', pricing: 'أسعار معلنة: من ١١٩ ريال/شهر؛ باقة مجانية' },
+  { slug: 'first-bit-erp', name: 'فرست بت (First Bit)', status: 'فوترة إلكترونية + ضريبة الاستقطاع', fit: 'نظام تخطيط موارد إنشائي كامل — جداول كميات، تكاليف مشاريع، مقاولي باطن', pricing: 'بعرض سعر' },
+  { slug: 'medad-erp', name: 'مداد (Medad)', status: 'معتمد من هيئة الزكاة — المرحلة الثانية', fit: 'نظام موارد سعودي للمنشآت الصغيرة والمتوسطة — مالية وموارد بشرية ومخزون', pricing: 'بعرض سعر' },
+  { slug: 'daftra', name: 'دفترة (Daftra)', status: 'يدعم الفوترة الإلكترونية', fit: 'منصة عربية أولاً لإدارة المقاولات والمحاسبة في نظام واحد', pricing: 'باقات (غير معلنة)' },
+  { slug: 'onyx-pro-erp', name: 'أونكس برو (Onyx Pro)', status: 'يدعم الفوترة الإلكترونية', fit: 'نظام موارد عربي راسخ وواسع الانتشار بين المقاولين السعوديين', pricing: 'بعرض سعر' },
+  { slug: 'pact-erp', name: 'باكت (PACT)', status: 'تأكد من دعم هيئة الزكاة أثناء العرض', fit: 'نظام موارد للمقاولات — تخطيط وتكاليف ومشتريات', pricing: 'بعرض سعر' },
+];
+const zatcaCount = 6;
+
+const notInvoicing = [
+  { slug: 'oracle-aconex', name: 'أوراكل أكونكس' },
+  { slug: 'oracle-primavera-p6', name: 'بريمافيرا P6' },
+  { slug: 'autodesk-construction-cloud', name: 'أوتوديسك' },
+  { slug: 'procore', name: 'بروكور' },
+  { slug: 'planradar', name: 'بلان رادار' },
+  { slug: 'bentley-systems', name: 'بنتلي' },
+];
+
+const faqs = [
+  { q: 'هل تنطبق الفوترة الإلكترونية على شركات المقاولات؟', a: 'نعم. تنطبق الفوترة الإلكترونية على جميع المنشآت المسجلة في ضريبة القيمة المضافة في السعودية، بما فيها شركات المقاولات. المرحلة الأولى (الإصدار) سارية منذ ٤ ديسمبر ٢٠٢١ — ومنذ ذلك الحين لم تعد الفواتير اليدوية أو فواتير وورد وإكسل مقبولة. أما المرحلة الثانية (الربط والتكامل) فتُطبَّق على موجات حسب الإيرادات، وقد انخفضت الحدود بما يكفي لتشمل منشآت المقاولات الصغيرة.' },
+  { q: 'ما هو الموعد النهائي للموجة ٢٤ ومن تشمل؟', a: 'تشمل الموجة ٢٤ المنشآت التي تجاوزت إيراداتها الخاضعة لضريبة القيمة المضافة ٣٧٥,٠٠٠ ريال في أي من أعوام ٢٠٢٢ أو ٢٠٢٣ أو ٢٠٢٤، والموعد النهائي للربط هو ٣٠ يونيو ٢٠٢٦. تُشعِر هيئة الزكاة والضريبة والجمارك المكلفين المستهدفين مباشرة — إن كانت منشأتك فوق هذا الحد ولم تتحقق من إشعاراتك، فافعل الآن.' },
+  { q: 'ما الذي تتطلبه المرحلة الثانية (الربط والتكامل) فعلياً؟', a: 'يجب أن يرتبط نظام الفوترة لديك بمنصة "فاتورة" عبر واجهة برمجية (API)، وأن يُصدر الفواتير بصيغة XML (أو PDF/A-3 متضمنة XML) مع رقم مميز UUID وختم تشفير ورمز استجابة سريعة QR. الفواتير الضريبية (بين المنشآت) تخضع للاعتماد الفوري من الهيئة قبل اعتبارها نظامية، والفواتير المبسطة (للمستهلك) يجب رفعها خلال ٢٤ ساعة.' },
+  { q: 'هل بروكور أو أكونكس أو بريمافيرا متوافقة مع هيئة الزكاة؟', a: 'السؤال لا ينطبق عليها — فهذه منصات لإدارة المشاريع والوثائق والجدولة، وليست أنظمة فوترة، وبالتالي لا تخضع لمتطلبات الفوترة الإلكترونية. الفاتورة النظامية يجب أن تصدر من طبقة المحاسبة أو نظام الموارد (مثل قيود، وافِق، فرست بت، مداد). معظم المقاولين في السعودية يشغّلون منصة إدارة مشاريع وأداة محاسبة معتمدة جنباً إلى جنب.' },
+  { q: 'كيف تتعامل الفوترة الإلكترونية مع المستخلصات والدفعات المقدمة ومحتجزات الضمان؟', a: 'هذه هي الحالات الإنشائية التي يجب اختبارها قبل الشراء: المستخلص يجب أن يُنتج فاتورة ضريبية نظامية على العقد بكميات تراكمية صحيحة وخصم المستخلصات السابقة؛ والدفعة المقدمة تحتاج فاتورة دفعة مقدمة نظامية مع تسويتها الصحيحة على المستخلصات اللاحقة؛ ومحتجزات الضمان تؤثر على توقيت الاستحقاق لا على التزامات الضريبة في الفواتير الصادرة. قد يكون النظام «معتمداً» ومع ذلك يتعامل مع هذه الحالات بشكل سيئ — اطلب من المورد عرضاً على سيناريوهات فوترتك أنت.' },
+  { q: 'ماذا يحدث لو فاتنا الموعد؟', a: 'تطبق هيئة الزكاة والضريبة والجمارك غرامات على مخالفات الفوترة الإلكترونية، ويبدأ الإجراء عادة بالإشعار ثم يتصاعد. وإلى جانب الغرامات، فإن الفواتير غير النظامية تسبب مشاكل في استرداد ضريبة القيمة المضافة لعملائك — وكبار الملّاك أصبحوا يرفضونها. تعامل مع موعد الربط كموعد مشروع صارم واترك شهرين إلى ثلاثة للتسجيل والاختبار.' },
+];
+
+const pageTitle = 'الفوترة الإلكترونية (المرحلة الثانية) لشركات المقاولات في السعودية — دليل ٢٠٢٦';
+const pageDescription = 'الموجة ٢٤: الموعد النهائي ٣٠ يونيو ٢٠٢٦ وحد الإيرادات ٣٧٥ ألف ريال. ما تتطلبه مرحلة الربط والتكامل من المقاولين — المستخلصات والدفعات المقدمة ومحتجزات الضمان — وأي برامج المقاولات جاهزة فعلاً لهيئة الزكاة. دليل مستقل، موثّق يونيو ٢٠٢٦.';
+
+const enUrl = new URL('/sa/guides/zatca-e-invoicing-contractors/', Astro.site).toString();
+const arUrl = new URL('/sa/ar/guides/zatca-e-invoicing-contractors/', Astro.site).toString();
+
+const breadcrumbs = [
+  { name: 'الرئيسية', url: '/' },
+  { name: 'السعودية', url: '/sa/ar/' },
+  { name: 'الفوترة الإلكترونية للمقاولين', url: '/sa/ar/guides/zatca-e-invoicing-contractors/' },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle,
+  description: pageDescription,
+  datePublished: '2026-06-11',
+  dateModified: '2026-06-11',
+  inLanguage: 'ar',
+  author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
+  publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
+  mainEntityOfPage: arUrl,
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  breadcrumbs={breadcrumbs}
+  lang="ar"
+  dir="rtl"
+  alternateUrls={[{ hreflang: 'en', href: enUrl }, { hreflang: 'ar', href: arUrl }, { hreflang: 'x-default', href: enUrl }]}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-8">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <p class="text-sm font-semibold tracking-wider text-orange-600">🇸🇦 السعودية · دليل امتثال</p>
+        <a href="/sa/guides/zatca-e-invoicing-contractors/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">English</a>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+        الفوترة الإلكترونية (المرحلة الثانية) لشركات المقاولات
+      </h1>
+      <p class="mt-3 text-lg text-slate-600 leading-relaxed">
+        ماذا يعني الربط مع منصة «فاتورة» للمقاولين في السعودية — المستخلصات والدفعات المقدمة ومحتجزات الضمان — وأي برامج المقاولات جاهزة فعلاً لمتطلبات هيئة الزكاة والضريبة والجمارك.
+      </p>
+      <p class="mt-3 text-sm text-slate-500">إعداد فريق أبحاث WrenchStack · نُشر وتم التحقق في يونيو ٢٠٢٦ · هذا الدليل معلومات عامة وليس استشارة ضريبية — تحقق من وضع منشأتك لدى الهيئة أو مستشارك الضريبي.</p>
+    </header>
+
+    <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ الخلاصة السريعة</h2>
+      <p class="text-slate-800 leading-relaxed">
+        إذا تجاوزت إيرادات منشأتك الخاضعة لضريبة القيمة المضافة <strong>٣٧٥,٠٠٠ ريال</strong> في أي من أعوام ٢٠٢٢ أو ٢٠٢٣ أو ٢٠٢٤، فقد تكون ضمن <strong>الموجة ٢٤</strong> من المرحلة الثانية — والموعد النهائي للربط هو <strong>٣٠ يونيو ٢٠٢٦</strong>. بحلول هذا التاريخ يجب أن تصدر فواتيرك من نظام مرتبط بمنصة «فاتورة» (فواتير XML، رقم مميز UUID، ختم تشفير، رمز QR، واعتماد فوري). منصات إدارة المشاريع مثل بروكور وأكونكس <em>لا</em> تفي بهذا المتطلب — الفاتورة النظامية يجب أن تصدر من نظام محاسبة أو موارد معتمد.
+      </p>
+    </section>
+
+    <section class="mb-10 grid gap-3 sm:grid-cols-3">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">٣٠ يونيو ٢٠٢٦</div>
+        <div class="mt-1 text-xs text-slate-600">الموعد النهائي لربط الموجة ٢٤</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">٣٧٥ ألف ريال</div>
+        <div class="mt-1 text-xs text-slate-600">حد إيرادات الموجة ٢٤ (أي عام من ٢٠٢٢–٢٠٢٤)</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">{zatcaCount} من {softwareCount}</div>
+        <div class="mt-1 text-xs text-slate-600">منصات في دليلنا السعودي تعلن دعم الفوترة الإلكترونية (يونيو ٢٠٢٦)</div>
+      </div>
+    </section>
+
+    <section class="mb-10 space-y-4 text-slate-700 leading-relaxed">
+      <h2 class="text-2xl font-bold text-slate-900">ما الذي تتطلبه المرحلة الثانية فعلياً</h2>
+      <p>
+        طُبّقت الفوترة الإلكترونية في السعودية على مرحلتين. <strong>المرحلة الأولى (الإصدار)</strong> سارية منذ ٤ ديسمبر ٢٠٢١، وأنهت عصر الفواتير اليدوية: لم تعد فواتير الورق ووورد وإكسل مقبولة — يجب أن تصدر الفاتورة من نظام إلكتروني متوافق. أما <strong>المرحلة الثانية (الربط والتكامل)</strong>، الجارية على موجات منذ يناير ٢٠٢٣، فهي الخطوة الأصعب: يجب أن يرتبط نظامك بمنصة «فاتورة» التابعة للهيئة عبر واجهة برمجية.
+      </p>
+      <p>عملياً، تعني المرحلة الثانية أن نظام الفوترة لديك يجب أن:</p>
+      <ul class="list-disc pr-6 space-y-2">
+        <li>يُصدر الفواتير بصيغة <strong>XML</strong> (أو PDF/A-3 متضمنة XML)؛</li>
+        <li>يحمل كل فاتورة <strong>رقماً مميزاً UUID</strong> و<strong>ختم تشفير</strong> و<strong>رمز استجابة سريعة QR</strong>؛</li>
+        <li>يرسل <strong>الفواتير الضريبية (بين المنشآت) للاعتماد الفوري</strong> من الهيئة — فلا تكون الفاتورة نظامية قبل اعتمادها؛</li>
+        <li>يرفع الفواتير المبسطة (للمستهلك) خلال ٢٤ ساعة؛</li>
+        <li>يسجّل أجهزتك/حلّك لدى الهيئة (شهادة ختم التشفير CSID) عبر بوابة فاتورة.</li>
+      </ul>
+      <p>
+        توزّع الهيئة المنشآت على <strong>موجات حسب الإيرادات</strong> وتُشعرها مباشرة قبل نحو ستة أشهر. بدأت الحدود بالعمالقة (الموجة الأولى: أكثر من ٣ مليارات ريال) وانخفضت موجة بعد موجة — حتى وصل حد <strong>الموجة ٢٤ إلى ٣٧٥ ألف ريال</strong>، ما يضع منشآت المقاولات الصغيرة في نطاق الإلزام مباشرة.
+      </p>
+
+      <h2 class="text-2xl font-bold text-slate-900 pt-4">لماذا فوترة المقاولات أصعب من غيرها</h2>
+      <p>
+        المقهى يُصدر فواتير بسيطة؛ أما المقاول فلا. فوترة المقاولات فيها هياكل تتعامل معها أدوات الفوترة العامة بشكل سيئ حتى لو كانت «معتمدة» تقنياً. قبل الالتزام بأي نظام، اطلب من المورد عرضاً على حالاتك أنت:
+      </p>
+      <ul class="list-disc pr-6 space-y-2">
+        <li><strong>المستخلصات:</strong> هل يُصدر النظام فاتورة ضريبية نظامية على العقد لكل مستخلص معتمد — بكميات تراكمية صحيحة وخصم المستخلصات السابقة وضريبة القيمة المضافة؟</li>
+        <li><strong>الدفعات المقدمة:</strong> هل يُصدر فاتورة دفعة مقدمة نظامية ثم يسوّيها بشكل صحيح على المستخلصات اللاحقة؟</li>
+        <li><strong>محتجزات الضمان:</strong> المحتجزات تغيّر توقيت الاستحقاق — يجب أن يحافظ النظام على المعالجة الضريبية الصحيحة للمبالغ المفوترة مع تتبع المحتجز حتى المستخلص الختامي.</li>
+        <li><strong>عقود التوريد والتركيب:</strong> فوترة سلع وخدمات معاً على عقد واحد، بملف XML سليم.</li>
+        <li><strong>سلسلة مقاولي الباطن:</strong> مطابقة فواتير مقاولي الباطن الإلكترونية الواردة مع الشهادات، ومعالجة ضريبة الاستقطاع حيث تنطبق.</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold text-slate-900 pt-4">أي برامج المقاولات جاهزة لهيئة الزكاة؟</h2>
+      <p>
+        من بين {softwareCount} منصة في <a href="/sa/ar/" class="text-orange-700 hover:underline font-medium">دليلنا السعودي</a>، هذه هي المنصات التي تعلن دعم الفوترة الإلكترونية — مع ملاحظاتنا على الملاءمة. (تحقق دائماً من أي مورد في <a href="https://zatca.gov.sa/ar/E-Invoicing/SolutionProviders/Pages/SolutionProvidersDirectory.aspx" rel="nofollow noopener" target="_blank" class="text-orange-700 hover:underline font-medium">دليل مزودي الحلول الرسمي لدى الهيئة</a> قبل التوقيع.)
+      </p>
+    </section>
+
+    <section class="mb-10 overflow-x-auto">
+      <table class="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
+        <thead class="bg-slate-50 text-right text-slate-700">
+          <tr>
+            <th class="p-3 font-semibold">المنصة</th>
+            <th class="p-3 font-semibold">حالة الاعتماد</th>
+            <th class="p-3 font-semibold">الأنسب لـ</th>
+            <th class="p-3 font-semibold">التسعير</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          {zatcaReady.map((v) => (
+            <tr>
+              <td class="p-3 font-semibold text-slate-900"><a href={`/sa/${v.slug}/`} class="text-orange-700 hover:underline">{v.name}</a></td>
+              <td class="p-3 text-slate-700">{v.status}</td>
+              <td class="p-3 text-slate-600">{v.fit}</td>
+              <td class="p-3 text-slate-600">{v.pricing}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="mt-3 text-xs text-slate-500">المصدر: دليل WrenchStack السعودي، تم التحقق في يونيو ٢٠٢٦. الحالات بحسب ما ينشره كل مورد؛ أكّد نطاق الاعتماد لموجتك أثناء العرض. (المراجعات التفصيلية متاحة حالياً بالإنجليزية.)</p>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">والأدوات التي لا يشملها الإلزام أصلاً</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        {notInvoicing.map((v, i) => (<><a href={`/sa/${v.slug}/`} class="font-medium text-orange-700 hover:underline">{v.name}</a>{i < notInvoicing.length - 1 ? '، ' : ''}</>))} منصات لإدارة المشاريع والنمذجة والموقع — <strong>وليست أنظمة فوترة</strong>، فلا تنطبق عليها الفوترة الإلكترونية. الإعداد المعتاد في السعودية: واحدة من هذه لإدارة المشروع، إلى جانب نظام محاسبة معتمد من الجدول أعلاه للفوترة. لا ترفض منصة إدارة مشاريع ممتازة بحجة «عدم اعتماد الهيئة» — ولا تفترض أن منصة المشاريع تغنيك عن الالتزام.
+      </p>
+    </section>
+
+    <section class="mb-10 space-y-3 text-slate-700 leading-relaxed">
+      <h2 class="text-2xl font-bold text-slate-900">قائمة الامتثال للمقاولين</h2>
+      <ol class="list-decimal pr-6 space-y-2">
+        <li><strong>تأكد من موجتك.</strong> راجع هل تجاوزت الإيرادات الخاضعة للضريبة ٣٧٥ ألف ريال في ٢٠٢٢ أو ٢٠٢٣ أو ٢٠٢٤، وابحث عن إشعار الهيئة (بوابة فاتورة / بيانات التواصل المسجلة).</li>
+        <li><strong>اختر نظاماً معتمداً مبكراً.</strong> اختر من الجدول أعلاه وتحقق من دليل مزودي الحلول لدى الهيئة، واترك شهرين إلى ثلاثة قبل موعدك النهائي.</li>
+        <li><strong>اطلب عرضاً على حالات فوترتك أنت.</strong> المستخلصات، الدفعات المقدمة، المحتجزات، التوريد والتركيب — على هيكل عقودك الفعلي.</li>
+        <li><strong>سجّل في منصة فاتورة.</strong> تسجيل الأجهزة/الحل وإصدار شهادة ختم التشفير عبر البوابة، بمساعدة المورد أو المحاسب.</li>
+        <li><strong>نفّذ اختبار اعتماد.</strong> أصدر دفعة فواتير معتمدة فعلياً بشكل محدود قبل تحويل المنشأة كلها.</li>
+        <li><strong>درّب الإدارة المالية.</strong> من يرفع المستخلصات يجب أن يعرف ما الذي يوقف الفاتورة الآن (رقم ضريبي ناقص للعميل، صيغة خاطئة) — عالج من المصدر لا في نهاية الشهر.</li>
+      </ol>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">أسئلة شائعة</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
+      <strong class="text-slate-700">المصادر والتحقق:</strong> إرشادات الفوترة الإلكترونية لهيئة الزكاة والضريبة والجمارك (zatca.gov.sa) · حد الموجة ٢٤ وموعدها كما أعلنته الهيئة ونقله مزودو حلول معتمدون (تم التحقق يونيو ٢٠٢٦) · قدرات الموردين من وثائقهم المنشورة، يونيو ٢٠٢٦. هذا الدليل معلومات عامة وليس استشارة ضريبية — تحقق من التزاماتك لدى الهيئة أو مستشار مرخّص. وجدت خطأ؟ <a href="/contact/" class="underline">أخبرنا</a> وسنصححه.
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">قارن الأنظمة الجاهزة لهيئة الزكاة جنباً إلى جنب</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">مراجعات مستقلة لـ {vendors.length} منصة وجهة في دليلنا السعودي — التسعير والمزايا والعيوب وسياق الامتثال، بلا ترتيب مدفوع.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/sa/ar/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">🇸🇦 الدليل السعودي ←</a>
+        <a href="/sa/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">قارن الأنظمة (بالإنجليزية)</a>
+        <a href="/for-vendors/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">هل أنت مورد؟ اعمل معنا</a>
+      </div>
+    </section>
+  </article>
+</Layout>
