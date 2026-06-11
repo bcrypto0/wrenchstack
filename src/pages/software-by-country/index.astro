@@ -10,6 +10,7 @@ import saData from '../../data/international/sa.json';
 import aeData from '../../data/international/ae.json';
 import qaData from '../../data/international/qa.json';
 import kwData from '../../data/international/kw.json';
+import zaData from '../../data/international/za.json';
 
 interface IntlV { slug: string; name: string; category: string; }
 
@@ -22,6 +23,7 @@ const MARKETS = [
   { code: 'au', flag: '🇦🇺', label: 'AU', href: '/au/' },
   { code: 'nz', flag: '🇳🇿', label: 'NZ', href: '/nz/' },
   { code: 'ie', flag: '🇮🇪', label: 'IE', href: '/ie/' },
+  { code: 'za', flag: '🇿🇦', label: 'ZA', href: '/za/' },
   { code: 'sa', flag: '🇸🇦', label: 'SA', href: '/sa/' },
   { code: 'ae', flag: '🇦🇪', label: 'AE', href: '/ae/' },
   { code: 'qa', flag: '🇶🇦', label: 'QA', href: '/qa/' },
@@ -38,6 +40,7 @@ const intlSources: Record<string, IntlV[]> = {
   ae: (aeData as { vendors: IntlV[] }).vendors,
   qa: (qaData as { vendors: IntlV[] }).vendors,
   kw: (kwData as { vendors: IntlV[] }).vendors,
+  za: (zaData as { vendors: IntlV[] }).vendors,
 };
 
 // Canonical key: market-suffix parentheticals ("Tradify (UK)", "Jobber

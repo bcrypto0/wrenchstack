@@ -103,6 +103,14 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     intro: 'Kuwait construction & trades software selection is shaped by the New Kuwait 2035 / Silk City pipeline, CAPT contractor classification, Kuwaitization labour quotas, the mandatory KFSD fire code, Kuwaiti-Dinar pricing, and — like Qatar — no VAT and no e-invoicing mandate.',
     certContext: 'The Central Agency for Public Tenders (CAPT) classifies contractors and gates public work; the Ministry of Finance levies 15% corporate income tax on foreign-owned entities (no VAT); the Public Authority for Manpower enforces Kuwaitization; Kuwait Municipality issues permits; and the Kuwait Fire Force owns the mandatory KFSD fire-safety code.',
   },
+  za: {
+    code: 'za',
+    name: 'South Africa',
+    flag: '🇿🇦',
+    noteField: 'za_specific_note',
+    intro: 'South African trades vendor selection is shaped by Certificate-of-Compliance culture (electrical CoCs via DoEL-registered persons, SAQCC Gas, PIRB plumbing CoCs), CIDB contractor grading (1–9) gating public work, NHBRC registration for home builders, SARS compliance (15% VAT, monthly EMP201, e-invoicing phasing in ~2026–28), the COIDA Letter of Good Standing — and the solar-installation boom the load-shedding era created.',
+    certContext: 'Electrical work legally requires Department of Employment & Labour registration (registered persons issue the mandatory Certificate of Compliance); gas work requires SAQCC Gas registration (unregistered work voids home insurance); PIRB plumbing CoCs are required for geysers and solar water heaters; CIDB grading gates public construction; NHBRC registration is mandatory for home builders; and employers need a current COIDA Letter of Good Standing for site access.',
+  },
 };
 
 export const INTL_CATEGORY_LABELS: Record<string, string> = {
