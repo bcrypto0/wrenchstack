@@ -1,0 +1,175 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { tools } from '../../lib/data';
+import ukData from '../../data/international/uk.json';
+import auData from '../../data/international/au.json';
+import caData from '../../data/international/ca.json';
+import nzData from '../../data/international/nz.json';
+import ieData from '../../data/international/ie.json';
+import saData from '../../data/international/sa.json';
+import aeData from '../../data/international/ae.json';
+import qaData from '../../data/international/qa.json';
+import kwData from '../../data/international/kw.json';
+
+interface IntlV { slug: string; name: string; category: string; }
+
+// The 10 markets, in display order. US first (the deepest directory), then
+// the English-speaking markets, then the Gulf construction markets.
+const MARKETS = [
+  { code: 'us', flag: '🇺🇸', label: 'US', href: '/' },
+  { code: 'uk', flag: '🇬🇧', label: 'UK', href: '/uk/' },
+  { code: 'ca', flag: '🇨🇦', label: 'CA', href: '/ca/' },
+  { code: 'au', flag: '🇦🇺', label: 'AU', href: '/au/' },
+  { code: 'nz', flag: '🇳🇿', label: 'NZ', href: '/nz/' },
+  { code: 'ie', flag: '🇮🇪', label: 'IE', href: '/ie/' },
+  { code: 'sa', flag: '🇸🇦', label: 'SA', href: '/sa/' },
+  { code: 'ae', flag: '🇦🇪', label: 'AE', href: '/ae/' },
+  { code: 'qa', flag: '🇶🇦', label: 'QA', href: '/qa/' },
+  { code: 'kw', flag: '🇰🇼', label: 'KW', href: '/kw/' },
+];
+
+const intlSources: Record<string, IntlV[]> = {
+  uk: (ukData as { vendors: IntlV[] }).vendors,
+  au: (auData as { vendors: IntlV[] }).vendors,
+  ca: (caData as { vendors: IntlV[] }).vendors,
+  nz: (nzData as { vendors: IntlV[] }).vendors,
+  ie: (ieData as { vendors: IntlV[] }).vendors,
+  sa: (saData as { vendors: IntlV[] }).vendors,
+  ae: (aeData as { vendors: IntlV[] }).vendors,
+  qa: (qaData as { vendors: IntlV[] }).vendors,
+  kw: (kwData as { vendors: IntlV[] }).vendors,
+};
+
+// Canonical key: market-suffix parentheticals ("Tradify (UK)", "Jobber
+// (Canadian-founded)") stripped, lowercased. Display name = stripped original.
+const norm = (name: string) => name.replace(/\s*\([^)]*\)/g, '').trim().toLowerCase();
+const display = (name: string) => name.replace(/\s*\([^)]*\)/g, '').trim();
+
+type Row = { key: string; name: string; cells: Record<string, string | null> };
+const rows = new Map<string, Row>();
+
+function add(marketCode: string, name: string, href: string) {
+  const key = norm(name);
+  if (!rows.has(key)) {
+    rows.set(key, { key, name: display(name), cells: Object.fromEntries(MARKETS.map(m => [m.code, null])) });
+  }
+  rows.get(key)!.cells[marketCode] = href;
+}
+
+// US column: every tool in the main software directory.
+for (const t of tools) add('us', t.name, `/tools/${t.slug}/`);
+// International columns: the software category of each market roster.
+for (const [code, vendors] of Object.entries(intlSources)) {
+  for (const v of vendors) {
+    if (v.category !== 'software') continue;
+    add(code, v.name, `/${code}/${v.slug}/`);
+  }
+}
+
+// The matrix shows CROSS-MARKET platforms (2+ of our markets). Single-market
+// tools live in their country directory — listing all 120+ US-only tools here
+// would bury the signal.
+const matrix = [...rows.values()]
+  .map(r => ({ ...r, count: MARKETS.filter(m => r.cells[m.code]).length }))
+  .filter(r => r.count >= 2)
+  .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+
+const singleMarket = [...rows.values()].filter(r => MARKETS.filter(m => r.cells[m.code]).length === 1).length;
+const perMarketCounts = MARKETS.map(m => ({ ...m, n: [...rows.values()].filter(r => r.cells[m.code]).length }));
+
+const pageTitle = 'Trades & Construction Software by Country (2026): Availability Matrix';
+const pageDescription = `Which trades and construction software actually operates in which country — ${matrix.length} cross-market platforms mapped across ${MARKETS.length} markets (US, UK, Canada, Australia, NZ, Ireland, Saudi Arabia, UAE, Qatar, Kuwait), from WrenchStack's per-country directories. Updated June 2026.`;
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Software by country', url: '/software-by-country/' },
+];
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Cross-market trades & construction software platforms',
+  numberOfItems: matrix.length,
+  itemListElement: matrix.slice(0, 25).map((r, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: `${r.name} (available in ${r.count} of our ${MARKETS.length} markets)`,
+  })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+
+  <article class="mx-auto max-w-6xl px-4 py-12">
+    <header class="mb-8">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">🌍 Global availability</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        Trades &amp; Construction Software by Country
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        "Does it work in my country?" is the first question — and vendors bury the answer. This matrix maps the <strong>{matrix.length} cross-market platforms</strong> across the <strong>{MARKETS.length} markets</strong> we cover, drawn from our per-country directories. A tick means the platform appears in that market's WrenchStack directory, with local context reviewed — click it for the country-specific take.
+      </p>
+      <p class="mt-3 text-sm text-slate-500">From the WrenchStack per-market directories · Updated June 2026 · {singleMarket} further single-market tools live in their country directories.</p>
+    </header>
+
+    <section class="mb-10 grid gap-2 grid-cols-5 sm:grid-cols-10">
+      {perMarketCounts.map((m) => (
+        <a href={m.href} class="rounded-lg border border-slate-200 bg-white p-3 text-center no-underline transition hover:border-orange-300 hover:bg-orange-50">
+          <div class="text-xl" aria-hidden="true">{m.flag}</div>
+          <div class="mt-1 text-lg font-bold text-slate-900">{m.n}</div>
+          <div class="text-xs text-slate-600">{m.label}</div>
+        </a>
+      ))}
+    </section>
+
+    <section class="mb-10 overflow-x-auto">
+      <table class="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
+        <thead class="bg-slate-900 text-white">
+          <tr>
+            <th class="p-3 text-left font-semibold sticky left-0 bg-slate-900">Platform</th>
+            {MARKETS.map((m) => (
+              <th class="p-2 text-center font-semibold" title={m.label}><span aria-hidden="true">{m.flag}</span><span class="sr-only">{m.label}</span></th>
+            ))}
+            <th class="p-2 text-center font-semibold">Markets</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          {matrix.map((r) => (
+            <tr class="hover:bg-orange-50/40">
+              <td class="p-3 font-semibold text-slate-900 sticky left-0 bg-white">{r.name}</td>
+              {MARKETS.map((m) => (
+                <td class="p-2 text-center">
+                  {r.cells[m.code]
+                    ? <a href={r.cells[m.code]!} class="inline-block rounded px-1.5 py-0.5 font-bold text-emerald-700 hover:bg-emerald-100" title={`${r.name} — ${m.label} review`}>✓</a>
+                    : <span class="text-slate-200" aria-hidden="true">—</span>}
+                </td>
+              ))}
+              <td class="p-2 text-center font-bold text-slate-700">{r.count}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="mt-3 text-xs text-slate-500">
+        ✓ = listed in that market's WrenchStack directory (click for the country-specific review). — = not in our directory for that market. <strong>A dash doesn't always mean unavailable</strong> — vendors expand constantly and some serve countries we haven't reviewed them in; confirm current coverage with the vendor. Availability reflects our per-market research as of June 2026.
+      </p>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">How to read this honestly</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        Availability is necessary but nowhere near sufficient. A platform can "work" in your country and still fail you locally: a US tool with no <strong>ZATCA e-invoicing</strong> is a non-starter for Saudi billing, no <strong>MTD recognition</strong> matters for UK sole traders, no <strong>payday-super support</strong> bites in Australia from July 2026, and currency, VAT rates and support time zones differ everywhere. That's exactly why each tick links to a <strong>country-specific review</strong> with local compliance context rather than one global page. Start from your country's directory, not from the tool.
+      </p>
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Browse by country</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">Every market has its own directory with local pricing, compliance bodies and head-to-head comparisons.</p>
+      <div class="mt-4 flex flex-wrap gap-2">
+        {MARKETS.map((m) => (
+          <a href={m.href} class="rounded-md bg-white/10 border border-white/20 px-4 py-2 text-sm font-semibold text-white hover:bg-white/20">{m.flag} {m.label === 'US' ? 'United States' : m.label}</a>
+        ))}
+      </div>
+    </section>
+  </article>
+</Layout>
