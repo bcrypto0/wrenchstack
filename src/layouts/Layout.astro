@@ -24,7 +24,8 @@ interface Props {
 
 const { title, description, canonical, ogImage, noindex = false, breadcrumbs, lang = 'en', dir = 'ltr', alternateUrls = [] } = Astro.props;
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
-const ogImageUrl = ogImage ?? new URL('/og-default.svg', Astro.site).toString();
+// PNG, not SVG: LinkedIn/X/Facebook do not render SVG og:images (the card shows blank).
+const ogImageUrl = ogImage ?? new URL('/og-default.png', Astro.site).toString();
 const fullTitle = title.endsWith('WrenchStack') ? title : `${title} | WrenchStack`;
 const isHomepage = Astro.url.pathname === '/';
 

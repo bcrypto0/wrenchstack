@@ -30,11 +30,22 @@ export function isComparisonIndexable(slugA, slugB) {
     && POPULAR_TOOL_SLUGS.has(slugB);
 }
 
+// Gulf markets (added 2026-06): their head-to-head pages are numerous (~266
+// templated pages) on a domain still fighting for crawl budget. Same
+// young-domain logic as /compare/ — keep them out of the sitemap and
+// noindexed (via IntlComparison.astro) until the domain has authority.
+// The per-market landings, vendor pages and compare hubs stay indexable.
+// The 5 legacy markets (uk/au/ca/nz/ie, 93 pages) stay indexable as decided
+// in the 2026-05-28 audit. To release a Gulf market later, remove it here.
+export const GATED_INTL_COMPARE_MARKETS = new Set(['sa', 'ae', 'qa', 'kw']);
+
 // Sitemap filter: keep every non-comparison URL; keep a /compare/<a>-vs-<b>/
-// URL only when it is indexable.
+// URL only when it is indexable; drop gated intl markets' head-to-heads.
 export function shouldKeepInSitemap(urlStr) {
   let path;
   try { path = new URL(urlStr).pathname; } catch { path = urlStr; }
+  const intl = path.match(/^\/([a-z]{2})\/compare\/.+-vs-.+\/$/);
+  if (intl) return !GATED_INTL_COMPARE_MARKETS.has(intl[1]);
   const m = path.match(/^\/compare\/(.+)-vs-(.+)\/$/);
   if (!m) return true;
   return isComparisonIndexable(m[1], m[2]);
