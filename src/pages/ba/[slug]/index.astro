@@ -1,0 +1,17 @@
+---
+import IntlVendorDetail from '../../../components/IntlVendorDetail.astro';
+import { INTL_MARKETS, type IntlVendor } from '../../../lib/intl';
+import data from '../../../data/international/ba.json';
+
+export function getStaticPaths() {
+  const vendors = (data as { vendors: IntlVendor[] }).vendors;
+  return vendors.map((v) => ({
+    params: { slug: v.slug },
+    props: { vendor: v, siblings: vendors.filter((x) => x.slug !== v.slug) },
+  }));
+}
+
+const market = INTL_MARKETS.ba;
+const { vendor, siblings } = Astro.props;
+---
+<IntlVendorDetail vendor={vendor} market={market} siblings={siblings} />

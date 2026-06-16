@@ -111,6 +111,22 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     intro: 'South African trades vendor selection is shaped by Certificate-of-Compliance culture (electrical CoCs via DoEL-registered persons, SAQCC Gas, PIRB plumbing CoCs), CIDB contractor grading (1–9) gating public work, NHBRC registration for home builders, SARS compliance (15% VAT, monthly EMP201, e-invoicing phasing in ~2026–28), the COIDA Letter of Good Standing — and the solar-installation boom the load-shedding era created.',
     certContext: 'Electrical work legally requires Department of Employment & Labour registration (registered persons issue the mandatory Certificate of Compliance); gas work requires SAQCC Gas registration (unregistered work voids home insurance); PIRB plumbing CoCs are required for geysers and solar water heaters; CIDB grading gates public construction; NHBRC registration is mandatory for home builders; and employers need a current COIDA Letter of Good Standing for site access.',
   },
+  ba: {
+    code: 'ba',
+    name: 'Bahrain',
+    flag: '🇧🇭',
+    noteField: 'ba_specific_note',
+    intro: 'Bahrain construction software selection is shaped by the GCC’s highest VAT rate (10%, via the NBR), mandatory CRPEP licensing for engineers and engineering offices, Ministry of Works contractor classification gating public works, Tender Board registration, LMRA work permits and Bahrainisation quotas, and building permits through the Benayat e-system — with no e-invoicing mandate yet, unlike Saudi or the UAE.',
+    certContext: 'VAT is administered by the National Bureau for Revenue at 10% — the GCC’s highest — with no e-invoicing mandate yet; CRPEP licensing is mandatory to practise engineering or run an engineering office (and to file Benayat permits); the Ministry of Works classifies contractors for public works; Tender Board registration is required to bid; LMRA controls work permits and enforces Bahrainisation; building permits run through Benayat; and Civil Defence enforces NFPA-based fire safety.',
+  },
+  om: {
+    code: 'om',
+    name: 'Oman',
+    flag: '🇴🇲',
+    noteField: 'om_specific_note',
+    intro: 'Oman construction software selection is defined by an imminent e-invoicing mandate — the Oman Tax Authority’s Peppol-based “Fawtara” system reaches large taxpayers in August 2026 and all VAT-registered businesses by August 2027 — alongside 5% VAT, OSE engineer accreditation (now tied to work permits), contractor classification via the Authority for Projects, Tenders & Local Content, Omanisation quotas, municipal building permits, the new Oman Building Code, and CDAA fire safety.',
+    certContext: 'The Oman Tax Authority runs 5% VAT and the phased Fawtara e-invoicing mandate (large taxpayers August 2026; all VAT-registered businesses August 2027); OSE accreditation is required for engineer work permits (since August 2025); the Authority for Projects, Tenders & Local Content runs contractor classification and procurement; the Ministry of Labour enforces Omanisation; municipalities issue building permits; MoHUP owns the new Oman Building Code (phasing in to 2030); and the CDAA is the national fire-safety authority.',
+  },
 };
 
 export const INTL_CATEGORY_LABELS: Record<string, string> = {

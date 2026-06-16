@@ -37,7 +37,7 @@ export function isComparisonIndexable(slugA, slugB) {
 // The per-market landings, vendor pages and compare hubs stay indexable.
 // The 5 legacy markets (uk/au/ca/nz/ie, 93 pages) stay indexable as decided
 // in the 2026-05-28 audit. To release a Gulf market later, remove it here.
-export const GATED_INTL_COMPARE_MARKETS = new Set(['sa', 'ae', 'qa', 'kw', 'za']);
+export const GATED_INTL_COMPARE_MARKETS = new Set(['sa', 'ae', 'qa', 'kw', 'ba', 'om', 'za']);
 
 // Sitemap filter: keep every non-comparison URL; keep a /compare/<a>-vs-<b>/
 // URL only when it is indexable; drop gated intl markets' head-to-heads.

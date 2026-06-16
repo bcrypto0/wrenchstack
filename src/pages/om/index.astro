@@ -1,0 +1,150 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import omData from '../../data/international/om.json';
+
+interface OmVendor {
+  slug: string; name: string; category: string; vendor_url: string;
+  tagline: string; market_position: string; om_specific_note?: string | null;
+  tier: 'S' | 'A' | 'F'; reputation_flag: string | null;
+  pros: string[]; cons: string[]; typical_pricing: string;
+  is_cross_market: boolean; cross_market_link: string | null;
+}
+
+const vendors = (omData as { vendors: OmVendor[] }).vendors;
+const categories = ['software', 'certification'];
+const categoryMeta: Record<string, { label: string; description: string }> = {
+  'software': { label: 'Construction & trades software', description: 'From global PM/BIM platforms (Bentley, Oracle Primavera, Aconex, Autodesk) via Muscat partners, to regional ERPs with real Oman offices (Focus Softnet, ePROMIS, Onyx Pro), the Oman-native option (Grey ERP), Fawtara-ready e-invoicing (ClearTax), and public-priced accounting (Zoho, Tally) for 5% VAT.' },
+  'certification': { label: 'Licensing & compliance', description: 'The Oman bodies every contractor deals with — the Tax Authority (5% VAT + the Fawtara e-invoicing mandate), OSE engineer accreditation, the Authority for Projects, Tenders & Local Content, Omanisation, municipal permits, the Oman Building Code, and CDAA fire safety.' },
+};
+const vendorsByCategory: Record<string, OmVendor[]> = {};
+categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
+
+const pageTitle = 'Oman Construction & Trades Software — WrenchStack';
+const pageDescription = `Independent directory of ${vendors.length} construction & trades vendors for Oman: global PM/BIM platforms, Oman-native and regional ERPs, Fawtara-ready e-invoicing, and 5%-VAT accounting — plus the Tax Authority e-invoicing mandate (2026–2027), OSE, contractor-classification, Omanisation and building-code compliance.`;
+const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Oman', url: '/om/' } ];
+---
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <header class="mb-10">
+      <div class="mb-3 flex items-center gap-2">
+        <span class="text-2xl" aria-hidden="true">🇴🇲</span>
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">Oman · سلطنة عُمان</p>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">Oman Construction & Trades Software Directory</h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Independent reviews of {vendors.length} Oman-relevant vendors — global PM/BIM platforms (Bentley, Oracle Primavera, Aconex, Autodesk) via Muscat partners, regional and Oman-native ERPs (Focus Softnet, ePROMIS, Grey ERP), and Fawtara-ready accounting — built around the local realities: 5% VAT, the incoming e-invoicing mandate, OSE accreditation, contractor classification, Omanisation, and the new Oman Building Code.
+      </p>
+    </header>
+
+    <section class="mb-10 grid gap-3 grid-cols-2 sm:grid-cols-4">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">{vendors.length}</div>
+        <div class="mt-1 text-xs text-slate-600">vendors reviewed</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">5%</div>
+        <div class="mt-1 text-xs text-slate-600">VAT — lowest in the GCC</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">~$7B</div>
+        <div class="mt-1 text-xs text-slate-600">construction market (2025)</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">2040</div>
+        <div class="mt-1 text-xs text-slate-600">Oman Vision</div>
+      </div>
+    </section>
+
+    <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border-2 border-emerald-300 bg-emerald-50 p-5">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">⏰ Compliance guide · e-invoicing mandatory for ALL by Aug 2027</p>
+        <h2 class="mt-1 text-base font-bold text-slate-900">Oman e-invoicing (Fawtara) for construction companies</h2>
+        <p class="mt-1 text-sm text-slate-700">The phased timeline (large taxpayers Aug 2026 → all VAT-registered Aug 2027), what the Peppol-based Fawtara system requires, and which software is getting ready.</p>
+      </div>
+      <a href="/om/guides/oman-e-invoicing-contractors/" class="shrink-0 rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Read the guide →</a>
+    </section>
+
+    <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
+      <div>
+        <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
+        <p class="mt-1 text-sm text-slate-700">See Oman vendors compared side by side — a clear verdict, pros and cons, Oman-specific notes, and pricing, head to head.</p>
+      </div>
+      <a href="/om/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare Oman vendors →</a>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">What's different about choosing software in Oman</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        Oman's defining software story is <strong>e-invoicing</strong>. The Oman Tax Authority is rolling out a mandatory, Peppol-based system (branded "Fawtara"): large taxpayers from <strong>August 2026</strong>, and <strong>every VAT-registered business — including SME trades and contractors — by August 2027</strong>. That makes "is it getting Fawtara-ready?" a real buying question, even though VAT itself is just <strong>5%</strong> (the GCC's lowest). Beyond tax, the local ecosystem is <strong>reseller-dominated</strong> — most "Oman construction software" is a global product implemented through a Muscat partner, with only a few genuinely Oman-built options (like Grey ERP). And compliance has structure: <strong>OSE accreditation</strong> now gates engineer work permits, the <strong>Authority for Projects, Tenders & Local Content</strong> runs contractor classification for public work, <strong>Omanisation</strong> quotas shape staffing, and the new <strong>Oman Building Code</strong> is phasing in toward 2030.
+      </p>
+    </section>
+
+    {categories.map(c => {
+      const cat = categoryMeta[c];
+      const cv = vendorsByCategory[c];
+      if (cv.length === 0) return null;
+      return (
+        <section class="mb-12">
+          <div class="mb-5">
+            <h2 class="text-2xl font-bold text-slate-900">{cat.label}</h2>
+            <p class="mt-1 text-sm text-slate-600 leading-relaxed">{cat.description}</p>
+          </div>
+          <div class="space-y-4">
+            {cv.map(v => {
+              const isCert = v.category === 'certification';
+              const tierColor = v.tier === 'S' ? 'border-emerald-300' : v.tier === 'F' ? 'border-rose-300' : 'border-blue-300';
+              const tierLabel = isCert ? 'Official body / regime' : v.tier === 'S' ? 'Recommended' : v.tier === 'F' ? 'Reputation warning' : 'Workable';
+              const tierBadge = v.tier === 'S' ? 'bg-emerald-100 text-emerald-900' : v.tier === 'F' ? 'bg-rose-100 text-rose-900' : 'bg-blue-100 text-blue-900';
+              return (
+                <article class={`rounded-lg border-2 ${tierColor} bg-white p-5`}>
+                  <div class="mb-3 flex items-start justify-between gap-3">
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-center gap-2 mb-1 flex-wrap">
+                        <h3 class="text-xl font-bold text-slate-900">{v.name}</h3>
+                        <span class={`rounded-full px-2 py-0.5 text-xs font-bold ${tierBadge}`}>{isCert ? tierLabel : `Tier ${v.tier} · ${tierLabel}`}</span>
+                        {v.is_cross_market && (<span class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">Cross-market</span>)}
+                      </div>
+                      <p class="text-sm italic text-slate-500">{v.tagline}</p>
+                    </div>
+                  </div>
+                  <p class="mb-3 text-sm text-slate-700 leading-relaxed">{v.market_position}</p>
+                  {v.om_specific_note && (
+                    <div class="mb-3 rounded-md bg-slate-50 px-4 py-3">
+                      <p class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Oman-specific note</p>
+                      <p class="text-sm text-slate-700 leading-relaxed">{v.om_specific_note}</p>
+                    </div>
+                  )}
+                  <div class="mb-3 grid gap-3 sm:grid-cols-2">
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1">{isCert ? 'What it covers' : 'Pros'}</p>
+                      <ul class="space-y-1 text-sm text-slate-700">{v.pros.slice(0, 4).map(p => <li class="leading-snug">+ {p}</li>)}</ul>
+                    </div>
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-rose-700 mb-1">{isCert ? 'Watch out for' : 'Cons'}</p>
+                      <ul class="space-y-1 text-sm text-slate-700">{v.cons.slice(0, 4).map(con => <li class="leading-snug">− {con}</li>)}</ul>
+                    </div>
+                  </div>
+                  <div class="mb-3 text-xs text-slate-600"><strong class="text-slate-900">{isCert ? 'Cost / access:' : 'Typical Oman pricing:'}</strong> {v.typical_pricing}</div>
+                  <div class="flex flex-wrap gap-2">
+                    <a href={`/om/${v.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">Full Oman review →</a>
+                    <a href={v.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600">{isCert ? 'Official site' : `Visit ${v.name}`} →</a>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Are you an Oman vendor?</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">If you build software or services for Oman construction and trades businesses and want to be reviewed or featured, get in touch through our <a href="/for-vendors/" class="underline">vendor program</a>.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/for-vendors/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Work with us →</a>
+        <a href="/software-by-country/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">🌍 Software by country</a>
+        <a href="/methodology/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Methodology</a>
+      </div>
+    </section>
+  </article>
+</Layout>
