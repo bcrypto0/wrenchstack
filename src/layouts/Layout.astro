@@ -56,7 +56,7 @@ const currentCountry = COUNTRIES.find((c) => c.code === currentCountryCode) ?? C
 // the visitor accepts the consent banner (GDPR/UK-GDPR — we now serve UK/IE/FR).
 // To activate: set PUBLIC_GA_ID (e.g. 'G-XXXXXXXXXX') and PUBLIC_CF_BEACON in the
 // Cloudflare build env, or hardcode the values here.
-const GA_MEASUREMENT_ID = import.meta.env.PUBLIC_GA_ID || '';
+const GA_MEASUREMENT_ID = import.meta.env.PUBLIC_GA_ID || 'G-S7V98KD153';
 const CF_BEACON_TOKEN = import.meta.env.PUBLIC_CF_BEACON || '';
 
 const organizationSchema = {
