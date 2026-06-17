@@ -50,6 +50,15 @@ const intlMatch = Astro.url.pathname.match(/^\/(uk|ca|au|nz|ie|sa|ae|qa|kw|ba|om
 const currentCountryCode = intlMatch ? intlMatch[1] : 'us';
 const currentCountry = COUNTRIES.find((c) => c.code === currentCountryCode) ?? COUNTRIES[0];
 
+// Analytics. Both read from build env vars and stay completely inert until set,
+// so this is safe to ship before the IDs exist. Cloudflare Web Analytics is
+// cookieless (loads unconditionally). GA4 sets cookies, so it loads ONLY after
+// the visitor accepts the consent banner (GDPR/UK-GDPR — we now serve UK/IE/FR).
+// To activate: set PUBLIC_GA_ID (e.g. 'G-XXXXXXXXXX') and PUBLIC_CF_BEACON in the
+// Cloudflare build env, or hardcode the values here.
+const GA_MEASUREMENT_ID = import.meta.env.PUBLIC_GA_ID || '';
+const CF_BEACON_TOKEN = import.meta.env.PUBLIC_CF_BEACON || '';
+
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
@@ -125,7 +134,9 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
     {isHomepage && <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />}
     {breadcrumbSchema && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />}
 
-    <link rel="preconnect" href="https://plausible.io" />
+    {CF_BEACON_TOKEN && (
+      <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={`{"token": "${CF_BEACON_TOKEN}"}`}></script>
+    )}
   </head>
   <body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
     <div id="geo-banner" class="hidden border-b border-orange-200 bg-orange-50 text-slate-800">
@@ -595,5 +606,58 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
         }).catch(() => {});
       })();
     </script>
+
+    {GA_MEASUREMENT_ID && (
+      <div id="cookie-consent" class="hidden fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 bg-white shadow-lg">
+        <div class="mx-auto flex max-w-5xl flex-col gap-3 px-4 py-4 text-sm text-slate-700 sm:flex-row sm:items-center sm:justify-between">
+          <p class="min-w-0 leading-relaxed">
+            We use privacy-friendly analytics to understand traffic. With your consent we also use Google Analytics cookies. See our <a href="/privacy/" class="font-medium text-orange-600 underline hover:text-orange-700">privacy policy</a>.
+          </p>
+          <div class="flex shrink-0 gap-2">
+            <button type="button" id="cookie-decline" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Decline</button>
+            <button type="button" id="cookie-accept" class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">Accept</button>
+          </div>
+        </div>
+      </div>
+
+      <script define:vars={{ gaId: GA_MEASUREMENT_ID }}>
+        // GA4 is consent-gated: no Google script and no cookies load until the
+        // visitor clicks Accept. Choice persists in localStorage. Cloudflare Web
+        // Analytics (cookieless) runs independently and needs no consent.
+        (function () {
+          if (!gaId) return;
+          var KEY = 'ws-analytics-consent';
+          function loadGA() {
+            if (window.__wsGaLoaded) return;
+            window.__wsGaLoaded = true;
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+            document.head.appendChild(s);
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { window.dataLayer.push(arguments); }
+            window.gtag = gtag;
+            gtag('js', new Date());
+            gtag('config', gaId, { anonymize_ip: true });
+          }
+          var choice = null;
+          try { choice = localStorage.getItem(KEY); } catch (e) {}
+          if (choice === 'granted') { loadGA(); return; }
+          if (choice === 'denied') { return; }
+          var banner = document.getElementById('cookie-consent');
+          if (!banner) return;
+          banner.classList.remove('hidden');
+          var done = function (val) {
+            try { localStorage.setItem(KEY, val); } catch (e) {}
+            banner.classList.add('hidden');
+            if (val === 'granted') loadGA();
+          };
+          var a = document.getElementById('cookie-accept');
+          var d = document.getElementById('cookie-decline');
+          if (a) a.addEventListener('click', function () { done('granted'); });
+          if (d) d.addEventListener('click', function () { done('denied'); });
+        })();
+      </script>
+    )}
   </body>
 </html>
