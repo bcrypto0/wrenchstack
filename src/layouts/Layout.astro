@@ -44,8 +44,9 @@ const COUNTRIES = [
   { code: 'ba', flag: '🇧🇭', label: 'Bahrain', href: '/ba/' },
   { code: 'om', flag: '🇴🇲', label: 'Oman', href: '/om/' },
   { code: 'za', flag: '🇿🇦', label: 'South Africa', href: '/za/' },
+  { code: 'fr', flag: '🇫🇷', label: 'France', href: '/fr/' },
 ];
-const intlMatch = Astro.url.pathname.match(/^\/(uk|ca|au|nz|ie|sa|ae|qa|kw|ba|om|za)(?:\/|$)/);
+const intlMatch = Astro.url.pathname.match(/^\/(uk|ca|au|nz|ie|sa|ae|qa|kw|ba|om|za|fr)(?:\/|$)/);
 const currentCountryCode = intlMatch ? intlMatch[1] : 'us';
 const currentCountry = COUNTRIES.find((c) => c.code === currentCountryCode) ?? COUNTRIES[0];
 
@@ -263,6 +264,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
               <li><a href="/ba/" class="hover:text-slate-900">🇧🇭 Bahrain directory</a></li>
               <li><a href="/om/" class="hover:text-slate-900">🇴🇲 Oman directory</a></li>
               <li><a href="/za/" class="hover:text-slate-900">🇿🇦 South Africa directory</a></li>
+              <li><a href="/fr/" class="hover:text-slate-900">🇫🇷 France directory</a></li>
               <li><a href="/software-by-country/" class="hover:text-slate-900">🌍 Software by country</a></li>
               <li><a href="/certifications/" class="hover:text-slate-900">Certifications by country</a></li>
             </ul>

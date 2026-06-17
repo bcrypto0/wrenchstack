@@ -127,6 +127,14 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     intro: 'Oman construction software selection is defined by an imminent e-invoicing mandate — the Oman Tax Authority’s Peppol-based “Fawtara” system reaches large taxpayers in August 2026 and all VAT-registered businesses by August 2027 — alongside 5% VAT, OSE engineer accreditation (now tied to work permits), contractor classification via the Authority for Projects, Tenders & Local Content, Omanisation quotas, municipal building permits, the new Oman Building Code, and CDAA fire safety.',
     certContext: 'The Oman Tax Authority runs 5% VAT and the phased Fawtara e-invoicing mandate (large taxpayers August 2026; all VAT-registered businesses August 2027); OSE accreditation is required for engineer work permits (since August 2025); the Authority for Projects, Tenders & Local Content runs contractor classification and procurement; the Ministry of Labour enforces Omanisation; municipalities issue building permits; MoHUP owns the new Oman Building Code (phasing in to 2030); and the CDAA is the national fire-safety authority.',
   },
+  fr: {
+    code: 'fr',
+    name: 'France',
+    flag: '🇫🇷',
+    noteField: 'fr_specific_note',
+    intro: 'French artisan (bâtiment) vendor selection is shaped by the incoming facturation électronique mandate (reception for all businesses from 1 September 2026, issuance for SMEs/micro from 1 September 2027, via approved PDP platforms), mandatory ten-year assurance décennale under the Loi Spinetta, multi-rate TVA (20/10/5.5%), RGE certification for subsidised renovation work, and the micro-entrepreneur regime that most solo tradespeople operate under.',
+    certContext: 'Facturation électronique is becoming mandatory via approved platforms (PDP) — reception for all businesses from 1 September 2026, issuance for SMEs and micro-entreprises from 1 September 2027; assurance décennale (Loi Spinetta) is legally mandatory before a worksite opens, with a criminal penalty for working uninsured; TVA is multi-rate (20% standard, 10% renovation, 5.5% energy); RGE certification is commercially essential for clients to claim MaPrimeRénov’ and other subsidies; business registration runs through the CMA/guichet unique; and regulated trades require a qualification (diploma or three years’ experience).',
+  },
 };
 
 export const INTL_CATEGORY_LABELS: Record<string, string> = {

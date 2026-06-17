@@ -13,6 +13,7 @@ import kwData from '../../data/international/kw.json';
 import baData from '../../data/international/ba.json';
 import omData from '../../data/international/om.json';
 import zaData from '../../data/international/za.json';
+import frData from '../../data/international/fr.json';
 
 interface IntlV { slug: string; name: string; category: string; }
 
@@ -32,6 +33,7 @@ const MARKETS = [
   { code: 'kw', flag: '🇰🇼', label: 'KW', href: '/kw/' },
   { code: 'ba', flag: '🇧🇭', label: 'BA', href: '/ba/' },
   { code: 'om', flag: '🇴🇲', label: 'OM', href: '/om/' },
+  { code: 'fr', flag: '🇫🇷', label: 'FR', href: '/fr/' },
 ];
 
 const intlSources: Record<string, IntlV[]> = {
@@ -47,6 +49,7 @@ const intlSources: Record<string, IntlV[]> = {
   ba: (baData as { vendors: IntlV[] }).vendors,
   om: (omData as { vendors: IntlV[] }).vendors,
   za: (zaData as { vendors: IntlV[] }).vendors,
+  fr: (frData as { vendors: IntlV[] }).vendors,
 };
 
 // Canonical key: market-suffix parentheticals ("Tradify (UK)", "Jobber

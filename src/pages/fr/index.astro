@@ -1,0 +1,153 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import frData from '../../data/international/fr.json';
+
+interface FrVendor {
+  slug: string; name: string; category: string; vendor_url: string;
+  tagline: string; market_position: string; fr_specific_note?: string | null;
+  tier: 'S' | 'A' | 'F'; reputation_flag: string | null;
+  pros: string[]; cons: string[]; typical_pricing: string;
+  is_cross_market: boolean; cross_market_link: string | null;
+}
+
+const vendors = (frData as { vendors: FrVendor[] }).vendors;
+const categories = ['software', 'lead-gen', 'payroll', 'insurance', 'certification'];
+const categoryMeta: Record<string, { label: string; description: string }> = {
+  'software': { label: 'Devis-facture & job-management software', description: 'French-native BTP tools for quotes (devis), invoicing (factures) and worksite tracking — Obat and Tolteck for artisans, EBP and Batappli for fuller coverage, Organilog for maintenance rounds — all built around multi-rate TVA (20/10/5.5).' },
+  'lead-gen': { label: 'Lead generation', description: 'French renovation marketplaces connecting homeowners to artisans — Habitatpresto (subscription, no commission), Quotatis (backed by Leroy Merlin), and the energy-renovation/RGE-angled Allotravaux.' },
+  'payroll': { label: 'Payroll (paie)', description: 'URSSAF-compliant payroll for small French firms — PayFit direct-to-business, Silae via your expert-comptable, plus EBP and Sage. Check BTP specifics (caisses CIBTP) for building crews.' },
+  'insurance': { label: 'Insurance — décennale & RC Pro', description: 'Mandatory ten-year decennial cover and pro liability — SMABTP (the historic BTP mutual), the per-trade specialist April, online insurtech Orus, plus AXA and MAAF.' },
+  'certification': { label: 'Compliance & qualifications', description: 'What French artisans must navigate — the facturation électronique mandate, mandatory assurance décennale, RGE for subsidised work, multi-rate TVA, URSSAF/micro-entrepreneur, CMA registration and trade qualifications.' },
+};
+const vendorsByCategory: Record<string, FrVendor[]> = {};
+categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
+
+const pageTitle = 'France Trades Software & Services (Artisans du Bâtiment) — WrenchStack';
+const pageDescription = `Independent directory of ${vendors.length} vendors for French tradespeople: devis-facture software, renovation lead-gen, URSSAF payroll, mandatory décennale insurance — plus the facturation électronique, RGE, multi-rate TVA and CMA compliance every artisan must handle.`;
+const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'France', url: '/fr/' } ];
+---
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <header class="mb-10">
+      <div class="mb-3 flex items-center gap-2">
+        <span class="text-2xl" aria-hidden="true">🇫🇷</span>
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">France · Artisans du bâtiment</p>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">France Trades Software & Services Directory</h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Independent reviews of {vendors.length} France-relevant vendors for artisans du bâtiment — French-native devis-facture software (Obat, Tolteck, EBP), renovation lead-gen (Habitatpresto, Quotatis), URSSAF payroll (PayFit, Silae) and mandatory décennale insurance (SMABTP, April, Orus) — built around the local realities: the facturation électronique mandate, multi-rate TVA, RGE for subsidised work, and the micro-entrepreneur regime.
+      </p>
+    </header>
+
+    <section class="mb-10 grid gap-3 grid-cols-2 sm:grid-cols-4">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">{vendors.length}</div>
+        <div class="mt-1 text-xs text-slate-600">vendors reviewed</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">~622k</div>
+        <div class="mt-1 text-xs text-slate-600">artisan building firms</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">20/10/5.5%</div>
+        <div class="mt-1 text-xs text-slate-600">multi-rate TVA</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">€208B</div>
+        <div class="mt-1 text-xs text-slate-600">bâtiment sector (2024)</div>
+      </div>
+    </section>
+
+    <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border-2 border-emerald-300 bg-emerald-50 p-5">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">⏰ Compliance guide · Reception for all from 1 Sept 2026 · SME issuance 1 Sept 2027</p>
+        <h2 class="mt-1 text-base font-bold text-slate-900">Facturation électronique (e-invoicing) for artisans</h2>
+        <p class="mt-1 text-sm text-slate-700">The phased timeline, the PDP (plateforme agréée) model that replaced the scrapped free portal, and which software is a registered platform.</p>
+      </div>
+      <a href="/fr/guides/facturation-electronique-artisans/" class="shrink-0 rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Read the guide →</a>
+    </section>
+
+    <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
+      <div>
+        <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
+        <p class="mt-1 text-sm text-slate-700">See French vendors compared side by side — a clear verdict, pros and cons, France-specific notes, and pricing, head to head.</p>
+      </div>
+      <a href="/fr/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare French vendors →</a>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">What's different about running a trades business in France</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        French artisan software selection has structural differences from the US or UK. First, <strong>structured e-invoicing is becoming mandatory</strong> — from 1 September 2026 every business must be able to receive e-invoices, and from 1 September 2027 SMEs and micro-entreprises must issue them through an approved platform (PDP); the planned free public portal was scrapped, so software choice now carries compliance weight. Second, <strong>assurance décennale is mandatory</strong> — ten-year structural liability under the Loi Spinetta, required before a worksite opens, with a criminal penalty for working without it — and French clients expect your insurer and policy number on the quote. Third, <strong>TVA is multi-rate</strong> (20% standard, 10% renovation, 5.5% energy-renovation), so software must apply the right rate per line. Fourth, <strong>RGE certification</strong> is commercially essential: only RGE-qualified artisans let their clients claim MaPrimeRénov' and other renovation subsidies. And most solo tradespeople run as <strong>micro-entrepreneurs</strong>, with a VAT franchise and the "TVA non applicable, art. 293 B" invoice mention.
+      </p>
+    </section>
+
+    {categories.map(c => {
+      const cat = categoryMeta[c];
+      const cv = vendorsByCategory[c];
+      if (cv.length === 0) return null;
+      return (
+        <section class="mb-12">
+          <div class="mb-5">
+            <h2 class="text-2xl font-bold text-slate-900">{cat.label}</h2>
+            <p class="mt-1 text-sm text-slate-600 leading-relaxed">{cat.description}</p>
+          </div>
+          <div class="space-y-4">
+            {cv.map(v => {
+              const isCert = v.category === 'certification';
+              const tierColor = v.tier === 'S' ? 'border-emerald-300' : v.tier === 'F' ? 'border-rose-300' : 'border-blue-300';
+              const tierLabel = isCert ? 'Official body / regime' : v.tier === 'S' ? 'Recommended' : v.tier === 'F' ? 'Reputation warning' : 'Workable';
+              const tierBadge = v.tier === 'S' ? 'bg-emerald-100 text-emerald-900' : v.tier === 'F' ? 'bg-rose-100 text-rose-900' : 'bg-blue-100 text-blue-900';
+              return (
+                <article class={`rounded-lg border-2 ${tierColor} bg-white p-5`}>
+                  <div class="mb-3 flex items-start justify-between gap-3">
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-center gap-2 mb-1 flex-wrap">
+                        <h3 class="text-xl font-bold text-slate-900">{v.name}</h3>
+                        <span class={`rounded-full px-2 py-0.5 text-xs font-bold ${tierBadge}`}>{isCert ? tierLabel : `Tier ${v.tier} · ${tierLabel}`}</span>
+                        {v.is_cross_market && (<span class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">Cross-market</span>)}
+                      </div>
+                      <p class="text-sm italic text-slate-500">{v.tagline}</p>
+                    </div>
+                  </div>
+                  <p class="mb-3 text-sm text-slate-700 leading-relaxed">{v.market_position}</p>
+                  {v.fr_specific_note && (
+                    <div class="mb-3 rounded-md bg-slate-50 px-4 py-3">
+                      <p class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">France-specific note</p>
+                      <p class="text-sm text-slate-700 leading-relaxed">{v.fr_specific_note}</p>
+                    </div>
+                  )}
+                  <div class="mb-3 grid gap-3 sm:grid-cols-2">
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1">{isCert ? 'What it covers' : 'Pros'}</p>
+                      <ul class="space-y-1 text-sm text-slate-700">{v.pros.slice(0, 4).map(p => <li class="leading-snug">+ {p}</li>)}</ul>
+                    </div>
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-rose-700 mb-1">{isCert ? 'Watch out for' : 'Cons'}</p>
+                      <ul class="space-y-1 text-sm text-slate-700">{v.cons.slice(0, 4).map(con => <li class="leading-snug">− {con}</li>)}</ul>
+                    </div>
+                  </div>
+                  <div class="mb-3 text-xs text-slate-600"><strong class="text-slate-900">{isCert ? 'Cost / access:' : 'Typical French pricing:'}</strong> {v.typical_pricing}</div>
+                  <div class="flex flex-wrap gap-2">
+                    <a href={`/fr/${v.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">Full France review →</a>
+                    <a href={v.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600">{isCert ? 'Official site' : `Visit ${v.name}`} →</a>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Are you a French vendor?</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">If you build software or services for French artisans and want to be reviewed or featured, get in touch through our <a href="/for-vendors/" class="underline">vendor program</a>.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/for-vendors/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Work with us →</a>
+        <a href="/software-by-country/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">🌍 Software by country</a>
+        <a href="/methodology/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Methodology</a>
+      </div>
+    </section>
+  </article>
+</Layout>

@@ -1,0 +1,183 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+
+// Registered "plateformes agréées" (PDPs) from our verified research. Honest:
+// most registrations are "sous réserve de raccordement" until interop tests
+// finish; the DGFiP list on impots.gouv.fr is the source of truth.
+const pdps = [
+  { name: 'Pennylane', status: 'Registered PDP (plateforme agréée)', fit: 'French cloud accounting + invoicing for SMEs; the leading native PDP', note: 'Free plan; from ~€14/mo' },
+  { name: 'Indy', status: 'Registered PDP (immatriculée 2026)', fit: 'French accounting aimed at independents / micro-entrepreneurs', note: 'Free tier; Plus ~€9/mo HT' },
+  { name: 'Tiime', status: 'Registered PDP (immatriculée 2025)', fit: 'French accounting + invoicing for small firms', note: 'Free tier; from ~€17.99/mo HT' },
+  { name: 'Sellsy', status: 'Registered PDP — "sous réserve", emission-only', fit: 'French CRM + invoicing for SMEs', note: 'From ~€29/mo per user' },
+  { name: 'Sage', status: 'Registered PDP ("PA Sage")', fit: 'Established accounting/ERP with a French presence', note: 'Pricing on quote' },
+];
+
+const faqs = [
+  { q: 'When does French e-invoicing become mandatory for a small artisan?', a: 'Two dates matter. From 1 September 2026, ALL VAT-registered businesses — including auto-entrepreneurs — must be able to RECEIVE structured e-invoices. From 1 September 2027, SMEs and micro-entreprises (most artisans) must also ISSUE them through an approved platform. Large and mid-size firms must issue from 1 September 2026. A non-penalised pilot phase has been running since February 2026.' },
+  { q: 'What is a PDP, and do I really need one?', a: 'A PDP (Plateforme de Dématérialisation Partenaire), now officially a "plateforme agréée," is a DGFiP-approved platform that issues, transmits and receives e-invoices and reports the data to the tax authority. Yes, you need one: the originally-planned free public portal (PPF) for issuing invoices was scrapped in the loi de finances 2025. The PPF now only runs the national directory (annuaire) that routes invoices between platforms — every business must use an approved platform, either directly or through their accounting software.' },
+  { q: 'My devis-facture software isn\'t a PDP — is that a problem?', a: 'Not necessarily. Many French tools that aren\'t themselves PDPs connect to one — for example EBP routes through Cegid\'s approved platform, and Henrri relies on Pennylane\'s. What matters is that your invoicing software can send and receive compliant e-invoices via an approved platform by your deadline. Ask your vendor directly: "Are you a registered PDP, or which PDP do you route through, and from when?"' },
+  { q: 'What format will e-invoices use?', a: 'France\'s reform uses structured electronic formats — commonly Factur-X (a hybrid PDF carrying embedded XML, popular with smaller businesses because it stays human-readable), as well as UBL and CII. Your platform handles the format; you generally keep working in your normal invoicing screen. Alongside invoicing, an "e-reporting" obligation transmits certain transaction and payment data (e.g. B2C sales) to the DGFiP on the same calendar.' },
+  { q: 'I\'m a micro-entrepreneur under the VAT franchise — am I still concerned?', a: 'Yes. The mandate applies to VAT-registered businesses broadly, and micro-entrepreneurs are in scope on the same calendar — reception from September 2026, issuance from September 2027. If you invoice under the franchise en base, your invoices still carry the "TVA non applicable, art. 293 B du CGI" mention, and they\'ll need to flow through an approved platform like everyone else\'s.' },
+  { q: 'What should I do now?', a: 'Confirm your invoicing software\'s plan: will it be (or connect to) a registered PDP, on what timeline, at what cost? If you\'re still on paper, Word or Excel invoices, choose a compliant tool well before September 2026 so you can receive e-invoices, and be ready to issue via a PDP by September 2027. Leave time to test — this affects every invoice you send.' },
+];
+
+const pageTitle = 'Facturation Électronique (E-Invoicing) for French Artisans (2026 Guide)';
+const pageDescription = 'France\'s e-invoicing mandate explained for tradespeople: reception for all businesses from 1 September 2026, issuance for SMEs and micro-entreprises from 1 September 2027, the PDP (plateforme agréée) model that replaced the scrapped free portal, and which software is a registered platform. Independent, verified June 2026.';
+
+const guideUrl = new URL('/fr/guides/facturation-electronique-artisans/', Astro.site).toString();
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'France', url: '/fr/' },
+  { name: 'E-invoicing for artisans', url: '/fr/guides/facturation-electronique-artisans/' },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org', '@type': 'Article', headline: pageTitle, description: pageDescription,
+  datePublished: '2026-06-17', dateModified: '2026-06-17', inLanguage: 'en',
+  author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
+  publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
+  mainEntityOfPage: guideUrl,
+};
+const faqSchema = {
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-8">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">🇫🇷 France · Compliance guide</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+        Facturation Électronique (E-Invoicing) for French Artisans
+      </h1>
+      <p class="mt-3 text-lg text-slate-600 leading-relaxed">
+        What France's phased e-invoicing mandate means for tradespeople — the timeline, the PDP (plateforme agréée) model that replaced the scrapped free portal, and which software is a registered platform.
+      </p>
+      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published &amp; verified June 2026 · Not tax advice — confirm your situation with the DGFiP (impots.gouv.fr) or your expert-comptable.</p>
+    </header>
+
+    <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ The short version</h2>
+      <p class="text-slate-800 leading-relaxed">
+        From <strong>1 September 2026</strong>, every French VAT-registered business — including auto-entrepreneurs — must be able to <strong>receive</strong> structured e-invoices. From <strong>1 September 2027</strong>, SMEs and micro-entreprises (most artisans) must also <strong>issue</strong> them. Invoices flow through a government-approved platform — a <strong>PDP / plateforme agréée</strong> — because the planned free public portal was scrapped. The practical task: make sure your invoicing software is (or connects to) a registered PDP before your deadline.
+      </p>
+    </section>
+
+    <section class="mb-10 grid gap-3 sm:grid-cols-3">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">1 Sept 2026</div>
+        <div class="mt-1 text-xs text-slate-600">RECEPTION mandatory for ALL businesses</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">1 Sept 2027</div>
+        <div class="mt-1 text-xs text-slate-600">ISSUANCE for SMEs &amp; micro-entreprises</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">PDP</div>
+        <div class="mt-1 text-xs text-slate-600">approved platform (the free portal was scrapped)</div>
+      </div>
+    </section>
+
+    <section class="mb-10 prose prose-slate max-w-none">
+      <h2>The phased timeline</h2>
+      <p>The calendar was set by Article 91 of the loi de finances pour 2024, after the original 2024 start was postponed. A non-penalised pilot has run since February 2026.</p>
+      <ul>
+        <li><strong>1 September 2026 — reception:</strong> ALL VAT-registered businesses must be able to <em>receive</em> e-invoices (every size, including auto-entrepreneurs).</li>
+        <li><strong>1 September 2026 — issuance (large &amp; mid-size):</strong> grandes entreprises and ETI must <em>issue</em> e-invoices and do e-reporting.</li>
+        <li><strong>1 September 2027 — issuance (SMEs &amp; micro):</strong> PME, TPE and micro-entreprises — most artisans — must <em>issue</em> e-invoices and do e-reporting.</li>
+      </ul>
+
+      <h2>What the reform actually requires</h2>
+      <ul>
+        <li><strong>Use an approved platform (PDP / plateforme agréée).</strong> Invoices are issued, transmitted and received through a DGFiP-approved platform — there is no free public alternative for issuing.</li>
+        <li><strong>Structured formats.</strong> E-invoices use structured formats — commonly <strong>Factur-X</strong> (a hybrid PDF with embedded XML that stays human-readable), plus UBL and CII. Your platform handles the format.</li>
+        <li><strong>The annuaire routes invoices.</strong> The refocused public portal (PPF) runs the national directory that routes invoices between platforms and forwards data to the DGFiP.</li>
+        <li><strong>E-reporting.</strong> A parallel obligation transmits certain transaction/payment data (e.g. B2C sales, foreign counterparties) to the DGFiP on the same calendar.</li>
+        <li><strong>Chorus Pro</strong> remains the platform for public-sector (B2G) invoicing, as it has been since 2017.</li>
+      </ul>
+
+      <h2>Why this matters for artisans specifically</h2>
+      <p>
+        French trades already work to a regulated <strong>devis → facture</strong> norm with mandatory invoice mentions, so the leap to structured e-invoicing is smaller than it looks — but two wrinkles are trade-specific. First, your invoices carry <strong>multi-rate TVA (20 / 10 / 5.5%)</strong>, and the structured format must reflect the right rate per line. Second, many tradespeople are <strong>micro-entrepreneurs under the VAT franchise</strong>: those invoices still carry the "TVA non applicable, art. 293 B du CGI" mention and still must flow through an approved platform. The mandate is not just for big companies — auto-entrepreneurs are squarely in scope.
+      </p>
+
+      <h2>Which software is a registered platform (PDP)?</h2>
+      <p>
+        From the tools French artisans actually use, these are registered "plateformes agréées." Most registrations are "sous réserve de raccordement" until live interoperability tests finish — always check the official <a href="https://www.impots.gouv.fr/je-consulte-la-liste-des-plateformes-agreees" rel="nofollow noopener" target="_blank">DGFiP list of approved platforms</a> before committing.
+      </p>
+    </section>
+
+    <section class="mb-10 overflow-x-auto">
+      <table class="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
+        <thead class="bg-slate-50 text-left text-slate-700">
+          <tr>
+            <th class="p-3 font-semibold">Platform</th>
+            <th class="p-3 font-semibold">PDP status</th>
+            <th class="p-3 font-semibold">Best fit</th>
+            <th class="p-3 font-semibold">Pricing</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          {pdps.map((p) => (
+            <tr>
+              <td class="p-3 font-semibold text-slate-900">{p.name}</td>
+              <td class="p-3 text-slate-700">{p.status}</td>
+              <td class="p-3 text-slate-600">{p.fit}</td>
+              <td class="p-3 text-slate-600">{p.note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="mt-3 text-xs text-slate-500">Source: vendor announcements + DGFiP list, verified June 2026. EBP routes through Cegid's approved platform and Henrri through Pennylane's — they are not themselves PDPs. Confirm current status on the official impots.gouv.fr list.</p>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">What about my devis-facture software (Obat, Tolteck, EBP…)?</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        Your <a href="/fr/" class="font-medium text-orange-700 hover:underline">job-management / devis-facture tool</a> issues your invoices, so it must be able to send and receive them through an approved platform by your deadline — either by being a registered PDP itself, or by routing through one. The right question for any vendor is simple: <strong>"Are you a registered PDP, or which PDP do you connect to, and from when?"</strong> Don't assume a great quoting tool automatically covers the mandate — confirm the platform path.
+      </p>
+    </section>
+
+    <section class="mb-10 prose prose-slate max-w-none">
+      <h2>Readiness checklist for artisans</h2>
+      <ol>
+        <li><strong>Confirm you can receive e-invoices by 1 September 2026</strong> — this applies to every business, including micro-entrepreneurs.</li>
+        <li><strong>Ask your invoicing software the PDP question:</strong> are you a registered platform, or which one do you route through, and from when?</li>
+        <li><strong>If you're still on paper / Word / Excel,</strong> choose a compliant tool well ahead of the deadlines.</li>
+        <li><strong>Check multi-rate TVA handling</strong> (20 / 10 / 5.5%) and, if you're under the franchise, the art. 293 B mention.</li>
+        <li><strong>Plan to issue via a PDP by 1 September 2027</strong> (SMEs / micro) — earlier if you're a large or mid-size firm.</li>
+        <li><strong>Test before the deadline</strong> — this touches every invoice you send and receive.</li>
+      </ol>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Frequently asked questions</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
+      <strong class="text-slate-700">Sources &amp; verification:</strong> Dates verified June 2026 from impots.gouv.fr / DGFiP (reception all businesses 1 September 2026; SME/micro issuance 1 September 2027). PDP/plateforme-agréée model and the PPF role-change (free public issuance scrapped, loi de finances 2025) confirmed from impots.gouv.fr and the AIFE; the Article 91 LF2024 basis is corroborated. PDP statuses from vendor announcements + the DGFiP list and may be "sous réserve de raccordement" — confirm on the official list. General information, not tax advice. Spotted an error? <a href="/contact/" class="underline">Tell us</a> and we'll correct it.
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Compare French trades software & services</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">Independent reviews of French devis-facture software, lead-gen, payroll and mandatory décennale insurance — with no pay-to-play.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/fr/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">🇫🇷 France directory →</a>
+        <a href="/fr/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Compare vendors</a>
+        <a href="/for-vendors/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Are you a vendor? Work with us</a>
+      </div>
+    </section>
+  </article>
+</Layout>
