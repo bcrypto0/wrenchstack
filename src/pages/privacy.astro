@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-const lastUpdated = 'May 29, 2026';
+const lastUpdated = 'June 18, 2026';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -11,7 +11,7 @@ const breadcrumbs = [
 
 <Layout
   title="Privacy Policy — WrenchStack"
-  description="How WrenchStack collects, uses, and protects information. We use privacy-friendly, cookieless analytics, never sell personal data, and only collect what you choose to send us."
+  description="How WrenchStack collects, uses, and protects information. We use privacy-friendly cookieless analytics by default and Google Analytics only with your consent; we never sell personal data and only collect what you choose to send us."
   breadcrumbs={breadcrumbs}
 >
   <article class="mx-auto max-w-3xl px-4 py-12">
@@ -31,7 +31,8 @@ const breadcrumbs = [
 
       <h2>The short version</h2>
       <ul>
-        <li>We use <strong>privacy-friendly, cookieless analytics</strong> — no personal profiles, no cross-site tracking.</li>
+        <li>By default we use <strong>privacy-friendly, cookieless analytics</strong> (Cloudflare Web Analytics) — no personal profiles, no cross-site tracking.</li>
+        <li>We load <strong>Google Analytics only if you accept</strong> our cookie banner — and you can decline or withdraw consent at any time.</li>
         <li>We only collect personal information you <strong>choose to send us</strong> (e.g., when you email us or submit a form).</li>
         <li>We <strong>never sell</strong> your personal information.</li>
         <li>We don't run user accounts, and we don't operate a newsletter at this time.</li>
@@ -40,11 +41,17 @@ const breadcrumbs = [
       <h2>Information we collect</h2>
       <h3>1. Analytics data</h3>
       <p>
-        We use <a href="https://plausible.io/data-policy" rel="nofollow noopener" target="_blank">Plausible Analytics</a>,
-        a privacy-first analytics tool that does not use cookies and does not collect personal or
-        identifiable information. It reports aggregate metrics only — page views, referring sites, country
-        (derived from IP and then discarded), and device type. We cannot identify individual visitors from
-        this data.
+        By default we use <a href="https://www.cloudflare.com/web-analytics/" rel="nofollow noopener" target="_blank">Cloudflare Web Analytics</a>,
+        a privacy-first tool that <strong>does not use cookies</strong> and does not collect personal or
+        identifiable information. It reports aggregate metrics only — page views, referring sites, country, and
+        device type — and we cannot identify individual visitors from it.
+      </p>
+      <p>
+        With your consent, we also use <a href="https://policies.google.com/privacy" rel="nofollow noopener" target="_blank">Google Analytics 4</a>
+        (provided by Google) to understand traffic in more detail. Google Analytics <strong>sets cookies</strong>, so it
+        is loaded <strong>only after you click "Accept" on our cookie banner</strong>; if you decline, it is never loaded
+        and no analytics cookies are set. We enable IP anonymization and do not use Google Analytics advertising or
+        remarketing features.
       </p>
       <h3>2. Information you provide</h3>
       <p>
@@ -54,16 +61,22 @@ const breadcrumbs = [
         and delivered to our inbox. We use this only to respond to you.
       </p>
 
-      <h2>Cookies and outbound affiliate links</h2>
+      <h2>Cookies and your choices</h2>
       <p>
-        WrenchStack itself does not set tracking or advertising cookies. Our analytics are cookieless.
+        By default, WrenchStack sets <strong>no analytics or advertising cookies</strong> — our default analytics
+        (Cloudflare Web Analytics) are cookieless. If you click <strong>"Accept"</strong> on our cookie banner, Google
+        Analytics sets its own cookies to measure traffic (with IP anonymization). If you click <strong>"Decline,"</strong>
+        no analytics cookies are set. Your choice is remembered in your browser, and you can change it at any time:
       </p>
       <p>
-        However, WrenchStack earns affiliate commissions on some outbound links (see our
-        <a href="/disclosure/">Affiliate Disclosure</a>). When you click an affiliate link and leave our site,
-        the destination vendor or its affiliate network (for example, PartnerStack) may set its own cookies to
-        attribute the referral. Those cookies are governed by the destination's privacy policy, not ours, and
-        we do not control or have access to them.
+        <button id="reset-consent" type="button" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 no-underline hover:bg-slate-50">Manage cookie preferences</button>
+      </p>
+      <p>
+        Separately, WrenchStack earns affiliate commissions on some outbound links (see our
+        <a href="/disclosure/">Affiliate Disclosure</a>). When you click an affiliate link and leave our site, the
+        destination vendor or its affiliate network (for example, PartnerStack) may set its own cookies to attribute
+        the referral. Those cookies are governed by the destination's privacy policy, not ours, and we do not control
+        or have access to them.
       </p>
 
       <h2>How we use information</h2>
@@ -76,8 +89,8 @@ const breadcrumbs = [
       <h2>Third-party services</h2>
       <p>We rely on a small number of service providers, each with its own privacy policy:</p>
       <ul>
-        <li><strong>Cloudflare</strong> — hosting, content delivery, and security.</li>
-        <li><strong>Plausible Analytics</strong> — cookieless, aggregate site analytics.</li>
+        <li><strong>Cloudflare</strong> — hosting, content delivery, security, and cookieless Web Analytics.</li>
+        <li><strong>Google Analytics</strong> (Google LLC) — consent-based, cookie-using site analytics, loaded only if you accept.</li>
         <li><strong>Web3Forms</strong> — processing form submissions.</li>
         <li><strong>Affiliate networks and vendors</strong> — only when you click an outbound affiliate link and leave our site.</li>
       </ul>
@@ -101,8 +114,9 @@ const breadcrumbs = [
       <h2>Data retention</h2>
       <p>
         We retain email and form correspondence only as long as needed to handle your request and keep a
-        reasonable record, then delete it. Aggregate analytics contain no personal data and are retained for
-        trend analysis.
+        reasonable record, then delete it. Cloudflare Web Analytics contains no personal data. Google Analytics
+        data, when you've consented to it, is retained according to Google's data-retention settings and used only
+        in aggregate for trend analysis.
       </p>
 
       <h2>Children</h2>
@@ -124,4 +138,13 @@ const breadcrumbs = [
       </p>
     </section>
   </article>
+
+  <script>
+    // "Manage cookie preferences": clear the stored consent choice and reload, which
+    // re-shows the consent banner (see Layout.astro). Harmless while analytics is inactive.
+    document.getElementById('reset-consent')?.addEventListener('click', function () {
+      try { localStorage.removeItem('ws-analytics-consent'); } catch (e) {}
+      location.reload();
+    });
+  </script>
 </Layout>
