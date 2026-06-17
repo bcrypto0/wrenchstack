@@ -1,0 +1,192 @@
+---
+import Layout from '../../../../../layouts/Layout.astro';
+
+// Plateformes agréées (PDP) vérifiées. Honnête : la plupart des immatriculations
+// sont « sous réserve de raccordement » ; la liste DGFiP sur impots.gouv.fr fait foi.
+const pdps = [
+  { name: 'Pennylane', status: 'Plateforme agréée (PDP)', fit: 'Comptabilité et facturation cloud française pour PME ; la PDP native de référence', note: 'Offre gratuite ; à partir d’environ 14 €/mois' },
+  { name: 'Indy', status: 'Plateforme agréée (immatriculée 2026)', fit: 'Comptabilité française pour indépendants / micro-entrepreneurs', note: 'Offre gratuite ; Plus ~9 €/mois HT' },
+  { name: 'Tiime', status: 'Plateforme agréée (immatriculée 2025)', fit: 'Comptabilité et facturation pour petites entreprises', note: 'Offre gratuite ; à partir de ~17,99 €/mois HT' },
+  { name: 'Sellsy', status: 'Plateforme agréée — « sous réserve », émission uniquement', fit: 'CRM et facturation pour PME', note: 'À partir de ~29 €/mois par utilisateur' },
+  { name: 'Sage', status: 'Plateforme agréée (« PA Sage »)', fit: 'Comptabilité/ERP établi avec une présence française', note: 'Tarif sur devis' },
+];
+
+const faqs = [
+  { q: 'Quand la facturation électronique devient-elle obligatoire pour un petit artisan ?', a: 'Deux dates comptent. À partir du 1ᵉʳ septembre 2026, TOUTES les entreprises assujetties à la TVA — y compris les auto-entrepreneurs — doivent pouvoir RECEVOIR des factures électroniques structurées. À partir du 1ᵉʳ septembre 2027, les PME et micro-entreprises (la plupart des artisans) doivent aussi les ÉMETTRE via une plateforme agréée. Les grandes entreprises et ETI doivent émettre dès le 1ᵉʳ septembre 2026. Une phase pilote non sanctionnée a démarré en février 2026.' },
+  { q: 'Qu’est-ce qu’une PDP, et en ai-je vraiment besoin ?', a: 'Une PDP (Plateforme de Dématérialisation Partenaire), désormais officiellement « plateforme agréée », est une plateforme agréée par la DGFiP qui émet, transmet et reçoit les factures électroniques et transmet les données à l’administration. Oui, vous en avez besoin : le portail public gratuit (PPF) initialement prévu pour émettre les factures a été abandonné par la loi de finances 2025. Le PPF ne gère plus que l’annuaire national qui aiguille les factures entre plateformes — toute entreprise doit passer par une plateforme agréée, directement ou via son logiciel.' },
+  { q: 'Mon logiciel de devis-facture n’est pas une PDP — est-ce un problème ?', a: 'Pas nécessairement. De nombreux outils français qui ne sont pas eux-mêmes des PDP se connectent à une PDP — par exemple EBP passe par la plateforme agréée de Cegid, et Henrri s’appuie sur celle de Pennylane. L’essentiel est que votre logiciel de facturation puisse envoyer et recevoir des factures conformes via une plateforme agréée avant votre échéance. Posez la question directement : « Êtes-vous une PDP immatriculée, ou via quelle PDP passez-vous, et à partir de quand ? »' },
+  { q: 'Quel format pour les factures électroniques ?', a: 'La réforme utilise des formats structurés — couramment Factur-X (un PDF hybride avec XML embarqué, apprécié des petites entreprises car il reste lisible), ainsi qu’UBL et CII. Votre plateforme gère le format ; vous continuez généralement à travailler dans votre écran de facturation habituel. En parallèle, une obligation d’« e-reporting » transmet certaines données de transactions et de paiement (ventes B2C, etc.) à la DGFiP, selon le même calendrier.' },
+  { q: 'Je suis micro-entrepreneur en franchise de TVA — suis-je quand même concerné ?', a: 'Oui. L’obligation s’applique largement aux entreprises assujetties, et les micro-entrepreneurs sont concernés selon le même calendrier — réception dès septembre 2026, émission à partir de septembre 2027. Si vous facturez en franchise en base, vos factures portent toujours la mention « TVA non applicable, art. 293 B du CGI » et devront, comme les autres, transiter par une plateforme agréée.' },
+  { q: 'Que dois-je faire maintenant ?', a: 'Vérifiez l’offre de votre logiciel de facturation : sera-t-il (ou se connectera-t-il à) une plateforme agréée, selon quel calendrier et à quel coût ? Si vous facturez encore sur papier, Word ou Excel, choisissez un outil conforme bien avant septembre 2026 pour pouvoir recevoir les factures, et soyez prêt à émettre via une PDP d’ici septembre 2027. Prévoyez du temps de test — cela concerne chaque facture que vous envoyez.' },
+];
+
+const pageTitle = 'Facturation électronique pour les artisans du bâtiment (guide 2026)';
+const pageDescription = 'La facturation électronique expliquée aux artisans : réception pour toutes les entreprises au 1ᵉʳ septembre 2026, émission pour les TPE/PME et micro-entreprises au 1ᵉʳ septembre 2027, le modèle de plateforme agréée (PDP) qui remplace le portail gratuit abandonné, et quels logiciels sont des plateformes agréées. Indépendant, vérifié en juin 2026.';
+
+const enUrl = new URL('/fr/guides/facturation-electronique-artisans/', Astro.site).toString();
+const frUrl = new URL('/fr/fr/guides/facturation-electronique-artisans/', Astro.site).toString();
+const breadcrumbs = [
+  { name: 'Accueil', url: '/' },
+  { name: 'France', url: '/fr/fr/' },
+  { name: 'Facturation électronique', url: '/fr/fr/guides/facturation-electronique-artisans/' },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org', '@type': 'Article', headline: pageTitle, description: pageDescription,
+  datePublished: '2026-06-17', dateModified: '2026-06-17', inLanguage: 'fr',
+  author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
+  publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
+  mainEntityOfPage: frUrl,
+};
+const faqSchema = {
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  lang="fr"
+  breadcrumbs={breadcrumbs}
+  alternateUrls={[{ hreflang: 'en', href: enUrl }, { hreflang: 'fr', href: frUrl }, { hreflang: 'x-default', href: enUrl }]}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-8">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">🇫🇷 France · Guide de conformité</p>
+        <a href="/fr/guides/facturation-electronique-artisans/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">English</a>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+        La facturation électronique pour les artisans du bâtiment
+      </h1>
+      <p class="mt-3 text-lg text-slate-600 leading-relaxed">
+        Ce que le calendrier obligatoire de la facturation électronique signifie pour les artisans — les étapes, le modèle de plateforme agréée (PDP) qui remplace le portail public gratuit abandonné, et quels logiciels sont des plateformes agréées.
+      </p>
+      <p class="mt-3 text-sm text-slate-500">Par WrenchStack Research · Publié et vérifié en juin 2026 · Ceci n’est pas un conseil fiscal — vérifiez votre situation auprès de la DGFiP (impots.gouv.fr) ou de votre expert-comptable.</p>
+    </header>
+
+    <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ L’essentiel</h2>
+      <p class="text-slate-800 leading-relaxed">
+        À partir du <strong>1ᵉʳ septembre 2026</strong>, toute entreprise française assujettie à la TVA — y compris les auto-entrepreneurs — doit pouvoir <strong>recevoir</strong> des factures électroniques structurées. À partir du <strong>1ᵉʳ septembre 2027</strong>, les TPE/PME et micro-entreprises (la plupart des artisans) doivent aussi les <strong>émettre</strong>. Les factures transitent par une plateforme agréée par l’État — une <strong>PDP / plateforme agréée</strong> — car le portail public gratuit prévu a été abandonné. La tâche concrète : vérifier que votre logiciel de facturation est (ou se connecte à) une plateforme agréée avant votre échéance.
+      </p>
+    </section>
+
+    <section class="mb-10 grid gap-3 sm:grid-cols-3">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">1ᵉʳ sept. 2026</div>
+        <div class="mt-1 text-xs text-slate-600">RÉCEPTION obligatoire pour TOUTES les entreprises</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">1ᵉʳ sept. 2027</div>
+        <div class="mt-1 text-xs text-slate-600">ÉMISSION pour les TPE/PME et micro-entreprises</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">PDP</div>
+        <div class="mt-1 text-xs text-slate-600">plateforme agréée (le portail gratuit a été abandonné)</div>
+      </div>
+    </section>
+
+    <section class="mb-10 prose prose-slate max-w-none">
+      <h2>Le calendrier par étapes</h2>
+      <p>Le calendrier a été fixé par l’article 91 de la loi de finances pour 2024, après le report du démarrage initial de 2024. Une phase pilote non sanctionnée est en cours depuis février 2026.</p>
+      <ul>
+        <li><strong>1ᵉʳ septembre 2026 — réception :</strong> TOUTES les entreprises assujetties à la TVA doivent pouvoir <em>recevoir</em> des factures électroniques (toutes tailles, y compris les auto-entrepreneurs).</li>
+        <li><strong>1ᵉʳ septembre 2026 — émission (grandes &amp; moyennes) :</strong> les grandes entreprises et ETI doivent <em>émettre</em> des factures électroniques et faire de l’e-reporting.</li>
+        <li><strong>1ᵉʳ septembre 2027 — émission (TPE/PME &amp; micro) :</strong> les PME, TPE et micro-entreprises — la plupart des artisans — doivent <em>émettre</em> des factures électroniques et faire de l’e-reporting.</li>
+      </ul>
+
+      <h2>Ce que la réforme exige réellement</h2>
+      <ul>
+        <li><strong>Utiliser une plateforme agréée (PDP).</strong> Les factures sont émises, transmises et reçues via une plateforme agréée par la DGFiP — il n’existe pas d’alternative publique gratuite pour l’émission.</li>
+        <li><strong>Formats structurés.</strong> Les factures utilisent des formats structurés — couramment <strong>Factur-X</strong> (PDF hybride avec XML embarqué, qui reste lisible), ainsi qu’UBL et CII. Votre plateforme gère le format.</li>
+        <li><strong>L’annuaire aiguille les factures.</strong> Le portail public recentré (PPF) gère l’annuaire national qui aiguille les factures entre plateformes et transmet les données à la DGFiP.</li>
+        <li><strong>E-reporting.</strong> Une obligation parallèle transmet certaines données de transactions/paiement (ventes B2C, contreparties étrangères) à la DGFiP, selon le même calendrier.</li>
+        <li><strong>Chorus Pro</strong> reste la plateforme de la facturation au secteur public (B2G), comme depuis 2017.</li>
+      </ul>
+
+      <h2>Pourquoi cela compte particulièrement pour les artisans</h2>
+      <p>
+        Les artisans travaillent déjà selon une norme réglementée <strong>devis → facture</strong> avec des mentions obligatoires, donc le passage à la facturation électronique structurée est plus court qu’il n’y paraît — mais deux particularités sont propres au métier. D’abord, vos factures portent une <strong>TVA à taux multiples (20 / 10 / 5,5 %)</strong>, et le format structuré doit refléter le bon taux par ligne. Ensuite, beaucoup d’artisans sont <strong>micro-entrepreneurs en franchise de TVA</strong> : ces factures portent toujours la mention « TVA non applicable, art. 293 B du CGI » et doivent quand même transiter par une plateforme agréée. L’obligation ne vise pas que les grandes entreprises — les auto-entrepreneurs sont pleinement concernés.
+      </p>
+
+      <h2>Quels logiciels sont des plateformes agréées (PDP) ?</h2>
+      <p>
+        Parmi les outils réellement utilisés par les artisans français, voici des « plateformes agréées » immatriculées. La plupart des immatriculations sont « sous réserve de raccordement » jusqu’à la fin des tests d’interopérabilité — vérifiez toujours la <a href="https://www.impots.gouv.fr/je-consulte-la-liste-des-plateformes-agreees" rel="nofollow noopener" target="_blank">liste officielle DGFiP des plateformes agréées</a> avant de vous engager.
+      </p>
+    </section>
+
+    <section class="mb-10 overflow-x-auto">
+      <table class="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
+        <thead class="bg-slate-50 text-left text-slate-700">
+          <tr>
+            <th class="p-3 font-semibold">Plateforme</th>
+            <th class="p-3 font-semibold">Statut PDP</th>
+            <th class="p-3 font-semibold">Idéal pour</th>
+            <th class="p-3 font-semibold">Tarif</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          {pdps.map((p) => (
+            <tr>
+              <td class="p-3 font-semibold text-slate-900">{p.name}</td>
+              <td class="p-3 text-slate-700">{p.status}</td>
+              <td class="p-3 text-slate-600">{p.fit}</td>
+              <td class="p-3 text-slate-600">{p.note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="mt-3 text-xs text-slate-500">Source : annonces des éditeurs + liste DGFiP, vérifié en juin 2026. EBP passe par la plateforme agréée de Cegid et Henrri par celle de Pennylane — ce ne sont pas eux-mêmes des PDP. Vérifiez le statut actuel sur la liste officielle impots.gouv.fr.</p>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">Et mon logiciel de devis-facture (Obat, Tolteck, EBP…) ?</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        Votre <a href="/fr/fr/" class="font-medium text-orange-700 hover:underline">logiciel de gestion / devis-facture</a> émet vos factures : il doit donc pouvoir les envoyer et les recevoir via une plateforme agréée avant votre échéance — soit en étant lui-même une PDP immatriculée, soit en passant par une PDP. La bonne question à poser à tout éditeur est simple : <strong>« Êtes-vous une PDP immatriculée, ou via quelle PDP passez-vous, et à partir de quand ? »</strong> Ne présumez pas qu’un bon outil de devis couvre automatiquement l’obligation — vérifiez le raccordement à une plateforme.
+      </p>
+    </section>
+
+    <section class="mb-10 prose prose-slate max-w-none">
+      <h2>Check-list de préparation pour les artisans</h2>
+      <ol>
+        <li><strong>Assurez-vous de pouvoir recevoir des factures électroniques d’ici le 1ᵉʳ septembre 2026</strong> — cela concerne toutes les entreprises, y compris les micro-entrepreneurs.</li>
+        <li><strong>Posez la question PDP à votre logiciel :</strong> êtes-vous une plateforme agréée, ou via laquelle passez-vous, et à partir de quand ?</li>
+        <li><strong>Si vous êtes encore sur papier / Word / Excel,</strong> choisissez un outil conforme bien avant les échéances.</li>
+        <li><strong>Vérifiez la gestion de la TVA à taux multiples</strong> (20 / 10 / 5,5 %) et, en franchise, la mention art. 293 B.</li>
+        <li><strong>Prévoyez d’émettre via une PDP d’ici le 1ᵉʳ septembre 2027</strong> (TPE/PME et micro) — plus tôt pour une grande entreprise ou ETI.</li>
+        <li><strong>Testez avant l’échéance</strong> — cela touche chaque facture que vous envoyez et recevez.</li>
+      </ol>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Questions fréquentes</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
+      <strong class="text-slate-700">Sources et vérification :</strong> dates vérifiées en juin 2026 sur impots.gouv.fr / DGFiP (réception toutes entreprises 1ᵉʳ septembre 2026 ; émission TPE/PME et micro 1ᵉʳ septembre 2027). Le modèle PDP/plateforme agréée et le recentrage du PPF (émission publique gratuite abandonnée, loi de finances 2025) sont confirmés par impots.gouv.fr et l’AIFE ; la base de l’article 91 LF2024 est corroborée. Statuts PDP issus des annonces des éditeurs et de la liste DGFiP, parfois « sous réserve de raccordement » — à vérifier sur la liste officielle. Information générale, pas un conseil fiscal. Une erreur ? <a href="/contact/" class="underline">Signalez-la</a> et nous la corrigerons.
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Comparez les logiciels et services pour artisans</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">Avis indépendants sur les logiciels de devis-facture, la génération de prospects, la paie et l’assurance décennale obligatoire — sans favoritisme payant.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/fr/fr/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">🇫🇷 Annuaire France →</a>
+        <a href="/fr/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Comparer</a>
+        <a href="/for-vendors/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Éditeur ? Travaillez avec nous</a>
+      </div>
+    </section>
+  </article>
+</Layout>

@@ -25,6 +25,7 @@ const pageTitle = 'Facturation Électronique (E-Invoicing) for French Artisans (
 const pageDescription = 'France\'s e-invoicing mandate explained for tradespeople: reception for all businesses from 1 September 2026, issuance for SMEs and micro-entreprises from 1 September 2027, the PDP (plateforme agréée) model that replaced the scrapped free portal, and which software is a registered platform. Independent, verified June 2026.';
 
 const guideUrl = new URL('/fr/guides/facturation-electronique-artisans/', Astro.site).toString();
+const frUrl = new URL('/fr/fr/guides/facturation-electronique-artisans/', Astro.site).toString();
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'France', url: '/fr/' },
@@ -44,13 +45,16 @@ const faqSchema = {
 };
 ---
 
-<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} alternateUrls={[{ hreflang: 'en', href: guideUrl }, { hreflang: 'fr', href: frUrl }, { hreflang: 'x-default', href: guideUrl }]}>
   <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <article class="mx-auto max-w-4xl px-4 py-12">
     <header class="mb-8">
-      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">🇫🇷 France · Compliance guide</p>
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">🇫🇷 France · Compliance guide</p>
+        <a href="/fr/fr/guides/facturation-electronique-artisans/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">Français</a>
+      </div>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
         Facturation Électronique (E-Invoicing) for French Artisans
       </h1>

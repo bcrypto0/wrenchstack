@@ -25,13 +25,18 @@ categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category 
 const pageTitle = 'France Trades Software & Services (Artisans du Bâtiment) — WrenchStack';
 const pageDescription = `Independent directory of ${vendors.length} vendors for French tradespeople: devis-facture software, renovation lead-gen, URSSAF payroll, mandatory décennale insurance — plus the facturation électronique, RGE, multi-rate TVA and CMA compliance every artisan must handle.`;
 const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'France', url: '/fr/' } ];
+const enUrl = new URL('/fr/', Astro.site).toString();
+const frUrl = new URL('/fr/fr/', Astro.site).toString();
 ---
-<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} alternateUrls={[{ hreflang: 'en', href: enUrl }, { hreflang: 'fr', href: frUrl }, { hreflang: 'x-default', href: enUrl }]}>
   <article class="mx-auto max-w-5xl px-4 py-12">
     <header class="mb-10">
-      <div class="mb-3 flex items-center gap-2">
-        <span class="text-2xl" aria-hidden="true">🇫🇷</span>
-        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">France · Artisans du bâtiment</p>
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl" aria-hidden="true">🇫🇷</span>
+          <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">France · Artisans du bâtiment</p>
+        </div>
+        <a href="/fr/fr/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">Français</a>
       </div>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">France Trades Software & Services Directory</h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
