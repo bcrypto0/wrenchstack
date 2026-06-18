@@ -69,6 +69,26 @@ const budgetPick = ranked
   .filter((t) => t.pricing.starting_at_usd !== null && (t.pricing.starting_at_usd as number) > 0)
   .sort((a, b) => (a.pricing.starting_at_usd as number) - (b.pricing.starting_at_usd as number))[0] ?? null;
 
+// "What it actually costs" pricing guide — buckets ranked tools by published
+// entry price into honest bands (custom-quote tools surfaced separately). The
+// most AI-citable answer to "how much does [trade] software cost", all derived
+// live from verified pricing, so it can't go stale silently.
+const inBand = (lo: number, hi: number) =>
+  ranked.filter((t) => {
+    const p = t.pricing.starting_at_usd;
+    return p !== null && p >= lo && p <= hi;
+  });
+const pricingBands = [
+  { label: 'Free / freemium', range: '$0 to start', tools: ranked.filter((t) => t.pricing.starting_at_usd === 0) },
+  { label: 'Budget', range: 'under $100/mo', tools: inBand(1, 99) },
+  { label: 'Mid-market', range: '$100–$249/mo', tools: inBand(100, 249) },
+  { label: 'Premium', range: '$250+/mo', tools: ranked.filter((t) => (t.pricing.starting_at_usd ?? -1) >= 250) },
+  { label: 'Custom quote only', range: 'sales call required', tools: ranked.filter((t) => t.pricing.starting_at_usd === null) },
+].filter((b) => b.tools.length > 0);
+const priceLo = publicPrices.length ? `$${publicPrices[0]}/mo` : null;
+const priceHi = publicPrices.length ? `$${publicPrices[publicPrices.length - 1]}/mo` : null;
+const showPricingGuide = ranked.length >= 4 && pricingBands.length >= 2;
+
 // Phase 3 custom content flags — use deep content when present
 const hasIndustryContext = !!vertical.industry_context;
 const hasBuyingPersonas = !!vertical.buying_personas;
@@ -105,7 +125,20 @@ const templatedFaqs = [
   },
 ];
 
-const faqs = hasCustomFaqs ? vertical.vertical_faqs! : templatedFaqs;
+// Lead the FAQ (and its FAQPage schema) with the exact high-intent query plus
+// a full ranked answer — the most AI-citable FAQ we can publish, and the only
+// place the complete ranking lands in structured data. Skip if the curated set
+// already answers the general "best … in 2026" form, to avoid a duplicate.
+const baseFaqs = hasCustomFaqs ? vertical.vertical_faqs! : templatedFaqs;
+const rankingFaq = {
+  q: `What is the best ${verticalLower} software in 2026?`,
+  a: `Ranked by our independent WrenchStack Fit Score (vertical fit, aggregated G2/Capterra ratings, pricing transparency, feature depth, and integrations), the best ${verticalLower} software in 2026 is: ${ranked
+    .slice(0, 8)
+    .map((t, i) => `${i + 1}. ${t.name}`)
+    .join('; ')}. ${topPicks[0]?.name ?? 'The top pick'} leads overall${topPicks[0] ? ` (${formatPrice(topPicks[0])})` : ''}, but the right choice depends on your team size and budget — see the decision guide on this page for size-specific picks.`,
+};
+const alreadyHasRankingFaq = baseFaqs.some((f) => /\bbest\b/i.test(f.q) && /2026/.test(f.q));
+const faqs = alreadyHasRankingFaq ? baseFaqs : [rankingFaq, ...baseFaqs];
 
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -271,6 +304,43 @@ const breadcrumbs = [
             </div>
           )}
         </div>
+      </section>
+    )}
+
+    {showPricingGuide && (
+      <section class="mb-12">
+        <h2 class="mb-1 text-2xl font-bold text-slate-900">What does {verticalLower} software actually cost?</h2>
+        <p class="mb-5 text-sm text-slate-600 leading-relaxed">
+          {priceLo && priceHi && (<>Across the {ranked.length} platforms we track, published entry prices run from {priceLo} to {priceHi}{medianPrice !== null ? <>, with a median of ${medianPrice}/mo</> : null}. </>)}
+          {hidePricingCount > 0 && (<>{hidePricingCount} of {ranked.length} publish no price and quote only on a sales call. </>)}
+          Pricing verified {lastVerifiedLabel}.
+        </p>
+        <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+          <table class="w-full text-sm">
+            <thead class="bg-slate-50 text-left text-slate-700">
+              <tr>
+                <th class="p-3 font-semibold">Tier</th>
+                <th class="p-3 font-semibold whitespace-nowrap">Entry price</th>
+                <th class="p-3 font-semibold">Options</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              {pricingBands.map((b) => (
+                <tr class="align-top">
+                  <td class="p-3 font-semibold text-slate-900">{b.label}</td>
+                  <td class="p-3 whitespace-nowrap text-slate-700">{b.range}</td>
+                  <td class="p-3 text-slate-600">
+                    {b.tools.slice(0, 6).map((t, i) => (<>{i > 0 ? ', ' : ''}<a href={`/tools/${t.slug}/`} class="hover:text-orange-600 hover:underline">{t.name}</a></>))}
+                    {b.tools.length > 6 ? ` +${b.tools.length - 6} more` : ''}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-2 text-xs text-slate-500">
+          Entry price = the lowest published tier per tool; most platforms add per-user or higher-tier costs above this (see each review for the full tier breakdown). <a href="/methodology/" class="underline hover:text-slate-700">How we verify pricing →</a>
+        </p>
       </section>
     )}
 
