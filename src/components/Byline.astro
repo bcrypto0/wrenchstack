@@ -1,22 +1,22 @@
 ---
 interface Props {
   updatedDate?: string;
+  nextReviewDate?: string;
   readingMinutes?: number;
 }
 
-const { updatedDate, readingMinutes } = Astro.props;
-const formattedDate = updatedDate
-  ? new Date(updatedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-  : null;
-const showSeparator = formattedDate && readingMinutes;
+const { updatedDate, nextReviewDate, readingMinutes } = Astro.props;
+const fmt = (d: string) => new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
 <div class="mb-6 flex flex-wrap items-center gap-x-2 gap-y-1 border-y border-slate-200 py-3 text-sm text-slate-500">
-  {formattedDate && (
-    <span>Last updated <time>{formattedDate}</time></span>
+  {updatedDate && (
+    <span>Last updated <time>{fmt(updatedDate)}</time></span>
   )}
-  {showSeparator && <span aria-hidden="true">·</span>}
+  {nextReviewDate && (
+    <>{updatedDate && <span aria-hidden="true">·</span>}<span>Next review <time>{fmt(nextReviewDate)}</time></span></>
+  )}
   {readingMinutes && (
-    <span>{readingMinutes} min read</span>
+    <>{(updatedDate || nextReviewDate) && <span aria-hidden="true">·</span>}<span>{readingMinutes} min read</span></>
   )}
 </div>

@@ -54,6 +54,21 @@ const qbCount = ranked.filter((t) => t.integrations.some((i) => i.includes('quic
 const lastVerifiedLabel = new Date(lastVerifiedDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 const showStatStrip = ranked.length >= 3;
 
+// Forward freshness promise — pricing is re-verified quarterly (see /methodology/).
+// A visible "next review" date is a cheap, honest trust signal almost no
+// competitor publishes.
+const nextReviewDate = (() => {
+  const d = new Date(lastVerifiedDate);
+  d.setMonth(d.getMonth() + 3);
+  return d.toISOString().slice(0, 10);
+})();
+
+// Cheapest published-price option — drives the "tightest budget" callout in
+// the decision block. Null when every option hides pricing behind a sales call.
+const budgetPick = ranked
+  .filter((t) => t.pricing.starting_at_usd !== null && (t.pricing.starting_at_usd as number) > 0)
+  .sort((a, b) => (a.pricing.starting_at_usd as number) - (b.pricing.starting_at_usd as number))[0] ?? null;
+
 // Phase 3 custom content flags — use deep content when present
 const hasIndustryContext = !!vertical.industry_context;
 const hasBuyingPersonas = !!vertical.buying_personas;
@@ -145,7 +160,7 @@ const breadcrumbs = [
       <p class="mt-4 text-lg text-slate-600">
         A comparison of {ranked.length} platforms for {verticalLower} businesses, ranked by vertical fit, user ratings, pricing transparency, and feature depth.
       </p>
-      <Byline updatedDate={lastVerifiedDate} readingMinutes={estimatedReadingMin} />
+      <Byline updatedDate={lastVerifiedDate} nextReviewDate={nextReviewDate} readingMinutes={estimatedReadingMin} />
     </header>
 
     {topPicks.length > 0 && (
@@ -229,6 +244,35 @@ const breadcrumbs = [
         <a href="/methodology/" class="underline hover:text-slate-700">Full methodology →</a>
       </p>
     </section>
+
+    {topPicks.length >= 2 && (
+      <section class="mb-12">
+        <h2 class="mb-1 text-2xl font-bold text-slate-900">Which {verticalLower} software should you choose?</h2>
+        <p class="mb-5 text-sm text-slate-600">The short, honest version by situation — full reasoning in the reviews below.</p>
+        <div class="space-y-3">
+          {topPicks.slice(0, 4).map((t) => {
+            const watch = t.weaknesses ? t.weaknesses.split(';')[0].trim() : null;
+            return (
+              <div class="rounded-lg border border-slate-200 bg-white p-4 sm:flex sm:items-baseline sm:gap-4">
+                <div class="mb-1 shrink-0 sm:mb-0 sm:w-48">
+                  <a href={`/tools/${t.slug}/`} class="font-bold text-slate-900 hover:text-orange-600">{t.name}</a>
+                  <div class="text-xs text-slate-500">{formatPrice(t)}{t.best_team_size ? ` · ${t.best_team_size} techs` : ''}</div>
+                </div>
+                <div class="text-sm leading-relaxed text-slate-700">
+                  <span class="font-semibold text-slate-900">Best for:</span> {t.best_for}.
+                  {watch && (<><br /><span class="text-slate-500"><span class="font-semibold text-slate-600">Watch-out:</span> {watch}.</span></>)}
+                </div>
+              </div>
+            );
+          })}
+          {budgetPick && (
+            <div class="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-700">
+              <span class="font-semibold text-slate-900">Tightest budget:</span> <a href={`/tools/${budgetPick.slug}/`} class="font-semibold text-orange-700 hover:underline">{budgetPick.name}</a> has the lowest published entry price — {formatPrice(budgetPick)}.
+            </div>
+          )}
+        </div>
+      </section>
+    )}
 
     <section class="mb-12 prose prose-slate max-w-none">
       <h2>Why {verticalLower} businesses need specialized software</h2>
