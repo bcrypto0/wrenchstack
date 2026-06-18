@@ -1298,7 +1298,7 @@ export function financingByModel(): Array<{ model: FinancingModel; providers: Fi
 // --- Accounting software (Phase 2 new category: accounting) -------------------
 // Trade-agnostic. Grouped by positioning (full double-entry / invoicing-first / free).
 
-export type AccountingPositioning = 'full-accounting' | 'invoicing-first' | 'free' | 'enterprise';
+export type AccountingPositioning = 'full-accounting' | 'invoicing-first' | 'free' | 'enterprise' | 'bill-pay';
 
 export interface AccountingRatings {
   g2: number | null;
@@ -1348,10 +1348,11 @@ export const ACCOUNTING_POSITION_META: Record<AccountingPositioning, { label: st
   'invoicing-first': { label: 'Invoicing-First Accounting', blurb: 'Built around invoicing, time tracking, and getting paid, with lighter bookkeeping. Great for solo and small service businesses that prioritize billing over deep accounting.' },
   'free': { label: 'Free Accounting', blurb: 'Core accounting and invoicing at no monthly cost, monetized through payments and payroll add-ons. Best for very small or new businesses watching every dollar.' },
   'enterprise': { label: 'Mid-Market / Enterprise Accounting', blurb: 'Heavier accounting for larger or multi-entity operations.' },
+  'bill-pay': { label: 'Bill Pay / Accounts Payable', blurb: 'Pays your vendors, subs, and suppliers (ACH, check, or card) and syncs to your books — an accounts-payable layer that sits alongside accounting rather than replacing it.' },
 };
 
 export function accountingByPosition(): Array<{ position: AccountingPositioning; software: AccountingSoftware[] }> {
-  const order: AccountingPositioning[] = ['full-accounting', 'invoicing-first', 'free', 'enterprise'];
+  const order: AccountingPositioning[] = ['full-accounting', 'invoicing-first', 'free', 'enterprise', 'bill-pay'];
   return order
     .map((position) => ({ position, software: accountingSoftware.filter((a) => a.positioning === position) }))
     .filter((g) => g.software.length > 0);
