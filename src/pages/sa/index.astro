@@ -12,8 +12,10 @@ interface SaVendor {
 
 const vendors = (saData as { vendors: SaVendor[] }).vendors;
 
-const categories = ['software', 'certification'];
+const categories = ['software', 'insurance', 'lead-gen', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
+  'insurance': { label: 'Contractor insurance', description: "Contractor & engineering cover (CAR, EAR, professional indemnity, workmen's comp) from Saudi insurers — Tawuniya, Walaa and GIG Saudi. All quote-based, as is standard for Gulf engineering risks." },
+  'lead-gen': { label: 'Lead generation & project intelligence', description: "How Saudi contractors actually find work — the Saudi Contractors Authority's Muqawil owner↔contractor exchange and ProTenders' project intelligence (the government tender portal Etimad sits under licensing & compliance)." },
   'software': { label: 'Construction & trades software', description: 'From giga-project platforms (Oracle Aconex, Primavera, Autodesk) to Saudi-native construction ERPs (First Bit, PACT), ZATCA-certified accounting (Qoyod, Wafeq) and field-service tools (FSM Grid) for MEP and facilities contractors.' },
   'certification': { label: 'Licensing & compliance', description: 'The Saudi bodies every contractor deals with — Saudi Council of Engineers, MOMRAH contractor classification, Balady permits, the Saudi Building Code, ZATCA e-invoicing, Qiwa/Nitaqat Saudization, and Etimad government tendering.' },
 };

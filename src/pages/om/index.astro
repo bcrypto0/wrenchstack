@@ -11,8 +11,10 @@ interface OmVendor {
 }
 
 const vendors = (omData as { vendors: OmVendor[] }).vendors;
-const categories = ['software', 'certification'];
+const categories = ['software', 'insurance', 'lead-gen', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
+  'insurance': { label: 'Contractor insurance', description: "Contractor & engineering cover from Oman insurers — GIG Oman, regional leader Liva, and the detailed CAR/EAR cover of domestic Oman United. Quote-based." },
+  'lead-gen': { label: 'Lead generation & project intelligence', description: "Construction lead-gen is thin in Oman — ProTenders' pan-GCC project intelligence (covering the Vision 2040 pipeline) is the one genuine option; local apps are residential." },
   'software': { label: 'Construction & trades software', description: 'From global PM/BIM platforms (Bentley, Oracle Primavera, Aconex, Autodesk) via Muscat partners, to regional ERPs with real Oman offices (Focus Softnet, ePROMIS, Onyx Pro), the Oman-native option (Grey ERP), Fawtara-ready e-invoicing (ClearTax), and public-priced accounting (Zoho, Tally) for 5% VAT.' },
   'certification': { label: 'Licensing & compliance', description: 'The Oman bodies every contractor deals with — the Tax Authority (5% VAT + the Fawtara e-invoicing mandate), OSE engineer accreditation, the Authority for Projects, Tenders & Local Content, Omanisation, municipal permits, the Oman Building Code, and CDAA fire safety.' },
 };

@@ -11,8 +11,10 @@ interface QaVendor {
 }
 
 const vendors = (qaData as { vendors: QaVendor[] }).vendors;
-const categories = ['software', 'certification'];
+const categories = ['software', 'insurance', 'lead-gen', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
+  'insurance': { label: 'Contractor insurance', description: "Contractor & engineering cover from Qatari insurers — market leader QIC, digital takaful Beema, and engineering specialist QGIRCO. Quote-based." },
+  'lead-gen': { label: 'Lead generation & project intelligence', description: "Construction project intelligence for Qatar via ProTenders and BNC Network — pan-GCC platforms surfacing the project pipeline and decision-maker contacts (the Monaqasat tender portal sits under compliance)." },
   'software': { label: 'Construction & trades software', description: 'The giga-project stack (Oracle Aconex & Primavera — Ashghal’s reference platform, Autodesk via Doha partners), regional ERPs with Qatar presence (Focus Softnet, PACT), Qatar-native SkyStruct, and CAFM tools (SWG, Insight) for facilities and labour-accommodation management.' },
   'certification': { label: 'Licensing & compliance', description: 'Monaqasat contractor classification, the GTA (no VAT yet) and a draft e-invoicing law, Qatarization (Law No. 12 of 2024), Baladiya building permits, Ashghal’s QCS 2014 construction code, and Kahramaa contractor accreditation.' },
 };

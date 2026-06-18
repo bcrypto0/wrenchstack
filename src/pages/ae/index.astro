@@ -11,8 +11,10 @@ interface AeVendor {
 }
 
 const vendors = (aeData as { vendors: AeVendor[] }).vendors;
-const categories = ['software', 'certification'];
+const categories = ['software', 'insurance', 'lead-gen', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
+  'insurance': { label: 'Contractor insurance', description: "Contractor & engineering cover (CAR, EAR, advance loss of profit, workmen's comp) from UAE insurers — Sukoon, ADNIC, and Shariah-compliant takaful from Salama. Quote-based." },
+  'lead-gen': { label: 'Lead generation & project intelligence', description: "Genuine construction lead-gen via ProTenders' UAE project intelligence and eTendering. Note UAE home-services apps (ServiceMarket, Justlife) are residential — not construction-contractor channels." },
   'software': { label: 'Construction & trades software', description: 'Giga-project platforms (Oracle Aconex, Primavera, Autodesk — central to Dubai’s BIM mandate), strong global PM (Procore, Bentley, PlanRadar), UAE-VAT-ready ERPs (First Bit, Focus Softnet, PACT, Sage), affordable SMB stacks (Zoho), and CAFM/field-service tools (Horizon FMS, FSM Grid).' },
   'certification': { label: 'Licensing & compliance', description: 'Dubai Municipality contractor classification (now reshaped by Dubai Law No. 7 of 2025), federal MOEI registration, the 5% VAT (FTA), the upcoming Peppol e-invoicing mandate, Emiratisation (MOHRE/Nafis), Abu Dhabi’s Estidama, and the Dubai BIM mandate.' },
 };

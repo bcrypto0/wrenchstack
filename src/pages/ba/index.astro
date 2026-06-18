@@ -11,8 +11,10 @@ interface BaVendor {
 }
 
 const vendors = (baData as { vendors: BaVendor[] }).vendors;
-const categories = ['software', 'certification'];
+const categories = ['software', 'insurance', 'lead-gen', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
+  'insurance': { label: 'Contractor insurance', description: "Contractor & engineering cover from Bahraini insurers — market leader BKIC (GIG), the consolidating Solidarity, and GIG Takaful. Quote-based." },
+  'lead-gen': { label: 'Lead generation & project intelligence', description: "Construction lead-gen is thin in Bahrain — ProTenders' pan-GCC project intelligence is the one genuine option; local home-services apps are residential, not construction-contractor." },
   'software': { label: 'Construction & trades software', description: 'From global PM/BIM platforms (Oracle Primavera, Aconex, Autodesk, Bentley) served via Manama resellers, to regional ERPs with a real Bahrain entity (Focus Softnet, PACT), the genuine Bahrain-native option (Diamond/Catalyst), and public-priced accounting (Zoho, Tally) for 10% NBR VAT.' },
   'certification': { label: 'Licensing & compliance', description: 'The Bahrain bodies every contractor deals with — NBR (10% VAT), CRPEP engineering licensing, Ministry of Works contractor classification, the Tender Board, LMRA & Bahrainisation, Benayat building permits, and Civil Defence fire safety.' },
 };

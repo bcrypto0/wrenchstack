@@ -11,8 +11,10 @@ interface KwVendor {
 }
 
 const vendors = (kwData as { vendors: KwVendor[] }).vendors;
-const categories = ['software', 'certification'];
+const categories = ['software', 'insurance', 'lead-gen', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
+  'insurance': { label: 'Contractor insurance', description: "Contractor & engineering cover from Kuwaiti insurers — market leader GIG Kuwait, Al Ahleia, and Shariah-compliant First Takaful. Quote-based." },
+  'lead-gen': { label: 'Lead generation & project intelligence', description: "Construction project intelligence for Kuwait via ProTenders and BNC Network (the government tender portal CAPT sits under licensing & compliance)." },
   'software': { label: 'Construction & trades software', description: 'The enterprise stack for large public EPC work (Oracle, Autodesk via GIC Middle East), the strongest local ERP footprint (Focus Softnet — Kuwait office since 1996), accessible site tools (PlanRadar), regional ERPs (PACT, First Bit), and Kuwait-native/localised options (Octonics, Matiyas, In4Suite).' },
   'certification': { label: 'Licensing & compliance', description: 'CAPT contractor classification (the gate to public tenders), the Ministry of Finance tax regime (no VAT; 15% CIT on foreign entities), Public Authority for Manpower (Kuwaitization), Kuwait Municipality permits, and the mandatory KFSD fire code.' },
 };
