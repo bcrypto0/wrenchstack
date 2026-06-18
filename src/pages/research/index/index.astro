@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { tools, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, verticals } from '../../../lib/data';
+import { tools, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, paymentProcessors, financingProviders, accountingSoftware, bankingProviders, aiTools, verticals } from '../../../lib/data';
 
 // Computed live from directory data — every stat is reproducible from our published methodology
 const totalTools = tools.length;
@@ -20,20 +20,39 @@ const stripePct = Math.round((stripeIntegrated / totalTools) * 100);
 const modernCohort = tools.filter(t => t.founded && t.founded >= 2015).length;
 const modernPct = Math.round((modernCohort / totalTools) * 100);
 
-const leadGenWithFlags = leadGenPlatforms.filter(p => p.reputation_flag !== null).length;
+// Reputation flags across the FULL adjacent-category stack (9 categories beyond FSM)
+const flaggedIn = (arr: readonly any[]) => arr.filter((x) => x && x.reputation_flag).length;
+const adjacentCats = [
+  { name: 'Lead generation', items: leadGenPlatforms },
+  { name: 'Financing', items: financingProviders },
+  { name: 'Business banking', items: bankingProviders },
+  { name: 'Payments', items: paymentProcessors },
+  { name: 'Marketing agencies', items: marketingAgencies },
+  { name: 'Insurance', items: insuranceProviders },
+  { name: 'Accounting', items: accountingSoftware },
+  { name: 'Payroll', items: payrollServices },
+  { name: 'AI tools', items: aiTools },
+];
+const leadGenWithFlags = flaggedIn(leadGenPlatforms);
 const leadGenFlagPct = Math.round((leadGenWithFlags / leadGenPlatforms.length) * 100);
-const insuranceWithFlags = insuranceProviders.filter(p => p.reputation_flag !== null).length;
-const agencyWithFlags = marketingAgencies.filter(a => a.reputation_flag !== null).length;
-const totalFlags = leadGenWithFlags + insuranceWithFlags + agencyWithFlags;
-const totalReputationVendors = leadGenPlatforms.length + insuranceProviders.length + marketingAgencies.length;
+const insuranceWithFlags = flaggedIn(insuranceProviders);
+const agencyWithFlags = flaggedIn(marketingAgencies);
+const flagRows = adjacentCats.map((c) => ({ name: c.name, total: c.items.length, flagged: flaggedIn(c.items as any[]) })).sort((a, b) => b.flagged - a.flagged);
+const totalFlags = flagRows.reduce((s, c) => s + c.flagged, 0);
+const totalReputationVendors = adjacentCats.reduce((s, c) => s + c.items.length, 0);
 const totalFlagPct = Math.round((totalFlags / totalReputationVendors) * 100);
 
+// International footprint
+const intlModules = import.meta.glob('../../../data/international/*.json', { eager: true });
+const intlMarkets = Object.keys(intlModules).length;
+const intlVendorCount = Object.values(intlModules).reduce((s: number, m: any) => s + (m.default?.vendors?.length ?? m.vendors?.length ?? 0), 0);
+
 const gustoAffiliate = '$300-$1,000+';
-const totalCategories = 5;
-const totalVendors = totalTools + leadGenPlatforms.length + insuranceProviders.length + payrollServices.length + marketingAgencies.length;
+const totalCategories = 10;
+const totalVendors = totalTools + adjacentCats.reduce((s, c) => s + c.items.length, 0);
 
 const pageTitle = 'WrenchStack Index Q2 2026 — Trades Vendor Benchmarks';
-const pageDescription = 'Quarterly data benchmark across all 5 trades-vendor categories. Software pricing distribution, lead-gen reputation patterns, insurance affiliate economics, payroll category structure. Citable headline stats.';
+const pageDescription = 'Quarterly data benchmark across all 10 trades-vendor categories and 13 international markets. Software pricing distribution, the full-stack reputation-flag ledger, affiliate economics by category, and multi-market coverage. Citable headline stats.';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -43,6 +62,7 @@ const breadcrumbs = [
 
 const quarter = 'Q2 2026';
 const publishDate = '2026-05-29';
+const updatedDate = '2026-06-19';
 ---
 
 <Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
@@ -54,10 +74,29 @@ const publishDate = '2026-05-29';
         WrenchStack Index — {quarter}
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Quarterly benchmark of the trades-contractor vendor market. {totalVendors} vendors analyzed across {totalCategories} categories. Every stat is reproducible from our public <a href="/methodology/" class="text-orange-600 hover:underline">methodology</a> and derived live from the WrenchStack directory.
+        Quarterly benchmark of the trades-contractor vendor market. {totalVendors} US vendors analyzed across {totalCategories} categories, plus {intlVendorCount} localized listings across {intlMarkets} international markets. Every stat is reproducible from our public <a href="/methodology/" class="text-orange-600 hover:underline">methodology</a> and derived live from the WrenchStack directory.
       </p>
-      <p class="mt-2 text-sm text-slate-500">Published {publishDate} · Next update: Q3 2026 (September)</p>
+      <p class="mt-2 text-sm text-slate-500">Published {publishDate} · Expanded to 10 categories + international {updatedDate} · Next update: Q3 2026 (September)</p>
     </header>
+
+    <section class="mb-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-3xl font-bold text-slate-900">{totalVendors}</div>
+        <div class="mt-1 text-xs text-slate-600">US vendors</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-3xl font-bold text-slate-900">{totalCategories}</div>
+        <div class="mt-1 text-xs text-slate-600">Categories</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-3xl font-bold text-slate-900">{intlMarkets}</div>
+        <div class="mt-1 text-xs text-slate-600">Intl. markets ({intlVendorCount} listings)</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-3xl font-bold text-slate-900">{totalFlags}</div>
+        <div class="mt-1 text-xs text-slate-600">Reputation-flagged</div>
+      </div>
+    </section>
 
     <section class="mb-10">
       <h2 class="mb-5 text-2xl font-bold text-slate-900">Software pricing & structure</h2>
@@ -117,9 +156,9 @@ const publishDate = '2026-05-29';
           </p>
         </div>
         <div class="rounded-lg border-2 border-rose-200 bg-rose-50 p-5">
-          <div class="text-4xl font-bold text-rose-900">{totalFlagPct}%</div>
+          <div class="text-4xl font-bold text-rose-900">{totalFlags}</div>
           <p class="mt-2 text-sm text-rose-900 leading-relaxed">
-            of vendors in flag-eligible categories (lead-gen, insurance, marketing agencies) carry documented reputation warnings ({totalFlags} of {totalReputationVendors}). Software and payroll categories use different concern-classification systems.
+            vendors across the full adjacent-category stack (lead-gen, financing, banking, payments, insurance, accounting, payroll, marketing, AI) carry a documented reputation warning — {totalFlagPct}% of {totalReputationVendors} vendors, concentrated in lead-gen ({leadGenWithFlags}), financing ({flagRows.find(r => r.name === 'Financing')?.flagged ?? 0}) and fintech banking ({flagRows.find(r => r.name === 'Business banking')?.flagged ?? 0}). We publish the specific reason on every one — and recommend commission-free vendors when they fit best.
           </p>
         </div>
         <div class="rounded-lg border-2 border-slate-200 bg-white p-5">
@@ -181,6 +220,36 @@ const publishDate = '2026-05-29';
                 <td class="p-3 text-slate-700">No affiliate programs — direct-relationship category</td>
                 <td class="p-3 text-slate-700">None (sponsored placement model)</td>
               </tr>
+              <tr>
+                <td class="p-3 font-medium text-slate-900">Accounting</td>
+                <td class="p-3 text-slate-700">{accountingSoftware.length}</td>
+                <td class="p-3 text-slate-700">QuickBooks, Xero, FreshBooks</td>
+                <td class="p-3 text-slate-700">Rev-share / per-signup (varies)</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-medium text-slate-900">Payments</td>
+                <td class="p-3 text-slate-700">{paymentProcessors.length}</td>
+                <td class="p-3 text-slate-700">Square, Stripe, Helcim (partner referral)</td>
+                <td class="p-3 text-slate-700">Referral / volume-based (varies)</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-medium text-slate-900">Business banking</td>
+                <td class="p-3 text-slate-700">{bankingProviders.length}</td>
+                <td class="p-3 text-slate-700">Mercury, Relay, Novo (funded-account referral)</td>
+                <td class="p-3 text-slate-700">Per funded account (varies)</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-medium text-slate-900">Financing</td>
+                <td class="p-3 text-slate-700">{financingProviders.length}</td>
+                <td class="p-3 text-slate-700">Wisetack, Hearth (contractor referral)</td>
+                <td class="p-3 text-slate-700">Merchant / referral (varies)</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-medium text-slate-900">AI tools</td>
+                <td class="p-3 text-slate-700">{aiTools.length}</td>
+                <td class="p-3 text-slate-700">Mostly direct SaaS affiliate programs</td>
+                <td class="p-3 text-slate-700">SaaS rev-share (varies)</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -209,8 +278,8 @@ const publishDate = '2026-05-29';
         WrenchStack Index stats are computed live from the public WrenchStack directory using the published <a href="/methodology/" class="text-orange-600 hover:underline">WrenchStack Fit Score™ methodology v1.0</a>. All vendor inclusions reflect quarterly editorial review; pricing tiers are verified directly from vendor pricing pages with date stamps.
       </p>
       <ul class="space-y-1 text-sm text-slate-700">
-        <li>• <strong>Sample size:</strong> All {totalVendors} vendors in the WrenchStack directory as of {publishDate}</li>
-        <li>• <strong>Geographic scope:</strong> United States (international markets in expansion)</li>
+        <li>• <strong>Sample size:</strong> All {totalVendors} US vendors across {totalCategories} categories, plus {intlVendorCount} localized listings across {intlMarkets} international markets, as of {updatedDate}</li>
+        <li>• <strong>Geographic scope:</strong> United States plus {intlMarkets} international markets — UK, Ireland, Canada, Australia, New Zealand, the six Gulf states (Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman), France and South Africa</li>
         <li>• <strong>Refresh cadence:</strong> Quarterly (Q3 2026 release: September 2026)</li>
         <li>• <strong>Data freshness:</strong> Individual pricing tiers carry verified_date stamps visible on each vendor page</li>
         <li>• <strong>Reproducibility:</strong> Every stat is derivable from the public directory + methodology</li>
