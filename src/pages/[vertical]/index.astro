@@ -148,6 +148,15 @@ const breadcrumbs = [
       <Byline updatedDate={lastVerifiedDate} readingMinutes={estimatedReadingMin} />
     </header>
 
+    {topPicks.length > 0 && (
+      <section class="mb-10 rounded-lg border-l-4 border-orange-500 bg-orange-50/40 p-5">
+        <p class="text-xs font-bold uppercase tracking-wider text-orange-600">The short answer</p>
+        <p class="mt-2 text-slate-800 leading-relaxed">
+          For most {verticalLower} businesses in 2026, <a href={`/tools/${topPicks[0].slug}/`} class="font-semibold text-orange-700 hover:underline">{topPicks[0].name}</a> is our top pick ({formatPrice(topPicks[0])}{topPicks[0].best_team_size ? `, best for ${topPicks[0].best_team_size} techs` : ''}){topPicks.length > 1 ? (<>, followed by {topPicks.slice(1, 3).map((t, i) => (<>{i > 0 ? ' and ' : ''}<a href={`/tools/${t.slug}/`} class="font-semibold text-orange-700 hover:underline">{t.name}</a></>))}</>) : null}. Picks come from our independent <a href="/methodology/" class="underline hover:text-orange-700">Fit Score</a> — vertical fit, aggregated G2/Capterra ratings, pricing transparency, feature depth and integrations — and no vendor pays for placement. Full ranking, pricing and trade-offs below.
+        </p>
+      </section>
+    )}
+
     {showStatStrip && (
       <section class="mb-10 rounded-lg border border-orange-200 bg-orange-50/60 p-5">
         <div class="grid gap-3 grid-cols-2 sm:grid-cols-4">
