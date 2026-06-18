@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, verticals, priceTier, teamSizeBucket, freshnessTier, aggregateRating } from '../lib/data';
+import { tools, verticals, priceTier, teamSizeBucket, freshnessTier, aggregateRating, accountingSoftware, paymentProcessors, bankingProviders, financingProviders, insuranceProviders, leadGenPlatforms, payrollServices, marketingAgencies, aiTools } from '../lib/data';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -76,13 +76,42 @@ const perUserCount = pricedTools.length - perCompanyCount - withFreeTier;
 // Freshness
 const freshCount = tools.filter((t) => freshnessTier(t) === 'fresh').length;
 
+// --- THE FULL CONTRACTOR STACK (beyond FSM) — June 2026 expansion ---
+const stackCats = [
+  { name: 'Accounting', items: accountingSoftware },
+  { name: 'Payments', items: paymentProcessors },
+  { name: 'Business banking', items: bankingProviders },
+  { name: 'Financing', items: financingProviders },
+  { name: 'Insurance', items: insuranceProviders },
+  { name: 'Lead generation', items: leadGenPlatforms },
+  { name: 'Payroll', items: payrollServices },
+  { name: 'Marketing agencies', items: marketingAgencies },
+  { name: 'AI tools', items: aiTools },
+];
+const flaggedIn = (arr: readonly any[]) => arr.filter((x) => x && x.reputation_flag).length;
+const stackRows = stackCats.map((c) => ({ name: c.name, total: c.items.length, flagged: flaggedIn(c.items as any[]) }));
+const adjacentVendorCount = stackCats.reduce((s, c) => s + c.items.length, 0);
+const totalStackVendors = tools.length + adjacentVendorCount;
+const totalCategories = stackCats.length + 1; // + FSM software
+const totalFlagged = stackRows.reduce((s, c) => s + c.flagged, 0);
+const flagsSorted = [...stackRows].filter((r) => r.flagged > 0).sort((a, b) => b.flagged - a.flagged);
+const acctPriced = accountingSoftware.filter((a: any) => a.starting_price_usd !== null && a.starting_price_usd !== undefined).length;
+
+// --- INTERNATIONAL FOOTPRINT (markets beyond the US) ---
+const intlModules = import.meta.glob('../data/international/*.json', { eager: true });
+const intlMarkets = Object.keys(intlModules).length;
+const intlVendorCount = Object.values(intlModules).reduce(
+  (s: number, m: any) => s + (m.default?.vendors?.length ?? m.vendors?.length ?? 0),
+  0
+);
+
 const articleSchema = {
   '@context': 'https://schema.org',
   '@type': 'Article',
   headline: 'Trades software market report 2026 — pricing, integrations, and the state of the industry',
-  description: `Original analysis of ${tools.length} field service and trades software platforms across ${verticals.length} verticals. Pricing distribution, integration prevalence, founded-year cohorts, and 15 other data findings from the WrenchStack directory.`,
+  description: `Original analysis of ${tools.length} field service platforms across ${verticals.length} verticals, expanded to the full ${totalStackVendors}-vendor contractor software stack and ${intlMarkets} international markets. Pricing distribution, integration prevalence, the reputation-flag ledger, and the multi-market picture from the WrenchStack directory.`,
   datePublished: '2026-05-26',
-  dateModified: '2026-05-26',
+  dateModified: '2026-06-19',
   author: {
     '@type': 'Organization',
     name: 'WrenchStack Research',
@@ -106,13 +135,13 @@ const articleSchema = {
   <article class="mx-auto max-w-4xl px-4 py-12">
     <header class="mb-12">
       <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
-        Original Research · Updated May 2026
+        Original Research · Updated June 2026
       </p>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
         Trades software market report 2026
       </h1>
       <p class="mt-4 text-lg text-slate-700 leading-relaxed sm:text-xl">
-        15 data findings from analysis of {tools.length} field service and trades software platforms across {verticals.length} verticals. What pricing actually looks like in 2026, which integrations matter, where the market is dense, and where the gaps are.
+        Original data findings from analysis of {tools.length} field service platforms across {verticals.length} verticals — now expanded to the full {totalStackVendors}-vendor contractor software stack ({totalCategories} categories) and {intlMarkets} international markets. What pricing actually looks like in 2026, which integrations matter, who we flag and why, and where the gaps are.
       </p>
       <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500">
         <span><a href="/research/" class="text-orange-600 hover:underline">WrenchStack Research</a></span>
@@ -131,6 +160,9 @@ const articleSchema = {
         <li>· <strong>{withQuickBooks}</strong> of {tools.length} platforms integrate with QuickBooks ({Math.round(withQuickBooks/tools.length*100)}%) — the universal integration benchmark</li>
         <li>· <strong>{post2015}</strong> platforms founded since 2015 — modern-cloud cohort now {Math.round(post2015/tools.length*100)}% of market</li>
         <li>· <strong>{avgTrialDays}-day</strong> average free trial length — 2025 standard was 14 days, 2026 expanding</li>
+        <li>· <strong>{totalStackVendors}+</strong> vendors tracked across <strong>{totalCategories} categories</strong> — FSM software plus accounting, payments, banking, financing, insurance, lead-gen, payroll, marketing and AI</li>
+        <li>· <strong>{totalFlagged}</strong> vendors across the adjacent-category stack carry a documented reputation warning — concentrated in lead-gen (FTC actions), financing (deferred-interest), and fintech banking (account freezes)</li>
+        <li>· <strong>{intlMarkets} international markets</strong> covered ({intlVendorCount} localized listings) — including the only independent English-and-Arabic Gulf construction-software directory we're aware of</li>
       </ul>
       <p class="mt-3 text-xs text-slate-600">
         All data sourced from public vendor pricing pages and integration directories. Cite as: "WrenchStack Trades Software Market Report 2026," WrenchStack Research · <a href="mailto:press@wrenchstack.com" class="text-orange-600 hover:underline">press@wrenchstack.com</a>
@@ -312,6 +344,74 @@ const articleSchema = {
 
       <p>
         Average aggregate rating (G2 + Capterra combined) across the directory is <strong>{avgRating}/5</strong>. <strong>{above47} platforms</strong> rate 4.7 or higher — the top quartile concentrates around modern cloud platforms (MaintainX, Limble, JobTread, ZenMaid, Skimmer, Sera Systems, GorillaDesk, Tradify, FieldPulse, CompanyCam). <strong>{below43} platforms</strong> rate below 4.3 — typically legacy enterprise platforms with mixed reviews around UI quality and onboarding experience.
+      </p>
+
+      <h2>Beyond FSM: the full contractor software stack</h2>
+
+      <p>
+        The 2026 contractor doesn't just buy field-service software — they assemble a stack. Beyond the {tools.length} FSM platforms analyzed above, WrenchStack now tracks <strong>{adjacentVendorCount} vendors across nine adjacent categories</strong>: {stackRows.map((r, i) => `${i > 0 ? ', ' : ''}${r.total} ${r.name.toLowerCase()}`)}. That's <strong>{totalStackVendors} vendors across {totalCategories} categories</strong> in total — the complete back office a trades business actually runs on.
+      </p>
+
+      <div class="not-prose my-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+          <div class="text-2xl font-bold text-slate-900">{totalStackVendors}</div>
+          <div class="mt-1 text-xs text-slate-600">Vendors tracked</div>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+          <div class="text-2xl font-bold text-slate-900">{totalCategories}</div>
+          <div class="mt-1 text-xs text-slate-600">Categories</div>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+          <div class="text-2xl font-bold text-slate-900">{intlMarkets}</div>
+          <div class="mt-1 text-xs text-slate-600">Intl. markets</div>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+          <div class="text-2xl font-bold text-slate-900">{totalFlagged}</div>
+          <div class="mt-1 text-xs text-slate-600">Reputation-flagged</div>
+        </div>
+      </div>
+
+      <h3>Pricing opacity is structural — and its shape differs by category</h3>
+
+      <p>
+        The custom-quote opacity tax isn't unique to FSM; it runs through the whole stack, but it takes a different form in each category. <strong>Accounting is the most transparent</strong> — {acctPriced} of {accountingSoftware.length} providers publish a starting price. <strong>Contractor insurance is the least</strong>: none of the {insuranceProviders.length} carriers we track list a flat published rate, because premiums are underwritten per trade, payroll size, and claims history — every quote is bespoke. <strong>Payments and financing don't have a sticker price at all</strong>: they're priced by rate model (interchange-plus, flat-rate, merchant or dealer fee), so the real cost depends on your card volume, average ticket, and job size, not a monthly number. The practical takeaway for buyers is the same everywhere — the published number, where one exists, is the start of the negotiation, not the end of it.
+      </p>
+
+      <h3>The honesty ledger: who we flag, and why</h3>
+
+      <p>
+        Across the adjacent-category stack, WrenchStack carries a documented reputation warning on <strong>{totalFlagged} vendors</strong> — and unlike vendor-funded "best of" listicles, we publish the specific reason on every one. The flags concentrate exactly where the contractor harm is real and documented:
+      </p>
+
+      <div class="not-prose my-8 overflow-x-auto rounded-lg border border-slate-200">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-left text-slate-700">
+            <tr>
+              <th class="px-4 py-3 font-semibold">Category</th>
+              <th class="px-4 py-3 font-semibold">Vendors tracked</th>
+              <th class="px-4 py-3 font-semibold">Reputation-flagged</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            {flagsSorted.map((r) => (
+              <tr>
+                <td class="px-4 py-3 font-medium text-slate-900">{r.name}</td>
+                <td class="px-4 py-3 text-slate-700">{r.total}</td>
+                <td class="px-4 py-3 text-slate-700">{r.flagged}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Lead generation tops the list — FTC actions and predatory shared-lead practices are well-documented in that category. Consumer financing follows, on deferred-interest fine print that contractors pass to customers without always understanding it. Fintech banking is third, on the account-freeze patterns that make these accounts risky as a sole operating account. The flip side of the same independence: we recommend commission-free vendors — Acuity, Erie, Google Local Services Ads — when they're genuinely the best fit, even though we earn nothing on them. A vendor-funded directory structurally cannot publish either half of this ledger.
+      </p>
+
+      <h3>The international picture: {intlMarkets} markets</h3>
+
+      <p>
+        WrenchStack's directory now spans <strong>{intlMarkets} markets beyond the US</strong> — the UK, Ireland, Canada, Australia and New Zealand; the six Gulf states (Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman); and France — with <strong>{intlVendorCount} localized vendor listings</strong>. The Gulf coverage is, as far as we can tell, the only independent <strong>English-and-Arabic</strong> construction-software comparison directory in existence; every other source is a vendor's own listing or an English-only Capterra clone. These pages track live compliance deadlines that off-the-shelf comparisons ignore — Saudi Arabia's ZATCA Phase-2 e-invoicing waves (Wave 24 hits the SAR 375k-revenue band on 30 June 2026) and Oman's Fawtara e-invoicing rollout extending to all VAT-registered businesses by 2027 — the kind of timing that decides which software a contractor can legally bill on.
       </p>
 
       <h2>Implications for buyers</h2>
