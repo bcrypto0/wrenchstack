@@ -69,6 +69,13 @@ const budgetPick = ranked
   .filter((t) => t.pricing.starting_at_usd !== null && (t.pricing.starting_at_usd as number) > 0)
   .sort((a, b) => (a.pricing.starting_at_usd as number) - (b.pricing.starting_at_usd as number))[0] ?? null;
 
+// "Best value" award = cheapest published-price option AMONG the top picks
+// (excluding the #1 overall) — an honest value flag for the recommended set,
+// rather than crowning a low-ranked budget tool.
+const valuePick = topPicks
+  .filter((t, i) => i !== 0 && t.pricing.starting_at_usd !== null && (t.pricing.starting_at_usd as number) > 0)
+  .sort((a, b) => (a.pricing.starting_at_usd as number) - (b.pricing.starting_at_usd as number))[0] ?? null;
+
 // "What it actually costs" pricing guide — buckets ranked tools by published
 // entry price into honest bands (custom-quote tools surfaced separately). The
 // most AI-citable answer to "how much does [trade] software cost", all derived
@@ -276,6 +283,12 @@ const breadcrumbs = [
                       <ToolLogo tool={t} size={32} />
                       <span class="font-semibold text-slate-900">{t.name}</span>
                     </a>
+                    {(i === 0 || (valuePick && t.slug === valuePick.slug)) && (
+                      <div class="ml-11 mt-1">
+                        {i === 0 && <span class="inline-block rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-800">Best overall</span>}
+                        {valuePick && t.slug === valuePick.slug && i !== 0 && <span class="inline-block rounded-full bg-orange-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-orange-800">Best value</span>}
+                      </div>
+                    )}
                   </td>
                   <td class="p-3">
                     <WrenchScore score={score} size="sm" />
