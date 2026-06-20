@@ -1,19 +1,55 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { tools, verticals, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies } from '../../lib/data';
+import { tools, verticals, accountingSoftware, paymentProcessors, bankingProviders, financingProviders, insuranceProviders, leadGenPlatforms, payrollServices, marketingAgencies, aiTools } from '../../lib/data';
 
-const totalVendorCount = tools.length + leadGenPlatforms.length + insuranceProviders.length + payrollServices.length + marketingAgencies.length;
-const categoryCount = 5;
+// --- THE FULL US CONTRACTOR STACK (computed live, never hardcoded) ---
+const stackCats = [
+  { name: 'accounting', items: accountingSoftware },
+  { name: 'payments', items: paymentProcessors },
+  { name: 'business banking', items: bankingProviders },
+  { name: 'financing', items: financingProviders },
+  { name: 'insurance', items: insuranceProviders },
+  { name: 'lead generation', items: leadGenPlatforms },
+  { name: 'payroll', items: payrollServices },
+  { name: 'marketing agencies', items: marketingAgencies },
+  { name: 'AI tools', items: aiTools },
+];
+const flaggedIn = (arr: readonly any[]) => arr.filter((x) => x && x.reputation_flag).length;
+const stackRows = stackCats.map((c) => ({ name: c.name, total: c.items.length, flagged: flaggedIn(c.items as any[]) }));
+const adjacentVendorCount = stackCats.reduce((s, c) => s + c.items.length, 0);
+const totalStackVendors = tools.length + adjacentVendorCount;
+const totalCategories = stackCats.length + 1; // + FSM software
+const totalFlagged = stackRows.reduce((s, c) => s + c.flagged, 0);
 const verticalCount = verticals.length;
-const reputationFlagCount = [...leadGenPlatforms, ...insuranceProviders, ...marketingAgencies].filter(v => 'reputation_flag' in v && v.reputation_flag !== null).length;
+
+const financingRow = stackRows.find((r) => r.name === 'financing')!;
+const leadGenRow = stackRows.find((r) => r.name === 'lead generation')!;
+const bankingRow = stackRows.find((r) => r.name === 'business banking')!;
+
+// Pricing opacity + QuickBooks prevalence
+const customQuotedPct = Math.round((tools.filter((t) => t.pricing.starting_at_usd === null).length / tools.length) * 100);
+const pricedTools = tools.filter((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0);
+const prices = pricedTools.map((t) => t.pricing.starting_at_usd!).sort((a, b) => a - b);
+const medianPrice = prices[Math.floor(prices.length / 2)];
+const qbPct = Math.round((tools.filter((t) => t.integrations.some((i) => i.includes('quickbooks'))).length / tools.length) * 100);
+
+// --- INTERNATIONAL FOOTPRINT ---
+const intlModules = import.meta.glob('../../data/international/*.json', { eager: true });
+const intlMarkets = Object.keys(intlModules).length;
+const intlVendorCount = Object.values(intlModules).reduce(
+  (s: number, m: any) => s + (m.default?.vendors?.length ?? m.vendors?.length ?? 0),
+  0
+);
 
 const pageTitle = 'Press & Media Room — WrenchStack';
-const pageDescription = 'Press kit, media assets, fact sheet, and editorial contacts for journalists covering trades-contractor vendors, trades software, and the trades-industry research market.';
+const pageDescription = 'Press kit, fact sheet, ready-to-cite story leads and editorial contacts for journalists covering trades & construction software, contractor vendors, and e-invoicing compliance — including the independent reputation-flag ledger and the English-and-Arabic Gulf coverage.';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Press', url: '/press/' },
 ];
+
+const boilerplate = `WrenchStack is an independent research desk for the trades and construction industries — it reviews software and services for contractors with no paid placements (vendors cannot pay for placement or scores). It evaluates ${totalStackVendors} US vendors across ${totalCategories} categories — field-service software, payments, accounting, banking, financing, payroll, insurance, lead generation, marketing agencies and AI tools — plus ${intlVendorCount} localized vendor listings across ${intlMarkets} international markets (UK, Canada, Australia, New Zealand, Ireland, the six GCC states, South Africa, France, Morocco, Jordan, Egypt and Malaysia), with the Gulf and other MENA markets covered in both English and Arabic. Every recommendation carries a published WrenchStack Fit Score™ and per-vendor affiliate disclosure. Based in the United States.`;
 
 // Recent citation log — empty until we land first citations. Structure ready.
 const citations: Array<{ outlet: string; title: string; date: string; url: string }> = [];
@@ -28,14 +64,67 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
         Press Room
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Resources for journalists, industry analysts, and trade publication editors covering WrenchStack — and the trades-contractor vendor landscape we research.
+        Resources for journalists, industry analysts and trade-publication editors — including ready-to-cite story leads with verified, reproducible numbers. WrenchStack is independent: no vendor pays for placement or scores, which is exactly why we can publish things vendor-funded listicles can't.
       </p>
     </header>
+
+    <!-- STORY LEADS — the reason a journalist is here -->
+    <section class="mb-12">
+      <h2 class="mb-2 text-2xl font-bold text-slate-900">Story leads for journalists</h2>
+      <p class="mb-5 text-sm text-slate-600 leading-relaxed">
+        Four findings from our live dataset, each a standalone angle. Every number is computed from the public directory and reproducible from our <a href="/methodology/" class="text-orange-600 hover:underline">methodology</a>. Want a custom cut (by trade, by region)? <a href="mailto:press@wrenchstack.com" class="text-orange-600 hover:underline">Ask the press desk</a>.
+      </p>
+
+      <div class="space-y-4">
+        <!-- Hook 3 — TIME-SENSITIVE, surfaced first while live -->
+        <article class="rounded-lg border-2 border-amber-300 bg-amber-50 p-5">
+          <div class="mb-2 flex flex-wrap items-center gap-2">
+            <span class="rounded-full bg-amber-200 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-amber-900">⏰ Time-sensitive</span>
+            <h3 class="text-lg font-bold text-slate-900">The Gulf e-invoicing deadline — and the Arabic gap</h3>
+          </div>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            Saudi Arabia's <strong>ZATCA Phase-2 Wave 24 reaches the SAR 375,000-revenue band on 30 June 2026</strong>, sweeping in a large share of small contractors who've never needed compliant billing software — and almost no one is comparing their options in Arabic. WrenchStack maintains what we believe is the only independent <strong>English-and-Arabic</strong> construction-software directory, spanning the Gulf plus the live mandates in Egypt (ETA), Jordan (JoFotara), Malaysia (MyInvois) and Oman (Fawtara, to all VAT-registered firms by 2027).
+          </p>
+          <p class="mt-2 text-xs text-slate-600">Evergreen angle (the EN+AR first-mover position) outlives the 30 June peg. → <a href="/sa/guides/zatca-e-invoicing-contractors/" class="font-semibold text-orange-600 hover:underline">ZATCA guide</a> · <a href="/software-by-country/" class="font-semibold text-orange-600 hover:underline">all {intlMarkets} markets</a></p>
+        </article>
+
+        <!-- Hook 1 — the honesty ledger -->
+        <article class="rounded-lg border border-slate-200 bg-white p-5">
+          <h3 class="mb-2 text-lg font-bold text-slate-900">The "who to avoid" ledger</h3>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            We flag <strong>{totalFlagged} vendors</strong> across the contractor stack for documented harm — and publish the specific reason on each. The pattern is concentrated in the money categories: <strong>{financingRow.flagged} of {financingRow.total} consumer-financing providers</strong> (deferred-interest fine print), <strong>{leadGenRow.flagged} of {leadGenRow.total} lead-generation platforms</strong> (including FTC enforcement actions), and <strong>{bankingRow.flagged} of {bankingRow.total} fintech-banking options</strong> (account-freeze patterns). A directory that takes vendor money structurally can't publish this.
+          </p>
+          <p class="mt-2 text-xs text-slate-600">→ <a href="/research/" class="font-semibold text-orange-600 hover:underline">Reputation-flag ledger</a> · <a href="/lead-gen/" class="font-semibold text-orange-600 hover:underline">Lead-gen reviews</a></p>
+        </article>
+
+        <!-- Hook 2 — pricing opacity -->
+        <article class="rounded-lg border border-slate-200 bg-white p-5">
+          <h3 class="mb-2 text-lg font-bold text-slate-900">The opacity tax</h3>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            <strong>{customQuotedPct}% of trades-software platforms publish no price at all</strong> — you have to sit through a sales call to get a number. The median <em>published</em> entry price is <strong>${medianPrice}/user/month</strong>, so the opacity hides a wide spread. Contractor insurance is worse: every carrier we track is quote-only — not one publishes a flat rate.
+          </p>
+          <p class="mt-2 text-xs text-slate-600">→ <a href="/trends-2026/" class="font-semibold text-orange-600 hover:underline">Market report</a> · <a href="/pricing/" class="font-semibold text-orange-600 hover:underline">Pricing comparison</a></p>
+        </article>
+
+        <!-- Hook 4 — QuickBooks lock-in -->
+        <article class="rounded-lg border border-slate-200 bg-white p-5">
+          <h3 class="mb-2 text-lg font-bold text-slate-900">The QuickBooks tax</h3>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            <strong>{qbPct}% of trades software integrates QuickBooks</strong> — the closest thing the category has to a universal standard, and a real adoption tax on any vendor who skips it. It's a useful lens on how much the back office, not the field, still dictates software choice for contractors.
+          </p>
+          <p class="mt-2 text-xs text-slate-600">→ <a href="/trends-2026/" class="font-semibold text-orange-600 hover:underline">Market report</a> · <a href="/accounting/" class="font-semibold text-orange-600 hover:underline">Accounting reviews</a></p>
+        </article>
+      </div>
+
+      <p class="mt-4 rounded-lg bg-slate-50 px-4 py-3 text-xs text-slate-500 leading-relaxed">
+        <strong class="text-slate-700">Standard citation line:</strong> "WrenchStack Trades Software Market Report 2026, WrenchStack Research" — free to cite with a link to <a href="/trends-2026/" class="underline">wrenchstack.com/trends-2026</a>. All figures are dated and reproducible from the public methodology.
+      </p>
+    </section>
 
     <section class="mb-12 rounded-lg border-2 border-slate-200 bg-slate-50 p-6">
       <h2 class="mb-4 text-lg font-bold text-slate-900">Press contact</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        For interviews, expert commentary, data licensing, embargo arrangements, and media inquiries:
+        For interviews, expert commentary, data licensing, embargo arrangements and media inquiries:
       </p>
       <p class="mt-3 text-base">
         <a href="mailto:press@wrenchstack.com" class="font-semibold text-orange-600 hover:underline">press@wrenchstack.com</a>
@@ -48,13 +137,11 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">About WrenchStack — boilerplate</h2>
       <div class="rounded-lg border border-slate-200 bg-white p-5">
-        <p class="text-slate-700 leading-relaxed">
-          WrenchStack is an independent research desk covering trades-contractor vendors across {categoryCount} categories: field service software, lead-generation platforms, business insurance, payroll services, and marketing agencies. The platform publishes the WrenchStack Fit Score™ methodology and per-vendor affiliate disclosure for every recommendation, evaluating {totalVendorCount}+ vendors across {verticalCount} trade verticals. Headquartered in the United States with international expansion to UK, Canada, Australia, New Zealand, and Ireland markets.
-        </p>
+        <p class="text-slate-700 leading-relaxed">{boilerplate}</p>
         <div class="mt-4 flex flex-wrap gap-2">
           <button onclick="navigator.clipboard.writeText(document.querySelector('.boilerplate-text').textContent.trim()); this.textContent = 'Copied!'; setTimeout(() => this.textContent = 'Copy boilerplate', 2000)" class="rounded-md bg-orange-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-orange-600">Copy boilerplate</button>
         </div>
-        <span class="boilerplate-text hidden">WrenchStack is an independent research desk covering trades-contractor vendors across {categoryCount} categories: field service software, lead-generation platforms, business insurance, payroll services, and marketing agencies. The platform publishes the WrenchStack Fit Score™ methodology and per-vendor affiliate disclosure for every recommendation, evaluating {totalVendorCount}+ vendors across {verticalCount} trade verticals. Headquartered in the United States with international expansion to UK, Canada, Australia, New Zealand, and Ireland markets.</span>
+        <span class="boilerplate-text hidden">{boilerplate}</span>
       </div>
     </section>
 
@@ -66,28 +153,28 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
           <p class="mt-1 font-semibold text-slate-900">2026</p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
-          <p class="text-xs uppercase tracking-wider text-slate-500">Coverage</p>
-          <p class="mt-1 font-semibold text-slate-900">{totalVendorCount}+ vendors · {categoryCount} categories · {verticalCount} trade verticals</p>
+          <p class="text-xs uppercase tracking-wider text-slate-500">US coverage</p>
+          <p class="mt-1 font-semibold text-slate-900">{totalStackVendors} vendors · {totalCategories} categories · {verticalCount} trade verticals</p>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <p class="text-xs uppercase tracking-wider text-slate-500">International coverage</p>
+          <p class="mt-1 font-semibold text-slate-900">{intlVendorCount} listings · {intlMarkets} markets (Gulf in EN + AR)</p>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <p class="text-xs uppercase tracking-wider text-slate-500">Reputation flags issued</p>
+          <p class="mt-1 font-semibold text-slate-900">{totalFlagged} vendors with documented concerns</p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <p class="text-xs uppercase tracking-wider text-slate-500">Methodology</p>
           <p class="mt-1 font-semibold text-slate-900">WrenchStack Fit Score™ v1.0 (effective 2026-05-29)</p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
-          <p class="text-xs uppercase tracking-wider text-slate-500">Reputation flags issued</p>
-          <p class="mt-1 font-semibold text-slate-900">{reputationFlagCount} vendors with documented concerns</p>
-        </div>
-        <div class="rounded-lg border border-slate-200 bg-white p-4">
-          <p class="text-xs uppercase tracking-wider text-slate-500">Categories</p>
-          <p class="mt-1 text-sm text-slate-700">Software · Lead-gen · Insurance · Payroll · Marketing agencies</p>
-        </div>
-        <div class="rounded-lg border border-slate-200 bg-white p-4">
-          <p class="text-xs uppercase tracking-wider text-slate-500">Geographic markets</p>
-          <p class="mt-1 text-sm text-slate-700">US (live) · UK, CA, AU, NZ, IE (in expansion)</p>
+          <p class="text-xs uppercase tracking-wider text-slate-500">Independence</p>
+          <p class="mt-1 text-sm text-slate-700">No paid placement · per-vendor affiliate disclosure · quarterly price re-checks</p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <p class="text-xs uppercase tracking-wider text-slate-500">Editorial pages</p>
-          <p class="mt-1 font-semibold text-slate-900">2,800+</p>
+          <p class="mt-1 font-semibold text-slate-900">6,000+</p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <p class="text-xs uppercase tracking-wider text-slate-500">Update cadence</p>
@@ -103,7 +190,7 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
           When citing WrenchStack research, please use this format:
         </p>
         <div class="rounded-md bg-slate-50 px-4 py-3 font-mono text-sm text-slate-800">
-          WrenchStack 2026 [Topic] Index. WrenchStack Research. https://wrenchstack.com/research/[slug]/
+          WrenchStack Trades Software Market Report 2026. WrenchStack Research. https://wrenchstack.com/trends-2026/
         </div>
         <p class="mt-4 text-sm text-slate-700 leading-relaxed">
           For methodology citations, please reference: <em>WrenchStack Fit Score™ Methodology v1.0, effective May 29, 2026. WrenchStack Research. <a href="/methodology/" class="text-orange-600 hover:underline">https://wrenchstack.com/methodology/</a></em>
@@ -154,15 +241,19 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
       <div class="space-y-3">
         <a href="/trends-2026/" class="block rounded-lg border border-slate-200 bg-white p-4 no-underline hover:border-orange-300 hover:bg-orange-50">
           <p class="font-semibold text-slate-900">Trades Software Market Report 2026</p>
-          <p class="mt-1 text-sm text-slate-600">15 data findings from analysis of {tools.length} platforms — pricing distribution, integration prevalence, founded-year cohorts, vertical density.</p>
+          <p class="mt-1 text-sm text-slate-600">Data findings across the full {totalStackVendors}-vendor contractor stack ({totalCategories} categories) and {intlMarkets} international markets — pricing transparency, integration prevalence, the reputation-flag ledger, and the English-and-Arabic Gulf picture.</p>
+        </a>
+        <a href="/research/" class="block rounded-lg border border-slate-200 bg-white p-4 no-underline hover:border-orange-300 hover:bg-orange-50">
+          <p class="font-semibold text-slate-900">Research hub & the WrenchStack Index</p>
+          <p class="mt-1 text-sm text-slate-600">Quarterly benchmarks and citable statistics, including the full-stack reputation-flag ledger ({totalFlagged} flagged vendors) and the {intlMarkets}-market coverage map.</p>
         </a>
         <a href="/awards/2026/" class="block rounded-lg border border-slate-200 bg-white p-4 no-underline hover:border-orange-300 hover:bg-orange-50">
           <p class="font-semibold text-slate-900">WrenchStack Awards 2026</p>
-          <p class="mt-1 text-sm text-slate-600">18 editorial categories of recognition across software, with full methodology and per-category winner rationale.</p>
+          <p class="mt-1 text-sm text-slate-600">Editorial categories of recognition across software, with full methodology and per-category winner rationale.</p>
         </a>
         <a href="/methodology/" class="block rounded-lg border border-slate-200 bg-white p-4 no-underline hover:border-orange-300 hover:bg-orange-50">
           <p class="font-semibold text-slate-900">WrenchStack Fit Score™ Methodology v1.0</p>
-          <p class="mt-1 text-sm text-slate-600">Published methodology documenting scoring rubric, evaluation timeline, weights, and independence statement.</p>
+          <p class="mt-1 text-sm text-slate-600">Published methodology documenting the scoring rubric, evaluation timeline, weights and independence statement.</p>
         </a>
       </div>
     </section>
@@ -193,24 +284,24 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Expert commentary available on</h2>
       <p class="mb-4 text-sm text-slate-600 leading-relaxed">
-        Journalists can reach out for expert commentary, exclusive data, or background interviews on the following topics:
+        Journalists can reach out for expert commentary, exclusive data or background interviews on:
       </p>
       <ul class="grid gap-2 sm:grid-cols-2 text-sm text-slate-700">
-        <li class="rounded-md bg-slate-50 px-3 py-2">Trades-contractor software market trends</li>
-        <li class="rounded-md bg-slate-50 px-3 py-2">Lead-generation platform reputation patterns</li>
-        <li class="rounded-md bg-slate-50 px-3 py-2">Contractor insurance market structure</li>
-        <li class="rounded-md bg-slate-50 px-3 py-2">FSM platform pricing trends and benchmarks</li>
-        <li class="rounded-md bg-slate-50 px-3 py-2">Payroll and HR for trades businesses</li>
-        <li class="rounded-md bg-slate-50 px-3 py-2">Marketing agency landscape for home services</li>
-        <li class="rounded-md bg-slate-50 px-3 py-2">FTC actions affecting trades-industry vendors</li>
-        <li class="rounded-md bg-slate-50 px-3 py-2">International trades-industry differences (UK/CA/AU/NZ)</li>
+        <li class="rounded-md bg-slate-50 px-3 py-2">Gulf &amp; MENA e-invoicing mandates (ZATCA, ETA, JoFotara, MyInvois, Fawtara)</li>
+        <li class="rounded-md bg-slate-50 px-3 py-2">The reputation-flag ledger — documented vendor harm across the stack</li>
+        <li class="rounded-md bg-slate-50 px-3 py-2">Trades-software pricing transparency and benchmarks</li>
+        <li class="rounded-md bg-slate-50 px-3 py-2">Lead-generation platform reputation patterns &amp; FTC actions</li>
+        <li class="rounded-md bg-slate-50 px-3 py-2">Contractor insurance &amp; financing market structure</li>
+        <li class="rounded-md bg-slate-50 px-3 py-2">Contractor banking &amp; the account-freeze problem</li>
+        <li class="rounded-md bg-slate-50 px-3 py-2">International trades-market differences ({intlMarkets} markets)</li>
+        <li class="rounded-md bg-slate-50 px-3 py-2">Independent-research economics vs. vendor-funded listicles</li>
       </ul>
     </section>
 
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Request data or interview</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        WrenchStack has proprietary data on vendor pricing, ratings, and trade-vertical adoption that's not published on the public site. For exclusive data, custom segments, or interview availability, reach the press desk directly.
+        WrenchStack has proprietary data on vendor pricing, ratings and trade-vertical adoption that isn't published on the public site. For exclusive data, custom segments or interview availability, reach the press desk directly.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="mailto:press@wrenchstack.com" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Email press desk →</a>
