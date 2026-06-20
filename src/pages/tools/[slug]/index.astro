@@ -1,6 +1,8 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import featuresData from '../../../data/features.json';
+import fs from 'node:fs';
+import path from 'node:path';
 import {
   tools,
   toolsForVertical,
@@ -47,6 +49,10 @@ const { tool } = Astro.props;
 const rating = aggregateRating(tool);
 const toolScore = wrenchStackScore(tool);
 const scoreBreakdown = wrenchStackScoreBreakdown(tool);
+// Self-hosted homepage screenshot (generated via _gen_screenshots.mjs). Build-
+// time existence check so tools without a screenshot fall back gracefully.
+const hasScreenshot = fs.existsSync(path.join(process.cwd(), 'public', 'screenshots', `${tool.slug}.webp`));
+const vendorHost = (() => { try { return new URL(tool.vendor_url).hostname.replace(/^www\./, ''); } catch { return tool.vendor_url; } })();
 const toolAwards = awardsForTool(tool.slug);
 const wins = toolAwards.filter((a) => a.kind === 'winner');
 const honorableMentions = toolAwards.filter((a) => a.kind === 'honorable_mention');
@@ -571,6 +577,22 @@ const breadcrumbs = [
         </div>
       )}
     </header>
+
+    {hasScreenshot && (
+      <figure class="mb-8 overflow-hidden rounded-lg border border-slate-200 bg-white">
+        <div class="aspect-[16/10] w-full overflow-hidden bg-slate-50">
+          <img
+            src={`/screenshots/${tool.slug}.webp`}
+            alt={`${tool.name} homepage screenshot`}
+            loading="lazy"
+            class="h-full w-full object-cover object-top"
+          />
+        </div>
+        <figcaption class="border-t border-slate-100 px-4 py-2 text-xs text-slate-500">
+          {tool.name} homepage · <a href={tool.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="hover:text-orange-600">{vendorHost}</a>
+        </figcaption>
+      </figure>
+    )}
 
     <nav id="jump-to-nav" class="mb-8 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 md:sticky md:top-2 md:z-30 md:bg-white/95 md:backdrop-blur">
       <div class="text-xs font-semibold uppercase tracking-wider text-slate-700">Jump to</div>
