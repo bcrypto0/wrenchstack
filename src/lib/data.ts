@@ -128,25 +128,35 @@ export function formatPrice(t: Tool): string {
   return `From $${p.starting_at_usd}/mo`;
 }
 
-export function wrenchStackScore(t: Tool, verticalSlug?: string): number {
-  // Composite editorial score 0-10
-  // 40% vertical fit, 30% aggregate user rating, 10% pricing transparency,
-  // 10% feature richness, 10% integration richness.
+export interface ScoreFactor {
+  factor: string;
+  weight: number; // 0-1
+  raw: number;    // sub-score 0-10
+}
+
+// The five weighted factors behind the WrenchStack Fit Score, exposed so the
+// breakdown can be surfaced wherever the score appears (single source of truth
+// for both the number and its explanation). 40% vertical fit, 30% aggregate
+// user rating, 10% pricing transparency, 10% feature depth, 10% integrations.
+export function wrenchStackScoreBreakdown(t: Tool, verticalSlug?: string): ScoreFactor[] {
   const fit = verticalSlug ? verticalFitScore(t, verticalSlug) : 7;
   const rating = aggregateRating(t);
   const ratingNormalized = rating !== null ? rating * 2 : 5;
   const transparency = t.pricing.starting_at_usd !== null ? 10 : 5;
   const featureScore = Math.min(t.key_features.length, 10);
   const integrationScore = Math.min(t.integrations.length, 10);
+  return [
+    { factor: 'Vertical fit', weight: 0.4, raw: fit },
+    { factor: 'User ratings (G2 + Capterra)', weight: 0.3, raw: ratingNormalized },
+    { factor: 'Pricing transparency', weight: 0.1, raw: transparency },
+    { factor: 'Feature depth', weight: 0.1, raw: featureScore },
+    { factor: 'Integration coverage', weight: 0.1, raw: integrationScore },
+  ];
+}
 
-  const score =
-    fit * 0.4 +
-    ratingNormalized * 0.3 +
-    transparency * 0.1 +
-    featureScore * 0.1 +
-    integrationScore * 0.1;
-
-  return Math.min(10, Math.round(score * 10) / 10);
+export function wrenchStackScore(t: Tool, verticalSlug?: string): number {
+  const total = wrenchStackScoreBreakdown(t, verticalSlug).reduce((s, f) => s + f.raw * f.weight, 0);
+  return Math.min(10, Math.round(total * 10) / 10);
 }
 
 export function getLogoUrl(t: Tool, size = 64): string {

@@ -9,6 +9,7 @@ import {
   verticalToUrl,
   verticals,
   wrenchStackScore,
+  wrenchStackScoreBreakdown,
   readingTimeMinutes,
   linkifyTools,
   smartAlternatives,
@@ -44,6 +45,8 @@ interface Props {
 
 const { tool } = Astro.props;
 const rating = aggregateRating(tool);
+const toolScore = wrenchStackScore(tool);
+const scoreBreakdown = wrenchStackScoreBreakdown(tool);
 const toolAwards = awardsForTool(tool.slug);
 const wins = toolAwards.filter((a) => a.kind === 'winner');
 const honorableMentions = toolAwards.filter((a) => a.kind === 'honorable_mention');
@@ -460,6 +463,35 @@ const breadcrumbs = [
         {tool.headquartered && <span>HQ {tool.headquartered}</span>}
         <span>Best team size: {tool.best_team_size ?? '—'}</span>
       </div>
+
+      <details class="mt-4 rounded-lg border border-slate-200 bg-white text-sm">
+        <summary class="cursor-pointer list-none px-4 py-2.5 font-medium text-slate-700 hover:text-orange-600">
+          <span class="select-none">▸</span> How we scored {tool.name}: <span class="font-bold text-slate-900">{toolScore.toFixed(1)}/10</span>
+        </summary>
+        <div class="border-t border-slate-100 px-4 py-3">
+          <table class="w-full text-xs">
+            <thead>
+              <tr class="text-left text-slate-500">
+                <th class="pb-1 font-semibold">Factor</th>
+                <th class="pb-1 font-semibold">Weight</th>
+                <th class="pb-1 font-semibold text-right">Sub-score</th>
+              </tr>
+            </thead>
+            <tbody>
+              {scoreBreakdown.map((b) => (
+                <tr class="border-t border-slate-50">
+                  <td class="py-1 text-slate-700">{b.factor}</td>
+                  <td class="py-1 text-slate-500">{Math.round(b.weight * 100)}%</td>
+                  <td class="py-1 text-right font-medium text-slate-900">{b.raw.toFixed(1)}/10</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p class="mt-2 text-xs leading-relaxed text-slate-500">
+            Weighted composite, applied identically to every vendor — no vendor pays to change it. <a href="/methodology/" class="underline hover:text-orange-600">Full Fit Score methodology →</a>
+          </p>
+        </div>
+      </details>
 
       <div class="mt-6 flex flex-wrap gap-3">
         <a
