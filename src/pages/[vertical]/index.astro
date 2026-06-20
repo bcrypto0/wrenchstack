@@ -233,8 +233,25 @@ const breadcrumbs = [
       </section>
     )}
 
+    <nav class="mb-8 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 md:sticky md:top-2 md:z-30 md:bg-white/95 md:backdrop-blur">
+      <div class="text-xs font-semibold uppercase tracking-wider text-slate-700">On this page</div>
+      <div class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-sm">
+        <a href="#top-picks" class="text-orange-600 hover:underline">Top picks</a>
+        <span class="text-slate-300">·</span>
+        <a href="#which-to-choose" class="text-orange-600 hover:underline">Which to choose</a>
+        <span class="text-slate-300">·</span>
+        <a href="#pricing" class="text-orange-600 hover:underline">Pricing</a>
+        <span class="text-slate-300">·</span>
+        <a href="#reviews" class="text-orange-600 hover:underline">Reviews</a>
+        <span class="text-slate-300">·</span>
+        <a href="#how-to-choose" class="text-orange-600 hover:underline">How to choose</a>
+        <span class="text-slate-300">·</span>
+        <a href="#faqs" class="text-orange-600 hover:underline">FAQ</a>
+      </div>
+    </nav>
+
     <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-bold text-slate-900">Top picks at a glance</h2>
+      <h2 id="top-picks" class="mb-4 scroll-mt-20 text-2xl font-bold text-slate-900">Top picks at a glance</h2>
       <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
         <table class="w-full text-sm">
           <thead class="bg-slate-50 text-left text-slate-700">
@@ -280,7 +297,7 @@ const breadcrumbs = [
 
     {topPicks.length >= 2 && (
       <section class="mb-12">
-        <h2 class="mb-1 text-2xl font-bold text-slate-900">Which {verticalLower} software should you choose?</h2>
+        <h2 id="which-to-choose" class="mb-1 scroll-mt-20 text-2xl font-bold text-slate-900">Which {verticalLower} software should you choose?</h2>
         <p class="mb-5 text-sm text-slate-600">The short, honest version by situation — full reasoning in the reviews below.</p>
         <div class="space-y-3">
           {topPicks.slice(0, 4).map((t) => {
@@ -309,7 +326,7 @@ const breadcrumbs = [
 
     {showPricingGuide && (
       <section class="mb-12">
-        <h2 class="mb-1 text-2xl font-bold text-slate-900">What does {verticalLower} software actually cost?</h2>
+        <h2 id="pricing" class="mb-1 scroll-mt-20 text-2xl font-bold text-slate-900">What does {verticalLower} software actually cost?</h2>
         <p class="mb-5 text-sm text-slate-600 leading-relaxed">
           {priceLo && priceHi && (<>Across the {ranked.length} platforms we track, published entry prices run from {priceLo} to {priceHi}{medianPrice !== null ? <>, with a median of ${medianPrice}/mo</> : null}. </>)}
           {hidePricingCount > 0 && (<>{hidePricingCount} of {ranked.length} publish no price and quote only on a sales call. </>)}
@@ -381,7 +398,7 @@ const breadcrumbs = [
     )}
 
     <section class="mb-12">
-      <h2 class="mb-6 text-2xl font-bold text-slate-900">Detailed reviews</h2>
+      <h2 id="reviews" class="mb-6 scroll-mt-20 text-2xl font-bold text-slate-900">Detailed reviews</h2>
       <div class="space-y-10">
         {topPicks.map((t, i) => {
           const rating = aggregateRating(t);
@@ -483,7 +500,7 @@ const breadcrumbs = [
     </section>
 
     <section class="mb-12 prose prose-slate max-w-none">
-      <h2>How to choose the right {verticalLower} software</h2>
+      <h2 id="how-to-choose" class="scroll-mt-20">How to choose the right {verticalLower} software</h2>
       <h3>If you're solo or have 1–3 techs</h3>
       <p>
         Start with <strong>Jobber Core ($39/mo)</strong> or <strong>Joist Pro ($13/mo)</strong>.
@@ -626,7 +643,7 @@ const breadcrumbs = [
     </section>
 
     <section class="mb-12">
-      <h2 class="mb-6 text-2xl font-bold text-slate-900">Frequently asked questions</h2>
+      <h2 id="faqs" class="mb-6 scroll-mt-20 text-2xl font-bold text-slate-900">Frequently asked questions</h2>
       <div class="space-y-4">
         {faqs.map((f) => (
           <details class="rounded-lg border border-slate-200 bg-white p-4">
