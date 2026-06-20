@@ -1,0 +1,96 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = 'Embeddable Badges — Rated on WrenchStack';
+const pageDescription = 'Free embeddable badges for vendors listed or selected on WrenchStack. Independent — no vendor pays to be listed, and displaying a badge never changes a rating. Copy-paste HTML, links back to your independent review.';
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Badges', url: '/badges/' },
+];
+
+const ratedEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noopener">
+  <img src="https://wrenchstack.com/badges/rated-on-wrenchstack.svg"
+       alt="Rated on WrenchStack — independent review" width="240" height="64" />
+</a>`;
+
+const pickEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noopener">
+  <img src="https://wrenchstack.com/badges/wrenchstack-2026-pick.svg"
+       alt="WrenchStack 2026 Pick" width="240" height="64" />
+</a>`;
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <article class="mx-auto max-w-4xl px-4 py-12">
+
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">For vendors</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        Embeddable badges
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Listed or selected on WrenchStack? Show it. These badges are free to embed on your site, link back to your independent review, and tell your customers a third party assessed you — not that you bought a placement.
+      </p>
+    </header>
+
+    <section class="mb-10 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">The rules (because independence is the whole point)</h2>
+      <ul class="space-y-2 text-sm text-slate-700">
+        <li class="flex gap-2"><span class="text-emerald-600">✓</span> <span><strong>Free for any vendor we list.</strong> You never pay us — to be listed, to be rated, or to display a badge.</span></li>
+        <li class="flex gap-2"><span class="text-emerald-600">✓</span> <span><strong>Displaying a badge does not change your rating.</strong> Our <a href="/methodology/" class="text-orange-600 hover:underline">Fit Score</a> is computed the same way whether or not you embed anything.</span></li>
+        <li class="flex gap-2"><span class="text-emerald-600">✓</span> <span><strong>Link it to your review.</strong> Point the badge at your own WrenchStack review page (see below) so visitors can read the full, independent write-up.</span></li>
+        <li class="flex gap-2"><span class="text-rose-500">✗</span> <span><strong>Use the "2026 Pick" badge only if you're an <a href="/awards/2026/" class="text-orange-600 hover:underline">editorial pick</a>.</strong> The "Rated on WrenchStack" badge is for any listed vendor.</span></li>
+      </ul>
+    </section>
+
+    <!-- Badge 1 -->
+    <section class="mb-8">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">"Rated on WrenchStack" — any listed vendor</h2>
+      <div class="rounded-lg border border-slate-200 bg-white p-6">
+        <div class="mb-5 flex items-center justify-center rounded-md bg-slate-50 py-8">
+          <img src="/badges/rated-on-wrenchstack.svg" alt="Rated on WrenchStack — independent review" width="240" height="64" />
+        </div>
+        <p class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Embed code</p>
+        <pre class="overflow-x-auto rounded-md bg-slate-900 p-4 text-xs leading-relaxed text-slate-100"><code id="rated-code">{ratedEmbed}</code></pre>
+        <button
+          onclick="navigator.clipboard.writeText(document.getElementById('rated-code').textContent); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy embed code', 1500)"
+          class="mt-3 rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600">Copy embed code</button>
+      </div>
+    </section>
+
+    <!-- Badge 2 -->
+    <section class="mb-10">
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">"WrenchStack 2026 Pick" — editorial picks only</h2>
+      <div class="rounded-lg border border-slate-200 bg-white p-6">
+        <div class="mb-5 flex items-center justify-center rounded-md bg-slate-50 py-8">
+          <img src="/badges/wrenchstack-2026-pick.svg" alt="WrenchStack 2026 Pick" width="240" height="64" />
+        </div>
+        <p class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Embed code</p>
+        <pre class="overflow-x-auto rounded-md bg-slate-900 p-4 text-xs leading-relaxed text-slate-100"><code id="pick-code">{pickEmbed}</code></pre>
+        <button
+          onclick="navigator.clipboard.writeText(document.getElementById('pick-code').textContent); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy embed code', 1500)"
+          class="mt-3 rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600">Copy embed code</button>
+        <p class="mt-3 text-xs text-slate-500">Won a category in the <a href="/awards/2026/" class="underline">2026 Awards</a>? You're cleared to use this one.</p>
+      </div>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">Linking the badge to your review</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        The embed code above links to our homepage by default. For the strongest result — and so your visitors land on your actual write-up — replace <code class="rounded bg-slate-200 px-1 text-xs">https://wrenchstack.com/</code> with your own review URL. US software vendors live at <code class="rounded bg-slate-200 px-1 text-xs">wrenchstack.com/tools/your-name/</code>; international vendors at <code class="rounded bg-slate-200 px-1 text-xs">wrenchstack.com/&lt;country&gt;/your-name/</code>. Can't find yours? <a href="/contact/" class="text-orange-600 hover:underline">Ask us</a> and we'll send the exact link.
+      </p>
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Something to correct, or want to be reviewed?</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">
+        We list vendors on the merits, with no paid placement. If your details are out of date, or you'd like us to review your product, start here.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/for-vendors/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Vendor program →</a>
+        <a href="/methodology/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">How we score</a>
+        <a href="/editorial-standards/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Editorial standards</a>
+      </div>
+    </section>
+  </article>
+</Layout>
