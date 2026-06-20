@@ -1,0 +1,732 @@
+{
+  "vendors": [
+    {
+      "slug": "gestion-btp-ma",
+      "name": "Gestion BTP",
+      "category": "software",
+      "vendor_url": "https://www.gestionbtp.ma/",
+      "tagline": "Logiciel BTP web + comptabilité, tout-en-un pour les entreprises marocaines",
+      "market_position": "A Moroccan-native, web-based all-in-one for construction firms — chantiers, devis, facturation, comptabilité analytique, liasse fiscale and CNSS in one product. It targets the exact gap where imported tools like EBP and Sage Batigest cover quotes and invoices but not Moroccan accounting and payroll.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Moroccan-native (local terminology + regulations)",
+        "Covers accounting/payroll where imports do not",
+        "Web + a \"chef de chantier\" mobile app",
+        "14-day free trial"
+      ],
+      "cons": [
+        "Pricing not published",
+        "Smaller vendor — longevity risk",
+        "Depth vs Sage on heavy BTP workflows unproven",
+        "Few independent reviews"
+      ],
+      "typical_pricing": "Quote-based (14-day free trial).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "Built around Moroccan compliance — TVA multi-taux (20/14/10/7/0%), liasse fiscale DGI, CNSS declarations and MAD — so a contractor gets devis-to-accounting in one local system rather than bolting an import onto a separate comptabilité tool."
+    },
+    {
+      "slug": "ebp-batiment-maroc",
+      "name": "EBP Bâtiment (Édition Maroc)",
+      "category": "software",
+      "vendor_url": "https://www.ebp.ma/",
+      "tagline": "Devis, facturation et gestion de chantier pour le bâtiment, adapté au Maroc",
+      "market_position": "French-origin building software with a dedicated Édition Maroc — strong on quotes, factures d’avancement / situations de travaux, retenue de garantie and work libraries (Batiprix/BatiChiffrage). The default \"serious artisan/SME\" devis-facture tool in Morocco.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Best-in-class devis + situations de travaux",
+        "A genuine Moroccan edition exists",
+        "Established reseller/support network",
+        "Work-library imports (Batiprix)"
+      ],
+      "cons": [
+        "No Moroccan comptabilité/paie — needs a separate tool",
+        "Largely desktop",
+        "Per-seat licensing",
+        "Core support is France-based; some UI still shows EUR"
+      ],
+      "typical_pricing": "Roughly 8,000–15,000 MAD/year for the devis/facture scope; reseller-quoted.",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "ma_specific_note": "The localized Moroccan edition is sold through certified resellers (e.g. Ciel Informatique) but does not include Moroccan accounting or payroll — Moroccan firms pair it with a separate comptabilité tool to close the loop."
+    },
+    {
+      "slug": "sage-batigest-connect-maroc",
+      "name": "Sage Batigest Connect",
+      "category": "software",
+      "vendor_url": "https://www.sage.com/fr-ma/",
+      "tagline": "Solution de gestion de chantier pour les entrepreneurs et artisans du bâtiment",
+      "market_position": "The heavyweight BTP option for mid/large Moroccan contractors — a specialised quote→situation workflow that links to Sage 100 for accounting, deployed through an established Moroccan reseller network. Chosen by firms that want the industry-standard name.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Deep BTP feature set",
+        "Integrates to Sage 100 for accounting",
+        "Strong local reseller/support",
+        "Trusted brand"
+      ],
+      "cons": [
+        "Expensive — often needs Sage 100 too",
+        "Aging tech, no native mobile",
+        "Siloed modules",
+        "No integrated payroll/CRM"
+      ],
+      "typical_pricing": "Roughly 15,000–80,000 MAD/year by version (plus Sage 100); reseller-quoted.",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "ma_specific_note": "Moroccan compliance (DGI filings, CNSS) is handled via the paired Sage 100 module rather than natively in Batigest, and pricing is reseller-dependent in MAD — so budget for the full Sage stack, not just Batigest."
+    },
+    {
+      "slug": "odoo-btp-maroc",
+      "name": "Odoo (BTP, via intégrateurs marocains)",
+      "category": "software",
+      "vendor_url": "https://www.odoo.com/",
+      "tagline": "ERP intégré pour le BTP marocain — chantier, compta, paie et stock en un seul système",
+      "market_position": "The global open-source ERP, localized by Moroccan integrators into a full BTP stack. The go-to when a contractor wants ONE system (projects + invoicing + stock + payroll + accounting) instead of EBP/Sage plus a separate accounting tool.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Full integrated ERP — no double entry",
+        "Native Moroccan accounting/payroll via the integrator",
+        "Mobile",
+        "Eligible for the MOWAKABA digitization subsidy"
+      ],
+      "cons": [
+        "BTP modules are not native — it is an integration project",
+        "Needs a competent integrator",
+        "Planning/Gantt weaker than specialist tools",
+        "Integration cost can be high"
+      ],
+      "typical_pricing": "Community is free; Enterprise ~280 MAD/user/mo; integration roughly 40,000–300,000 MAD in year one.",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "ma_specific_note": "Moroccan integrators add native PCGE accounting, TVA marocaine, CNSS/AMO/IR payroll and labour-code overtime (25%/50%) with FR/AR support — and the MOWAKABA program can subsidise up to 90% (TPE) / 80% (PME) of the digitization cost."
+    },
+    {
+      "slug": "hisab",
+      "name": "Hisab",
+      "category": "software",
+      "vendor_url": "https://hisab.ma/",
+      "tagline": "Plateforme moderne de facturation électronique du Maroc — conforme DGI",
+      "market_position": "A modern cloud e-invoicing platform for Moroccan SMEs and accountants. Not construction-specific, but highly relevant as the DGI e-invoicing mandate lands — any trades business needing compliant devis and factures can use it. Clean, bilingual, compliance-first.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Compliance-first — structured UBL 2.1 XML",
+        "Cheap entry point",
+        "Bilingual FR/AR (RTL) invoices",
+        "Cloud + 14-day free trial, no card"
+      ],
+      "cons": [
+        "Not BTP-specific — no chantier/situations",
+        "Horizontal SME tool",
+        "Younger product",
+        "Depth limited vs an ERP"
+      ],
+      "typical_pricing": "From 149 MAD/month.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "Generates structured UBL 2.1 XML with sequential numbering, auto ICE/IF/TVA fields, a digital signature/integrity chain and 10-year archiving — i.e. the technical shape the DGI clearance mandate will require, ahead of the official API."
+    },
+    {
+      "slug": "fawatir-ai",
+      "name": "Fawatir AI",
+      "category": "software",
+      "vendor_url": "https://fawatirai.com/",
+      "tagline": "Logiciel de gestion conforme DGI au Maroc — facturation, paie, POS, stocks",
+      "market_position": "A Moroccan AI-assisted invoicing and management suite, positioned for auto-entrepreneur / self-employed status — relevant to solo artisans and very small trades businesses that need DGI-compliant invoices quickly.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Fits the auto-entrepreneur (solo artisan) regime",
+        "AI auto-fills invoice fields",
+        "Broad module set (paie / POS / stock)",
+        "DGI-oriented"
+      ],
+      "cons": [
+        "Not BTP-specific",
+        "Breadth may mean shallow depth",
+        "Few independent reviews",
+        "Pricing not confirmed"
+      ],
+      "typical_pricing": "Tiered / quote-based (not publicly confirmed).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "DGI-compliant invoicing with auto-population of the mandatory fields (ICE/IF/TVA), aimed at the auto-entrepreneur regime most solo Moroccan tradespeople operate under — useful for fast compliant quoting rather than site management."
+    },
+    {
+      "slug": "aube-ma",
+      "name": "Aube",
+      "category": "software",
+      "vendor_url": "https://aube.ma/",
+      "tagline": "Devis et facturation conformes au Maroc — TVA correcte, vérification ICE client",
+      "market_position": "A Moroccan devis/facturation tool that leads on legal conformity — correct TVA, client ICE verification, compliant quotes. A horizontal SME tool a trades business can use for compliant quoting and invoicing.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Compliance-focused (TVA + client ICE checks)",
+        "Moroccan-native",
+        "Quoting-oriented (devis)",
+        "Simple to start"
+      ],
+      "cons": [
+        "Not BTP-specific",
+        "Horizontal tool",
+        "Limited public detail on pricing/depth",
+        "Smaller player"
+      ],
+      "typical_pricing": "Quote-based (not publicly confirmed).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "Automatic compliance with Moroccan invoicing rules — correct multi-rate TVA and customer ICE verification — which is the unglamorous detail that decides whether a devis is legally valid as the e-invoicing regime tightens."
+    },
+    {
+      "slug": "ciel-informatique-maroc",
+      "name": "Ciel Informatique",
+      "category": "software",
+      "vendor_url": "https://www.cielmaroc.ma/",
+      "tagline": "Intégrateur marocain Sage & EBP — gestion de chantier, devis, conformité DGI",
+      "market_position": "A Casablanca-based reseller/integrator of Sage (50/100, Batigest Connect) and EBP — the local implementation and support channel for the imported BTP tools, covering training, DGI/CNSS setup and consulting. Listed because in Morocco you generally buy Sage/EBP through a partner like this.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Local Casablanca presence + support",
+        "Multi-product (Sage + EBP)",
+        "Handles DGI/CNSS configuration",
+        "Training and consulting"
+      ],
+      "cons": [
+        "A reseller/integrator, not a product itself",
+        "Ties you to Sage/EBP licensing",
+        "Project-based pricing",
+        "Single-city base"
+      ],
+      "typical_pricing": "Quote-based (project/services).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "This is how most Moroccan firms actually acquire Sage or EBP — the integrator localizes the install (DGI filings, CNSS declarations) so the imported tool fits Moroccan compliance out of the gate."
+    },
+    {
+      "slug": "oasis-techno-cloud",
+      "name": "Oasis Techno Cloud",
+      "category": "software",
+      "vendor_url": "https://oasistechnocloud.com/",
+      "tagline": "Intégrateur Odoo spécialisé BTP au Maroc — ERP chantier, compta PCGE, paie marocaine",
+      "market_position": "A Moroccan Odoo integrator specialised in BTP — the partner that turns generic Odoo into a Morocco-compliant construction ERP. Listed as the implementation route for the Odoo option (and it publishes detailed Moroccan BTP-software comparisons).",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "BTP-specialised Odoo expertise",
+        "Full Moroccan localization (PCGE, TVA, CNSS)",
+        "Advises on MOWAKABA subsidy eligibility",
+        "Strong domain content"
+      ],
+      "cons": [
+        "A services/integrator, not a product",
+        "Odoo-locked",
+        "Integration cost",
+        "Outcome depends on partner quality"
+      ],
+      "typical_pricing": "Quote-based (integration projects ~40k–300k MAD/year).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "The practical way to get Odoo working as a Moroccan BTP ERP — native PCGE accounting, TVA marocaine and CNSS/AMO/IR payroll built in, with guidance on the MOWAKABA digitization subsidy."
+    },
+    {
+      "slug": "datao",
+      "name": "Datao",
+      "category": "lead-gen",
+      "vendor_url": "https://datao.ma/",
+      "tagline": "Repérez les meilleurs appels d’offres BTP au Maroc grâce à l’IA",
+      "market_position": "A Moroccan public-tender intelligence platform (UXS SARL AU, Rabat) that aggregates construction marchés publics with AI analysis of the cahier des charges and qualification matching. The strongest genuine construction project-intelligence play in Morocco.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Real BTP tender data at scale (12,000+ from 300+ sources)",
+        "AI CPS analysis + qualification matching",
+        "Geo/sector alerts",
+        "Moroccan entity (Rabat)"
+      ],
+      "cons": [
+        "Public tenders only — not private renovation leads",
+        "Paid tiers not published",
+        "Freemium gating",
+        "French-only"
+      ],
+      "typical_pricing": "Freemium — free account; paid tiers not disclosed.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "Pulls 12,000+ construction tenders from 300+ official Moroccan sources (regional agencies, hydraulic basins, municipalities) and matches each against your Ministry qualification class — the Moroccan version of \"which public jobs can I actually bid\"."
+    },
+    {
+      "slug": "aljady",
+      "name": "Aljady",
+      "category": "lead-gen",
+      "vendor_url": "https://aljady.ma/",
+      "tagline": "Le guide de référence des marchés publics au Maroc — veille et alertes IA",
+      "market_position": "A Moroccan public-procurement intelligence platform — broad (90,000+ tenders across all sectors including BTP) with AI alerts, a reference-price tool and competitor/bid-history analytics. Complements Datao; more horizontal but covers construction strongly.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Huge tender coverage (90,000+)",
+        "AI alerts + 7-day free trial",
+        "Bid-history / competitor analytics",
+        "\"Prix de référence\" calculator"
+      ],
+      "cons": [
+        "Horizontal — not BTP-only",
+        "Subscription pricing not public",
+        "French-only",
+        "Public tenders only"
+      ],
+      "typical_pricing": "Subscription with a 7-day free trial; tiers not disclosed.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "Real-time veille on Moroccan marchés publics that extracts the bordereaux de prix, lots and quantities and surfaces competitors’ submission history and success rates — useful for pricing a public bid in a thin-margin market."
+    },
+    {
+      "slug": "sabab-ma",
+      "name": "Sabab.ma",
+      "category": "lead-gen",
+      "vendor_url": "https://sabab.ma/",
+      "tagline": "Trouvez un plombier, électricien ou artisan de confiance au Maroc",
+      "market_position": "A leading Moroccan artisan/home-services marketplace connecting individuals to verified, geolocated tradespeople (plumbing, electrical, painting, HVAC, appliance repair) — the closest Morocco equivalent to a renovation/artisan lead marketplace.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Trades-focused",
+        "ID-verified + rated providers",
+        "Nationwide (Casablanca, Rabat, Marrakech, Tanger, Fès, Agadir)",
+        "FR/AR, web + Android"
+      ],
+      "cons": [
+        "No-commission model — lead-gen value to pros is unclear",
+        "Consumer (not B2B project) leads",
+        "Some non-trade services mixed in",
+        "Site occasionally unreachable"
+      ],
+      "typical_pricing": "Free for clients; no commission (payment direct client↔pro).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "Free, no-commission and ID-verified — good for a Moroccan artisan to be found, but because it takes no cut there is no paid-lead funnel, so treat it as a visibility channel rather than a lead-purchase one."
+    },
+    {
+      "slug": "bricole",
+      "name": "Bricole",
+      "category": "lead-gen",
+      "vendor_url": "https://bricoleapp.com/fr/ma/",
+      "tagline": "Votre artisan, à portée de main",
+      "market_position": "An app-first Moroccan home-services marketplace at real scale (25k+ registered pros, 100k+ downloads, 4.6★). 160+ services skewed toward trades — plumbing, electrical, painting, HVAC, carpentry, tiling/marble. Operates in Morocco and Egypt.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Large active pro base",
+        "Trades-heavy catalogue",
+        "Strong app traction (4.6★, 100k+)",
+        "FR/AR"
+      ],
+      "cons": [
+        "Zero-commission — weak monetization story for pros",
+        "Includes non-trade services",
+        "Not Morocco-only (also Egypt)",
+        "Consumer, not B2B, leads"
+      ],
+      "typical_pricing": "Free — no commission.",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "ma_specific_note": "The largest of the consumer artisan apps by traction, but fully free/zero-commission, so it is a discovery channel for a Moroccan tradesperson rather than a paid lead source."
+    },
+    {
+      "slug": "allopro-bricall",
+      "name": "Allopro (ex-Bricall)",
+      "category": "lead-gen",
+      "vendor_url": "https://www.allopro.ma/",
+      "tagline": "Plateforme marocaine de services à domicile — devis multiples, pros vérifiés",
+      "market_position": "A Moroccan home-services marketplace with an actual lead-gen / paid-listing model — pros pay a subscription to receive leads, and clients get up to five devis from verified providers. The most WrenchStack-aligned monetization model among the consumer marketplaces.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Genuine paid lead-gen model (pros subscribe)",
+        "Multi-quote comparison for clients",
+        "15-city coverage",
+        "Trades-inclusive (electrical, plumbing, painting, renovation)"
+      ],
+      "cons": [
+        "Mixes trades with non-construction services",
+        "Pricing not public",
+        "Rebrand (Bricall→Allopro) signals churn",
+        "Consumer-grade leads"
+      ],
+      "typical_pricing": "Pro subscription (tiers not public); free for clients.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "Unlike the free marketplaces, Allopro actually charges pros for leads and sends clients up to five competing devis — so it is the closest thing to a Western \"pay-for-leads\" model in Morocco, albeit across mixed home services."
+    },
+    {
+      "slug": "bricoul-ma",
+      "name": "Bricoul.ma",
+      "category": "lead-gen",
+      "vendor_url": "https://www.bricoul.ma/",
+      "tagline": "Connecter particuliers et artisans vérifiés (CIN, RC, certifications)",
+      "market_position": "A Moroccan artisan marketplace with explicit paid \"forfaits\" (subscription packages) for artisans and rigorous verification (CIN, RC, certifications). Trades-focused — plumber, electrician, painter, carpenter, HVAC, glazier. Another genuine paid-lead-gen entry.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Trades-focused",
+        "Strong verification (CIN/RC/certifications)",
+        "Paid artisan packages (real monetization)",
+        "FR/AR"
+      ],
+      "cons": [
+        "Appears Casablanca-centric / smaller scale",
+        "No app confirmed",
+        "Pricing not public",
+        "Younger/smaller than Bricole or Sabab"
+      ],
+      "typical_pricing": "Artisan subscription \"forfaits\" (tiers not public).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "Verifies artisans against CIN, RC and certifications and sells them lead packages — a more trust-vetted, genuinely paid lead channel, though currently smaller and Casablanca-weighted."
+    },
+    {
+      "slug": "wafa-assurance",
+      "name": "Wafa Assurance",
+      "category": "insurance",
+      "vendor_url": "https://www.wafaassurance.ma/fr/assurance-entreprise/produits/grandes-entreprises/les-biens/assurance-tous-risques-chantier",
+      "tagline": "Le leader marocain — Tous Risques Chantier et décennale pour le BTP",
+      "market_position": "Wafa Assurance (Attijariwafa bank group) is the market-leading Moroccan insurer, offering a dedicated Tous Risques Chantier product plus complementary RC Décennale and targeting public and private BTP players of every size, with nationwide bancassurance distribution.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Market leader with deep BTP underwriting capacity",
+        "Both mandatory covers (TRC + RCD) under one roof",
+        "Vast agency + bank-branch network",
+        "Suited to large/complex projects"
+      ],
+      "cons": [
+        "No online quote — agent/broker underwriting only",
+        "RCD gated on a contrôle technique",
+        "Large-enterprise orientation",
+        "Pricing opaque (project-rated)"
+      ],
+      "typical_pricing": "Project-rated (premium as a % of total works value); quoted per chantier.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "TRC covers damage to the works plus the civil liability of every site stakeholder, while RCD covers collapse risk for ten years post-reception under Morocco’s post-2024 mandate — but RCD subscription requires a prior contrôle technique by an approved body."
+    },
+    {
+      "slug": "rma-assurance",
+      "name": "RMA (Royale Marocaine d’Assurance)",
+      "category": "insurance",
+      "vendor_url": "https://www.entreprise.rmaassurance.com/produits/BTP",
+      "tagline": "Grand assureur marocain avec une gamme BTP dédiée",
+      "market_position": "RMA (FinanceCom group; founded 1949) is among Morocco’s top-tier insurers and runs a dedicated BTP offering covering Tous Risques Chantier and RC Décennale with project-tailored solutions.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Dedicated BTP product page and underwriting team",
+        "Covers both mandatory lines",
+        "Large balance sheet for big infrastructure risks",
+        "Established reinsurer relationships"
+      ],
+      "cons": [
+        "Quote via agent only",
+        "Underwriting case-by-case (no instant pricing)",
+        "Décennale needs technical-control sign-off",
+        "Geared to mid/large enterprises"
+      ],
+      "typical_pricing": "Bespoke, project-rated; no published tariff.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "Frames its décennale cover around Article 769 of the DOC — indemnifying structural damage that compromises solidity within the ten-year period — i.e. built for the Moroccan legal framework rather than a ported European wording."
+    },
+    {
+      "slug": "atlantasanad",
+      "name": "AtlantaSanad Assurance",
+      "category": "insurance",
+      "vendor_url": "https://www.atlantasanad.ma/professionnels/protection-de-l_activite/tous-risques-chantiers",
+      "tagline": "Produits BTP nommés — Tous Risques Chantiers + décennale « ALBINAA »",
+      "market_position": "AtlantaSanad (from the Atlanta–Sanad merger) is a major Moroccan insurer with explicitly branded construction products: a Tous Risques Chantiers policy and a dedicated décennale product marketed as \"RC Décennale ALBINAA\".",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Clearly named, easy-to-reference BTP products",
+        "Both mandatory covers (TRC + ALBINAA décennale)",
+        "Solid national network",
+        "Professional/SME-friendly positioning"
+      ],
+      "cons": [
+        "No online quote",
+        "Décennale gated on technical control",
+        "Smaller than Wafa/RMA for mega-projects",
+        "The ALBINAA deep-link can be hard to find — ask the agent for it"
+      ],
+      "typical_pricing": "Project-rated; quote on request via agent.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "One of the few insurers to give the décennale cover its own product name (ALBINAA — Arabic for \"building\"), which makes it easy to ask an agent for exactly the mandatory cover under the post-2024 regime."
+    },
+    {
+      "slug": "axa-assurance-maroc",
+      "name": "AXA Assurance Maroc",
+      "category": "insurance",
+      "vendor_url": "https://www.axa.ma/entreprise/protect_entreprise/trc-batissur",
+      "tagline": "« BATISSUR » — TRC et montage, avec décennale intégrée",
+      "market_position": "AXA Assurance Maroc, the local arm of the global AXA group, markets a named construction product \"BATISSUR\" (Tous Risques Chantier / Montage) plus \"MIHNASSUR\" professional multirisque — international brand credibility in a fully localized Moroccan entity.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Globally recognised brand, locally licensed",
+        "Clearly named BATISSUR product",
+        "Broad single-site multi-party cover",
+        "Claims handling spelled out (expertise/debris reimbursement)"
+      ],
+      "cons": [
+        "Quote via agent/broker only",
+        "Premium positioning may cost more",
+        "Décennale still gated on contrôle technique",
+        "Two products (BATISSUR + décennale) to coordinate"
+      ],
+      "typical_pricing": "Project-rated; no public tariff.",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "ma_specific_note": "BATISSUR covers every stakeholder on one chantier (architects, engineers, workers, suppliers, BET) through the works and the maintenance period, with the décennale element covering structural integrity for ten years — a strong fit for a contractor who wants a global brand locally."
+    },
+    {
+      "slug": "allianz-maroc",
+      "name": "Allianz Maroc",
+      "category": "insurance",
+      "vendor_url": "https://allianz.ma/fr_MA/professionels/metiers-secteurs/entreprises/batiment-et-travaux-publics.html",
+      "tagline": "Page sectorielle BTP dédiée — chantier + décennale",
+      "market_position": "Allianz Maroc (global Allianz group, locally licensed) runs a dedicated Bâtiment et Travaux Publics sector page and a risques-techniques line covering construction projects from site installation through completion, including décennale liability for ten years post-completion.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Global brand, local licence",
+        "Dedicated BTP + technical-risks pages",
+        "Both construction-phase and décennale cover",
+        "Good for cross-border/larger contractors"
+      ],
+      "cons": [
+        "Agent/broker quote only",
+        "Cover described more generically than rivals’ named products",
+        "Décennale needs technical control",
+        "Likely premium pricing"
+      ],
+      "typical_pricing": "Project-rated; quote on request.",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "ma_specific_note": "Positions décennale as a legal obligation for all building-works providers and covers both the construction phase and the ten-year post-reception liability — international underwriting standards delivered through local agents."
+    },
+    {
+      "slug": "sage-paie-maroc",
+      "name": "Sage Paie & RH Maroc (Sage 100)",
+      "category": "payroll",
+      "vendor_url": "https://www.sage.com/fr-ma/",
+      "tagline": "Le standard de paie localisé des PME marocaines",
+      "market_position": "Sage is the long-established payroll + accounting standard among Moroccan SMEs and accountants. Sage 100 Paie & RH integrates current Moroccan tax/social rules — IR, CNSS, AMO, CIMR, IS — and auto-computes statutory contributions, distributed through a wide local reseller network.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Deep local installed base and accountant familiarity",
+        "Full statutory coverage (IR/CNSS/AMO/CIMR)",
+        "Strong reseller/support ecosystem",
+        "Bridges payroll + accounting + future e-invoicing"
+      ],
+      "cons": [
+        "Licence + integrator cost (not cheap for micro-firms)",
+        "More ERP-heavy than lightweight SaaS",
+        "Setup typically needs a partner",
+        "UX dated vs newer SaaS"
+      ],
+      "typical_pricing": "Licence/subscription via reseller; quote-based.",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "ma_specific_note": "Handles Moroccan IR-at-source, CNSS (with the ~9,000 MAD ceiling), AMO and CIMR, and is usually paired with Damancom EDI workflows — the safe default if your accountant already lives in Sage."
+    },
+    {
+      "slug": "ojra-paie",
+      "name": "OJRA — Paie Maroc (NSE)",
+      "category": "payroll",
+      "vendor_url": "https://www.nse-ma.com/fr/logiciel-de-paie-ojra/",
+      "tagline": "Paie marocaine avec EDI Damancom/CNSS natif",
+      "market_position": "OJRA, developed by Moroccan vendor NSE, is a local-market payroll product purpose-built for Moroccan rules, with a native EDI module for Damancom (CNSS declarations) and full IR/AMO handling — a fit for firms wanting a homegrown, locally supported tool.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Purpose-built for Morocco (CNSS/IR/AMO)",
+        "Native Damancom EDI",
+        "Local vendor support/updates",
+        "Lighter and more affordable than a full ERP"
+      ],
+      "cons": [
+        "Limited brand recognition outside Morocco",
+        "Smaller ecosystem than Sage",
+        "Quote-based pricing",
+        "Narrower feature depth than a full HRIS"
+      ],
+      "typical_pricing": "Quote on request (local SME pricing).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "CNSS Damancom EDI is built in rather than bolted on, so monthly salary declarations transmit natively — a practical edge for a Moroccan SME that just needs payroll to be compliant and quiet."
+    },
+    {
+      "slug": "humantal",
+      "name": "Humantal",
+      "category": "payroll",
+      "vendor_url": "https://humantal.ma/",
+      "tagline": "Paie & RH SaaS spécialisée BTP au Maroc — multi-chantiers, pointage GPS",
+      "market_position": "A Moroccan payroll/HR SaaS built specifically for BTP — filling the exact gap EBP and Sage Batigest leave open. It targets contractors managing crews across multiple sites with site-based time tracking and construction-specific pay rules.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "BTP-specialised payroll/HR (rare)",
+        "GPS pointage on site",
+        "Convention collective BTP + intérimaires",
+        "Pairs well with EBP/Sage devis tools"
+      ],
+      "cons": [
+        "Payroll/HR only — not a full ERP",
+        "Needs a companion devis/chantier tool",
+        "Pricing not public",
+        "Newer/smaller vendor"
+      ],
+      "typical_pricing": "Free quote (subscription; no public flat price).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "Handles the messy parts of Moroccan construction payroll specifically — GPS site pointage, multi-chantier crews, the BTP convention collective and intérimaires — and files CNSS via Damancom in one click. Pair it with EBP or Sage Batigest for the devis side."
+    },
+    {
+      "slug": "qualification-classification-btp",
+      "name": "Qualification & Classification des Entreprises de BTP",
+      "category": "certification",
+      "vendor_url": "https://www.equipement.gov.ma/Ingenierie/Systemes-regissant-la-Profession/pages/qualification-et-classification-des-entreprises-btp.aspx",
+      "tagline": "Le passeport des marchés publics pour les entreprises de BTP marocaines",
+      "market_position": "A state system (Décret n°2-94-223 of 16 June 1994) run by the Ministère de l’Équipement et de l’Eau with the FNBTP. A qualification + classification certificate is mandatory to bid on public construction tenders above set thresholds.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Unlocks eligibility for public BTP markets",
+        "Signals vetted capacity to clients",
+        "Structured by sector + class (19 sectors / 115 qualifications)",
+        "Nationally recognised credential"
+      ],
+      "cons": [
+        "Mandatory only above certain thresholds — small private jobs don’t need it",
+        "Your class limits the project size you can bid",
+        "Administrative renewal/dossier process",
+        "Tied to demonstrated past works + means"
+      ],
+      "typical_pricing": "Administrative dossier (no commercial fee).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "Covers 19 activity sectors and 115 qualifications across classes 1–5 plus a superior \"S\" class — without it, a Moroccan firm cannot access ministry, municipality or public-institution tenders, which is most of the World-Cup-2030 pipeline."
+    },
+    {
+      "slug": "cnss-immatriculation",
+      "name": "CNSS — Immatriculation employeur + Damancom",
+      "category": "certification",
+      "vendor_url": "https://www.cnss.ma/",
+      "tagline": "L’immatriculation sécurité sociale obligatoire de tout employeur marocain",
+      "market_position": "Every Moroccan employer must register with the CNSS and declare/pay social contributions; Damancom is the CNSS online télédéclaration/EDI portal. It covers AMO (mandatory health), family/social benefits and pensions.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Legal social cover for employees (AMO/pension/family)",
+        "Enables compliant hiring",
+        "Damancom EDI streamlines monthly declarations",
+        "A CNSS number feeds the ICE"
+      ],
+      "cons": [
+        "Mandatory and audited",
+        "Late/missing declarations carry penalties",
+        "Contribution rates/ceilings change (re-verify current rates)",
+        "Requires payroll discipline"
+      ],
+      "typical_pricing": "Statutory contributions (employer + employee % of salary, capped).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "A CNSS affiliation number is one of the legal identifiers feeding the ICE, and salary declarations run through Damancom (EDI) — which is exactly why Moroccan payroll tools (OJRA, Humantal, Sage) integrate there natively."
+    },
+    {
+      "slug": "ice-identifiant-commun-entreprise",
+      "name": "ICE — Identifiant Commun de l’Entreprise",
+      "category": "certification",
+      "vendor_url": "https://www.ompic.ma/",
+      "tagline": "L’identifiant unique à 15 chiffres, obligatoire sur chaque facture",
+      "market_position": "The ICE uniquely identifies a Moroccan company and its establishments across all administrations, and has been mandatory since January 2016 on all official documents — invoices, devis, tax declarations and accounting records.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Single cross-administration ID",
+        "Mandatory on invoices (central to the e-invoicing regime)",
+        "Simplifies inter-agency procedures",
+        "Free to obtain"
+      ],
+      "cons": [
+        "Must appear on all commercial/fiscal documents — omission = a non-compliant invoice",
+        "Obtained through different bodies by legal form",
+        "Don’t confuse it with the IF (tax ID) or RC number",
+        "Errors propagate across agencies"
+      ],
+      "typical_pricing": "Free / administrative.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "15 digits (9 entity + 4 establishment + 2 control key), attributed by OMPIC for new companies or the DGI for individuals — and it will sit on every e-invoice, so any invoicing tool you choose must carry and validate it."
+    },
+    {
+      "slug": "registre-de-commerce",
+      "name": "Registre de Commerce (RC) — OMPIC",
+      "category": "certification",
+      "vendor_url": "https://www.ompic.ma/",
+      "tagline": "L’immatriculation commerciale obligatoire pour exister et contracter",
+      "market_position": "Registration in the Registre de Commerce (local commercial court, centralized at OMPIC) is the foundational legal step to incorporate, starting with the certificat négatif (name reservation) at OMPIC.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Legal existence + commercial capacity",
+        "Name protection via the certificat négatif",
+        "Prerequisite for IF/ICE/CNSS",
+        "Required to bid and contract"
+      ],
+      "cons": [
+        "Required up front (certificat négatif → RC → IF → CNSS → ICE)",
+        "Statutory updates needed on changes (address, capital, managers)",
+        "Annual filing obligations",
+        "Court-based process"
+      ],
+      "typical_pricing": "Registration fees (administrative).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "The RC number is one of the core legal identifiers (with the IF and CNSS) consolidated under the ICE — the first domino in the sequence a Moroccan contractor completes before they can legally invoice or bid."
+    },
+    {
+      "slug": "dgi-simpl",
+      "name": "DGI — Identifiant Fiscal (IF) & portail SIMPL",
+      "category": "certification",
+      "vendor_url": "https://www.tax.gov.ma/",
+      "tagline": "Immatriculation fiscale + le portail DGI pour toutes les déclarations",
+      "market_position": "The Direction Générale des Impôts issues the Identifiant Fiscal (IF) and operates SIMPL for online declaration and payment of TVA, IS and IR. Télédéclaration is now the norm, and the upcoming e-invoicing platform sits alongside SIMPL.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Tax identity (IF)",
+        "Online TVA/IS/IR filing + payment",
+        "Traceability",
+        "Gateway to the e-invoicing regime"
+      ],
+      "cons": [
+        "Filing deadlines/penalties",
+        "Télédéclaration effectively mandatory",
+        "Rates/brackets shift each Loi de Finances",
+        "E-invoicing obligations arriving 2026+ (phased)"
+      ],
+      "typical_pricing": "Free portal; taxes per statute.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "ma_specific_note": "This is the same authority running the phased 2026 e-invoicing clearance mandate — your IF feeds the ICE, SIMPL handles TVA/IS/IR today, and the new e-invoicing platform is what your invoicing software will have to connect to next."
+    }
+  ]
+}

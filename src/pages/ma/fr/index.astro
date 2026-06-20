@@ -1,0 +1,145 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import maData from '../../../data/international/ma.json';
+
+interface MaVendor {
+  slug: string; name: string; category: string; vendor_url: string;
+  tagline: string; tier: 'S' | 'A' | 'F';
+  is_cross_market: boolean;
+}
+const vendors = (maData as { vendors: MaVendor[] }).vendors;
+
+// Concise French positioning per vendor (the detailed reviews remain in English for now).
+const fr: Record<string, string> = {
+  'gestion-btp-ma': 'Logiciel BTP web marocain tout-en-un — chantiers, devis, facturation et comptabilité (TVA, CNSS, liasse fiscale DGI).',
+  'ebp-batiment-maroc': 'EBP Bâtiment, édition Maroc : devis et situations de travaux — sans la compta/paie marocaine (à coupler à un outil local).',
+  'sage-batigest-connect-maroc': 'Sage Batigest Connect : gestion de chantier costaude pour PME, reliée à Sage 100 pour la compta. Via revendeurs locaux.',
+  'odoo-btp-maroc': 'Odoo localisé BTP par des intégrateurs marocains — un seul système (chantier, compta PCGE, paie CNSS, stock). Éligible MOWAKABA.',
+  'hisab': 'Plateforme cloud de facturation électronique conforme DGI (UBL 2.1, ICE/IF/TVA) — bilingue FR/AR, dès 149 MAD/mois.',
+  'fawatir-ai': 'Facturation et gestion conformes DGI assistées par IA — pensé pour le statut auto-entrepreneur.',
+  'aube-ma': 'Devis et factures conformes au Maroc — bons taux de TVA et vérification de l’ICE du client.',
+  'ciel-informatique-maroc': 'Intégrateur marocain Sage & EBP (Casablanca) — installation, paramétrage DGI/CNSS, formation et support.',
+  'oasis-techno-cloud': 'Intégrateur Odoo spécialisé BTP — localisation marocaine complète (PCGE, TVA, paie CNSS) et conseil MOWAKABA.',
+  'datao': 'Veille des appels d’offres BTP (marchés publics) au Maroc, avec analyse IA du CPS et correspondance de qualification.',
+  'aljady': 'Plateforme de veille des marchés publics marocains — alertes IA, prix de référence et historique des concurrents.',
+  'sabab-ma': 'Place de marché d’artisans (plombier, électricien…) — pros vérifiés et géolocalisés, gratuit, sans commission.',
+  'bricole': 'Application de services à domicile à forte audience (Maroc + Égypte) — gratuite, sans commission.',
+  'allopro-bricall': 'Place de marché de services à domicile avec un vrai modèle de génération de prospects (les pros paient un abonnement).',
+  'bricoul-ma': 'Place de marché d’artisans avec vérification stricte (CIN, RC) et forfaits payants pour les pros.',
+  'wafa-assurance': 'Le leader marocain — Tous Risques Chantier et RC Décennale pour le BTP de toute taille. Via agent/courtier.',
+  'rma-assurance': 'Grand assureur marocain avec une gamme BTP dédiée (TRC + décennale, art. 769 du DOC).',
+  'atlantasanad': 'Produits BTP nommés — Tous Risques Chantiers + décennale « ALBINAA ». Souscription via agent.',
+  'axa-assurance-maroc': 'Offre « BATISSUR » (TRC/montage) avec décennale intégrée — grand assureur mondial, entité marocaine.',
+  'allianz-maroc': 'Page sectorielle BTP dédiée — couverture chantier et décennale. Distribution par agents.',
+  'sage-paie-maroc': 'Le standard de paie localisé (Sage 100) — IR, CNSS, AMO, CIMR ; couplé aux flux EDI Damancom.',
+  'ojra-paie': 'Paie marocaine (NSE) avec module EDI Damancom/CNSS natif — local, abordable.',
+  'humantal': 'Paie & RH SaaS spécialisée BTP — pointage GPS, multi-chantiers, convention collective et intérimaires.',
+  'qualification-classification-btp': 'Qualification & Classification (Ministère de l’Équipement) — obligatoire pour soumissionner aux marchés publics de BTP.',
+  'cnss-immatriculation': 'Immatriculation CNSS de l’employeur + déclarations via Damancom — couverture sociale obligatoire (AMO, retraite).',
+  'ice-identifiant-commun-entreprise': 'ICE — identifiant unique à 15 chiffres, obligatoire sur chaque facture et devis depuis 2016.',
+  'registre-de-commerce': 'Registre de Commerce (OMPIC) — immatriculation commerciale obligatoire, à commencer par le certificat négatif.',
+  'dgi-simpl': 'DGI — Identifiant Fiscal (IF) et portail SIMPL pour la TVA/IS/IR ; l’autorité qui pilote la facturation électronique.',
+};
+
+const tierFr: Record<string, string> = { S: 'Recommandé', A: 'Convenable', F: 'Alerte' };
+const cats = [
+  { key: 'software', label: 'Logiciels BTP & facturation conforme DGI', desc: 'Tout-en-un marocains qui gèrent aussi la compta locale (Gestion BTP), les standards importés de devis-facture via intégrateurs (EBP, Sage Batigest, Odoo) et les nouveaux outils « conformes DGI » (Hisab, Fawatir AI, Aube).' },
+  { key: 'lead-gen', label: 'Prospection & veille des marchés', desc: 'Deux canaux réels au Maroc : la veille des marchés publics BTP (Datao, Aljady) et les places de marché d’artisans pour particuliers (Sabab, Bricole, Allopro, Bricoul).' },
+  { key: 'payroll', label: 'Paie — CNSS / IR / AMO', desc: 'Le standard Sage 100, le marocain OJRA avec EDI Damancom natif, et Humantal, conçu pour les équipes de chantier (pointage GPS, multi-chantiers).' },
+  { key: 'insurance', label: 'Assurance construction — TRC & décennale', desc: 'Couverture obligatoire (loi 59-13) : Tous Risques Chantier + RC décennale, chez les grands assureurs marocains (Wafa, RMA, AtlantaSanad, AXA, Allianz). Via courtier, sans devis en ligne.' },
+  { key: 'certification', label: 'Conformité & organismes officiels', desc: 'Ce qu’un entrepreneur marocain doit gérer — la facturation électronique DGI, la Qualification & Classification pour les marchés publics, la CNSS, l’ICE sur chaque facture, et le Registre de Commerce.' },
+];
+
+const enUrl = new URL('/ma/', Astro.site).toString();
+const frUrl = new URL('/ma/fr/', Astro.site).toString();
+const pageTitle = 'Annuaire des logiciels et services BTP au Maroc — WrenchStack';
+const pageDescription = `Avis indépendants sur ${vendors.length} solutions pour le BTP marocain : logiciels de devis-facture et facturation conforme DGI, veille des marchés publics, paie CNSS et assurance construction obligatoire (loi 59-13) — avec la facturation électronique, la Qualification & Classification et l’ICE.`;
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  lang="fr"
+  alternateUrls={[{ hreflang: 'en', href: enUrl }, { hreflang: 'fr', href: frUrl }, { hreflang: 'x-default', href: enUrl }]}
+>
+  <article class="mx-auto max-w-5xl px-4 py-12">
+
+    <div class="mb-6 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl" aria-hidden="true">🇲🇦</span>
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">Maroc · BTP</p>
+      </div>
+      <a href="/ma/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">English</a>
+    </div>
+
+    <header class="mb-10">
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">Annuaire des logiciels et services BTP au Maroc</h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Avis indépendants sur {vendors.length} solutions pertinentes pour le BTP marocain — logiciels de devis-facture marocains et importés, veille des marchés publics (Datao, Aljady), paie CNSS (Sage, OJRA, Humantal) et assurance construction obligatoire (Wafa, RMA, AXA) — au regard des réalités locales : la facturation électronique DGI à venir, la décennale (loi 59-13), la Qualification & Classification pour les marchés publics, et un carnet de commandes porté par la Coupe du monde 2030.
+      </p>
+    </header>
+
+    <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border-2 border-emerald-300 bg-emerald-50 p-5">
+      <div>
+        <p class="text-xs font-bold tracking-wider text-emerald-700">⏰ Guide de conformité · Modèle « clearance » · 2026, grandes entreprises d’abord · date exacte en attente du décret</p>
+        <h2 class="mt-1 text-base font-bold text-slate-900">La facturation électronique (DGI) pour les entrepreneurs marocains</h2>
+        <p class="mt-1 text-sm text-slate-700">La base légale vérifiée (article 145-IX du CGI), le modèle de validation préalable, qui est concerné en premier, et quels outils génèrent déjà de l’UBL conforme — sans inventer une date que le décret n’a pas fixée.</p>
+      </div>
+      <a href="/ma/fr/guides/facturation-electronique-maroc/" class="shrink-0 rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Lire le guide →</a>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">Ce qui distingue le choix d’un logiciel au Maroc</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        Le choix d’un logiciel BTP au Maroc diffère structurellement de l’Europe. D’abord, <strong>la facturation électronique arrive</strong> — la DGI déploie un <strong>modèle de validation préalable (« clearance »)</strong> : chaque facture est validée par la plateforme fiscale avant d’atteindre le client, en UBL structuré, au titre de l’article 145-IX du CGI, à partir de 2026 pour les grandes entreprises (B2B) ; la date exacte reste <em>en attente du décret d’application</em>, donc méfiez-vous de toute source qui annonce un mois précis. Ensuite, le piège pratique majeur : <strong>les outils importés ne font pas la comptabilité ni la paie marocaines.</strong> EBP et Sage Batigest gèrent très bien les devis et les situations de travaux, mais pas la compta PCGE, la TVA marocaine ou la CNSS — il faut donc les coupler à un outil local, ou choisir un tout-en-un marocain (Gestion BTP) ou un Odoo localisé. Par ailleurs, <strong>l’assurance construction est désormais obligatoire</strong> — la loi 59-13 (en vigueur depuis fin 2024) impose la Tous Risques Chantier et la RC décennale, conditionnées à un contrôle technique préalable et souscrites via un courtier, pas en ligne. Les marchés publics sont conditionnés par la <strong>Qualification & Classification</strong>, et votre <strong>ICE</strong> doit figurer sur chaque facture. Les prix sont en dirham, le B2B se fait en français, et le programme <strong>MOWAKABA</strong> peut subventionner jusqu’à 90 % (TPE) le coût de la digitalisation.
+      </p>
+    </section>
+
+    {cats.map((cat) => {
+      const cv = vendors.filter((v) => v.category === cat.key);
+      if (cv.length === 0) return null;
+      return (
+        <section class="mb-12">
+          <div class="mb-5">
+            <h2 class="text-2xl font-bold text-slate-900">{cat.label}</h2>
+            <p class="mt-1 text-sm text-slate-600 leading-relaxed">{cat.desc}</p>
+          </div>
+          <div class="grid gap-3 sm:grid-cols-2">
+            {cv.map((v) => {
+              const isCert = v.category === 'certification';
+              const tierColor = v.tier === 'S' ? 'border-emerald-300' : v.tier === 'F' ? 'border-rose-300' : 'border-blue-300';
+              const tierBadge = v.tier === 'S' ? 'bg-emerald-100 text-emerald-900' : v.tier === 'F' ? 'bg-rose-100 text-rose-900' : 'bg-blue-100 text-blue-900';
+              const label = isCert ? 'Organisme officiel' : tierFr[v.tier];
+              return (
+                <article class={`rounded-lg border-2 ${tierColor} bg-white p-4`}>
+                  <div class="mb-1 flex items-center gap-2 flex-wrap">
+                    <h3 class="text-lg font-bold text-slate-900">{v.name}</h3>
+                    <span class={`rounded-full px-2 py-0.5 text-xs font-bold ${tierBadge}`}>{label}</span>
+                  </div>
+                  <p class="text-sm text-slate-700 leading-relaxed">{fr[v.slug] ?? v.tagline}</p>
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    <a href={`/ma/${v.slug}/`} class="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-700">Détails (en anglais) →</a>
+                    <a href={v.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-orange-600">{isCert ? 'Site officiel' : 'Visiter le site'} →</a>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="mb-10 rounded-lg border border-slate-200 bg-white p-5 text-sm text-slate-600">
+      <p>Les avis détaillés par solution sont actuellement disponibles <a href="/ma/" class="font-medium text-orange-600 hover:underline">en anglais</a>, et nous étendons progressivement le contenu en français.</p>
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Vous êtes éditeur ou prestataire au Maroc ?</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">Si vous proposez un logiciel ou un service pour les entrepreneurs marocains du bâtiment et souhaitez être évalué ou mis en avant, contactez-nous via notre <a href="/for-vendors/" class="underline">programme prestataires</a>.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/for-vendors/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Travailler avec nous →</a>
+        <a href="/ma/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">English directory</a>
+      </div>
+    </section>
+  </article>
+</Layout>

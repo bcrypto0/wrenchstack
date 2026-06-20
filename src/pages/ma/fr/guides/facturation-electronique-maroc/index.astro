@@ -1,0 +1,184 @@
+---
+import Layout from '../../../../../layouts/Layout.astro';
+
+// Outils de notre annuaire Maroc qui se positionnent pour le mandat DGI.
+// Honnête : AUCUN outil ne peut être officiellement « certifié » tant que la
+// DGI n'a pas publié l'API technique et le décret d'application.
+const tools = [
+  { name: 'Hisab', status: 'Orienté facturation électronique — génère de l’UBL 2.1 + ICE/IF/TVA, signature et archivage 10 ans', fit: 'Facturation PME (non spécifique BTP)', note: 'Dès 149 MAD/mois', href: '/ma/hisab/' },
+  { name: 'Fawatir AI', status: 'Facturation conforme DGI ; remplit automatiquement les champs obligatoires', fit: 'Auto-entrepreneur / artisans solos', note: 'Sur devis', href: '/ma/fawatir-ai/' },
+  { name: 'Aube', status: 'Devis/factures conformes — bons taux de TVA + vérification de l’ICE client', fit: 'Outil orienté devis', note: 'Sur devis', href: '/ma/aube-ma/' },
+  { name: 'Gestion BTP', status: 'Marocain natif ; gère la TVA multi-taux + la liasse fiscale DGI', fit: 'Tout-en-un BTP (avec compta)', note: 'Sur devis', href: '/ma/gestion-btp-ma/' },
+  { name: 'Sage / Sage Batigest', status: 'Sage se positionne publiquement pour le mandat DGI 2026', fit: 'ERP établi (PME/grandes)', note: 'Via revendeur', href: '/ma/sage-batigest-connect-maroc/' },
+  { name: 'Odoo (via intégrateurs)', status: 'Localisable en facturation marocaine conforme par l’intégrateur', fit: 'ERP complet si vous voulez un seul système', note: 'Projet d’intégration', href: '/ma/odoo-btp-maroc/' },
+];
+
+const faqs = [
+  { q: 'Quand la facturation électronique devient-elle obligatoire au Maroc ?', a: 'La DGI a confirmé un déploiement en 2026, à commencer par les grandes entreprises en B2B, puis une extension aux entreprises moyennes et plus tard aux PME et TPE. Point crucial : aucune date calendaire ferme n’est encore fixée par la loi — le démarrage exact dépend de la publication d’un décret d’application toujours en cours de rédaction. Une phase pilote avec des entreprises volontaires est en cours depuis octobre 2025. Considérez toute source qui annonce un mois précis de 2026 comme non vérifiée.' },
+  { q: 'Qu’est-ce que le modèle « clearance » et en quoi est-il différent ?', a: 'Le Maroc a opté pour un modèle de validation préalable (« clearance ») : chaque facture doit transiter par la plateforme centralisée de la DGI et être validée AVANT d’être envoyée au client. Sans cette validation et l’identifiant attribué, la facture n’est pas légalement valable. C’est le même type de modèle qu’au Mexique, en Turquie, en Italie ou en Arabie saoudite — plus strict qu’un simple envoi de PDF, car l’administration voit la facture en temps réel.' },
+  { q: 'Quelle est la base légale ?', a: 'L’obligation figure à l’article 145-IX du Code Général des Impôts (CGI). Le fondement légal a d’abord été introduit par la Loi de Finances 2018, et la Loi de Finances 2024 lui a donné une impulsion opérationnelle concrète en activant l’obligation selon un calendrier progressif fondé sur le chiffre d’affaires. Certains commentaires parlent simplement de « la Loi de Finances 2024 » — c’est un raccourci ; les deux lois comptent.' },
+  { q: 'Quel format pour les factures ?', a: 'Du XML structuré — UBL (UBL 2.1 / CII cités par les sources fiscales marocaines) — échangé via le portail centralisé de la DGI, avec une phase ultérieure ouvrant à des opérateurs privés certifiés pour la facturation déléguée. Chaque facture porte les identifiants obligatoires (ICE, IF, TVA), une numérotation séquentielle et des garanties d’intégrité. Les factures manuscrites, Word et Excel sont en voie de disparition.' },
+  { q: 'Qui est concerné, et un petit entrepreneur l’est-il déjà ?', a: 'La première vague 2026 vise les grandes entreprises (B2B), au-dessus d’un seuil de chiffre d’affaires souvent cité autour de 200M MAD — mais ce seuil reste non vérifié tant que le décret ne l’a pas confirmé. Le périmètre couvre les sociétés soumises à l’IS et certains contribuables au régime du Bénéfice Net Réel (BNR). Les PME et TPE viennent dans une phase ultérieure. Un petit entrepreneur n’est donc généralement PAS dans la première vague — mais il faut s’y préparer, car la direction est fixée.' },
+  { q: 'Que faire dès maintenant ?', a: 'Deux étapes concrètes. D’abord, assurez-vous que votre ICE figure correctement sur chaque facture et devis (obligatoire depuis 2016, il sera central pour la facturation électronique). Ensuite, posez une question à votre logiciel de facturation : « Générez-vous des factures UBL structurées, et vous connecterez-vous à la plateforme de validation DGI quand l’API sera publiée ? » Si vous êtes encore sur Word ou Excel, passer à un outil positionné DGI maintenant est peu risqué — et le programme MOWAKABA peut subventionner jusqu’à 90 % (TPE) / 80 % (PME) du coût.' },
+];
+
+const pageTitle = 'Facturation électronique DGI au Maroc — Guide 2026 pour le BTP';
+const pageDescription = 'La facturation électronique obligatoire au Maroc expliquée pour le bâtiment : la base légale vérifiée (article 145-IX du CGI), le modèle « clearance », le déploiement 2026 par étapes (grandes entreprises d’abord) — sans date inventée — le format UBL, l’obligation d’ICE, et les outils qui s’y préparent. Indépendant, vérifié juin 2026.';
+
+const enUrl = new URL('/ma/guides/facturation-electronique-maroc/', Astro.site).toString();
+const frUrl = new URL('/ma/fr/guides/facturation-electronique-maroc/', Astro.site).toString();
+
+const articleSchema = {
+  '@context': 'https://schema.org', '@type': 'Article', headline: pageTitle, description: pageDescription,
+  datePublished: '2026-06-20', dateModified: '2026-06-20', inLanguage: 'fr',
+  author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
+  publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
+  mainEntityOfPage: frUrl,
+};
+const faqSchema = {
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} lang="fr" alternateUrls={[{ hreflang: 'en', href: enUrl }, { hreflang: 'fr', href: frUrl }, { hreflang: 'x-default', href: enUrl }]}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-8">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">🇲🇦 Maroc · Guide de conformité</p>
+        <a href="/ma/guides/facturation-electronique-maroc/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">English</a>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+        Facturation électronique DGI au Maroc
+      </h1>
+      <p class="mt-3 text-lg text-slate-600 leading-relaxed">
+        Ce que la facturation électronique obligatoire signifie pour le BTP — la base légale vérifiée, le modèle « clearance », qui est concerné en premier, et quels outils s’y préparent. Nous nous appuyons sur ce qui est confirmé, pas sur une date que le décret n’a pas fixée.
+      </p>
+      <p class="mt-3 text-sm text-slate-500">Par WrenchStack Research · Publié et vérifié en juin 2026 · Ceci n’est pas un conseil fiscal — vérifiez votre situation auprès de la DGI (tax.gov.ma) ou de votre fiduciaire.</p>
+    </header>
+
+    <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ En bref</h2>
+      <p class="text-slate-800 leading-relaxed">
+        Le Maroc introduit la <strong>facturation électronique obligatoire</strong> selon un <strong>modèle de validation préalable (« clearance »)</strong> : chaque facture sera validée par la plateforme centrale de la DGI, en <strong>UBL</strong> structuré, <em>avant</em> d’atteindre le client. La base légale est l’<strong>article 145-IX du CGI</strong> (introduit par la LF 2018, opérationnalisé par la LF 2024). Le démarrage est prévu en <strong>2026 pour les grandes entreprises B2B</strong>, puis une extension aux moyennes et ensuite aux PME. <strong>Aucune date ferme n’est encore fixée par la loi</strong> — le démarrage exact dépend d’un décret d’application en cours de rédaction, donc méfiez-vous de toute source annonçant un mois précis.
+      </p>
+    </section>
+
+    <section class="mb-10 grid gap-3 sm:grid-cols-3">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">2026</div>
+        <div class="mt-1 text-xs text-slate-600">démarrage par étapes, grandes entreprises B2B d’abord</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">Clearance</div>
+        <div class="mt-1 text-xs text-slate-600">la DGI valide chaque facture avant l’envoi</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">UBL</div>
+        <div class="mt-1 text-xs text-slate-600">XML structuré, avec ICE/IF/TVA</div>
+      </div>
+    </section>
+
+    <section class="mb-10 prose prose-slate max-w-none">
+      <h2>Ce qui est confirmé — et ce qui ne l’est pas</h2>
+      <p>Soyons précis, car beaucoup de contenus de prestataires marocains citent une échéance ferme que la loi n’a pas fixée.</p>
+      <p><strong>Confirmé :</strong></p>
+      <ul>
+        <li>Le Directeur Général de la DGI a confirmé publiquement le lancement <strong>en 2026</strong>, à commencer par les <strong>grandes entreprises en B2B</strong>.</li>
+        <li>Une <strong>phase de test est en cours depuis octobre 2025</strong> avec des entreprises volontaires (après une consultation publique ouverte en octobre 2024).</li>
+        <li>Un <strong>appel d’offres de développement de la plateforme a été lancé en mai 2024, budgété à 6,48M MAD</strong> avec une livraison à un an — le jalon le plus tangible et documenté.</li>
+        <li>Le modèle est le <strong>« clearance »</strong> (contrôle continu / validation préalable) en <strong>UBL</strong>, via un portail centralisé DGI, avec une phase ultérieure ouverte à des opérateurs privés certifiés.</li>
+      </ul>
+      <p><strong>En attente — à ne pas présenter comme un fait :</strong></p>
+      <ul>
+        <li><strong>Aucune date calendaire ferme.</strong> Les trackers (EDICOM, VATupdate) indiquent que le démarrage « reste tributaire de la publication d’un décret en cours d’élaboration », et que la DGI n’a pas encore publié l’ensemble des détails techniques.</li>
+        <li>Le <strong>seuil de chiffre d’affaires</strong> exact de la première vague (souvent cité autour de 200M MAD) — non vérifié jusqu’au décret.</li>
+      </ul>
+
+      <h2>Le déploiement par étapes</h2>
+      <ul>
+        <li><strong>2026 — grandes entreprises (B2B d’abord).</strong> Sociétés soumises à l’IS, et certains contribuables au régime du Bénéfice Net Réel (BNR).</li>
+        <li><strong>2026 → 2027 — extension</strong> aux entreprises moyennes.</li>
+        <li><strong>Phase ultérieure — PME et TPE.</strong> La plupart des entrepreneurs sont ici, donc la première vague ne vous concernera probablement pas — mais la direction est fixée.</li>
+        <li><strong>B2C et transfrontalier</strong> dans des phases ultérieures.</li>
+      </ul>
+
+      <h2>Pourquoi c’est important pour le BTP en particulier</h2>
+      <p>
+        Les métiers marocains travaillent déjà selon une norme <strong>devis → facture</strong> avec des identifiants obligatoires, donc le passage au format structuré est plus petit qu’il n’y paraît — mais deux choses sont propres au BTP. D’abord, la difficulté récurrente : les <strong>outils importés (EBP, Sage Batigest) gèrent les devis mais pas la compta marocaine ni la connexion à la facturation électronique</strong> — le chemin vers la plateforme compte autant que les fonctions de devis. Ensuite, votre <strong>ICE</strong> (l’Identifiant Commun de l’Entreprise à 15 chiffres) est obligatoire sur chaque facture depuis 2016 et sera central pour le « clearance » — fiabilisez-le dès maintenant. Bonne nouvelle : le programme <strong>MOWAKABA</strong> peut subventionner jusqu’à <strong>90 % (TPE) / 80 % (PME)</strong> du coût d’adoption d’un logiciel conforme.
+      </p>
+
+      <h2>Le contexte fiscal marocain plus large</h2>
+      <ul>
+        <li><strong>TVA :</strong> 20 % standard, avec des taux réduits de 14 %, 10 % et 7 %. Votre logiciel doit appliquer le bon taux par ligne.</li>
+        <li><strong>IS (impôt sur les sociétés) :</strong> progressif, en pleine réforme — les taux évoluent à chaque Loi de Finances.</li>
+        <li><strong>SIMPL</strong> (simpl.tax.gov.ma) est le portail en ligne existant de la DGI pour la télédéclaration/télépaiement de la TVA, l’IS et l’IR ; la plateforme de facturation électronique est un nouveau système DGI adjacent.</li>
+      </ul>
+
+      <h2>Quels outils s’y préparent ?</h2>
+      <p>
+        Parmi les logiciels de notre <a href="/ma/fr/">annuaire Maroc</a>, ceux-ci se positionnent pour le mandat — en générant déjà de l’UBL conforme ou en se présentant « conformes DGI ». <strong>Soyez lucide : aucun ne peut être officiellement « certifié » aujourd’hui</strong>, car la DGI n’a pas publié l’API technique ni le décret. Traitez « prêt DGI » comme « construit dans le bon sens », et posez la question concrète ci-dessous.
+      </p>
+    </section>
+
+    <section class="mb-10 overflow-x-auto">
+      <table class="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
+        <thead class="bg-slate-50 text-left text-slate-700">
+          <tr>
+            <th class="p-3 font-semibold">Outil</th>
+            <th class="p-3 font-semibold">Signal « prêt DGI »</th>
+            <th class="p-3 font-semibold">Idéal pour</th>
+            <th class="p-3 font-semibold">Tarif</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          {tools.map((t) => (
+            <tr>
+              <td class="p-3 font-semibold text-slate-900"><a href={t.href} class="hover:text-orange-600">{t.name}</a></td>
+              <td class="p-3 text-slate-700">{t.status}</td>
+              <td class="p-3 text-slate-600">{t.fit}</td>
+              <td class="p-3 text-slate-600">{t.note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="mt-3 text-xs text-slate-500">Le « signal prêt DGI » reflète le positionnement du prestataire et la capacité UBL structurée en juin 2026 — pas une certification officielle de la DGI, qui n’est pas encore possible. À confirmer directement avec chaque prestataire.</p>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">La question à poser à tout prestataire</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        Ne supposez pas qu’un bon outil de devis couvre le mandat. Demandez : <strong>« Générez-vous des factures UBL structurées avec les champs obligatoires ICE/IF/TVA, et vous connecterez-vous à la plateforme de validation DGI quand l’API sera publiée ? »</strong> Si la réponse est vague, c’est un signal. Et vérifiez que votre <a href="/ma/ice-identifiant-commun-entreprise/" class="font-medium text-orange-700 hover:underline">ICE</a> est correct sur chaque document dès aujourd’hui.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Questions fréquentes</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
+      <strong class="text-slate-700">Sources et vérification :</strong> Vérifié en juin 2026 auprès d’EDICOM, VATupdate, Upsilon Consulting, Experio et Sage Maroc, recoupé avec la DGI. Base légale : article 145-IX du CGI (introduit par la LF 2018, opérationnalisé par la LF 2024). Confirmé : modèle « clearance », UBL, démarrage 2026 par étapes (grandes entreprises B2B d’abord), pilote depuis octobre 2025, l’appel d’offres plateforme de 6,48M MAD (mai 2024). En attente et explicitement NON présenté comme un fait ici : la date exacte de démarrage (en attente du décret) et le seuil de la première vague (~200M MAD, non vérifié). Information générale, pas un conseil fiscal. Une erreur ? <a href="/contact/" class="underline">Dites-le-nous</a> et nous corrigerons.
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Comparez les logiciels et services BTP au Maroc</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">Avis indépendants sur les logiciels BTP marocains, la veille des appels d’offres, la paie CNSS et l’assurance construction obligatoire — sans pay-to-play.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/ma/fr/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">🇲🇦 Annuaire Maroc →</a>
+        <a href="/ma/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Comparer les solutions</a>
+        <a href="/for-vendors/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Vous êtes prestataire ? Travaillez avec nous</a>
+      </div>
+    </section>
+  </article>
+</Layout>

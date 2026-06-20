@@ -135,6 +135,14 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     intro: 'French artisan (bâtiment) vendor selection is shaped by the incoming facturation électronique mandate (reception for all businesses from 1 September 2026, issuance for SMEs/micro from 1 September 2027, via approved PDP platforms), mandatory ten-year assurance décennale under the Loi Spinetta, multi-rate TVA (20/10/5.5%), RGE certification for subsidised renovation work, and the micro-entrepreneur regime that most solo tradespeople operate under.',
     certContext: 'Facturation électronique is becoming mandatory via approved platforms (PDP) — reception for all businesses from 1 September 2026, issuance for SMEs and micro-entreprises from 1 September 2027; assurance décennale (Loi Spinetta) is legally mandatory before a worksite opens, with a criminal penalty for working uninsured; TVA is multi-rate (20% standard, 10% renovation, 5.5% energy); RGE certification is commercially essential for clients to claim MaPrimeRénov’ and other subsidies; business registration runs through the CMA/guichet unique; and regulated trades require a qualification (diploma or three years’ experience).',
   },
+  ma: {
+    code: 'ma',
+    name: 'Morocco',
+    flag: '🇲🇦',
+    noteField: 'ma_specific_note',
+    intro: 'Moroccan construction & trades software selection is shaped by the incoming DGI facturation électronique mandate (a clearance model under Article 145-IX of the CGI, rolling out in 2026 to large firms first — the exact start date pending the implementing decree), mandatory construction insurance under Loi 59-13 (Tous Risques Chantier + responsabilité civile décennale, in force since end-2024), multi-rate TVA (20% standard), CNSS social security, the Ministry of Equipment’s Qualification & Classification system gating public BTP tenders, and a construction pipeline lifted by World Cup 2030 and Al Haouz earthquake reconstruction. B2B runs predominantly in French.',
+    certContext: 'The DGI runs tax (20% TVA, IS, IR via the SIMPL portal) and the phased 2026 e-invoicing clearance mandate — large enterprises / B2B first, exact start pending the implementing decree; the Ministère de l’Équipement’s Qualification & Classification certificate is required to bid public construction tenders; mandatory construction insurance (Tous Risques Chantier + responsabilité civile décennale) under Loi 59-13 requires a prior contrôle technique and is broker-placed; and employers must register with the CNSS (declarations via Damancom) and carry the ICE on every invoice.',
+  },
 };
 
 export const INTL_CATEGORY_LABELS: Record<string, string> = {
