@@ -1,0 +1,185 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+
+const tools = [
+  { name: 'Daftra', status: 'Native ETA integration (e-signature, GS1, 14% VAT)', fit: 'Native accounting / e-invoice SMEs', note: 'From $20/mo (USD)', href: '/eg/daftra/' },
+  { name: 'AccFlex', status: 'Native ETA + a construction edition with مستخلصات', fit: 'SMEs incl. contractors', note: 'From ~$279/mo', href: '/eg/accflex-erp/' },
+  { name: 'DoubleClick ERP', status: 'Direct ETA submission of مستخلصات (payment certificates)', fit: 'Contractors (engineering → finance)', note: 'Quote-based', href: '/eg/doubleclick-erp/' },
+  { name: 'Voko ERP', status: 'Built-in ETA e-invoice module + مستخلصات', fit: 'Contractors', note: 'Quote-based', href: '/eg/voko-erp/' },
+  { name: 'Edara', status: 'Hands-on ETA onboarding (accounting + POS)', fit: 'SMBs / retailers', note: 'Quote-based', href: '/eg/edara-erp/' },
+  { name: 'Odoo', status: 'Native ETA localization (API, GS1, USB e-sign), via partners', fit: 'Full ERP if you want one system', note: 'SaaS + implementation', href: '/eg/odoo/' },
+  { name: 'OrchidaTax', status: 'ETA middleware/connector for SAP/Oracle/Dynamics/Odoo', fit: 'Keep your ERP, add compliance', note: 'Quote-based', href: '/eg/orchidatax/' },
+  { name: 'QuickBooks / Zoho', status: 'NOT native — require a connector (QuiXcel, OrchidaTax)', fit: 'Firms already on these globals', note: 'Connector priced separately', href: '/eg/quickbooks/' },
+];
+
+const faqs = [
+  { q: 'Is ETA e-invoicing mandatory yet — and for whom?', a: 'Yes, and it is enforced. The full B2B mandate took effect in April 2023, requiring ALL VAT-registered businesses to issue e-invoices, and paper VAT invoices became invalid for input-tax deduction from around July 2023. Under Resolution 281/2025 the VAT-registration threshold was halved to EGP 250,000, so even small businesses are now in scope, with a registration deadline of 31 March 2026. B2C transactions are covered by the parallel e-receipt system.' },
+  { q: 'What is the "clearance" model?', a: 'Egypt uses a real-time clearance (Continuous Transaction Control) model: each document is transmitted to the ETA and validated BEFORE it is issued to the recipient. The ETA checks the structure, tax math, e-seal and product codes, then assigns a UUID; rejected documents return error codes. B2C e-receipts carry a QR code for verification. This is stricter than post-audit reporting — the tax authority sees and approves each document in real time.' },
+  { q: 'What happens if I don\'t comply?', a: 'Three real consequences. (1) Costs and VAT input credit are recognized only when backed by a valid ETA-cleared e-invoice — paper invoices after April 2023 are not a valid basis for deduction. (2) Non-compliant firms can be barred from dealing with government bodies and public tenders, and face import/export restrictions. (3) Penalties under Law 206/2020 (Article 71) range from EGP 20,000 to EGP 100,000 for failures to register or issue e-documents, with a tiered late-reporting escalation. Records must be kept at least 5 years.' },
+  { q: 'What format and what\'s the legal basis?', a: 'Documents are structured JSON or XML (not PDF) per the ETA schema, with a UUID, a cryptographic hash, and a mandatory electronic signature via an approved certificate (HSM or USB token). Products are coded using GS1 (GTIN/GPC) or national EGS codes. The legal basis is the Unified Tax Procedures Law No. 206 of 2020 (Article 71 sets the fines), its Executive Regulations (Decree No. 286 of 2021), and the VAT Law No. 67 of 2016, administered by the Egyptian Tax Authority (ETA) under the Ministry of Finance.' },
+  { q: 'Does my accounting software need to be ETA-native?', a: 'It must reach the ETA somehow — and the deadline has passed. Egyptian-native tools (Daftra, Edara, AccFlex) and construction ERPs (DoubleClick, Voko) submit to the ETA directly, and Odoo has a native Egyptian localization. Global tools like QuickBooks and Zoho Books are NOT ETA-native — they need a connector or middleware (QuiXcel/Apps Valley, OrchidaTax). The right question for any vendor: "Do you clear documents through the ETA directly, or which connector do I need?"' },
+  { q: 'What\'s the wider Egyptian tax context — and the FX angle?', a: 'Standard VAT is 14% and corporate income tax is generally 22.5%. One Egypt-specific consideration: the pound is volatile and un-pegged, so USD-billed foreign SaaS (Daftra and Zoho both price in USD; QuickBooks bills on a foreign card) carries real FX risk for an EGP-earning business — which is a practical argument for locally-priced Egyptian vendors where they meet your needs.' },
+];
+
+const pageTitle = 'ETA E-Invoicing in Egypt — 2026 Guide for Contractors';
+const pageDescription = 'Egypt\'s ETA e-invoicing explained for the building trades: the verified legal basis, the real-time clearance model, who must comply (now down to EGP 250k turnover — small businesses by 31 March 2026), why only cleared invoices are tax-deductible, and which tools are ETA-integrated (incl. مستخلصات). Live and enforced since April 2023. Independent, verified June 2026.';
+
+const guideUrl = new URL('/eg/guides/eta-e-invoicing/', Astro.site).toString();
+const arUrl = new URL('/eg/ar/guides/eta-e-invoicing/', Astro.site).toString();
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Egypt', url: '/eg/' },
+  { name: 'ETA e-invoicing for contractors', url: '/eg/guides/eta-e-invoicing/' },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org', '@type': 'Article', headline: pageTitle, description: pageDescription,
+  datePublished: '2026-06-20', dateModified: '2026-06-20', inLanguage: 'en',
+  author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
+  publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
+  mainEntityOfPage: guideUrl,
+};
+const faqSchema = {
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} alternateUrls={[{ hreflang: 'en', href: guideUrl }, { hreflang: 'ar', href: arUrl }, { hreflang: 'x-default', href: guideUrl }]}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-8">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">🇪🇬 Egypt · Compliance guide</p>
+        <a href="/eg/ar/guides/eta-e-invoicing/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">العربية</a>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+        ETA E-Invoicing in Egypt
+      </h1>
+      <p class="mt-3 text-lg text-slate-600 leading-relaxed">
+        What Egypt's national e-invoicing means for the building trades — it is live and enforced, and now reaching small businesses. The clearance model, who must comply, the real consequences, and which tools are actually ETA-integrated (including مستخلصات).
+      </p>
+      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published &amp; verified June 2026 · Not tax advice — confirm your situation with the ETA (eta.gov.eg) or your accountant.</p>
+    </header>
+
+    <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ The short version</h2>
+      <p class="text-slate-800 leading-relaxed">
+        Egypt's <strong>ETA e-invoicing</strong> is <strong>live and enforced</strong>. The full B2B mandate has applied to <strong>all VAT-registered businesses since April 2023</strong> (paper invoices invalid for deduction since ~July 2023), under a real-time <strong>clearance</strong> model — each document validated by the Tax Authority <em>before</em> issuance (JSON/XML, UUID, mandatory e-signature). Under Resolution 281/2025 the threshold was halved to <strong>EGP 250,000</strong>, so even small businesses must register — by <strong>31 March 2026</strong>. The teeth: only cleared invoices allow VAT/cost deduction, non-compliance bars you from government work, and fines run <strong>EGP 20,000–100,000</strong>. The task: make sure your tool clears to the ETA — directly or via a connector.
+      </p>
+    </section>
+
+    <section class="mb-10 grid gap-3 sm:grid-cols-3">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">Apr 2023</div>
+        <div class="mt-1 text-xs text-slate-600">full B2B mandate — all VAT-registered</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">31 Mar 2026</div>
+        <div class="mt-1 text-xs text-slate-600">small businesses (EGP 250k threshold)</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">Clearance</div>
+        <div class="mt-1 text-xs text-slate-600">validated before issue · UUID + e-sign</div>
+      </div>
+    </section>
+
+    <section class="mb-10 prose prose-slate max-w-none">
+      <h2>The timeline</h2>
+      <ul>
+        <li><strong>15 Nov 2020</strong> — pilot: 134 large companies.</li>
+        <li><strong>Feb–May 2021</strong> — waves extending to the Large Taxpayers Center.</li>
+        <li><strong>1 Jul 2021</strong> — mandatory for sales to government / public sector (B2G).</li>
+        <li><strong>April 2023</strong> — <strong>full mandate: ALL VAT-registered businesses must issue e-invoices.</strong></li>
+        <li><strong>~Jul 2023</strong> — paper VAT invoices declared invalid for input tax / deductibility.</li>
+        <li><strong>2022 → Jan 2025</strong> — the parallel B2C e-receipt system rolled out in successive taxpayer waves.</li>
+        <li><strong>Resolution 281/2025 → 31 Mar 2026</strong> — VAT-registration threshold halved to EGP 250,000; small businesses must register.</li>
+      </ul>
+
+      <h2>What the system requires</h2>
+      <ul>
+        <li><strong>Clearance, not reporting.</strong> Each document is transmitted to the ETA and validated <em>before</em> it is issued; without clearance and the assigned UUID, it isn't valid.</li>
+        <li><strong>Structured format + e-signature.</strong> JSON or XML per the ETA schema, with a UUID, a cryptographic hash, and a mandatory electronic signature (HSM or USB token).</li>
+        <li><strong>Product coding.</strong> GS1 (GTIN/GPC) or national EGS codes; B2C e-receipts carry a QR code.</li>
+        <li><strong>Integration path.</strong> ETA API + SDK for larger firms, or a free web portal/desktop app for small ones — plus the connector ecosystem (OrchidaTax, QuiXcel) for global tools.</li>
+        <li><strong>Everyone in scope.</strong> All VAT-registered persons/entities — now including small businesses below the old threshold.</li>
+      </ul>
+
+      <h2>Why this matters for contractors specifically</h2>
+      <p>
+        The consequences land hardest on contractors. <strong>Only ETA-cleared invoices are tax-deductible</strong>, so your subcontractors' and suppliers' invoices must be cleared for you to claim them — and yours for your clients. More directly, <strong>non-compliance bars you from government tenders</strong> (most of Egypt's pipeline). And there's a uniquely Egyptian wrinkle: the standout local tools are the ERPs that submit <strong>مستخلصات (payment certificates)</strong> straight to the ETA (<a href="/eg/doubleclick-erp/">DoubleClick</a>, <a href="/eg/voko-erp/">Voko</a>) — most horizontal accounting tools don't model مستخلصات at all. Pair that with the <strong>volatile pound</strong>: USD-billed foreign SaaS carries FX risk, so a locally-priced Egyptian tool that handles ETA <em>and</em> مستخلصات is often the rational pick.
+      </p>
+
+      <h2>The wider Egyptian tax context</h2>
+      <ul>
+        <li><strong>VAT:</strong> standard <strong>14%</strong> (5% reduced in some cases; exports zero-rated).</li>
+        <li><strong>Corporate income tax:</strong> generally <strong>22.5%</strong> (higher for oil/Suez Canal/Central Bank).</li>
+        <li><strong>The FX angle:</strong> the EGP is volatile and un-pegged, so USD-billed tools carry real currency risk for an EGP business.</li>
+      </ul>
+
+      <h2>Which tools are ETA-integrated?</h2>
+      <p>
+        From the software in our <a href="/eg/">Egypt directory</a>, here's how the tools relate to the ETA. Native Egyptian tools clear directly; global tools need a connector. Always confirm current status with the vendor.
+      </p>
+    </section>
+
+    <section class="mb-10 overflow-x-auto">
+      <table class="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
+        <thead class="bg-slate-50 text-left text-slate-700">
+          <tr>
+            <th class="p-3 font-semibold">Tool</th>
+            <th class="p-3 font-semibold">ETA status</th>
+            <th class="p-3 font-semibold">Best fit</th>
+            <th class="p-3 font-semibold">Pricing</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          {tools.map((t) => (
+            <tr>
+              <td class="p-3 font-semibold text-slate-900"><a href={t.href} class="hover:text-orange-600">{t.name}</a></td>
+              <td class="p-3 text-slate-700">{t.status}</td>
+              <td class="p-3 text-slate-600">{t.fit}</td>
+              <td class="p-3 text-slate-600">{t.note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="mt-3 text-xs text-slate-500">ETA status reflects vendor positioning/capability as of June 2026 — confirm current ETA accreditation directly with each vendor.</p>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">The one question to ask any vendor</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        Don't assume a good accounting tool clears to the ETA — and if you're a contractor, ask about مستخلصات too. Ask: <strong>"Do you clear documents through the ETA directly, do you handle مستخلصات, and do you price in EGP or USD?"</strong> A vague answer is your signal. If you're on a global tool like QuickBooks or Zoho, plan for a connector (QuiXcel, OrchidaTax).
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Frequently asked questions</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
+      <strong class="text-slate-700">Sources &amp; verification:</strong> Verified June 2026 from PwC, Sovos, VATupdate, EDICOM, SNI and Comarch, cross-checked against the ETA. Legal basis: Unified Tax Procedures Law No. 206 of 2020 (Art. 71), Executive Regulations Decree No. 286 of 2021, VAT Law No. 67 of 2016. Real-time clearance/CTC, JSON/XML + UUID + mandatory e-signature, full B2B mandate April 2023, paper invalidity ~July 2023, penalty range EGP 20,000–100,000, and the Resolution 281/2025 threshold cut (EGP 250k, small-business deadline 31 March 2026) are verified. VAT 14% and CIT 22.5% per PwC. The exact 2026 penalty-tier amounts are not stated here as they could not be confirmed against the current Arabic decree. General information, not tax advice. Spotted an error? <a href="/contact/" class="underline">Tell us</a> and we'll correct it.
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Compare Egyptian trades software & services</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">Independent reviews of ETA-ready Egyptian software, tender access, social-insurance payroll and Contractors All Risks insurance — with no pay-to-play.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/eg/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">🇪🇬 Egypt directory →</a>
+        <a href="/eg/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Compare vendors</a>
+        <a href="/for-vendors/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Are you a vendor? Work with us</a>
+      </div>
+    </section>
+  </article>
+</Layout>

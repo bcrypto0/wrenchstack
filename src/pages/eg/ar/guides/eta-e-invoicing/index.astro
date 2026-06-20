@@ -1,0 +1,180 @@
+---
+import Layout from '../../../../../layouts/Layout.astro';
+
+const tools = [
+  { name: 'Daftra', status: 'تكامل أصلي مع الضرائب (توقيع، GS1، ضريبة ١٤٪)', fit: 'منشآت محاسبة/فوترة مصرية', note: 'من ٢٠$ شهرياً', href: '/eg/daftra/' },
+  { name: 'AccFlex', status: 'تكامل أصلي + إصدار مقاولات بالمستخلصات', fit: 'منشآت ومنها المقاولون', note: 'من ~٢٧٩$ شهرياً', href: '/eg/accflex-erp/' },
+  { name: 'DoubleClick ERP', status: 'إرسال مباشر للمستخلصات إلى الضرائب', fit: 'مقاولون (المكتب الفني ← المالية)', note: 'حسب الطلب', href: '/eg/doubleclick-erp/' },
+  { name: 'Voko ERP', status: 'وحدة فاتورة إلكترونية مدمجة + مستخلصات', fit: 'مقاولون', note: 'حسب الطلب', href: '/eg/voko-erp/' },
+  { name: 'Edara', status: 'مساعدة عملية في الربط مع الضرائب', fit: 'منشآت/تجزئة', note: 'حسب الطلب', href: '/eg/edara-erp/' },
+  { name: 'Odoo', status: 'توطين مصري أصلي (API، GS1، توقيع USB) عبر شركاء', fit: 'نظام موارد كامل', note: 'اشتراك + تطبيق', href: '/eg/odoo/' },
+  { name: 'OrchidaTax', status: 'وسيط للضرائب يربط SAP/Oracle/Dynamics/Odoo', fit: 'أبقِ نظامك وأضف الامتثال', note: 'حسب الطلب', href: '/eg/orchidatax/' },
+  { name: 'QuickBooks / Zoho', status: 'غير أصلية — تتطلّب موصّلاً (QuiXcel، OrchidaTax)', fit: 'منشآت تستخدم هذه الأنظمة', note: 'الموصّل بسعر منفصل', href: '/eg/quickbooks/' },
+];
+
+const faqs = [
+  { q: 'هل الفاتورة الإلكترونية إلزامية الآن — ولمن؟', a: 'نعم، وهي مطبّقة. سرى الإلزام الكامل بين الشركات في أبريل ٢٠٢٣ على كل المسجّلين في ضريبة القيمة المضافة، وأصبحت الفواتير الورقية غير مقبولة للخصم منذ نحو يوليو ٢٠٢٣. وبموجب القرار ٢٨١/٢٠٢٥ خُفِّض حدّ التسجيل إلى ٢٥٠ ألف جنيه، فصارت حتى المنشآت الصغيرة مشمولة بموعد تسجيل ٣١ مارس ٢٠٢٦. أما معاملات المستهلك فيغطيها نظام الإيصال الإلكتروني الموازي.' },
+  { q: 'ما هو نموذج «التخليص»؟', a: 'تعتمد مصر نموذج تخليص لحظي (رقابة مستمرة على المعاملات): تُرسَل كل وثيقة إلى مصلحة الضرائب وتُعتمَد قبل إصدارها للمتلقّي. تتحقّق المصلحة من البنية والحساب الضريبي والختم وأكواد الأصناف، ثم تمنح معرّفاً فريداً (UUID)، وتُعيد الوثائق المرفوضة أكواد أخطاء. وتحمل الإيصالات الإلكترونية رمز QR للتحقق. وهذا أكثر صرامة من الإبلاغ اللاحق.' },
+  { q: 'ماذا يحدث إن لم ألتزم؟', a: 'ثلاث نتائج حقيقية: (١) لا تُعترَف بالتكاليف وخصم ضريبة المدخلات إلا بفاتورة إلكترونية مخلّصة — والورقية بعد أبريل ٢٠٢٣ ليست أساساً صالحاً للخصم. (٢) قد تُمنَع المنشأة غير الملتزمة من التعامل مع الجهات الحكومية والمناقصات. (٣) غرامات بموجب قانون ٢٠٦/٢٠٢٠ (المادة ٧١) تتراوح بين ٢٠ ألف و١٠٠ ألف جنيه، مع تصعيد متدرّج للتأخير. وتُحفظ السجلات ٥ سنوات على الأقل.' },
+  { q: 'ما الصيغة وما الأساس القانوني؟', a: 'الوثائق بصيغة JSON أو XML (لا PDF) وفق مخطط المصلحة، مع معرّف فريد، وبصمة تشفيرية، وتوقيع إلكتروني إلزامي عبر شهادة معتمدة (HSM أو توكن USB). وتُرمَّز الأصناف بأكواد GS1 أو الأكواد المصرية EGS. والأساس القانوني هو قانون الإجراءات الضريبية الموحّد رقم ٢٠٦ لسنة ٢٠٢٠ (المادة ٧١ للغرامات)، ولائحته التنفيذية (قرار ٢٨٦ لسنة ٢٠٢١)، وقانون ضريبة القيمة المضافة ٦٧ لسنة ٢٠١٦، وتديره مصلحة الضرائب المصرية تحت وزارة المالية.' },
+  { q: 'هل يجب أن يكون برنامجي متكاملاً أصلاً مع الضرائب؟', a: 'يجب أن يصل إلى المصلحة بطريقة ما، والموعد قد مضى. الأدوات المصرية (دفترة، إدارة، أكفليكس) وأنظمة المقاولات (دابل كليك، فوكو) ترسل مباشرة، وأودو له توطين مصري أصلي. أما الأدوات العالمية مثل QuickBooks وZoho فليست أصلية — وتحتاج موصّلاً (QuiXcel من Apps Valley، أو OrchidaTax). والسؤال الصحيح: «هل تُخلّص الوثائق عبر مصلحة الضرائب مباشرة، أم أي موصّل أحتاج؟»' },
+  { q: 'ما السياق الضريبي الأوسع — وزاوية سعر الصرف؟', a: 'ضريبة القيمة المضافة ١٤٪ وضريبة دخل الشركات ٢٢٫٥٪ عموماً. واعتبار مصري خاص: الجنيه متقلّب وغير مربوط، فالبرامج الأجنبية المسعّرة بالدولار (دفترة وZoho بالدولار، وQuickBooks على بطاقة أجنبية) تحمل مخاطر صرف حقيقية على منشأة تكسب بالجنيه — وهي حجة عملية لصالح الموردين المحليين حيث يلبّون حاجتك.' },
+];
+
+const pageTitle = 'الفاتورة الإلكترونية (ETA) في مصر — دليل ٢٠٢٦ للمقاولين';
+const pageDescription = 'شرح منظومة الفاتورة الإلكترونية المصرية للبناء والمقاولات: الأساس القانوني، ونموذج التخليص اللحظي، ومن يلتزم (حتى ٢٥٠ ألف جنيه — المنشآت الصغيرة بحلول ٣١ مارس ٢٠٢٦)، ولماذا تُقبل الفواتير المخلّصة فقط للخصم، وأي الأنظمة متكاملة (بما فيها المستخلصات). فعّالة وإلزامية منذ أبريل ٢٠٢٣.';
+
+const enUrl = new URL('/eg/guides/eta-e-invoicing/', Astro.site).toString();
+const arUrl = new URL('/eg/ar/guides/eta-e-invoicing/', Astro.site).toString();
+
+const articleSchema = {
+  '@context': 'https://schema.org', '@type': 'Article', headline: pageTitle, description: pageDescription,
+  datePublished: '2026-06-20', dateModified: '2026-06-20', inLanguage: 'ar',
+  author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
+  publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
+  mainEntityOfPage: arUrl,
+};
+const faqSchema = {
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} lang="ar" dir="rtl" alternateUrls={[{ hreflang: 'en', href: enUrl }, { hreflang: 'ar', href: arUrl }, { hreflang: 'x-default', href: enUrl }]}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-8">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">🇪🇬 مصر · دليل امتثال</p>
+        <a href="/eg/guides/eta-e-invoicing/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">English</a>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+        الفاتورة الإلكترونية (ETA) في مصر
+      </h1>
+      <p class="mt-3 text-lg text-slate-600 leading-relaxed">
+        ماذا تعني منظومة الفاتورة الإلكترونية الوطنية للبناء والمقاولات — فهي فعّالة وإلزامية، وباتت تصل إلى المنشآت الصغيرة. نموذج التخليص، ومن يلتزم، والعواقب الحقيقية، وأي الأنظمة متكاملة فعلاً (بما فيها المستخلصات).
+      </p>
+      <p class="mt-3 text-sm text-slate-500">إعداد WrenchStack Research · نُشر وتُحقّق منه في يونيو ٢٠٢٦ · ليس استشارة ضريبية — تحقّق من وضعك مع المصلحة (eta.gov.eg) أو محاسبك.</p>
+    </header>
+
+    <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ باختصار</h2>
+      <p class="text-slate-800 leading-relaxed">
+        منظومة <strong>الفاتورة الإلكترونية</strong> في مصر <strong>فعّالة وإلزامية</strong>. سرى الإلزام الكامل بين الشركات على <strong>كل المسجّلين في ضريبة القيمة المضافة منذ أبريل ٢٠٢٣</strong> (والورقية غير مقبولة للخصم منذ نحو يوليو ٢٠٢٣)، بنموذج <strong>تخليص لحظي</strong> — تُعتمَد كل وثيقة قبل إصدارها (JSON/XML، معرّف فريد، توقيع إلكتروني إلزامي). وبموجب القرار ٢٨١/٢٠٢٥ خُفِّض الحدّ إلى <strong>٢٥٠ ألف جنيه</strong>، فصارت المنشآت الصغيرة ملزمة — بحلول <strong>٣١ مارس ٢٠٢٦</strong>. والعقوبات حقيقية: الفواتير المخلّصة وحدها تتيح الخصم، وعدم الامتثال يمنعك من الأعمال الحكومية، والغرامات تتراوح بين <strong>٢٠ ألف و١٠٠ ألف جنيه</strong>. والمهمة: تأكّد أن أداتك تُخلّص إلى المصلحة — مباشرة أو عبر موصّل.
+      </p>
+    </section>
+
+    <section class="mb-10 grid gap-3 sm:grid-cols-3">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">أبريل ٢٠٢٣</div>
+        <div class="mt-1 text-xs text-slate-600">الإلزام الكامل — كل المسجّلين بالضريبة</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">٣١ مارس ٢٠٢٦</div>
+        <div class="mt-1 text-xs text-slate-600">المنشآت الصغيرة (حدّ ٢٥٠ ألف جنيه)</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">تخليص</div>
+        <div class="mt-1 text-xs text-slate-600">اعتماد قبل الإصدار · معرّف + توقيع</div>
+      </div>
+    </section>
+
+    <section class="mb-10 prose prose-slate max-w-none">
+      <h2>الجدول الزمني</h2>
+      <ul>
+        <li><strong>١٥ نوفمبر ٢٠٢٠</strong> — تجربة: ١٣٤ شركة كبرى.</li>
+        <li><strong>فبراير–مايو ٢٠٢١</strong> — موجات توسّع لكبار الممولين.</li>
+        <li><strong>١ يوليو ٢٠٢١</strong> — إلزامية للبيع للجهات الحكومية (B2G).</li>
+        <li><strong>أبريل ٢٠٢٣</strong> — <strong>الإلزام الكامل: على كل المسجّلين في ضريبة القيمة المضافة إصدار الفاتورة الإلكترونية.</strong></li>
+        <li><strong>~يوليو ٢٠٢٣</strong> — الفواتير الورقية غير مقبولة للخصم الضريبي.</li>
+        <li><strong>٢٠٢٢ ← يناير ٢٠٢٥</strong> — انتشار نظام الإيصال الإلكتروني (B2C) على موجات متتالية.</li>
+        <li><strong>القرار ٢٨١/٢٠٢٥ ← ٣١ مارس ٢٠٢٦</strong> — خفض حدّ التسجيل إلى ٢٥٠ ألف جنيه؛ المنشآت الصغيرة ملزمة بالتسجيل.</li>
+      </ul>
+
+      <h2>ما يتطلّبه النظام</h2>
+      <ul>
+        <li><strong>تخليص، لا إبلاغ.</strong> تُرسَل كل وثيقة وتُعتمَد قبل إصدارها؛ ودون التخليص والمعرّف الفريد لا تكون صحيحة.</li>
+        <li><strong>صيغة مهيكلة وتوقيع.</strong> JSON أو XML وفق مخطط المصلحة، بمعرّف فريد وبصمة تشفيرية وتوقيع إلكتروني إلزامي (HSM أو توكن USB).</li>
+        <li><strong>ترميز الأصناف.</strong> أكواد GS1 أو الأكواد المصرية EGS؛ وتحمل الإيصالات رمز QR.</li>
+        <li><strong>مسار التكامل.</strong> واجهة برمجية + SDK للكبار، أو بوابة/تطبيق مجاني للصغار — إضافة إلى منظومة الموصّلات (OrchidaTax، QuiXcel) للأدوات العالمية.</li>
+        <li><strong>الجميع مشمول.</strong> كل المسجّلين في الضريبة — والآن المنشآت الصغيرة دون الحدّ القديم.</li>
+      </ul>
+
+      <h2>لماذا يهمّ هذا المقاولين تحديداً</h2>
+      <p>
+        تقع العواقب أثقل على المقاولين. <strong>الفواتير المخلّصة فقط قابلة للخصم</strong>، فيجب أن تُخلَّص فواتير مقاولي الباطن والموردين كي تخصمها، وفواتيرك كي يخصمها عملاؤك. والأهم، <strong>عدم الامتثال يمنعك من المناقصات الحكومية</strong> (معظم السوق المصري). وهناك خصوصية مصرية: أبرز الأدوات المحلية هي أنظمة الموارد التي ترسل <strong>المستخلصات</strong> مباشرة إلى المصلحة (<a href="/eg/doubleclick-erp/">دابل كليك</a>، <a href="/eg/voko-erp/">فوكو</a>) — ومعظم أدوات المحاسبة الأفقية لا تتعامل مع المستخلصات أصلاً. أضف <strong>الجنيه المتقلّب</strong>: فالبرامج الأجنبية المسعّرة بالدولار تحمل مخاطر صرف، فأداة مصرية محلية تعالج الضرائب <em>والمستخلصات</em> غالباً هي الخيار الرشيد.
+      </p>
+
+      <h2>السياق الضريبي الأوسع</h2>
+      <ul>
+        <li><strong>ضريبة القيمة المضافة:</strong> <strong>١٤٪</strong> (٥٪ مخفّضة أحياناً؛ الصادرات صفرية).</li>
+        <li><strong>ضريبة دخل الشركات:</strong> <strong>٢٢٫٥٪</strong> عموماً (أعلى للبترول/قناة السويس/البنك المركزي).</li>
+        <li><strong>زاوية الصرف:</strong> الجنيه متقلّب وغير مربوط، فالأدوات المسعّرة بالدولار تحمل مخاطر عملة على منشأة بالجنيه.</li>
+      </ul>
+
+      <h2>أي الأنظمة متكاملة مع الضرائب؟</h2>
+      <p>
+        من البرامج في <a href="/eg/ar/">دليل مصر</a>، إليك علاقتها بالمصلحة. الأدوات المصرية تُخلّص مباشرة؛ والأدوات العالمية تحتاج موصّلاً. تحقّق دائماً من الحالة الحالية مع المزوّد.
+      </p>
+    </section>
+
+    <section class="mb-10 overflow-x-auto">
+      <table class="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
+        <thead class="bg-slate-50 text-right text-slate-700">
+          <tr>
+            <th class="p-3 font-semibold">الأداة</th>
+            <th class="p-3 font-semibold">الحالة مع الضرائب</th>
+            <th class="p-3 font-semibold">الأنسب لـ</th>
+            <th class="p-3 font-semibold">السعر</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          {tools.map((t) => (
+            <tr>
+              <td class="p-3 font-semibold text-slate-900"><a href={t.href} class="hover:text-orange-600">{t.name}</a></td>
+              <td class="p-3 text-slate-700">{t.status}</td>
+              <td class="p-3 text-slate-600">{t.fit}</td>
+              <td class="p-3 text-slate-600">{t.note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="mt-3 text-xs text-slate-500">تعكس الحالة موقع المزوّد وقدرته حتى يونيو ٢٠٢٦ — تحقّق من الاعتماد الحالي مباشرة قبل الاعتماد عليه.</p>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">السؤال الواحد لأي مزوّد</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        لا تفترض أن أداة محاسبية جيدة تُخلّص إلى المصلحة — وإن كنت مقاولاً، اسأل عن المستخلصات أيضاً. اسأل: <strong>«هل تُخلّص الوثائق عبر المصلحة مباشرة، وهل تعالج المستخلصات، وهل تُسعّر بالجنيه أم بالدولار؟»</strong> الإجابة المبهمة إشارة. وإن كنت على أداة عالمية كـ QuickBooks أو Zoho، فخطّط لموصّل (QuiXcel، OrchidaTax).
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">الأسئلة الشائعة</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
+      <strong class="text-slate-700">المصادر والتحقّق:</strong> تُحقّق منه في يونيو ٢٠٢٦ من PwC وSovos وVATupdate وEDICOM وSNI وComarch، بمقابلته مع المصلحة. الأساس القانوني: قانون الإجراءات الضريبية الموحّد رقم ٢٠٦ لسنة ٢٠٢٠ (المادة ٧١)، واللائحة التنفيذية قرار ٢٨٦ لسنة ٢٠٢١، وقانون ضريبة القيمة المضافة ٦٧ لسنة ٢٠١٦. نموذج التخليص اللحظي وJSON/XML والمعرّف الفريد والتوقيع الإلكتروني الإلزامي والإلزام الكامل أبريل ٢٠٢٣ وبطلان الورقي ~يوليو ٢٠٢٣ ونطاق الغرامة ٢٠–١٠٠ ألف جنيه وخفض الحدّ بالقرار ٢٨١/٢٠٢٥ (٢٥٠ ألف جنيه، موعد المنشآت الصغيرة ٣١ مارس ٢٠٢٦) — جميعها مُتحقَّق منها. ضريبة القيمة المضافة ١٤٪ ودخل الشركات ٢٢٫٥٪ بحسب PwC. مبالغ شرائح غرامات ٢٠٢٦ غير مذكورة هنا لعدم تأكيدها بعد. معلومات عامة وليست استشارة ضريبية. لاحظت خطأً؟ <a href="/contact/" class="underline">أخبرنا</a> وسنصحّحه.
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">قارن برامج وخدمات المقاولات في مصر</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">مراجعات مستقلة لبرامج مصرية جاهزة للفاتورة الإلكترونية، والوصول إلى المناقصات، ورواتب التأمينات، وتأمين كل أخطار المقاولين — دون مقابل مدفوع.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/eg/ar/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">🇪🇬 دليل مصر ←</a>
+        <a href="/eg/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">قارن المزوّدين</a>
+        <a href="/for-vendors/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">هل أنت مزوّد؟ اعمل معنا</a>
+      </div>
+    </section>
+  </article>
+</Layout>

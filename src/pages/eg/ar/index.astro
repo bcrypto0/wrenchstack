@@ -1,0 +1,153 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import egData from '../../../data/international/eg.json';
+
+interface EgVendor {
+  slug: string; name: string; category: string; vendor_url: string;
+  tagline: string; tier: 'S' | 'A' | 'F';
+  is_cross_market: boolean;
+}
+const vendors = (egData as { vendors: EgVendor[] }).vendors;
+
+// Concise Arabic positioning per vendor (the detailed reviews remain in English for now).
+const ar: Record<string, string> = {
+  'daftra': 'نظام محاسبة وفوترة سحابي مصري الأصل، متكامل بالكامل مع منظومة الفاتورة الإلكترونية — تسعير بالدولار (مخاطر صرف).',
+  'edara-erp': 'نظام موارد سحابي مصري (محاسبة، نقاط بيع، مخزون) مع مساعدة عملية في الربط مع مصلحة الضرائب.',
+  'accflex-erp': 'نظام موارد مصري بإصدارات قطاعية (منها المقاولات بالمستخلصات)، معتمد للفاتورة الإلكترونية ETA.',
+  'wafeq': 'محاسبة سحابية حديثة بواجهة عربية وعملة بالجنيه، مع إرسال موقّع إلى مصلحة الضرائب (تسعير بالدولار).',
+  'doubleclick-erp': 'نظام مقاولات مصري يربط المكتب الفني بالمالية، مع نافذة إرسال مباشر للمستخلصات والفواتير إلى الضرائب.',
+  'voko-erp': 'نظام مقاولات مصري مع وحدة فاتورة إلكترونية، ومستخلصات ومقايسات وتنبؤ موازنات بالذكاء الاصطناعي.',
+  'namasoft': 'نظام موارد مصري عريق (نحو ٧٠٠ عميل) بوحدة مقاولات وعقارات — تأكّد من دعم الفاتورة الإلكترونية قبل الاعتماد.',
+  'oracle-primavera-p6': 'المعيار العالمي لجدولة ومراقبة المشاريع الكبرى — لغة التخطيط المعتمدة لدى كبار المقاولين في مصر.',
+  'rib-candy': 'برنامج حصر وتسعير وتخطيط للمقاولين، باعتماد مصري موثّق (دراسة حالة حسن علام للإنشاءات).',
+  'autodesk-construction-cloud': 'سحابة إدارة الإنشاءات من أوتوديسك — الأنسب للشركات على Revit، عبر شركاء معتمدين في القاهرة.',
+  'planradar': 'أداة توثيق ميداني وحصر ملاحظات للمواقع، بواجهة عربية ومكتب في القاهرة.',
+  'odoo': 'نظام موارد عالمي مفتوح المصدر بتوطين مصري أصلي للفاتورة الإلكترونية، عبر نحو ١٧٨ شريكاً محلياً.',
+  'orchidatax': 'وسيط برمجي مصري يربط أنظمة SAP/Oracle/Dynamics/Odoo بمنظومة الفاتورة الإلكترونية.',
+  'quickbooks': '⚠ محاسبة عالمية لكنها الأضعف لمصر: لا دعم أصلي للفاتورة الإلكترونية، فوترة بالدولار، وبلا عربية.',
+  'egypt-etenders-gov': 'بوابة التعاقدات الحكومية المصرية الرسمية — المصدر الأساسي لمناقصات الأشغال العامة.',
+  'egypttenders-com': 'مُجمِّع تجاري لمناقصات الحكومة المصرية مع تنبيهات بريدية — يعيد بيع بيانات البوابة الرسمية المجانية.',
+  'bnc-network': 'أكبر قاعدة بيانات لمعلومات مشاريع الإنشاءات في المنطقة، بتغطية مخصّصة لمصر (ما قبل المناقصة).',
+  'protenders': 'منصة معلومات ومناقصات إنشائية بتغطية مصرية مؤكدة، مع إدراج مجاني لملف شركتك.',
+  'madeinegypt-com': 'دليل موردين مصري مجاني يضم ٣٠٠+ مصنّع إنشاءات موثّق — لمصادر مواد البناء (وليس المناقصات).',
+  'filkhedma': 'تطبيق الخدمات المنزلية الرائد في مصر (سباكة، كهرباء، تكييف، نجارة) — قناة طلب للحرفيين.',
+  'misr-insurance-egypt': 'عملاق التأمين الحكومي في مصر — المؤمّن الافتراضي للمشاريع القومية الكبرى (تأمين كل أخطار المقاولين).',
+  'allianz-egypt': 'أليانز مصر — أوضح صفحة منتجات هندسية (كل أخطار المقاولين والتركيب) مع خدمات هندسة المخاطر.',
+  'gig-egypt': 'مجموعة الخليج للتأمين – مصر — خط هندسي كامل بعمق إعادة تأمين إقليمي (مع تأمين عشري ومسؤولية).',
+  'suez-canal-insurance-egypt': 'قناة السويس للتأمين — أول مؤمّن خاص في مصر، نشأ من المقاولون العرب؛ الهندسة في حمضه النووي.',
+  'mohandes-insurance-egypt': 'شركة المهندس للتأمين — توجّه هندسي بقائمة تغطيات مفصّلة ومسؤولية مهنية؛ رأسمال أصغر.',
+  'zenhr': 'نظام موارد بشرية ورواتب سحابي مُوطَّن لمصر — ضريبة الدخل، التأمينات الاجتماعية، استمارة ١، نهاية الخدمة.',
+  'menaitech': 'بيت رواتب وموارد بشرية بمكتب في القاهرة (نظام MenaPAY) — تأكّد من تفاصيل التأمينات المصرية في العرض.',
+  'payspace': 'رواتب سحابية موطّنة لمصر (شركة Deel) — ضريبة ودخل وتأمينات وقانون ١٤٨/٢٠١٩ (واجهة عربية غير مؤكدة).',
+  'egybell': 'شركة مصرية في القاهرة لإدارة الرواتب والتأمينات كخدمة مُدارة (وليست برنامجاً ذاتي الخدمة).',
+  'egyptian-federation-construction-building-contractors': 'الاتحاد المصري لمقاولي التشييد (التصنيف) — عضوية وتصنيف إلزاميان للعمل فوق ٥٠ ألف جنيه أو دخول المناقصات.',
+  'egyptian-engineers-syndicate': 'نقابة المهندسين المصرية — التسجيل إلزامي لمزاولة الهندسة، ومطلوب لتصنيف الشركة لدى الاتحاد.',
+  'gafi-commercial-registry-tax-card': 'السجل التجاري والبطاقة الضريبية (الهيئة العامة للاستثمار) — الخطوة القانونية الأولى لتأسيس الشركة.',
+  'egyptian-tax-authority-eta': 'مصلحة الضرائب المصرية — التسجيل الضريبي، ضريبة القيمة المضافة ١٤٪، والفاتورة الإلكترونية الإلزامية.',
+  'national-social-insurance-authority-egypt': 'الهيئة القومية للتأمين الاجتماعي — التسجيل إلزامي لكل عامل من أول يوم (قانون ١٤٨/٢٠١٩).',
+  'new-urban-communities-authority-nuca': 'هيئة المجتمعات العمرانية الجديدة — تراخيص البناء داخل المدن الجديدة (حسب الموقع، وليست رخصة عامة).',
+};
+
+const tierAr: Record<string, string> = { S: 'موصى به', A: 'مقبول', F: 'تنبيه' };
+const cats = [
+  { key: 'software', label: 'برامج المحاسبة والفوترة والإنشاءات', desc: 'سوق غني فعلاً — أدوات محاسبة وفاتورة إلكترونية مصرية قوية (دفترة، إدارة، أكفليكس)، أنظمة مقاولات مصرية بالمستخلصات والفاتورة الإلكترونية (دابل كليك، فوكو)، المعايير العالمية الموثّقة محلياً (بريمافيرا، كاندي، أوتوديسك)، وأودو بتوطين أصلي — مع تنبيه واحد صريح (QuickBooks).' },
+  { key: 'lead-gen', label: 'المناقصات والفرص والخدمات', desc: 'بوابة المناقصات الحكومية الرسمية ومُجمِّع تجاري فوقها، ومعلومات مشاريع إقليمية تغطي مصر (BNC، ProTenders)، ودليل موردين، وتطبيق الخدمات المنزلية الرائد «فيلخدمة». أغنى من معظم أسواق المنطقة، لكن بلا منصة معلومات إنشائية مصرية خالصة.' },
+  { key: 'insurance', label: 'تأمين الإنشاءات — كل أخطار المقاولين', desc: 'تغطية كل أخطار المقاولين والتأمين الهندسي من كبرى شركات مصر (مصر، أليانز مصر، gig، قناة السويس، المهندس). عبر الوسطاء فقط، بإشراف الهيئة العامة للرقابة المالية.' },
+  { key: 'payroll', label: 'الرواتب — التأمينات وضريبة الدخل', desc: 'ZenHR المُوطَّن لمصر، وMenaITech في القاهرة، وPaySpace من Deel، وخدمة EgyBell المُدارة. كل صاحب عمل ملزم بتأمين عماله من أول يوم.' },
+  { key: 'certification', label: 'الامتثال والجهات الرسمية', desc: 'السلسلة القانونية للمقاول المصري — التأسيس (السجل التجاري والبطاقة الضريبية)، الملف الضريبي والفاتورة الإلكترونية، عضوية الاتحاد والتصنيف (بوابة العمل فوق ٥٠ ألف جنيه والمناقصات)، نقابة المهندسين، التأمينات الاجتماعية، وهيئة المجتمعات العمرانية للمدن الجديدة.' },
+];
+
+const enUrl = new URL('/eg/', Astro.site).toString();
+const arUrl = new URL('/eg/ar/', Astro.site).toString();
+const pageTitle = 'دليل برامج المقاولات والإنشاءات في مصر — الفاتورة الإلكترونية';
+const pageDescription = 'دليل مستقل لبرامج المقاولات والإنشاءات في مصر: أنظمة محاسبة وفوترة وإنشاءات متوافقة مع الفاتورة الإلكترونية (بالمستخلصات)، الوصول إلى المناقصات، رواتب التأمينات الاجتماعية، وتأمين كل أخطار المقاولين — مع سياق الامتثال المحلي (الفاتورة الإلكترونية، التصنيف، نقابة المهندسين).';
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  lang="ar"
+  dir="rtl"
+  alternateUrls={[{ hreflang: 'en', href: enUrl }, { hreflang: 'ar', href: arUrl }, { hreflang: 'x-default', href: enUrl }]}
+>
+  <article class="mx-auto max-w-5xl px-4 py-12">
+
+    <div class="mb-6 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl" aria-hidden="true">🇪🇬</span>
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">جمهورية مصر العربية</p>
+      </div>
+      <a href="/eg/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">English</a>
+    </div>
+
+    <header class="mb-10">
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">دليل برامج المقاولات والإنشاءات في مصر</h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        مراجعات مستقلة لـ {vendors.length} منتجاً ذا صلة بالسوق المصري — يهيمن عليها نظام الفاتورة الإلكترونية الإلزامي (ETA) الذي بات يصل إلى المنشآت الصغيرة. أدوات محاسبة وإنشاءات مصرية تعالج المستخلصات والفاتورة الإلكترونية (دفترة، دابل كليك، أكفليكس)، والمعايير العالمية المستخدمة محلياً (بريمافيرا، كاندي، أوتوديسك)، ورواتب التأمينات، وتأمين كل أخطار المقاولين — مع السياق المحلي (ضريبة القيمة المضافة ١٤٪، التصنيف لدى الاتحاد، جنيه متقلّب يرجّح الموردين المحليين، وخطّ مشاريع العاصمة الإدارية) الذي تتجاهله البرامج الأجنبية.
+      </p>
+    </header>
+
+    <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border-2 border-emerald-300 bg-emerald-50 p-5">
+      <div>
+        <p class="text-xs font-bold tracking-wider text-emerald-700">⏰ دليل امتثال · الفاتورة الإلكترونية فعّالة وإلزامية · على المنشآت الصغيرة التسجيل قبل ٣١ مارس ٢٠٢٦</p>
+        <h2 class="mt-1 text-base font-bold text-slate-900">الفاتورة الإلكترونية (ETA) لشركات المقاولات المصرية</h2>
+        <p class="mt-1 text-sm text-slate-700">نموذج التخليص، ومن يلتزم (حتى ٢٥٠ ألف جنيه)، ولماذا تُقبل الفواتير المخلّصة فقط للخصم، وأي الأنظمة متكاملة فعلاً — بما فيها المستخلصات.</p>
+      </div>
+      <a href="/eg/ar/guides/eta-e-invoicing/" class="shrink-0 rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">اقرأ الدليل ←</a>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">ما الذي يميّز اختيار البرامج في مصر</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        يهيمن على اختيار البرامج في مصر عامل واحد: <strong>الفاتورة الإلكترونية فعّالة وإلزامية.</strong> تعتمد مصر نموذج <strong>تخليص لحظي</strong> — تُخلَّص كل فاتورة لدى مصلحة الضرائب قبل إصدارها (JSON/XML، معرّف فريد، وتوقيع رقمي إلزامي) — والإلزام الكامل بين الشركات سارٍ منذ <strong>أبريل ٢٠٢٣</strong>، والفواتير الورقية غير مقبولة للخصم منذ نحو يوليو ٢٠٢٣. وبموجب القرار ٢٨١/٢٠٢٥ خُفِّض حدّ التسجيل إلى <strong>٢٥٠ ألف جنيه</strong>، فصارت حتى المنشآت الصغيرة ملزمة، بموعد تسجيل <strong>٣١ مارس ٢٠٢٦</strong>. والفواتير المخلّصة وحدها تتيح خصم الضريبة، وعدم الامتثال يمنعك من الأعمال الحكومية. والواقع الثاني نقدي: <strong>الجنيه متقلّب وغير مربوط</strong>، فالبرامج الأجنبية المسعّرة بالدولار (دفترة، Zoho، QuickBooks) تحمل مخاطر صرف — ما يمنح <strong>الموردين المحليين المسعّرين بالجنيه أفضلية حقيقية</strong>. والكنوز المحلية النادرة هي أنظمة المقاولات المصرية التي تعالج <strong>المستخلصات</strong> وترسلها مباشرة إلى الضرائب (دابل كليك، فوكو). أضف ضريبة القيمة المضافة <strong>١٤٪</strong>، والتصنيف الإلزامي لدى الاتحاد الذي يفتح العمل فوق ٥٠ ألف جنيه والمناقصات، وخطّ مشاريع تقوده العاصمة الإدارية الجديدة.
+      </p>
+    </section>
+
+    {cats.map((cat) => {
+      const cv = vendors.filter((v) => v.category === cat.key);
+      if (cv.length === 0) return null;
+      return (
+        <section class="mb-12">
+          <div class="mb-5">
+            <h2 class="text-2xl font-bold text-slate-900">{cat.label}</h2>
+            <p class="mt-1 text-sm text-slate-600 leading-relaxed">{cat.desc}</p>
+          </div>
+          <div class="grid gap-3 sm:grid-cols-2">
+            {cv.map((v) => {
+              const isCert = v.category === 'certification';
+              const tierColor = v.tier === 'S' ? 'border-emerald-300' : v.tier === 'F' ? 'border-rose-300' : 'border-blue-300';
+              const tierBadge = v.tier === 'S' ? 'bg-emerald-100 text-emerald-900' : v.tier === 'F' ? 'bg-rose-100 text-rose-900' : 'bg-blue-100 text-blue-900';
+              const label = isCert ? 'جهة رسمية' : tierAr[v.tier];
+              return (
+                <article class={`rounded-lg border-2 ${tierColor} bg-white p-4`}>
+                  <div class="mb-1 flex items-center gap-2 flex-wrap">
+                    <h3 class="text-lg font-bold text-slate-900">{v.name}</h3>
+                    <span class={`rounded-full px-2 py-0.5 text-xs font-bold ${tierBadge}`}>{label}</span>
+                  </div>
+                  <p class="text-sm text-slate-700 leading-relaxed">{ar[v.slug] ?? v.tagline}</p>
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    <a href={`/eg/${v.slug}/`} class="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-700">التفاصيل (بالإنجليزية) ←</a>
+                    <a href={v.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-orange-600">{isCert ? 'الموقع الرسمي' : 'زيارة الموقع'} ←</a>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="mb-10 rounded-lg border border-slate-200 bg-white p-5 text-sm text-slate-600">
+      <p>المراجعات التفصيلية لكل منتج متاحة حالياً <a href="/eg/" class="font-medium text-orange-600 hover:underline">بالإنجليزية</a>، ونعمل على توسيع المحتوى العربي تباعاً.</p>
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">هل أنت مزوّد برامج مصري؟</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">إذا كنت تطوّر برامج للمقاولات أو المحاسبة أو الفاتورة الإلكترونية أو الرواتب للسوق المصري وترغب في المراجعة أو الإدراج، تواصل معنا عبر <a href="/for-vendors/" class="underline">برنامج المزوّدين</a>.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/for-vendors/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">العمل معنا ←</a>
+        <a href="/eg/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">English directory</a>
+      </div>
+    </section>
+  </article>
+</Layout>

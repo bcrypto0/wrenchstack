@@ -1,0 +1,163 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import egData from '../../data/international/eg.json';
+
+interface EgVendor {
+  slug: string; name: string; category: string; vendor_url: string;
+  tagline: string; market_position: string; eg_specific_note?: string | null;
+  tier: 'S' | 'A' | 'F'; reputation_flag: string | null;
+  pros: string[]; cons: string[]; typical_pricing: string;
+  is_cross_market: boolean; cross_market_link: string | null;
+}
+
+const vendors = (egData as { vendors: EgVendor[] }).vendors;
+const categories = ['software', 'lead-gen', 'insurance', 'payroll', 'certification'];
+const categoryMeta: Record<string, { label: string; description: string }> = {
+  'software': { label: 'Accounting / invoicing & construction software', description: 'Egypt has a genuinely rich market — strong native accounting/e-invoice tools (Daftra, Edara, AccFlex), Egyptian construction ERPs that handle مستخلصات + ETA (DoubleClick, Voko, Namasoft), the global standards verified in-country (Primavera P6, RIB Candy, Autodesk), Odoo with native ETA, plus the ETA-connector middleware the mandate created — and one honest cautionary entry (QuickBooks).' },
+  'lead-gen': { label: 'Tenders, project intelligence & home services', description: 'The official government tender portal (etenders.gov.eg) and a commercial aggregator over it, regional project-intelligence covering Egypt (BNC, ProTenders), a materials-supplier directory, and the dominant home-services app FilKhedma. Richer than most MENA markets — but still no Egypt-only construction-intelligence SaaS.' },
+  'insurance': { label: 'Construction insurance — Contractors All Risks', description: 'CAR and engineering cover from Egypt’s major insurers — the state giant Misr, the well-documented Allianz Egypt, GIG Egypt, the construction-DNA Suez Canal Insurance, and the engineering-focused Mohandes. All broker-placed, no online quotes; regulated by the FRA.' },
+  'payroll': { label: 'Payroll — social insurance & income tax', description: 'The Egypt-localized ZenHR, the Cairo-based incumbent MenaITech, the Deel-backed PaySpace, and the managed-service EgyBell. Every Egyptian employer must enrol workers in social insurance (NOSI) from the first hire.' },
+  'certification': { label: 'Compliance & official bodies', description: 'The legal chain an Egyptian contractor must complete — GAFI incorporation (Commercial Register + Tax Card), the ETA tax file + e-invoicing, EFCBC ("Tasheed") membership + classification (the gate to work over EGP 50,000 and public tenders), the Engineers Syndicate, social insurance (NOSI), and — for new-city sites — NUCA.' },
+};
+const vendorsByCategory: Record<string, EgVendor[]> = {};
+categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
+
+const pageTitle = 'Egypt Construction & Trades Software (ETA e-Invoicing) — WrenchStack';
+const pageDescription = `Independent directory of ${vendors.length} vendors for Egypt: ETA-ready accounting/invoicing & construction software (with مستخلصات), tender access, social-insurance payroll, and Contractors All Risks insurance — plus the ETA e-invoicing mandate (live; small businesses must register by 31 March 2026), EFCBC classification and the compliance chain every contractor must handle.`;
+const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Egypt', url: '/eg/' } ];
+const enUrl = new URL('/eg/', Astro.site).toString();
+const arUrl = new URL('/eg/ar/', Astro.site).toString();
+---
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} alternateUrls={[{ hreflang: 'en', href: enUrl }, { hreflang: 'ar', href: arUrl }, { hreflang: 'x-default', href: enUrl }]}>
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <header class="mb-10">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl" aria-hidden="true">🇪🇬</span>
+          <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">Egypt · مصر</p>
+        </div>
+        <a href="/eg/ar/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">العربية</a>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">Egypt Construction & Trades Software Directory</h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Independent reviews of {vendors.length} Egypt-relevant vendors — built around the force that dominates the market: the <strong>ETA</strong> (Egyptian Tax Authority) e-invoicing mandate, now live and reaching small businesses. Egyptian-native accounting and construction tools that handle <span dir="rtl">مستخلصات</span> + ETA (Daftra, DoubleClick, AccFlex), the global standards used in-country (Primavera P6, RIB Candy, Autodesk), social-insurance payroll and Contractors All Risks insurance — with the local context (14% VAT, EFCBC classification, a volatile pound that favours local vendors, the New Administrative Capital pipeline) that off-the-shelf software ignores.
+      </p>
+    </header>
+
+    <section class="mb-10 grid gap-3 grid-cols-2 sm:grid-cols-4">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">{vendors.length}</div>
+        <div class="mt-1 text-xs text-slate-600">vendors reviewed</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">~$45B+</div>
+        <div class="mt-1 text-xs text-slate-600">New Admin Capital pipeline</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">14%</div>
+        <div class="mt-1 text-xs text-slate-600">VAT</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">31 Mar 2026</div>
+        <div class="mt-1 text-xs text-slate-600">ETA small-business deadline</div>
+      </div>
+    </section>
+
+    <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border-2 border-emerald-300 bg-emerald-50 p-5">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">⏰ Compliance guide · ETA e-invoicing LIVE & ENFORCED · small businesses must register by 31 March 2026</p>
+        <h2 class="mt-1 text-base font-bold text-slate-900">ETA e-invoicing (الفاتورة الإلكترونية) for Egyptian contractors</h2>
+        <p class="mt-1 text-sm text-slate-700">The clearance model, who must comply (now down to EGP 250k turnover), why only cleared invoices are tax-deductible, and which tools are actually ETA-integrated — including <span dir="rtl">مستخلصات</span>.</p>
+      </div>
+      <a href="/eg/guides/eta-e-invoicing/" class="shrink-0 rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Read the guide →</a>
+    </section>
+
+    <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
+      <div>
+        <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
+        <p class="mt-1 text-sm text-slate-700">See Egyptian vendors compared side by side — a clear verdict, pros and cons, Egypt-specific notes, and pricing, head to head.</p>
+      </div>
+      <a href="/eg/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare Egyptian vendors →</a>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">What’s different about choosing software in Egypt</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        One thing dominates Egyptian software selection: <strong>ETA e-invoicing is live and enforced.</strong> Egypt runs a real-time <strong>clearance</strong> model — every invoice is validated by the Tax Authority <em>before</em> issuance (JSON/XML, UUID, mandatory digital signature) — and the full B2B mandate has been in force since <strong>April 2023</strong>, with paper invoices invalid for deduction since ~July 2023. Under Resolution 281/2025 the registration threshold was halved to <strong>EGP 250,000</strong>, so even small businesses must be on the system, with a <strong>31 March 2026</strong> registration deadline. Only ETA-cleared invoices allow VAT/cost deduction, and non-compliance bars you from government work. The second reality is monetary: the <strong>Egyptian pound is volatile and un-pegged</strong>, so USD-billed foreign SaaS (Daftra, Zoho, QuickBooks) carries real FX risk — which gives <strong>locally-priced Egyptian vendors a genuine edge</strong>. The hard-to-find local gems are the Egyptian construction ERPs that handle <span dir="rtl">مستخلصات</span> (payment certificates) and submit them straight to the ETA (DoubleClick, Voko). Beyond that: <strong>14% VAT</strong>, the mandatory <strong>EFCBC ("Tasheed") classification</strong> that gates work over EGP 50,000 and public tenders, and a megaproject pipeline led by the New Administrative Capital.
+      </p>
+    </section>
+
+    {categories.map(c => {
+      const cat = categoryMeta[c];
+      const cv = vendorsByCategory[c];
+      if (cv.length === 0) return null;
+      return (
+        <section class="mb-12">
+          <div class="mb-5">
+            <h2 class="text-2xl font-bold text-slate-900">{cat.label}</h2>
+            <p class="mt-1 text-sm text-slate-600 leading-relaxed">{cat.description}</p>
+          </div>
+          <div class="space-y-4">
+            {cv.map(v => {
+              const isCert = v.category === 'certification';
+              const tierColor = v.tier === 'S' ? 'border-emerald-300' : v.tier === 'F' ? 'border-rose-300' : 'border-blue-300';
+              const tierLabel = isCert ? 'Official body / regime' : v.tier === 'S' ? 'Recommended' : v.tier === 'F' ? 'Reputation warning' : 'Workable';
+              const tierBadge = v.tier === 'S' ? 'bg-emerald-100 text-emerald-900' : v.tier === 'F' ? 'bg-rose-100 text-rose-900' : 'bg-blue-100 text-blue-900';
+              return (
+                <article class={`rounded-lg border-2 ${tierColor} bg-white p-5`}>
+                  <div class="mb-3 flex items-start justify-between gap-3">
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-center gap-2 mb-1 flex-wrap">
+                        <h3 class="text-xl font-bold text-slate-900">{v.name}</h3>
+                        <span class={`rounded-full px-2 py-0.5 text-xs font-bold ${tierBadge}`}>{isCert ? tierLabel : `Tier ${v.tier} · ${tierLabel}`}</span>
+                        {v.is_cross_market && (<span class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">Cross-market</span>)}
+                      </div>
+                      <p class="text-sm italic text-slate-500">{v.tagline}</p>
+                    </div>
+                  </div>
+                  <p class="mb-3 text-sm text-slate-700 leading-relaxed">{v.market_position}</p>
+                  {v.reputation_flag && (
+                    <div class="mb-3 rounded-md border-l-4 border-amber-400 bg-amber-50 px-4 py-2">
+                      <p class="text-sm text-amber-900 leading-relaxed"><strong>Heads up:</strong> {v.reputation_flag}</p>
+                    </div>
+                  )}
+                  {v.eg_specific_note && (
+                    <div class="mb-3 rounded-md bg-slate-50 px-4 py-3">
+                      <p class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Egypt-specific note</p>
+                      <p class="text-sm text-slate-700 leading-relaxed">{v.eg_specific_note}</p>
+                    </div>
+                  )}
+                  <div class="mb-3 grid gap-3 sm:grid-cols-2">
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1">{isCert ? 'What it covers' : 'Pros'}</p>
+                      <ul class="space-y-1 text-sm text-slate-700">{v.pros.slice(0, 4).map(p => <li class="leading-snug">+ {p}</li>)}</ul>
+                    </div>
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-rose-700 mb-1">{isCert ? 'Watch out for' : 'Cons'}</p>
+                      <ul class="space-y-1 text-sm text-slate-700">{v.cons.slice(0, 4).map(con => <li class="leading-snug">− {con}</li>)}</ul>
+                    </div>
+                  </div>
+                  <div class="mb-3 text-xs text-slate-600"><strong class="text-slate-900">{isCert ? 'Cost / access:' : 'Typical Egypt pricing:'}</strong> {v.typical_pricing}</div>
+                  <div class="flex flex-wrap gap-2">
+                    <a href={`/eg/${v.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">Full Egypt review →</a>
+                    <a href={v.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600">{isCert ? 'Official site' : `Visit ${v.name}`} →</a>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Are you an Egyptian software vendor?</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">If you build software or services for Egyptian contractors and the building trades and want to be reviewed or featured, get in touch through our <a href="/for-vendors/" class="underline">vendor program</a>.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/for-vendors/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Work with us →</a>
+        <a href="/sa/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">🇸🇦 Saudi directory</a>
+        <a href="/methodology/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Methodology</a>
+      </div>
+    </section>
+  </article>
+</Layout>

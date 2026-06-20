@@ -151,6 +151,14 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     intro: 'Jordanian construction & trades software selection is dominated by one force: the JoFotara national e-invoicing mandate, which is live and enforced — a centralized clearance model run by the Income & Sales Tax Department (ISTD), mandatory for all businesses with no threshold since Phase 2 on 1 April 2025, where only cleared invoices are tax-deductible and non-compliance bars you from public tenders. Add 16% General Sales Tax, mandatory Social Security (SSC) from the first employee, JCCA contractor classification gating public works, and a dinar pegged to the US dollar.',
     certContext: 'The ISTD runs tax (16% GST, income tax) and the mandatory JoFotara e-invoicing clearance platform (live since 1 April 2025, all businesses, UBL 2.1 + QR, only cleared invoices deductible); JCCA working membership plus a contractor classification (Govt Works Regulation 71/1986) is the legal gate to bidding public works; Jordan Engineers Association (JEA) registration is mandatory to practice engineering; companies register at the Companies Control Department (CCD); and every employer must enrol in Social Security (SSC) from the first worker (~21.75% of the insured wage).',
   },
+  eg: {
+    code: 'eg',
+    name: 'Egypt',
+    flag: '🇪🇬',
+    noteField: 'eg_specific_note',
+    intro: 'Egyptian construction & trades software selection is shaped above all by the ETA (Egyptian Tax Authority) e-invoicing mandate — live and enforced (full B2B mandate from April 2023; paper invoices invalid for deduction since ~July 2023), a real-time clearance model where only cleared e-invoices allow VAT/cost deduction, and now reaching small businesses (the VAT-registration threshold was halved to EGP 250,000, with small firms required to register by 31 March 2026). Add a volatile, un-pegged Egyptian pound (which favours local EGP-priced vendors over USD-billed foreign SaaS), 14% VAT, mandatory EFCBC contractor classification, Engineers-Syndicate registration, and a megaproject pipeline led by the New Administrative Capital. B2B runs in Arabic and English.',
+    certContext: 'The ETA runs tax (14% VAT, 22.5% corporate tax) and the mandatory e-invoicing/e-receipt clearance system (JSON/XML, UUID, digital signature — only cleared invoices are deductible, and non-compliance bars government work); EFCBC ("Tasheed") membership and classification (Law 104/1992) is required to take work above EGP 50,000 or bid public tenders; engineers must register with the Egyptian Engineers Syndicate; companies incorporate via GAFI (Commercial Register + Tax Card); employers must enrol every worker in social insurance (NOSI, Law 148/2019); and building in the new cities is permitted through NUCA.',
+  },
 };
 
 export const INTL_CATEGORY_LABELS: Record<string, string> = {

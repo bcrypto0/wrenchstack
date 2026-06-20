@@ -16,6 +16,7 @@ import zaData from '../../data/international/za.json';
 import frData from '../../data/international/fr.json';
 import maData from '../../data/international/ma.json';
 import joData from '../../data/international/jo.json';
+import egData from '../../data/international/eg.json';
 
 interface IntlV { slug: string; name: string; category: string; }
 
@@ -38,6 +39,7 @@ const MARKETS = [
   { code: 'fr', flag: '🇫🇷', label: 'FR', href: '/fr/' },
   { code: 'ma', flag: '🇲🇦', label: 'MA', href: '/ma/' },
   { code: 'jo', flag: '🇯🇴', label: 'JO', href: '/jo/' },
+  { code: 'eg', flag: '🇪🇬', label: 'EG', href: '/eg/' },
 ];
 
 const intlSources: Record<string, IntlV[]> = {
@@ -56,6 +58,7 @@ const intlSources: Record<string, IntlV[]> = {
   fr: (frData as { vendors: IntlV[] }).vendors,
   ma: (maData as { vendors: IntlV[] }).vendors,
   jo: (joData as { vendors: IntlV[] }).vendors,
+  eg: (egData as { vendors: IntlV[] }).vendors,
 };
 
 // Canonical key: market-suffix parentheticals ("Tradify (UK)", "Jobber
@@ -96,7 +99,7 @@ const singleMarket = [...rows.values()].filter(r => MARKETS.filter(m => r.cells[
 const perMarketCounts = MARKETS.map(m => ({ ...m, n: [...rows.values()].filter(r => r.cells[m.code]).length }));
 
 const pageTitle = 'Trades & Construction Software by Country (2026): Availability Matrix';
-const pageDescription = `Which trades and construction software actually operates in which country — ${matrix.length} cross-market platforms mapped across ${MARKETS.length} markets (US, UK, Canada, Australia, NZ, Ireland, the GCC states, South Africa, France, Morocco and Jordan), from WrenchStack's per-country directories. Updated June 2026.`;
+const pageDescription = `Which trades and construction software actually operates in which country — ${matrix.length} cross-market platforms mapped across ${MARKETS.length} markets (US, UK, Canada, Australia, NZ, Ireland, the GCC states, South Africa, France, Morocco, Jordan and Egypt), from WrenchStack's per-country directories. Updated June 2026.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
