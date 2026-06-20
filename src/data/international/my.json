@@ -1,0 +1,862 @@
+{
+  "vendors": [
+    {
+      "slug": "autocount",
+      "name": "AutoCount",
+      "category": "software",
+      "vendor_url": "https://www.autocountsoft.com",
+      "tagline": "All-in-one accounting, POS, payroll & e-Invoice for Malaysian SMEs",
+      "market_position": "One of Malaysia's two dominant SME accounting platforms (alongside SQL). KL-based and Malaysia-native, with 240,000+ businesses and a deep reseller network, in on-premise and cloud editions.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Massive installed base + reseller support",
+        "MyInvois deeply integrated and free",
+        "On-prem + cloud options",
+        "Strong inventory/POS modules"
+      ],
+      "cons": [
+        "Desktop UI feels dated",
+        "Per-user add-on licensing adds cost",
+        "Reseller quality varies",
+        "Less modern than cloud-first rivals"
+      ],
+      "typical_pricing": "~RM1,599–RM2,899 one-off (desktop); extra network user ~RM800; Cloud tiers separate.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "Direct MyInvois/LHDN submission is built in (standard, consolidated and self-billed) via its \"AIP\" platform with a retry mechanism for LHDN downtime — and e-Invoice is included at no extra cost, with native SST handling."
+    },
+    {
+      "slug": "sql-account",
+      "name": "SQL Account",
+      "category": "software",
+      "vendor_url": "https://www.sqlacc.com",
+      "tagline": "Leading accounting & payroll software in Malaysia, LHDN e-Invoice ready",
+      "market_position": "The other half of Malaysia's SME accounting duopoly — very widely deployed and used as a training standard, in on-prem and SQL Cloud editions.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Huge market share + accountant familiarity",
+        "Built-in MyInvois submission",
+        "Strong support/training ecosystem",
+        "Reliable for full-set accounting"
+      ],
+      "cons": [
+        "Interface dated",
+        "Primarily desktop-first",
+        "Mobile/cloud experience trails cloud-natives",
+        "Reseller-dependent support"
+      ],
+      "typical_pricing": "Quote-based via resellers (desktop one-off + SQL Cloud subscription tiers).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "One-click MyInvois submission is built in (XML/JSON to LHDN with a QR validation), once your ERP is registered with MyInvois — with full SST support and Malaysian localization."
+    },
+    {
+      "slug": "financio",
+      "name": "Financio (by ABSS)",
+      "category": "software",
+      "vendor_url": "https://financio.co/my",
+      "tagline": "Cloud accounting built for Malaysian SMEs and non-accountants",
+      "market_position": "The cloud product from ABSS (formerly MYOB South Asia), a long-established Malaysian accounting vendor — aimed at startups and small businesses that want simplicity.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Backed by the established ABSS/MYOB lineage",
+        "Genuinely easy for non-accountants",
+        "Cloud-native",
+        "MyInvois included on paid tiers"
+      ],
+      "cons": [
+        "Lighter feature set than SQL/AutoCount for complex needs",
+        "E-Invoice gated to paid tiers",
+        "Smaller construction/job-costing depth",
+        "Less reseller muscle"
+      ],
+      "typical_pricing": "Subscription tiers (Free / Essentials / Premier).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "Handles MyInvois e-invoicing via API on the Essentials and Premier tiers (generating XML/JSON and submitting to LHDN), and pairs with ABSS desktop for existing users — SST-ready throughout."
+    },
+    {
+      "slug": "bukku",
+      "name": "Bukku",
+      "category": "software",
+      "vendor_url": "https://bukku.my",
+      "tagline": "Cloud accounting with a permanently free LHDN e-Invoice plan",
+      "market_position": "A modern Malaysian cloud-accounting challenger, distributed via UOB Business, that positions on price and free e-invoicing.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Free-forever e-invoice tier (rare)",
+        "Supports both MyInvois and the Peppol network",
+        "Very low cost (<RM2/day)",
+        "Eligible for the SME digitalisation grant"
+      ],
+      "cons": [
+        "Younger/smaller than the incumbents",
+        "Less reseller/training muscle",
+        "Thinner for heavy inventory or construction job-costing",
+        "Smaller brand"
+      ],
+      "typical_pricing": "Free invoicing tier; accounting from <RM2/day (~RM600–700/yr); grant can subsidise 50%.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "A strong MyInvois angle — it integrates both LHDN MyInvois and the Peppol network and markets a permanently free e-invoicing plan, and qualifying SMEs can claim the government 50% / up-to-RM5,000 digitalisation grant."
+    },
+    {
+      "slug": "biztory",
+      "name": "Biztory Cloud Accounting",
+      "category": "software",
+      "vendor_url": "https://biztory.com.my",
+      "tagline": "Cloud accounting & invoicing on the go for Malaysian small business",
+      "market_position": "A Malaysian cloud-accounting SaaS (since 2014) with a budget-friendly, SME/micro focus.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Very affordable entry point",
+        "Cloud/mobile-first",
+        "MyInvois automation",
+        "Recognized by accountants"
+      ],
+      "cons": [
+        "Smaller brand/ecosystem",
+        "Lighter advanced features",
+        "Limited construction-specific tooling",
+        "Modest support scale"
+      ],
+      "typical_pricing": "From ~RM390/year (entry tier).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "Automatic LHDN-compliant MyInvois submission (it consolidates and submits to avoid manual portal entry), with SST handling built in — a low-cost way for a micro-business to get compliant."
+    },
+    {
+      "slug": "sage-ubs-malaysia",
+      "name": "Sage UBS (Sage Malaysia)",
+      "category": "software",
+      "vendor_url": "https://www.sage.com/en-my",
+      "tagline": "Long-running localized accounting (UBS) plus mid-market Sage 300/X3",
+      "market_position": "Sage UBS has been a Malaysian SME staple since 1988 (now also branded Access UBS), while Sage 300/X3 serve larger multi-entity firms needing job costing.",
+      "tier": "A",
+      "reputation_flag": "Sage's direction for the \"UBS\" line has shifted under the Access Group acquisition — confirm the current product/branding and support continuity before relying on the legacy UBS product.",
+      "pros": [
+        "Deep legacy install base + partner network",
+        "Job-costing for contractors (Sage 300/X3)",
+        "Scales from SME (UBS) to mid-market",
+        "SST + e-invoice paths"
+      ],
+      "cons": [
+        "Branding/ownership confusion (Sage UBS vs Access UBS)",
+        "E-invoicing may need a third-party Access Point (e.g. SESAMi)",
+        "Legacy UI",
+        "Enterprise tiers pricey"
+      ],
+      "typical_pricing": "Quote-based (UBS one-off via partners; 300/X3 enterprise quote).",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "my_specific_note": "MyInvois/LHDN compliance is available, with Sage 300 routing e-invoices to LHDN via SESAMi as an Access Point — and the job-costing modules suit construction and multi-department contractors."
+    },
+    {
+      "slug": "hashmicro",
+      "name": "HashMicro",
+      "category": "software",
+      "vendor_url": "https://www.hashmicro.com/my",
+      "tagline": "Cloud ERP for Asia-Pacific SMEs, MyInvois-ready, with a construction module",
+      "market_position": "A Southeast-Asia ERP vendor (Singapore-based, with a strong Malaysia marketing presence) serving retail, manufacturing, construction and services with industry-specific configs and AI automation.",
+      "tier": "A",
+      "reputation_flag": "Self-ranking conflict — HashMicro places ITSELF at #1 in its own \"best ERP / best e-invoicing software\" listicles, which rank prominently in Malaysian search; treat its comparison content as marketing, not independent review.",
+      "pros": [
+        "Broad ERP breadth incl. a construction module",
+        "MyInvois-ready (direct LHDN connection)",
+        "Quick-deploy industry templates",
+        "Aggressive local content/marketing"
+      ],
+      "cons": [
+        "Self-promotional \"best-of\" lists (conflicted)",
+        "Pricing opaque / quote-only",
+        "Implementation can be heavy",
+        "Reviews mixed on customization cost"
+      ],
+      "typical_pricing": "Quote-based (per-module / per-user enterprise quote).",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "my_specific_note": "Markets as fully MyInvois-ready with a direct LHDN connection and SST compliance, and offers a construction/project module — just read its own \"best of\" rankings (where it crowns itself) as marketing, not a neutral review."
+    },
+    {
+      "slug": "buildspace",
+      "name": "BuildSpace (BuildSpace Pro)",
+      "category": "software",
+      "vendor_url": "https://buildspace.my",
+      "tagline": "\"A construction digital solution made by QS for QS\"",
+      "market_position": "A Malaysia-native (since 2016) end-to-end cloud platform for developers, contractors and consultants — BQ, e-tendering, contract management and progress claims. A standout local quantity-surveying tool.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Purpose-built for Malaysian QS/BQ workflow",
+        "Strong tender comparison (no Excel formulae)",
+        "Centralized cost database",
+        "Progress-claim / variation-order management"
+      ],
+      "cons": [
+        "Niche (QS/contractor only, not general accounting)",
+        "Not itself an e-invoice submitter — pairs with accounting software",
+        "Smaller vendor",
+        "Learning curve"
+      ],
+      "typical_pricing": "Quote-based (module/seat-based).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "Directly relevant to the construction e-invoicing reality — it handles the progress-claim certificates and variation orders linked to contract BQ items, exactly the documents construction firms must e-invoice individually under MyInvois. Pair it with an accounting tool for the LHDN submission itself."
+    },
+    {
+      "slug": "cubicost-glodon",
+      "name": "Cubicost by Glodon",
+      "category": "software",
+      "vendor_url": "https://asia.glodon.com",
+      "tagline": "BIM-based 5D quantity takeoff and cost estimating for construction",
+      "market_position": "Glodon's Cubicost suite (TAS/TRB/TBQ/TME) for BIM quantity takeoff and 5D cost management, with a Malaysia entity plus local resellers and documented Malaysian project case studies.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Powerful BIM 5D takeoff (auto-deductions, rebar)",
+        "Local Malaysia entity + resellers",
+        "Proven on Malaysian projects",
+        "Integrates cost + schedule"
+      ],
+      "cons": [
+        "Estimating-only (no e-invoice/accounting)",
+        "Steep learning curve",
+        "Per-module licensing adds up",
+        "China-HQ product (localization depth varies)"
+      ],
+      "typical_pricing": "Quote-based via Malaysian resellers (per-module: TAS/TRB/TBQ).",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "my_specific_note": "Used by Malaysian QS and contractors for BQ and estimating, with Glodon Malaysia providing local sales and support — but it is a takeoff/estimating tool, not an LHDN/MyInvois one, so it pairs with accounting software."
+    },
+    {
+      "slug": "rib-costx",
+      "name": "RIB CostX",
+      "category": "software",
+      "vendor_url": "https://www.rib-software.com/en/rib-costx",
+      "tagline": "2D & BIM takeoff and estimating with live-linked workbooks",
+      "market_position": "A global estimating/QS standard (originally Exactal, now RIB Software), available in Malaysia via reseller and used by QS firms operating in and across the country.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Best-in-class 2D/3D BIM takeoff",
+        "Live-linked estimating workbooks",
+        "Trusted globally by QS",
+        "Widely taught"
+      ],
+      "cons": [
+        "Premium price",
+        "No local e-invoice/SST relevance",
+        "Support is reseller-mediated in Malaysia",
+        "Overkill for small contractors"
+      ],
+      "typical_pricing": "Quote-based (premium; per-license).",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "my_specific_note": "Sold into Malaysia through local resellers for BQ, estimating and tender prep — a strong international QS brand, but not Malaysia-native and not a MyInvois tool, so it's purely the takeoff/estimating layer."
+    },
+    {
+      "slug": "globe3-erp",
+      "name": "Globe3 ERP",
+      "category": "software",
+      "vendor_url": "https://www.globe3.com/my",
+      "tagline": "Cloud ERP with a dedicated construction/project-accounting module",
+      "market_position": "An ERP suite (Singapore-HQ, with a Malaysia office and a localized MY site) with 20+ years' track record, serving construction, trading, manufacturing and field service — a solid mid-market construction ERP option locally.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "A real construction/project-accounting module",
+        "MyInvois API integration",
+        "Local Malaysia office + 20-year track record",
+        "Covers subcontractor cost tracking"
+      ],
+      "cons": [
+        "Singapore-HQ (regional, not Malaysia-native)",
+        "Smaller brand vs SAP/HashMicro",
+        "Quote-only pricing",
+        "Implementation-heavy"
+      ],
+      "typical_pricing": "Quote-based.",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "my_specific_note": "Markets a MyInvois API integration (handling the direct LHDN connection for clients) and project-accounting for tracking subcontractors, materials and expenses — a fit for the construction no-consolidation reality, with a local MY office for support."
+    },
+    {
+      "slug": "ifca-msc",
+      "name": "IFCA MSC Berhad",
+      "category": "software",
+      "vendor_url": "https://ifca.asia",
+      "tagline": "Property & construction enterprise software, Bursa Malaysia-listed",
+      "market_position": "An established Malaysian software house (founded 1987, listed on Bursa Malaysia since 2003) with 800+ clients, specializing in property developers and contractors — its ContractX handles construction and contract management.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Listed, well-capitalized Malaysian vendor",
+        "Purpose-built property + construction modules",
+        "Long track record",
+        "Large local client base"
+      ],
+      "cons": [
+        "Enterprise-scale (heavy for small contractors)",
+        "Quote-only",
+        "Aimed more at developers than micro-SMEs",
+        "Legacy elements in the product line"
+      ],
+      "typical_pricing": "Quote-based (enterprise).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "Malaysia-listed and deeply localized for property/construction — its ContractX targets the progress claims and contract management relevant to the MyInvois construction rules, with local SST/LHDN compliance."
+    },
+    {
+      "slug": "eperolehan",
+      "name": "ePerolehan (Government eProcurement)",
+      "category": "lead-gen",
+      "vendor_url": "https://www.eperolehan.gov.my",
+      "tagline": "Malaysia's official federal e-procurement portal for government tenders",
+      "market_position": "The mandatory federal eProcurement system — all federal supply/service procurement runs through it, and ministries and agencies advertise tenders, quotations and contracts here. The single largest public source of government work for contractors.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Authoritative, mandatory source of federal contracts",
+        "Free entry tier",
+        "Transparent award trail",
+        "Huge volume"
+      ],
+      "cons": [
+        "Government UX / bureaucracy",
+        "MOF Account + registration overhead",
+        "Federal-only (state/private tenders elsewhere)",
+        "Not a curated \"alert\" tool on its own"
+      ],
+      "typical_pricing": "Free Basic Account (transacts up to RM20,000); MOF Account RM450 / 3 years for more.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "Suppliers register by category (including Contractor), and CIDB-graded contractors bid on works here — though major construction-works tenders are also routed via CIDB's own e-tender portal."
+    },
+    {
+      "slug": "cidb-etender",
+      "name": "CIDB e-Tender & N3C",
+      "category": "lead-gen",
+      "vendor_url": "https://www.cidb.gov.my/eng/e-tender/",
+      "tagline": "CIDB's national construction tender portal + cost-data centre",
+      "market_position": "CIDB (the construction-industry regulator) runs a dedicated e-tender portal where major works tenders from bodies like JKR/PWD are advertised to CIDB-registered contractors, plus N3C (the National Construction Cost Centre) with a Tender Price Index.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Construction-only focus",
+        "Aligned to CIDB G1–G7 grades",
+        "Authoritative cost-index data (N3C)",
+        "National coverage of works tenders"
+      ],
+      "cons": [
+        "Government portal UX",
+        "Overlaps with ePerolehan",
+        "Primarily public/major works",
+        "Not a polished SaaS alert product"
+      ],
+      "typical_pricing": "Free (government portal); N3C data products vary.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "A construction-specific lead source aligned to CIDB grading — it complements ePerolehan for works tenders, and the N3C provides Malaysian construction cost benchmarks (the Tender Price Index) useful for bidding."
+    },
+    {
+      "slug": "tenderpanel",
+      "name": "Tenderpanel",
+      "category": "lead-gen",
+      "vendor_url": "https://www.tenderpanel.com",
+      "tagline": "Malaysia's government procurement intelligence platform",
+      "market_position": "The strongest genuine private Malaysia-native tender-intelligence SaaS — it consolidates public (CIDB, MOF, UPKJ) and private tenders plus quotations into one searchable database with daily keyword alerts.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Genuinely Malaysia-rooted",
+        "Consolidates many sources into one feed",
+        "CIDB/MOF licence-category filtering",
+        "Award-history intelligence (Pro)"
+      ],
+      "cons": [
+        "Smaller/independent vendor",
+        "Data completeness vs official portals unverified",
+        "Pro features paywalled",
+        "Brand reach limited"
+      ],
+      "typical_pricing": "Basic + Pro subscription tiers (RM pricing not published).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "Built around Malaysian licence categories (CIDB, MOF/KKM, PUKONSA, UPKJ filtering), and its Pro tier adds award intelligence — the winning contractor, exact RM award value and contract period for past government contracts — a real competitive-bidding edge."
+    },
+    {
+      "slug": "recommend-my",
+      "name": "Recommend.my",
+      "category": "lead-gen",
+      "vendor_url": "https://www.recommend.my",
+      "tagline": "Malaysia's home-improvement & contractor marketplace",
+      "market_position": "A leading Malaysian home-services/renovation marketplace (since 2015), active in 2026 with 10,000+ vetted pros — renovation contractors, interior designers, handymen and repair trades. A real lead channel for renovation/trades businesses.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Established and clearly active (2026 listings)",
+        "High pro volume",
+        "Verified reviews + money-back guarantee build trust",
+        "Genuine inbound lead flow for trades"
+      ],
+      "cons": [
+        "Consumer/renovation-skewed (not commercial/government works)",
+        "Provider economics (commission/lead fees) not publicly itemized",
+        "Competitive bidding pressures margins",
+        "Residential focus"
+      ],
+      "typical_pricing": "Free for homeowners; provider lead/commission model (not publicly itemized).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "The strongest surviving consumer-to-contractor lead marketplace in Malaysia (after Kaodim closed in 2022) — local pros bid on homeowner projects, with verified reviews and past-project photos, on a lead/commission model."
+    },
+    {
+      "slug": "allianz-general-malaysia",
+      "name": "Allianz General Malaysia",
+      "category": "insurance",
+      "vendor_url": "https://www.allianz.com.my/corporate/liabilities-operations-and-asset-protections/engineering-and-machines/contractors-all-risks-insurance.html",
+      "tagline": "Global insurer, Malaysia's engineering heavyweight",
+      "market_position": "One of the largest general insurers in Malaysia and part of the global Allianz Group, giving deep reinsurance capacity for large infrastructure. Engineering (CAR, EAR, machinery) is a flagship line, strongly broker/corporate-distributed.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Fully-documented CAR + EAR products",
+        "Large-project reinsurance capacity",
+        "Broad extensions (plant, machinery, debris)",
+        "Strong broker relationships"
+      ],
+      "cons": [
+        "Quote-only, no online self-serve",
+        "Effectively broker-placed",
+        "Pricing opaque without a proposal",
+        "Geared to corporate over micro-contractors"
+      ],
+      "typical_pricing": "Quote-only; CAR market benchmark ~0.08–0.30% of contract value (indicative, not an Allianz tariff).",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "my_specific_note": "Its CAR explicitly allows add-ons for Construction Plant & Equipment, Machinery, Professional Fees and the Principal's Existing Property — well-suited to mid/large Malaysian projects, and placed through brokers rather than online."
+    },
+    {
+      "slug": "lonpac-insurance",
+      "name": "Lonpac Insurance",
+      "category": "insurance",
+      "vendor_url": "https://www.lonpac.com/business-insurance/engineering-machinery/contractors-all-risks",
+      "tagline": "Malaysia's home-grown engineering-class specialist",
+      "market_position": "The operating arm of LPI Capital and a leading domestic insurer consistently cited among the top CAR/engineering carriers in Malaysia — it publishes its own CAR wordings and Product Disclosure Sheets.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Dedicated Engineering & Machinery line incl. CAR",
+        "Publicly downloadable CAR PDS/wording",
+        "Deep local underwriting knowledge",
+        "Wide nationwide agency reach"
+      ],
+      "cons": [
+        "No online quote — agent/broker only",
+        "Smaller global balance sheet than Allianz/Zurich for mega-projects",
+        "Sparse product pages (need the PDF PDS)",
+        "Commercial lines not self-serve"
+      ],
+      "typical_pricing": "Quote-only; rated on sum insured/contract value; market band ~0.08–0.30% (indicative).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "A Malaysian-owned default market for contractors' CAR/EAR — strongly broker- and agency-distributed, reaching SME and bumiputera-contractor business through its nationwide agency force."
+    },
+    {
+      "slug": "msig-malaysia",
+      "name": "MSIG Malaysia",
+      "category": "insurance",
+      "vendor_url": "https://www.msig.com.my/business-insurance/products/other-commercial-insurance/",
+      "tagline": "Japanese-backed (MS&AD) commercial engineering insurer",
+      "market_position": "Part of the Mitsui Sumitomo / MS&AD global group, carrying a full commercial/engineering suite including Contractors' All Risks — a recognised CAR market in Malaysia with PIDM-protected products.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Established CAR/engineering with a published PDS",
+        "Strong group reinsurance (MS&AD)",
+        "Good fit for Japan-linked principals",
+        "PIDM-protected"
+      ],
+      "cons": [
+        "Quote-only, broker/agent-placed",
+        "Engineering buried under \"Other Commercial Insurance\" (low discoverability)",
+        "Pricing not public",
+        "Less retail-contractor friendly"
+      ],
+      "typical_pricing": "Quote-only; % of contract value/sum insured; ~0.08–0.30% (indicative).",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "my_specific_note": "Broker- and corporate-distributed and often favoured for projects with Japanese or multinational principals — it publishes a CAR Product Disclosure Sheet, though engineering sits under a generic \"Other Commercial\" menu."
+    },
+    {
+      "slug": "zurich-general-malaysia",
+      "name": "Zurich General Malaysia",
+      "category": "insurance",
+      "vendor_url": "https://www.zurich.com.my/insurance-products/business/for-my-assets/engineering/contractors-all-risks-or-erection-all-risks-insurance",
+      "tagline": "Global Zurich brand — with a Shariah CAR/EAR Takaful option",
+      "market_position": "The local arm of the global Zurich Group, offering a combined CAR/EAR all-risks product covering both civil and M&E works — and running a parallel Takaful range (CAR Takaful, EAR Takaful).",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Combined CAR/EAR all-risks product",
+        "A dedicated Shariah-compliant Takaful alternative",
+        "Global Zurich reinsurance",
+        "Wide extension menu (SRCC, transit, cross-liability)"
+      ],
+      "cons": [
+        "Commercial CAR/EAR quote-only",
+        "Two parallel ranges (conventional vs Takaful) can confuse buyers",
+        "Pricing not published",
+        "Broker/intermediary dependent"
+      ],
+      "typical_pricing": "Quote-only; rated on contract value/sum insured; ~0.08–0.30% (indicative).",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "my_specific_note": "The conventional-plus-Takaful pairing is a genuine Malaysia differentiator for bumiputera, Islamic-finance-linked and government-linked projects that need a Shariah-compliant CAR/EAR."
+    },
+    {
+      "slug": "tokio-marine-malaysia",
+      "name": "Tokio Marine Malaysia",
+      "category": "insurance",
+      "vendor_url": "https://www.tokiomarine.com/my/en/non-life/products/business/engineering/contractors--all-risks-erection-all-risks.html",
+      "tagline": "Engineering CAR/EAR and professional indemnity under one insurer",
+      "market_position": "The local arm of the global Tokio Marine group — one of the few here with both a documented combined CAR/EAR product and a clearly stated PI line underwritten by the Malaysian entity.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Combined CAR/EAR clearly documented",
+        "In-market PI for engineers/architects/consultants",
+        "Strong global group backing",
+        "Good for bundling works + professional liability"
+      ],
+      "cons": [
+        "Quote-only commercial lines",
+        "Smaller Malaysian general-insurance footprint than Allianz/Lonpac",
+        "Pricing not public",
+        "Broker-dependent"
+      ],
+      "typical_pricing": "Quote-only; CAR/EAR on contract value, PI on fee income + limit of indemnity; ~0.08–0.30% (indicative).",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "my_specific_note": "A single-carrier option for a contractor who also needs Professional Indemnity for their design consultants on a Malaysian project — both CAR/EAR and PI are underwritten by the local entity, via brokers."
+    },
+    {
+      "slug": "sql-payroll",
+      "name": "SQL Payroll",
+      "category": "payroll",
+      "vendor_url": "https://www.sql.com.my/payroll-software/",
+      "tagline": "LHDN-verified Malaysian payroll with auto EPF, SOCSO, EIS, PCB and HRDF",
+      "market_position": "The dominant Malaysia-only payroll incumbent, paired with the widely-deployed SQL Account. Strong with accountants and traditional SMEs wanting a locally-certified system, and heavily reseller-distributed.",
+      "tier": "S",
+      "reputation_flag": null,
+      "pros": [
+        "Certified by KWSP/PERKESO/LHDN/HRDF",
+        "Uses LHDN's own PCB calculator engine",
+        "Complete Malaysian statutory form coverage",
+        "Massive local support/reseller network"
+      ],
+      "cons": [
+        "Malaysia-only",
+        "Dated UI vs modern SaaS",
+        "Pricing not transparent (quote/reseller)",
+        "Best value bundled with SQL Account"
+      ],
+      "typical_pricing": "Not published; commonly from ~RM799 one-time via reseller.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "Uses the official LHDN PCB calculator for 100%-matched MTD and generates the full statutory pack (EPF Borang A, SOCSO Borang 2/3/8A, EIS, Form EA, Borang E/CP8D, CP39/CP22) with text-file exports for KWSP/PERKESO/LHDN and bank uploads."
+    },
+    {
+      "slug": "autocount-cloud-payroll",
+      "name": "AutoCount Cloud Payroll",
+      "category": "payroll",
+      "vendor_url": "https://autocountsystem.com/autocount-cloud/payroll/",
+      "tagline": "Cloud HR & payroll for Malaysian SMEs — LHDN/PCB/EPF/SOCSO/EIS/HRDF compliant",
+      "market_position": "The payroll arm of AutoCount, the other major Malaysian SME accounting vendor — a cloud-native HR+payroll bundling e-Leave/e-Claim/e-Attendance, sold through a large dealer ecosystem.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Free plan up to 3 employees",
+        "Cloud-based with facial-recognition/GPS clocking",
+        "Tight fit with AutoCount Accounting",
+        "Broad reseller support"
+      ],
+      "cons": [
+        "Malaysia-only",
+        "Payroll depth lighter than a dedicated HRIS",
+        "Best value inside the AutoCount ecosystem",
+        "Advanced HR gated to paid tiers"
+      ],
+      "typical_pricing": "Free up to 3 employees; paid from ~RM44/month.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "Fully compliant with LHDN/PCB/EPF/SOCSO/EIS/HRDF and auto-updates statutory rates (including Zakat) through to submission — a natural pick if you already run AutoCount Accounting."
+    },
+    {
+      "slug": "talenox",
+      "name": "Talenox",
+      "category": "payroll",
+      "vendor_url": "https://www.talenox.com.my/payroll/",
+      "tagline": "Clean cloud payroll & leave across Malaysia, Singapore and Hong Kong",
+      "market_position": "A regional SaaS popular with startups and lean SMEs for its clean UI and fast onboarding, on a self-serve online model rather than reseller-led.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Clean modern UI, quick setup",
+        "Transparent per-headcount pricing",
+        "Regional coverage for SG/HK staff",
+        "Free public MY EPF/SOCSO/PCB calculators"
+      ],
+      "cons": [
+        "Free tier sunset 5 Jan 2026 (paid-only now)",
+        "Per-headcount cost scales up",
+        "Less local hand-holding than SQL/AutoCount",
+        "Suite lighter on deep HR"
+      ],
+      "typical_pricing": "Base RM40 for first 5 headcount + RM8/full-timer; promo annual ~RM5/employee/mo.",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "my_specific_note": "Auto-calculates EPF/SOCSO/EIS on each payroll run and produces PCB/MTD plus statutory exports — a good fit for a modern contractor with staff across Malaysia, Singapore or Hong Kong."
+    },
+    {
+      "slug": "kakitangan",
+      "name": "Kakitangan.com",
+      "category": "payroll",
+      "vendor_url": "https://www.kakitangan.com/",
+      "tagline": "Malaysia-first HR & payroll built around local statutory workflows",
+      "market_position": "One of the earliest, most recognised Malaysia-focused cloud HR/payroll brands, with a micro/small-business focus built on local fit and affordability.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Deep Malaysia-only focus",
+        "Affordable entry pricing",
+        "Complete statutory + EA/LHDN e-filing",
+        "Established local brand"
+      ],
+      "cons": [
+        "Malaysia-only",
+        "Lighter feature set than enterprise HRIS",
+        "Micro/SME orientation may not suit larger firms",
+        "Less suited to multi-country teams"
+      ],
+      "typical_pricing": "From ~RM50/month for up to 5 employees.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "Handles full statutory submissions (EPF/SOCSO/EIS/PCB/HRDF) plus the EA Form and LHDN e-filing — a cheap, local-first option for a small contractor making its first payroll hire."
+    },
+    {
+      "slug": "briohr",
+      "name": "BrioHR",
+      "category": "payroll",
+      "vendor_url": "https://briohr.com/",
+      "tagline": "All-in-one Malaysian HRMS & payroll, recruitment to payslip",
+      "market_position": "A KL-HQ'd (founded 2018) Malaysia-born modular HRMS that raised a ~US$6.5M Series A and is expanding across ASEAN — aimed at growing SMEs that want a full HR suite, not just payroll.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Full-suite HRMS (recruitment → payroll)",
+        "Well-funded local company with regional ambition",
+        "Automates ~80% of routine HR tasks",
+        "1,000+ companies"
+      ],
+      "cons": [
+        "Pricing quote-based (less transparent)",
+        "Broad suite is more than a payroll-only buyer needs",
+        "Younger installed base than SQL/AutoCount",
+        "Onboarding heavier"
+      ],
+      "typical_pricing": "Custom/quotation-based.",
+      "is_cross_market": true,
+      "cross_market_link": null,
+      "my_specific_note": "Fully LHDN-compliant — it streamlines EPF/SOCSO/EIS/HRDF/PCB and Malaysian public holidays inside a broader recruitment-to-payslip platform, fitting a contractor scaling its back office."
+    },
+    {
+      "slug": "cidb-malaysia",
+      "name": "CIDB Malaysia",
+      "category": "certification",
+      "vendor_url": "https://www.cidb.gov.my/eng/contractor-registration/",
+      "tagline": "Mandatory contractor registration & construction-personnel certification (Act 520)",
+      "market_position": "The federal statutory body under Act 520 (CIDB Act 1994) that regulates Malaysia's construction industry — contractor registration and G1–G7 grading (SPKK), the Green Card, accreditation and standards, via the CIMS portal.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Legally enables you to tender for and undertake construction work",
+        "G1–G7 grade sets tender capacity (G1 ≤RM200k … G7 unlimited)",
+        "Green Card certifies site personnel as safety-inducted",
+        "Gateway to government/MOF tenders"
+      ],
+      "cons": [
+        "Registration compulsory BEFORE any work — operating unregistered risks RM10,000–RM100,000 fine (s.29)",
+        "Cannot tender/work after the certificate expires until renewed",
+        "Cannot exceed your grade ceiling or work outside your registered category",
+        "Every worker needs a Green Card (penalties up to ~RM5,000 per worker without)"
+      ],
+      "typical_pricing": "Green Card RM35 (1yr) → RM135 (5yr) via CIMS; contractor SPKK fees vary by grade/category.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "Under s.25(1) no one may undertake construction work as a contractor without valid CIDB registration, and under s.33(1) every worker, supervisor and manager on site must hold a valid Green Card (Kad Hijau) — the two legal preconditions to bid or build. Grades also require minimum paid-up capital (G1 ~RM5k → G7 >RM750k)."
+    },
+    {
+      "slug": "bem-malaysia",
+      "name": "Board of Engineers Malaysia (BEM)",
+      "category": "certification",
+      "vendor_url": "https://www.bem.org.my/",
+      "tagline": "Statutory registration of engineers & engineering practices (REA 1967)",
+      "market_position": "The statutory body under the Registration of Engineers Act 1967 (Rev. 2015), formed in 1972, that registers engineers, engineering technologists, inspectors of works and consultancy practices, and regulates professional conduct.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Legal authority to practise and submit engineering work",
+        "Professional Engineer (Ir.) status to endorse designs and sign off submissions",
+        "Lets you register an engineering consultancy practice",
+        "Professional standing for tenders that require registered engineers"
+      ],
+      "cons": [
+        "Practising/submitting without registration is prohibited",
+        "PE status needs ≥3 years post-grad experience + the Professional Assessment Exam",
+        "Ongoing CPD and conduct obligations",
+        "Annual renewal"
+      ],
+      "typical_pricing": "Varies by category — see the official BEM site.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "For construction/infrastructure requiring engineering input the engineer must be BEM-registered, and only a registered Professional Engineer (Ir.) may submit or endorse engineering work — a Graduate Engineer needs ≥3 years supervised experience first."
+    },
+    {
+      "slug": "ssm-malaysia",
+      "name": "SSM (Companies Commission of Malaysia)",
+      "category": "certification",
+      "vendor_url": "https://www.ssm.com.my/",
+      "tagline": "Statutory registration of companies & businesses in Malaysia",
+      "market_position": "The regulatory authority for companies (Companies Act 2016), businesses (ROB Act 1956) and LLPs — registration is mandatory to operate legally, via ezBiz (sole prop/partnership) and MyCoID (Sdn Bhd).",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Establishes a legal entity (Sdn Bhd, sole prop, partnership, LLP)",
+        "Prerequisite for business bank accounts, CIDB registration and tendering",
+        "Online self-service",
+        "Fast for sole props (~1–3 working days)"
+      ],
+      "cons": [
+        "Annual renewal for enterprises/sole props (lapses if missed)",
+        "Sdn Bhd carries ongoing obligations (annual return, audited accounts, company secretary)",
+        "Paid-up capital matters for CIDB grade minimums",
+        "Sdn Bhd incorporation can take up to ~2 weeks"
+      ],
+      "typical_pricing": "Sole prop RM30/yr (personal name) or RM60/yr (trade name); Sdn Bhd RM1,000 one-time; LLP RM500.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "A contractor must be an SSM-registered legal entity (Sdn Bhd or enterprise/sole prop) before registering with CIDB or bidding — it is the foundational legal-entity step, and your paid-up capital here feeds your CIDB grade ceiling."
+    },
+    {
+      "slug": "lhdn-irbm-malaysia",
+      "name": "LHDN / IRBM (Inland Revenue Board)",
+      "category": "certification",
+      "vendor_url": "https://www.hasil.gov.my/en/",
+      "tagline": "Income-tax registration, the MyTax portal and MyInvois e-invoicing",
+      "market_position": "The federal authority administering direct taxes (Income Tax Act 1967) under the Ministry of Finance — it runs the MyTax gateway and the MyInvois e-invoicing platform.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Issues the TIN required for all legal/financial dealings",
+        "MyTax centralises filing and e-Daftar",
+        "MyInvois enables compliant e-invoicing for B2B/B2G construction billing",
+        "Employers handle PCB/MTD through LHDN channels"
+      ],
+      "cons": [
+        "MyInvois is phased by turnover band",
+        "Non-compliant invoices are penalised RM200–RM20,000 each (s.120(1)(d), ITA 1967)",
+        "Ongoing monthly PCB/MTD plus annual filing",
+        "TIN required before most commercial onboarding"
+      ],
+      "typical_pricing": "Free (TIN registration and MyInvois portal usage).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "A contractor must register for income tax and obtain a TIN via e-Daftar, then issue validated e-invoices through MyInvois — the RM1m–RM5m turnover band is in MyInvois scope from 1 Jan 2026, with full penalty enforcement extended to 1 Jan 2028. See our MyInvois guide for the construction specifics."
+    },
+    {
+      "slug": "epf-kwsp-malaysia",
+      "name": "EPF / KWSP",
+      "category": "certification",
+      "vendor_url": "https://www.kwsp.gov.my/",
+      "tagline": "Mandatory employer registration & retirement-savings contributions",
+      "market_position": "The statutory retirement-savings body under the EPF Act 1991 — any employer hiring at least one employee must register and contribute, transacting via i-Akaun (Employer).",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Establishes the legal employer account to hire compliantly",
+        "i-Akaun for online employee registration, contributions and bank uploads",
+        "Baseline requirement for any contractor with workers",
+        "Well-documented online process"
+      ],
+      "cons": [
+        "Strict 7-day registration after the first hire",
+        "Must activate i-Akaun within 30 days",
+        "Monthly remittance (employer + employee) with late penalties",
+        "Non-registration risks prosecution + backdated contributions"
+      ],
+      "typical_pricing": "No registration fee; statutory contribution rates apply.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "Under s.41(1) EPF Act 1991 an employer must register within 7 days of its first hire, activate i-Akaun within 30 days, then remit monthly — one of the tightest statutory deadlines a new contractor faces."
+    },
+    {
+      "slug": "socso-perkeso-malaysia",
+      "name": "SOCSO / PERKESO",
+      "category": "certification",
+      "vendor_url": "https://www.perkeso.gov.my/",
+      "tagline": "Mandatory employer registration for injury, invalidity & EIS protection",
+      "market_position": "The statutory body under the Employees' Social Security Act 1969 and the EIS Act 2017 — employers register and contribute via the ASSIST portal. Especially load-bearing in construction given on-site injury risk.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Employment-injury, invalidity and EIS coverage (critical for construction risk)",
+        "A single ASSIST portal for combined SOCSO + EIS",
+        "Demonstrates statutory compliance for tenders/audits",
+        "Covers foreign workers (Employment Injury since 2019, Invalidity since 2024)"
+      ],
+      "cons": [
+        "30-day registration after the first hire",
+        "Monthly contribution due by the 15th",
+        "Non-compliance risks fines up to RM10,000 and/or 2 years' imprisonment",
+        "Statutory scope/rates — you cannot opt out"
+      ],
+      "typical_pricing": "No registration fee; statutory rates apply.",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "An employer must register within 30 days of hiring (Form 1 / ASSIST) and contribute monthly for Employment Injury & Invalidity plus EIS by the 15th — and because the mandatory CIDB Green Card bundles only a basic personal-accident Takaful, SOCSO is the real injury backbone on site."
+    },
+    {
+      "slug": "hrd-corp-malaysia",
+      "name": "HRD Corp",
+      "category": "certification",
+      "vendor_url": "https://hrdcorp.gov.my/",
+      "tagline": "Training-levy registration for employers with 10+ employees",
+      "market_position": "The statutory body under the PSMB Act 2001 that manages the HR-development levy and training-grant ecosystem, with registration via the eTRiS portal.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "The levy is reclaimable as training grants (e.g. CIDB/safety/technical courses)",
+        "Straightforward eTRiS registration",
+        "Supports workforce upskilling for a growing contractor",
+        "Funds the safety training the industry needs"
+      ],
+      "cons": [
+        "Compulsory at 10+ employees",
+        "Monthly 1% levy on wages",
+        "Failure to register risks a fine up to RM10,000 and/or 1 year's imprisonment",
+        "\"Use-it-or-lose-it\" if grants go unclaimed"
+      ],
+      "typical_pricing": "No registration fee; levy 1% of wages (10+ employees) or 0.5% (optional, 5–9).",
+      "is_cross_market": false,
+      "cross_market_link": null,
+      "my_specific_note": "Under s.13(1) PSMB Act 2001, once you reach 10 Malaysian employees you must register and pay a 1%-of-wages levy (5–9 employees may opt in at 0.5%) — but a contractor can claw it back to fund CIDB Green Card and safety courses."
+    }
+  ]
+}

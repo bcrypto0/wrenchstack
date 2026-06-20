@@ -1,0 +1,183 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+
+// Tools from our Malaysia directory by MyInvois-integration status. Honest:
+// "native" = submits to LHDN/IRBM directly today; QS tools model the BQ/claims
+// but pair with accounting for the actual submission. Verify current status.
+const tools = [
+  { name: 'AutoCount', status: 'Native MyInvois (standard / consolidated / self-billed) with an LHDN-downtime retry', fit: 'SME accounting incumbent', note: '~RM1,599–2,899 one-off', href: '/my/autocount/' },
+  { name: 'SQL Account', status: 'Built-in one-click MyInvois submission (XML/JSON + QR), once ERP-registered', fit: 'SME accounting incumbent', note: 'Quote (reseller)', href: '/my/sql-account/' },
+  { name: 'Bukku', status: 'Native MyInvois AND the Peppol network; permanently free e-invoice tier', fit: 'Cost-conscious SMEs', note: 'Free tier; <RM2/day', href: '/my/bukku/' },
+  { name: 'Financio (ABSS)', status: 'MyInvois via API on the Essentials/Premier tiers', fit: 'Simple cloud books', note: 'Tiered SaaS', href: '/my/financio/' },
+  { name: 'HashMicro', status: 'MyInvois-ready with a direct LHDN connection (+ a construction module)', fit: 'ERP buyers', note: 'Quote-based', href: '/my/hashmicro/' },
+  { name: 'Globe3 ERP', status: 'MyInvois API integration + construction/project accounting', fit: 'Mid-market construction ERP', note: 'Quote-based', href: '/my/globe3-erp/' },
+  { name: 'BuildSpace', status: 'NOT a submitter — models BQ + progress claims; pairs with accounting for LHDN', fit: 'QS / contractors', note: 'Quote-based', href: '/my/buildspace/' },
+  { name: 'IFCA (ContractX)', status: 'Construction/contract management with local LHDN compliance', fit: 'Developers / larger contractors', note: 'Quote (enterprise)', href: '/my/ifca-msc/' },
+];
+
+const faqs = [
+  { q: 'Is MyInvois mandatory yet — and for whom?', a: 'It is mandatory, but phased by annual turnover. It went live for the largest firms (>RM100m) on 1 Aug 2024, then >RM25m on 1 Jan 2025, >RM5m on 1 Jul 2025, and businesses above RM1m from 1 Jan 2026. The smallest businesses are now permanently out: turnover under RM150,000 never has to issue e-invoices, and the RM150,000–RM1m band is voluntary. There is no separate "Phase 5" — in December 2025 the mandatory entry threshold was raised from RM500,000 to RM1 million, removing the need for a final phase. For firms up to RM5m, a penalty-free interim relaxation runs to 31 December 2027, with full enforcement from 1 January 2028.' },
+  { q: 'I\'m a contractor — must I really e-invoice every progress claim separately?', a: 'This is the single most-confused point in Malaysia, so read carefully. YES, construction is on the official "no-consolidation" list (Specific Guideline v4.7, April 2026, Table 3.6 item 4: a "construction contractor undertaking a construction contract" per the Income Tax (Construction Contracts) Regulations 2007), which in principle means each progress/interim claim must be its own e-invoice rather than batched into a monthly consolidated one. BUT — the interim relaxation in §16.2 of the same guideline expressly permits issuing consolidated e-invoices "for all activities and transactions," construction included, during your grace window. For contractors up to RM5m turnover that window runs to 31 December 2027. So in practice: most small/mid contractors can still batch claims into a consolidated e-invoice for now; larger contractors (>RM5m, already past their relaxation) must issue individually today; and everyone moves to individual claims from 1 January 2028. Separately, any single transaction over RM10,000 must be individually e-invoiced from 1 Jan 2026, and construction-materials wholesalers/retailers were removed from the no-consolidation list in the January 2026 update.' },
+  { q: 'How does the system actually work — model and format?', a: 'You submit through the free MyInvois Portal or via an API (directly, or through a Peppol-accredited service provider under the MDEC Peppol framework). Documents are structured XML or JSON built on UBL 2.1. IRBM validates in near real-time — generally under two seconds — and on success returns a Unique Identifier Number (UIN) plus a validation QR code for the visual PDF. You have a 72-hour window to cancel and reissue; after that, corrections need a debit/credit/refund-note e-invoice. Where consolidation is allowed, the consolidated e-invoice is issued within 7 calendar days after month-end. Buyers issue self-billed e-invoices for imports, foreign suppliers and payments to agents/dealers/distributors.' },
+  { q: 'What happens if I don\'t comply?', a: 'Failure to issue an e-invoice is an offence under Section 120(1)(d) of the Income Tax Act 1967: a fine of not less than RM200 and not more than RM20,000, or imprisonment up to 6 months, or both — for EACH non-compliance. Because every non-compliant e-invoice is a separate offence, the exposure multiplies with volume. The relief: under §16.3 of the guideline, IRBM will not prosecute during the interim relaxation period, which for businesses up to RM5m runs to 31 December 2027. Beyond fines, non-validated invoices undermine your records for audit and deductibility.' },
+  { q: 'What about the new SST on construction?', a: 'Separate from MyInvois (and run by a different authority — RMCD/Customs, not LHDN), the SST expansion of 1 July 2025 brought construction work services into the service-tax net for the first time, at 6%. You must register once your taxable construction services exceed RM1.5 million in any rolling 12-month period. Key exemptions: residential buildings (and related common facilities) and government/local-authority projects are excluded, and non-reviewable contracts signed before 1 July 2025 got a 12-month transitional exemption. So a contractor can be in scope for MyInvois (income-tax side) and SST (consumption-tax side) at the same time, through two different portals.' },
+  { q: 'Does my software need to be MyInvois-native?', a: 'It must reach LHDN by your phase deadline — but there are several routes. Malaysian accounting tools (AutoCount, SQL Account, Bukku, Financio, Biztory) and ERPs (HashMicro, Globe3) submit to IRBM directly, and Bukku also does Peppol; the free MyInvois Portal works for low volume. QS/construction tools like BuildSpace and IFCA model the BQ and progress claims but pair with an accounting tool for the actual submission. The right question for any vendor: "Do you submit to LHDN directly (or via a Peppol provider), and how do you handle consolidated vs individual e-invoices for a construction contract?"' },
+];
+
+const pageTitle = 'MyInvois E-Invoicing in Malaysia — 2026 Guide for Contractors';
+const pageDescription = 'Malaysia\'s MyInvois (LHDN/IRBM) e-invoicing explained for the building trades: the phased turnover thresholds, the RM150k permanent exemption, and the most-confused point — construction is a "no-consolidation" industry, but the §16.2 relaxation lets ≤RM5m contractors keep batching progress claims until 31 December 2027. Plus the 6% SST on construction services and which tools submit to LHDN. Independent, verified June 2026.';
+
+const guideUrl = new URL('/my/guides/myinvois-e-invoicing/', Astro.site).toString();
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Malaysia', url: '/my/' },
+  { name: 'MyInvois e-invoicing for contractors', url: '/my/guides/myinvois-e-invoicing/' },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org', '@type': 'Article', headline: pageTitle, description: pageDescription,
+  datePublished: '2026-06-20', dateModified: '2026-06-20', inLanguage: 'en',
+  author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
+  publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
+  mainEntityOfPage: guideUrl,
+};
+const faqSchema = {
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} alternateUrls={[{ hreflang: 'en', href: guideUrl }, { hreflang: 'x-default', href: guideUrl }]}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-8">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">🇲🇾 Malaysia · Compliance guide</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+        MyInvois E-Invoicing in Malaysia
+      </h1>
+      <p class="mt-3 text-lg text-slate-600 leading-relaxed">
+        What Malaysia's national e-invoicing system means for the building trades — it's live and phasing in by turnover. The thresholds, the most-confused point about construction progress claims, the real consequences, and which tools actually submit to LHDN.
+      </p>
+      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published &amp; verified June 2026 · Not tax advice — confirm your situation with LHDN/IRBM (hasil.gov.my) or your tax agent.</p>
+    </header>
+
+    <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ The short version</h2>
+      <p class="text-slate-800 leading-relaxed">
+        Malaysia's <strong>MyInvois</strong> (run by LHDN/IRBM) is <strong>live and phasing in by turnover</strong> — the largest firms since August 2024, businesses above <strong>RM1m from January 2026</strong>, and turnover under <strong>RM150,000 permanently exempt</strong>. You submit XML/JSON (UBL 2.1) via the free portal or an API; IRBM validates in under two seconds and returns a <strong>UIN and QR code</strong>. The contractor headline: construction <em>is</em> on the <strong>"no-consolidation" list</strong> (each progress claim its own e-invoice in principle) — <strong>but</strong> the §16.2 interim relaxation lets firms up to <strong>RM5m keep issuing consolidated e-invoices until 31 December 2027</strong>. The teeth: <strong>RM200–RM20,000 per non-compliant invoice</strong> (Section 120, ITA 1967), though prosecution is paused during the grace window. The task: make sure your tool submits to LHDN — directly or via a Peppol provider.
+      </p>
+    </section>
+
+    <section class="mb-10 grid gap-3 sm:grid-cols-3">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">RM1m+</div>
+        <div class="mt-1 text-xs text-slate-600">in MyInvois scope (from Jan 2026)</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">31 Dec 2027</div>
+        <div class="mt-1 text-xs text-slate-600">≤RM5m grace — consolidation still allowed</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">&lt;RM150k</div>
+        <div class="mt-1 text-xs text-slate-600">turnover permanently exempt</div>
+      </div>
+    </section>
+
+    <section class="mb-10 prose prose-slate max-w-none">
+      <h2>The timeline</h2>
+      <ul>
+        <li><strong>1 Aug 2024</strong> — Phase 1: turnover &gt; RM100m (penalty relaxation ended 31 Jan 2025).</li>
+        <li><strong>1 Jan 2025</strong> — Phase 2: &gt; RM25m–RM100m (relaxation ended 30 Jun 2025).</li>
+        <li><strong>1 Jul 2025</strong> — Phase 3: &gt; RM5m–RM25m — <strong>not deferred</strong> (relaxation ended 31 Dec 2025).</li>
+        <li><strong>1 Jan 2026</strong> — Phase 4: &gt; RM1m–RM5m goes live; penalty-free relaxation <strong>extended to 31 Dec 2027</strong>.</li>
+        <li><strong>Dec 2025</strong> — the "Phase 5" was eliminated: the mandatory floor was raised from RM500k to <strong>RM1m</strong>, and turnover under <strong>RM150,000 is permanently exempt</strong>.</li>
+        <li><strong>1 Jan 2028</strong> — full enforcement for the ≤RM5m band (end of the interim relaxation).</li>
+      </ul>
+
+      <h2>What the system requires</h2>
+      <ul>
+        <li><strong>Phased, not all-at-once.</strong> Your obligation date depends on your annual turnover band; new businesses crossing RM1m have their own start dates.</li>
+        <li><strong>Structured format.</strong> XML or JSON built on <strong>UBL 2.1</strong>; IRBM validates in near real-time (under ~2 seconds) and returns a <strong>UIN + validation QR code</strong>.</li>
+        <li><strong>Several channels.</strong> The free MyInvois Portal, a direct API, or an API through a <strong>Peppol-accredited service provider</strong> (the MDEC Peppol framework).</li>
+        <li><strong>Construction is a special case.</strong> It's on the no-consolidation list — but the §16.2 relaxation suspends that for everyone during the grace window (to 31 Dec 2027 for ≤RM5m).</li>
+        <li><strong>Housekeeping rules.</strong> A 72-hour cancellation window; consolidated e-invoices (where allowed) within 7 days of month-end; self-billed e-invoices for imports/foreign suppliers.</li>
+      </ul>
+
+      <h2>Why this matters for contractors specifically</h2>
+      <p>
+        The construction nuance is where most guides get it wrong, so it's worth being precise: construction is genuinely on the <strong>no-consolidation list</strong>, which sounds like "e-invoice every progress claim individually, now." In reality the <strong>§16.2 interim relaxation lets contractors up to RM5m keep batching claims into consolidated e-invoices until 31 December 2027</strong> — so the per-claim requirement bites today only for larger contractors (already past their relaxation) and for everyone from 2028. Two more things land on contractors: any <strong>single transaction over RM10,000</strong> needs its own e-invoice (from 1 Jan 2026), and the standout local tools are the <strong>QS systems that model Malaysian BQ and progress claims</strong> (<a href="/my/buildspace/">BuildSpace</a>, <a href="/my/ifca-msc/">IFCA</a>) — most horizontal accounting tools don't, so many contractors run a QS tool alongside a MyInvois-native accounting package.
+      </p>
+
+      <h2>The wider Malaysian tax context</h2>
+      <ul>
+        <li><strong>SST on construction:</strong> a new <strong>6%</strong> service tax on construction work services since 1 July 2025; register once taxable services exceed <strong>RM1.5m</strong> in a rolling 12 months. Residential buildings and government projects are exempt. Administered by RMCD/Customs — separate from MyInvois.</li>
+        <li><strong>Currency:</strong> the Ringgit (MYR); set your software to Malaysia, not a regional default.</li>
+        <li><strong>Employer duties:</strong> register every worker with EPF/KWSP (within 7 days of the first hire) and SOCSO/PERKESO (within 30 days) — see the <a href="/my/">compliance bodies</a> in our directory.</li>
+      </ul>
+
+      <h2>Which tools submit to MyInvois?</h2>
+      <p>
+        From the software in our <a href="/my/">Malaysia directory</a>, here's how the tools relate to MyInvois. The clean distinction: native accounting tools and ERPs submit to LHDN directly (Bukku also via Peppol); QS/construction tools model the work but pair with accounting for the submission. Always confirm current status with the vendor.
+      </p>
+    </section>
+
+    <section class="mb-10 overflow-x-auto">
+      <table class="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
+        <thead class="bg-slate-50 text-left text-slate-700">
+          <tr>
+            <th class="p-3 font-semibold">Tool</th>
+            <th class="p-3 font-semibold">MyInvois status</th>
+            <th class="p-3 font-semibold">Best fit</th>
+            <th class="p-3 font-semibold">Pricing</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          {tools.map((t) => (
+            <tr>
+              <td class="p-3 font-semibold text-slate-900"><a href={t.href} class="hover:text-orange-600">{t.name}</a></td>
+              <td class="p-3 text-slate-700">{t.status}</td>
+              <td class="p-3 text-slate-600">{t.fit}</td>
+              <td class="p-3 text-slate-600">{t.note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="mt-3 text-xs text-slate-500">MyInvois status reflects vendor positioning/capability as of June 2026 — confirm current LHDN/Peppol accreditation directly with each vendor before relying on it.</p>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">The one question to ask any vendor</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        Don't assume a good accounting tool submits to MyInvois — and if you run construction contracts, ask about claims handling. Ask: <strong>"Do you submit to LHDN directly or via a Peppol provider, and how do you handle consolidated vs individual e-invoices for a construction contract?"</strong> A vague answer is your signal. And confirm your own phase date by turnover — the RM1m band's clock is already running.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Frequently asked questions</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
+      <strong class="text-slate-700">Sources &amp; verification:</strong> Verified June 2026 against the IRBM e-Invoice Specific Guideline v4.7 (20 April 2026) and General FAQs (5 May 2026), cross-checked with EY Malaysia, Grant Thornton, Sovos and VATupdate. Legal basis: s.134A and s.120(1)(d) of the Income Tax Act 1967. The phased thresholds, the RM150,000 permanent exemption and RM1m mandatory floor, the construction no-consolidation listing (v4.7 Table 3.6 #4), the §16.2 interim relaxation extending consolidation/§16.3 prosecution relief to 31 December 2027 for ≤RM5m, the single-transaction RM10,000 rule, UBL 2.1 + UIN + QR, the 72-hour cancellation window and the RM200–RM20,000 per-offence penalty are all verified. The 6% SST on construction services (RM1.5m threshold, residential/government exemptions, RMCD-administered) is per RMCD/L&amp;Co. Corporate-tax rates and the SST treatment of mixed-development residential portions are not stated here as they were not pinned to a primary source. General information, not tax advice. Spotted an error? <a href="/contact/" class="underline">Tell us</a> and we'll correct it.
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Compare Malaysian trades software & services</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">Independent reviews of MyInvois-ready Malaysian software, government tender access, EPF/SOCSO payroll and Contractor's All Risks insurance — with no pay-to-play.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/my/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">🇲🇾 Malaysia directory →</a>
+        <a href="/my/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Compare vendors</a>
+        <a href="/for-vendors/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Are you a vendor? Work with us</a>
+      </div>
+    </section>
+  </article>
+</Layout>

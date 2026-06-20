@@ -1,0 +1,158 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import myData from '../../data/international/my.json';
+
+interface MyVendor {
+  slug: string; name: string; category: string; vendor_url: string;
+  tagline: string; market_position: string; my_specific_note?: string | null;
+  tier: 'S' | 'A' | 'F'; reputation_flag: string | null;
+  pros: string[]; cons: string[]; typical_pricing: string;
+  is_cross_market: boolean; cross_market_link: string | null;
+}
+
+const vendors = (myData as { vendors: MyVendor[] }).vendors;
+const categories = ['software', 'lead-gen', 'insurance', 'payroll', 'certification'];
+const categoryMeta: Record<string, { label: string; description: string }> = {
+  'software': { label: 'Accounting / invoicing & construction software', description: 'A genuinely rich market — the SME accounting duopoly with native MyInvois (AutoCount, SQL), modern cloud challengers (Bukku with free e-invoicing + Peppol, Financio, Biztory), the standout local QS/BQ tool that handles progress claims (BuildSpace), Bursa-listed property/construction software (IFCA), the BIM takeoff standards (Cubicost, RIB CostX) and ERPs with MyInvois APIs (Globe3, HashMicro).' },
+  'lead-gen': { label: 'Tenders, project intelligence & home services', description: 'The official federal e-procurement portal (ePerolehan), CIDB’s construction-specific e-tender portal plus its cost index (N3C), the strongest private Malaysia-native tender-intelligence SaaS with award history (Tenderpanel), and the leading renovation/trades marketplace (Recommend.my). Genuinely thin on private construction lead-gen — these are the real ones, no padding.' },
+  'insurance': { label: 'Construction insurance — Contractor’s All Risks', description: 'CAR and Erection All Risks from Malaysia’s major engineering insurers — global Allianz, home-grown Lonpac, Japanese-backed MSIG and Tokio Marine, and Zurich with a Shariah Takaful option. All broker-placed, no online quotes; regulated by Bank Negara Malaysia.' },
+  'payroll': { label: 'Payroll — EPF, SOCSO, EIS, PCB & HRDF', description: 'Software that handles the full Malaysian statutory stack — EPF/KWSP, SOCSO/PERKESO, EIS, PCB/MTD and the HRDF levy. The LHDN-certified incumbent (SQL Payroll), AutoCount’s cloud payroll, and the modern HR suites (Talenox, Kakitangan, BrioHR).' },
+  'certification': { label: 'Compliance & official bodies', description: 'The legal chain a Malaysian contractor must complete — SSM incorporation, LHDN tax + MyInvois, the mandatory CIDB registration (G1–G7) and Green Card that gate all construction work, the Board of Engineers (BEM), and employer registration with EPF, SOCSO and HRD Corp.' },
+};
+const vendorsByCategory: Record<string, MyVendor[]> = {};
+categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
+
+const pageTitle = 'Malaysia Construction & Trades Software (MyInvois) — WrenchStack';
+const pageDescription = `Independent directory of ${vendors.length} vendors for Malaysia: MyInvois-ready accounting/invoicing & construction/QS software, government tender access, EPF/SOCSO payroll, and Contractor's All Risks insurance — plus the MyInvois e-invoicing mandate (LHDN/IRBM; construction's no-consolidation rule and the relaxation to 2027), CIDB G1–G7 grading and the compliance chain every contractor must handle.`;
+const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Malaysia', url: '/my/' } ];
+---
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <header class="mb-10">
+      <div class="mb-3 flex items-center gap-2">
+        <span class="text-2xl" aria-hidden="true">🇲🇾</span>
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">Malaysia</p>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">Malaysia Construction & Trades Software Directory</h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Independent reviews of {vendors.length} Malaysia-relevant vendors — built around the force reshaping the market: <strong>MyInvois</strong>, the national e-invoicing system run by LHDN/IRBM. The MyInvois-native accounting tools (AutoCount, SQL, Bukku), the local QS software that handles BQ and progress claims (BuildSpace, IFCA), EPF/SOCSO payroll and Contractor’s All Risks insurance — with the local context (the Ringgit, 6% SST on construction services, CIDB G1–G7 grading, the Green Card) that off-the-shelf software ignores.
+      </p>
+    </header>
+
+    <section class="mb-10 grid gap-3 grid-cols-2 sm:grid-cols-4">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">{vendors.length}</div>
+        <div class="mt-1 text-xs text-slate-600">vendors reviewed</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">~130k</div>
+        <div class="mt-1 text-xs text-slate-600">CIDB-registered contractors</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">RM1m</div>
+        <div class="mt-1 text-xs text-slate-600">MyInvois mandatory threshold</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">6%</div>
+        <div class="mt-1 text-xs text-slate-600">SST on construction services</div>
+      </div>
+    </section>
+
+    <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border-2 border-emerald-300 bg-emerald-50 p-5">
+      <div class="min-w-0 flex-1">
+        <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">⏰ Compliance guide · MyInvois e-invoicing is LIVE (LHDN/IRBM) · construction has a special rule</p>
+        <h2 class="mt-1 text-base font-bold text-slate-900">MyInvois e-invoicing for Malaysian contractors</h2>
+        <p class="mt-1 text-sm text-slate-700">Construction is a “no-consolidation” industry — but the interim relaxation lets ≤RM5m contractors keep batching progress claims until 31 Dec 2027. The phases, the RM150k exemption, the RM10k rule, and which tools submit to LHDN directly.</p>
+      </div>
+      <a href="/my/guides/myinvois-e-invoicing/" class="shrink-0 rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Read the guide →</a>
+    </section>
+
+    <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
+      <div>
+        <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
+        <p class="mt-1 text-sm text-slate-700">See Malaysian vendors compared side by side — a clear verdict, pros and cons, Malaysia-specific notes, and pricing, head to head.</p>
+      </div>
+      <a href="/my/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare Malaysian vendors →</a>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">What’s different about choosing software in Malaysia</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        One thing dominates Malaysian software selection: <strong>MyInvois</strong>, run by LHDN/IRBM. It’s live and phasing in by turnover (largest firms since August 2024; businesses above <strong>RM1m</strong> from January 2026), and the smallest are now permanently exempt — turnover under <strong>RM150,000</strong> never has to issue e-invoices. You submit structured XML/JSON through the MyInvois portal or an API, IRBM validates in near real-time and returns a <strong>UIN and a QR code</strong>. The construction wrinkle is the most misunderstood point in the country: construction <em>is</em> on the official <strong>“no-consolidation” list</strong>, meaning each progress claim should in principle be e-invoiced individually — <strong>but</strong> the interim relaxation (§16.2) expressly lets every business, construction included, keep issuing consolidated e-invoices through the grace window, which for firms up to <strong>RM5m runs to 31 December 2027</strong>. So most small contractors are not yet forced into per-claim invoicing; larger ones already are. Beyond that: the second-order rule that <strong>any single transaction over RM10,000</strong> needs its own e-invoice, a new <strong>6% SST on construction services</strong> (since July 2025; residential and government work exempt), and the CIDB layer — you can’t legally bid or build without <strong>CIDB G1–G7 registration</strong> and a <strong>Green Card</strong> for every worker. The local gems are the QS tools that model Malaysian BQ and progress claims (BuildSpace, IFCA), since most horizontal accounting tools don’t.
+      </p>
+    </section>
+
+    {categories.map(c => {
+      const cat = categoryMeta[c];
+      const cv = vendorsByCategory[c];
+      if (cv.length === 0) return null;
+      return (
+        <section class="mb-12">
+          <div class="mb-5">
+            <h2 class="text-2xl font-bold text-slate-900">{cat.label}</h2>
+            <p class="mt-1 text-sm text-slate-600 leading-relaxed">{cat.description}</p>
+          </div>
+          <div class="space-y-4">
+            {cv.map(v => {
+              const isCert = v.category === 'certification';
+              const tierColor = v.tier === 'S' ? 'border-emerald-300' : v.tier === 'F' ? 'border-rose-300' : 'border-blue-300';
+              const tierLabel = isCert ? 'Official body / regime' : v.tier === 'S' ? 'Recommended' : v.tier === 'F' ? 'Reputation warning' : 'Workable';
+              const tierBadge = v.tier === 'S' ? 'bg-emerald-100 text-emerald-900' : v.tier === 'F' ? 'bg-rose-100 text-rose-900' : 'bg-blue-100 text-blue-900';
+              return (
+                <article class={`rounded-lg border-2 ${tierColor} bg-white p-5`}>
+                  <div class="mb-3 flex items-start justify-between gap-3">
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-center gap-2 mb-1 flex-wrap">
+                        <h3 class="text-xl font-bold text-slate-900">{v.name}</h3>
+                        <span class={`rounded-full px-2 py-0.5 text-xs font-bold ${tierBadge}`}>{isCert ? tierLabel : `Tier ${v.tier} · ${tierLabel}`}</span>
+                        {v.is_cross_market && (<span class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">Cross-market</span>)}
+                      </div>
+                      <p class="text-sm italic text-slate-500">{v.tagline}</p>
+                    </div>
+                  </div>
+                  <p class="mb-3 text-sm text-slate-700 leading-relaxed">{v.market_position}</p>
+                  {v.reputation_flag && (
+                    <div class="mb-3 rounded-md border-l-4 border-amber-400 bg-amber-50 px-4 py-2">
+                      <p class="text-sm text-amber-900 leading-relaxed"><strong>Heads up:</strong> {v.reputation_flag}</p>
+                    </div>
+                  )}
+                  {v.my_specific_note && (
+                    <div class="mb-3 rounded-md bg-slate-50 px-4 py-3">
+                      <p class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Malaysia-specific note</p>
+                      <p class="text-sm text-slate-700 leading-relaxed">{v.my_specific_note}</p>
+                    </div>
+                  )}
+                  <div class="mb-3 grid gap-3 sm:grid-cols-2">
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1">{isCert ? 'What it covers' : 'Pros'}</p>
+                      <ul class="space-y-1 text-sm text-slate-700">{v.pros.slice(0, 4).map(p => <li class="leading-snug">+ {p}</li>)}</ul>
+                    </div>
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-rose-700 mb-1">{isCert ? 'Watch out for' : 'Cons'}</p>
+                      <ul class="space-y-1 text-sm text-slate-700">{v.cons.slice(0, 4).map(con => <li class="leading-snug">− {con}</li>)}</ul>
+                    </div>
+                  </div>
+                  <div class="mb-3 text-xs text-slate-600"><strong class="text-slate-900">{isCert ? 'Cost / access:' : 'Typical Malaysia pricing:'}</strong> {v.typical_pricing}</div>
+                  <div class="flex flex-wrap gap-2">
+                    <a href={`/my/${v.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">Full Malaysia review →</a>
+                    <a href={v.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600">{isCert ? 'Official site' : `Visit ${v.name}`} →</a>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Are you a Malaysian software vendor?</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">If you build software or services for Malaysian contractors and the building trades and want to be reviewed or featured, get in touch through our <a href="/for-vendors/" class="underline">vendor program</a>.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/for-vendors/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Work with us →</a>
+        <a href="/software-by-country/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Software by country →</a>
+        <a href="/methodology/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Methodology</a>
+      </div>
+    </section>
+  </article>
+</Layout>
