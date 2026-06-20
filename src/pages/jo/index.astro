@@ -1,0 +1,163 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import joData from '../../data/international/jo.json';
+
+interface JoVendor {
+  slug: string; name: string; category: string; vendor_url: string;
+  tagline: string; market_position: string; jo_specific_note?: string | null;
+  tier: 'S' | 'A' | 'F'; reputation_flag: string | null;
+  pros: string[]; cons: string[]; typical_pricing: string;
+  is_cross_market: boolean; cross_market_link: string | null;
+}
+
+const vendors = (joData as { vendors: JoVendor[] }).vendors;
+const categories = ['software', 'lead-gen', 'insurance', 'payroll', 'certification'];
+const categoryMeta: Record<string, { label: string; description: string }> = {
+  'software': { label: 'Accounting / invoicing & construction software', description: 'Jordan’s software market is a JoFotara compliance gold-rush — e-invoicing platforms and connectors (InvoiceQ, Fatwarti, FawtraPlus, Tax2Gov), Arabic accounting (Daftra), and global ERPs localized for Jordan (Odoo’s native l10n_jo_edi, via partners). Genuine construction-specific tools are thin — Mozon’s contracting module is the standout.' },
+  'lead-gen': { label: 'Tenders & lead generation', description: 'Honestly thin in Jordan: the official government e-procurement portal (JONEPS), where public construction tenders are won, plus a subscription tender aggregator (JordanTenders). No Jordan-rooted construction marketplace exists — we don’t invent one.' },
+  'insurance': { label: 'Construction insurance — Contractors All Risks', description: 'CAR and engineering cover from Jordan’s major insurers — JOFICO and Arabia Insurance (which spell the cover out on their own sites), market leaders gig and JIC, and MEICO. All broker-placed, no online quotes; regulated by the Central Bank of Jordan.' },
+  'payroll': { label: 'Payroll — SSC & income tax', description: 'The Jordan-origin modern pick ZenHR (which states SSC handling on its own page), the enterprise incumbent MenaITech, plus Yomly and GTS One. Every Jordanian employer must enrol in Social Security from the first worker.' },
+  'certification': { label: 'Compliance & official bodies', description: 'The legal chain a Jordanian contractor must complete — company registration (CCD), the tax file + JoFotara (ISTD), JCCA membership + classification (the gate to public tenders), Jordan Engineers Association registration, and Social Security (SSC).' },
+};
+const vendorsByCategory: Record<string, JoVendor[]> = {};
+categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
+
+const pageTitle = 'Jordan Construction & Trades Software (JoFotara) — WrenchStack';
+const pageDescription = `Independent directory of ${vendors.length} vendors for Jordan: JoFotara-ready accounting/invoicing & construction software, public-tender access (JONEPS), SSC payroll, and Contractors All Risks insurance — plus the JoFotara e-invoicing mandate (live since April 2025), JCCA classification and SSC compliance every contractor must handle.`;
+const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Jordan', url: '/jo/' } ];
+const enUrl = new URL('/jo/', Astro.site).toString();
+const arUrl = new URL('/jo/ar/', Astro.site).toString();
+---
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} alternateUrls={[{ hreflang: 'en', href: enUrl }, { hreflang: 'ar', href: arUrl }, { hreflang: 'x-default', href: enUrl }]}>
+  <article class="mx-auto max-w-5xl px-4 py-12">
+    <header class="mb-10">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl" aria-hidden="true">🇯🇴</span>
+          <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">Jordan · الأردن</p>
+        </div>
+        <a href="/jo/ar/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">العربية</a>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">Jordan Construction & Trades Software Directory</h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        Independent reviews of {vendors.length} Jordan-relevant vendors — built around the one force that dominates the market: the <strong>JoFotara</strong> national e-invoicing mandate, now live and enforced. JoFotara-ready accounting and invoicing tools (InvoiceQ, Mozon, Daftra, Odoo), public-tender access (JONEPS), SSC payroll (ZenHR, MenaITech) and Contractors All Risks insurance (JOFICO, gig, JIC) — with the local context (16% GST, JCCA classification, Social Security from the first employee, a dinar pegged to the dollar) that off-the-shelf software ignores.
+      </p>
+    </header>
+
+    <section class="mb-10 grid gap-3 grid-cols-2 sm:grid-cols-4">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">{vendors.length}</div>
+        <div class="mt-1 text-xs text-slate-600">vendors reviewed</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">+17%</div>
+        <div class="mt-1 text-xs text-slate-600">construction growth (2025)</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">16%</div>
+        <div class="mt-1 text-xs text-slate-600">General Sales Tax</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">Apr 2025</div>
+        <div class="mt-1 text-xs text-slate-600">JoFotara mandatory (Phase 2)</div>
+      </div>
+    </section>
+
+    <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border-2 border-emerald-300 bg-emerald-50 p-5">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">⏰ Compliance guide · JoFotara LIVE & ENFORCED · Phase 2 mandatory since 1 April 2025 · no exemptions</p>
+        <h2 class="mt-1 text-base font-bold text-slate-900">JoFotara (الفوترة الوطنية) e-invoicing for Jordanian contractors</h2>
+        <p class="mt-1 text-sm text-slate-700">The clearance model, who must comply (everyone — no threshold), why only cleared invoices are tax-deductible and non-compliance bars you from public tenders, and which tools are actually JoFotara-integrated.</p>
+      </div>
+      <a href="/jo/guides/jofotara-e-invoicing/" class="shrink-0 rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Read the guide →</a>
+    </section>
+
+    <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
+      <div>
+        <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
+        <p class="mt-1 text-sm text-slate-700">See Jordanian vendors compared side by side — a clear verdict, pros and cons, Jordan-specific notes, and pricing, head to head.</p>
+      </div>
+      <a href="/jo/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare Jordanian vendors →</a>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-3 text-base font-bold text-slate-900">What’s different about choosing software in Jordan</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        One thing dominates Jordanian software selection: <strong>JoFotara is live and enforced.</strong> Since Phase 2 went mandatory on <strong>1 April 2025</strong>, every business — no turnover threshold, no sector exemption — must route invoices through the ISTD’s clearance platform, where each invoice is validated <em>before</em> it’s legally issued (UBL 2.1 XML/JSON, mandatory digital signature, a QR code returned on clearance). The teeth are real: an invoice not cleared through JoFotara is <strong>invalid for VAT input deduction</strong>, fines run up to JOD 500 per violation, and — critically for contractors — <strong>non-compliance excludes you from public tenders.</strong> So software choice carries compliance weight. The second reality: <strong>genuine construction-specific tools are thin</strong> — most of the market is JoFotara-driven invoicing, so a contractor often pairs a compliance tool with project tracking (Mozon’s contracting module and Odoo via local partners are the closest to all-in-one). Beyond that: <strong>16% GST</strong> (note: not Saudi’s 15% or the UAE’s 5%, so software must be tuned to Jordan), the <strong>JCCA classification</strong> that gates public works, and <strong>Social Security from the first employee</strong> (~21.75% of wage). The dinar is pegged to the US dollar, so pricing in either currency carries no FX risk.
+      </p>
+    </section>
+
+    {categories.map(c => {
+      const cat = categoryMeta[c];
+      const cv = vendorsByCategory[c];
+      if (cv.length === 0) return null;
+      return (
+        <section class="mb-12">
+          <div class="mb-5">
+            <h2 class="text-2xl font-bold text-slate-900">{cat.label}</h2>
+            <p class="mt-1 text-sm text-slate-600 leading-relaxed">{cat.description}</p>
+          </div>
+          <div class="space-y-4">
+            {cv.map(v => {
+              const isCert = v.category === 'certification';
+              const tierColor = v.tier === 'S' ? 'border-emerald-300' : v.tier === 'F' ? 'border-rose-300' : 'border-blue-300';
+              const tierLabel = isCert ? 'Official body / regime' : v.tier === 'S' ? 'Recommended' : v.tier === 'F' ? 'Reputation warning' : 'Workable';
+              const tierBadge = v.tier === 'S' ? 'bg-emerald-100 text-emerald-900' : v.tier === 'F' ? 'bg-rose-100 text-rose-900' : 'bg-blue-100 text-blue-900';
+              return (
+                <article class={`rounded-lg border-2 ${tierColor} bg-white p-5`}>
+                  <div class="mb-3 flex items-start justify-between gap-3">
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-center gap-2 mb-1 flex-wrap">
+                        <h3 class="text-xl font-bold text-slate-900">{v.name}</h3>
+                        <span class={`rounded-full px-2 py-0.5 text-xs font-bold ${tierBadge}`}>{isCert ? tierLabel : `Tier ${v.tier} · ${tierLabel}`}</span>
+                        {v.is_cross_market && (<span class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">Cross-market</span>)}
+                      </div>
+                      <p class="text-sm italic text-slate-500">{v.tagline}</p>
+                    </div>
+                  </div>
+                  <p class="mb-3 text-sm text-slate-700 leading-relaxed">{v.market_position}</p>
+                  {v.reputation_flag && (
+                    <div class="mb-3 rounded-md border-l-4 border-amber-400 bg-amber-50 px-4 py-2">
+                      <p class="text-sm text-amber-900 leading-relaxed"><strong>Heads up:</strong> {v.reputation_flag}</p>
+                    </div>
+                  )}
+                  {v.jo_specific_note && (
+                    <div class="mb-3 rounded-md bg-slate-50 px-4 py-3">
+                      <p class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Jordan-specific note</p>
+                      <p class="text-sm text-slate-700 leading-relaxed">{v.jo_specific_note}</p>
+                    </div>
+                  )}
+                  <div class="mb-3 grid gap-3 sm:grid-cols-2">
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1">{isCert ? 'What it covers' : 'Pros'}</p>
+                      <ul class="space-y-1 text-sm text-slate-700">{v.pros.slice(0, 4).map(p => <li class="leading-snug">+ {p}</li>)}</ul>
+                    </div>
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-rose-700 mb-1">{isCert ? 'Watch out for' : 'Cons'}</p>
+                      <ul class="space-y-1 text-sm text-slate-700">{v.cons.slice(0, 4).map(con => <li class="leading-snug">− {con}</li>)}</ul>
+                    </div>
+                  </div>
+                  <div class="mb-3 text-xs text-slate-600"><strong class="text-slate-900">{isCert ? 'Cost / access:' : 'Typical Jordan pricing:'}</strong> {v.typical_pricing}</div>
+                  <div class="flex flex-wrap gap-2">
+                    <a href={`/jo/${v.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">Full Jordan review →</a>
+                    <a href={v.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600">{isCert ? 'Official site' : `Visit ${v.name}`} →</a>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Are you a Jordanian software vendor?</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">If you build software or services for Jordanian contractors and the building trades and want to be reviewed or featured, get in touch through our <a href="/for-vendors/" class="underline">vendor program</a>.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/for-vendors/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Work with us →</a>
+        <a href="/sa/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">🇸🇦 Saudi directory</a>
+        <a href="/methodology/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Methodology</a>
+      </div>
+    </section>
+  </article>
+</Layout>

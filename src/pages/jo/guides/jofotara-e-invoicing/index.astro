@@ -1,0 +1,186 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+
+// Tools from our Jordan directory by JoFotara-integration status. Honest:
+// "JoFotara-integrated" = generates/transmits cleared invoices to ISTD today;
+// "via connector" = needs third-party middleware. Verify current status with
+// each vendor before relying on it.
+const tools = [
+  { name: 'InvoiceQ', status: 'JoFotara-native compliance platform (sits on top of your ERP/POS)', fit: 'Compliance layer for any back-office', note: 'From JOD 120/yr', href: '/jo/invoiceq/' },
+  { name: 'Mozon', status: 'Jordan-native ERP with a contracting module + pre-built ISTD connectors', fit: 'Contractors wanting ERP + compliance', note: 'Quote-based', href: '/jo/mozon/' },
+  { name: 'Odoo', status: 'Native l10n_jo_edi JoFotara module (UBL 1.2, QR), via local partners', fit: 'Full ERP if you want one system', note: 'SaaS + implementation', href: '/jo/odoo/' },
+  { name: 'Daftra', status: 'Direct JoFotara integration with auto QR; Arabic-first', fit: 'Small Arabic-language firms (books + light projects)', note: 'Tiered SaaS', href: '/jo/daftra/' },
+  { name: 'FawtraPlus', status: 'Approved JoFotara app; 16% GST built in', fit: 'Micro-businesses / sole traders', note: '~50 JOD/yr', href: '/jo/fawtraplus/' },
+  { name: 'Fatwarti', status: 'Direct JoFotara via official API; accounting + POS', fit: 'Retail/service SMEs', note: 'Tiered (free trial)', href: '/jo/fatwarti/' },
+  { name: 'Tax2Gov (T2G)', status: 'Universal JoFotara middleware/connector (incl. Odoo plugin)', fit: 'Keep your existing system, add compliance', note: 'Quote-based', href: '/jo/tax2gov/' },
+  { name: 'Zoho Books / QuickBooks', status: 'NOT JoFotara-native — require a third-party connector/middleware', fit: 'Firms already on these globals', note: 'Connector priced separately', href: '/jo/zoho-books/' },
+];
+
+const faqs = [
+  { q: 'Is JoFotara mandatory yet — and for whom?', a: 'Yes, and it is enforced. Phase 2 became mandatory on 1 April 2025, requiring ALL invoices (B2B, B2C and B2G) to route through the ISTD\'s JoFotara platform. The ISTD has explicitly stated there is no sector or entity-type exemption and no turnover threshold — all sales-tax-registered entities, retailers, service providers, independent professionals and government suppliers are in scope. A penalty-waiver grace period ran until 31 May 2025 for those who registered and integrated in time.' },
+  { q: 'What is the "clearance" model?', a: 'JoFotara uses a centralized clearance (Continuous Transaction Control) model: every invoice must be submitted to the ISTD via JoFotara and validated/cleared BEFORE it is legally issued to the buyer. On clearance, the ISTD returns a unique QR code that must appear on the final invoice. This is stricter than post-audit reporting — the tax authority sees and approves the invoice in real time.' },
+  { q: 'What happens if I don\'t comply?', a: 'Three real consequences. (1) Any invoice not cleared through JoFotara is invalid for VAT input deduction and accounting/expense purposes — only cleared invoices are deductible. (2) Fines run up to JOD 500 per violation under the Billing & Control Regulation. (3) Non-compliance excludes you from public tenders, which matters directly for contractors bidding government work. The ISTD has also run field-inspection campaigns — in early 2026 it formally notified 379 businesses, giving them a one-week window to rectify before legal action.' },
+  { q: 'What format and what\'s the legal basis?', a: 'Invoices are structured XML or JSON compliant with UBL 2.1, with mandatory digital signatures and the cleared QR code. The legal basis is layered: Income Tax Law No. 38 of 2018 (Article 23) created the parent obligation, Regulation No. 34 of 2019 set the framework, and the Amended Billing & Control Regulation No. 2 of 2025 enacted mandatory Phase 2. The system is run by the Income & Sales Tax Department (ISTD) under the Ministry of Finance, with the Ministry of Digital Economy.' },
+  { q: 'Does my accounting software need to be JoFotara-native?', a: 'Not necessarily — but it must reach JoFotara somehow by the deadline (which has passed). Jordan-native tools like InvoiceQ, Mozon, Daftra, FawtraPlus and Fatwarti, and Odoo via its l10n_jo_edi module, transmit to the ISTD directly. Global tools like Zoho Books and QuickBooks are NOT JoFotara-native — they need a third-party connector or middleware (e.g. InvoiceQ, Tax2Gov) to clear invoices. The right question for any vendor: "Do you clear invoices through JoFotara directly, or which connector do I need?"' },
+  { q: 'What\'s the wider Jordanian tax context?', a: 'General Sales Tax (GST) is a standard 16% (note: different from Saudi Arabia\'s 15% and the UAE\'s 5%, so your software must be set to Jordan). Corporate income tax is generally 20% (higher for some sectors). Social Security (SSC) is mandatory from the first employee at roughly 21.75% of the insured wage (employer 14.25% + employee 7.5%). The ISTD runs the online portal; tax payments go through eFawateercom.' },
+];
+
+const pageTitle = 'JoFotara E-Invoicing in Jordan — 2026 Guide for Contractors';
+const pageDescription = 'Jordan\'s JoFotara national e-invoicing explained for the building trades: the verified legal basis, the clearance model, who must comply (everyone — no threshold), why only cleared invoices are tax-deductible and non-compliance bars you from public tenders, and which tools are JoFotara-integrated. Live and enforced since 1 April 2025. Independent, verified June 2026.';
+
+const guideUrl = new URL('/jo/guides/jofotara-e-invoicing/', Astro.site).toString();
+const arUrl = new URL('/jo/ar/guides/jofotara-e-invoicing/', Astro.site).toString();
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Jordan', url: '/jo/' },
+  { name: 'JoFotara e-invoicing for contractors', url: '/jo/guides/jofotara-e-invoicing/' },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org', '@type': 'Article', headline: pageTitle, description: pageDescription,
+  datePublished: '2026-06-20', dateModified: '2026-06-20', inLanguage: 'en',
+  author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
+  publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
+  mainEntityOfPage: guideUrl,
+};
+const faqSchema = {
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} alternateUrls={[{ hreflang: 'en', href: guideUrl }, { hreflang: 'ar', href: arUrl }, { hreflang: 'x-default', href: guideUrl }]}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-8">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">🇯🇴 Jordan · Compliance guide</p>
+        <a href="/jo/ar/guides/jofotara-e-invoicing/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">العربية</a>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+        JoFotara E-Invoicing in Jordan
+      </h1>
+      <p class="mt-3 text-lg text-slate-600 leading-relaxed">
+        What Jordan's national e-invoicing system means for the building trades — it is live and enforced. The clearance model, who must comply, the real consequences of not complying, and which tools are actually JoFotara-integrated.
+      </p>
+      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published &amp; verified June 2026 · Not tax advice — confirm your situation with the ISTD (istd.gov.jo) or your accountant.</p>
+    </header>
+
+    <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ The short version</h2>
+      <p class="text-slate-800 leading-relaxed">
+        Jordan's <strong>JoFotara</strong> national e-invoicing system is <strong>live and enforced</strong>. Since <strong>1 April 2025</strong> (Phase 2), every business — <strong>no turnover threshold, no exemption</strong> — must route invoices through the ISTD's <strong>clearance</strong> platform, where each invoice is validated <em>before</em> it's legally issued (UBL 2.1 XML/JSON, mandatory digital signature, a QR code returned on clearance). The teeth: an invoice not cleared through JoFotara is <strong>invalid for VAT deduction</strong>, fines reach <strong>JOD 500 per violation</strong>, and <strong>non-compliance excludes you from public tenders</strong>. The practical task: make sure your invoicing tool clears to JoFotara — directly or via a connector.
+      </p>
+    </section>
+
+    <section class="mb-10 grid gap-3 sm:grid-cols-3">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">1 Apr 2025</div>
+        <div class="mt-1 text-xs text-slate-600">Phase 2 MANDATORY — all invoices</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">No threshold</div>
+        <div class="mt-1 text-xs text-slate-600">every business, every sector</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">Clearance</div>
+        <div class="mt-1 text-xs text-slate-600">cleared before issue · UBL 2.1 + QR</div>
+      </div>
+    </section>
+
+    <section class="mb-10 prose prose-slate max-w-none">
+      <h2>The timeline</h2>
+      <ul>
+        <li><strong>December 2022</strong> — JoFotara platform launched, voluntary registration.</li>
+        <li><strong>January 2023</strong> — mandatory registration began for Phase 1 (large taxpayers).</li>
+        <li><strong>1 April 2025</strong> — <strong>Phase 2 mandatory go-live: ALL invoices (B2B, B2C, B2G) must route through JoFotara.</strong> The headline date.</li>
+        <li><strong>31 May 2025</strong> — end of the penalty-waiver grace period (fines waived for those who registered + integrated by then).</li>
+        <li><strong>~February 2026</strong> — ISTD field-inspection campaign: 379 businesses formally notified for non-compliance, with a one-week window to rectify before legal action.</li>
+      </ul>
+
+      <h2>What the system requires</h2>
+      <ul>
+        <li><strong>Clearance, not reporting.</strong> Each invoice is submitted to the ISTD and validated <em>before</em> it is legally issued; without clearance and the assigned identifier/QR, the invoice isn't valid.</li>
+        <li><strong>Structured format.</strong> XML or JSON compliant with <strong>UBL 2.1</strong>, with mandatory digital signatures; the ISTD returns a unique <strong>QR code</strong> that must appear on the final invoice.</li>
+        <li><strong>Integration path.</strong> Via the ISTD's free portal/web entry, or any officially integrated third-party platform / API — which is where the vendor ecosystem (InvoiceQ, Mozon, Daftra, Odoo, Tax2Gov, etc.) plays.</li>
+        <li><strong>Everyone is in scope.</strong> No turnover threshold, no sector exemption; non-resident businesses with a Jordanian tax liability are included too.</li>
+      </ul>
+
+      <h2>Why this matters for contractors specifically</h2>
+      <p>
+        The consequences land hardest on contractors. <strong>Only JoFotara-cleared invoices are tax-deductible</strong>, so your subcontractors' and suppliers' invoices must be cleared for you to claim them — and yours must be cleared for your clients to claim them. More directly: <strong>JoFotara registration is required to participate in public tenders</strong>, so non-compliance doesn't just risk a fine, it locks you out of government work entirely (and most of Jordan's construction pipeline runs through <a href="/jo/joneps/">JONEPS</a>). Pair this with the reality that <strong>genuine construction-specific tools are thin in Jordan</strong> — most of the market is JoFotara invoicing software, so many contractors run a compliance tool alongside project tracking (Mozon's contracting module and Odoo are the closest to all-in-one).
+      </p>
+
+      <h2>The wider Jordanian tax context</h2>
+      <ul>
+        <li><strong>GST:</strong> standard <strong>16%</strong> — note this differs from Saudi (15%) and the UAE (5%), so software must be tuned to Jordan specifically.</li>
+        <li><strong>Corporate income tax:</strong> generally 20% (higher for some sectors).</li>
+        <li><strong>Social Security (SSC):</strong> mandatory from the first employee at ~21.75% of the insured wage; tax payments run through eFawateercom.</li>
+      </ul>
+
+      <h2>Which tools are JoFotara-integrated?</h2>
+      <p>
+        From the software in our <a href="/jo/">Jordan directory</a>, here's how the tools relate to JoFotara. The clean distinction: native tools clear to the ISTD directly; global tools (Zoho, QuickBooks) need a connector. Always confirm current status with the vendor.
+      </p>
+    </section>
+
+    <section class="mb-10 overflow-x-auto">
+      <table class="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
+        <thead class="bg-slate-50 text-left text-slate-700">
+          <tr>
+            <th class="p-3 font-semibold">Tool</th>
+            <th class="p-3 font-semibold">JoFotara status</th>
+            <th class="p-3 font-semibold">Best fit</th>
+            <th class="p-3 font-semibold">Pricing</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          {tools.map((t) => (
+            <tr>
+              <td class="p-3 font-semibold text-slate-900"><a href={t.href} class="hover:text-orange-600">{t.name}</a></td>
+              <td class="p-3 text-slate-700">{t.status}</td>
+              <td class="p-3 text-slate-600">{t.fit}</td>
+              <td class="p-3 text-slate-600">{t.note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="mt-3 text-xs text-slate-500">JoFotara status reflects vendor positioning/capability as of June 2026 — confirm current ISTD certification directly with each vendor before relying on it.</p>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">The one question to ask any vendor</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        Don't assume a good accounting tool clears to JoFotara. Ask: <strong>"Do you clear invoices through JoFotara directly with the ISTD, or do I need a third-party connector — and is it certified right now?"</strong> If you're on a global tool like QuickBooks or Zoho Books, plan for a connector (InvoiceQ, Tax2Gov). And remember the deadline has already passed — this isn't a "later" task.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Frequently asked questions</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
+      <strong class="text-slate-700">Sources &amp; verification:</strong> Verified June 2026 from EDICOM, VATupdate, MenaFN, Fana News and PwC, cross-checked against the ISTD. Legal basis: Income Tax Law No. 38 of 2018 (Art. 23), Regulation No. 34 of 2019, and the Amended Billing &amp; Control Regulation No. 2 of 2025 (mandatory Phase 2, 1 April 2025). Clearance/CTC model, UBL 2.1, QR on clearance, no threshold/exemption, deductibility tied to clearance, fines up to JOD 500, tender exclusion, and the ~February 2026 379-business enforcement campaign are all verified. GST 16% and SSC ~21.75% per PwC. General information, not tax advice. Spotted an error? <a href="/contact/" class="underline">Tell us</a> and we'll correct it.
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">Compare Jordanian trades software & services</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">Independent reviews of JoFotara-ready Jordanian software, tender access, SSC payroll and Contractors All Risks insurance — with no pay-to-play.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/jo/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">🇯🇴 Jordan directory →</a>
+        <a href="/jo/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Compare vendors</a>
+        <a href="/for-vendors/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Are you a vendor? Work with us</a>
+      </div>
+    </section>
+  </article>
+</Layout>

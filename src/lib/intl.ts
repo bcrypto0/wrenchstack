@@ -143,6 +143,14 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     intro: 'Moroccan construction & trades software selection is shaped by the incoming DGI facturation électronique mandate (a clearance model under Article 145-IX of the CGI, rolling out in 2026 to large firms first — the exact start date pending the implementing decree), mandatory construction insurance under Loi 59-13 (Tous Risques Chantier + responsabilité civile décennale, in force since end-2024), multi-rate TVA (20% standard), CNSS social security, the Ministry of Equipment’s Qualification & Classification system gating public BTP tenders, and a construction pipeline lifted by World Cup 2030 and Al Haouz earthquake reconstruction. B2B runs predominantly in French.',
     certContext: 'The DGI runs tax (20% TVA, IS, IR via the SIMPL portal) and the phased 2026 e-invoicing clearance mandate — large enterprises / B2B first, exact start pending the implementing decree; the Ministère de l’Équipement’s Qualification & Classification certificate is required to bid public construction tenders; mandatory construction insurance (Tous Risques Chantier + responsabilité civile décennale) under Loi 59-13 requires a prior contrôle technique and is broker-placed; and employers must register with the CNSS (declarations via Damancom) and carry the ICE on every invoice.',
   },
+  jo: {
+    code: 'jo',
+    name: 'Jordan',
+    flag: '🇯🇴',
+    noteField: 'jo_specific_note',
+    intro: 'Jordanian construction & trades software selection is dominated by one force: the JoFotara national e-invoicing mandate, which is live and enforced — a centralized clearance model run by the Income & Sales Tax Department (ISTD), mandatory for all businesses with no threshold since Phase 2 on 1 April 2025, where only cleared invoices are tax-deductible and non-compliance bars you from public tenders. Add 16% General Sales Tax, mandatory Social Security (SSC) from the first employee, JCCA contractor classification gating public works, and a dinar pegged to the US dollar.',
+    certContext: 'The ISTD runs tax (16% GST, income tax) and the mandatory JoFotara e-invoicing clearance platform (live since 1 April 2025, all businesses, UBL 2.1 + QR, only cleared invoices deductible); JCCA working membership plus a contractor classification (Govt Works Regulation 71/1986) is the legal gate to bidding public works; Jordan Engineers Association (JEA) registration is mandatory to practice engineering; companies register at the Companies Control Department (CCD); and every employer must enrol in Social Security (SSC) from the first worker (~21.75% of the insured wage).',
+  },
 };
 
 export const INTL_CATEGORY_LABELS: Record<string, string> = {

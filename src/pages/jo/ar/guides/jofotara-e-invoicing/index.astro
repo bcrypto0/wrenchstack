@@ -1,0 +1,177 @@
+---
+import Layout from '../../../../../layouts/Layout.astro';
+
+const tools = [
+  { name: 'InvoiceQ', status: 'منصة امتثال للفوترة الوطنية (تعمل فوق نظامك الحالي)', fit: 'طبقة امتثال لأي نظام محاسبي', note: 'من ١٢٠ ديناراً/سنة', href: '/jo/invoiceq/' },
+  { name: 'Mozon', status: 'نظام موارد أردني بوحدة مقاولات + موصّلات جاهزة', fit: 'مقاولون يريدون نظام موارد + امتثال', note: 'حسب الطلب', href: '/jo/mozon/' },
+  { name: 'Odoo', status: 'وحدة فوترة وطنية أصلية (l10n_jo_edi)، عبر شركاء محليين', fit: 'نظام موارد كامل إن أردت نظاماً واحداً', note: 'اشتراك + تطبيق', href: '/jo/odoo/' },
+  { name: 'Daftra', status: 'تكامل مباشر مع رمز QR تلقائي؛ عربية أولاً', fit: 'منشآت صغيرة (محاسبة + مشاريع خفيفة)', note: 'اشتراك متدرّج', href: '/jo/daftra/' },
+  { name: 'FawtraPlus', status: 'تطبيق معتمد؛ ضريبة المبيعات ١٦٪ مدمجة', fit: 'المنشآت الصغيرة جداً', note: '~٥٠ ديناراً/سنة', href: '/jo/fawtraplus/' },
+  { name: 'Fatwarti', status: 'تكامل مباشر عبر الواجهة الرسمية؛ محاسبة + نقاط بيع', fit: 'منشآت التجزئة والخدمات', note: 'متدرّج (تجربة مجانية)', href: '/jo/fatwarti/' },
+  { name: 'Tax2Gov (T2G)', status: 'وسيط عام للفوترة الوطنية (مع إضافة لـ Odoo)', fit: 'أبقِ نظامك وأضف الامتثال', note: 'حسب الطلب', href: '/jo/tax2gov/' },
+  { name: 'Zoho Books / QuickBooks', status: 'غير متوافقة أصلاً — تتطلّب موصّلاً/وسيطاً خارجياً', fit: 'منشآت تستخدم هذه الأنظمة العالمية', note: 'الموصّل بسعر منفصل', href: '/jo/zoho-books/' },
+];
+
+const faqs = [
+  { q: 'هل الفوترة الوطنية إلزامية الآن — ولمن؟', a: 'نعم، وهي مطبّقة فعلاً. أصبحت المرحلة الثانية إلزامية في ١ أبريل ٢٠٢٥، وتُلزم بتمرير جميع الفواتير (بين الشركات وللمستهلك والحكومية) عبر منصة دائرة ضريبة الدخل والمبيعات. وقد صرّحت الدائرة بأنه لا يوجد إعفاء لأي قطاع أو نوع منشأة ولا حدّ أدنى للإيرادات — فكل منشأة مسجّلة في ضريبة المبيعات مشمولة. وكانت هناك فترة سماح من الغرامات حتى ٣١ مايو ٢٠٢٥ لمن سجّل وتكامل في حينه.' },
+  { q: 'ما هو نموذج «التخليص»؟', a: 'تعتمد الفوترة الوطنية نموذج تخليص مركزي (رقابة لحظية على المعاملات): يجب إرسال كل فاتورة إلى الدائرة عبر المنصة وتخليصها قبل إصدارها قانونياً للمشتري. وعند التخليص تُعيد الدائرة رمز QR فريداً يجب أن يظهر على الفاتورة النهائية. وهذا أكثر صرامة من الإبلاغ اللاحق — إذ ترى السلطة الفاتورة وتوافق عليها فورياً.' },
+  { q: 'ماذا يحدث إن لم ألتزم؟', a: 'ثلاث نتائج حقيقية: (١) أي فاتورة غير مخلّصة عبر الفوترة الوطنية لا تُقبل للخصم الضريبي ولأغراض المحاسبة — فقط المخلّصة قابلة للخصم. (٢) غرامات تصل إلى ٥٠٠ دينار لكل مخالفة. (٣) عدم الامتثال يُقصيك من العطاءات الحكومية — وهو ما يهمّ المقاول مباشرة. كما نفّذت الدائرة حملات تفتيش ميدانية؛ ففي مطلع ٢٠٢٦ أبلغت رسمياً ٣٧٩ منشأة ومنحتها مهلة أسبوع للتصويب قبل الإجراء القانوني.' },
+  { q: 'ما الصيغة وما الأساس القانوني؟', a: 'الفواتير بصيغة XML أو JSON متوافقة مع معيار UBL 2.1، مع توقيع رقمي إلزامي ورمز QR المخلّص. والأساس القانوني متدرّج: قانون ضريبة الدخل رقم ٣٨ لسنة ٢٠١٨ (المادة ٢٣) أنشأ الالتزام الأصلي، ونظام رقم ٣٤ لسنة ٢٠١٩ وضع الإطار، والنظام المعدّل للفوترة والرقابة رقم ٢ لسنة ٢٠٢٥ هو الذي فعّل المرحلة الثانية الإلزامية. وتديره دائرة ضريبة الدخل والمبيعات تحت وزارة المالية، بالتعاون مع وزارة الاقتصاد الرقمي.' },
+  { q: 'هل يجب أن يكون برنامجي متكاملاً أصلاً مع الفوترة الوطنية؟', a: 'ليس بالضرورة — لكنه يجب أن يصل إلى المنصة بطريقة ما. الأدوات الأردنية مثل InvoiceQ وموزون ودفترة وفوترة بلس وفاتورتي، وOdoo عبر وحدة l10n_jo_edi، ترسل إلى الدائرة مباشرة. أما الأدوات العالمية مثل Zoho Books وQuickBooks فليست متوافقة أصلاً — وتحتاج موصّلاً أو وسيطاً خارجياً (مثل InvoiceQ أو Tax2Gov) لتخليص الفواتير. والسؤال الصحيح لأي مزوّد: «هل تخلّص الفواتير عبر الفوترة الوطنية مباشرة، أم أي موصّل أحتاج؟»' },
+  { q: 'ما السياق الضريبي الأردني الأوسع؟', a: 'ضريبة المبيعات العامة ١٦٪ (تختلف عن ١٥٪ في السعودية و٥٪ في الإمارات، فيجب ضبط البرنامج على الأردن). وضريبة دخل الشركات ٢٠٪ عموماً (أعلى لبعض القطاعات). والضمان الاجتماعي إلزامي من أول موظف بنحو ٢١٫٧٥٪ من الأجر المؤمَّن عليه. وتُدفع الضرائب عبر «إي فواتيركم».' },
+];
+
+const pageTitle = 'الفوترة الوطنية (JoFotara) في الأردن — دليل ٢٠٢٦ للمقاولين';
+const pageDescription = 'شرح نظام الفوترة الوطنية الأردني للبناء والمقاولات: الأساس القانوني، ونموذج التخليص، ومن يلتزم (الجميع — بلا حدّ أدنى)، ولماذا تُقبل الفواتير المخلّصة فقط للخصم الضريبي وعدم الامتثال يُقصيك من العطاءات، وأي الأنظمة متكاملة. فعّال وإلزامي منذ ١ أبريل ٢٠٢٥.';
+
+const enUrl = new URL('/jo/guides/jofotara-e-invoicing/', Astro.site).toString();
+const arUrl = new URL('/jo/ar/guides/jofotara-e-invoicing/', Astro.site).toString();
+
+const articleSchema = {
+  '@context': 'https://schema.org', '@type': 'Article', headline: pageTitle, description: pageDescription,
+  datePublished: '2026-06-20', dateModified: '2026-06-20', inLanguage: 'ar',
+  author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
+  publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
+  mainEntityOfPage: arUrl,
+};
+const faqSchema = {
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} lang="ar" dir="rtl" alternateUrls={[{ hreflang: 'en', href: enUrl }, { hreflang: 'ar', href: arUrl }, { hreflang: 'x-default', href: enUrl }]}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-8">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <p class="text-sm font-semibold uppercase tracking-wider text-orange-600">🇯🇴 الأردن · دليل امتثال</p>
+        <a href="/jo/guides/jofotara-e-invoicing/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">English</a>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+        الفوترة الوطنية (JoFotara) في الأردن
+      </h1>
+      <p class="mt-3 text-lg text-slate-600 leading-relaxed">
+        ماذا يعني نظام الفوترة الإلكترونية الوطني للبناء والمقاولات — فهو فعّال وإلزامي. نموذج التخليص، ومن يلتزم، والعواقب الحقيقية لعدم الامتثال، وأي الأنظمة متكاملة فعلاً مع الفوترة الوطنية.
+      </p>
+      <p class="mt-3 text-sm text-slate-500">إعداد WrenchStack Research · نُشر وتُحقّق منه في يونيو ٢٠٢٦ · ليس استشارة ضريبية — تحقّق من وضعك مع الدائرة (istd.gov.jo) أو محاسبك.</p>
+    </header>
+
+    <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ باختصار</h2>
+      <p class="text-slate-800 leading-relaxed">
+        نظام <strong>الفوترة الوطنية</strong> الأردني <strong>فعّال وإلزامي</strong>. منذ <strong>١ أبريل ٢٠٢٥</strong> (المرحلة الثانية)، على كل منشأة — <strong>بلا حدّ أدنى وبلا إعفاء</strong> — تمرير فواتيرها عبر منصة <strong>التخليص</strong> لدى الدائرة، حيث تُخلَّص كل فاتورة قبل إصدارها قانونياً (XML/JSON بمعيار UBL 2.1، وتوقيع رقمي إلزامي، ورمز QR يُعاد عند التخليص). والعقوبات حقيقية: الفاتورة غير المخلّصة <strong>لا تُقبل للخصم الضريبي</strong>، والغرامات تصل إلى <strong>٥٠٠ دينار لكل مخالفة</strong>، و<strong>عدم الامتثال يُقصيك من العطاءات الحكومية</strong>. والمهمة العملية: تأكّد أن أداة الفوترة لديك تُخلّص إلى الفوترة الوطنية — مباشرة أو عبر موصّل.
+      </p>
+    </section>
+
+    <section class="mb-10 grid gap-3 sm:grid-cols-3">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">١ أبريل ٢٠٢٥</div>
+        <div class="mt-1 text-xs text-slate-600">المرحلة الثانية إلزامية — جميع الفواتير</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">بلا حدّ أدنى</div>
+        <div class="mt-1 text-xs text-slate-600">كل منشأة، كل قطاع</div>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
+        <div class="text-2xl font-bold text-slate-900">تخليص</div>
+        <div class="mt-1 text-xs text-slate-600">قبل الإصدار · UBL 2.1 + QR</div>
+      </div>
+    </section>
+
+    <section class="mb-10 prose prose-slate max-w-none">
+      <h2>الجدول الزمني</h2>
+      <ul>
+        <li><strong>ديسمبر ٢٠٢٢</strong> — إطلاق منصة الفوترة الوطنية، تسجيل اختياري.</li>
+        <li><strong>يناير ٢٠٢٣</strong> — بدء التسجيل الإلزامي للمرحلة الأولى (كبار المكلّفين).</li>
+        <li><strong>١ أبريل ٢٠٢٥</strong> — <strong>المرحلة الثانية إلزامية: كل الفواتير (بين الشركات وللمستهلك والحكومية) عبر الفوترة الوطنية.</strong> التاريخ المحوري.</li>
+        <li><strong>٣١ مايو ٢٠٢٥</strong> — نهاية فترة الإعفاء من الغرامات لمن سجّل وتكامل في حينه.</li>
+        <li><strong>~فبراير ٢٠٢٦</strong> — حملة تفتيش ميدانية: إبلاغ ٣٧٩ منشأة رسمياً بعدم الامتثال، مع مهلة أسبوع للتصويب قبل الإجراء القانوني.</li>
+      </ul>
+
+      <h2>ما يتطلّبه النظام</h2>
+      <ul>
+        <li><strong>تخليص، لا إبلاغ.</strong> تُرسل كل فاتورة إلى الدائرة وتُخلَّص قبل إصدارها قانونياً؛ ودون التخليص والمعرّف/الرمز لا تكون الفاتورة صحيحة.</li>
+        <li><strong>صيغة مهيكلة.</strong> XML أو JSON متوافقة مع <strong>UBL 2.1</strong> وبتوقيع رقمي إلزامي؛ وتُعيد الدائرة رمز <strong>QR</strong> فريداً يجب أن يظهر على الفاتورة.</li>
+        <li><strong>مسار التكامل.</strong> عبر بوابة الدائرة المجانية، أو أي منصة/واجهة برمجية متكاملة رسمياً — وهنا يأتي دور المزوّدين (InvoiceQ، موزون، دفترة، Odoo، Tax2Gov…).</li>
+        <li><strong>الجميع مشمول.</strong> بلا حدّ أدنى وبلا إعفاء قطاعي؛ وتشمل المنشآت غير المقيمة ذات الالتزام الضريبي في الأردن.</li>
+      </ul>
+
+      <h2>لماذا يهمّ هذا المقاولين تحديداً</h2>
+      <p>
+        تقع العواقب أثقل على المقاولين. <strong>الفواتير المخلّصة فقط قابلة للخصم الضريبي</strong>، فيجب أن تُخلَّص فواتير مقاولي الباطن والموردين كي تخصمها، وأن تُخلَّص فواتيرك كي يخصمها عملاؤك. والأهم: <strong>التسجيل في الفوترة الوطنية شرط للمشاركة في العطاءات الحكومية</strong>، فعدم الامتثال لا يعرّضك لغرامة فحسب، بل يُقصيك من الأعمال الحكومية كلياً (ومعظم مشاريع الإنشاءات الأردنية تمرّ عبر <a href="/jo/joneps/">JONEPS</a>). أضف إلى ذلك أن <strong>الأدوات الإنشائية المتخصّصة قليلة</strong> — فيقرن كثير من المقاولين أداة امتثال بأداة لإدارة المشاريع (وحدة «موزون» وOdoo هما الأقرب لحلٍّ شامل).
+      </p>
+
+      <h2>السياق الضريبي الأوسع</h2>
+      <ul>
+        <li><strong>ضريبة المبيعات:</strong> ١٦٪ (تختلف عن ١٥٪ بالسعودية و٥٪ بالإمارات، فاضبط البرنامج على الأردن).</li>
+        <li><strong>ضريبة دخل الشركات:</strong> ٢٠٪ عموماً (أعلى لبعض القطاعات).</li>
+        <li><strong>الضمان الاجتماعي:</strong> إلزامي من أول موظف بنحو ٢١٫٧٥٪ من الأجر؛ والدفع عبر «إي فواتيركم».</li>
+      </ul>
+
+      <h2>أي الأنظمة متكاملة مع الفوترة الوطنية؟</h2>
+      <p>
+        من البرامج في <a href="/jo/ar/">دليل الأردن</a>، إليك علاقتها بالفوترة الوطنية. التمييز الواضح: الأدوات الأردنية تُخلّص إلى الدائرة مباشرة؛ والأدوات العالمية (Zoho، QuickBooks) تحتاج موصّلاً. تحقّق دائماً من الحالة الحالية مع المزوّد.
+      </p>
+    </section>
+
+    <section class="mb-10 overflow-x-auto">
+      <table class="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
+        <thead class="bg-slate-50 text-right text-slate-700">
+          <tr>
+            <th class="p-3 font-semibold">الأداة</th>
+            <th class="p-3 font-semibold">حالة الفوترة الوطنية</th>
+            <th class="p-3 font-semibold">الأنسب لـ</th>
+            <th class="p-3 font-semibold">السعر</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          {tools.map((t) => (
+            <tr>
+              <td class="p-3 font-semibold text-slate-900"><a href={t.href} class="hover:text-orange-600">{t.name}</a></td>
+              <td class="p-3 text-slate-700">{t.status}</td>
+              <td class="p-3 text-slate-600">{t.fit}</td>
+              <td class="p-3 text-slate-600">{t.note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="mt-3 text-xs text-slate-500">تعكس الحالة موقع المزوّد وقدرته حتى يونيو ٢٠٢٦ — تحقّق من الاعتماد الحالي مباشرة قبل الاعتماد عليه.</p>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-6">
+      <h2 class="mb-2 text-lg font-bold text-slate-900">السؤال الواحد لأي مزوّد</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        لا تفترض أن أداة محاسبية جيدة تُخلّص إلى الفوترة الوطنية. اسأل: <strong>«هل تخلّص الفواتير عبر الفوترة الوطنية مباشرة مع الدائرة، أم أحتاج موصّلاً خارجياً — وهل هو معتمد الآن؟»</strong> وإن كنت على أداة عالمية كـ QuickBooks أو Zoho Books، فخطّط لموصّل (InvoiceQ، Tax2Gov). وتذكّر أن الموعد قد مضى — فهذه ليست مهمة تؤجَّل.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">الأسئلة الشائعة</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="rounded-lg border border-slate-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
+      <strong class="text-slate-700">المصادر والتحقّق:</strong> تُحقّق منه في يونيو ٢٠٢٦ من EDICOM وVATupdate وMenaFN وFana News وPwC، بمقابلته مع الدائرة. الأساس القانوني: قانون ضريبة الدخل رقم ٣٨ لسنة ٢٠١٨ (المادة ٢٣)، ونظام رقم ٣٤ لسنة ٢٠١٩، والنظام المعدّل للفوترة والرقابة رقم ٢ لسنة ٢٠٢٥ (المرحلة الثانية الإلزامية، ١ أبريل ٢٠٢٥). نموذج التخليص وUBL 2.1 ورمز QR وغياب الحدّ الأدنى وربط الخصم بالتخليص وغرامات حتى ٥٠٠ دينار والإقصاء من العطاءات وحملة ٣٧٩ منشأة (~فبراير ٢٠٢٦) جميعها مُتحقَّق منها. ضريبة المبيعات ١٦٪ والضمان ~٢١٫٧٥٪ بحسب PwC. معلومات عامة وليست استشارة ضريبية. لاحظت خطأً؟ <a href="/contact/" class="underline">أخبرنا</a> وسنصحّحه.
+    </section>
+
+    <section class="rounded-lg bg-slate-900 p-8 text-white">
+      <h2 class="text-2xl font-bold">قارن برامج وخدمات المقاولات في الأردن</h2>
+      <p class="mt-2 text-slate-300 leading-relaxed">مراجعات مستقلة لبرامج أردنية جاهزة للفوترة الوطنية، والوصول إلى العطاءات، ورواتب الضمان، وتأمين مخاطر المقاولين — دون مقابل مدفوع.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="/jo/ar/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">🇯🇴 دليل الأردن ←</a>
+        <a href="/jo/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">قارن المزوّدين</a>
+        <a href="/for-vendors/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">هل أنت مزوّد؟ اعمل معنا</a>
+      </div>
+    </section>
+  </article>
+</Layout>
