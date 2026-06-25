@@ -46,7 +46,7 @@ const newIntegrations = toTool.integrations.filter(i => !fromTool.integrations.i
 // Cost-of-switch analysis
 const fromPrice = fromTool.pricing.starting_at_usd;
 const toPrice = toTool.pricing.starting_at_usd;
-const monthlyDelta = (fromPrice !== null && toPrice !== null) ? toPrice - fromPrice : null;
+const monthlyDelta = (fromPrice !== null && toPrice !== null) ? Math.round(toPrice - fromPrice) : null;
 const annualDelta = monthlyDelta !== null ? monthlyDelta * 12 : null;
 
 // Classify TO tool by pricing tier for implementation cost estimate
