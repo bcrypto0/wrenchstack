@@ -71,7 +71,7 @@ function scenarioCost(t: Tool, teamSize: number): string {
     return tiers[2] ? `~$${tiers[2]}/mo` : `~$${p}/mo`;
   }
   // Per-user pricing — multiply by team size (rough estimate)
-  return `~$${p * teamSize}/mo`;
+  return `~$${Math.round(p * teamSize)}/mo`;
 }
 
 const faqs = [

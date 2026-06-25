@@ -228,7 +228,8 @@ const breadcrumbs = [
         const rating = aggregateRating(alt);
         const altPrice = alt.pricing.starting_at_usd;
         const isCheaper = altPrice !== null && toolPrice !== null && altPrice < toolPrice;
-        const isHigherRated = (rating ?? 0) > (aggregateRating(tool) ?? 0);
+        const toolRating = aggregateRating(tool);
+        const isHigherRated = rating !== null && toolRating !== null && rating > toolRating;
         const altOnlyFeatures = alt.key_features.filter((f) => !tool.key_features.includes(f));
         const toolOnlyFeatures = tool.key_features.filter((f) => !alt.key_features.includes(f));
 
@@ -272,7 +273,7 @@ const breadcrumbs = [
                 <dd class="text-slate-700">
                   {isCheaper && `you need a lower entry price (${formatPrice(alt)} vs ${formatPrice(tool)})`}
                   {isCheaper && isHigherRated && '; '}
-                  {isHigherRated && `you prioritize post-purchase satisfaction (${rating?.toFixed(1)} vs ${aggregateRating(tool)?.toFixed(1)} user rating)`}
+                  {isHigherRated && `you prioritize post-purchase satisfaction (${rating!.toFixed(1)} vs ${toolRating!.toFixed(1)} user rating)`}
                   {!isCheaper && !isHigherRated && altOnlyFeatures.length > 0 && `you need ${altOnlyFeatures[0].replace(/_/g, ' ')} — ${alt.name} has it, ${tool.name} doesn't`}
                   {!isCheaper && !isHigherRated && altOnlyFeatures.length === 0 && `the target profile matches: ${alt.best_for}`}
                 </dd>

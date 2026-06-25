@@ -200,7 +200,7 @@ function pricingAnalysis(): string {
     const diff = Math.abs(a.pricing.starting_at_usd - b.pricing.starting_at_usd);
     const cheaper = cheaperTool!;
     const pricier = cheaper === a ? b : a;
-    analysis += ` ${cheaper.name} is $${diff}/mo cheaper at the entry tier. At scale (5+ users), both platforms typically converge in price as you climb the tier ladder.`;
+    analysis += ` ${cheaper.name} is $${Math.round(diff)}/mo cheaper at the entry tier. At scale (5+ users), both platforms typically converge in price as you climb the tier ladder.`;
   }
 
   return analysis;
