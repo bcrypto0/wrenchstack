@@ -94,6 +94,19 @@ export function getTool(slug: string): Tool | undefined {
   return tools.find((t) => t.slug === slug);
 }
 
+// International cross-market vendors map to a US tool via cross_market_link
+// (e.g. "/tools/servicetitan/"). When that US tool carries a real affiliate
+// URL, route the international click there so intl pages can earn commission
+// too; otherwise fall back to the vendor's own site.
+export function intlOutboundUrl(vendor: { vendor_url: string; cross_market_link?: string | null }): string {
+  const m = vendor.cross_market_link?.match(/\/tools\/([^/]+)/);
+  if (m) {
+    const tool = getTool(m[1]);
+    if (tool?.affiliate_url?.startsWith('http')) return tool.affiliate_url;
+  }
+  return vendor.vendor_url;
+}
+
 export function getVertical(slug: string): Vertical | undefined {
   return verticals.find((v) => v.slug === slug);
 }

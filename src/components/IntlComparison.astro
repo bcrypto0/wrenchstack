@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { INTL_CATEGORY_LABELS, intlNote, intlTierMeta, type IntlVendor, type IntlMarket } from '../lib/intl';
 import { GATED_INTL_COMPARE_MARKETS } from '../lib/compare-index.mjs';
+import { intlOutboundUrl } from '../lib/data';
 
 interface Props {
   market: IntlMarket;
@@ -43,7 +44,7 @@ const cols = [a, b];
 const noindex = GATED_INTL_COMPARE_MARKETS.has(market.code);
 ---
 
-<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} noindex={noindex}>
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} noindex={noindex} affiliate>
   <article class="mx-auto max-w-5xl px-4 py-12">
     <header class="mb-8">
       <div class="mb-3 flex items-center gap-2">
@@ -98,7 +99,7 @@ const noindex = GATED_INTL_COMPARE_MARKETS.has(market.code);
 
             <div class="flex flex-wrap gap-2">
               <a href={`/${market.code}/${v.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">Full review →</a>
-              <a href={v.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Visit →</a>
+              <a href={intlOutboundUrl(v)} rel="sponsored nofollow noopener" target="_blank" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Visit →</a>
             </div>
           </div>
         );

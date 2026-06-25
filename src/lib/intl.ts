@@ -192,3 +192,19 @@ export function intlTierMeta(tier: 'S' | 'A' | 'F'): { label: string; badge: str
   if (tier === 'F') return { label: 'Reputation warning', badge: 'bg-rose-100 text-rose-900', border: 'border-rose-300' };
   return { label: 'Workable', badge: 'bg-blue-100 text-blue-900', border: 'border-blue-300' };
 }
+
+// Hreflang cluster for the parallel English-market homepages. Shared, self-
+// referential set (each page lists every alternate including itself, per
+// Google's reciprocity rules) — signals these are regional variants of one
+// directory, not duplicate content competing against each other.
+export const EN_MARKET_HREFLANG: { hreflang: string; href: string }[] = [
+  { hreflang: 'en-US', href: 'https://wrenchstack.com/' },
+  { hreflang: 'en-GB', href: 'https://wrenchstack.com/uk/' },
+  { hreflang: 'en-CA', href: 'https://wrenchstack.com/ca/' },
+  { hreflang: 'en-AU', href: 'https://wrenchstack.com/au/' },
+  { hreflang: 'en-NZ', href: 'https://wrenchstack.com/nz/' },
+  { hreflang: 'en-IE', href: 'https://wrenchstack.com/ie/' },
+  { hreflang: 'en-ZA', href: 'https://wrenchstack.com/za/' },
+  { hreflang: 'en-MY', href: 'https://wrenchstack.com/my/' },
+  { hreflang: 'x-default', href: 'https://wrenchstack.com/' },
+];

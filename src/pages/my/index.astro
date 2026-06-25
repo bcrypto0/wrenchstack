@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { EN_MARKET_HREFLANG } from '../../lib/intl';
 import myData from '../../data/international/my.json';
 
 interface MyVendor {
@@ -26,7 +27,7 @@ const pageTitle = 'Malaysia Construction & Trades Software (MyInvois) — Wrench
 const pageDescription = `Independent directory of ${vendors.length} vendors for Malaysia: MyInvois-ready accounting/invoicing & construction/QS software, government tender access, EPF/SOCSO payroll, and Contractor's All Risks insurance — plus the MyInvois e-invoicing mandate (LHDN/IRBM; construction's no-consolidation rule and the relaxation to 2027), CIDB G1–G7 grading and the compliance chain every contractor must handle.`;
 const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Malaysia', url: '/my/' } ];
 ---
-<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} alternateUrls={EN_MARKET_HREFLANG}>
   <article class="mx-auto max-w-5xl px-4 py-12">
     <header class="mb-10">
       <div class="mb-3 flex items-center gap-2">

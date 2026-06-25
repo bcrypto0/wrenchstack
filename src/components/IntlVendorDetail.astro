@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { INTL_CATEGORY_LABELS, intlNote, intlTierMeta, type IntlVendor, type IntlMarket } from '../lib/intl';
+import { intlOutboundUrl } from '../lib/data';
 
 interface Props {
   vendor: IntlVendor;
@@ -18,7 +19,11 @@ const sameCategory = siblings.filter((s) => s.category === vendor.category);
 const otherCategory = siblings.filter((s) => s.category !== vendor.category);
 const related = [...sameCategory, ...otherCategory].slice(0, 6);
 
-const pageTitle = `${vendor.name} ${market.name} Review (2026): ${categoryLabel} for ${market.name} Trades`;
+// Keep titles short + drop the duplicate market name. Certifications aren't
+// "reviewed", so give them a neutral form.
+const pageTitle = vendor.category === 'certification'
+  ? `${vendor.name}: ${categoryLabel} in ${market.name} (2026)`
+  : `${vendor.name} ${market.name} Review (2026): ${categoryLabel}`;
 const pageDescription = `${vendor.name} for ${market.name} trades — ${vendor.tagline}. Market position, ${market.name}-specific compliance notes, pros and cons, and typical pricing. Independent WrenchStack review.`;
 
 const breadcrumbs = [
@@ -61,7 +66,7 @@ const faqSchema = {
 };
 ---
 
-<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} affiliate>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <article class="mx-auto max-w-4xl px-4 py-12">
@@ -79,7 +84,7 @@ const faqSchema = {
       </div>
 
       <div class="mt-6 flex flex-wrap gap-3">
-        <a href={vendor.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Visit {vendor.name} →</a>
+        <a href={intlOutboundUrl(vendor)} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Visit {vendor.name} →</a>
         {vendor.cross_market_link && (
           <a href={vendor.cross_market_link} class="rounded-md border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50">Full review (US market context)</a>
         )}

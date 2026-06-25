@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { EN_MARKET_HREFLANG } from '../../lib/intl';
 import zaData from '../../data/international/za.json';
 
 interface ZaVendor {
@@ -26,7 +27,7 @@ const pageTitle = 'South Africa Trades Software & Services — WrenchStack';
 const pageDescription = `Independent directory of ${vendors.length} South African trades vendors: job-management software (incl. the solar-installer boom), lead-gen marketplaces, SARS-compliant payroll, contractor insurance — plus the PIRB, DoEL, SAQCC Gas, CIDB, NHBRC and COIDA compliance every SA trades business navigates.`;
 const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'South Africa', url: '/za/' } ];
 ---
-<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} alternateUrls={EN_MARKET_HREFLANG}>
   <article class="mx-auto max-w-5xl px-4 py-12">
     <header class="mb-10">
       <div class="mb-3 flex items-center gap-2">

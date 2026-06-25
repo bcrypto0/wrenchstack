@@ -20,13 +20,28 @@ interface Props {
   lang?: string;
   dir?: 'ltr' | 'rtl';
   alternateUrls?: { hreflang: string; href: string }[];
+  /** Render a proximate FTC affiliate disclosure strip atop the content (for pages with affiliate CTAs). */
+  affiliate?: boolean;
 }
 
-const { title, description, canonical, ogImage, noindex = false, breadcrumbs, lang = 'en', dir = 'ltr', alternateUrls = [] } = Astro.props;
+const { title, description, canonical, ogImage, noindex = false, breadcrumbs, lang = 'en', dir = 'ltr', alternateUrls = [], affiliate = false } = Astro.props;
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
 // PNG, not SVG: LinkedIn/X/Facebook do not render SVG og:images (the card shows blank).
 const ogImageUrl = ogImage ?? new URL('/og-default.png', Astro.site).toString();
-const fullTitle = title.endsWith('WrenchStack') ? title : `${title} | WrenchStack`;
+// Brand suffix only when the title doesn't already contain the brand AND the
+// result stays within Google's ~60-char SERP display — never push a title past
+// the cut or repeat the brand twice.
+const TITLE_SUFFIX = ' | WrenchStack';
+const fullTitle = title.includes('WrenchStack')
+  ? title
+  : title.length + TITLE_SUFFIX.length <= 60
+    ? `${title}${TITLE_SUFFIX}`
+    : title;
+// Meta descriptions over ~160 chars get hard-truncated by Google mid-word;
+// clamp to a clean word boundary so the snippet always reads well.
+const metaDescription = description.length > 160
+  ? `${description.slice(0, 157).replace(/\s+\S*$/, '')}…`
+  : description;
 const isHomepage = Astro.url.pathname === '/';
 
 // Country/region switcher — detect the active market from the URL path.
@@ -117,21 +132,21 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
     <meta name="generator" content={Astro.generator} />
 
     <title>{fullTitle}</title>
-    <meta name="description" content={description} />
+    <meta name="description" content={metaDescription} />
     <link rel="canonical" href={canonicalUrl} />
     {alternateUrls.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
     {noindex && <meta name="robots" content="noindex,nofollow" />}
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={metaDescription} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:site_name" content="WrenchStack" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:description" content={metaDescription} />
     <meta name="twitter:image" content={ogImageUrl} />
 
     {isHomepage && <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />}
@@ -218,6 +233,13 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
     </header>
 
     <main>
+      {affiliate && (
+        <div class="border-b border-amber-200/70 bg-amber-50/60">
+          <p class="mx-auto max-w-6xl px-4 py-2 text-xs text-slate-600">
+            Some links on this page are affiliate links — WrenchStack may earn a commission at no extra cost to you, which never affects our ratings or what we write. <a href="/disclosure/" class="font-medium underline hover:text-slate-900">How we make money</a>.
+          </p>
+        </div>
+      )}
       <slot />
     </main>
 
