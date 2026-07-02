@@ -76,7 +76,10 @@ const currentCountry = COUNTRIES.find((c) => c.code === currentCountryCode) ?? C
 // To activate: set PUBLIC_GA_ID (e.g. 'G-XXXXXXXXXX') and PUBLIC_CF_BEACON in the
 // Cloudflare build env, or hardcode the values here.
 const GA_MEASUREMENT_ID = import.meta.env.PUBLIC_GA_ID || 'G-S7V98KD153';
-const CF_BEACON_TOKEN = import.meta.env.PUBLIC_CF_BEACON || '';
+// Cloudflare Web Analytics (RUM) site token — public by design (ships in HTML).
+// Site was created 2026-05-20 but auto-install never injected the beacon on
+// Workers-served pages, so we ship it ourselves. Overridable via env.
+const CF_BEACON_TOKEN = import.meta.env.PUBLIC_CF_BEACON || '4a623739a8db4cd4aeb0496f7859a4e2';
 
 const organizationSchema = {
   '@context': 'https://schema.org',
