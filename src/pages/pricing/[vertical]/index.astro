@@ -77,7 +77,7 @@ function scenarioCost(t: Tool, teamSize: number): string {
 const faqs = [
   {
     q: `How much does ${verticalLower} software cost?`,
-    a: `Entry-level tools start at ${freeTier ? `free (${freeTier.name})` : `$${cheapestPublic?.pricing.starting_at_usd}/month (${cheapestPublic?.name})`}. Mid-tier tools run $99-$300/month for small teams. Enterprise platforms like ${customQuoteOnly[0]?.name ?? 'ServiceTitan'} use custom quotes and typically run $300-$800/user/month at typical configurations.`,
+    a: `${freeTier ? `Entry-level tools start at free (${freeTier.name}). ` : cheapestPublic ? `Entry-level tools start at $${cheapestPublic.pricing.starting_at_usd}/month (${cheapestPublic.name}). ` : `Most ${verticalLower} platforms are custom-quoted rather than publicly priced, so entry cost depends on your team size and modules. `}Mid-tier tools run $99-$300/month for small teams. Enterprise platforms like ${customQuoteOnly[0]?.name ?? 'ServiceTitan'} use custom quotes and typically run $300-$800/user/month at typical configurations.`,
   },
   {
     q: `What's the cheapest ${verticalLower} software?`,
