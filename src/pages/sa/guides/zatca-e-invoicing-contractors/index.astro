@@ -32,15 +32,15 @@ const notInvoicing = [
 
 const faqs = [
   { q: 'Does ZATCA e-invoicing apply to construction companies?', a: 'Yes. E-invoicing applies to all VAT-registered businesses in Saudi Arabia, including contractors and construction firms. Phase 1 (Generation) has applied since 4 December 2021 — handwritten, Word or Excel invoices stopped being acceptable then. Phase 2 (Integration) is being rolled out in waves by revenue, and the thresholds have dropped low enough to reach small contracting businesses.' },
-  { q: 'What is the Wave 24 deadline and who is in it?', a: 'Wave 24 covers businesses whose VAT-taxable revenue exceeded SAR 375,000 in any of 2022, 2023 or 2024, with an integration deadline of 30 June 2026. ZATCA notifies targeted taxpayers directly — if your contracting business is above that threshold and you have not checked your notifications, do it now.' },
+  { q: 'Has the Wave 24 deadline passed, and what about later waves?', a: 'Yes — it has passed. Wave 24 covered businesses whose VAT-taxable revenue exceeded SAR 375,000 in any of 2022, 2023 or 2024, and its integration deadline of 30 June 2026 has now closed. Because SAR 375,000 is also Saudi Arabia’s mandatory VAT-registration threshold, Wave 24 was the most expansive wave to date — it effectively brought every VAT-registered contractor into Phase 2. If you were in scope and are still not integrated, you are now non-compliant and should onboard immediately. As of July 2026 no later wave (a "Wave 25") has been publicly announced; ZATCA notifies each wave directly and gives at least six months’ notice before a new integration date, so keep checking your Fatoora notifications.' },
   { q: 'What does Phase 2 (Integration) actually require?', a: 'Your invoicing system must integrate with ZATCA’s Fatoora platform via API and issue invoices in the required XML (or PDF/A-3 with embedded XML) format, carrying a UUID, cryptographic stamp and QR code. Standard (B2B) invoices are cleared with ZATCA in near real time before being valid; simplified (B2C) invoices must be reported within 24 hours.' },
   { q: 'Is Procore, Aconex or Primavera ZATCA-compliant?', a: 'The question doesn’t apply — these are project-management, document-control and scheduling platforms, not invoicing systems, so ZATCA e-invoicing doesn’t apply to them. The compliant invoice must come from your accounting/ERP layer (e.g. Qoyod, Wafeq, First Bit, Medad). Most Saudi contractors run a PM tool and a ZATCA-certified accounting tool side by side.' },
   { q: 'How does e-invoicing handle progress claims, advance payments and retention?', a: 'These are the construction-specific flows to test before you buy: a progress claim (mustakhlas) must still produce a compliant tax invoice against the contract; advance payments need compliant advance invoices with correct offsetting on later claims; retention affects when amounts fall due, not your VAT obligations on issued invoices. A generic invoicing tool can be ZATCA-certified yet still handle these flows poorly — make the vendor demo YOUR billing scenarios.' },
-  { q: 'What happens if we miss the deadline?', a: 'ZATCA applies penalties for e-invoicing violations, and enforcement typically starts with notification and escalates. Beyond fines, non-compliant invoices create VAT-recovery problems for your clients — large project owners increasingly refuse them. Treat the integration deadline as a hard project date with 2–3 months of lead time for onboarding and testing.' },
+  { q: 'What happens now if we are still not integrated?', a: 'With the Wave 24 deadline (30 June 2026) passed, businesses that were in scope and have not integrated are non-compliant now — this is no longer a countdown. ZATCA applies penalties for e-invoicing violations, and enforcement typically starts with notification and escalates. Beyond fines, non-compliant invoices create VAT-recovery problems for your clients — large project owners increasingly refuse them. If you are behind, treat onboarding (2–3 months for setup and clearance testing) as urgent, not optional.' },
 ];
 
 const pageTitle = 'ZATCA Phase 2 E-Invoicing for Construction Companies in Saudi Arabia (2026 Guide)';
-const pageDescription = 'Wave 24 deadline 30 June 2026 (SAR 375k threshold): what ZATCA Phase 2 integration requires from Saudi contractors — progress claims, advance payments, retention — and which construction software is actually ZATCA-ready. Independent, verified June 2026.';
+const pageDescription = 'ZATCA Wave 24 (SAR 375k threshold) closed on 30 June 2026 — the most expansive wave yet, reaching every VAT-registered business. What Phase 2 integration requires from Saudi contractors — progress claims, advance payments, retention — and which construction software is actually ZATCA-ready. Independent, updated July 2026.';
 
 const enUrl = new URL('/sa/guides/zatca-e-invoicing-contractors/', Astro.site).toString();
 const arUrl = new URL('/sa/ar/guides/zatca-e-invoicing-contractors/', Astro.site).toString();
@@ -57,7 +57,7 @@ const articleSchema = {
   headline: pageTitle,
   description: pageDescription,
   datePublished: '2026-06-11',
-  dateModified: '2026-06-11',
+  dateModified: '2026-07-13',
   inLanguage: 'en',
   author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
   publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
@@ -92,24 +92,24 @@ const faqSchema = {
       <p class="mt-3 text-lg text-slate-600 leading-relaxed">
         What the Fatoora integration mandate means for Saudi contractors — progress claims, advance payments, retention — and which construction software is actually ZATCA-ready.
       </p>
-      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published &amp; verified June 2026 · Not tax advice — confirm your status with ZATCA or your tax advisor.</p>
+      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published June 2026 · Updated 13 July 2026 · Not tax advice — confirm your status with ZATCA or your tax advisor.</p>
     </header>
 
     <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
-      <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ The short version</h2>
+      <h2 class="mb-2 text-lg font-bold text-slate-900">✅ The short version</h2>
       <p class="text-slate-800 leading-relaxed">
-        If your contracting business had VAT-taxable revenue over <strong>SAR 375,000</strong> in any of 2022, 2023 or 2024, you may be in <strong>Wave 24</strong> of ZATCA's Phase 2 rollout — with an integration deadline of <strong>30 June 2026</strong>. By that date your invoicing must run through software that integrates with ZATCA's Fatoora platform (XML invoices, UUID, cryptographic stamp, QR, real-time clearance). Project-management platforms like Procore or Aconex do <em>not</em> satisfy this — the compliant invoice must come from a certified accounting/ERP system.
+        <strong>Wave 24 has closed.</strong> If your contracting business had VAT-taxable revenue over <strong>SAR 375,000</strong> in any of 2022, 2023 or 2024, you were in <strong>Wave 24</strong> of ZATCA's Phase 2 rollout — and its integration deadline of <strong>30 June 2026 has now passed</strong>. Since SAR 375,000 is also Saudi Arabia's mandatory VAT-registration threshold, Wave 24 swept in effectively every VAT-registered contractor. Your invoicing must now run through software that integrates with ZATCA's Fatoora platform (XML invoices, UUID, cryptographic stamp, QR, real-time clearance) — if you are not there yet, you are non-compliant and should onboard immediately. Project-management platforms like Procore or Aconex do <em>not</em> satisfy this — the compliant invoice must come from a certified accounting/ERP system.
       </p>
     </section>
 
     <section class="mb-10 grid gap-3 sm:grid-cols-3">
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">30 Jun 2026</div>
-        <div class="mt-1 text-xs text-slate-600">Wave 24 integration deadline</div>
+        <div class="mt-1 text-xs text-slate-600">Wave 24 integration deadline (now passed)</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">SAR 375k</div>
-        <div class="mt-1 text-xs text-slate-600">Wave 24 revenue threshold (any of 2022–24)</div>
+        <div class="mt-1 text-xs text-slate-600">Wave 24 threshold — also Saudi's VAT-registration floor</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">{zatcaCount} of {softwareCount}</div>
@@ -131,7 +131,7 @@ const faqSchema = {
         <li>onboard your devices/solution with ZATCA (CSID) through the Fatoora portal.</li>
       </ul>
       <p>
-        ZATCA assigns businesses to <strong>waves by revenue</strong> and notifies them directly, typically about six months ahead. Thresholds started with the giants (Wave 1: over SAR 3 billion) and have stepped down ever since — by <strong>Wave 24 the threshold is SAR 375,000</strong>, which puts ordinary small contracting businesses squarely in scope.
+        ZATCA assigns businesses to <strong>waves by revenue</strong> and notifies them directly, typically about six months ahead. Thresholds started with the giants (Wave 1: over SAR 3 billion) and stepped down ever since — by <strong>Wave 24 the threshold reached SAR 375,000</strong>, which is also Saudi Arabia's mandatory VAT-registration floor, so that wave put ordinary small contracting businesses squarely in scope. Wave 24's deadline (<strong>30 June 2026) has now passed</strong>, and because it captured essentially every VAT-registered business it was the most expansive wave to date. As of July 2026 ZATCA has not publicly announced a later wave — expect at least six months' notice before any new integration date, and watch your Fatoora notifications.
       </p>
 
       <h2>Why construction billing makes this harder</h2>
@@ -186,8 +186,8 @@ const faqSchema = {
     <section class="mb-10 prose prose-slate max-w-none">
       <h2>Compliance checklist for contractors</h2>
       <ol>
-        <li><strong>Confirm your wave.</strong> Check whether VAT-taxable revenue exceeded SAR 375,000 in 2022, 2023 or 2024, and look for ZATCA's notification (Fatoora portal / registered contacts).</li>
-        <li><strong>Pick certified software early.</strong> Shortlist from the table above; cross-check ZATCA's solution-provider directory. Leave 2–3 months for onboarding before your deadline.</li>
+        <li><strong>Confirm your status.</strong> If VAT-taxable revenue exceeded SAR 375,000 in 2022, 2023 or 2024, you were in Wave 24 (deadline 30 June 2026 — now passed). Check the Fatoora portal / your registered contacts, and if a new firm crosses the VAT-registration threshold, watch for ZATCA's notification of any later wave.</li>
+        <li><strong>Pick certified software now.</strong> Shortlist from the table above; cross-check ZATCA's solution-provider directory. If your deadline has already passed, onboarding is urgent — don't add more non-compliant months; otherwise leave 2–3 months before your date.</li>
         <li><strong>Demo YOUR billing flows.</strong> Progress claims, advances, retention, supply-and-install — in the demo, on your real contract structure.</li>
         <li><strong>Onboard with Fatoora.</strong> Device/solution onboarding (CSID issuance) through the portal, done by your vendor or accountant.</li>
         <li><strong>Run a clearance test.</strong> Issue real cleared invoices in a controlled batch before switching the whole business over.</li>
@@ -208,7 +208,7 @@ const faqSchema = {
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
-      <strong class="text-slate-700">Sources &amp; verification:</strong> ZATCA e-invoicing guidance (zatca.gov.sa) · Wave 24 threshold and deadline as published by ZATCA and reported by certified solution providers (verified June 2026) · vendor capabilities from each vendor's published documentation, June 2026. This guide is general information, not tax advice — confirm your obligations with ZATCA or a licensed advisor. Spotted an error? <a href="/contact/" class="underline">Tell us</a> and we'll correct it.
+      <strong class="text-slate-700">Sources &amp; verification:</strong> ZATCA e-invoicing guidance (zatca.gov.sa) · Wave 24 threshold (SAR 375k) and integration deadline (30 June 2026, now passed) as published by ZATCA and reported by certified solution providers · re-verified July 2026: no later wave publicly announced as of this update · vendor capabilities from each vendor's published documentation, June 2026. This guide is general information, not tax advice — confirm your obligations with ZATCA or a licensed advisor. Spotted an error? <a href="/contact/" class="underline">Tell us</a> and we'll correct it.
     </section>
 
     <section class="rounded-lg bg-slate-900 p-8 text-white">
