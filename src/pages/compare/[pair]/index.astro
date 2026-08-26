@@ -27,10 +27,17 @@ export async function getStaticPaths() {
       pairs.push({ a, b });
     }
   }
-  return pairs.map(({ a, b }) => ({
-    params: { pair: `${a.slug}-vs-${b.slug}` },
-    props: { a, b },
-  }));
+  // Pairs with a hand-written definitive page (static route) are excluded
+  // here so the template does not collide with the custom version. The
+  // reverse-order URL stays template-generated and canonicals to the custom
+  // page.
+  const HAND_WRITTEN = new Set(['housecall-pro-vs-jobber']);
+  return pairs
+    .filter(({ a, b }) => !HAND_WRITTEN.has(`${a.slug}-vs-${b.slug}`))
+    .map(({ a, b }) => ({
+      params: { pair: `${a.slug}-vs-${b.slug}` },
+      props: { a, b },
+    }));
 }
 
 interface Props {
