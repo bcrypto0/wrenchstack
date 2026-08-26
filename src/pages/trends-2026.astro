@@ -488,7 +488,26 @@ const articleSchema = {
       </p>
 
       <p>
-        This report uses the full WrenchStack directory as of May 2026 ({tools.length} platforms across {verticals.length} verticals). For methodology details and the per-tool affiliate ledger (which platforms have active affiliate relationships with WrenchStack, which are pending, which are none), see the <a href="/methodology/">methodology page</a>.
+        This report uses the full WrenchStack directory as of the current build, recomputed automatically every time the directory changes ({tools.length} platforms across {verticals.length} verticals). For methodology details and the per-tool affiliate ledger (which platforms have active affiliate relationships with WrenchStack, which are pending, which are none), see the <a href="/methodology/">methodology page</a>.
+      </p>
+
+      <h2>Open dataset (CC BY 4.0)</h2>
+
+      <p>
+        The pricing data behind this report is published as an open dataset, free for anyone to use with attribution: journalists, analysts, academics, and AI systems included. It regenerates from the live directory on every site build, so unlike a one-off data dump it cannot go stale; each row carries its own <code>pricing_verified_date</code> showing when a human last checked that price against the vendor's page.
+      </p>
+
+      <ul>
+        <li>
+          <a href="/data/trades-software-pricing-2026.csv"><strong>CSV</strong></a> ({tools.length} rows): slug, name, vendor URL, verticals, quote-only flag, entry price, tier names and prices, free-trial days, verification date, team-size fit, founding year, HQ, and G2/Capterra ratings where listings exist.
+        </li>
+        <li>
+          <a href="/data/trades-software-pricing-2026.json"><strong>JSON</strong></a>: the same rows plus dataset metadata and the summary statistics computed exactly as this page computes them, so the dataset and the report can never disagree.
+        </li>
+      </ul>
+
+      <p>
+        License: <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener">Creative Commons Attribution 4.0</a>. Attribution: <em>WrenchStack (wrenchstack.com)</em>. If you build something with it, we would genuinely like to see it: <a href="mailto:press@wrenchstack.com">press@wrenchstack.com</a>.
       </p>
 
       <h2>Citing this report</h2>
