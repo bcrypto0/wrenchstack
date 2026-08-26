@@ -1260,6 +1260,125 @@
           "a": "For a solo or small home-service business that wants more Google reviews and the local-search visibility they drive, NiceJob is one of the best-value picks — affordable, automated, and easy to run. If you need full customer messaging, payments, or AI call handling, pair it with other tools or look at a broader platform."
         }
       ]
+    },
+    {
+      "slug": "more-good-reviews",
+      "name": "More Good Reviews",
+      "vendor_url": "https://moregoodreviews.com",
+      "affiliate_url": "TBD",
+      "tagline": "AI review manager with flat per-location pricing — and the only tool here you can drive from Claude",
+      "ai_category": "ai-marketing",
+      "pricing_summary": "Business $59/location/mo ($49/mo billed yearly; volume tiers step down to $19/location at 51+), 5,000 review requests per location per month, unlimited customers. Agency plan $99/mo flat with 5 locations and 25,000 requests included, extra locations $12/mo. 7-day free trial, no card required. SMS sending costs extra through your own Twilio, ClickSend, SimpleTexting or TextLink account. An AppSumo lifetime deal ($69-$345) was active as of 2026-08-26. Note: Business and Agency plan families require separate accounts and cannot be switched.",
+      "starting_price_usd": 49,
+      "free_trial_days": 7,
+      "verticals_supported": [
+        "hvac",
+        "plumbing",
+        "electrical",
+        "roofing",
+        "landscaping",
+        "painting",
+        "general_contractor"
+      ],
+      "founded": 2022,
+      "headquartered": "New York, New York",
+      "long_description": "More Good Reviews is a bootstrapped, solo-founder AI reputation manager (SJW Group, Inc., New York; founder Scott Vayner) that undercuts the category's big names by a wide margin: published pricing of $59 per location per month against roughly $299/location for Birdeye and $399/month for Podium, both of which hide their prices behind a sales call. The core loop is conventional and well executed — automated review requests by email and SMS, Google and Facebook review sync with replies posted back, AI-drafted responses, and a white-label agency portal at $99/month that includes client SSO and a branded domain.\n\nTwo things genuinely distinguish it. First, the documentation: 500KB+ of public docs, a full legal suite (DPA, sub-processor list, DSAR process), a public roadmap, changelog and status page — discipline that is rare at this price point. Second, it is the only tool in this category with a documented MCP server, meaning you can manage reviews, customers and reports directly from Claude or another MCP client, with scoped OAuth access and open-source agent skills published on GitHub. For a trades business already using AI assistants day to day, that is a real workflow advantage no competitor here offers.\n\nThe honest caveats: there is no independent review base anywhere — no G2, Capterra, Trustpilot or BBB listing exists, and the visible reviews are deal-site reviews from an active AppSumo lifetime deal, which skew positive by construction. The homepage's \"rated #1 in review management\" and \"4.8 out of 239 reviews\" figures are self-hosted. Review-site sync covers only Google and Facebook, where Birdeye syncs hundreds of sites. And two product capabilities sit in compliance gray zones a buyer should understand before turning them on: review routing that can steer unhappy customers away from public review paths (the gating pattern Google's policy and the FTC's 2024 fake-reviews rule target), and AI-generated review text with operator-chosen SEO keywords that customers can paste to Google — at odds with Google's own rules and, notably, with the vendor's own published guidelines page, which teaches the right behavior. Safe defaults, sharp edges.",
+      "how_it_works": "You connect your Google Business Profile and Facebook page, import customers (CSV, Zapier, or integrations), and set a request strategy — timed sequences of email and SMS review invitations sent after a job. SMS goes through your own provider account (Twilio, ClickSend, SimpleTexting or TextLink), so texting costs are yours and STOP/unsubscribe handling is enforced platform-side. Incoming Google and Facebook reviews sync in; the AI drafts replies you can approve, or auto-post with an optional delay. A review page with a star-rating flow routes customers to public review links, with a feedback form for low ratings (a \"link revealer\" keeps a public path visible by default — leave it on; disabling it is the gating pattern that violates Google policy). Agencies get a separate white-label portal with per-client projects, SSO and their own MCP endpoint. The MCP server is per-project: sign in with OAuth from Claude or another MCP client, grant read/write scopes, and manage requests, reviews and reports conversationally.",
+      "pros_detail": [
+        {
+          "title": "A real price advantage over Birdeye and Podium, with pricing actually published",
+          "explanation": "Verified 2026-08-26: $59/location/month ($49 yearly) against roughly $299/location for Birdeye and $399/month for Podium — both of which are quote-gated. For a one-to-five-location trades business the gap is 5-8x, and you can see the number without a sales call, which is the behavior this directory exists to reward."
+        },
+        {
+          "title": "The only tool in this category with a documented MCP server",
+          "explanation": "Manage reviews, customers, requests and reports from Claude or any MCP client, with per-project OAuth and scoped read/write/delete access — plus open-source Claude Agent Skills on GitHub that pair with it. Verified against the vendor's MCP docs and GitHub org on 2026-08-26. If your business already runs on an AI assistant, no competitor here offers this."
+        },
+        {
+          "title": "White-label agency tier that is actually cheap",
+          "explanation": "$99/month flat with five locations included, branded client portal, custom domain, client SSO (OIDC) and per-client overrides. Comparable agency programs at the big names run into four figures. For a marketing agency serving trades clients, this is the standout use case."
+        },
+        {
+          "title": "Documentation and legal discipline far above its price point",
+          "explanation": "500KB+ of public docs, a DPA, a published sub-processor list, DSAR handling, a public roadmap, changelog and status page. The docs also explicitly teach Google's no-gating, no-incentives rules — the vendor tells customers the right thing to do, in writing."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "No independent review base anywhere",
+          "explanation": "No G2, Capterra, GetApp, Trustpilot or BBB listing exists as of 2026-08-26. The homepage's \"rated #1 in review management\" and \"4.8 out of 239 reviews\" claims are self-hosted with no third-party source. The visible reviews are AppSumo (4.93/81) and FiveTaco (4.9/74) — real, but lifetime-deal buyers skew positive. The \"5,000+ businesses\" figure is vendor-reported and unverifiable."
+        },
+        {
+          "title": "Review gating is configurable, and one of their own docs suggests it",
+          "explanation": "Defaults are safe: the review page keeps a public review path visible even after a low rating. But the safeguard can be switched off, review links carry an optional incentive field, and the Redirects feature's own tips describe routing positive ratings to Google and negative ones to a private form — the gating pattern that Google's policy and the FTC's 2024 fake-reviews rule (16 CFR Part 465) target. The FTC rule is mentioned nowhere in the docs. Leave the defaults alone and this is fine; flip them and the compliance risk is yours."
+        },
+        {
+          "title": "AI-suggested review text for customers crosses a line Google draws clearly",
+          "explanation": "The AI Review Suggestions feature drafts ready-to-post review text — only for 4-5 star raters, seeded with up to ten operator-chosen SEO keywords — which customers can copy straight to Google. Google's policy prohibits reviews not written by the customer, and the vendor's own guidelines page says not to write reviews for customers. The feature contradicts both. We'd leave it off."
+        },
+        {
+          "title": "SMS compliance guidance stops short of where the risk is",
+          "explanation": "STOP/unsubscribe handling is enforced and A2P registration is documented, but there is no guidance on obtaining prior express written consent before texting customers (the actual TCPA exposure), and the TextLink integration page advertises skipping 10DLC registration entirely — carrier gray-route territory for business messaging. The terms put all TCPA/CAN-SPAM liability on you."
+        },
+        {
+          "title": "Narrow sync and single-founder risk",
+          "explanation": "Review sync covers Google and Facebook only, where Birdeye syncs hundreds of sites — fine for most trades businesses, limiting if you care about industry-specific platforms. The company is one bootstrapped founder (key-person risk), the ToS pricing section still cites a retired plan lineup, and an active lifetime deal raises the usual sustainability question. Product claimed founded 2022; the current domain dates to December 2023."
+        }
+      ],
+      "best_for": "Trades businesses of one to ten locations that want automated review generation at a published flat price instead of a quote-gated enterprise contract — and especially operators or agencies already working in Claude or another AI assistant, where the MCP server makes this the only review tool they can drive conversationally",
+      "best_team_size": "1-50",
+      "weaknesses": "No third-party review presence (no G2/Capterra/Trustpilot/BBB; deal-site reviews only); self-hosted \"#1\" and \"4.8/239\" claims; Google+Facebook sync only; configurable review gating and AI-drafted customer review text are compliance gray zones under Google policy and the FTC's 2024 rule; no TCPA consent guidance; solo-founder key-person risk; stale ToS pricing section; incorporation state unconfirmed",
+      "reputation_flag": null,
+      "ratings": {
+        "g2": null,
+        "capterra": null,
+        "trustpilot": null,
+        "reddit_sentiment": "none found — no organic Reddit discussion as of 2026-08-26; the visible review base is deal-site reviews (AppSumo 4.93/81, FiveTaco 4.9/74), which skew toward lifetime-deal buyers"
+      },
+      "key_features": [
+        "automated_review_requests",
+        "sms_email_sequences",
+        "google_facebook_sync",
+        "ai_reply_drafts",
+        "review_page_with_link_revealer",
+        "white_label_agency_portal",
+        "client_sso",
+        "mcp_server",
+        "claude_agent_skills",
+        "public_roadmap_changelog",
+        "dpa_and_dsar_support"
+      ],
+      "integrations": [
+        "google_business_profile",
+        "facebook",
+        "twilio",
+        "clicksend",
+        "simpletexting",
+        "textlink",
+        "zapier",
+        "stripe",
+        "claude_mcp"
+      ],
+      "affiliate_program": "yes — 30% recurring lifetime referral program per the docs (verified 2026-08-26); last-touch, 90-day window, US Stripe payouts only. WrenchStack has not joined it.",
+      "affiliate_payout_note": "not joined — listing is editorial; per-vendor disclosure applies if that ever changes",
+      "verified_date": "2026-08-26",
+      "ai_faqs": [
+        {
+          "q": "How much does More Good Reviews cost?",
+          "a": "Business is $59 per location per month, or $49 when billed yearly, with volume tiers stepping down to $19/location at 51+ locations — verified on the vendor's pricing page 26 August 2026. Each location includes 5,000 review requests per month and unlimited customers. The Agency plan is $99/month flat with five locations included and $12/month per extra location. There's a 7-day free trial with no card required. Budget separately for SMS: sending runs through your own Twilio, ClickSend, SimpleTexting or TextLink account. For comparison, Birdeye starts around $299/location/month and Podium around $399/month, and neither publishes pricing."
+        },
+        {
+          "q": "What is the MCP server, and why does it matter?",
+          "a": "It lets AI assistants like Claude connect directly to your More Good Reviews account — you sign in with OAuth per project, grant read/write scopes, and can then check reviews, send requests, look up customers and pull reports by asking your assistant instead of opening the dashboard. The vendor also publishes open-source Claude Agent Skills on GitHub that pair with it. As of August 2026 no other tool in this category offers anything comparable — if your business already runs on an AI assistant, this is the differentiator."
+        },
+        {
+          "q": "Is automated review requesting even allowed?",
+          "a": "Asking customers for reviews is fine under Google's rules — what's prohibited is gating (only steering happy customers to public reviews), incentivizing reviews, or posting text the customer didn't write. More Good Reviews defaults to compliant behavior and its own guidelines teach Google's rules well, but three configurable features can cross the line: disabling the \"link revealer\" on the review page, the incentive field on review links, and AI-suggested review text seeded with SEO keywords for customers to paste. The FTC's 2024 fake-reviews rule (16 CFR Part 465) covers the same ground with civil penalties. Keep the defaults, skip the review-text suggestions, and get written consent before texting anyone."
+        },
+        {
+          "q": "How does it compare to NiceJob, Podium and Birdeye?",
+          "a": "Against the two giants it's a price play: 5-8x cheaper than Birdeye (~$299/location) and Podium (~$399/mo), with published pricing and a self-serve trial where they require sales calls — but they sync far more review sites and bundle adjacent products (Podium: messaging, payments, phones). Against NiceJob — the closest small-business comparator in this directory — the differences are the MCP server, the $99 white-label agency tier, and BYO-provider SMS (cheaper at volume, but you manage the provider). NiceJob has the third-party review footprint More Good Reviews lacks entirely."
+        }
+      ]
     }
   ]
 }
