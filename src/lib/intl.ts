@@ -208,3 +208,17 @@ export const EN_MARKET_HREFLANG: { hreflang: string; href: string }[] = [
   { hreflang: 'en-MY', href: 'https://wrenchstack.com/my/' },
   { hreflang: 'x-default', href: 'https://wrenchstack.com/' },
 ];
+
+// Total international listings, computed from the market data files at build
+// time so homepage/press counts can never drift from the data (added
+// 2026-08-27 after an audit found four different vendor totals on public
+// surfaces).
+const _intlModules = import.meta.glob('../data/international/*.json', { eager: true }) as Record<
+  string,
+  { default?: { vendors?: unknown[] }; vendors?: unknown[] }
+>;
+export const intlVendorCount = Object.values(_intlModules).reduce((n, m) => {
+  const mod = m.default ?? m;
+  return n + (Array.isArray(mod.vendors) ? mod.vendors.length : 0);
+}, 0);
+export const intlMarketCount = Object.keys(INTL_MARKETS).length;

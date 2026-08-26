@@ -152,19 +152,34 @@ export interface ScoreFactor {
 // for both the number and its explanation). 40% vertical fit, 30% aggregate
 // user rating, 10% pricing transparency, 10% feature depth, 10% integrations.
 export function wrenchStackScoreBreakdown(t: Tool, verticalSlug?: string): ScoreFactor[] {
-  const fit = verticalSlug ? verticalFitScore(t, verticalSlug) : 7;
+  // Vertical fit: with trade context, score for that trade. Without context
+  // (tool page, awards, migrations), use the tool's BEST trade fit: "how good
+  // is this tool at the thing it is best at". Never a dummy constant.
+  // (Fixed 2026-08-27; previously defaulted to a flat 7, which understated
+  // every context-free score. Documented in the methodology changelog.)
+  const fitValues = Object.values(t.vertical_fit ?? {});
+  const bestFit = fitValues.length ? Math.max(...fitValues) : 5;
+  const fit = verticalSlug ? verticalFitScore(t, verticalSlug) : bestFit;
   const rating = aggregateRating(t);
-  const ratingNormalized = rating !== null ? rating * 2 : 5;
   const transparency = t.pricing.starting_at_usd !== null ? 10 : 5;
   const featureScore = Math.min(t.key_features.length, 10);
   const integrationScore = Math.min(t.integrations.length, 10);
-  return [
-    { factor: 'Vertical fit', weight: 0.4, raw: fit },
-    { factor: 'User ratings (G2 + Capterra)', weight: 0.3, raw: ratingNormalized },
+  const factors: ScoreFactor[] = [
+    { factor: verticalSlug ? 'Vertical fit' : 'Vertical fit (best trade)', weight: 0.4, raw: fit },
+  ];
+  // When no G2/Capterra listing exists we refuse to invent a rating, so the
+  // factor is EXCLUDED and remaining weights renormalize, instead of silently
+  // scoring the tool as if it had earned 2.5 stars.
+  if (rating !== null) {
+    factors.push({ factor: 'User ratings (G2 + Capterra)', weight: 0.3, raw: rating * 2 });
+  }
+  factors.push(
     { factor: 'Pricing transparency', weight: 0.1, raw: transparency },
     { factor: 'Feature depth', weight: 0.1, raw: featureScore },
     { factor: 'Integration coverage', weight: 0.1, raw: integrationScore },
-  ];
+  );
+  const totalWeight = factors.reduce((s, f) => s + f.weight, 0);
+  return factors.map((f) => ({ ...f, weight: f.weight / totalWeight }));
 }
 
 export function wrenchStackScore(t: Tool, verticalSlug?: string): number {
@@ -552,6 +567,28 @@ export interface FreshnessStats {
   totalTools: number;
 }
 
+
+/** Directory-wide count of entries whose verified_date falls within N days:
+ *  tools (pricing.verified_date) + AI tools + all 8 adjacent US categories.
+ *  Matches the aggregation on /verification-log/ so the homepage trust strip
+ *  and the log can never disagree (added 2026-08-27). */
+export function directoryVerifiedWithinDays(days: number): number {
+  const cutoff = Date.now() - days * 86400000;
+  const dates: (string | undefined)[] = [
+    ...tools.map((t) => t.pricing.verified_date),
+    ...aiTools.map((a) => a.verified_date),
+    ...leadGenPlatforms.map((e) => e.verified_date),
+    ...insuranceProviders.map((e) => e.verified_date),
+    ...payrollServices.map((e) => e.verified_date),
+    ...marketingAgencies.map((e) => e.verified_date),
+    ...paymentProcessors.map((e) => e.verified_date),
+    ...financingProviders.map((e) => e.verified_date),
+    ...accountingSoftware.map((e) => e.verified_date),
+    ...bankingProviders.map((e) => e.verified_date),
+  ];
+  return dates.filter((d) => d && new Date(d + 'T00:00:00Z').getTime() >= cutoff).length;
+}
+
 export function freshnessStats(): FreshnessStats {
   let fresh = 0;
   let aging = 0;
@@ -900,7 +937,10 @@ export function leadGenTier(p: LeadGenPlatform): 'S' | 'A' | 'F' {
   // Tier S: strongly positive sentiment + exclusive/pay-per-call models + real affiliate
   if (
     (p.lead_model === 'exclusive' || p.lead_model === 'pay-per-call' || p.lead_model === 'directory-listing') &&
-    p.ratings.reddit_sentiment.toLowerCase().includes('positive')
+    p.ratings.reddit_sentiment.toLowerCase().includes('positive') &&
+    !p.ratings.reddit_sentiment.toLowerCase().includes('mixed') &&
+    !p.ratings.reddit_sentiment.toLowerCase().includes('negative') &&
+    !p.ratings.reddit_sentiment.toLowerCase().includes('not positive')
   ) {
     return 'S';
   }
@@ -966,9 +1006,11 @@ export function insuranceProvidersForVertical(verticalSlug: string): InsurancePr
 export function insuranceTier(p: InsuranceProvider): 'S' | 'A' | 'F' {
   if (p.reputation_flag) return 'F';
   const tp = p.ratings.trustpilot;
-  // Strong sentiment + direct-digital with affiliate → Tier S
+  // Direct-digital with strong Trustpilot → Tier S. Affiliate status is
+  // deliberately NOT an input here (fixed 2026-08-27: an earlier version
+  // required an affiliate program for this path, which contradicted the
+  // methodology; whether we earn from a carrier can never affect its tier).
   if (
-    p.affiliate_program !== 'none' && p.affiliate_program !== 'unknown' &&
     p.distribution_model === 'direct-digital' &&
     tp !== null && tp >= 4.0
   ) return 'S';
@@ -1033,8 +1075,8 @@ export function getPayrollService(slug: string): PayrollService | undefined {
 /** Tier classification for payroll services. */
 export function payrollTier(s: PayrollService): 'S' | 'A' | 'B' {
   if (s.reputation_flag) return 'B';
-  // Gusto leads on affiliate economics + product strength
-  if (s.slug === 'gusto') return 'S';
+  // Tier S is rule-based only. (Fixed 2026-08-27: a hardcoded Gusto exception
+  // was removed; Gusto now earns whatever tier the same rules give everyone.)
   // Modern-saas with strong sentiment → Tier S
   if (s.service_type === 'modern-saas' && (s.ratings.g2 ?? 0) >= 4.5) return 'S';
   if (s.service_type === 'specialty' && (s.ratings.g2 ?? 0) >= 4.5) return 'S';
@@ -1115,10 +1157,10 @@ export function agenciesForVertical(verticalSlug: string): MarketingAgency[] {
 /** Tier classification for marketing agencies. */
 export function agencyTier(a: MarketingAgency): 'S' | 'A' | 'F' {
   if (a.reputation_flag) return 'F';
-  // Trade-specific with strong reputation → Tier S
-  if (a.agency_type === 'trade-specific' && a.ratings.reddit_sentiment.toLowerCase().includes('strongly positive')) return 'S';
-  // Home-services with strong reputation + content credibility → Tier S
-  if (a.slug === 'hook-agency' || a.slug === 'plumbing-hvac-seo' || a.slug === 'blue-corona' || a.slug === 'adapt-digital-solutions') return 'S';
+  // Strong documented reputation → Tier S, one rule for every agency type.
+  // (Fixed 2026-08-27: a hardcoded four-slug S-list was removed; two of the
+  // four did not meet the stated sentiment bar and dropped to A.)
+  if (a.ratings.reddit_sentiment.toLowerCase().includes('strongly positive')) return 'S';
   return 'A';
 }
 

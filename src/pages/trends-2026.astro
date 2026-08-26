@@ -52,9 +52,16 @@ const verticalSizes = verticals.map((v) => ({
   count: tools.filter((t) => t.verticals.includes(v.slug)).length,
 })).sort((a, b) => b.count - a.count);
 
-// HQ distribution
-const usHQ = tools.filter((t) => t.headquartered?.includes('USA')).length;
-const intlHQ = tools.length - usHQ;
+// HQ distribution. Match by known non-US country, not by the literal 'USA'
+// (fixed 2026-08-27: 'Addison, Illinois' and 'Cedar Park, TX' were being
+// counted as international because they do not contain the string 'USA').
+const NON_US_COUNTRIES = ['Canada', 'Australia', 'New Zealand', 'United Kingdom', 'UK', 'Ireland', 'Netherlands', 'Germany', 'France', 'Israel', 'India', 'Denmark', 'Sweden', 'Norway', 'Finland', 'Estonia', 'Lithuania', 'Poland', 'Spain', 'Portugal', 'South Africa', 'Singapore', 'Japan', 'Brazil', 'Ukraine'];
+const usHQ = tools.filter(
+  (t) => t.headquartered && !NON_US_COUNTRIES.some((c) => t.headquartered!.includes(c))
+).length;
+const intlHQ = tools.filter(
+  (t) => t.headquartered && NON_US_COUNTRIES.some((c) => t.headquartered!.includes(c))
+).length;
 
 // Rating distribution
 const ratings = tools.map((t) => aggregateRating(t)).filter((r): r is number => r !== null);
@@ -71,7 +78,9 @@ function detectsPerCompany(t: typeof tools[number]): boolean {
   return note.includes('per company') || (note.includes('per month') && !note.includes('per user'));
 }
 const perCompanyCount = tools.filter(detectsPerCompany).length;
-const perUserCount = pricedTools.length - perCompanyCount - withFreeTier;
+// pricedTools already excludes free ($0) tools, so free-tier tools must not be
+// subtracted a second time (fixed 2026-08-27).
+const perUserCount = pricedTools.length - perCompanyCount;
 
 // Median entry price by trade (publicly-priced paid tools; trades with >=4 such tools)
 function medianUsd(arr: number[]): number {

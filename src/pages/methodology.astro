@@ -3,15 +3,15 @@ import Layout from '../layouts/Layout.astro';
 import { tools, verticals, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, aiTools, paymentProcessors, financingProviders, accountingSoftware, bankingProviders } from '../lib/data';
 
 // WrenchStack Fit Score™ methodology version metadata
-const METHODOLOGY_VERSION = '1.0';
-const METHODOLOGY_EFFECTIVE_DATE = '2026-05-29';
+const METHODOLOGY_VERSION = '1.1';
+const METHODOLOGY_EFFECTIVE_DATE = '2026-08-27';
 
 // Quantification — coverage stats across all categories
 const totalVendorsCovered = tools.length + leadGenPlatforms.length + insuranceProviders.length + payrollServices.length + marketingAgencies.length + aiTools.length + paymentProcessors.length + financingProviders.length + accountingSoftware.length + bankingProviders.length;
 const totalCategories = 10;
 const totalTrades = verticals.length;
 const totalCriteriaTracked = 47;
-const totalCountries = 13; // US + UK/CA/AU/NZ/IE + SA/AE/QA/KW/BA/OM + FR, all live
+const totalCountries = 18; // US + 17 international markets, all live
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -83,7 +83,7 @@ const counts = {
 ---
 
 <Layout
-  title="WrenchStack Fit Score™ Methodology v1.0 — How we rank trades vendors"
+  title="WrenchStack Fit Score™ Methodology v1.1 — How we rank trades vendors"
   description="The WrenchStack Fit Score™ is our published, versioned methodology for evaluating trades vendors across 10 categories — software, payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI. Five weighted factors. Public scoring rubric. Independence statement. Per-vendor affiliate ledger."
   breadcrumbs={breadcrumbs}
 >
@@ -120,6 +120,16 @@ const counts = {
       </div>
     </div>
 
+    <div class="not-prose mb-8 rounded-lg border border-slate-200 bg-slate-50 p-5 text-sm text-slate-700">
+      <h2 class="text-base font-bold text-slate-900 mb-2 mt-0">Changelog: v1.1 (2026-08-27)</h2>
+      <ul class="list-disc pl-5 space-y-1 m-0">
+        <li><strong>Fixed a scoring bug.</strong> On pages with no trade context (tool pages, awards), the vertical-fit factor previously fell back to a flat 7.0 instead of the tool's actual fit data. It now uses the tool's best trade fit. Context-free scores published before this date understated most tools.</li>
+        <li><strong>Unrated tools are no longer scored as if they had earned 2.5 stars.</strong> When no G2/Capterra listing exists, the ratings factor is excluded and remaining weights renormalize, instead of substituting a neutral 5/10.</li>
+        <li><strong>Removed affiliate considerations from category tier rules.</strong> An insurance tier path required an affiliate program, and payroll and agency tiers contained hardcoded exceptions. All tiers are now rule-based on product and reputation data only, which is what this page always promised. Affected tiers were recomputed.</li>
+        <li><strong>One review cadence.</strong> This page previously said monthly in one section and quarterly in another. The cycle is monthly, matching the published <a href="/verification-log/">verification log</a>.</li>
+      </ul>
+    </div>
+
     <h2>What the WrenchStack Fit Score™ measures</h2>
 
     <p>
@@ -145,7 +155,7 @@ const counts = {
         <tr>
           <td><strong>Aggregated user ratings</strong></td>
           <td>30%</td>
-          <td>Averaged G2 + Capterra ratings, normalized to a 0–10 scale.</td>
+          <td>Averaged G2 + Capterra ratings, normalized to a 0–10 scale. When no listing exists on either platform, this factor is excluded and the remaining weights renormalize (v1.1); we never invent a rating.</td>
         </tr>
         <tr>
           <td><strong>Pricing transparency</strong></td>
@@ -221,7 +231,7 @@ const counts = {
     </p>
 
     <p>
-      <strong>User ratings</strong> are pulled fresh from G2 and Capterra at each quarterly review.
+      <strong>User ratings</strong> are pulled fresh from G2 and Capterra at each monthly review.
     </p>
 
     <h2 id="changelog">Methodology changelog</h2>
@@ -374,7 +384,7 @@ const counts = {
     <h2>Where pricing data comes from</h2>
 
     <p>
-      Each pricing tier shows a <strong>verified date</strong>. We re-check pricing quarterly by
+      Each pricing tier shows a <strong>verified date</strong>. We re-check pricing on the monthly cycle by
       visiting each vendor's public pricing page; for custom-quoted enterprise platforms, we cite
       user-reported ranges from public sources (Reddit threads, G2 reviews, vendor RFP responses
       shared publicly). Numbers older than 90 days get flagged with an amber freshness pill;

@@ -1,10 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { EN_MARKET_HREFLANG } from '../lib/intl';
+import { EN_MARKET_HREFLANG, intlVendorCount, intlMarketCount } from '../lib/intl';
 import categories from '../data/categories.json';
 import toolsData from '../data/tools.json';
 import featuresData from '../data/features.json';
-import { tools, toolsForVertical, freshnessStats, daysSinceVerified, aggregateRating, formatPrice, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies } from '../lib/data';
+import { tools, toolsForVertical, freshnessStats, directoryVerifiedWithinDays, daysSinceVerified, aggregateRating, formatPrice, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, aiTools, paymentProcessors, financingProviders, accountingSoftware, bankingProviders } from '../lib/data';
 import FreshnessBadge from '../components/FreshnessBadge.astro';
 
 const verticals = categories.verticals;
@@ -13,7 +13,13 @@ const leadGenCount = leadGenPlatforms.length;
 const insuranceCount = insuranceProviders.length;
 const payrollCount = payrollServices.length;
 const agencyCount = marketingAgencies.length;
-const totalVendorCount = toolCount + leadGenCount + insuranceCount + payrollCount + agencyCount;
+// One number system, generated from the data (audit 2026-08-27: the homepage
+// sold a 5-category product while the site had grown to 10 categories plus
+// international; every public surface now derives from these three counts).
+const adjacentCount = leadGenCount + insuranceCount + payrollCount + agencyCount +
+  aiTools.length + paymentProcessors.length + financingProviders.length +
+  accountingSoftware.length + bankingProviders.length;
+const totalVendorCount = toolCount + adjacentCount + intlVendorCount;
 
 // Compute most-recent pricing-verified date across all tools (for the "Last refreshed" indicator).
 const lastVerifiedDate = tools
@@ -81,7 +87,7 @@ function featureToUrl(slug: string): string {
 
 <Layout
   title="WrenchStack — The trades vendor directory: software, lead-gen, insurance, payroll, marketing"
-  description={`Independent reviews of ${totalVendorCount}+ vendors across software (${toolCount}), lead-gen (${leadGenCount}), insurance (${insuranceCount}), payroll (${payrollCount}), and marketing agencies (${agencyCount}). Honest reputation flags. Real pricing. No lead-gen sales calls.`}
+  description={`Independent reviews of ${totalVendorCount} vendors: ${toolCount} field-service platforms, ${adjacentCount} adjacent US vendors (insurance, payroll, lead-gen, payments, financing, banking, accounting, agencies, AI), and ${intlVendorCount} listings across ${intlMarketCount} international markets. Honest reputation flags. Real pricing. No lead-gen sales calls.`}
   alternateUrls={EN_MARKET_HREFLANG}
 >
   <section class="bg-gradient-to-b from-white to-slate-50">
@@ -91,23 +97,25 @@ function featureToUrl(slug: string): string {
         reviewed honestly.
       </h1>
       <p class="mt-6 max-w-3xl text-lg text-slate-600 md:text-xl">
-        The first independent directory covering all five categories trades contractors actually spend on: software, lead-gen platforms, business insurance, payroll, and marketing agencies. {totalVendorCount}+ vendors compared, with reputation flags on the ones that earn them.
+        The independent directory covering what trades contractors actually spend on: {toolCount} field-service platforms, {adjacentCount} adjacent US vendors (lead-gen, insurance, payroll, payments, financing, banking, accounting, agencies, AI tools), and {intlVendorCount} listings across {intlMarketCount} international markets. With reputation flags on the vendors that earn them.
       </p>
 
       <div class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-slate-600">
-        <span><span class="font-bold text-slate-900">{totalVendorCount}+</span> vendors tracked</span>
+        <span><span class="font-bold text-slate-900">{totalVendorCount}</span> vendors tracked</span>
         <span class="text-slate-300">·</span>
-        <span><span class="font-bold text-slate-900">5</span> categories</span>
+        <span><span class="font-bold text-slate-900">10</span> US categories</span>
         <span class="text-slate-300">·</span>
         <span><span class="font-bold text-slate-900">{verticals.length}</span> trades</span>
         <span class="text-slate-300">·</span>
-        <span class="inline-flex items-center gap-1.5">
+        <span><span class="font-bold text-slate-900">{intlMarketCount}</span> international markets</span>
+        <span class="text-slate-300">·</span>
+        <a href="/verification-log/" class="inline-flex items-center gap-1.5 hover:text-slate-900">
           <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 ring-2 ring-emerald-200"></span>
-          <span class="font-bold text-slate-900">{freshness.verifiedLast30Days}</span> verified in last 30 days
-        </span>
+          <span class="font-bold text-slate-900">{directoryVerifiedWithinDays(30)}</span> verifications in the last 30 days
+        </a>
       </div>
       <p class="mt-5 max-w-2xl text-sm text-slate-500 leading-relaxed">
-        Independent and reader-funded. We earn affiliate commissions when you sign up with some vendors, but <strong class="font-semibold text-slate-700">vendors can't pay for a higher score or to be featured</strong> — and we flag the ones with documented bad track records. <a href="/methodology/" class="underline hover:text-slate-700">How we rate</a> · <a href="/disclosure/" class="underline hover:text-slate-700">how we make money</a>.
+        Independent and reader-funded. We earn affiliate commissions when you sign up with some vendors, but <strong class="font-semibold text-slate-700">vendors can't pay for a higher score or to be featured</strong>, and we flag the ones with documented bad track records. <a href="/methodology/" class="underline hover:text-slate-700">How we rate</a> · <a href="/disclosure/" class="underline hover:text-slate-700">how we make money</a>.
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
         <a
@@ -139,7 +147,7 @@ function featureToUrl(slug: string): string {
         <a href="/methodology/" class="text-sm font-medium text-orange-600 hover:underline">Why these 5 →</a>
       </div>
       <p class="mb-8 max-w-3xl text-slate-600">
-        These are the five categories that absorb the majority of a trades shop's vendor spending. We cover all of them — independently — so you're not stuck with five directories run by five different lead-gen companies.
+        These five absorb the majority of a trades shop's vendor spending, and we cover ten US categories in total, independently, so you're not stuck with five directories run by five different lead-gen companies.
       </p>
       <div class="grid gap-4 md:grid-cols-3 lg:grid-cols-5">
         <a href="/tools/" class="group rounded-lg border-2 border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm">
@@ -221,7 +229,7 @@ function featureToUrl(slug: string): string {
             <span class="text-slate-400 group-hover:text-orange-600">→</span>
           </div>
           <p class="mt-1 text-sm text-slate-500">
-            {v.toolCount} tools ranked · pricing, features, head-to-head
+            {v.toolCount} {v.toolCount === 1 ? 'tool' : 'tools'} ranked · pricing, features, head-to-head
           </p>
         </a>
       ))}
@@ -320,7 +328,7 @@ function featureToUrl(slug: string): string {
         <div class="rounded-lg border border-slate-200 bg-white p-5">
           <div class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-700">🏆 WrenchStack Awards 2026</div>
           <p class="text-sm text-slate-700 leading-relaxed">
-            Editorial designations across 18 categories. <a href="/awards/2026/" class="text-orange-600 hover:underline">No vendor paid for placement</a> — same methodology as everything else. Updated annually.
+            Editorial designations across 18 categories. <a href="/awards/2026/" class="text-orange-600 hover:underline">No vendor paid for placement</a>: same methodology as everything else. Updated annually.
           </p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-5">

@@ -52,7 +52,7 @@ const totalCategories = 10;
 const totalVendors = totalTools + adjacentCats.reduce((s, c) => s + c.items.length, 0);
 
 const pageTitle = 'WrenchStack Index Q2 2026 — Trades Vendor Benchmarks';
-const pageDescription = 'Quarterly data benchmark across all 10 trades-vendor categories and 13 international markets. Software pricing distribution, the full-stack reputation-flag ledger, affiliate economics by category, and multi-market coverage. Citable headline stats.';
+const pageDescription = 'Quarterly data benchmark across all 10 trades-vendor categories and 17 international markets. Software pricing distribution, the full-stack reputation-flag ledger, affiliate economics by category, and multi-market coverage. Citable headline stats.';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -275,7 +275,7 @@ const updatedDate = '2026-06-19';
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Methodology notes</h2>
       <p class="text-sm text-slate-700 leading-relaxed mb-3">
-        WrenchStack Index stats are computed live from the public WrenchStack directory using the published <a href="/methodology/" class="text-orange-600 hover:underline">WrenchStack Fit Score™ methodology v1.0</a>. All vendor inclusions reflect quarterly editorial review; pricing tiers are verified directly from vendor pricing pages with date stamps.
+        WrenchStack Index stats are computed live from the public WrenchStack directory using the published <a href="/methodology/" class="text-orange-600 hover:underline">WrenchStack Fit Score™ methodology v1.1</a>. All vendor inclusions reflect the monthly editorial review cycle; pricing tiers are verified directly from vendor pricing pages with date stamps.
       </p>
       <ul class="space-y-1 text-sm text-slate-700">
         <li>• <strong>Sample size:</strong> All {totalVendors} US vendors across {totalCategories} categories, plus {intlVendorCount} localized listings across {intlMarkets} international markets, as of {updatedDate}</li>
