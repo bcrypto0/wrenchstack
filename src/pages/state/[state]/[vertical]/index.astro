@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../../layouts/Layout.astro';
+import { isStatePageIndexable } from '../../../../lib/compare-index.mjs';
 import statesData from '../../../../data/states.json';
 import {
   rankToolsForVertical,
@@ -117,9 +118,12 @@ const faqSchema = {
     acceptedAnswer: { '@type': 'Answer', text: f.a.replace(/<[^>]+>/g, '') },
   })),
 };
+// Doorway-page gate: these pages are ~98.6% identical across states, so they
+// are noindexed unless they have earned external links (see compare-index.mjs).
+const noindex = !isStatePageIndexable(state.slug, verticalToUrl(verticalSlug));
 ---
 
-<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} affiliate>
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} affiliate noindex={noindex}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <article class="mx-auto max-w-5xl px-4 py-12">

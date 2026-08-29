@@ -39,6 +39,31 @@ export function isComparisonIndexable(slugA, slugB) {
 // in the 2026-05-28 audit. To release a Gulf market later, remove it here.
 export const GATED_INTL_COMPARE_MARKETS = new Set(['sa', 'ae', 'qa', 'kw', 'ba', 'om', 'za', 'fr']);
 
+// --- State pages (added 2026-08-29, launch-day SEO audit) --------------------
+// /state/<state>/<vertical>/ generates ~250 pages and /state/<state>/ another
+// 50. Measured 2026-08-29: two different states' pages are 98.6% identical
+// once the state name is swapped out, i.e. classic doorway pages. On a
+// three-month-old domain fighting for crawl budget, advertising 300 near
+// duplicates competes with the pages that can actually rank.
+//
+// So: noindex + drop from the sitemap by default. The exception is a page that
+// has EARNED external links, because a page other sites already cite is a real
+// destination regardless of how it was generated. Contractor Foreman's press
+// releases cite the Illinois and Nebraska general-contractor roundups, so those
+// stay indexable.
+//
+// To release more: give a page something that is not a find-replace (real
+// licensing-board detail, state-specific permit rules, local pricing) and add
+// its key here. Earning the release is the point; do not bulk-add.
+export const INDEXABLE_STATE_PAGES = new Set([
+  'illinois/general-contractor',
+  'nebraska/general-contractor',
+]);
+
+export function isStatePageIndexable(stateSlug, verticalUrl) {
+  return INDEXABLE_STATE_PAGES.has(`${stateSlug}/${verticalUrl}`);
+}
+
 // Sitemap filter: keep every non-comparison URL; keep a /compare/<a>-vs-<b>/
 // URL only when it is indexable; drop gated intl markets' head-to-heads.
 export function shouldKeepInSitemap(urlStr) {
@@ -46,6 +71,10 @@ export function shouldKeepInSitemap(urlStr) {
   try { path = new URL(urlStr).pathname; } catch { path = urlStr; }
   const intl = path.match(/^\/([a-z]{2})\/compare\/.+-vs-.+\/$/);
   if (intl) return !GATED_INTL_COMPARE_MARKETS.has(intl[1]);
+  // State hubs and state-by-trade pages: allowlist only.
+  const stateVertical = path.match(/^\/state\/([^/]+)\/([^/]+)\/$/);
+  if (stateVertical) return isStatePageIndexable(stateVertical[1], stateVertical[2]);
+  if (/^\/state\/[^/]+\/$/.test(path)) return false;
   const m = path.match(/^\/compare\/(.+)-vs-(.+)\/$/);
   if (!m) return true;
   return isComparisonIndexable(m[1], m[2]);
