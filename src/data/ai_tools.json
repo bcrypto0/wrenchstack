@@ -1379,6 +1379,120 @@
           "a": "Against the two giants it's a price play: 5-8x cheaper than Birdeye (~$299/location) and Podium (~$399/mo), with published pricing and a self-serve trial where they require sales calls — but they sync far more review sites and bundle adjacent products (Podium: messaging, payments, phones). Against NiceJob — the closest small-business comparator in this directory — the differences are the MCP server, the $99 white-label agency tier, and BYO-provider SMS (cheaper at volume, but you manage the provider). NiceJob has the third-party review footprint More Good Reviews lacks entirely."
         }
       ]
+    },
+    {
+      "slug": "rooftops-ai",
+      "name": "Rooftops AI",
+      "vendor_url": "https://www.rooftops.ai",
+      "affiliate_url": "TBD",
+      "tagline": "Satellite roof measurements and AI estimating at a fraction of per-report pricing",
+      "ai_category": "ai-estimating",
+      "pricing_summary": "Free tier: 3 full roof reports, no card required (no storm history, cost estimates or proposals). Pro $48/month month-to-month or $28/month billed annually, including 10 roof reports per month plus AI cost estimates, storm history and property notes. Business $98/month month-to-month or $58/month billed annually, including 100 roof reports per month plus AI proposals, the full Agent Suite and solar analysis. Report allowances are monthly caps, not unlimited: the terms state metered features are subject to the published monthly limits per account or seat, and excessive usage may trigger restrictions or conversion to a custom plan. Verified from rooftops.ai/pricing 2026-08-29.",
+      "starting_price_usd": 28,
+      "free_trial_days": 0,
+      "verticals_supported": [
+        "roofing"
+      ],
+      "founded": 2023,
+      "headquartered": "Tennessee",
+      "long_description": "Rooftops AI generates roof measurement reports from high-resolution satellite imagery combined with Google 3D elevation data, returning facet area, pitch, waste factor and a cost estimate, plus NWS hail and storm history, shingle identification from a photo, one-click proposals and door-knock tracking. The company is Mutter Voice, LLC (Tennessee), trading as Rooftops AI.\n\nThe commercial case is the price structure. EagleView, the incumbent this product is aimed at, sells reports individually at roughly $20 to $90 each. Rooftops AI sells allowances: 10 reports a month for $48, or 100 for $98, which works out to under $5 and under $1 per report respectively. For a roofer running steady inspection volume that is a genuine order-of-magnitude difference, and it is the reason this tool is worth a contractor's attention. Hover, also listed here, solves a different problem: it builds 3D models from smartphone photos taken on site, so it needs someone at the property, while Rooftops AI is desk-based and remote.\n\nThe caution is what is not published. For insurance and supplement work, measurement accuracy is the entire product, and Rooftops AI publishes no margin of error, no accuracy figure, no third-party validation, and no claim of Xactimate compatibility or carrier acceptance. EagleView publishes a specific accuracy figure; that gap is the main reason to keep an incumbent report in the workflow for claims work. The vendor's own terms are explicit on this point and worth reading before purchase: users \"must independently verify measurements, product identifications, and estimates (including by on-site inspection) before relying on them for bids, contracts, material orders, insurance claims, or any other business or legal purpose.\" Treated as a fast, cheap first-pass measurement and proposal tool, that framing is reasonable and the value is real. Treated as a drop-in replacement for a carrier-accepted report, it is not what the vendor itself says it is.",
+      "how_it_works": "You enter a property address and the platform returns a report built from satellite imagery plus Google 3D elevation data, measuring each roof facet's area and pitch rather than just the building footprint. Every report carries a confidence score, and roofs that are complex or heavily tree-covered are flagged for on-site verification. Full reports add NWS hail and storm history for the address, an AI cost estimate, and, on the Business tier, generated proposals and solar analysis. Shingle identification works from an uploaded photo. Reports are metered monthly against your plan allowance, so match the tier to your actual inspection volume rather than the headline price. The free tier gives three full reports without a card, which is enough to test measurement quality against roofs you have already measured by hand, and that is exactly how to evaluate it.",
+      "pros_detail": [
+        {
+          "title": "Report economics that undercut per-report incumbents by an order of magnitude",
+          "explanation": "Verified 2026-08-29: 10 reports for $48/month (under $5 each) or 100 for $98/month (under $1 each), against roughly $20 to $90 per report from EagleView. For a contractor with steady inspection volume this is the whole argument, and unlike the incumbents the pricing is published without a sales call."
+        },
+        {
+          "title": "Confidence scoring and honest flagging of hard roofs",
+          "explanation": "Every report includes a confidence score, and complex or tree-covered roofs are flagged for on-site verification rather than silently returned as certain. Publishing uncertainty is better practice than the false precision common in AI-generated measurement, and it is the strongest signal on the site that the product is built by people who understand the failure mode."
+        },
+        {
+          "title": "Storm history bundled into the report, not sold separately",
+          "explanation": "NWS hail and storm history for the address is included in full reports. For storm-restoration work that data normally comes from a separate subscription, so bundling it removes a line item from the stack."
+        },
+        {
+          "title": "Genuinely roofing-specific rather than a general FSM with a roofing page",
+          "explanation": "Shingle identification from a photo, waste factor, facet-level pitch, door-knock tracking and supplement-oriented AI assistance are roofing-native features. The product is not trying to also serve HVAC and plumbing, which shows in the feature set."
+        },
+        {
+          "title": "A real free tier for evaluating the thing that matters",
+          "explanation": "Three full reports with no card is enough to test measurements against roofs you have already measured yourself. Given the absence of published accuracy figures, this self-test is the only credible way to evaluate the tool, and the vendor makes it free to run."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "No published accuracy figure, and no claimed carrier or Xactimate acceptance",
+          "explanation": "Checked 2026-08-29: the site publishes no margin of error, no accuracy percentage, no third-party validation, and never mentions Xactimate compatibility, insurance carrier acceptance or adjuster approval. EagleView publishes a specific accuracy figure. For insurance and supplement work, where a wrong measurement is a rejected claim or an underbid job, that gap is the single most important thing to understand before switching."
+        },
+        {
+          "title": "The vendor's own terms tell you not to rely on it for claims without verifying",
+          "explanation": "The terms of service (last updated 14 July 2026) state that AI output \"is an estimate, may be inaccurate or incomplete\" and that users \"must independently verify measurements, product identifications, and estimates (including by on-site inspection) before relying on them for bids, contracts, material orders, insurance claims.\" That is a reasonable disclaimer, but it sits in tension with marketing an AI assistant for insurance supplements, and it means on-site verification stays in your process."
+        },
+        {
+          "title": "Reports are capped monthly, and the headline price implies more than it includes",
+          "explanation": "$48/month buys 10 reports, not unlimited access. A storm week can exhaust that in two days, pushing you to the $98 Business tier or a custom plan. The terms also allow account restrictions for excessive usage. Budget from your actual inspection volume, not the entry price."
+        },
+        {
+          "title": "Pricing has moved sharply against customers",
+          "explanation": "Archived captures show the product selling unlimited reports for $12/month in May 2024. It now sells 10 reports for $48/month month-to-month. The economics may well have required it, but anyone evaluating a long-term dependency should know the model has already been restructured once, and factor that into how much of the estimating workflow they hand over."
+        },
+        {
+          "title": "No verifiable third-party review base or public founder footprint",
+          "explanation": "The claimed 850+ customers is vendor-reported and could not be corroborated. G2, Capterra and Trustpilot all bot-blocked automated checks on 2026-08-29, so their listings are unverified rather than confirmed absent, and no organic discussion surfaced in search. The named founder has no public footprint we could tie to the company. The domain also sat parked and listed for sale in 2022 before its current registration in August 2023."
+        },
+        {
+          "title": "Satellite imagery age is never disclosed",
+          "explanation": "Nothing on the site states how current the imagery is or warns that a recently replaced roof may still show the old one, which is the classic failure mode for remote measurement. The imagery supplier is not named either, though Google 3D elevation data is credited for the pitch and facet modelling."
+        }
+      ],
+      "best_for": "Roofing contractors and storm-restoration crews who want fast, cheap first-pass measurements and proposals from the desk, and who will keep on-site verification in the process for anything going to an insurance carrier",
+      "best_team_size": "1-25",
+      "weaknesses": "No published accuracy figure, third-party validation, Xactimate compatibility or carrier-acceptance claim; the vendor's own terms require independent verification before use in bids, material orders or insurance claims; monthly report caps rather than unlimited access at the headline price; pricing restructured from unlimited-at-$12 in 2024 to 10 reports at $48; customer count unverifiable and third-party review listings bot-blocked; no public founder footprint; satellite imagery age never disclosed",
+      "reputation_flag": null,
+      "ratings": {
+        "g2": null,
+        "capterra": null,
+        "trustpilot": null,
+        "reddit_sentiment": "no organic discussion found as of 2026-08-29; G2, Capterra and Trustpilot bot-blocked automated checks, so their listings are unverified rather than confirmed absent"
+      },
+      "key_features": [
+        "satellite_roof_measurement",
+        "3d_elevation_modeling",
+        "facet_area_and_pitch",
+        "waste_factor",
+        "confidence_scoring",
+        "nws_hail_storm_history",
+        "shingle_id_from_photo",
+        "ai_cost_estimates",
+        "ai_proposals",
+        "solar_analysis",
+        "door_knock_tracking"
+      ],
+      "integrations": [
+        "google_3d_elevation",
+        "nws_storm_data"
+      ],
+      "affiliate_program": "none disclosed (no affiliate URL provided in the vendor's submission)",
+      "affiliate_payout_note": "not joined; listing is editorial and per-vendor disclosure applies if that ever changes",
+      "verified_date": "2026-08-29",
+      "ai_faqs": [
+        {
+          "q": "How much does Rooftops AI cost, and is it really unlimited?",
+          "a": "It is not unlimited. Verified on rooftops.ai/pricing 29 August 2026: the free tier gives 3 full reports with no card; Pro is $48/month month-to-month or $28/month billed annually and includes 10 roof reports per month; Business is $98/month month-to-month or $58/month billed annually and includes 100 reports per month. Those are monthly caps, and the terms allow restrictions for excessive usage. Note also that in May 2024 the product sold unlimited reports for $12/month, so the model has already changed substantially."
+        },
+        {
+          "q": "Can I use Rooftops AI reports for insurance claims and supplements?",
+          "a": "Cautiously, and not on their own. The site publishes no accuracy figure, no third-party validation and no claim of Xactimate compatibility or carrier acceptance, and the vendor's own terms state you must independently verify measurements, including by on-site inspection, before relying on them for bids, contracts, material orders or insurance claims. Use it as a fast first pass and keep a carrier-accepted report or a physical measurement in the loop for anything a claim depends on."
+        },
+        {
+          "q": "How does it compare to EagleView and Hover?",
+          "a": "Against EagleView it is a pricing play: roughly $1 to $5 per report on an allowance versus roughly $20 to $90 per individual report, with the trade-off that EagleView publishes a specific accuracy figure and Rooftops AI does not. Against Hover it is a different workflow: Hover builds 3D models from smartphone photos taken at the property, so someone has to be on site, while Rooftops AI works remotely from satellite imagery. Many contractors will end up using a cheap remote tool for triage and quoting and an established report for claims."
+        },
+        {
+          "q": "How accurate are the measurements?",
+          "a": "Unknown from published sources, which is itself the answer you need. No margin of error or accuracy percentage appears anywhere on the site as of 29 August 2026. What the product does provide is a per-report confidence score and automatic flagging of complex or tree-covered roofs for on-site verification, which is more honest than implied certainty. Since three full reports are free with no card, run them against roofs you have already measured by hand: that comparison will tell you more than any marketing claim."
+        }
+      ]
     }
   ]
 }
