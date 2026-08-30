@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { tools } from '../../lib/data';
+import { tools, medianUsd } from '../../lib/data';
 
 // Static endpoint: /data/trades-software-pricing-2026.json, generated at build
 // time from tools.json. Machine-readable companion to the CSV, with dataset
@@ -14,7 +14,7 @@ export const GET: APIRoute = () => {
   const prices = priced
     .map((t) => t.pricing.starting_at_usd as number)
     .sort((a, b) => a - b);
-  const medianPrice = prices[Math.floor(prices.length / 2)];
+  const medianPrice = medianUsd(prices);
   const quoteOnly = tools.filter((t) => t.pricing.starting_at_usd === null).length;
   const freeTier = tools.filter((t) => t.pricing.starting_at_usd === 0).length;
 

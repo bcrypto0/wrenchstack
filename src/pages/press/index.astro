@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { tools, verticals, accountingSoftware, paymentProcessors, bankingProviders, financingProviders, insuranceProviders, leadGenPlatforms, payrollServices, marketingAgencies, aiTools } from '../../lib/data';
+import { tools, verticals, medianUsd, accountingSoftware, paymentProcessors, bankingProviders, financingProviders, insuranceProviders, leadGenPlatforms, payrollServices, marketingAgencies, aiTools } from '../../lib/data';
 
 // --- THE FULL US CONTRACTOR STACK (computed live, never hardcoded) ---
 const stackCats = [
@@ -30,7 +30,7 @@ const bankingRow = stackRows.find((r) => r.name === 'business banking')!;
 const customQuotedPct = Math.round((tools.filter((t) => t.pricing.starting_at_usd === null).length / tools.length) * 100);
 const pricedTools = tools.filter((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0);
 const prices = pricedTools.map((t) => t.pricing.starting_at_usd!).sort((a, b) => a - b);
-const medianPrice = prices[Math.floor(prices.length / 2)];
+const medianPrice = medianUsd(prices);
 const qbPct = Math.round((tools.filter((t) => t.integrations.some((i) => i.includes('quickbooks'))).length / tools.length) * 100);
 
 // --- INTERNATIONAL FOOTPRINT ---

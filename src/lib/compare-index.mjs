@@ -46,19 +46,26 @@ export const GATED_INTL_COMPARE_MARKETS = new Set(['sa', 'ae', 'qa', 'kw', 'ba',
 // three-month-old domain fighting for crawl budget, advertising 300 near
 // duplicates competes with the pages that can actually rank.
 //
-// So: noindex + drop from the sitemap by default. The exception is a page that
-// has EARNED external links, because a page other sites already cite is a real
-// destination regardless of how it was generated. Contractor Foreman's press
-// releases cite the Illinois and Nebraska general-contractor roundups, so those
-// stay indexable.
+// So: noindex + drop from the sitemap by default. The one exception worth making
+// is a page that has EARNED external links, because a page other sites already
+// cite is a real destination regardless of how it was generated.
 //
-// To release more: give a page something that is not a find-replace (real
-// licensing-board detail, state-specific permit rules, local pricing) and add
-// its key here. Earning the release is the point; do not bulk-add.
-export const INDEXABLE_STATE_PAGES = new Set([
-  'illinois/general-contractor',
-  'nebraska/general-contractor',
-]);
+// The list is EMPTY, and that is deliberate (2026-08-30). It previously held
+// illinois/general-contractor and nebraska/general-contractor on the strength of
+// an external audit's claim that Contractor Foreman's press releases cite those
+// two roundups. We tried to verify that on 2026-08-29 and could not: nothing in
+// general search, nothing in a site-scoped search of contractorforeman.com, and
+// their own press index returns HTTP 403 to automation, so it is UNVERIFIABLE
+// rather than proven absent. Measured the same day, those two pages are within
+// 200 bytes of Texas's, i.e. they have no state-specific substance of their own
+// either. Exempting them satisfied neither half of the rule above, so they are
+// out until one half is actually met.
+//
+// To release a page: give it something that is not a find-replace (real
+// licensing-board detail, state-specific permit rules, local pricing), or point
+// at a citation you have actually loaded and read, then add its key here.
+// Earning the release is the point; do not bulk-add.
+export const INDEXABLE_STATE_PAGES = new Set([]);
 
 export function isStatePageIndexable(stateSlug, verticalUrl) {
   return INDEXABLE_STATE_PAGES.has(`${stateSlug}/${verticalUrl}`);

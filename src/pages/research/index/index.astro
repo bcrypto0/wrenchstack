@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { tools, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, paymentProcessors, financingProviders, accountingSoftware, bankingProviders, aiTools, verticals } from '../../../lib/data';
+import { tools, medianUsd, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, paymentProcessors, financingProviders, accountingSoftware, bankingProviders, aiTools, verticals } from '../../../lib/data';
 
 // Computed live from directory data — every stat is reproducible from our published methodology
 const totalTools = tools.length;
@@ -9,10 +9,12 @@ const customQuotedTools = tools.filter(t => t.pricing.starting_at_usd === null).
 const customQuotedPct = Math.round((customQuotedTools / totalTools) * 100);
 const freeTrialTools = tools.filter(t => (t.pricing.free_trial_days ?? 0) > 0).length;
 const freeTrialPct = Math.round((freeTrialTools / totalTools) * 100);
-const avgPriceTools = tools.filter(t => t.pricing.starting_at_usd !== null);
-const medianPrice = avgPriceTools.length > 0
-  ? avgPriceTools.map(t => t.pricing.starting_at_usd!).sort((a, b) => a - b)[Math.floor(avgPriceTools.length / 2)]
-  : 0;
+// Paid entry prices only. This page previously included the $0 free-tier tools and
+// took the upper-middle value, publishing a $59 "median" against the $79 on
+// /trends-2026/. Both were wrong; the shared helper gives $77 on the same basis
+// every other page now uses. (2026-08-30)
+const avgPriceTools = tools.filter(t => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0);
+const medianPrice = medianUsd(avgPriceTools.map(t => t.pricing.starting_at_usd!));
 const quickbooksIntegrated = tools.filter(t => t.integrations.some(i => i.includes('quickbooks'))).length;
 const quickbooksPct = Math.round((quickbooksIntegrated / totalTools) * 100);
 const stripeIntegrated = tools.filter(t => t.integrations.some(i => i.includes('stripe'))).length;

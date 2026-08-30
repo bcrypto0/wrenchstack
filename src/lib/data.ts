@@ -1486,3 +1486,25 @@ export function bankingByFocus(): Array<{ focus: BankingFocus; providers: Bankin
 
 
 
+
+// Single source of truth for the median entry price.
+//
+// Added 2026-08-30. Four pages had each copy-pasted `prices[Math.floor(len/2)]`,
+// which is the upper-middle value, not a median: with an even number of priced
+// tools it silently overstates. trends-2026.astro was publishing $79 as the
+// headline "median" while its own per-trade table (which did average the two
+// middle values) used the correct method. The open CSV/JSON dataset carried the
+// same overstatement, so anyone citing us inherited it.
+export function medianUsd(values: number[]): number {
+  if (!values.length) return 0;
+  const s = [...values].sort((a, b) => a - b);
+  const m = Math.floor(s.length / 2);
+  return s.length % 2 ? s[m] : Math.round((s[m - 1] + s[m]) / 2);
+}
+
+/** Entry prices of every tool that publishes a real paid starting price. */
+export function pricedEntryValues(list: Tool[] = tools): number[] {
+  return list
+    .filter((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0)
+    .map((t) => t.pricing.starting_at_usd!);
+}
