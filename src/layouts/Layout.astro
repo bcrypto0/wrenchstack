@@ -134,7 +134,9 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
     <!-- Favicons on tool/listing cards load from Google's s2 service — warm the connection early. -->
     <link rel="preconnect" href="https://www.google.com" />
     <link rel="dns-prefetch" href="https://www.google.com" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
     <meta name="generator" content={Astro.generator} />
 
     <title>{fullTitle}</title>
@@ -174,7 +176,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
       <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-4">
         <div class="flex items-center gap-3">
           <a href="/" class="flex items-center" aria-label="WrenchStack home">
-            <img src="/logo.svg" alt="WrenchStack" width="191" height="44" class="h-11 w-auto" />
+            <img src="/logo-header.png" alt="WrenchStack" width="186" height="44" class="h-11 w-auto" fetchpriority="high" decoding="async" />
           </a>
           <details id="country-switcher" class="group relative">
             <summary class="flex cursor-pointer list-none items-center gap-1.5 rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 [&::-webkit-details-marker]:hidden" aria-label="Choose country or region">
