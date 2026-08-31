@@ -3,7 +3,7 @@
     "description": "United Kingdom trades-vendor coverage. Lighter-touch profiles than full US reviews (400-600 words each rather than 1,200-2,500) — focused on what makes each UK vendor distinct and what UK contractors should know. Cross-market vendors (Bark UK, Hiscox UK, ServiceM8 UK) link to existing US reviews with UK-specific context noted. UK-only vendors (Checkatrade, MyBuilder, BrightPay) get full UK-specific treatment.",
     "country": "United Kingdom",
     "country_code": "uk",
-    "last_updated": "2026-05-29",
+    "last_updated": "2026-08-31",
     "vendor_shape": {
       "slug": "string",
       "name": "string",
@@ -395,6 +395,34 @@
       ],
       "typical_pricing": "£25-£200/month tier-based",
       "is_cross_market": true,
+      "cross_market_link": null
+    },
+    {
+      "slug": "sleepless-tradesman",
+      "name": "Sleepless Tradesman",
+      "category": "software",
+      "vendor_url": "https://sleeplesstradesman.com",
+      "tagline": "Chat-first AI quoting and invoicing for UK trades, with Part P and gas regs built in",
+      "market_position": "A seven-month-old UK AI assistant that quotes jobs from a plain-language description or site photos, then invoices, plans and looks up material prices. Published by 24/7 Tradespeople Ltd (company 12851474, incorporated 2020). The differentiator is UK regulation awareness: it checks Part P, gas certification, building regs and planning permission, which generic US platforms do not handle natively. Priced openly with a real free tier, which is more than a third of the field-service category manages.",
+      "uk_specific_note": "Genuinely UK-built rather than a US product with a UK page. Free tools include a CIS refund estimator and sole-trader tax calculator, and the AI checks Part P, Gas Safe and planning permission as part of quoting. Pricing is in GBP and the app ships on the GB App Store. It also runs a free tradesman directory with no monthly fee and no commission on won jobs. Claimed availability in the US, Australia, Canada, New Zealand and UAE is unverified.",
+      "tier": "A",
+      "reputation_flag": null,
+      "pros": [
+        "Real trade-specific content: 17 dedicated trade pages, not a single generic product with a trades label",
+        "UK regulation checks (Part P, gas certification, building regs, planning permission) built into quoting",
+        "Published pricing and a genuine free tier (10 AI messages/month, no card), against a category where 36% of platforms publish no price at all",
+        "Backed by a real UK company incorporated in 2020, six years older than the product",
+        "Free directory side charges no monthly fee and takes no commission on jobs won"
+      ],
+      "cons": [
+        "Publishes a self-serving aggregateRating of 5.0 from 6 testimonials hosted on its own site, all dated identically 2026-01-01 and first-name-only, while the independently-counted App Store rating is 5.0 from just 2 ratings. Google's structured-data guidance advises against self-serving review markup for your own product. Verified 2026-08-31.",
+        "Overclaims scope: schema states 40+ trades across 35+ countries, but only 17 trades have dedicated pages and the FAQ names 6 countries. Verified 2026-08-31.",
+        "Pricing is metered on AI messages, not unlimited: £29.99/month buys 100 messages, £59.99 buys 500. Steady quoting will meet that cap. Joist and Markate both offer free quoting and invoicing tiers, and a general assistant drafts a quote with no trade subscription; what you pay for here is the UK regulation checks and material-price lookup.",
+        "Product is roughly seven months old (domain registered 2026-02-07), so there is no track record on reliability, pricing stability or support",
+        "No verifiable third-party review base: G2, Capterra and Trustpilot all returned HTTP 403 to automated checks on 2026-08-31, so their listings are UNVERIFIED rather than confirmed absent"
+      ],
+      "typical_pricing": "Free tier £0 (10 AI messages/month). Starter £29.99/month (100 messages). Premium £59.99/month (500 messages, live material-price search). Teams from about £100 with extra seats from £25/seat/month. Message allowances are monthly caps, not unlimited. Verified from the /pro pricing page and App Store in-app purchase listings, 2026-08-31.",
+      "is_cross_market": false,
       "cross_market_link": null
     },
     {
