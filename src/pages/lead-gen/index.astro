@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import VendorLogo from '../../components/VendorLogo.astro';
+import MissingFromList from '../../components/MissingFromList.astro';
 import {
   leadGenPlatforms,
   leadGenTier,
@@ -210,5 +211,6 @@ const itemListSchema = {
         </li>
       </ul>
     </section>
+    <MissingFromList listName="lead-generation platforms" count={leadGenPlatforms.length} />
   </article>
 </Layout>

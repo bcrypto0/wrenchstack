@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import VendorLogo from '../../components/VendorLogo.astro';
 import { payrollServices, payrollTier, type PayrollService } from '../../lib/data';
+import MissingFromList from '../../components/MissingFromList.astro';
 
 const pageTitle = `Best Payroll Software for Trades Contractors (2026)`;
 const pageDescription = `Independent reviews of ${payrollServices.length} payroll services for HVAC, plumbing, electrical, roofing, and other trades — Gusto, OnPay, Patriot, Hourly.io (with WC), QuickBooks Payroll, and more. Single-vendor focus on Gusto for affiliate economics; honest coverage of ADP and Paychex renewal patterns.`;
@@ -147,5 +148,6 @@ const itemListSchema = {
         <a href="/tools/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Software directory</a>
       </div>
     </section>
+    <MissingFromList listName="payroll services for trades" count={payrollServices.length} />
   </article>
 </Layout>

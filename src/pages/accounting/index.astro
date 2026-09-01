@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import VendorLogo from '../../components/VendorLogo.astro';
 import { accountingSoftware, accountingByPosition, ACCOUNTING_POSITION_META } from '../../lib/data';
+import MissingFromList from '../../components/MissingFromList.astro';
 
 const grouped = accountingByPosition();
 
@@ -138,5 +139,6 @@ const itemListSchema = {
         <a href="/payments/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Payments</a>
       </div>
     </section>
+    <MissingFromList listName="accounting platforms for trades" count={accountingSoftware.length} />
   </article>
 </Layout>

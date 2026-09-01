@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import VendorLogo from '../../components/VendorLogo.astro';
 import { insuranceProviders, insuranceTier, type InsuranceProvider } from '../../lib/data';
+import MissingFromList from '../../components/MissingFromList.astro';
 
 const pageTitle = `Best Business Insurance for Trades Contractors (2026)`;
 const pageDescription = `Independent reviews of ${insuranceProviders.length} business-insurance providers for HVAC, plumbing, electrical, roofing, and other trades — NEXT, Hiscox, Simply Business, CoverWallet, Acuity, Erie, and more. Honest reputation flags + real affiliate disclosure.`;
@@ -168,5 +169,6 @@ const itemListSchema = {
         <a href="/tools/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Software directory</a>
       </div>
     </section>
+    <MissingFromList listName="insurance providers for contractors" count={insuranceProviders.length} />
   </article>
 </Layout>

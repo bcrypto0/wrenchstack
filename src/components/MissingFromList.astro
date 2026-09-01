@@ -1,0 +1,57 @@
+---
+// Contextual vendor-submission prompt for category hubs (added 2026-09-01).
+//
+// Why: /for-vendors/ was reachable only from the footer, the international market
+// pages and /badges/. It was linked from ZERO tool pages, comparison pages,
+// category hubs or the homepage, which are precisely the pages a vendor lands on
+// after searching for their own product or a competitor.
+//
+// The mechanism is already evidenced. Lavo CRM's submission said, in the vendor's
+// own words, "Lavo CRM is not on WrenchStack's pressure-washing list today". He
+// browsed a category page, noticed he was absent, and went hunting for the form.
+// Nothing on that page asked him to. This component is that ask.
+//
+// Deliberately specific rather than generic: naming the list a vendor is looking
+// at converts better than a footer link labelled "For vendors", because the
+// trigger is the vendor seeing the exact list they should be on.
+//
+// Deliberately restates the two rules that make submitting worthwhile, since a
+// vendor's first question is always whether this is pay-to-play.
+
+interface Props {
+  /** The list as a reader sees it, e.g. "AI tools for trades", "lead-generation platforms". */
+  listName: string;
+  /** How many vendors the list currently holds, when the page already computes it. */
+  count?: number;
+}
+
+const { listName, count } = Astro.props;
+---
+
+<section class="mt-12 rounded-lg border border-slate-200 bg-slate-50 p-6">
+  <h2 class="text-lg font-bold text-slate-900">Missing from this list?</h2>
+  <p class="mt-2 text-sm leading-relaxed text-slate-700">
+    {count
+      ? `We track ${count} ${listName} today, and we know that is not all of them.`
+      : `We know our ${listName} coverage is not complete.`}
+    {' '}If you build one and it is not here, send it to us and we will review it against your
+    own published pricing and terms.
+  </p>
+  <p class="mt-2 text-sm leading-relaxed text-slate-700">
+    Listings are free. No vendor can pay for placement, for a score, or to have a documented
+    con removed. We publish the cons next to the pros, so read an existing review before you
+    decide you want one.
+  </p>
+  <div class="mt-4 flex flex-wrap gap-3">
+    <a
+      href="/for-vendors/"
+      class="rounded-md bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-orange-600"
+      >Submit your product →</a
+    >
+    <a
+      href="/methodology/"
+      class="rounded-md border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 hover:bg-slate-100"
+      >How we review</a
+    >
+  </div>
+</section>

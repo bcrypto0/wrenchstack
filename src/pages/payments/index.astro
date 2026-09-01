@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { paymentProcessors, paymentsByModel, PAYMENT_MODEL_META } from '../../lib/data';
 import VendorLogo from '../../components/VendorLogo.astro';
+import MissingFromList from '../../components/MissingFromList.astro';
 
 const grouped = paymentsByModel();
 
@@ -143,5 +144,6 @@ const itemListSchema = {
         <a href="/tools/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Software directory</a>
       </div>
     </section>
+    <MissingFromList listName="payment processors for contractors" count={paymentProcessors.length} />
   </article>
 </Layout>

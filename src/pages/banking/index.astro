@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import VendorLogo from '../../components/VendorLogo.astro';
 import { bankingProviders, bankingByFocus, BANKING_FOCUS_META } from '../../lib/data';
+import MissingFromList from '../../components/MissingFromList.astro';
 
 const grouped = bankingByFocus();
 
@@ -139,5 +140,6 @@ const itemListSchema = {
         <a href="/accounting/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Accounting</a>
       </div>
     </section>
+    <MissingFromList listName="business-banking providers" count={bankingProviders.length} />
   </article>
 </Layout>

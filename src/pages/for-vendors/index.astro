@@ -186,6 +186,30 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
               <label for="vs-role" class="block text-sm font-semibold text-slate-900">Your role at the company</label>
               <input type="text" id="vs-role" name="contact_role" placeholder="e.g. Founder, Head of Marketing, BD" class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
             </div>
+            {/*
+              Added 2026-09-01. Eight submissions had arrived by this date and we could not
+              say how any of them found us, which made every decision about promoting this
+              form a guess. One required dropdown turns the next ten into a map.
+              Required deliberately: optional fields on a long form go unanswered, and a
+              half-empty column answers nothing. A single click is the least friction a
+              required field can cost.
+            */}
+            <div>
+              <label for="vs-heard" class="block text-sm font-semibold text-slate-900">How did you find us? <span class="text-rose-600">*</span></label>
+              <select id="vs-heard" name="how_did_you_find_us" required class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500">
+                <option value="">Select one</option>
+                <option value="search-own">Search: I was looking for my own product</option>
+                <option value="search-competitor">Search: I found a competitor listed here</option>
+                <option value="search-category">Search: I was researching the category</option>
+                <option value="wrenchstack-contacted">WrenchStack contacted me</option>
+                <option value="recommendation">Someone recommended you</option>
+                <option value="social">Social (X, LinkedIn, Reddit, forum)</option>
+                <option value="product-hunt">Product Hunt</option>
+                <option value="newsletter-article">A newsletter or article</option>
+                <option value="ai-assistant">An AI assistant suggested you</option>
+                <option value="other">Something else</option>
+              </select>
+            </div>
           </div>
 
           <div class="flex flex-wrap items-center gap-3">

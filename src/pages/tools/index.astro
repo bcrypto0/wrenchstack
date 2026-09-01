@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import { tools, verticals, aggregateRating, formatPrice, verticalToUrl, priceTier, teamSizeBucket, freshnessTier, winsForTool, type Tool } from '../../lib/data';
 import FreshnessBadge from '../../components/FreshnessBadge.astro';
 import ToolLogo from '../../components/ToolLogo.astro';
+import MissingFromList from '../../components/MissingFromList.astro';
 
 // Compute filter data per tool for the client-side filter system.
 // We pre-compute these server-side to avoid sending all tool data to JS.
@@ -435,4 +436,5 @@ const itemListSchema = {
       });
     })();
   </script>
+  <MissingFromList listName="field-service platforms" count={tools.length} />
 </Layout>

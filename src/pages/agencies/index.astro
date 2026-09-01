@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import VendorLogo from '../../components/VendorLogo.astro';
 import { marketingAgencies, agencyTier, type MarketingAgency } from '../../lib/data';
+import MissingFromList from '../../components/MissingFromList.astro';
 
 const pageTitle = `Best Marketing Agencies for Trades Contractors (2026)`;
 const pageDescription = `Independent reviews of ${marketingAgencies.length} digital marketing agencies serving HVAC, plumbing, electrical, roofing, and other trades. Trade-specific specialists (Hook Agency, Plumbing & HVAC SEO), home-services generalists, and honest reputation warnings on Townsquare and Marketing 360.`;
@@ -149,5 +150,6 @@ const itemListSchema = {
         Unlike software, insurance, lead-gen, or payroll — agencies in this directory have <strong>no affiliate programs</strong>. Agency relationships are direct sales rather than publisher-affiliate. Our recommendations here are unaffected by commercial alignment because there isn't any. The honest editorial position is the only revenue model — we recommend the agencies our readers should actually use because that's the only way the directory remains credible. Future monetization on this category may be sponsored placement (clearly labeled) after 6+ months of authority-building, but that's not active today.
       </p>
     </section>
+    <MissingFromList listName="marketing agencies serving trades" count={marketingAgencies.length} />
   </article>
 </Layout>
