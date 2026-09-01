@@ -1,5 +1,5 @@
 ---
-// Contextual vendor-submission prompt for category hubs (added 2026-09-01).
+// Contextual vendor-submission prompt (added 2026-09-01, extended same day).
 //
 // Why: /for-vendors/ was reachable only from the footer, the international market
 // pages and /badges/. It was linked from ZERO tool pages, comparison pages,
@@ -11,37 +11,66 @@
 // browsed a category page, noticed he was absent, and went hunting for the form.
 // Nothing on that page asked him to. This component is that ask.
 //
-// Deliberately specific rather than generic: naming the list a vendor is looking
-// at converts better than a footer link labelled "For vendors", because the
-// trigger is the vendor seeing the exact list they should be on.
+// Two modes, because the reader's situation differs:
+//   listName  -> a category hub. The vendor is looking at the list they belong on.
+//   competitors -> a tool or comparison page. The vendor is looking at a rival.
+// Naming what they are looking at is the entire point; a generic "For vendors"
+// footer link is what already existed and it converted rarely enough that we
+// cannot attribute a single submission to it.
 //
-// Deliberately restates the two rules that make submitting worthwhile, since a
-// vendor's first question is always whether this is pay-to-play.
+// Kept as ONE component rather than copies per template, for the same reason the
+// median bug happened: a block repeated across 1,400 pages is 1,400 chances to
+// drift.
 
 interface Props {
-  /** The list as a reader sees it, e.g. "AI tools for trades", "lead-generation platforms". */
-  listName: string;
-  /** How many vendors the list currently holds, when the page already computes it. */
+  /** Category-hub mode: the list as a reader sees it, e.g. "AI tools for trades". */
+  listName?: string;
+  /** How many vendors that list holds, when the page already computes it. */
   count?: number;
+  /** Tool/compare mode: the vendor(s) whose page this is. One name or two. */
+  competitors?: string[];
 }
 
-const { listName, count } = Astro.props;
+const { listName, count, competitors } = Astro.props;
+const rivals = competitors?.filter(Boolean) ?? [];
+const isCompetitorMode = rivals.length > 0;
+
+const heading = isCompetitorMode
+  ? rivals.length > 1
+    ? 'Should your product be in this comparison?'
+    : `Do you build something that competes with ${rivals[0]}?`
+  : 'Missing from this list?';
+
+const rivalPhrase = rivals.length > 1 ? `${rivals[0]} and ${rivals[1]}` : rivals[0];
 ---
 
 <section class="mt-12 rounded-lg border border-slate-200 bg-slate-50 p-6">
-  <h2 class="text-lg font-bold text-slate-900">Missing from this list?</h2>
-  <p class="mt-2 text-sm leading-relaxed text-slate-700">
-    {count
-      ? `We track ${count} ${listName} today, and we know that is not all of them.`
-      : `We know our ${listName} coverage is not complete.`}
-    {' '}If you build one and it is not here, send it to us and we will review it against your
-    own published pricing and terms.
-  </p>
+  <h2 class="text-lg font-bold text-slate-900">{heading}</h2>
+
+  {isCompetitorMode ? (
+    <p class="mt-2 text-sm leading-relaxed text-slate-700">
+      We review {rivalPhrase} against {rivals.length > 1 ? 'their' : 'its'} own published pricing
+      and terms, and we publish the cons next to the pros. If you build a competing product and
+      it is not covered here, send it to us and it gets the same treatment.
+    </p>
+  ) : (
+    <p class="mt-2 text-sm leading-relaxed text-slate-700">
+      {count
+        ? `We track ${count} ${listName} today, and we know that is not all of them.`
+        : `We know our ${listName} coverage is not complete.`}
+      {' '}If you build one and it is not here, send it to us and we will review it against your
+      own published pricing and terms.
+    </p>
+  )}
+
   <p class="mt-2 text-sm leading-relaxed text-slate-700">
     Listings are free. No vendor can pay for placement, for a score, or to have a documented
-    con removed. We publish the cons next to the pros, so read an existing review before you
-    decide you want one.
+    con removed.{' '}
+    {isCompetitorMode
+      ? 'Read this page first and decide whether you want that.'
+      : 'We publish the cons next to the pros, so read an existing review before you decide you want one.'}
   </p>
+
   <div class="mt-4 flex flex-wrap gap-3">
     <a
       href="/for-vendors/"

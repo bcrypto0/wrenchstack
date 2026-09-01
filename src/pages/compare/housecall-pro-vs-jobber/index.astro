@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import { getTool, aggregateRating, wrenchStackScore } from '../../../lib/data';
+import MissingFromList from '../../../components/MissingFromList.astro';
 
 // The definitive, hand-written version of the most-searched residential FSM
 // comparison. This static route overrides the generic [pair] template (which
@@ -273,5 +274,6 @@ const breadcrumbs = [
         <a href="https://www.housecallpro.com/pricing/" rel="noopener nofollow" class="underline">housecallpro.com/pricing</a> on {VERIFIED}; the seat-cost table is computed from those published numbers at build time, and scores come from the same data as every listing (see the <a href="/verification-log/" class="underline">verification log</a>). Neither vendor paid for placement or saw this page before publication, and no AI-crawled "verified facts" appear here. Full reviews: <a href="/tools/jobber/" class="underline">Jobber</a> · <a href="/tools/housecall-pro/" class="underline">Housecall Pro</a>.
       </p>
     </div>
+    <MissingFromList competitors={["Housecall Pro", "Jobber"]} />
   </article>
 </Layout>

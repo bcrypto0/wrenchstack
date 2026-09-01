@@ -10,6 +10,7 @@ import {
 } from '../../../lib/data';
 import FreshnessBadge from '../../../components/FreshnessBadge.astro';
 import { isComparisonIndexable } from '../../../lib/compare-index.mjs';
+import MissingFromList from '../../../components/MissingFromList.astro';
 
 export async function getStaticPaths() {
   // Generate both directions per pair (e.g. jobber-vs-servicetitan AND
@@ -733,5 +734,6 @@ const breadcrumbs = [
         </a>
       </div>
     </section>
+    <MissingFromList competitors={[a.name, b.name]} />
   </article>
 </Layout>

@@ -33,6 +33,7 @@ import UserReviews from '../../../components/UserReviews.astro';
 import ReviewSubmissionForm from '../../../components/ReviewSubmissionForm.astro';
 import AffiliateDisclosure from '../../../components/AffiliateDisclosure.astro';
 import { awardsForTool, awards, userRatingForTool, reviewsForTool } from '../../../lib/data';
+import MissingFromList from '../../../components/MissingFromList.astro';
 
 export async function getStaticPaths() {
   return tools.map((t) => ({
@@ -915,6 +916,7 @@ const breadcrumbs = [
         Visit {tool.name} →
       </a>
     </section>
+    <MissingFromList competitors={[tool.name]} />
   </article>
 
   <script>
