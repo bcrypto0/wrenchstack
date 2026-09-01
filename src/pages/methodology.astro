@@ -83,7 +83,7 @@ const counts = {
 ---
 
 <Layout
-  title="WrenchStack Fit Score™ Methodology v1.1 — How we rank trades vendors"
+  title="WrenchStack Fit Score™ Methodology v1.2 — How we rank trades vendors"
   description="The WrenchStack Fit Score™ is our published, versioned methodology for evaluating trades vendors across 10 categories — software, payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI. Five weighted factors. Public scoring rubric. Independence statement. Per-vendor affiliate ledger."
   breadcrumbs={breadcrumbs}
 >
@@ -121,6 +121,16 @@ const counts = {
     </div>
 
     <div class="not-prose mb-8 rounded-lg border border-slate-200 bg-slate-50 p-5 text-sm text-slate-700">
+      <h2 class="text-base font-bold text-slate-900 mb-2 mt-0">Changelog: v1.2 (2026-09-01)</h2>
+      <ul class="list-disc pl-5 space-y-1 m-0">
+        <li><strong>Removed the "Feature depth" factor.</strong> It scored a count of listed features, capped at 10. Our feature vocabulary is not controlled: 234 distinct labels across 125 tools, 118 of which appear exactly once, including outright duplicates (<em>reporting</em> and <em>reports</em>; <em>routing</em>, <em>route optimization</em> and <em>route planning</em>; <em>customer portal</em> and <em>client portal</em>) and even vendor product names entered as features. A tool whose entry split quoting into four labels scored four times one that wrote it once, which is a difference in how we took notes rather than in the software. It was also inflatable by simply submitting a longer list.</li>
+        <li><strong>We tried to fix it rather than remove it, and the fix failed honestly.</strong> A rewrite scoring coverage of 14 canonical capabilities mapped only 69% of our labels and scored AccuLynx 0 out of 10 despite seven real features, because a generic vocabulary does not describe roofing. Making it work requires normalising the whole taxonomy, which is a data project we have not done. We would rather remove a factor than publish one we cannot defend, which is the same reason we refuse to invent a rating for an unlisted tool.</li>
+        <li><strong>Integration coverage now uses a reachable scale.</strong> It counted integrations against a cap of 10 while the highest count in the directory is 7, so no tool could score above 7 on a 10-point factor and every tool took a silent reduction. Six or more native integrations now earns full marks.</li>
+        <li><strong>Weights rebalanced.</strong> Pricing transparency and integration coverage move from 10% to 15% each. Vertical fit (40%) and user ratings (30%) are unchanged. Every score was recomputed: the mean moved by 0.07 and no tool moved by more than 1.0.</li>
+      </ul>
+    </div>
+
+    <div class="not-prose mb-8 rounded-lg border border-slate-200 bg-slate-50 p-5 text-sm text-slate-700">
       <h2 class="text-base font-bold text-slate-900 mb-2 mt-0">Changelog: v1.1 (2026-08-27)</h2>
       <ul class="list-disc pl-5 space-y-1 m-0">
         <li><strong>Fixed a scoring bug.</strong> On pages with no trade context (tool pages, awards), the vertical-fit factor previously fell back to a flat 7.0 instead of the tool's actual fit data. It now uses the tool's best trade fit. Context-free scores published before this date understated most tools.</li>
@@ -133,7 +143,7 @@ const counts = {
     <h2>What the WrenchStack Fit Score™ measures</h2>
 
     <p>
-      Every vendor in our directory carries a WrenchStack Fit Score™ on a 0–10 scale. The score is calculated from five weighted factors and is the primary input to where a vendor ranks on category pages, vertical landing pages, and buyer guides. The same formula applies to every vendor — regardless of affiliate relationship, sponsorship status, or commercial alignment.
+      Every vendor in our directory carries a WrenchStack Fit Score™ on a 0–10 scale. The score is calculated from four weighted factors and is the primary input to where a vendor ranks on category pages, vertical landing pages, and buyer guides. The same formula applies to every vendor — regardless of affiliate relationship, sponsorship status, or commercial alignment.
     </p>
 
     <h2>The WrenchStack Fit Score™ formula</h2>
@@ -159,18 +169,13 @@ const counts = {
         </tr>
         <tr>
           <td><strong>Pricing transparency</strong></td>
-          <td>10%</td>
-          <td>Tools with public tier pricing score 10. Tools requiring sales calls for any number score 5. Tools with free tiers get a bonus.</td>
-        </tr>
-        <tr>
-          <td><strong>Feature depth</strong></td>
-          <td>10%</td>
-          <td>Count of meaningful features the tool ships, capped at 10. Generic feature stuffing doesn't help; coverage of the must-have features for the declared use case does.</td>
+          <td>15%</td>
+          <td>Tools with public tier pricing score 10. Tools requiring sales calls for any number score 5. Weight raised from 10% in v1.2.</td>
         </tr>
         <tr>
           <td><strong>Integration coverage</strong></td>
-          <td>10%</td>
-          <td>Count of native integrations with adjacent tools (QuickBooks, Stripe, Zapier, payment processors, marketing platforms). Capped at 10.</td>
+          <td>15%</td>
+          <td>Count of native integrations with adjacent tools (QuickBooks, Stripe, Zapier, payment processors, marketing platforms). Six or more earns full marks. Weight raised from 10% in v1.2.</td>
         </tr>
       </tbody>
     </table>
@@ -248,7 +253,7 @@ const counts = {
           <span class="font-semibold text-slate-900">Version 1.0</span>
           <span class="text-xs font-medium uppercase tracking-wider text-slate-500">2026-05-29</span>
         </div>
-        <p class="mt-1 text-sm text-slate-600 leading-relaxed">Initial public methodology: the WrenchStack Fit Score™ (five weighted factors — vertical fit 40%, user ratings 30%, pricing transparency 10%, feature depth 10%, integration coverage 10%), the documented evaluation timeline, the independence statement, and the per-vendor affiliate ledger.</p>
+        <p class="mt-1 text-sm text-slate-600 leading-relaxed">Initial public methodology: the WrenchStack Fit Score™ (five weighted factors as of that date — vertical fit 40%, user ratings 30%, pricing transparency 10%, feature depth 10%, integration coverage 10%; feature depth was removed in v1.2), the documented evaluation timeline, the independence statement, and the per-vendor affiliate ledger.</p>
       </li>
     </ul>
 

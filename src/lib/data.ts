@@ -147,10 +147,24 @@ export interface ScoreFactor {
   raw: number;    // sub-score 0-10
 }
 
-// The five weighted factors behind the WrenchStack Fit Score, exposed so the
+// The weighted factors behind the WrenchStack Fit Score, exposed so the
 // breakdown can be surfaced wherever the score appears (single source of truth
 // for both the number and its explanation). 40% vertical fit, 30% aggregate
-// user rating, 10% pricing transparency, 10% feature depth, 10% integrations.
+// user rating, 15% pricing transparency, 15% integration coverage.
+//
+// v1.2 (2026-09-01): 'Feature depth' REMOVED. It scored min(key_features.length, 10),
+// which counted array entries against an uncontrolled vocabulary: 234 distinct slugs
+// across 125 tools, 118 appearing exactly once, containing duplicates like
+// reporting/reports, routing/route_optimization/route_planning and
+// customer_portal/client_portal, plus vendor product names (instapay, pricebook_pro)
+// entered as features. It measured how granularly a researcher decomposed a product
+// rather than the product, and it was trivially inflatable by a longer submission.
+// A canonical-capability rewrite was built and rejected: it mapped 69% of slugs and
+// scored AccuLynx 0/10 despite seven real features, because a generic vocabulary does
+// not cover roofing. Fixing it properly needs the taxonomy normalised, which is a data
+// project. Removal moved the mean score by 0.04 and no tool by more than 0.5, so the
+// factor was noise. Same principle as refusing to invent a rating: an undefendable
+// number is worse than an absent one.
 export function wrenchStackScoreBreakdown(t: Tool, verticalSlug?: string): ScoreFactor[] {
   // Vertical fit: with trade context, score for that trade. Without context
   // (tool page, awards, migrations), use the tool's BEST trade fit: "how good
@@ -162,8 +176,11 @@ export function wrenchStackScoreBreakdown(t: Tool, verticalSlug?: string): Score
   const fit = verticalSlug ? verticalFitScore(t, verticalSlug) : bestFit;
   const rating = aggregateRating(t);
   const transparency = t.pricing.starting_at_usd !== null ? 10 : 5;
-  const featureScore = Math.min(t.key_features.length, 10);
-  const integrationScore = Math.min(t.integrations.length, 10);
+  // Integration coverage scaled to a denominator that is actually reachable. It used to
+  // be min(count, 10) while the directory maximum is 7 and the mean is 2.7, so no tool
+  // could ever score above 7 on a 10-point factor and every tool took a silent haircut.
+  // Six integrations is comprehensive for this category, so six or more earns full marks.
+  const integrationScore = Math.min(10, (t.integrations.length / 6) * 10);
   const factors: ScoreFactor[] = [
     { factor: verticalSlug ? 'Vertical fit' : 'Vertical fit (best trade)', weight: 0.4, raw: fit },
   ];
@@ -174,9 +191,8 @@ export function wrenchStackScoreBreakdown(t: Tool, verticalSlug?: string): Score
     factors.push({ factor: 'User ratings (G2 + Capterra)', weight: 0.3, raw: rating * 2 });
   }
   factors.push(
-    { factor: 'Pricing transparency', weight: 0.1, raw: transparency },
-    { factor: 'Feature depth', weight: 0.1, raw: featureScore },
-    { factor: 'Integration coverage', weight: 0.1, raw: integrationScore },
+    { factor: 'Pricing transparency', weight: 0.15, raw: transparency },
+    { factor: 'Integration coverage', weight: 0.15, raw: integrationScore },
   );
   const totalWeight = factors.reduce((s, f) => s + f.weight, 0);
   return factors.map((f) => ({ ...f, weight: f.weight / totalWeight }));
