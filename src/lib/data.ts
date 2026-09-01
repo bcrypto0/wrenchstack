@@ -211,7 +211,12 @@ export function readingTimeMinutes(wordCount: number): number {
 // bucket overlap — with rating as a tiebreaker, not the primary signal.
 
 export type ToolType = 'fsm' | 'cmms' | 'construction_pm' | 'estimating' | 'crm' | 'specialty' | 'unknown';
-export type PriceTier = 'free' | 'entry' | 'mid' | 'enterprise';
+// 'quote-only' split out from 'enterprise' on 2026-09-01. They were one bucket, and
+// they are not one thing: 45 of the 54 tools in the old 'enterprise' bucket simply do not
+// publish a price, while 9 genuinely start at $250+. Presenting "we do not know" as
+// "expensive" misled buyers filtering on price, and it made downstream copy assert an
+// enterprise footprint for products that may well be $40/month.
+export type PriceTier = 'free' | 'entry' | 'mid' | 'enterprise' | 'quote-only';
 export type TeamSizeBucket = 'solo' | 'small' | 'mid' | 'large';
 
 // Customer-facing FSM signature features. A tool with these is dispatch /
@@ -287,7 +292,7 @@ export function toolType(t: Tool): ToolType {
 
 export function priceTier(t: Tool): PriceTier {
   const p = t.pricing.starting_at_usd;
-  if (p === null) return 'enterprise';
+  if (p === null) return 'quote-only';
   if (p === 0) return 'free';
   if (p < 100) return 'entry';
   if (p < 250) return 'mid';
@@ -308,7 +313,11 @@ export function teamSizeBucket(t: Tool): TeamSizeBucket {
   return 'large';
 }
 
+// Deliberately excludes 'quote-only': it is the ABSENCE of a point on the price axis,
+// not a point at the top of it. Anything comparing tiers must special-case it rather than
+// let indexOf return -1 and silently score it as cheaper than free.
 const PRICE_TIER_ORDER: PriceTier[] = ['free', 'entry', 'mid', 'enterprise'];
+const isQuoteOnly = (tier: PriceTier) => tier === 'quote-only';
 const TEAM_BUCKET_ORDER: TeamSizeBucket[] = ['solo', 'small', 'mid', 'large'];
 
 export interface ScoredAlternative {
@@ -357,7 +366,11 @@ function buildAlternativeRationale(source: Tool, alt: Tool): string {
   const altPrice = alt.pricing.starting_at_usd;
 
   // 1. Pricing relationship
-  if (altTier === 'free' && sourceTier !== 'free') {
+  if (isQuoteOnly(altTier) || isQuoteOnly(sourceTier)) {
+    // One side publishes no price, so any "cheaper" or "upgrade path" claim would be
+    // invented. Say what is actually true instead.
+    if (isQuoteOnly(altTier)) fragments.push('Quote-only pricing, so compare on fit not cost');
+  } else if (altTier === 'free' && sourceTier !== 'free') {
     fragments.push('Has a free tier');
   } else if (altTierIdx < sourceTierIdx) {
     if (altPrice !== null && altPrice > 0) {
@@ -366,7 +379,13 @@ function buildAlternativeRationale(source: Tool, alt: Tool): string {
       fragments.push('Lower-tier alternative');
     }
   } else if (altTierIdx > sourceTierIdx) {
-    fragments.push('Enterprise-tier upgrade path');
+    // Was hardcoded to 'Enterprise-tier upgrade path' for ANY step up, so busybusy (free)
+    // suggesting CompanyCam ($63/mo) claimed an enterprise upgrade. Name the real number.
+    if (altPrice !== null && altPrice > 0) {
+      fragments.push(`Costs more at $${altPrice}/mo`);
+    } else {
+      fragments.push('Higher price tier');
+    }
   } else if (sourceTier === 'mid' || sourceTier === 'entry') {
     fragments.push('Similar price point');
   }
@@ -459,10 +478,14 @@ export function smartAlternatives(t: Tool, n: number = 6): ScoredAlternative[] {
     // Strong overlap worth 2 points each (capped at 10), weak worth 0.5
     const vfNormalized = Math.min(10, strongOverlapCount * 2 + weakOverlapCount * 0.5);
 
-    // 2. Price tier proximity (max 10): same tier = 10, 1 away = 5, 2+ = 0
-    const candTierIdx = PRICE_TIER_ORDER.indexOf(priceTier(c));
-    const tierDistance = Math.abs(sourceTierIdx - candTierIdx);
-    const tierScore = Math.max(0, 10 - tierDistance * 5);
+    // 2. Price tier proximity (max 10): same tier = 10, 1 away = 5, 2+ = 0.
+    // If either side is quote-only there is no distance to measure, so score it neutral
+    // rather than pretending an unknown price sits next to $250+.
+    const candTier = priceTier(c);
+    const candTierIdx = PRICE_TIER_ORDER.indexOf(candTier);
+    const tierScore = (isQuoteOnly(candTier) || isQuoteOnly(sourceTier))
+      ? 5
+      : Math.max(0, 10 - Math.abs(sourceTierIdx - candTierIdx) * 5);
 
     // 3. Team size proximity (max 10): same = 10, 1 away = 7, 2 = 4, 3+ = 0
     const candBucketIdx = TEAM_BUCKET_ORDER.indexOf(teamSizeBucket(c));

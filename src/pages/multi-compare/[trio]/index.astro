@@ -87,7 +87,7 @@ function verticalWinner(verticalSlug: string): { winner: Tool | null; scores: { 
 // Implementation timeline per tool (based on price tier)
 function implementationTimeline(t: Tool): string {
   const p = t.pricing.starting_at_usd;
-  if (p === null) return '3-6 months (enterprise — dedicated implementation manager)';
+  if (p === null) return 'Not published (quote-only, ask for the onboarding plan in writing)';
   if (p >= 250) return '3-6 months (enterprise tier — dedicated PM required)';
   if (p >= 100) return '4-8 weeks (mid-tier — optional paid onboarding)';
   return '1-3 weeks (self-service onboarding)';

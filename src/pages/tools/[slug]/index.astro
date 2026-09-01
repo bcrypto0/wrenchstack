@@ -62,7 +62,11 @@ const userReviews = reviewsForTool(tool.slug);
 const startingPrice = tool.pricing.starting_at_usd;
 const hasPublicPricing = startingPrice !== null;
 const isFree = startingPrice === 0;
-const isEnterprise = !hasPublicPricing || (startingPrice !== null && startingPrice >= 250);
+// Split 2026-09-01. These were one flag and they are not one thing: an unpublished price
+// is not evidence of an expensive one. Conflating them made this page assert an enterprise
+// rollout and $1M+ revenue requirements for products that may cost $40/month.
+const isQuoteOnly = !hasPublicPricing;
+const isEnterprise = startingPrice !== null && startingPrice >= 250;
 const isMidTier = hasPublicPricing && startingPrice !== null && startingPrice >= 100 && startingPrice < 250;
 const isEntryTier = hasPublicPricing && startingPrice !== null && startingPrice < 100;
 const hasFreeTrial = (tool.pricing.free_trial_days ?? 0) > 0;
@@ -253,6 +257,12 @@ function getCons(): string[] {
 
 // --- IMPLEMENTATION TIMELINE ---
 function implementationTimeline(): { headline: string; detail: string } {
+  if (isQuoteOnly) {
+    return {
+      headline: 'Not published',
+      detail: `${tool.name} does not publish a price, and it does not publish an implementation timeline either. That is not the same as being an enterprise rollout: plenty of quote-only products onboard in days. Ask for the onboarding plan and the go-live date in writing during the sales call, and treat any timeline given verbally as an estimate rather than a commitment.`,
+    };
+  }
   if (isEnterprise) {
     return {
       headline: '3–6 months for full deployment',
@@ -279,7 +289,9 @@ function getFaqs(): { q: string; a: string }[] {
   faqs.push({
     q: `Is ${tool.name} worth the money?`,
     a: `${tool.name} is worth it if you fit the target profile: ${tool.best_for}. ${
-      isEnterprise
+      isQuoteOnly
+        ? `${tool.name} does not publish a price, so the ROI maths cannot be done from public information. Get a written quote for your seat count before comparing it against anything here.`
+        : isEnterprise
         ? `At enterprise pricing, the ROI math requires established revenue ($1M+) and a team large enough to absorb the implementation overhead.`
         : isMidTier
         ? `At mid-tier pricing ($${startingPrice}+/mo), you typically recoup the cost within 2-3 months from faster invoicing, fewer missed appointments, and reduced manual scheduling.`

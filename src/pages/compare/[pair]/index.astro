@@ -6,8 +6,7 @@ import {
   formatPrice,
   verticalToUrl,
   verticals,
-  type Tool,
-} from '../../../lib/data';
+  type Tool, priceTier} from '../../../lib/data';
 import FreshnessBadge from '../../../components/FreshnessBadge.astro';
 import { isComparisonIndexable } from '../../../lib/compare-index.mjs';
 import MissingFromList from '../../../components/MissingFromList.astro';
@@ -80,14 +79,9 @@ const higherRated =
     : null;
 
 // --- HELPER: classify each tool by pricing tier ---
-function priceTier(t: Tool): 'free' | 'entry' | 'mid' | 'enterprise' {
-  const p = t.pricing.starting_at_usd;
-  if (p === null) return 'enterprise';
-  if (p === 0) return 'free';
-  if (p < 100) return 'entry';
-  if (p < 250) return 'mid';
-  return 'enterprise';
-}
+// priceTier was duplicated here until 2026-09-01. Removed: a second copy of a rule is a
+// second thing to forget to update, which is exactly how the median ended up with three
+// different answers. Imported from lib/data now.
 
 const tierA = priceTier(a);
 const tierB = priceTier(b);
@@ -217,6 +211,11 @@ function pricingAnalysis(): string {
 // --- IMPLEMENTATION TIMELINE COMPARISON ---
 function implementationTimeline(t: Tool): string {
   const tier = priceTier(t);
+  // A tool that publishes no price is not automatically an enterprise deployment. Until
+  // 2026-09-01 these shared the 'enterprise' bucket and every quote-only product was
+  // described as a 3-6 month rollout with a dedicated implementation manager, which was
+  // invented for 45 of the 54 tools it was applied to.
+  if (tier === 'quote-only') return 'Not published; the vendor quotes per account, so ask for the onboarding plan in writing before signing';
   if (tier === 'enterprise') return '3-6 months for full deployment with dedicated implementation manager';
   if (tier === 'mid') return '4-8 weeks self-service or with optional paid onboarding';
   if (tier === 'free' || tier === 'entry') return '1-3 weeks self-service onboarding';

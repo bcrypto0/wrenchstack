@@ -10,7 +10,7 @@ const breadcrumbs = [
 // --- COMPUTE STATS FROM OUR DIRECTORY ---
 
 // Pricing distribution
-const tierDist = { free: 0, entry: 0, mid: 0, enterprise: 0 };
+const tierDist = { free: 0, entry: 0, mid: 0, enterprise: 0, 'quote-only': 0 };
 for (const t of tools) tierDist[priceTier(t)]++;
 
 const pricedTools = tools.filter((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0);
@@ -196,7 +196,7 @@ const articleSchema = {
       <h2>Pricing — what trades software actually costs</h2>
 
       <p>
-        The trades software market in 2026 spans an order of magnitude in price. Entry-tier platforms like Joist ($13/user/month Pro tier) and Tradify ($36/user/month single tier) live alongside enterprise platforms like ServiceTitan and BuildOps where user-reported pricing hits $400-$800 per user per month. The median entry-tier price across our directory is <strong>${medianPrice}/user/month</strong>, with {tierDist.entry} platforms in the under-$100 tier, {tierDist.mid} in $100-$249, and {tierDist.enterprise} at $250+ or custom-quoted.
+        The trades software market in 2026 spans an order of magnitude in price. Entry-tier platforms like Joist ($13/user/month Pro tier) and Tradify ($36/user/month single tier) live alongside enterprise platforms like ServiceTitan and BuildOps where user-reported pricing hits $400-$800 per user per month. The median entry-tier price across our directory is <strong>${medianPrice}/user/month</strong>, with {tierDist.entry} platforms in the under-$100 tier, {tierDist.mid} in $100-$249, {tierDist.enterprise} publishing $250+, and {tierDist['quote-only']} publishing no price at all.
       </p>
 
       <div class="not-prose my-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -213,13 +213,13 @@ const articleSchema = {
           <div class="mt-1 text-xs text-slate-600">Mid-tier ($100-249)</div>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-          <div class="text-2xl font-bold text-slate-900">{tierDist.enterprise}</div>
-          <div class="mt-1 text-xs text-slate-600">Enterprise ($250+/custom)</div>
+          <div class="text-2xl font-bold text-slate-900">{tierDist.enterprise + tierDist['quote-only']}</div>
+          <div class="mt-1 text-xs text-slate-600">$250+ or quote-only ({tierDist.enterprise} priced, {tierDist['quote-only']} unpublished)</div>
         </div>
       </div>
 
       <p>
-        The pricing distribution is heavily bimodal: {tierDist.entry} platforms compete fiercely under $100/user/month (Jobber, Housecall Pro, Workiz, FieldPulse, Tradify, Service Autopilot, Coolfront, Joist), and another {tierDist.enterprise} cluster at the enterprise end where ServiceTitan, BuildOps, FieldEdge, Procore, Aspire, FieldRoutes, and others quote custom prices that user reports peg at $250-$800 per user per month. The middle is sparse — only {tierDist.mid} platforms genuinely live in the $100-$249 mid-tier band.
+        The pricing distribution is heavily bimodal: {tierDist.entry} platforms compete fiercely under $100/user/month (Jobber, Housecall Pro, Workiz, FieldPulse, Tradify, Service Autopilot, Coolfront, Joist), while {tierDist['quote-only']} publish no price at all, the group that includes ServiceTitan, BuildOps, FieldEdge, Procore, Aspire and FieldRoutes, where user reports peg the real figure at $250-$800 per user per month. A further {tierDist.enterprise} publish a starting price of $250 or more. Those two groups are counted separately here on purpose: an unpublished price is not evidence of an expensive one. The middle is sparse, with only {tierDist.mid} platforms genuinely in the $100-$249 band.
       </p>
 
       <h2>The "custom-quoted" opacity tax</h2>
