@@ -222,3 +222,22 @@ export const intlVendorCount = Object.values(_intlModules).reduce((n, m) => {
   return n + (Array.isArray(mod.vendors) ? mod.vendors.length : 0);
 }, 0);
 export const intlMarketCount = Object.keys(INTL_MARKETS).length;
+
+/**
+ * Every international vendor as {name, url}, for surfaces that need to offer a
+ * vendor their own page (the badge picker). Derives the market code from the
+ * data filename so a new market file appears here without a code change.
+ */
+export function intlVendorIndex(): Array<{ name: string; url: string }> {
+  const out: Array<{ name: string; url: string }> = [];
+  for (const [path, m] of Object.entries(_intlModules)) {
+    const code = path.split('/').pop()?.replace('.json', '') ?? '';
+    if (!INTL_MARKETS[code]) continue;
+    const mod = (m.default ?? m) as { vendors?: Array<{ name?: string; slug?: string }> };
+    for (const v of mod.vendors ?? []) {
+      if (!v?.name || !v?.slug) continue;
+      out.push({ name: `${v.name} (${code.toUpperCase()})`, url: `https://wrenchstack.com/${code}/${v.slug}/` });
+    }
+  }
+  return out;
+}
