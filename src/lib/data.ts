@@ -1547,3 +1547,97 @@ export function pricedEntryValues(list: Tool[] = tools): number[] {
     .filter((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0)
     .map((t) => t.pricing.starting_at_usd!);
 }
+
+// --- Directory-wide headline stats ------------------------------------------
+//
+// Added 2026-09-04, for the same reason medianUsd() was: a number that appears
+// on more than one surface drifts. /reputation-flags/ hardcoded `725` as the
+// directory total while the data files held 729, and public/llms.txt still
+// published the pre-fix median of $75 four days after every page had moved to
+// $77. Anything quoted as a headline figure belongs here, computed, so a data
+// edit updates every surface at once.
+
+/** Every US-category vendor list, in the order the site presents them. */
+export function usVendorLists(): Array<{ label: string; count: number }> {
+  return [
+    { label: 'field-service software', count: tools.length },
+    { label: 'lead generation', count: leadGenPlatforms.length },
+    { label: 'insurance', count: insuranceProviders.length },
+    { label: 'payroll', count: payrollServices.length },
+    { label: 'marketing agencies', count: marketingAgencies.length },
+    { label: 'AI tools', count: aiTools.length },
+    { label: 'payments', count: paymentProcessors.length },
+    { label: 'financing', count: financingProviders.length },
+    { label: 'accounting', count: accountingSoftware.length },
+    { label: 'banking', count: bankingProviders.length },
+  ];
+}
+
+/** Total US vendors across all 10 categories. */
+export function usVendorTotal(): number {
+  return usVendorLists().reduce((n, c) => n + c.count, 0);
+}
+
+export interface FlaggedEntry {
+  name: string;
+  slug: string;
+  url: string;
+  flag: string;
+  verified: string;
+}
+
+export interface FlagGroup {
+  category: string;
+  categoryUrl: string;
+  entries: FlaggedEntry[];
+}
+
+function collectFlags(
+  arr: Array<{ name: string; slug: string; reputation_flag?: string | null; verified_date?: string }>,
+  category: string,
+  prefix: string
+): FlagGroup {
+  return {
+    category,
+    categoryUrl: `/${prefix}/`,
+    entries: arr
+      .filter((e) => e.reputation_flag)
+      .map((e) => ({
+        name: e.name,
+        slug: e.slug,
+        url: `/${prefix}/${e.slug}/`,
+        flag: e.reputation_flag as string,
+        verified: e.verified_date ?? '',
+      })),
+  };
+}
+
+/** Every documented reputation warning in the directory, grouped by category. */
+export function reputationFlagGroups(): FlagGroup[] {
+  return [
+    collectFlags(leadGenPlatforms, 'Lead generation', 'lead-gen'),
+    collectFlags(financingProviders, 'Consumer financing', 'financing'),
+    collectFlags(insuranceProviders, 'Insurance', 'insurance'),
+    collectFlags(paymentProcessors, 'Payments', 'payments'),
+    collectFlags(bankingProviders, 'Business banking', 'banking'),
+    collectFlags(marketingAgencies, 'Marketing agencies', 'agencies'),
+    collectFlags(payrollServices, 'Payroll', 'payroll'),
+    collectFlags(accountingSoftware, 'Accounting', 'accounting'),
+  ].filter((g) => g.entries.length > 0);
+}
+
+export function totalReputationFlags(): number {
+  return reputationFlagGroups().reduce((n, g) => n + g.entries.length, 0);
+}
+
+/** Share of field-service tools that publish no price at all (quote-only). */
+export function quoteOnlyPct(): number {
+  const n = tools.filter((t) => t.pricing.starting_at_usd === null).length;
+  return Math.round((n / tools.length) * 100);
+}
+
+/** Share of field-service tools integrating with QuickBooks. */
+export function quickbooksPct(): number {
+  const n = tools.filter((t) => t.integrations.some((i) => /quickbooks/i.test(i))).length;
+  return Math.round((n / tools.length) * 100);
+}

@@ -1,68 +1,24 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import {
-  leadGenPlatforms,
-  insuranceProviders,
-  payrollServices,
-  marketingAgencies,
-  paymentProcessors,
-  financingProviders,
-  accountingSoftware,
-  bankingProviders,
+  reputationFlagGroups,
+  totalReputationFlags,
+  usVendorTotal,
 } from '../lib/data';
+import { intlVendorCount } from '../lib/intl';
 
 // The reputation ledger: every documented warning in the directory, on one
 // page, with the policy that governs it. Counts and entries are computed at
 // build time from the same data files that power the category pages, so this
 // page can never disagree with the listings.
+//
+// 2026-09-04: the grouping logic moved to lib/data.ts so /llms.txt can quote
+// the same count, and the directory total stopped being the hardcoded 725 it
+// had drifted to while the data files held 729.
 
-interface FlaggedEntry {
-  name: string;
-  slug: string;
-  url: string;
-  flag: string;
-  verified: string;
-}
-
-interface FlagGroup {
-  category: string;
-  categoryUrl: string;
-  entries: FlaggedEntry[];
-}
-
-function collect(
-  arr: Array<{ name: string; slug: string; reputation_flag: string | null; verified_date?: string }>,
-  category: string,
-  prefix: string
-): FlagGroup {
-  return {
-    category,
-    categoryUrl: `/${prefix}/`,
-    entries: arr
-      .filter((e) => e.reputation_flag)
-      .map((e) => ({
-        name: e.name,
-        slug: e.slug,
-        url: `/${prefix}/${e.slug}/`,
-        flag: e.reputation_flag as string,
-        verified: e.verified_date ?? '',
-      })),
-  };
-}
-
-const groups: FlagGroup[] = [
-  collect(leadGenPlatforms, 'Lead generation', 'lead-gen'),
-  collect(financingProviders, 'Consumer financing', 'financing'),
-  collect(insuranceProviders, 'Insurance', 'insurance'),
-  collect(paymentProcessors, 'Payments', 'payments'),
-  collect(bankingProviders, 'Business banking', 'banking'),
-  collect(marketingAgencies, 'Marketing agencies', 'agencies'),
-  collect(payrollServices, 'Payroll', 'payroll'),
-  collect(accountingSoftware, 'Accounting', 'accounting'),
-].filter((g) => g.entries.length > 0);
-
-const totalFlags = groups.reduce((n, g) => n + g.entries.length, 0);
-const totalVendors = 725; // directory-wide; the flag universe below is the US adjacent stack
+const groups = reputationFlagGroups();
+const totalFlags = totalReputationFlags();
+const totalVendors = usVendorTotal() + intlVendorCount;
 
 const removedFlags = [
   {

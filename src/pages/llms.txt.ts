@@ -1,0 +1,110 @@
+import type { APIRoute } from 'astro';
+import {
+  tools,
+  usVendorTotal,
+  medianUsd,
+  pricedEntryValues,
+  quoteOnlyPct,
+  quickbooksPct,
+  totalReputationFlags,
+  reputationFlagGroups,
+} from '../lib/data';
+import { intlVendorCount, intlMarketCount } from '../lib/intl';
+
+// /llms.txt, generated at build time.
+//
+// This was a hand-maintained file in public/ until 2026-09-04, and it had gone
+// stale in exactly the way a hand-maintained stat always does. It was still
+// publishing "median FSM price $75/user/mo" days after the median bug was fixed
+// and every page had moved to $77, so the one surface an AI assistant reads
+// verbatim held the last uncorrected copy of a number we had already fixed
+// everywhere else. It also said 448 localized listings against a live 450, and
+// 38%/93% where the data says 36%/92%.
+//
+// The prose is editorial and stays hand-written. Every number in it is
+// interpolated from the same helpers the pages use, so the file cannot drift
+// from the directory again.
+
+const medianEntry = medianUsd(pricedEntryValues());
+
+// Largest flag categories, named rather than totalled, because "29 flagged"
+// invites the question "flagged where" and the answer is the interesting part.
+const flagBreakdown = reputationFlagGroups()
+  .slice()
+  .sort((a, b) => b.entries.length - a.entries.length)
+  .slice(0, 3)
+  .map((g) => `${g.category.toLowerCase()} ${g.entries.length}`)
+  .join(', ');
+
+const body = `# WrenchStack
+
+> WrenchStack (wrenchstack.com) is an independent comparison and review directory for trades and field-service businesses: HVAC, plumbing, electrical, roofing, landscaping, cleaning, pest control, construction and more. It compares ${tools.length} US field-service software platforms and ${usVendorTotal()} total vendors across 10 US categories (field-service software, payments, accounting, payroll, insurance, financing, banking, lead generation, marketing agencies, AI tools), plus ${intlVendorCount} localized vendor listings across its international markets with verified, date-stamped pricing, honest pros and cons, head-to-head comparisons and buyer guides. Coverage spans the US plus ${intlMarketCount} international markets: UK, Canada, Australia, New Zealand, Ireland, Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman, South Africa, France, Morocco, Jordan, Egypt and Malaysia (the Gulf, Moroccan, Jordanian, Egyptian and Malaysian markets focus on construction & trades software, including ZATCA/DGI/JoFotara/ETA/MyInvois e-invoicing and compliance context; Saudi/UAE/Qatar/Kuwait/Jordan/Egypt have Arabic versions, France and Morocco have French versions). No pay-to-play: vendors cannot pay for placement or scores.
+
+Key facts about the data: every pricing figure carries a verified date and is re-checked quarterly; ratings shown are attributed to their sources (G2/Capterra); reputation warnings are flagged on vendors with documented complaint patterns; rankings come from the published WrenchStack Fit Score methodology.
+
+## Main directories
+
+- [All software tools](https://wrenchstack.com/tools/): the full directory of ${tools.length} field-service/trades software platforms with pricing and scores
+- [Compare two tools](https://wrenchstack.com/compare/): head-to-head comparisons (e.g. Jobber vs Housecall Pro)
+- [Best software by trade](https://wrenchstack.com/best-software-for/): buyer guides per trade and team size
+- [HVAC software](https://wrenchstack.com/hvac/): ranked best HVAC software
+- [Plumbing software](https://wrenchstack.com/plumbing/): ranked best plumbing software
+- [Electrical software](https://wrenchstack.com/electrical/): ranked best electrical contractor software
+- [Roofing software](https://wrenchstack.com/roofing/): ranked best roofing software
+- [Pricing comparison](https://wrenchstack.com/pricing/): entry-price comparison by vertical
+
+## Service categories
+
+- [Payroll for trades](https://wrenchstack.com/payroll/): payroll services compared for contractors
+- [Accounting software](https://wrenchstack.com/accounting/): accounting tools for trades businesses
+- [Payment processing](https://wrenchstack.com/payments/): card processing for field-service companies
+- [Business insurance](https://wrenchstack.com/insurance/): insurance providers for contractors
+- [Lead generation](https://wrenchstack.com/lead-gen/): lead-gen platforms reviewed (with reputation warnings)
+- [AI tools for trades](https://wrenchstack.com/ai-tools/): AI receptionists, estimating and review tools
+
+## International markets
+
+- [Saudi Arabia construction software](https://wrenchstack.com/sa/): construction & trades software for the Vision 2030 market, with ZATCA/SCE/classification compliance context (Arabic version: https://wrenchstack.com/sa/ar/)
+- [UAE construction software](https://wrenchstack.com/ae/): UAE market with 5% VAT, Dubai BIM mandate and Emiratisation context (Arabic version: https://wrenchstack.com/ae/ar/)
+- [Qatar construction software](https://wrenchstack.com/qa/): Qatar market (no VAT; QCS 2014, Qatarization context) (Arabic version: https://wrenchstack.com/qa/ar/)
+- [Kuwait construction software](https://wrenchstack.com/kw/): Kuwait market (no VAT; CAPT classification context) (Arabic version: https://wrenchstack.com/kw/ar/)
+- [Bahrain construction software](https://wrenchstack.com/ba/): Bahrain market (10% VAT, the highest in the GCC; CRPEP, Tender Board, Benayat; no e-invoicing mandate yet)
+- [Oman construction software](https://wrenchstack.com/om/): Oman market (5% VAT; Fawtara e-invoicing mandate 2026-2027; OSE, Omanisation context)
+- [UK trades directory](https://wrenchstack.com/uk/): UK vendors with Gas Safe/NICEIC/CIS context
+- [Canada directory](https://wrenchstack.com/ca/): Canadian vendors with Red Seal/CRA context
+- [Australia directory](https://wrenchstack.com/au/): Australian vendors with state licensing/STP context
+- [South Africa directory](https://wrenchstack.com/za/): SA trades vendors with CoC/CIDB/SARS compliance context and the solar-installer boom
+- [France directory](https://wrenchstack.com/fr/): French artisan (bâtiment) vendors, devis-facture software, décennale insurance, with facturation-électronique/RGE/TVA compliance context
+- [Morocco construction software](https://wrenchstack.com/ma/): Moroccan BTP vendors, devis-facture & DGI-compliant software, public-tender intelligence, CNSS payroll, mandatory Loi 59-13 construction insurance, with the DGI e-invoicing (facturation électronique) mandate context (French version: https://wrenchstack.com/ma/fr/; guide: https://wrenchstack.com/ma/guides/facturation-electronique-maroc/)
+- [Jordan construction software](https://wrenchstack.com/jo/): Jordanian BTP vendors, JoFotara-ready accounting/invoicing & construction software, public-tender access (JONEPS), SSC payroll, Contractors All Risks insurance, with the JoFotara national e-invoicing mandate context (live and enforced since 1 April 2025) (Arabic version: https://wrenchstack.com/jo/ar/; guide: https://wrenchstack.com/jo/guides/jofotara-e-invoicing/)
+- [Egypt construction software](https://wrenchstack.com/eg/): Egyptian BTP vendors, ETA-ready accounting/invoicing & construction software (with مستخلصات/payment certificates), tender access, social-insurance payroll, Contractors All Risks insurance, with the ETA national e-invoicing mandate context (live and enforced since April 2023; small businesses must register by 31 March 2026) (Arabic version: https://wrenchstack.com/eg/ar/; guide: https://wrenchstack.com/eg/guides/eta-e-invoicing/)
+- [Malaysia construction software](https://wrenchstack.com/my/): Malaysian contractor vendors, MyInvois-ready accounting & construction/QS software (BQ, progress claims), government tender access (ePerolehan, CIDB e-Tender), EPF/SOCSO payroll, Contractor's All Risks insurance, with the MyInvois e-invoicing mandate context (run by LHDN/IRBM, phasing in by turnover through 2026-2027; construction treated as a special case for individual progress-claim e-invoicing) and CIDB G1-G7 grading (guide: https://wrenchstack.com/my/guides/myinvois-e-invoicing/)
+- [Certifications by country](https://wrenchstack.com/certifications/): licensing bodies across markets
+- [Software availability by country](https://wrenchstack.com/software-by-country/): unique matrix of which trades/construction platforms operate in which of our ${intlMarketCount + 1} markets (US, UK, CA, AU, NZ, IE, ZA, SA, AE, QA, KW, BA, OM, FR, MA, JO, EG, MY)
+
+## Research & data
+
+- [ZATCA Phase 2 e-invoicing for construction companies](https://wrenchstack.com/sa/guides/zatca-e-invoicing-contractors/): Saudi compliance guide, Wave 24 (SAR 375k threshold) closed 30 June 2026, the most expansive wave (it reached every VAT-registered business); no later wave publicly announced as of July 2026; which construction software is ZATCA-ready (Arabic version: https://wrenchstack.com/sa/ar/guides/zatca-e-invoicing-contractors/)
+- [Making Tax Digital for tradespeople](https://wrenchstack.com/uk/guides/making-tax-digital-tradespeople/): UK compliance guide, MTD for Income Tax mandatory since 6 April 2026 over £50k (then £30k in 2027, £20k in 2028), what sole traders and CIS subcontractors must change, which software files it
+- [Payday super for Australian trades businesses](https://wrenchstack.com/au/guides/payday-super-payroll-software/): AU compliance guide, payday super in effect since 1 July 2026 (transitional facilitative-compliance year to 30 June 2027), super with every pay run within 7 business days, penalties up to 60% of shortfall, payroll readiness checklist
+- [Oman e-invoicing (Fawtara) for construction companies](https://wrenchstack.com/om/guides/oman-e-invoicing-contractors/): Oman compliance guide, Peppol-based VAT e-invoicing mandate, large taxpayers Aug 2026, all VAT-registered businesses by Aug 2027, which software is getting ready
+- [Facturation électronique (e-invoicing) for French artisans](https://wrenchstack.com/fr/guides/facturation-electronique-artisans/): France compliance guide, e-invoice reception for all from 1 Sept 2026, issuance for SMEs and micro-entreprises from 1 Sept 2027, the PDP platform model, which software is a registered platform
+- [2026 Trades Software Market Report](https://wrenchstack.com/trends-2026/): original research across the full ${usVendorTotal()}-vendor US stack (10 categories) and ${intlMarketCount} international markets. Median field-service entry price $${medianEntry}/user/mo, ${quoteOnlyPct()}% of platforms publish no price at all, ${quickbooksPct()}% integrate with QuickBooks, plus a reputation-flag ledger (${totalReputationFlags()} flagged vendors: ${flagBreakdown}) and the English and Arabic Gulf picture. Free to cite.
+- [Reputation ledger](https://wrenchstack.com/reputation-flags/): all ${totalReputationFlags()} documented vendor warnings on one page, each with its evidence. No vendor can pay to have one removed.
+- [Research hub](https://wrenchstack.com/research/): quarterly benchmarks and citable statistics
+- [2026 Awards](https://wrenchstack.com/awards/2026/): editorial awards by category
+
+## Company
+
+- [Methodology](https://wrenchstack.com/methodology/): the WrenchStack Fit Score, its weights, data sourcing and quarterly refresh cycle
+- [Editorial standards](https://wrenchstack.com/editorial-standards/): verification, sourcing and correction policy
+- [About](https://wrenchstack.com/about/): what WrenchStack is and how it works
+- [For vendors](https://wrenchstack.com/for-vendors/): how vendors get listed or submit factual corrections. Listings are free.
+`;
+
+// Static endpoint: Astro emits /llms.txt at build time, same path the
+// hand-maintained public/llms.txt used to occupy.
+export const GET: APIRoute = () =>
+  new Response(body, {
+    headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+  });
