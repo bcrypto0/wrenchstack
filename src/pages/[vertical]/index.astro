@@ -8,6 +8,8 @@ import {
   formatPrice,
   wrenchStackScore,
   readingTimeMinutes,
+  medianUsd,
+  verticalFitScore,
   type Vertical,
   type Tool,
 } from '../../lib/data';
@@ -44,11 +46,9 @@ const publicPrices = ranked
   .map((t) => t.pricing.starting_at_usd)
   .filter((p): p is number => p !== null && p > 0)
   .sort((a, b) => a - b);
-const medianPrice = publicPrices.length
-  ? (publicPrices.length % 2
-      ? publicPrices[(publicPrices.length - 1) / 2]
-      : Math.round((publicPrices[publicPrices.length / 2 - 1] + publicPrices[publicPrices.length / 2]) / 2))
-  : null;
+// Shared helper rather than a fifth hand-rolled median. This copy happened to be
+// correct, which is exactly how the last one survived long enough to publish $79.
+const medianPrice = publicPrices.length ? medianUsd(publicPrices) : null;
 const hidePricingCount = ranked.filter((t) => t.pricing.starting_at_usd === null).length;
 const qbCount = ranked.filter((t) => t.integrations.some((i) => i.includes('quickbooks'))).length;
 const lastVerifiedLabel = new Date(lastVerifiedDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
@@ -373,6 +373,54 @@ const breadcrumbs = [
         </p>
       </section>
     )}
+
+    {/* Complete ranked list. Added 2026-09-04.
+        Every vertical page advertised `ranked.length` in its meta description, its
+        H1 subhead and its stat strip, but only ever rendered topPicks (5) plus the
+        pricing bands (capped at 6 per band). /hvac/ said "Compare the 48 best hvac
+        software options" and linked 24. Across the 21 vertical pages, 113 tool
+        slots were claimed and never rendered, and the gap was worst on the three
+        highest-value pages: hvac 48/24, plumbing 50/26, electrical 48/25.
+        High-fit tools were among the missing (Smart Service at fit 8 was absent
+        from the HVAC page entirely), so this was not a quality cut, just a render
+        that stopped early. */}
+    <section class="mb-12">
+      <h2 id="all-platforms" class="mb-1 scroll-mt-20 text-2xl font-bold text-slate-900">
+        All {ranked.length} {verticalLower} platforms, ranked
+      </h2>
+      <p class="mb-5 text-sm text-slate-600 leading-relaxed">
+        The complete list behind the picks above, ordered by <a href="/methodology/" class="underline hover:text-orange-700">Fit Score</a> for {verticalLower} work. Fit is how well the product suits this trade specifically, not how good it is generally. Pricing verified {lastVerifiedLabel}.
+      </p>
+      <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-left text-slate-700">
+            <tr>
+              <th class="p-3 font-semibold">#</th>
+              <th class="p-3 font-semibold">Platform</th>
+              <th class="p-3 font-semibold whitespace-nowrap">Entry price</th>
+              <th class="p-3 font-semibold whitespace-nowrap">Fit</th>
+              <th class="p-3 font-semibold">Best for</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            {ranked.map((t, i) => (
+              <tr class="align-top">
+                <td class="p-3 text-slate-500">{i + 1}</td>
+                <td class="p-3 font-semibold whitespace-nowrap">
+                  <a href={`/tools/${t.slug}/`} class="text-orange-700 hover:underline">{t.name}</a>
+                </td>
+                <td class="p-3 whitespace-nowrap text-slate-700">{formatPrice(t)}</td>
+                <td class="p-3 whitespace-nowrap text-slate-700">{verticalFitScore(t, vertical.slug)}/10</td>
+                <td class="p-3 text-slate-600">{t.best_for}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-xs text-slate-500">
+        No vendor pays for placement or for a score. <a href="/methodology/" class="underline hover:text-slate-700">How we rank →</a>
+      </p>
+    </section>
 
     <section class="mb-12 prose prose-slate max-w-none">
       <h2>Why {verticalLower} businesses need specialized software</h2>
