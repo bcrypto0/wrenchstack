@@ -14911,6 +14911,135 @@
           "a": "Not in the turn-by-turn sense. Its route density feature lets you draw custom service zones, assign service days to each zone and receive scheduling suggestions based on where a new job sits, with a visual density map showing job clustering. That reduces windshield time by grouping work geographically, but it does not sequence individual stops within a day the way a dedicated routing engine does."
         }
       ]
+    },
+    {
+      "slug": "calday",
+      "name": "Calday",
+      "vendor_url": "https://calday.com",
+      "affiliate_url": "TBD",
+      "tagline": "Online booking page, calendar and Stripe deposits for solo service operators",
+      "verticals": [
+        "handyman",
+        "cleaning",
+        "pressure_washing",
+        "appliance_repair",
+        "locksmith",
+        "garage_door",
+        "hvac",
+        "painting"
+      ],
+      "pricing": {
+        "starting_at_usd": 12,
+        "tiers": [
+          "Free",
+          "Pro"
+        ],
+        "tier_prices_usd": [
+          0,
+          12
+        ],
+        "pricing_note": "Free tier is genuinely usable but capped at 1 service, 100 clients and 1 integration. Pro $12/month unlocks unlimited services and clients, payment collection, add-ons and custom booking questions. Yearly billing is 20% off. A 7-day Pro trial is advertised as requiring no credit card. Verified from calday.com/pricing 2026-09-04 and corroborated by the Capterra listing.",
+        "verified_date": "2026-09-04",
+        "free_trial_days": 7
+      },
+      "key_features": [
+        "booking_page",
+        "calendar_sync",
+        "appointment_reminders",
+        "stripe_payments",
+        "contact_management"
+      ],
+      "integrations": [
+        "stripe",
+        "google_calendar",
+        "outlook_calendar",
+        "icloud_calendar",
+        "zoom",
+        "google_meet"
+      ],
+      "best_for": "Solo operators who want a public booking page and upfront deposits, not a job-management system",
+      "best_team_size": "1-2",
+      "weaknesses": "No quoting, estimating, invoicing, job or work-order management, dispatch, route planning, job photos or technician seats. It is an appointment-booking product, so anything past the booking has to live in another tool.",
+      "founded": 2022,
+      "headquartered": "Florida, United States",
+      "vertical_fit": {
+        "handyman": 5,
+        "cleaning": 5,
+        "pressure_washing": 5,
+        "appliance_repair": 5,
+        "locksmith": 4,
+        "garage_door": 4,
+        "hvac": 3,
+        "painting": 3
+      },
+      "long_description": "Calday is an online booking and scheduling product for very small service businesses, operated by DUDECODE LLC, a Florida company filed in July 2022. It gives an operator a public booking page, a calendar with working hours, breaks, buffers and lead times, a client contact list, automated reminders and confirmations, and Stripe payment collection so a deposit can be taken at the time of booking. There are two plans and both prices are published: a free tier capped at one service, 100 clients and one calendar integration, and Pro at $12 per month for unlimited services and clients plus payment collection, add-on services and custom booking questions. Annual billing is 20% cheaper. That makes Calday the third-cheapest paid entry in this directory behind Workyard and Joist, against a median entry price of $77 per user per month across the platforms we track.\n\nIt is important to be precise about what Calday is, because the vendor markets it as service business management software and the product is narrower than that phrase implies. The complete plan comparison table on their own pricing page contains no quoting, no estimating, no invoicing, no job or work-order management, no dispatch, no route planning, no job photos, no timesheets and no technician seats. Their own iOS app, published in January 2026, is titled Calday: Booking & Scheduling. As recently as November 2025 the homepage was titled Free Appointment Scheduling Software and led with tutors, photographers and accountants rather than trades. The trade-specific landing pages are real and the vendor genuinely courts handyman, cleaning, pressure-washing and appliance-repair operators, but the underlying product is a booking tool.\n\nThat framing is not a criticism so much as a buying instruction. A solo operator who wants customers to self-book and pay a deposit, and who already handles quotes and invoices somewhere else, is buying exactly the right thing at $12 a month. An operator who needs to quote a job, schedule a crew to it, capture photos on site and bill it afterwards is not, and should be reading Jobber or Housecall Pro instead. Calday's own FAQ concedes as much: it positions itself below ServiceTitan and FieldEdge, and names Calendly, Acuity and Square Appointments as the products people switch from.",
+      "implementation_notes": "Setup is genuinely fast and the vendor's claim of a booking page live in about five minutes is plausible given what the product does: you create a service, set working hours, connect a calendar and publish the page. There is no data migration to speak of because there is no job history, invoice ledger or customer job record to bring across, which is the flip side of the product being booking-first. Connect Stripe if you want to take deposits, since payment collection is a Pro feature and is not in the free tier.\n\nTwo things to handle deliberately during signup. The consent checkbox on the email registration form links to calday.com/terms and calday.com/privacy, and both return HTTP 404 as of 2026-09-04; the real documents are at /terms-and-conditions and /privacy-policy, so read those before you tick the box. And treat the pricing page's price-lock promise as marketing rather than contract, because the Terms contain no grandfathering language and reserve the right to change prices at any time.\n\nPlan for a second tool from day one. Decide before you start where quotes, invoices and job records will live, because Calday will not hold them, and retrofitting that after you have customers booking through the page is more disruptive than choosing it up front.",
+      "pros_detail": [
+        {
+          "title": "Both prices are published, with no quote-only path",
+          "explanation": "Free at $0 per month and Pro at $12 per month are on the pricing page with a full feature comparison table, and the $12 figure is corroborated on Calday's Capterra listing. Against a $77 median entry price across the platforms we track, and with 36% of them publishing no price at all, this is the transparent end of the category."
+        },
+        {
+          "title": "The company is independently verifiable and the founder is named",
+          "explanation": "Calday is operated by DUDECODE LLC, a Florida limited liability company filed 2022-07-01 (document L22000297466, status ACTIVE). The same person named as founder on the About page appears as the authorised person on the state register and as the seller of record on the Apple App Store. Most vendors this small cannot be confirmed at all."
+        },
+        {
+          "title": "A buyer can actually buy it without talking to anyone",
+          "explanation": "Every call to action routes to a self-serve registration form rather than a demo request, and both cancellation and account deletion are self-serve inside the app. In a category where a large share of vendors gate every button behind a sales call, this matters more than it should."
+        },
+        {
+          "title": "The free tier is usable rather than decorative",
+          "explanation": "The $0 plan includes the booking page itself, calendar events, breaks, working hours, buffers, reminders and confirmation emails, capped at one service, 100 clients and one calendar integration. A solo operator can run a real booking page on it without paying."
+        }
+      ],
+      "cons_detail": [
+        {
+          "title": "The 4.8 rating on G2.com shown on the site is self-declared in Calday's own page markup",
+          "explanation": "Calday's homepage and pricing page serve their own JSON-LD carrying an aggregateRating of 4.8 from 11 ratings, with no attribution to G2 or any other source. G2 itself returned HTTP 403 to every method we tried, so the real G2 figure is unverified rather than disproved. Every platform we could read is materially lower and rests on a single review each: Capterra 3.0 from 1 review, GetApp 3.0 from 1, Software Advice 3 out of 5 from 1, and Trustpilot 3.7 from 1. Capterra, GetApp and Software Advice share one Gartner review pool, so those three are most likely the same review shown three times. Verified 2026-09-04."
+        },
+        {
+          "title": "The public customer figure is framed as active usage and the vendor's own number does not support it",
+          "explanation": "The site states 2,500+ service businesses already saving hours every week, and 2,500+ service businesses across 25 industries. The founder told WrenchStack on 2026-09-02 that the base is 2,000+ registered accounts with approximately 200 to 300 monthly active users. The public figure exceeds his own registration count and is roughly eight to twelve times his own active count, and none of the pages carrying it describe it as cumulative sign-ups. Verified 2026-09-04."
+        },
+        {
+          "title": "The Terms and Privacy links on the signup consent checkbox are dead",
+          "explanation": "Creating an account requires ticking a box agreeing to the Terms and Conditions and Privacy Policy, but those two links point at calday.com/terms and calday.com/privacy, which both return HTTP 404. The real documents exist at /terms-and-conditions and /privacy-policy. Users are therefore agreeing to documents the form itself cannot open. Verified 2026-09-04."
+        },
+        {
+          "title": "The price-lock promise on the pricing page is not in the contract",
+          "explanation": "The pricing FAQ says there will be no surprise hikes and that existing customers keep their current rate as long as their subscription stays active. The Terms contain no grandfathering language at all and reserve the opposite, stating that Calday reserves the right to change prices and revise the resources usage policy at any moment, inside an entire-agreement clause that supersedes prior representations. Verified 2026-09-04."
+        },
+        {
+          "title": "This is booking and scheduling, not field-service management",
+          "explanation": "The complete plan comparison table has no quoting, estimating, invoicing, job or work-order management, dispatch, route planning, job photos, timesheets or technician seats. Calday's own iOS app is titled Calday: Booking & Scheduling. If you need to quote a job, bill it and track the work, Calday handles the appointment and something else has to handle the rest."
+        },
+        {
+          "title": "Short operating history and almost no independent review base",
+          "explanation": "calday.com served no live product before 2024-12-11 and the product ran at calday.app from 2023-05-18. The iOS app shipped 2026-01-22 and carries one rating. As recently as 2025-11-14 the homepage was titled Free Appointment Scheduling Software and led with tutors, photographers and accountants, so the service-business positioning is under a year old. There is no track record yet on reliability, pricing stability or support."
+        }
+      ],
+      "tool_faqs": [
+        {
+          "q": "Is Calday field service management software?",
+          "a": "No. It is an appointment-booking and scheduling product. The full plan comparison on Calday's own pricing page has no quoting, estimating, invoicing, job or work-order management, dispatch, route planning, job photos or technician seats, and their own iOS app is titled Calday: Booking & Scheduling. It gives you a public booking page, a calendar, reminders, a client list and Stripe deposits. If you need to quote, schedule a crew, capture site photos and invoice, you need a field-service platform such as Jobber or Housecall Pro, and Calday's own FAQ positions it below those."
+        },
+        {
+          "q": "How much does Calday cost?",
+          "a": "There are two published plans. Free at $0 per month covers the booking page, calendar, working hours, breaks, buffers, reminders and confirmation emails, capped at one service, 100 clients and one calendar integration. Pro is $12 per month and adds unlimited services and clients, Stripe payment collection, add-on services, custom booking questions and priority support. Annual billing is 20% cheaper. A 7-day Pro trial is advertised as requiring no credit card. Verified 2026-09-04."
+        },
+        {
+          "q": "Is the 4.8 G2 rating on Calday's website real?",
+          "a": "We could not confirm it. The 4.8 figure is published in Calday's own page markup as a self-declared aggregate rating of 4.8 from 11 ratings, carrying no attribution to G2 or anyone else. G2 blocked every attempt we made to read the actual profile, so the real G2 score is unverified rather than disproved. The ratings we could read are all lower and all rest on a single review: Capterra 3.0, GetApp 3.0, Software Advice 3 out of 5 and Trustpilot 3.7. Those first three share one Gartner review pool, so they are probably one review shown three times."
+        },
+        {
+          "q": "Who is behind Calday?",
+          "a": "DUDECODE LLC, a Florida limited liability company filed on 2022-07-01, document number L22000297466, status ACTIVE. The founder, Pavlo Grinevich, is named publicly on the company's About page, appears as the authorised person on the Florida state register, and DUDECODE LLC is the seller of record on the Apple App Store listing. That level of confirmation is unusual for a vendor this small."
+        },
+        {
+          "q": "What should I watch for when signing up to Calday?",
+          "a": "Two things as of 2026-09-04. The consent checkbox on the registration form links to calday.com/terms and calday.com/privacy, and both return a 404; read the real documents at /terms-and-conditions and /privacy-policy before agreeing. And the pricing page promises existing customers keep their rate if prices change, but the Terms contain no grandfathering language and reserve the right to change prices at any moment under an entire-agreement clause, so treat that promise as marketing rather than contract."
+        }
+      ]
     }
   ]
 }
