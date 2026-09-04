@@ -13,6 +13,17 @@ import {
   bankingProviders,
 } from '../../lib/data';
 import { intlVendorIndex } from '../../lib/intl';
+import awardsData from '../../data/awards.json';
+
+// Which vendors may use the 2026 Pick badge. The picker rewrites BOTH snippets,
+// so without this a listed vendor who is not an editorial pick could pick their
+// name and copy the restricted badge in good faith. The rules block above says
+// picks only; this makes the page enforce it rather than merely state it.
+const pickWinnerSlugs = new Set(
+  (awardsData.categories as Array<{ winner_slug?: string }>)
+    .map((c) => c.winner_slug)
+    .filter((x): x is string => Boolean(x))
+);
 
 // Vendor picker, added 2026-09-04.
 //
@@ -22,7 +33,7 @@ import { intlVendorIndex } from '../../lib/intl';
 // badge pointing at wrenchstack.com/ rather than at the write-up the badge is
 // actually claiming. Picking your product now rewrites the snippet for you.
 const vendorIndex: Array<{ name: string; url: string }> = [
-  ...tools.map((t) => ({ name: t.name, url: `https://wrenchstack.com/tools/${t.slug}/` })),
+  ...tools.map((t) => ({ name: t.name, url: `https://wrenchstack.com/tools/${t.slug}/`, pick: pickWinnerSlugs.has(t.slug) })),
   ...leadGenPlatforms.map((v) => ({ name: v.name, url: `https://wrenchstack.com/lead-gen/${v.slug}/` })),
   ...insuranceProviders.map((v) => ({ name: v.name, url: `https://wrenchstack.com/insurance/${v.slug}/` })),
   ...payrollServices.map((v) => ({ name: v.name, url: `https://wrenchstack.com/payroll/${v.slug}/` })),
@@ -89,7 +100,7 @@ const pickEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noope
         class="mt-3 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-orange-500 focus:outline-none"
       >
         <option value="https://wrenchstack.com/">Not listed yet, or link to the homepage</option>
-        {vendorIndex.map((v) => <option value={v.url}>{v.name}</option>)}
+        {vendorIndex.map((v) => <option value={v.url} data-pick={v.pick ? 'yes' : 'no'}>{v.name}</option>)}
       </select>
       <p class="mt-3 text-xs text-slate-500">
         {vendorIndex.length} vendors listed. Missing? <a href="/for-vendors/" class="text-orange-600 hover:underline">Send us your product</a> and we will review it.
@@ -112,7 +123,7 @@ const pickEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noope
     </section>
 
     <!-- Badge 2 -->
-    <section class="mb-10">
+    <section id="pick-badge-section" class="mb-10 transition-opacity">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">"WrenchStack 2026 Pick": editorial picks only</h2>
       <div class="rounded-lg border border-slate-200 bg-white p-6">
         <div class="mb-5 flex items-center justify-center rounded-md bg-slate-50 py-8">
@@ -121,8 +132,10 @@ const pickEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noope
         <p class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Embed code</p>
         <pre class="overflow-x-auto rounded-md bg-slate-900 p-4 text-xs leading-relaxed text-slate-100"><code id="pick-code">{pickEmbed}</code></pre>
         <button
-          onclick="navigator.clipboard.writeText(document.getElementById('pick-code').textContent); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy embed code', 1500)"
+          id="pick-copy-btn"
+          onclick="if (this.disabled) return; navigator.clipboard.writeText(document.getElementById('pick-code').textContent); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy embed code', 1500)"
           class="mt-3 rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600">Copy embed code</button>
+        <p id="pick-badge-note" hidden class="mt-3 rounded-md bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-900"></p>
         <p class="mt-3 text-xs text-slate-500">Won a category in the <a href="/awards/2026/" class="underline">2026 Awards</a>? You're cleared to use this one.</p>
       </div>
     </section>
@@ -154,10 +167,19 @@ const pickEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noope
   <script is:inline>
     // Rewrites both embed snippets to the picked vendor review URL. The copy
     // buttons read the same textContent, so they copy the rewritten code.
+    //
+    // The 2026 Pick badge is restricted to editorial picks, and the picker would
+    // otherwise hand a non-pick vendor working code for it the moment they chose
+    // their own name. Picking a vendor who did not win a category now dims that
+    // section and disables its copy button, so the page enforces the rule the
+    // rules block states.
     (function () {
       var NL = String.fromCharCode(10);
       var picker = document.getElementById('vendor-picker');
       if (!picker) return;
+      var pickSection = document.getElementById('pick-badge-section');
+      var pickNote = document.getElementById('pick-badge-note');
+      var pickCopy = document.getElementById('pick-copy-btn');
       var targets = [
         {
           el: document.getElementById('rated-code'),
@@ -180,7 +202,29 @@ const pickEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noope
             '</a>';
         });
       }
-      picker.addEventListener('change', function () { render(picker.value); });
+      function gatePick() {
+        if (!pickSection) return;
+        var opt = picker.options[picker.selectedIndex];
+        var chose = picker.value !== 'https://wrenchstack.com/';
+        var eligible = !chose || (opt && opt.getAttribute('data-pick') === 'yes');
+        pickSection.style.opacity = eligible ? '' : '0.45';
+        if (pickCopy) {
+          pickCopy.disabled = !eligible;
+          pickCopy.style.cursor = eligible ? '' : 'not-allowed';
+        }
+        if (pickNote) {
+          pickNote.hidden = eligible;
+          if (!eligible && opt) {
+            pickNote.textContent =
+              opt.textContent + ' is not a 2026 editorial pick, so this badge is not one to use. The Rated on WrenchStack badge above is.';
+          }
+        }
+      }
+      picker.addEventListener('change', function () {
+        render(picker.value);
+        gatePick();
+      });
+      gatePick();
     })();
   </script>
 </Layout>
