@@ -1,4 +1,17 @@
 User-agent: *
 Allow: /
 
+# Both the index and the child sitemap are listed deliberately.
+#
+# Google reads /sitemap-index.xml, reports "Sitemap index processed successfully",
+# and then reads zero child sitemaps from it (Search Console drilldown, 2026-09-05:
+# last read 8/27/26, total discovered pages 0, sitemaps read 0 of 0). The index
+# itself is valid and contains one correct <loc> pointing at sitemap-0.xml, which
+# is live and which Google indexed 1,819 URLs from once it was submitted directly.
+#
+# So the index is advertised for future-proofing, because @astrojs/sitemap will
+# add sitemap-1.xml if the site outgrows one file, and the child is advertised
+# because it is the route that currently works. Any crawler that discovers
+# sitemaps only through robots.txt was previously getting the empty route.
+Sitemap: https://wrenchstack.com/sitemap-0.xml
 Sitemap: https://wrenchstack.com/sitemap-index.xml
