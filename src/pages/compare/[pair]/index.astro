@@ -97,6 +97,76 @@ const bHasTrial = (b.pricing.free_trial_days ?? 0) > 0;
 const aHasPublicPricing = a.pricing.starting_at_usd !== null;
 const bHasPublicPricing = b.pricing.starting_at_usd !== null;
 
+// --- WHAT ACTUALLY SEPARATES THEM (added 2026-09-07, thin-page audit) -------
+// Measured 2026-09-07: two comparison pages shared 801 of 857 unique word
+// tokens (93%). The pages were not short, 1,731 words, and the extra length
+// was all shared furniture. The differentiating facts existed but sat below
+// several screens of boilerplate, so every page read like every other page.
+//
+// This builds a list of ONLY the things that differ for this specific pair,
+// from data, and the template renders it directly under the H1. It is unique
+// per pair by construction. If a pair genuinely differs in nothing here, the
+// block renders nothing rather than padding with filler.
+const verticalLabel = (slug: string) =>
+  verticals.find((x) => x.slug === slug)?.name ?? slug.replace(/_/g, ' ');
+
+const differences: string[] = [];
+
+if (aHasPublicPricing && bHasPublicPricing && cheaperTool) {
+  const dearer = cheaperTool === a ? b : a;
+  const lo = cheaperTool.pricing.starting_at_usd as number;
+  const hi = dearer.pricing.starting_at_usd as number;
+  const mult = hi / lo;
+  differences.push(
+    `**Entry price:** ${cheaperTool.name} starts at ${formatPrice(cheaperTool)}, ${dearer.name} at ${formatPrice(dearer)}` +
+      (mult >= 1.5 ? `, so ${dearer.name} is ${mult >= 10 ? Math.round(mult) : mult.toFixed(1)}x the entry cost.` : '.')
+  );
+} else if (aHasPublicPricing !== bHasPublicPricing) {
+  const open = aHasPublicPricing ? a : b;
+  const closed = aHasPublicPricing ? b : a;
+  differences.push(
+    `**Price transparency:** ${open.name} publishes a starting price (${formatPrice(open)}). ${closed.name} does not, so comparing them costs you a sales call.`
+  );
+}
+
+const aOnlyVerticals = a.verticals.filter((v: string) => !b.verticals.includes(v));
+const bOnlyVerticals = b.verticals.filter((v: string) => !a.verticals.includes(v));
+if (aOnlyVerticals.length || bOnlyVerticals.length) {
+  const parts: string[] = [];
+  if (aOnlyVerticals.length) parts.push(`${a.name} covers ${aOnlyVerticals.map(verticalLabel).join(', ')}`);
+  if (bOnlyVerticals.length) parts.push(`${b.name} covers ${bOnlyVerticals.map(verticalLabel).join(', ')}`);
+  differences.push(`**Trades served:** ${parts.join('; ')}. The other does not.`);
+}
+
+if (aHasTrial !== bHasTrial) {
+  const t = aHasTrial ? a : b;
+  differences.push(
+    `**Free trial:** ${t.name} runs a ${t.pricing.free_trial_days}-day trial. ${(aHasTrial ? b : a).name} has none, so you evaluate it on a demo.`
+  );
+}
+
+if (onlyAIntegrations.length || onlyBIntegrations.length) {
+  const fmt = (list: string[]) => list.slice(0, 4).map((i) => i.replace(/_/g, ' ')).join(', ');
+  const parts: string[] = [];
+  if (onlyAIntegrations.length) parts.push(`only ${a.name} connects to ${fmt(onlyAIntegrations)}`);
+  if (onlyBIntegrations.length) parts.push(`only ${b.name} connects to ${fmt(onlyBIntegrations)}`);
+  differences.push(`**Integrations:** ${parts.join('; ')}.`);
+}
+
+if (higherRated && ratingA !== null && ratingB !== null && Math.abs(ratingA - ratingB) >= 0.3) {
+  const other = higherRated === a ? b : a;
+  differences.push(
+    `**User ratings:** ${higherRated.name} ${aggregateRating(higherRated)?.toFixed(1)} against ${aggregateRating(other)?.toFixed(1)} for ${other.name}.`
+  );
+}
+
+if (onlyA.length || onlyB.length) {
+  const parts: string[] = [];
+  if (onlyA.length) parts.push(`${a.name} has ${onlyA.slice(0, 3).join(', ')}`);
+  if (onlyB.length) parts.push(`${b.name} has ${onlyB.slice(0, 3).join(', ')}`);
+  differences.push(`**Features the other lacks:** ${parts.join('; ')}.`);
+}
+
 // --- DECISION MATRIX ---
 function getDecisionMatrix(): { pickA: string[]; pickB: string[] } {
   const pickA: string[] = [];
@@ -444,6 +514,24 @@ const breadcrumbs = [
         );
       })}
     </section>
+
+    {differences.length > 0 && (
+      <section class="mb-12">
+        <h2 class="mb-4 text-2xl font-bold text-slate-900">What actually separates them</h2>
+        <p class="mb-4 text-sm text-slate-600">
+          Only the points where {a.name} and {b.name} genuinely differ, from our verified data.
+          Everything they share is further down.
+        </p>
+        <ul class="space-y-3 rounded-lg border border-orange-200 bg-orange-50 p-6">
+          {differences.map((d) => (
+            <li class="flex gap-3 text-slate-800">
+              <span class="font-bold text-orange-600">→</span>
+              <span set:html={d.replace(/\*\*(.+?)\*\*/g, '<strong class="text-slate-900">$1</strong>')} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
 
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Quick verdict</h2>
