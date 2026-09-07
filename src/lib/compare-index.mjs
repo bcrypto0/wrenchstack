@@ -71,13 +71,45 @@ export function isStatePageIndexable(stateSlug, verticalUrl) {
   return INDEXABLE_STATE_PAGES.has(`${stateSlug}/${verticalUrl}`);
 }
 
+
+// --- International section (added 2026-09-07, thin-page audit) --------------
+// Measured 2026-09-07 across all 1,821 indexable pages: the 17 international
+// markets account for 1,089 of them (60% of the site), generated from vendor
+// records averaging 1,191 bytes against 8,843 for the US records. Same pages
+// per vendor as the US (2.4 vs 2.6), one seventh the substance behind each.
+//
+// Sibling overlap confirms it: international compare pairs 64%, international
+// vendor pages 69%. Search Console's crawled-and-declined list is full of
+// exactly these URLs (/uk/powered-now/, /uk/joblogic/, /au/aroflo/,
+// /ca/compare/...). The press kit had already recorded the same weakness from
+// the other direction, declining to pitch UK trade press on 22 UK vendors
+// against 280 US ones.
+//
+// So the whole international section is noindexed and dropped from the
+// sitemap: not deleted, not unlinked, still served to anyone who lands on it.
+// This supersedes the narrower GATED_INTL_COMPARE_MARKETS gate above, which
+// covered 8 markets' head-to-heads only and is kept for reference.
+//
+// This is ONE flag to reverse. If the keep rate does not improve, or if a
+// market earns real coverage depth, undo it here rather than per template.
+export const INTL_MARKET_CODES = new Set([
+  'ae', 'au', 'ba', 'ca', 'eg', 'fr', 'ie', 'jo', 'kw',
+  'ma', 'my', 'nz', 'om', 'qa', 'sa', 'uk', 'za',
+]);
+
+/** True for any path inside an international market, at any depth. */
+export function isInternationalPath(pathname) {
+  const seg = String(pathname || '').split('/').filter(Boolean)[0];
+  return seg !== undefined && INTL_MARKET_CODES.has(seg);
+}
+
 // Sitemap filter: keep every non-comparison URL; keep a /compare/<a>-vs-<b>/
 // URL only when it is indexable; drop gated intl markets' head-to-heads.
 export function shouldKeepInSitemap(urlStr) {
   let path;
   try { path = new URL(urlStr).pathname; } catch { path = urlStr; }
-  const intl = path.match(/^\/([a-z]{2})\/compare\/.+-vs-.+\/$/);
-  if (intl) return !GATED_INTL_COMPARE_MARKETS.has(intl[1]);
+  // Whole international section is out of the sitemap (2026-09-07 thin-page audit).
+  if (isInternationalPath(path)) return false;
   // State hubs and state-by-trade pages: allowlist only.
   const stateVertical = path.match(/^\/state\/([^/]+)\/([^/]+)\/$/);
   if (stateVertical) return isStatePageIndexable(stateVertical[1], stateVertical[2]);

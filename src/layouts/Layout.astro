@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { tools, verticals } from '../lib/data';
+import { isInternationalPath } from '../lib/compare-index.mjs';
 
 export interface BreadcrumbItem {
   name: string;
@@ -25,6 +26,14 @@ interface Props {
 }
 
 const { title, description, canonical, ogImage, noindex = false, breadcrumbs, lang = 'en', dir = 'ltr', alternateUrls = [], affiliate = false } = Astro.props;
+// The whole international section is noindexed (2026-09-07 thin-page audit:
+// 1,089 pages, 60% of the site, on vendor records a seventh the depth of the
+// US ones). Applied here rather than in each of the four intl templates and 17
+// market landings, so no international page can be added later that misses it.
+// `follow` rather than `nofollow`: stop indexing these, but still let Google
+// traverse the links out of them to the US pages that can rank.
+const intlGated = isInternationalPath(Astro.url.pathname);
+const robotsContent = noindex ? 'noindex,nofollow' : intlGated ? 'noindex,follow' : null;
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
 // PNG, not SVG: LinkedIn/X/Facebook do not render SVG og:images (the card shows blank).
 const ogImageUrl = ogImage ?? new URL('/og-default.png', Astro.site).toString();
@@ -143,7 +152,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
     <meta name="description" content={metaDescription} />
     <link rel="canonical" href={canonicalUrl} />
     {alternateUrls.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
-    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    {robotsContent && <meta name="robots" content={robotsContent} />}
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />
