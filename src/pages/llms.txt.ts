@@ -6,6 +6,10 @@ import {
   pricedEntryValues,
   quoteOnlyPct,
   quickbooksPct,
+  perUserMedian,
+  flatFeeMedian,
+  perUserTools,
+  flatFeeTools,
   totalReputationFlags,
   reputationFlagGroups,
 } from '../lib/data';
@@ -26,6 +30,16 @@ import { intlVendorCount, intlMarketCount } from '../lib/intl';
 // from the directory again.
 
 const medianEntry = medianUsd(pricedEntryValues());
+
+// 2026-09-09: the mixed median above was published for months labelled
+// "per user per month". A hand classification of all 69 paid entries found only
+// 16 are genuinely per-seat; 46 are flat monthly platform fees. The label was
+// describing 23% of the set it was attached to. Publish the two bands instead,
+// and never attach a per-user unit to the mixed figure again.
+const perUser = perUserMedian();
+const perUserN = perUserTools().length;
+const flatFee = flatFeeMedian();
+const flatN = flatFeeTools().length;
 
 // Largest flag categories, named rather than totalled, because "29 flagged"
 // invites the question "flagged where" and the answer is the interesting part.
@@ -89,7 +103,7 @@ Key facts about the data: every pricing figure carries a verified date and is re
 - [Payday super for Australian trades businesses](https://wrenchstack.com/au/guides/payday-super-payroll-software/): AU compliance guide, payday super in effect since 1 July 2026 (transitional facilitative-compliance year to 30 June 2027), super with every pay run within 7 business days, penalties up to 60% of shortfall, payroll readiness checklist
 - [Oman e-invoicing (Fawtara) for construction companies](https://wrenchstack.com/om/guides/oman-e-invoicing-contractors/): Oman compliance guide, Peppol-based VAT e-invoicing mandate, large taxpayers Aug 2026, all VAT-registered businesses by Aug 2027, which software is getting ready
 - [Facturation électronique (e-invoicing) for French artisans](https://wrenchstack.com/fr/guides/facturation-electronique-artisans/): France compliance guide, e-invoice reception for all from 1 Sept 2026, issuance for SMEs and micro-entreprises from 1 Sept 2027, the PDP platform model, which software is a registered platform
-- [2026 Trades Software Market Report](https://wrenchstack.com/trends-2026/): original research across the full ${usVendorTotal()}-vendor US stack (10 categories) and ${intlMarketCount} international markets. Median entry-tier price across the directory $${medianEntry}/user/mo, ${quoteOnlyPct()}% of platforms publish no price at all, ${quickbooksPct()}% integrate with QuickBooks, plus a reputation-flag ledger (${totalReputationFlags()} flagged vendors: ${flagBreakdown}) and the English and Arabic Gulf picture. Free to cite.
+- [2026 Trades Software Market Report](https://wrenchstack.com/trends-2026/): original research across the full ${usVendorTotal()}-vendor US stack (10 categories) and ${intlMarketCount} international markets. Median published entry price across the directory $${medianEntry}/month, which mixes two pricing models and should not be quoted as a per-seat rate: ${perUserN} platforms charge per user (median $${perUser} per user/month) and ${flatN} charge a flat monthly fee (median $${flatFee}/month). ${quoteOnlyPct()}% of platforms publish no price at all, ${quickbooksPct()}% integrate with QuickBooks, plus a reputation-flag ledger (${totalReputationFlags()} flagged vendors: ${flagBreakdown}) and the English and Arabic Gulf picture. Free to cite.
 - [Reputation ledger](https://wrenchstack.com/reputation-flags/): all ${totalReputationFlags()} documented vendor warnings on one page, each with its evidence. No vendor can pay to have one removed.
 - [Research hub](https://wrenchstack.com/research/): quarterly benchmarks and citable statistics
 - [2026 Awards](https://wrenchstack.com/awards/2026/): editorial awards by category

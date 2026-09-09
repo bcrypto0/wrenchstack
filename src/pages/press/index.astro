@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { tools, verticals, medianUsd, accountingSoftware, paymentProcessors, bankingProviders, financingProviders, insuranceProviders, leadGenPlatforms, payrollServices, marketingAgencies, aiTools } from '../../lib/data';
+import { tools, verticals, medianUsd, perUserMedian, flatFeeMedian, perUserTools, flatFeeTools, accountingSoftware, paymentProcessors, bankingProviders, financingProviders, insuranceProviders, leadGenPlatforms, payrollServices, marketingAgencies, aiTools } from '../../lib/data';
 
 // --- THE FULL US CONTRACTOR STACK (computed live, never hardcoded) ---
 const stackCats = [
@@ -101,7 +101,7 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
         <article class="rounded-lg border border-slate-200 bg-white p-5">
           <h3 class="mb-2 text-lg font-bold text-slate-900">The opacity tax</h3>
           <p class="text-sm text-slate-700 leading-relaxed">
-            <strong>{customQuotedPct}% of trades-software platforms publish no price at all</strong> — you have to sit through a sales call to get a number. The median <em>published</em> entry price is <strong>${medianPrice}/user/month</strong>, so the opacity hides a wide spread. Contractor insurance is worse: every carrier we track is quote-only — not one publishes a flat rate.
+            <strong>{customQuotedPct}% of trades-software platforms publish no price at all</strong> — you have to sit through a sales call to get a number. The median <em>published</em> entry price is <strong>${medianPrice}/month</strong>, and that figure mixes two models: {perUserTools().length} platforms charge per seat (median <strong>${perUserMedian()} per user/month</strong>) while {flatFeeTools().length} charge a flat monthly fee (median <strong>${flatFeeMedian()}/month</strong>). Quoting the blended number as a per-seat rate overstates what a one-person shop pays and understates a large team. Contractor insurance is worse: every carrier we track is quote-only — not one publishes a flat rate.
           </p>
           <p class="mt-2 text-xs text-slate-600">→ <a href="/trends-2026/" class="font-semibold text-orange-600 hover:underline">Market report</a> · <a href="/pricing/" class="font-semibold text-orange-600 hover:underline">Pricing comparison</a></p>
         </article>

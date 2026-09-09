@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { tools, medianUsd } from '../../lib/data';
+import { tools, medianUsd, perUserMedian, flatFeeMedian, perUserTools, flatFeeTools } from '../../lib/data';
 
 // Static endpoint: /data/trades-software-pricing-2026.json, generated at build
 // time from tools.json. Machine-readable companion to the CSV, with dataset
@@ -22,7 +22,7 @@ export const GET: APIRoute = () => {
     dataset: {
       name: 'WrenchStack Trades Software Pricing Dataset 2026',
       description:
-        'Entry pricing, tier structure, verticals served, and verification dates for US field-service software platforms serving trades and construction businesses. Every price was checked by a human against the vendor pricing page on the pricing_verified_date recorded per platform. quote_only means the vendor publishes no price at all.',
+        'Entry pricing, tier structure, verticals served, and verification dates for US field-service software platforms serving trades and construction businesses. Every price was checked by a human against the vendor pricing page on the pricing_verified_date recorded per platform. quote_only means the vendor publishes no price at all. pricing_model says what starting_price_usd_month actually measures: per_user is a per-seat monthly rate, flat is a fixed monthly platform fee (which may include seats), flat_plus_seat is a flat base plus per-seat overage. Do not average across models.',
       license: 'CC-BY-4.0',
       license_url: 'https://creativecommons.org/licenses/by/4.0/',
       attribution: 'WrenchStack (https://wrenchstack.com)',
@@ -38,7 +38,15 @@ export const GET: APIRoute = () => {
       quote_only_count: quoteOnly,
       quote_only_pct: Math.round((quoteOnly / tools.length) * 100),
       publicly_priced_count: priced.length,
+      // 2026-09-09: median_entry_price_usd_month BLENDS pricing models and must
+      // not be cited as a per-seat rate. A hand classification of all 69 paid
+      // entries found only 16 are genuinely per-user. Cite the split instead.
       median_entry_price_usd_month: medianPrice,
+      median_entry_price_is_blended: true,
+      per_user_platform_count: perUserTools().length,
+      median_per_user_price_usd_month: perUserMedian(),
+      flat_fee_platform_count: flatFeeTools().length,
+      median_flat_fee_usd_month: flatFeeMedian(),
       min_entry_price_usd_month: prices[0],
       max_entry_price_usd_month: prices[prices.length - 1],
       free_tier_count: freeTier,
@@ -52,6 +60,7 @@ export const GET: APIRoute = () => {
       verticals: t.verticals ?? [],
       quote_only: t.pricing.starting_at_usd === null,
       starting_price_usd_month: t.pricing.starting_at_usd,
+      pricing_model: t.pricing.pricing_model ?? 'unclear',
       tier_names: t.pricing.tiers ?? [],
       tier_prices_usd: t.pricing.tier_prices_usd ?? [],
       free_trial_days: t.pricing.free_trial_days ?? null,

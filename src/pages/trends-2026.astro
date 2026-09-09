@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, verticals, medianUsd as sharedMedianUsd, priceTier, teamSizeBucket, freshnessTier, aggregateRating, accountingSoftware, paymentProcessors, bankingProviders, financingProviders, insuranceProviders, leadGenPlatforms, payrollServices, marketingAgencies, aiTools } from '../lib/data';
+import { tools, verticals, medianUsd as sharedMedianUsd, perUserMedian, flatFeeMedian, perUserTools, flatFeeTools, priceTier, teamSizeBucket, freshnessTier, aggregateRating, accountingSoftware, paymentProcessors, bankingProviders, financingProviders, insuranceProviders, leadGenPlatforms, payrollServices, marketingAgencies, aiTools } from '../lib/data';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -196,7 +196,7 @@ const articleSchema = {
       <h2>Pricing — what trades software actually costs</h2>
 
       <p>
-        The trades software market in 2026 spans an order of magnitude in price. Entry-tier platforms like Joist ($13/user/month Pro tier) and Tradify ($36/user/month single tier) live alongside enterprise platforms like ServiceTitan and BuildOps where user-reported pricing hits $400-$800 per user per month. The median entry-tier price across our directory is <strong>${medianPrice}/user/month</strong>, with {tierDist.entry} platforms in the under-$100 tier, {tierDist.mid} in $100-$249, {tierDist.enterprise} publishing $250+, and {tierDist['quote-only']} publishing no price at all.
+        The trades software market in 2026 spans an order of magnitude in price. Entry-tier platforms like Joist ($13/user/month Pro tier) and Tradify ($36/user/month single tier) live alongside enterprise platforms like ServiceTitan and BuildOps where user-reported pricing hits $400-$800 per user per month. The median published entry price across our directory is <strong>${medianPrice}/month</strong>. That blended figure mixes two pricing models and is not a per-seat rate: {perUserTools().length} platforms charge per user (median <strong>${perUserMedian()} per user/month</strong>) and {flatFeeTools().length} charge a flat monthly platform fee (median <strong>${flatFeeMedian()}/month</strong>). Counting from the blended number, with {tierDist.entry} platforms in the under-$100 tier, {tierDist.mid} in $100-$249, {tierDist.enterprise} publishing $250+, and {tierDist['quote-only']} publishing no price at all.
       </p>
 
       <div class="not-prose my-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -235,7 +235,7 @@ const articleSchema = {
       <h2>What software costs by trade</h2>
 
       <p>
-        Median entry pricing is not uniform across trades. Pulling the publicly-priced platforms that serve each trade (those with at least four such tools), <strong>{cheapestTrade?.name}</strong> is the cheapest field to equip — a median of <strong>${cheapestTrade?.median}/user/month</strong> — while <strong>{priciestTrade?.name}</strong> sits at the top at <strong>${priciestTrade?.median}/month</strong>. Most field-service trades cluster in the $45–$80 band; the high-end outliers reflect specialized, heavier platforms.
+        Median entry pricing is not uniform across trades. Pulling the publicly-priced platforms that serve each trade (those with at least four such tools), <strong>{cheapestTrade?.name}</strong> is the cheapest field to equip, at a median of <strong>${cheapestTrade?.median}/month</strong> — while <strong>{priciestTrade?.name}</strong> sits at the top at <strong>${priciestTrade?.median}/month</strong>. Most field-service trades cluster in the $45–$80 band; the high-end outliers reflect specialized, heavier platforms.
       </p>
 
       <div class="not-prose my-8 overflow-x-auto">
@@ -243,7 +243,7 @@ const articleSchema = {
           <thead>
             <tr class="border-b-2 border-slate-200 text-left text-slate-700">
               <th class="py-2 pr-4 font-semibold">Trade</th>
-              <th class="py-2 pr-4 font-semibold">Median /user/mo</th>
+              <th class="py-2 pr-4 font-semibold">Median entry $/mo</th>
               <th class="py-2 pr-4 font-semibold">Range</th>
               <th class="py-2 font-semibold">Priced tools</th>
             </tr>

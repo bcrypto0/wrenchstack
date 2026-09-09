@@ -12,8 +12,24 @@ import financingData from '../data/financing.json';
 import accountingData from '../data/accounting.json';
 import bankingData from '../data/banking.json';
 
+export type ToolPricingModel =
+  | 'per_user'
+  | 'flat'
+  | 'flat_plus_seat'
+  | 'annual_per_user'
+  | 'free_tier'
+  | 'quote_only'
+  | 'unclear';
+
 export interface ToolPricing {
   starting_at_usd: number | null;
+  /**
+   * What `starting_at_usd` actually measures. Added 2026-09-09 after a hand
+   * classification of all 69 paid entries found that only 16 of them are
+   * genuinely per-user, while the site, llms.txt and seven press emails were
+   * all labelling the mixed median "$75 per user per month".
+   */
+  pricing_model?: ToolPricingModel;
   tiers: string[];
   tier_prices_usd: (number | null)[] | null;
   pricing_note?: string;
@@ -1640,4 +1656,47 @@ export function quoteOnlyPct(): number {
 export function quickbooksPct(): number {
   const n = tools.filter((t) => t.integrations.some((i) => /quickbooks/i.test(i))).length;
   return Math.round((n / tools.length) * 100);
+}
+
+// --- Pricing models ---------------------------------------------------------
+//
+// Added 2026-09-09. `starting_at_usd` had no companion field saying WHAT it
+// measures, so every median computed over it silently averaged per-seat rates
+// against flat platform fees. A hand read of all 69 paid entries (two
+// independent classifications per entry, third read on every disagreement)
+// found the split is 16 per-user against 46 flat, i.e. the label "per user per
+// month" described 23% of the set it was attached to.
+//
+// Never take a median across models again. Ask for the one you mean.
+
+/** Tools whose starting price is genuinely a per-seat monthly rate. */
+export function perUserTools(list: Tool[] = tools): Tool[] {
+  return list.filter((t) => t.pricing.pricing_model === 'per_user');
+}
+
+/** Tools whose starting price is a flat monthly platform fee (with or without included seats). */
+export function flatFeeTools(list: Tool[] = tools): Tool[] {
+  return list.filter(
+    (t) => t.pricing.pricing_model === 'flat' || t.pricing.pricing_model === 'flat_plus_seat'
+  );
+}
+
+/** Median of the genuinely per-user starting prices. Safe to label "per user per month". */
+export function perUserMedian(): number {
+  return medianUsd(perUserTools().map((t) => t.pricing.starting_at_usd!).filter((v) => v > 0));
+}
+
+/** Median of the flat monthly platform fees. Safe to label "per month". */
+export function flatFeeMedian(): number {
+  return medianUsd(flatFeeTools().map((t) => t.pricing.starting_at_usd!).filter((v) => v > 0));
+}
+
+/** Counts by pricing model, for prose that needs to say how big each group is. */
+export function pricingModelCounts(): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const t of tools) {
+    const m: string = t.pricing.pricing_model ?? 'unclear';
+    out[m] = (out[m] ?? 0) + 1;
+  }
+  return out;
 }
