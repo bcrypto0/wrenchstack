@@ -8,11 +8,13 @@ import MissingFromList from '../../../components/MissingFromList.astro';
 // excludes this slug in getStaticPaths). Every price on this page was
 // re-verified by a human against both vendors' live pricing pages on
 // 2026-08-27; the seat-cost tables are computed from those published numbers
-// at build time.
+// at build time. 2026-09-10: the monthly verification run re-checked Jobber's
+// plan ladder; the 2026-08-27 report that Plus had been retired was wrong.
 
 const jobber = getTool('jobber')!;
 const hcp = getTool('housecall-pro')!;
 const VERIFIED = '2026-08-27';
+const JOBBER_RECHECKED = '2026-09-10';
 
 const jScore = wrenchStackScore(jobber);
 const hScore = wrenchStackScore(hcp);
@@ -53,7 +55,7 @@ const faqs = [
   },
   {
     q: 'What did Jobber’s 2026 pricing change actually do?',
-    a: `Jobber retired the four-tier ladder that topped out at Plus ($399/month) and now sells three plans (Core, Connect, Grow) priced by team size, with $29/$99/$149 as the annual-billed 1-user rates ($49/$139/$199 billed monthly). The practical effect: entry costs look lower, but growing headcount raises the bill continuously instead of at tier jumps, and there is no published price for a large team. We verified this against the live pricing page on ${'2026-08-27'}.`,
+    a: `Jobber prices all four plans (Core, Connect, Grow and Plus) by team size. At each plan's smallest team the annual-billed rates are $29/$99/$149/$399 a month ($49/$139/$199/$499 billed monthly), and extra users cost $29/month each. The practical effect: entry costs look lower, but growing headcount raises the bill continuously instead of at tier jumps, and the only way to see your team's number is Jobber's own calculator. Correction: our 2026-08-27 check reported that the Plus plan had been retired; Jobber still sells it (re-checked 2026-09-10). The other figures were verified against the live pricing page on ${'2026-08-27'}.`,
   },
   {
     q: 'What does Housecall Pro really cost for a 6-person shop?',
@@ -98,7 +100,7 @@ const breadcrumbs = [
       <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-orange-600">Head to head</p>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl m-0">Jobber vs Housecall Pro (2026)</h1>
       <p class="mt-3 text-lg text-slate-600">
-        The most-searched comparison in residential field service, and the one where both vendors' pricing changed under everyone's published reviews. Every price below was checked by a human against both live pricing pages on {VERIFIED}.
+        The most-searched comparison in residential field service, and the one where both vendors' pricing changed under everyone's published reviews. Every price below was checked by a human against both live pricing pages on {VERIFIED}, and Jobber's plan ladder was re-checked on {JOBBER_RECHECKED}.
       </p>
     </div>
 
@@ -123,7 +125,7 @@ const breadcrumbs = [
           <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">WrenchStack Fit Score</td><td class="py-2 pr-4 font-semibold">{jScore}</td><td class="py-2 font-semibold">{hScore}</td></tr>
           <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">G2 + Capterra average</td><td class="py-2 pr-4">{jRating} (G2 {jobber.g2_rating} / Capterra {jobber.capterra_rating})</td><td class="py-2">{hRating} (G2 {hcp.g2_rating} / Capterra {hcp.capterra_rating})</td></tr>
           <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Entry price (annual-billed)</td><td class="py-2 pr-4">$29/mo (Core, 1 user)</td><td class="py-2">$59/mo (Basic, 1 user)</td></tr>
-          <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Pricing model</td><td class="py-2 pr-4">3 plans, priced by team size</td><td class="py-2">3 bundles with included seats + per-seat overage</td></tr>
+          <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Pricing model</td><td class="py-2 pr-4">4 plans, priced by team size</td><td class="py-2">3 bundles with included seats + per-seat overage</td></tr>
           <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Best team size</td><td class="py-2 pr-4">{jobber.best_team_size}</td><td class="py-2">{hcp.best_team_size}</td></tr>
           <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Founded / HQ</td><td class="py-2 pr-4">{jobber.founded}, {jobber.headquartered}</td><td class="py-2">{hcp.founded}, {hcp.headquartered}</td></tr>
           <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Free trial</td><td class="py-2 pr-4">14 days, no card</td><td class="py-2">14 days, no card</td></tr>
@@ -137,21 +139,25 @@ const breadcrumbs = [
       Both vendors restructured pricing in 2026, and most comparison pages on the internet still describe ladders that no longer exist. Here is what each actually sells today.
     </p>
 
-    <h3>Jobber: three plans, priced by your team size</h3>
+    <h3>Jobber: four plans, priced by your team size</h3>
     <p>
-      Jobber retired its old four-tier ladder (the $399 Plus plan is gone) and now prices Core, Connect, and Grow by user count. The published figures are the 1-user rates; adding techs raises the price on every plan, and the only way to see your team's number is Jobber's own calculator. A promotion running at verification (ends 2026-08-31) discounts the first 12 months of annual plans.
+      Jobber prices Core, Connect, Grow, and Plus by team size. The published figures are each plan's smallest-team rates; adding techs raises the price on every plan (extra users are $29/month each), and the only way to see your team's number is Jobber's own calculator. The August 2026 promotion ended on 2026-08-31.
+    </p>
+    <p class="text-sm text-slate-500">
+      Correction, {JOBBER_RECHECKED}: our {VERIFIED} check reported that Jobber had retired the $399 Plus plan. It had not; Plus is still sold, and the table below now includes it.
     </p>
     <div class="not-prose overflow-x-auto">
       <table class="w-full text-sm">
         <thead>
           <tr class="border-b border-slate-300 text-left text-xs uppercase tracking-wide text-slate-500">
-            <th class="py-2 pr-4">Plan (1 user)</th><th class="py-2 pr-4">Billed annually</th><th class="py-2">Billed monthly</th>
+            <th class="py-2 pr-4">Plan (smallest team)</th><th class="py-2 pr-4">Billed annually</th><th class="py-2">Billed monthly</th>
           </tr>
         </thead>
         <tbody>
           <tr class="border-b border-slate-100"><td class="py-2 pr-4 font-medium">Core</td><td class="py-2 pr-4">$29/mo</td><td class="py-2">$49/mo</td></tr>
           <tr class="border-b border-slate-100"><td class="py-2 pr-4 font-medium">Connect</td><td class="py-2 pr-4">$99/mo</td><td class="py-2">$139/mo</td></tr>
           <tr class="border-b border-slate-100"><td class="py-2 pr-4 font-medium">Grow</td><td class="py-2 pr-4">$149/mo</td><td class="py-2">$199/mo</td></tr>
+          <tr class="border-b border-slate-100"><td class="py-2 pr-4 font-medium">Plus</td><td class="py-2 pr-4">$399/mo</td><td class="py-2">$499/mo</td></tr>
         </tbody>
       </table>
       <p class="mt-2 text-xs text-slate-500">Paid add-ons at verification: Marketing Suite $99/mo, AI Receptionist $29/mo, Sales Pipeline $49/mo. Franchise and multi-location pricing is custom.</p>
@@ -195,7 +201,7 @@ const breadcrumbs = [
         </tbody>
       </table>
       <p class="mt-2 text-xs text-slate-500">
-        Computed at build time from the bundle prices and per-seat fees published on housecallpro.com/pricing, verified {VERIFIED}. Jobber's equivalent table cannot be computed honestly: its team pricing is not published beyond the 1-user rate, which is itself worth knowing when a vendor's price transparency matters to you.
+        Computed at build time from the bundle prices and per-seat fees published on housecallpro.com/pricing, verified {VERIFIED}. Jobber's equivalent table cannot be computed honestly: its team pricing is not published beyond each plan's smallest-team rate, which is itself worth knowing when a vendor's price transparency matters to you.
       </p>
     </div>
 
@@ -271,7 +277,7 @@ const breadcrumbs = [
       <p class="m-0">
         <strong>How this page was made:</strong> prices were checked by a human against
         <a href="https://www.getjobber.com/pricing/" rel="noopener nofollow" class="underline">getjobber.com/pricing</a> and
-        <a href="https://www.housecallpro.com/pricing/" rel="noopener nofollow" class="underline">housecallpro.com/pricing</a> on {VERIFIED}; the seat-cost table is computed from those published numbers at build time, and scores come from the same data as every listing (see the <a href="/verification-log/" class="underline">verification log</a>). Neither vendor paid for placement or saw this page before publication, and no AI-crawled "verified facts" appear here. Full reviews: <a href="/tools/jobber/" class="underline">Jobber</a> · <a href="/tools/housecall-pro/" class="underline">Housecall Pro</a>.
+        <a href="https://www.housecallpro.com/pricing/" rel="noopener nofollow" class="underline">housecallpro.com/pricing</a> on {VERIFIED} (Jobber's plan ladder re-checked {JOBBER_RECHECKED}); the seat-cost table is computed from those published numbers at build time, and scores come from the same data as every listing (see the <a href="/verification-log/" class="underline">verification log</a>). Neither vendor paid for placement or saw this page before publication, and no AI-crawled "verified facts" appear here. Full reviews: <a href="/tools/jobber/" class="underline">Jobber</a> · <a href="/tools/housecall-pro/" class="underline">Housecall Pro</a>.
       </p>
     </div>
     <MissingFromList competitors={["Housecall Pro", "Jobber"]} />

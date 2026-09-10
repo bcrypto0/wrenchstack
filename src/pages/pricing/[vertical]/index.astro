@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import { priceScaling } from '../../../lib/data';
 import {
   verticals,
   toolsForVertical,
@@ -40,8 +41,8 @@ const freeTier = cheapestFirst.find((t) => t.pricing.starting_at_usd === 0);
 const customQuoteOnly = verticalTools.filter((t) => t.pricing.starting_at_usd === null);
 
 // Pricing model classification
-const flatRateTools = verticalTools.filter((t) => t.pricing.pricing_note?.toLowerCase().includes('unlimited users') || t.pricing.pricing_note?.toLowerCase().includes('per-company'));
-const perUserTools = verticalTools.filter((t) => !flatRateTools.includes(t) && t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0);
+const flatRateTools = verticalTools.filter((t) => priceScaling(t) === 'flat' || priceScaling(t) === 'base_plus_seat');
+const perUserTools = verticalTools.filter((t) => priceScaling(t) === 'per_user');
 
 // Best value picks by tier
 const entryTierTools = verticalTools.filter((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0 && t.pricing.starting_at_usd < 100);
@@ -61,17 +62,11 @@ function scenarioCost(t: Tool, teamSize: number): string {
   const p = t.pricing.starting_at_usd;
   if (p === null) return 'Custom quote';
   if (p === 0) return 'Free';
-  // Detect flat-rate
-  const isFlat = t.pricing.pricing_note?.toLowerCase().includes('unlimited users') || t.pricing.pricing_note?.toLowerCase().includes('per-company');
-  if (isFlat) {
-    // Use mid-tier price as proxy for flat pricing scaling
-    const tiers = t.pricing.tier_prices_usd ?? [];
-    if (teamSize <= 5) return `~$${p}/mo`;
-    if (teamSize <= 15 && tiers[1]) return `~$${tiers[1]}/mo`;
-    return tiers[2] ? `~$${tiers[2]}/mo` : `~$${p}/mo`;
-  }
-  // Per-user pricing — multiply by team size (rough estimate)
-  return `~$${Math.round(p * teamSize)}/mo`;
+  // Only per-user prices scale with headcount. Flat plans and base-plus-seat
+  // bundles carry plan limits and seat fees we do not model, so show the entry
+  // price (their tiers are often job or usage bands, not team sizes).
+  if (priceScaling(t) === 'per_user') return `~$${Math.round(p * teamSize)}/mo`;
+  return `From $${p}/mo`;
 }
 
 const faqs = [
@@ -107,7 +102,7 @@ const faqs = [
   },
   {
     q: `How does pricing scale as I grow from 3 to 10 to 25 techs?`,
-    a: `Massive difference depending on pricing model. Per-user platforms (Jobber: $39/user, ServiceTitan: $300-$800/user) scale linearly — 10x tech count = 10x software cost. Flat-rate platforms (Service Fusion $195/mo, ServiceM8 $59-$329/mo by call volume) barely change — you might pay 1.5-2x more going from 3 to 25 techs vs 10x. Crossover point is typically 6-8 users: below that, per-user platforms are cheaper; above that, flat-rate platforms become meaningfully cheaper. Model your projected 18-month team size when comparing.`,
+    a: `It depends on how each platform charges. Per-user pricing grows with headcount: Jobber's plans are priced by team size and add $29/month per extra user, and ServiceTitan is custom-quoted (user reports put it around $300-$800 per user per month). Flat plans barely move with headcount: Service Fusion includes unlimited users on every plan ($208-$533/month billed annually), and ServiceM8 prices by job volume rather than users (paid plans $29-$349/month). Seat-bundle plans sit in between: Housecall Pro Essentials includes 5 users for $149/month billed annually, then $100/month per extra user. The crossover depends on the specific plans, so model your projected 18-month team size against each vendor's current pricing page.`,
   },
   {
     q: `Can I negotiate ${verticalLower} software pricing?`,
@@ -263,13 +258,13 @@ const breadcrumbs = [
           </thead>
           <tbody class="divide-y divide-slate-100">
             {cheapestFirst.filter((t) => t.pricing.starting_at_usd !== null).slice(0, 10).map((t) => {
-              const isFlat = t.pricing.pricing_note?.toLowerCase().includes('unlimited users') || t.pricing.pricing_note?.toLowerCase().includes('per-company');
+              const scaling = priceScaling(t);
               return (
                 <tr class="hover:bg-slate-50">
                   <td class="p-3">
                     <a href={`/tools/${t.slug}/`} class="font-semibold text-slate-900 hover:text-orange-600">{t.name}</a>
                   </td>
-                  <td class="p-3 text-xs text-slate-600">{isFlat ? 'Flat per company' : 'Per user'}</td>
+                  <td class="p-3 text-xs text-slate-600">{scaling === 'per_user' ? 'Per user' : scaling === 'flat' ? 'Flat per plan' : scaling === 'base_plus_seat' ? 'Base + per seat' : 'See pricing note'}</td>
                   <td class="p-3 text-right text-slate-700">{scenarioCost(t, 3)}</td>
                   <td class="p-3 text-right text-slate-700">{scenarioCost(t, 10)}</td>
                   <td class="p-3 text-right text-slate-700">{scenarioCost(t, 25)}</td>

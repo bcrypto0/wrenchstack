@@ -19,7 +19,7 @@ for (const a of marketingAgencies) byTier[agencyTier(a)].push(a);
 const tierMeta = {
   S: { label: 'Tier S — strongest recommendations', description: 'Trade-specific specialists (Hook Agency for roofing, Plumbing & HVAC SEO for plumbing/HVAC) and the strongest home-services generalists (Blue Corona, Adapt Digital). Best combination of expertise + reputation + accessible pricing for typical SMB trades operations.', badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
   A: { label: 'Tier A — context-specific fit', description: 'Solid agencies that work for specific contractor profiles — construction-focused (Builder Funnel), enterprise-scale (Scorpion), generalist mid-tier (Lemonade Stand), or lead-gen-hybrid (Service Direct). Not standout for typical SMB but credible in their niches.', badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
-  F: { label: 'Tier F — listed with reputation warnings', description: 'Agencies with documented lock-in contract patterns + customer-complaint sites + ROI issues (Townsquare Interactive with FrownSquare.com, Marketing 360). Listed for completeness — we cannot recommend.', badgeColor: 'bg-rose-100 text-rose-900 ring-rose-300', cardBorder: 'border-rose-300' },
+  F: { label: 'Tier F — listed with reputation warnings', description: 'Agencies with documented lock-in contract patterns + BBB complaint volume + ROI issues (Townsquare Interactive, Marketing 360). Listed for completeness — we cannot recommend.', badgeColor: 'bg-rose-100 text-rose-900 ring-rose-300', cardBorder: 'border-rose-300' },
 };
 
 const itemListSchema = {
@@ -50,7 +50,7 @@ const itemListSchema = {
         Best Marketing Agencies for Trades Contractors (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {marketingAgencies.length} digital marketing agencies serving trades contractors. Trade-specific specialists (Hook Agency, Plumbing & HVAC SEO), home-services generalists (Adapt Digital, Lemonade Stand), and honest reputation warnings on Townsquare Interactive (FrownSquare.com complaint pattern) and Marketing 360 (lock-in contracts + ROI complaints).
+        Independent reviews of {marketingAgencies.length} digital marketing agencies serving trades contractors. Trade-specific specialists (Hook Agency, Plumbing & HVAC SEO), home-services generalists (Adapt Digital, Lemonade Stand), and honest reputation warnings on Townsquare Interactive (cancellation and contract-term complaints) and Marketing 360 (lock-in contracts + ROI complaints).
       </p>
     </header>
 
@@ -101,7 +101,7 @@ const itemListSchema = {
                 <dl class="mb-3 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Minimum contract</dt>
-                    <dd class="font-semibold text-slate-900">{a.minimum_contract_months}-month{a.minimum_contract_months === 1 ? '' : 's'}</dd>
+                    <dd class="font-semibold text-slate-900">{a.minimum_contract_months === null ? 'Not published' : `${a.minimum_contract_months}-month${a.minimum_contract_months === 1 ? '' : 's'}`}</dd>
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Google rating</dt>

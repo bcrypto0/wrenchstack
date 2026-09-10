@@ -132,7 +132,7 @@ const articleSchema = {
   headline: 'Trades software market report 2026 — pricing, integrations, and the state of the industry',
   description: `Original analysis of ${tools.length} field service platforms across ${verticals.length} verticals, expanded to the full ${totalStackVendors}-vendor contractor software stack and ${intlMarkets} international markets. Pricing distribution, integration prevalence, the reputation-flag ledger, and the multi-market picture from the WrenchStack directory.`,
   datePublished: '2026-05-26',
-  dateModified: '2026-06-19',
+  dateModified: '2026-09-10',
   author: {
     '@type': 'Organization',
     name: 'WrenchStack Research',
@@ -196,7 +196,7 @@ const articleSchema = {
       <h2>Pricing — what trades software actually costs</h2>
 
       <p>
-        The trades software market in 2026 spans an order of magnitude in price. Entry-tier platforms like Joist ($13/user/month Pro tier) and Tradify ($36/user/month single tier) live alongside enterprise platforms like ServiceTitan and BuildOps where user-reported pricing hits $400-$800 per user per month. The median published entry price across our directory is <strong>${medianPrice}/month</strong>. That blended figure mixes two pricing models and is not a per-seat rate: {perUserTools().length} platforms charge per user (median <strong>${perUserMedian()} per user/month</strong>) and {flatFeeTools().length} charge a flat monthly platform fee (median <strong>${flatFeeMedian()}/month</strong>). Counting from the blended number, with {tierDist.entry} platforms in the under-$100 tier, {tierDist.mid} in $100-$249, {tierDist.enterprise} publishing $250+, and {tierDist['quote-only']} publishing no price at all.
+        The trades software market in 2026 spans an order of magnitude in price. Entry-tier platforms like Joist ($10/month Basics) and Tradify ($47/user/month Lite tier) live alongside enterprise platforms like ServiceTitan and BuildOps where user-reported pricing reaches $250-$800 per user per month. The median published entry price across our directory is <strong>${medianPrice}/month</strong>. That blended figure mixes two pricing models and is not a per-seat rate: {perUserTools().length} platforms charge per user (median <strong>${perUserMedian()} per user/month</strong>) and {flatFeeTools().length} charge a flat monthly platform fee (median <strong>${flatFeeMedian()}/month</strong>). Counting from the blended number, with {tierDist.entry} platforms in the under-$100 tier, {tierDist.mid} in $100-$249, {tierDist.enterprise} publishing $250+, and {tierDist['quote-only']} publishing no price at all.
       </p>
 
       <div class="not-prose my-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -219,7 +219,7 @@ const articleSchema = {
       </div>
 
       <p>
-        The pricing distribution is heavily bimodal: {tierDist.entry} platforms compete fiercely under $100/user/month (Jobber, Housecall Pro, Workiz, FieldPulse, Tradify, Service Autopilot, Coolfront, Joist), while {tierDist['quote-only']} publish no price at all, the group that includes ServiceTitan, BuildOps, FieldEdge, Procore, Aspire and FieldRoutes, where user reports peg the real figure at $250-$800 per user per month. A further {tierDist.enterprise} publish a starting price of $250 or more. Those two groups are counted separately here on purpose: an unpublished price is not evidence of an expensive one. The middle is sparse, with only {tierDist.mid} platforms genuinely in the $100-$249 band.
+        The pricing distribution is heavily bimodal: {tierDist.entry} platforms compete fiercely under $100/user/month (Jobber, Housecall Pro, Tradify, Service Autopilot, Joist), while {tierDist['quote-only']} publish no price at all, the group that includes ServiceTitan, BuildOps and Procore, where user reports peg the real figure at $250-$800 per user per month, alongside vendors such as Aspire and FieldRoutes that quote by company size or customer count. A further {tierDist.enterprise} publish a starting price of $250 or more. Those two groups are counted separately here on purpose: an unpublished price is not evidence of an expensive one. The middle is sparse, with only {tierDist.mid} platforms genuinely in the $100-$249 band.
       </p>
 
       <h2>The "custom-quoted" opacity tax</h2>
@@ -280,11 +280,11 @@ const articleSchema = {
       </div>
 
       <p>
-        Only <strong>{withFreeTier} platforms</strong> in the directory offer a genuine free tier (usable indefinitely, not just a trial). Joist's Free, Markate's free FSM, Yardbook's free landscape software, MaintainX Basic, Limble CMMS Free, and Tradify trial-only — the rest of the market requires paid commitment from day one.
+        Only <strong>{withFreeTier} platforms</strong> in the directory offer a genuine free tier (usable indefinitely, not just a trial), among them Yardbook's free landscape software, Contractor+'s Freedom plan, Connecteam's small-team plan, MaintainX Basic, Mitti's (formerly SafetyCulture) free plan, Roofr's Starter plan and OpenSolar's free platform. Every other platform requires a paid plan once any trial ends.
       </p>
 
       <p>
-        Free trial length is trending up. The 2025 standard was 14 days; the 2026 average across {withFreeTrial} platforms is <strong>{avgTrialDays} days</strong>. Skimmer (30 days), MaintainX (30 days), Joist (30 days on Pro), and Limble (30 days) lead the trial-length shift. Trial length matters because field service software's value compounds over weeks — a 14-day trial barely captures a single billing cycle and rarely captures customer follow-up workflows.
+        Free trial length is trending up. The 2025 standard was 14 days; the 2026 average across {withFreeTrial} platforms is <strong>{avgTrialDays} days</strong>. Skimmer (30 days), MaintainX (30 days), and Limble (30 days) lead the trial-length shift. Trial length matters because field service software's value compounds over weeks — a 14-day trial barely captures a single billing cycle and rarely captures customer follow-up workflows.
       </p>
 
       <h2>The integration consolidation</h2>
@@ -474,15 +474,15 @@ const articleSchema = {
         <li><strong>If you're at $5M+ revenue</strong> — the custom-quoted enterprise tier is unavoidable. Plan 30-60 minute discovery calls with 3-5 enterprise platforms. Cite published user-reported pricing as your anchor.</li>
         <li><strong>If you're on Xero</strong> (AU/NZ/UK markets) — Tradify, Simpro, BigChange are your strongest matches. US-rooted platforms typically have weaker Xero integration than QuickBooks integration.</li>
         <li><strong>If you do significant insurance restoration work</strong> — photo documentation discipline matters more than FSM choice. CompanyCam pairs with whatever FSM you use.</li>
-        <li><strong>If you're solo or 1-2 techs</strong> — Joist (Free / $13/mo Pro) and Markate (free) are genuinely viable starting points before committing to mid-tier FSM.</li>
+        <li><strong>If you're solo or 1-2 techs</strong> — Joist (from $10/mo Basics) and Markate (from about $40/mo) are genuinely viable starting points before committing to mid-tier FSM.</li>
       </ul>
 
       <h2>Implications for software vendors</h2>
 
       <ul>
         <li><strong>Custom-quoted pricing is leaving SMB demand on the table.</strong> The 60%+ of buyers in our quiz traffic who indicate they want under-$100/user pricing skip past your platform on the comparison page when they see no published price.</li>
-        <li><strong>14-day free trials are below market norm now</strong> — the 30-day cohort is winning evaluation conversions. Skimmer, MaintainX, Joist, and Limble all ship 30-day trials.</li>
-        <li><strong>Per-company pricing is a real competitive differentiator for SMB segments</strong>. Jobber's Connect tier and Housecall Pro flat-rate plans are pulling share from per-user competitors at 5+ user operations.</li>
+        <li><strong>14-day free trials are below market norm now</strong> — the 30-day cohort is winning evaluation conversions. Skimmer, MaintainX, and Limble all ship 30-day trials.</li>
+        <li><strong>Per-company pricing is a real competitive differentiator for SMB segments</strong>. Seat-inclusive bundles like Housecall Pro's Essentials and MAX are pulling share from per-user competitors at 5+ user operations.</li>
         <li><strong>Mobile-first UX is now table stakes, not differentiation.</strong> Every platform founded since 2015 ships mobile-first. The remaining differentiation is in the trade-specific workflow depth.</li>
       </ul>
 

@@ -114,11 +114,11 @@ const templatedFaqs = [
   },
   {
     q: `How much does ${verticalLower} software cost?`,
-    a: `Entry-level tools start around $39/month (Jobber) to $65/month (Housecall Pro). Mid-tier platforms like Service Fusion charge flat per-company rates around $195-400/month with unlimited users. Enterprise platforms like ServiceTitan and BuildOps are custom-quoted but typically run $250-800 per user per month, plus 3-6 month implementations.`,
+    a: `Entry-level tools start around $29/month billed annually (Jobber Core; $49 month-to-month) to $59/month billed annually (Housecall Pro Basic). Mid-tier platforms like Service Fusion charge flat per-company rates of $208-$533/month billed annually with unlimited users. Enterprise platforms like ServiceTitan and BuildOps are custom-quoted but typically run $250-800 per user per month, plus 3-6 month implementations.`,
   },
   {
     q: `What is the cheapest ${verticalLower} software?`,
-    a: `Joist offers a free tier and a $13/month Pro plan, making it the cheapest legitimate option — but it's quote-and-invoice only, with no scheduling or dispatching. For full FSM features at the low end, Jobber Core ($39/mo) is the best value. Connecteam offers a genuinely free tier for teams under 10.`,
+    a: `Joist starts at $10/month (Basics, up to 5 documents a month; its free tier was discontinued), making it one of the cheapest legitimate options, but below its new Run plan it is quote-and-invoice only, with no scheduling or dispatching. For full FSM features at the low end, Jobber Core ($29/month billed annually, $49 month-to-month) is the best value. Connecteam offers a genuinely free tier for teams under 10.`,
   },
   {
     q: `Is ${vertical.name === 'HVAC' ? 'ServiceTitan' : topPicks[0]?.name ?? 'this software'} worth it?`,
@@ -564,17 +564,17 @@ const breadcrumbs = [
       <h2 id="how-to-choose" class="scroll-mt-20">How to choose the right {verticalLower} software</h2>
       <h3>If you're solo or have 1–3 techs</h3>
       <p>
-        Start with <strong>Jobber Core ($39/mo)</strong> or <strong>Joist Pro ($13/mo)</strong>.
-        Joist is the cheapest legitimate option but only handles estimates and invoices — no
-        scheduling. If you need to schedule jobs across days, go Jobber. Don't pay for
+        Start with <strong>Jobber Core ($29/mo billed annually)</strong> or <strong>Joist Basics ($10/mo)</strong>.
+        Joist is one of the cheapest legitimate options but, below its new Run plan, only handles
+        estimates and invoices, with no scheduling. If you need to schedule jobs across days, go Jobber. Don't pay for
         enterprise features you won't touch.
       </p>
       <h3>If you have 4–15 techs and are growing</h3>
       <p>
-        This is where <strong>Housecall Pro Essentials</strong> ($169/mo), <strong>Jobber Connect</strong>{' '}
-        ($119/mo), and <strong>Service Fusion Starter</strong> ($195/mo, unlimited users) compete
-        head-to-head. Service Fusion wins on per-user economics once you cross ~6 techs because
-        the others charge per user. Housecall Pro wins if you want consumer financing baked in.
+        This is where <strong>Housecall Pro Essentials</strong> ($149/mo billed annually, 5 users included), <strong>Jobber Connect</strong>{' '}
+        ($99/mo billed annually), and <strong>Service Fusion Starter</strong> ($208/mo billed annually, unlimited users) compete
+        head-to-head. Service Fusion gets relatively cheaper as you add techs because every plan includes unlimited users,
+        while Housecall Pro and Jobber cost more as you add users. Housecall Pro wins if you want consumer financing baked in.
         Jobber wins on UX polish.
       </p>
       <h3>If you have 15+ techs or do $1M+ annual revenue</h3>

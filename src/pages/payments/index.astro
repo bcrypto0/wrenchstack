@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { paymentProcessors, paymentsByModel, PAYMENT_MODEL_META } from '../../lib/data';
+import { paymentProcessors, paymentsByModel, PAYMENT_MODEL_META, formatMonthlyFee } from '../../lib/data';
 import VendorLogo from '../../components/VendorLogo.astro';
 import MissingFromList from '../../components/MissingFromList.astro';
 
@@ -83,7 +83,7 @@ const itemListSchema = {
                     </div>
                   </div>
                   <div class="shrink-0 text-right text-xs">
-                    <p class="font-bold text-slate-900">{p.monthly_fee}</p>
+                    <p class="font-bold text-slate-900">{formatMonthlyFee(p.monthly_fee)}</p>
                     <p class="text-slate-500">monthly</p>
                   </div>
                 </div>

@@ -1178,7 +1178,8 @@ export interface MarketingAgency {
   services_offered: string[];
   pricing_model: string;
   typical_retainer_usd: string;
-  minimum_contract_months: number;
+  /** null when the agency publishes no minimum term. */
+  minimum_contract_months: number | null;
   verticals_specialty: string[];
   geographic_coverage: string;
   founded: number;
@@ -1294,7 +1295,7 @@ export function aiToolsByCategory(): Array<{ category: AiToolCategory; tools: Ai
 // Trade-agnostic — every contractor takes payments. Grouped by pricing MODEL
 // (flat-rate / interchange-plus / subscription), which is the core buyer decision.
 
-export type PaymentPricingModel = 'flat-rate' | 'interchange-plus' | 'subscription' | 'tiered';
+export type PaymentPricingModel = 'flat-rate' | 'interchange-plus' | 'subscription' | 'tiered' | 'custom-quote';
 
 export interface PaymentRatings {
   g2: number | null;
@@ -1311,7 +1312,8 @@ export interface PaymentProcessor {
   tagline: string;
   pricing_model: PaymentPricingModel;
   pricing_summary: string;
-  monthly_fee: string;
+  /** A number (dollars) for published flat fees, or descriptive text. */
+  monthly_fee: string | number;
   verticals_supported: string[];
   founded: number | null;
   headquartered: string;
@@ -1343,10 +1345,17 @@ export const PAYMENT_MODEL_META: Record<PaymentPricingModel, { label: string; bl
   'interchange-plus': { label: 'Interchange-Plus Processors', blurb: 'You pay the interchange cost set by the card networks plus a transparent fixed markup. Usually the cheapest and most transparent model, especially for higher-volume businesses.' },
   'subscription': { label: 'Subscription / Membership Pricing', blurb: 'A flat monthly fee plus interchange and a small per-transaction fee, with no percentage markup on processing. Saves money once monthly volume is high enough to amortize the subscription.' },
   'tiered': { label: 'Tiered Pricing', blurb: 'Rates bucketed into qualified, mid, and non-qualified tiers — generally the least transparent model; included for completeness.' },
+  'custom-quote': { label: 'Custom-Quote Processors', blurb: 'No public rate card: pricing is set in a sales quote. Get the full fee schedule, contract term and any early-termination fee in writing before you sign.' },
 };
 
+/** Display text for a processor's monthly fee (numbers become "$14.95"; text keeps its first clause). */
+export function formatMonthlyFee(fee: string | number): string {
+  if (typeof fee === 'number') return `$${fee}`;
+  return fee.split(';')[0].trim();
+}
+
 export function paymentsByModel(): Array<{ model: PaymentPricingModel; processors: PaymentProcessor[] }> {
-  const order: PaymentPricingModel[] = ['flat-rate', 'interchange-plus', 'subscription', 'tiered'];
+  const order: PaymentPricingModel[] = ['flat-rate', 'interchange-plus', 'subscription', 'tiered', 'custom-quote'];
   return order
     .map((model) => ({ model, processors: paymentProcessors.filter((p) => p.pricing_model === model) }))
     .filter((g) => g.processors.length > 0);
@@ -1689,6 +1698,23 @@ export function perUserMedian(): number {
 /** Median of the flat monthly platform fees. Safe to label "per month". */
 export function flatFeeMedian(): number {
   return medianUsd(flatFeeTools().map((t) => t.pricing.starting_at_usd!).filter((v) => v > 0));
+}
+
+/**
+ * How a tool's published entry price scales with team size, read from
+ * pricing_model. Use this instead of matching pricing_note text: until
+ * 2026-09-10 several pages guessed from phrases like "unlimited users" or
+ * "per month" and labelled per-user tools as flat per-company pricing.
+ */
+export type PriceScaling = 'per_user' | 'flat' | 'base_plus_seat' | 'free' | 'quote' | 'unclear';
+export function priceScaling(t: Tool): PriceScaling {
+  const p = t.pricing;
+  if (p.starting_at_usd === null) return 'quote';
+  if (p.starting_at_usd === 0) return 'free';
+  if (p.pricing_model === 'per_user' || p.pricing_model === 'annual_per_user') return 'per_user';
+  if (p.pricing_model === 'flat') return 'flat';
+  if (p.pricing_model === 'flat_plus_seat') return 'base_plus_seat';
+  return 'unclear';
 }
 
 /** Counts by pricing model, for prose that needs to say how big each group is. */

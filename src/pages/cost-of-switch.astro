@@ -15,6 +15,7 @@ const calculatorTools = tools.map((t) => ({
   startingPrice: t.pricing.starting_at_usd,
   tier: priceTier(t),
   pricingNote: t.pricing.pricing_note ?? '',
+  pricingModel: t.pricing.pricing_model ?? '',
   bestTeamSize: t.best_team_size ?? '',
 }));
 
@@ -170,7 +171,7 @@ const faqSchema = {
       </p>
 
       <ul>
-        <li><strong>New subscription cost</strong> for the target tool, scaled by team size if per-user.</li>
+        <li><strong>New subscription cost</strong> for the target tool, scaled by team size if per-user; plans with a base price plus seat fees are shown at the base price, with a note.</li>
         <li><strong>Implementation fee</strong> — what the vendor charges to set up your account. Tier-based estimate: $0 for entry-tier self-service, $1,500 for mid-tier, $15,000 for enterprise. Override if you have a quote.</li>
         <li><strong>Training cost</strong> — wages of techs and office staff during product training. Default assumption: 8 hours per tech at $50/hour fully-burdened, plus 60 office-staff hours at $35/hour.</li>
         <li><strong>Parallel-run cost</strong> — one extra month of paying both subscriptions during cutover. Most shops run both for 2-4 weeks; skipping this is operationally risky.</li>
@@ -249,8 +250,15 @@ const faqSchema = {
     }
 
     function isFlatRate(t) {
-      const note = (t.pricingNote || '').toLowerCase();
-      return note.includes('per company') || note.includes('per month') && !note.includes('per user');
+      // From pricing_model (2026-09-10).
+      return t.pricingModel === 'flat';
+    }
+
+    function isBasePlusSeat(t) {
+      // Base price with some seats included plus a per-seat fee. The included-seat
+      // count and seat fee aren't stored as data, so these are costed at the base
+      // and the result shows a caveat rather than a made-up per-head figure.
+      return t.pricingModel === 'flat_plus_seat';
     }
 
     function monthlyCostOf(t, techs) {
@@ -259,7 +267,7 @@ const faqSchema = {
         return 400 * techs;
       }
       if (t.startingPrice === 0) return 0;
-      if (isFlatRate(t)) return t.startingPrice;
+      if (isFlatRate(t) || isBasePlusSeat(t)) return t.startingPrice;
       return t.startingPrice * techs;
     }
 
@@ -303,6 +311,11 @@ const faqSchema = {
       const toTCO12 = toMonthly * 12 + totalSwitchingCost;
       const netDelta12 = toTCO12 - fromTCO12;
 
+      const seatTools = [...new Set([toTool, ...(currentCostInput.value ? [] : [fromTool])])].filter(isBasePlusSeat);
+      const seatNote = seatTools.length
+        ? `<p class="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">${seatTools.map((t) => t.name).join(' and ')} ${seatTools.length === 1 ? 'charges' : 'charge'} a base price that includes some users, plus a fee for each extra seat. This estimate uses the base price only, so the real monthly cost is higher for larger teams; check the pricing note on the tool page.</p>`
+        : '';
+
       let breakEvenLabel;
       if (monthlySavings <= 0) {
         breakEvenLabel = 'Never on price alone — new tool costs the same or more';
@@ -335,6 +348,7 @@ const faqSchema = {
       outputDiv.innerHTML = `
         <h2 class="mb-4 text-2xl font-bold text-slate-900">Your switching cost: ${fromTool.name} → ${toTool.name}</h2>
         <p class="mb-6 text-sm text-slate-500">At ${techs} tech${techs === 1 ? '' : 's'}.</p>
+        ${seatNote}
 
         <div class="grid gap-4 sm:grid-cols-2">
           <div class="rounded-lg border border-slate-200 bg-white p-4">

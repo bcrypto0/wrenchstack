@@ -695,6 +695,7 @@ const breadcrumbs = [
         data-pricing-widget
         data-starting-price={tool.pricing.starting_at_usd ?? ''}
         data-pricing-note={tool.pricing.pricing_note ?? ''}
+        data-pricing-model={tool.pricing.pricing_model ?? ''}
         data-tool-name={tool.name}
       >
         <div class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-700">
@@ -1001,8 +1002,7 @@ const breadcrumbs = [
     })();
 
     // Per-tool pricing widget: takes team size input, shows live monthly +
-    // annual cost. Detects per-user vs per-company pricing from the
-    // pricing_note hint.
+    // annual cost. Reads per-user vs flat structure from pricing_model.
     (() => {
       const widget = document.querySelector<HTMLElement>('[data-pricing-widget]');
       if (!widget) return;
@@ -1021,8 +1021,12 @@ const breadcrumbs = [
       const isCustomQuoted = !startingPriceRaw || startingPriceRaw === '';
       const startingPrice = isCustomQuoted ? 400 : parseFloat(startingPriceRaw);
       const isFree = startingPrice === 0;
-      const isFlat = pricingNote.includes('per company') ||
-                     (pricingNote.includes('per month') && !pricingNote.includes('per user'));
+      // Structure comes from pricing_model (hand-classified 2026-09-09); the old
+      // note-text guess treated any note mentioning "per month" as per-company.
+      const pricingModel = widget.dataset.pricingModel ?? '';
+      const isPerUser = pricingModel === 'per_user' || pricingModel === 'annual_per_user';
+      const isFlat = pricingModel === 'flat';
+      const isBasePlusSeat = pricingModel === 'flat_plus_seat';
 
       function format(n: number): string {
         return '$' + Math.round(n).toLocaleString('en-US');
@@ -1036,16 +1040,20 @@ const breadcrumbs = [
           noteEl!.innerHTML = `${toolName} has a free tier — usable indefinitely for solo or 1-2 person operations. Paid tiers unlock advanced features once your team grows. For an exact quote at your size and feature mix, request pricing from ${toolName}.`;
           return;
         }
-        const monthly = isFlat ? startingPrice : startingPrice * techs;
+        const monthly = isPerUser || isCustomQuoted ? startingPrice * techs : startingPrice;
         const annual = monthly * 12;
         monthlyEl!.textContent = format(monthly);
         annualEl!.textContent = format(annual);
         if (isCustomQuoted) {
           noteEl!.innerHTML = `${toolName} uses custom-quoted pricing. We model it at <strong>$400/user/mo</strong> as the mid-case (range: $250-$800/user/mo). Actual quotes vary significantly by team size and modules. Request a real quote from ${toolName} for precision.`;
         } else if (isFlat) {
-          noteEl!.innerHTML = `${toolName} uses <strong>per-company</strong> pricing — the monthly cost doesn't scale with team size. Unlimited techs included.`;
-        } else {
+          noteEl!.innerHTML = `${toolName} charges a <strong>flat monthly price per plan</strong>, so this estimate doesn't scale with team size. Plans can cap users or usage, so check which plan fits your team in the pricing note above.`;
+        } else if (isBasePlusSeat) {
+          noteEl!.innerHTML = `${toolName} charges a <strong>base price that includes some users</strong>, plus a fee for each extra seat. This estimate shows the base price only; see the pricing note above for seat costs.`;
+        } else if (isPerUser) {
           noteEl!.innerHTML = `${toolName} uses <strong>per-user</strong> pricing at $${startingPrice}/user/mo on the entry tier. Cost scales linearly with team size. Higher tiers add features at higher per-user rates.`;
+        } else {
+          noteEl!.innerHTML = `${toolName}'s published entry price is $${startingPrice}/mo. How it scales with team size isn't clear from the vendor's page, so this estimate doesn't multiply it; check the pricing note above.`;
         }
       }
 

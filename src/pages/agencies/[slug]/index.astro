@@ -74,7 +74,7 @@ const faqSchema = {
       <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
         <span>Founded {agency.founded}</span>
         <span>HQ {agency.headquartered}</span>
-        <span>{agency.minimum_contract_months}-month minimum</span>
+        <span>{agency.minimum_contract_months === null ? 'Minimum term not published' : `${agency.minimum_contract_months}-month minimum`}</span>
         <span>Verified: {agency.verified_date}</span>
       </div>
 
@@ -112,7 +112,7 @@ const faqSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700 leading-relaxed">
-        <strong class="text-slate-900">{agency.name}</strong> is best for {agency.best_for}. Pricing: {agency.typical_retainer_usd}. Minimum: {agency.minimum_contract_months}-month commitment. {agency.weaknesses}.
+        <strong class="text-slate-900">{agency.name}</strong> is best for {agency.best_for}. Pricing: {agency.typical_retainer_usd}. {agency.minimum_contract_months === null ? 'No minimum term is published.' : `Minimum: ${agency.minimum_contract_months}-month commitment.`} {agency.weaknesses}.
       </p>
     </section>
 
@@ -172,7 +172,7 @@ const faqSchema = {
           </div>
           <div>
             <dt class="text-xs uppercase tracking-wider text-slate-500">Minimum contract</dt>
-            <dd class="mt-1 font-semibold text-slate-900">{agency.minimum_contract_months}-month{agency.minimum_contract_months === 1 ? '' : 's'}</dd>
+            <dd class="mt-1 font-semibold text-slate-900">{agency.minimum_contract_months === null ? 'Not published' : `${agency.minimum_contract_months}-month${agency.minimum_contract_months === 1 ? '' : 's'}`}</dd>
           </div>
           <div>
             <dt class="text-xs uppercase tracking-wider text-slate-500">Pricing model</dt>

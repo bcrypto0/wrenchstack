@@ -10,6 +10,7 @@ import {
 import FreshnessBadge from '../../../components/FreshnessBadge.astro';
 import { isComparisonIndexable } from '../../../lib/compare-index.mjs';
 import MissingFromList from '../../../components/MissingFromList.astro';
+import { priceScaling } from '../../../lib/data';
 
 export async function getStaticPaths() {
   // Generate both directions per pair (e.g. jobber-vs-servicetitan AND
@@ -257,17 +258,20 @@ function pricingAnalysis(): string {
   }
 
   // Both have public pricing
-  const aIsFlat = a.pricing.pricing_note?.toLowerCase().includes('unlimited users');
-  const bIsFlat = b.pricing.pricing_note?.toLowerCase().includes('unlimited users');
+  // Structure comes from pricing_model (2026-09-10); matching 'unlimited users'
+  // in the note text called per-user tools flat.
+  const aIsFlat = priceScaling(a) === 'flat';
+  const bIsFlat = priceScaling(b) === 'flat';
+  const flatVsPerUser = (aIsFlat && priceScaling(b) === 'per_user') || (bIsFlat && priceScaling(a) === 'per_user');
   const aTopPrice = a.pricing.tier_prices_usd?.[a.pricing.tiers.length - 1];
   const bTopPrice = b.pricing.tier_prices_usd?.[b.pricing.tiers.length - 1];
 
   let analysis = `${a.name} starts at $${a.pricing.starting_at_usd}/mo on ${a.pricing.tiers[0]}${aTopPrice && typeof aTopPrice === 'number' ? ` and scales to $${aTopPrice}/mo on ${a.pricing.tiers[a.pricing.tiers.length - 1]}` : ''}. ${b.name} starts at $${b.pricing.starting_at_usd}/mo on ${b.pricing.tiers[0]}${bTopPrice && typeof bTopPrice === 'number' ? ` and scales to $${bTopPrice}/mo on ${b.pricing.tiers[b.pricing.tiers.length - 1]}` : ''}.`;
 
-  if (aIsFlat || bIsFlat) {
+  if (flatVsPerUser) {
     const flatTool = aIsFlat ? a : b;
     const perUserTool = aIsFlat ? b : a;
-    analysis += ` ${flatTool.name} uses flat per-company pricing (unlimited users at every tier) while ${perUserTool.name} is per-user. The math crossover happens around 6-8 users — past that, ${flatTool.name} becomes meaningfully cheaper.`;
+    analysis += ` ${flatTool.name} charges a flat monthly price per plan while ${perUserTool.name} charges per user, so ${flatTool.name} gets relatively cheaper as your team grows; check each plan's user or usage limits.`;
   } else if (a.pricing.starting_at_usd !== b.pricing.starting_at_usd) {
     const diff = Math.abs(a.pricing.starting_at_usd - b.pricing.starting_at_usd);
     const cheaper = cheaperTool!;
@@ -310,7 +314,7 @@ function getPros(t: Tool, isCheaper: boolean, isHigherRated: boolean): string[] 
   if (t.verticals.length >= 5) pros.push(`Covers ${t.verticals.length} trade verticals — strong multi-vertical fit`);
   if (t.key_features.length >= 8) pros.push(`Broad feature coverage (${t.key_features.length} core features)`);
   if (t.founded && t.founded <= 2015) pros.push(`${2026 - t.founded} years of product maturity (founded ${t.founded})`);
-  if (t.pricing.pricing_note?.toLowerCase().includes('unlimited users')) pros.push(`Flat per-company pricing — unlimited users at every tier`);
+  if (priceScaling(t) === 'flat') pros.push(`Flat monthly price per plan, not per user`);
 
   return pros.slice(0, 5);
 }
