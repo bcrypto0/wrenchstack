@@ -22,7 +22,7 @@ const calculatorTools = tools.map((t) => ({
 const faqs = [
   {
     q: 'How do you estimate the implementation cost for the new tool?',
-    a: 'Implementation fees are tier-based estimates from observed deployments: entry-tier tools (under $100/user/mo) typically have $0-500 self-service setup; mid-tier tools ($100-249/user/mo) cost $500-2,000 with optional paid onboarding; enterprise tools ($250+/user/mo or custom-quoted) commonly hit $5,000-50,000 in implementation, with $15,000 a defensible mid-case. The calculator uses $0 / $1,500 / $15,000 as the defaults for entry / mid / enterprise. You can override if you have a real vendor quote.',
+    a: 'Implementation fees are tier-based estimates from observed deployments: free-tier tools have $0 self-service setup; entry-tier tools (under $100/user/mo) typically have $0-500 self-service setup; mid-tier tools ($100-249/user/mo) cost $500-2,000 with optional paid onboarding; enterprise and custom-quoted tools ($250+/user/mo or no published price) commonly hit $5,000-50,000 in implementation, with $15,000 a defensible mid-case. The calculator uses $0 / $500 / $1,500 / $15,000 as the defaults for free / entry / mid / enterprise (custom-quoted tools use the enterprise default too). You can override if you have a real vendor quote.',
   },
   {
     q: 'Why include a parallel-run month?',
@@ -232,6 +232,7 @@ const faqSchema = {
       entry: 500,
       mid: 1500,
       enterprise: 15000,
+      'quote-only': 15000,
     };
     const TRAINING_HOURS_PER_TECH = 8;
     const TECH_RATE_PER_HOUR = 50;

@@ -176,7 +176,7 @@ const articleSchema = {
     <section class="mb-12 rounded-lg border border-orange-200 bg-orange-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">TL;DR for journalists and analysts</h2>
       <ul class="space-y-1 text-sm text-slate-700">
-        <li>· Median entry-tier pricing in trades software: <strong>${medianPrice}/month per user</strong> (range ${minPrice}-${maxPrice})</li>
+        <li>· Median entry-tier pricing in trades software: <strong>${medianPrice}/month</strong> blended across per-user and flat-fee plans (range ${minPrice}-${maxPrice}) — per-user median <strong>${perUserMedian()}/user/month</strong>, flat-fee median <strong>${flatFeeMedian()}/month</strong></li>
         <li>· <strong>{customQuotedPct}%</strong> of platforms use custom-quoted "request a demo" pricing instead of publishing tier prices</li>
         <li>· <strong>{withQuickBooks}</strong> of {tools.length} platforms integrate with QuickBooks ({Math.round(withQuickBooks/tools.length*100)}%) — the universal integration benchmark</li>
         <li>· <strong>{post2015}</strong> platforms founded since 2015 — modern-cloud cohort now {Math.round(post2015/tools.length*100)}% of market</li>
@@ -480,7 +480,7 @@ const articleSchema = {
       <h2>Implications for software vendors</h2>
 
       <ul>
-        <li><strong>Custom-quoted pricing is leaving SMB demand on the table.</strong> The 60%+ of buyers in our quiz traffic who indicate they want under-$100/user pricing skip past your platform on the comparison page when they see no published price.</li>
+        <li><strong>Custom-quoted pricing is leaving SMB demand on the table.</strong> {customQuotedPct}% of platforms in our directory publish no price at all. Buyers who are comparison-shopping skip straight to whichever competitor gives them a number.</li>
         <li><strong>14-day free trials are below market norm now</strong> — the 30-day cohort is winning evaluation conversions. Skimmer, MaintainX, and Limble all ship 30-day trials.</li>
         <li><strong>Per-company pricing is a real competitive differentiator for SMB segments</strong>. Seat-inclusive bundles like Housecall Pro's Essentials and MAX are pulling share from per-user competitors at 5+ user operations.</li>
         <li><strong>Mobile-first UX is now table stakes, not differentiation.</strong> Every platform founded since 2015 ships mobile-first. The remaining differentiation is in the trade-specific workflow depth.</li>
