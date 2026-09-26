@@ -994,7 +994,8 @@ export function leadGenTier(p: LeadGenPlatform): 'S' | 'A' | 'F' {
   if (p.reputation_flag) return 'F';
   const tp = p.ratings.trustpilot;
   if (tp !== null && tp < 2.5) return 'F';
-  // Tier S: strongly positive sentiment + exclusive/pay-per-call models + real affiliate
+  // Tier S: positive sentiment + exclusive/pay-per-call/directory models.
+  // Affiliate status is not an input.
   if (
     (p.lead_model === 'exclusive' || p.lead_model === 'pay-per-call' || p.lead_model === 'directory-listing') &&
     p.ratings.reddit_sentiment.toLowerCase().includes('positive') &&
@@ -1061,7 +1062,7 @@ export function insuranceProvidersForVertical(verticalSlug: string): InsurancePr
   return insuranceProviders.filter((p) => p.verticals.includes(verticalSlug));
 }
 
-/** Tier classification: S (strong reputation + good affiliate or strong recommendation), A (workable),
+/** Tier classification: S (strong reputation or strong recommendation), A (workable),
  *  F (reputation_flag warning required). */
 export function insuranceTier(p: InsuranceProvider): 'S' | 'A' | 'F' {
   if (p.reputation_flag) return 'F';

@@ -5,7 +5,7 @@ import { payrollServices, payrollTier, type PayrollService } from '../../lib/dat
 import MissingFromList from '../../components/MissingFromList.astro';
 
 const pageTitle = `Best Payroll Software for Trades Contractors (2026)`;
-const pageDescription = `Independent reviews of ${payrollServices.length} payroll services for HVAC, plumbing, electrical, roofing, and other trades — Gusto, OnPay, Patriot, Hourly.io (with WC), QuickBooks Payroll, and more. Single-vendor focus on Gusto for affiliate economics; honest coverage of ADP and Paychex renewal patterns.`;
+const pageDescription = `Independent reviews of ${payrollServices.length} payroll services for HVAC, plumbing, electrical, roofing, and other trades — Gusto, OnPay, Patriot, Hourly.io (with WC), QuickBooks Payroll, and more. Honest coverage of ADP and Paychex renewal patterns.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -17,7 +17,7 @@ const byTier: Record<'S' | 'A' | 'B', PayrollService[]> = { S: [], A: [], B: [] 
 for (const s of payrollServices) byTier[payrollTier(s)].push(s);
 
 const tierMeta = {
-  S: { label: 'Tier S — recommended for SMB trades', description: 'Modern SMB payroll with best product + affiliate economics: Gusto leads on affiliate ($300-$1,000 via PartnerStack), OnPay on flat pricing, Patriot on lowest cost, Hourly.io on integrated WC+payroll.', badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
+  S: { label: 'Tier S — recommended for SMB trades', description: 'Modern SMB and trades-specialty payroll rated 4.5+ on G2: OnPay on flat pricing, Patriot on lowest cost, Hourly.io on integrated WC+payroll, Fingercheck on certified payroll and crew time tracking.', badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
   A: { label: 'Tier A — context-specific fit', description: 'Workable when you\'re already on the parent ecosystem (QuickBooks, Square) or genuinely need mid-market HR consolidation (Rippling).', badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
   B: { label: 'Tier B — legacy or wrong-shape', description: 'Legacy big-name payroll with documented aggressive renewal-pricing patterns (ADP Run, Paychex Flex) or PEO model that doesn\'t fit trades operations (Justworks). Listed for completeness with structural concerns.', badgeColor: 'bg-amber-100 text-amber-900 ring-amber-300', cardBorder: 'border-amber-300' },
 };
@@ -140,7 +140,7 @@ const itemListSchema = {
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Where to start</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        For most SMB trades contractors with 2-20 W-2 employees, the recommendation is straightforward: <strong>Gusto</strong> — it's the modern SMB payroll standard, has the cleanest tax-filing automation, the best mixed W-2 + 1099 handling, and the highest affiliate payouts in our entire directory (which means we have aligned incentives to recommend it, which we'd do anyway). For 1-3 employee shops where every dollar counts: Patriot. For trades shops wanting integrated workers comp + payroll: Hourly.io.
+        For most SMB trades contractors with 2-20 W-2 employees, the recommendation is straightforward: <strong>Gusto</strong> — it's the modern SMB payroll standard, has the cleanest tax-filing automation, and the best mixed W-2 + 1099 handling. For 1-3 employee shops where every dollar counts: Patriot. For trades shops wanting integrated workers comp + payroll: Hourly.io.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/payroll/gusto/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Start with Gusto →</a>
