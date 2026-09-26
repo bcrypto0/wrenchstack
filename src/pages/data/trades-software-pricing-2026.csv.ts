@@ -32,6 +32,9 @@ export const GET: APIRoute = () => {
     'headquartered',
     'g2_rating',
     'capterra_rating',
+    // 2026-09-26: appended last so existing column positions do not move. Without it,
+    // per-user and flat-fee entry prices cannot be told apart.
+    'pricing_model',
   ];
 
   const rows = tools.map((t) => {
@@ -53,6 +56,7 @@ export const GET: APIRoute = () => {
       t.headquartered,
       t.g2_rating,
       t.capterra_rating,
+      p.pricing_model ?? 'unclear',
     ]
       .map(csvField)
       .join(',');
@@ -64,6 +68,7 @@ export const GET: APIRoute = () => {
     '# Attribution: WrenchStack, https://wrenchstack.com/trends-2026/',
     '# Every price was checked by a human against the vendor pricing page on the pricing_verified_date shown per row.',
     '# quote_only=true means the vendor publishes no price at all (contact-sales only).',
+    '# pricing_model: per_user, annual_per_user, flat, flat_plus_seat, free_tier, quote_only or unclear. Compare starting_price_usd_month only between rows with the same pricing_model.',
     `# Rows: ${tools.length}. Generated at build time from the live directory; re-download for the current version.`,
   ].join('\n');
 
