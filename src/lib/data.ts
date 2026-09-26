@@ -155,6 +155,15 @@ export function rankToolsForVertical(verticalSlug: string): Tool[] {
   });
 }
 
+// End a data-supplied phrase with exactly one full stop. Detail pages used to
+// write `{field}.`, which printed ".." whenever the data already ended in a
+// period (73 of 153 detail pages, fixed 2026-09-26).
+export function asSentence(s: string | null | undefined): string {
+  const t = (s ?? '').trim();
+  if (!t) return '';
+  return /[.!?]["')\]]*$/.test(t) ? t : `${t}.`;
+}
+
 export function formatPrice(t: Tool): string {
   const p = t.pricing;
   if (p.starting_at_usd === null) return 'Custom quote';

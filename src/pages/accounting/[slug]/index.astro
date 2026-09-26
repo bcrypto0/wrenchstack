@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { accountingSoftware, ACCOUNTING_POSITION_META, type AccountingSoftware } from '../../../lib/data';
+import { asSentence, accountingSoftware, ACCOUNTING_POSITION_META, type AccountingSoftware } from '../../../lib/data';
 
 export async function getStaticPaths() {
   return accountingSoftware.map((a) => ({
@@ -108,7 +108,7 @@ const faqSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700 leading-relaxed">
-        <strong class="text-slate-900">{software.name}</strong> is best for {software.best_for}. {software.weaknesses}.
+        <strong class="text-slate-900">{software.name}</strong> is best for {asSentence(software.best_for)} {asSentence(software.weaknesses)}
       </p>
     </section>
 

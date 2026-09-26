@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { paymentProcessors, PAYMENT_MODEL_META, formatMonthlyFee, type PaymentProcessor } from '../../../lib/data';
+import { asSentence, paymentProcessors, PAYMENT_MODEL_META, formatMonthlyFee, type PaymentProcessor } from '../../../lib/data';
 
 export async function getStaticPaths() {
   return paymentProcessors.map((p) => ({
@@ -105,7 +105,7 @@ const faqSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700 leading-relaxed">
-        <strong class="text-slate-900">{processor.name}</strong> is best for {processor.best_for}. {processor.weaknesses}.
+        <strong class="text-slate-900">{processor.name}</strong> is best for {asSentence(processor.best_for)} {asSentence(processor.weaknesses)}
       </p>
     </section>
 

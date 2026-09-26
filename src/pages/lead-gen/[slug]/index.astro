@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import {
+import { asSentence,
   leadGenPlatforms,
   getLeadGenPlatform,
   leadGenTier,
@@ -155,7 +155,7 @@ const faqSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700 leading-relaxed">
-        <strong class="text-slate-900">{platform.name}</strong> is best for {platform.best_for}. Pricing: {platform.typical_cost}. Lead model: {platform.exclusivity}. {platform.weaknesses}.
+        <strong class="text-slate-900">{platform.name}</strong> is best for {asSentence(platform.best_for)} Pricing: {asSentence(platform.typical_cost)} Lead model: {asSentence(platform.exclusivity)} {asSentence(platform.weaknesses)}
       </p>
     </section>
 

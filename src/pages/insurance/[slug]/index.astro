@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import {
+import { asSentence,
   insuranceProviders,
   insuranceTier,
   type InsuranceProvider,
@@ -122,7 +122,7 @@ const faqSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700 leading-relaxed">
-        <strong class="text-slate-900">{provider.name}</strong> is best for {provider.best_for}. Quote speed: {provider.quote_speed}. Pricing: {provider.typical_premium_range}. {provider.weaknesses}.
+        <strong class="text-slate-900">{provider.name}</strong> is best for {asSentence(provider.best_for)} Quote speed: {asSentence(provider.quote_speed)} Pricing: {asSentence(provider.typical_premium_range)} {asSentence(provider.weaknesses)}
       </p>
     </section>
 

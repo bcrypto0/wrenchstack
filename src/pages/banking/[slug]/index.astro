@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { bankingProviders, BANKING_FOCUS_META, type BankingProvider } from '../../../lib/data';
+import { asSentence, bankingProviders, BANKING_FOCUS_META, type BankingProvider } from '../../../lib/data';
 
 export async function getStaticPaths() {
   return bankingProviders.map((p) => ({
@@ -104,7 +104,7 @@ const faqSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700 leading-relaxed">
-        <strong class="text-slate-900">{provider.name}</strong> is best for {provider.best_for}. {provider.weaknesses}.
+        <strong class="text-slate-900">{provider.name}</strong> is best for {asSentence(provider.best_for)} {asSentence(provider.weaknesses)}
       </p>
     </section>
 

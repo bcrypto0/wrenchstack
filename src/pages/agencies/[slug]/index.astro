@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { marketingAgencies, agencyTier, type MarketingAgency, verticals, verticalToUrl } from '../../../lib/data';
+import { asSentence, marketingAgencies, agencyTier, type MarketingAgency, verticals, verticalToUrl } from '../../../lib/data';
 
 export async function getStaticPaths() {
   return marketingAgencies.map((a) => ({
@@ -112,7 +112,7 @@ const faqSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700 leading-relaxed">
-        <strong class="text-slate-900">{agency.name}</strong> is best for {agency.best_for}. Pricing: {agency.typical_retainer_usd}. {agency.minimum_contract_months === null ? 'No minimum term is published.' : `Minimum: ${agency.minimum_contract_months}-month commitment.`} {agency.weaknesses}.
+        <strong class="text-slate-900">{agency.name}</strong> is best for {asSentence(agency.best_for)} Pricing: {asSentence(agency.typical_retainer_usd)} {agency.minimum_contract_months === null ? 'No minimum term is published.' : `Minimum: ${agency.minimum_contract_months}-month commitment.`} {asSentence(agency.weaknesses)}
       </p>
     </section>
 

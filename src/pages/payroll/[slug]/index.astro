@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import {
+import { asSentence,
   payrollServices,
   payrollTier,
   type PayrollService,
@@ -120,7 +120,7 @@ const faqSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700 leading-relaxed">
-        <strong class="text-slate-900">{service.name}</strong> is best for {service.best_for}. Pricing: {service.pricing_summary}. {service.weaknesses}.
+        <strong class="text-slate-900">{service.name}</strong> is best for {asSentence(service.best_for)} Pricing: {asSentence(service.pricing_summary)} {asSentence(service.weaknesses)}
       </p>
     </section>
 

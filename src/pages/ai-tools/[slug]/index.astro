@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { aiTools, AI_CATEGORY_META, type AiTool } from '../../../lib/data';
+import { asSentence, aiTools, AI_CATEGORY_META, type AiTool } from '../../../lib/data';
 
 export async function getStaticPaths() {
   return aiTools.map((t) => ({
@@ -107,7 +107,7 @@ const faqSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700 leading-relaxed">
-        <strong class="text-slate-900">{tool.name}</strong> is best for {tool.best_for}. Pricing: {tool.pricing_summary}. {tool.weaknesses}.
+        <strong class="text-slate-900">{tool.name}</strong> is best for {asSentence(tool.best_for)} Pricing: {asSentence(tool.pricing_summary)} {asSentence(tool.weaknesses)}
       </p>
     </section>
 
