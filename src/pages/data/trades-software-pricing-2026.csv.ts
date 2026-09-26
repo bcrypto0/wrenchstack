@@ -66,7 +66,7 @@ export const GET: APIRoute = () => {
     '# WrenchStack Trades Software Pricing Dataset 2026',
     '# License: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)',
     '# Attribution: WrenchStack, https://wrenchstack.com/trends-2026/',
-    '# Every price was checked by a human against the vendor pricing page on the pricing_verified_date shown per row.',
+    '# Every price was checked against the vendor\'s own pricing page on the pricing_verified_date shown per row.',
     '# quote_only=true means the vendor publishes no price at all (contact-sales only).',
     '# pricing_model: per_user, annual_per_user, flat, flat_plus_seat, free_tier, quote_only or unclear. Compare starting_price_usd_month only between rows with the same pricing_model.',
     `# Rows: ${tools.length}. Generated at build time from the live directory; re-download for the current version.`,

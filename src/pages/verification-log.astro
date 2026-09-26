@@ -13,6 +13,8 @@ import {
   bankingProviders,
 } from '../lib/data';
 
+const quoteOnlyPct = Math.round((tools.filter((t) => t.pricing?.starting_at_usd === null).length / tools.length) * 100);
+
 // Proof-of-life page: every verification date in the directory, aggregated at
 // build time. A "verified" claim only means something if the dates are alive;
 // this page makes the heartbeat public.
@@ -113,7 +115,7 @@ const breadcrumbs = [
 
     <h2>What a verification is here</h2>
     <p>
-      A <strong>human checked the claim against a named primary source on the date shown</strong>, almost always the vendor's own pricing page. Not a crawler reading marketing copy, not an AI inference, not a vendor-supplied form. When a vendor is quote-only, the verification records that no public price existed on that date, which is itself a finding: <a href="/trends-2026/">36% of the category publishes no price at all</a>.
+      The <strong>claim was checked against a named primary source on the date shown</strong>, almost always the vendor's own pricing page. Not a third-party listing, not an estimate, not a vendor-supplied form. When a vendor is quote-only, the verification records that no public price existed on that date, which is itself a finding: <a href="/trends-2026/">{quoteOnlyPct}% of the category publishes no price at all</a>.
     </p>
     <p>
       The full directory re-verifies on a monthly cycle, and any vendor correction backed by a primary source is applied the same day. The complete rules live on the <a href="/methodology/">methodology page</a>; the warnings this process produces live on the <a href="/reputation-flags/">reputation ledger</a>.

@@ -3,8 +3,8 @@
 //
 // Why it matters: a sitemap with no lastmod tells Google nothing about what
 // changed, so on a young domain with thousands of URLs the crawler has no
-// signal for where to spend budget. We already record, per vendor, the date a
-// human last verified that entry. Feeding those dates to the sitemap points
+// signal for where to spend budget. We already record, per vendor, the date
+// that entry was last verified. Feeding those dates to the sitemap points
 // crawlers at genuinely updated pages.
 //
 // Deliberately honest: we do NOT stamp every URL with today's date to look

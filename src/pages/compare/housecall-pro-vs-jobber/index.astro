@@ -6,7 +6,7 @@ import MissingFromList from '../../../components/MissingFromList.astro';
 // The definitive, hand-written version of the most-searched residential FSM
 // comparison. This static route overrides the generic [pair] template (which
 // excludes this slug in getStaticPaths). Every price on this page was
-// re-verified by a human against both vendors' live pricing pages on
+// re-verified against both vendors' live pricing pages on
 // 2026-08-27; the seat-cost tables are computed from those published numbers
 // at build time. 2026-09-10: the monthly verification run re-checked Jobber's
 // plan ladder; the 2026-08-27 report that Plus had been retired was wrong.
@@ -90,7 +90,7 @@ const breadcrumbs = [
 
 <Layout
   title="Jobber vs Housecall Pro (2026): Prices Verified, Seat Math Done"
-  description={`The most-searched FSM comparison, with both vendors' prices human-verified ${VERIFIED}: Jobber's new team-size pricing ($29+ annual) vs Housecall Pro's seat bundles ($59 to $449+ real-world). Who wins by trade, by team size, and by total cost.`}
+  description={`The most-searched FSM comparison, with both vendors' prices verified ${VERIFIED}: Jobber's new team-size pricing ($29+ annual) vs Housecall Pro's seat bundles ($59 to $449+ real-world). Who wins by trade, by team size, and by total cost.`}
   breadcrumbs={breadcrumbs}
   canonical="https://wrenchstack.com/compare/housecall-pro-vs-jobber/"
 >
@@ -100,7 +100,7 @@ const breadcrumbs = [
       <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-orange-600">Head to head</p>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl m-0">Jobber vs Housecall Pro (2026)</h1>
       <p class="mt-3 text-lg text-slate-600">
-        The most-searched comparison in residential field service, and the one where both vendors' pricing changed under everyone's published reviews. Every price below was checked by a human against both live pricing pages on {VERIFIED}, and Jobber's plan ladder was re-checked on {JOBBER_RECHECKED}.
+        The most-searched comparison in residential field service, and the one where both vendors' pricing changed under everyone's published reviews. Every price below was checked against both live pricing pages on {VERIFIED}, and Jobber's plan ladder was re-checked on {JOBBER_RECHECKED}.
       </p>
     </div>
 
@@ -275,7 +275,7 @@ const breadcrumbs = [
 
     <div class="not-prose mt-10 rounded-lg bg-slate-50 p-5 text-sm text-slate-600">
       <p class="m-0">
-        <strong>How this page was made:</strong> prices were checked by a human against
+        <strong>How this page was made:</strong> prices were checked against
         <a href="https://www.getjobber.com/pricing/" rel="noopener nofollow" class="underline">getjobber.com/pricing</a> and
         <a href="https://www.housecallpro.com/pricing/" rel="noopener nofollow" class="underline">housecallpro.com/pricing</a> on {VERIFIED} (Jobber's plan ladder re-checked {JOBBER_RECHECKED}); the seat-cost table is computed from those published numbers at build time, and scores come from the same data as every listing (see the <a href="/verification-log/" class="underline">verification log</a>). Neither vendor paid for placement or saw this page before publication, and no AI-crawled "verified facts" appear here. Full reviews: <a href="/tools/jobber/" class="underline">Jobber</a> · <a href="/tools/housecall-pro/" class="underline">Housecall Pro</a>.
       </p>

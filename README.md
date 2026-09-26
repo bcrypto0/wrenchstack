@@ -2,7 +2,7 @@
 
 **The independent vendor directory for trades and construction businesses.** Live at [wrenchstack.com](https://wrenchstack.com).
 
-WrenchStack reviews 125 field-service software platforms, 153 adjacent US vendors (insurance, payroll, lead generation, payments, financing, banking, accounting, marketing agencies, AI tools), and 448 listings across 17 international markets. Every price is checked by a human against the vendor's own pricing page and carries a per-vendor verification date. Vendors with documented problems get a public [reputation flag](https://wrenchstack.com/reputation-flags/), and no vendor can pay for placement, scores, or flag removal.
+WrenchStack reviews 125 field-service software platforms, 153 adjacent US vendors (insurance, payroll, lead generation, payments, financing, banking, accounting, marketing agencies, AI tools), and 448 listings across 17 international markets. Every price is checked against the vendor's own pricing page and carries a per-vendor verification date. Vendors with documented problems get a public [reputation flag](https://wrenchstack.com/reputation-flags/), and no vendor can pay for placement, scores, or flag removal.
 
 - **Market report:** [wrenchstack.com/trends-2026](https://wrenchstack.com/trends-2026/) (36% of trades software publishes no price at all)
 - **Open dataset:** [CSV](https://wrenchstack.com/data/trades-software-pricing-2026.csv) / [JSON](https://wrenchstack.com/data/trades-software-pricing-2026.json), CC BY 4.0, regenerated on every build
