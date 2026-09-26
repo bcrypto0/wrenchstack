@@ -17,7 +17,7 @@ const byTier: Record<'S' | 'A' | 'F', MarketingAgency[]> = { S: [], A: [], F: []
 for (const a of marketingAgencies) byTier[agencyTier(a)].push(a);
 
 const tierMeta = {
-  S: { label: 'Tier S — strongest recommendations', description: 'Trade-specific specialists (Hook Agency for roofing, Plumbing & HVAC SEO for plumbing/HVAC) and the strongest home-services generalists (Blue Corona, Adapt Digital). Best combination of expertise + reputation + accessible pricing for typical SMB trades operations.', badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
+  S: { label: 'Tier S — strongest recommendations', description: 'Agencies with strongly positive documented reputations, mostly trade-specific specialists (Hook Agency for roofing, Plumbing & HVAC SEO for plumbing/HVAC, RYNO for residential HVAC, plumbing, electrical, and roofing). Best combination of expertise + reputation + accessible pricing for typical SMB trades operations.', badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
   A: { label: 'Tier A — context-specific fit', description: 'Solid agencies that work for specific contractor profiles — construction-focused (Builder Funnel), enterprise-scale (Scorpion), generalist mid-tier (Lemonade Stand), or lead-gen-hybrid (Service Direct). Not standout for typical SMB but credible in their niches.', badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
   F: { label: 'Tier F — listed with reputation warnings', description: 'Agencies with documented lock-in contract patterns + BBB complaint volume + ROI issues (Townsquare Interactive, Marketing 360). Listed for completeness — we cannot recommend.', badgeColor: 'bg-rose-100 text-rose-900 ring-rose-300', cardBorder: 'border-rose-300' },
 };
@@ -57,7 +57,7 @@ const itemListSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">The headline filter: trade-specific vs generalist</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Trade-specific agencies (Hook Agency for roofing, Plumbing & HVAC SEO for plumbing/HVAC) have deep playbooks built around the specific customer-journey dynamics of their trade. Generalist home-services agencies (Adapt Digital, Lemonade Stand, Blue Corona) cover most trades at a broader-but-shallower level. For most SMB contractors, the trade-specific option (if available in your trade) delivers higher ROI per retainer; for trades without trade-specific specialists or for multi-trade operations, the generalist option is appropriate.
+        Trade-specific agencies (Hook Agency for roofing, Plumbing & HVAC SEO for plumbing/HVAC, RYNO for residential HVAC, plumbing, electrical, and roofing) have deep playbooks built around the specific customer-journey dynamics of their trade. Generalist home-services agencies (Adapt Digital, Lemonade Stand) cover most trades at a broader-but-shallower level. For most SMB contractors, the trade-specific option (if available in your trade) delivers higher ROI per retainer; for trades without trade-specific specialists or for multi-trade operations, the generalist option is appropriate.
       </p>
     </section>
 
@@ -135,7 +135,7 @@ const itemListSchema = {
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Where to start</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        For most SMB contractors, the recommendation depends on your trade and stage: <strong>Roofing → Hook Agency</strong>. <strong>Plumbing or HVAC → Plumbing & HVAC SEO</strong>. <strong>Other home-services trades → Adapt Digital Solutions or Lemonade Stand</strong>. <strong>Established multi-location operations → Blue Corona</strong>. Avoid Townsquare Interactive and Marketing 360 — the contract structures and complaint patterns aren't worth the lower entry pricing.
+        For most SMB contractors, the recommendation depends on your trade and stage: <strong>Roofing → Hook Agency</strong>. <strong>Plumbing or HVAC → Plumbing & HVAC SEO</strong>. <strong>Other home-services trades → Adapt Digital Solutions or Lemonade Stand</strong>. <strong>Established multi-location operations → RYNO Strategic Solutions</strong> (which absorbed Blue Corona in 2024). Avoid Townsquare Interactive and Marketing 360 — the contract structures and complaint patterns aren't worth the lower entry pricing.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/agencies/hook-agency/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Start with Hook (roofing) →</a>
