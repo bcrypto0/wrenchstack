@@ -16,7 +16,7 @@ const catLabel = AI_CATEGORY_META[tool.ai_category].label;
 const siblings = aiTools.filter((t) => t.slug !== tool.slug).slice(0, 6);
 
 const pageTitle = `${tool.name} Review (2026): Pricing, Features, Pros & Cons`;
-const pageDescription = `${tool.name} review for trades contractors. ${tool.tagline}. ${tool.reputation_flag ? 'Includes documented reputation context. ' : ''}Independent, affiliate-transparent. Updated ${new Date().getFullYear()}.`;
+const pageDescription = `${tool.name} review for trades contractors. ${asSentence(tool.tagline)} ${tool.reputation_flag ? 'Includes documented reputation context. ' : ''}Independent, affiliate-transparent. Updated ${new Date().getFullYear()}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -152,11 +152,11 @@ const faqSchema = {
     <section id="pricing" class="mb-10 scroll-mt-8">
       <h2 class="mb-3 text-2xl font-bold text-slate-900">Pricing</h2>
       <div class="rounded-lg border border-slate-200 bg-white p-5">
-        <p class="font-semibold text-slate-900">{tool.pricing_summary}.</p>
+        <p class="font-semibold text-slate-900">{asSentence(tool.pricing_summary)}</p>
         {tool.starting_price_usd !== null && (
           <p class="mt-2 text-sm text-slate-600">Starting at ${tool.starting_price_usd}/mo{tool.free_trial_days > 0 && ` · ${tool.free_trial_days}-day free trial`}</p>
         )}
-        <p class="mt-3 text-sm text-slate-700"><strong class="text-slate-900">Affiliate disclosure:</strong> {tool.affiliate_payout_note}.</p>
+        <p class="mt-3 text-sm text-slate-700"><strong class="text-slate-900">Affiliate disclosure:</strong> {asSentence(tool.affiliate_payout_note)}</p>
       </div>
     </section>
 

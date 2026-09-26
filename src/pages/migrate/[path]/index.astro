@@ -1,7 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import migrationsData from '../../../data/migrations.json';
-import {
+import { asSentence,
   getTool,
   aggregateRating,
   formatPrice,
@@ -239,7 +239,7 @@ const faqSchema = {
                 ? `~$${Math.abs(monthlyDelta)}/month less on ${toTool.name} (${formatPrice(toTool)} vs ${formatPrice(fromTool)}). Annual savings: ~$${Math.abs(annualDelta ?? 0)}.`
                 : `Entry pricing is identical. Compare based on features and integrations, not price.`}
         </li>
-        <li><strong>Implementation fees:</strong> {implCost.range} for {toTool.name}. {implCost.description}.</li>
+        <li><strong>Implementation fees:</strong> {implCost.range} for {toTool.name}. {asSentence(implCost.description)}</li>
         <li><strong>Team time during transition:</strong> 40-100 hours of office-staff time across the 4-12 week migration, plus 2-4 hours per field technician for training. For a 10-tech shop with 2 office staff, total internal labor cost typically runs $5,000-$15,000 at loaded hourly rates.</li>
       </ul>
       <p>For most shops, the total switching cost is recovered within 6-18 months if the new platform delivers on its value proposition. Below 6 months, the math usually doesn't work — make sure your reason for switching justifies the friction.</p>

@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { paymentProcessors, paymentsByModel, PAYMENT_MODEL_META, formatMonthlyFee } from '../../lib/data';
+import { asSentence, paymentProcessors, paymentsByModel, PAYMENT_MODEL_META, formatMonthlyFee } from '../../lib/data';
 import VendorLogo from '../../components/VendorLogo.astro';
 import MissingFromList from '../../components/MissingFromList.astro';
 
@@ -96,7 +96,7 @@ const itemListSchema = {
                 )}
 
                 <p class="mb-3 rounded-md bg-slate-50 px-4 py-2 text-sm text-slate-700 leading-relaxed">
-                  <strong class="text-slate-900">Rates:</strong> {p.pricing_summary}.
+                  <strong class="text-slate-900">Rates:</strong> {asSentence(p.pricing_summary)}
                 </p>
 
                 <dl class="mb-3 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">

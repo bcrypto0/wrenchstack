@@ -72,12 +72,11 @@ const verticalSizes = verticals.map((v) => ({
 // (fixed 2026-08-27: 'Addison, Illinois' and 'Cedar Park, TX' were being
 // counted as international because they do not contain the string 'USA').
 const NON_US_COUNTRIES = ['Canada', 'Australia', 'New Zealand', 'United Kingdom', 'UK', 'Ireland', 'Netherlands', 'Germany', 'France', 'Israel', 'India', 'Denmark', 'Sweden', 'Norway', 'Finland', 'Estonia', 'Lithuania', 'Poland', 'Spain', 'Portugal', 'South Africa', 'Singapore', 'Japan', 'Brazil', 'Ukraine'];
-const usHQ = tools.filter(
-  (t) => t.headquartered && !NON_US_COUNTRIES.some((c) => t.headquartered!.includes(c))
-).length;
-const intlHQ = tools.filter(
-  (t) => t.headquartered && NON_US_COUNTRIES.some((c) => t.headquartered!.includes(c))
-).length;
+// Compare whole place segments, not substrings, so 'India' can never match
+// 'Indianapolis'. "London, UK / New York, USA" splits into London, UK, New York, USA.
+const isNonUsHQ = (hq: string) => hq.split(/[,/]/).some((seg) => NON_US_COUNTRIES.includes(seg.trim()));
+const usHQ = tools.filter((t) => t.headquartered && !isNonUsHQ(t.headquartered)).length;
+const intlHQ = tools.filter((t) => t.headquartered && isNonUsHQ(t.headquartered)).length;
 
 // Rating distribution
 const ratings = tools.map((t) => aggregateRating(t)).filter((r): r is number => r !== null);

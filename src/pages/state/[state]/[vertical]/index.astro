@@ -2,7 +2,7 @@
 import Layout from '../../../../layouts/Layout.astro';
 import { isStatePageIndexable } from '../../../../lib/compare-index.mjs';
 import statesData from '../../../../data/states.json';
-import {
+import { asSentence,
   rankToolsForVertical,
   getVertical,
   verticalToUrl,
@@ -89,7 +89,7 @@ function stateMarketContext(): string {
 const faqs = [
   {
     q: `What's the best ${vertical.name.toLowerCase()} software for ${state.name} contractors?`,
-    a: `Based on user ratings, vertical fit, and pricing transparency, ${featuredTool.name} ranks at the top for ${vertical.name.toLowerCase()} contractors in ${state.name}. ${featuredTool.tagline}. None of the field service platforms in our directory have ${state.name}-specific limitations — they all work nationwide. The "best" choice comes down to your team size, vertical specialization, and budget. See the ranked list above or take our matching quiz.`,
+    a: `Based on user ratings, vertical fit, and pricing transparency, ${featuredTool.name} ranks at the top for ${vertical.name.toLowerCase()} contractors in ${state.name}. ${asSentence(featuredTool.tagline)} None of the field service platforms in our directory have ${state.name}-specific limitations — they all work nationwide. The "best" choice comes down to your team size, vertical specialization, and budget. See the ranked list above or take our matching quiz.`,
   },
   {
     q: `Do I need ${vertical.name.toLowerCase()} software that's specific to ${state.name}?`,

@@ -1,7 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import triosData from '../../../data/trios.json';
-import {
+import { asSentence,
   getTool,
   aggregateRating,
   formatPrice,
@@ -275,13 +275,13 @@ const breadcrumbs = [
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Quick verdict</h2>
       <div class="space-y-3 text-slate-800">
         <p>
-          <strong class="text-slate-900">{a.name}:</strong> {a.best_for}.
+          <strong class="text-slate-900">{a.name}:</strong> {asSentence(a.best_for)}
         </p>
         <p>
-          <strong class="text-slate-900">{b.name}:</strong> {b.best_for}.
+          <strong class="text-slate-900">{b.name}:</strong> {asSentence(b.best_for)}
         </p>
         <p>
-          <strong class="text-slate-900">{c.name}:</strong> {c.best_for}.
+          <strong class="text-slate-900">{c.name}:</strong> {asSentence(c.best_for)}
         </p>
         {cheapest && (
           <p class="mt-3 text-sm text-slate-600">

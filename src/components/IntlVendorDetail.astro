@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { INTL_CATEGORY_LABELS, intlNote, intlTierMeta, type IntlVendor, type IntlMarket } from '../lib/intl';
-import { intlOutboundUrl } from '../lib/data';
+import { asSentence, intlOutboundUrl } from '../lib/data';
 
 interface Props {
   vendor: IntlVendor;
@@ -24,7 +24,7 @@ const related = [...sameCategory, ...otherCategory].slice(0, 6);
 const pageTitle = vendor.category === 'certification'
   ? `${vendor.name}: ${categoryLabel} in ${market.name} (2026)`
   : `${vendor.name} ${market.name} Review (2026): ${categoryLabel}`;
-const pageDescription = `${vendor.name} for ${market.name} trades — ${vendor.tagline}. Market position, ${market.name}-specific compliance notes, pros and cons, and typical pricing. Independent WrenchStack review.`;
+const pageDescription = `${vendor.name} for ${market.name} trades — ${asSentence(vendor.tagline)} Market position, ${market.name}-specific compliance notes, pros and cons, and typical pricing. Independent WrenchStack review.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -48,7 +48,7 @@ const faqs: { q: string; a: string }[] = [
   },
   {
     q: `What does ${vendor.name} cost in ${market.name}?`,
-    a: `${vendor.typical_pricing}. Pricing and availability can change by region — confirm current ${market.name} pricing on the vendor's site before committing.`,
+    a: `${asSentence(vendor.typical_pricing)} Pricing and availability can change by region — confirm current ${market.name} pricing on the vendor's site before committing.`,
   },
 ];
 if (vendor.tier === 'F' && vendor.reputation_flag) {

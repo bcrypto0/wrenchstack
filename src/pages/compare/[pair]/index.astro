@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import {
+import { asSentence,
   tools,
   aggregateRating,
   formatPrice,
@@ -365,7 +365,7 @@ const verticalWinners = getVerticalWinners();
 const faqs = [
   {
     q: `Which is better, ${a.name} or ${b.name}?`,
-    a: `Neither is universally better — they target different buyers. ${a.name} is best for ${a.best_for}. ${b.name} is best for ${b.best_for}. See the decision matrix above for situation-specific guidance, or jump to the per-vertical winner table if you're in a specific trade.`,
+    a: `Neither is universally better — they target different buyers. ${a.name} is best for ${asSentence(a.best_for)} ${b.name} is best for ${asSentence(b.best_for)} See the decision matrix above for situation-specific guidance, or jump to the per-vertical winner table if you're in a specific trade.`,
   },
   {
     q: `Is ${a.name} cheaper than ${b.name}?`,
@@ -541,10 +541,10 @@ const breadcrumbs = [
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Quick verdict</h2>
       <div class="rounded-lg bg-slate-50 p-6 text-slate-800">
         <p class="mb-2">
-          <strong class="text-slate-900">{a.name}:</strong> {a.best_for}.
+          <strong class="text-slate-900">{a.name}:</strong> {asSentence(a.best_for)}
         </p>
         <p>
-          <strong class="text-slate-900">{b.name}:</strong> {b.best_for}.
+          <strong class="text-slate-900">{b.name}:</strong> {asSentence(b.best_for)}
         </p>
         {higherRated && (
           <p class="mt-3 text-sm text-slate-600">

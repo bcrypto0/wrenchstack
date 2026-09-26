@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import {
+import { asSentence,
   verticals,
   rankToolsForVertical,
   verticalToUrl,
@@ -322,8 +322,8 @@ const breadcrumbs = [
                   <div class="text-xs text-slate-500">{formatPrice(t)}{t.best_team_size ? ` · ${t.best_team_size} techs` : ''}</div>
                 </div>
                 <div class="text-sm leading-relaxed text-slate-700">
-                  <span class="font-semibold text-slate-900">Best for:</span> {t.best_for}.
-                  {watch && (<><br /><span class="text-slate-500"><span class="font-semibold text-slate-600">Watch-out:</span> {watch}.</span></>)}
+                  <span class="font-semibold text-slate-900">Best for:</span> {asSentence(t.best_for)}
+                  {watch && (<><br /><span class="text-slate-500"><span class="font-semibold text-slate-600">Watch-out:</span> {asSentence(watch)}</span></>)}
                 </div>
               </div>
             );

@@ -34,7 +34,7 @@ const siblings = leadGenPlatforms
   .slice(0, 6);
 
 const pageTitle = `${platform.name} Review (2026): Pricing, Lead Quality, Pros & Cons`;
-const pageDescription = `${platform.name} review for trades contractors. ${platform.tagline}. ${platform.reputation_flag ? 'Includes documented FTC and class-action context. ' : ''}Updated ${new Date().getFullYear()}.`;
+const pageDescription = `${platform.name} review for trades contractors. ${asSentence(platform.tagline)} ${platform.reputation_flag ? 'Includes documented FTC and class-action context. ' : ''}Updated ${new Date().getFullYear()}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -267,7 +267,7 @@ const faqSchema = {
             <dt class="text-xs uppercase tracking-wider text-slate-500">Affiliate disclosure</dt>
             <dd class="mt-1 text-sm text-slate-700 leading-relaxed">
               <strong class="text-slate-900">Affiliate program:</strong> {platform.affiliate_program === 'none' ? 'None' : platform.affiliate_program === 'unknown' ? 'Unknown' : platform.affiliate_program}.
-              {' '}{platform.affiliate_payout_note}.
+              {' '}{asSentence(platform.affiliate_payout_note)}
               {' '}WrenchStack's recommendation is unchanged regardless of whether an affiliate is active.
             </dd>
           </div>

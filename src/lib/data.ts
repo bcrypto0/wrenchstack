@@ -161,7 +161,7 @@ export function rankToolsForVertical(verticalSlug: string): Tool[] {
 export function asSentence(s: string | null | undefined): string {
   const t = (s ?? '').trim();
   if (!t) return '';
-  return /[.!?]["')\]]*$/.test(t) ? t : `${t}.`;
+  return /[.!?]["'”’)\]]*$/.test(t) ? t : `${t}.`;
 }
 
 export function formatPrice(t: Tool): string {

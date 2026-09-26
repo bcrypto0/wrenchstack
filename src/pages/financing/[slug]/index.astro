@@ -16,7 +16,7 @@ const modelLabel = FINANCING_MODEL_META[provider.financing_model].label;
 const siblings = financingProviders.filter((p) => p.slug !== provider.slug).slice(0, 6);
 
 const pageTitle = `${provider.name} Review (2026): Fees, Rates & Pros & Cons for Contractors`;
-const pageDescription = `${provider.name} contractor financing review. ${provider.tagline}. ${provider.reputation_flag ? 'Includes documented consumer-cost context. ' : ''}Real fees, APRs, and honest trade-offs. Updated ${new Date().getFullYear()}.`;
+const pageDescription = `${provider.name} contractor financing review. ${asSentence(provider.tagline)} ${provider.reputation_flag ? 'Includes documented consumer-cost context. ' : ''}Real fees, APRs, and honest trade-offs. Updated ${new Date().getFullYear()}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -111,7 +111,7 @@ const faqSchema = {
     <section id="terms" class="mb-10 scroll-mt-8">
       <h2 class="mb-3 text-2xl font-bold text-slate-900">Fees & terms</h2>
       <div class="rounded-lg border border-slate-200 bg-white p-5">
-        <p class="font-semibold text-slate-900">{provider.pricing_summary}.</p>
+        <p class="font-semibold text-slate-900">{asSentence(provider.pricing_summary)}</p>
         <dl class="mt-3 grid gap-3 sm:grid-cols-3 text-sm">
           <div>
             <dt class="text-xs font-bold uppercase tracking-wider text-slate-500">Cost to contractor</dt>
@@ -126,7 +126,7 @@ const faqSchema = {
             <dd class="text-slate-800">{provider.loan_range}</dd>
           </div>
         </dl>
-        <p class="mt-3 text-sm text-slate-700"><strong class="text-slate-900">Affiliate disclosure:</strong> {provider.affiliate_payout_note}.</p>
+        <p class="mt-3 text-sm text-slate-700"><strong class="text-slate-900">Affiliate disclosure:</strong> {asSentence(provider.affiliate_payout_note)}</p>
       </div>
     </section>
 

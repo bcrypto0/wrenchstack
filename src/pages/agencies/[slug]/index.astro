@@ -20,7 +20,7 @@ const agencyVerticals = agency.verticals_specialty
 const siblings = marketingAgencies.filter((a) => a.slug !== agency.slug).slice(0, 6);
 
 const pageTitle = `${agency.name} Review (2026): Services, Pricing, Pros & Cons`;
-const pageDescription = `${agency.name} digital marketing agency review for trades contractors. ${agency.tagline}. ${agency.reputation_flag ? 'Includes documented reputation context. ' : ''}Updated ${new Date().getFullYear()}.`;
+const pageDescription = `${agency.name} digital marketing agency review for trades contractors. ${asSentence(agency.tagline)} ${agency.reputation_flag ? 'Includes documented reputation context. ' : ''}Updated ${new Date().getFullYear()}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -190,7 +190,7 @@ const faqSchema = {
           )}
           <div class="sm:col-span-2">
             <dt class="text-xs uppercase tracking-wider text-slate-500">Affiliate disclosure</dt>
-            <dd class="mt-1 text-sm text-slate-700">{agency.affiliate_payout_note}.</dd>
+            <dd class="mt-1 text-sm text-slate-700">{asSentence(agency.affiliate_payout_note)}</dd>
           </div>
         </dl>
       </div>

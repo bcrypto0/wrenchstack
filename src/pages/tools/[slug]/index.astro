@@ -3,7 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import featuresData from '../../../data/features.json';
 import fs from 'node:fs';
 import path from 'node:path';
-import {
+import { asSentence,
   tools,
   toolsForVertical,
   aggregateRating,
@@ -288,7 +288,7 @@ function getFaqs(): { q: string; a: string }[] {
   // 1. Worth the money
   faqs.push({
     q: `Is ${tool.name} worth the money?`,
-    a: `${tool.name} is worth it if you fit the target profile: ${tool.best_for}. ${
+    a: `${tool.name} is worth it if you fit the target profile: ${asSentence(tool.best_for)} ${
       isQuoteOnly
         ? `${tool.name} does not publish a price, so the ROI maths cannot be done from public information. Get a written quote for your seat count before comparing it against anything here.`
         : isEnterprise
@@ -321,14 +321,14 @@ function getFaqs(): { q: string; a: string }[] {
   const timeline = implementationTimeline();
   faqs.push({
     q: `How long does ${tool.name} implementation take?`,
-    a: `${timeline.headline}. ${timeline.detail.split('.').slice(0, 2).join('.')}.`,
+    a: `${asSentence(timeline.headline)} ${timeline.detail.split('.').slice(0, 2).join('.')}.`,
   });
 
   // 5. Alternative
   if (topCompetitor) {
     faqs.push({
       q: `What's the best alternative to ${tool.name}?`,
-      a: `The closest alternative in the same trades is ${topCompetitor.name} (${formatPrice(topCompetitor)}). ${topCompetitor.best_for}. See our full ${tool.name} vs ${topCompetitor.name} comparison for a side-by-side breakdown.`,
+      a: `The closest alternative in the same trades is ${topCompetitor.name} (${formatPrice(topCompetitor)}). ${asSentence(topCompetitor.best_for)} See our full ${tool.name} vs ${topCompetitor.name} comparison for a side-by-side breakdown.`,
     });
   }
 
@@ -414,7 +414,7 @@ const faqSchema = {
 };
 
 const pageTitle = `${tool.name} Review (2026): Pricing, Features, Pros & Cons`;
-const pageDescription = `${tool.name} review: pricing tiers, key features, pros and cons, integrations, and honest weaknesses. ${tool.tagline}. Updated ${new Date().getFullYear()}.`;
+const pageDescription = `${tool.name} review: pricing tiers, key features, pros and cons, integrations, and honest weaknesses. ${asSentence(tool.tagline)} Updated ${new Date().getFullYear()}.`;
 
 // (Removed the standalone Review schema: it recast the third-party G2/Capterra
 // aggregate as WrenchStack's own review rating, and its embedded SoftwareApplication
@@ -637,7 +637,7 @@ const breadcrumbs = [
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700">
-        <strong class="text-slate-900">{tool.name}</strong> is best for {tool.best_for}.
+        <strong class="text-slate-900">{tool.name}</strong> is best for {asSentence(tool.best_for)}
         Pricing {hasPublicPricing ? `starts at $${startingPrice}/mo` : 'is custom-quoted (sales call required)'}.
         {strongVerticals.length > 0 && ` Strongest fit: ${strongVerticals.slice(0, 3).join(', ')}.`}
         {rating !== null && ` ${rating.toFixed(1)} / 5 aggregate user rating.`}

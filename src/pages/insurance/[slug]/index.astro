@@ -29,7 +29,7 @@ const providerVerticals = provider.verticals
 const siblings = insuranceProviders.filter((p) => p.slug !== provider.slug).slice(0, 6);
 
 const pageTitle = `${provider.name} Review (2026): Coverage, Pricing, Pros & Cons`;
-const pageDescription = `${provider.name} review for trades contractors. ${provider.tagline}. ${provider.reputation_flag ? 'Includes documented reputation context. ' : ''}Updated ${new Date().getFullYear()}.`;
+const pageDescription = `${provider.name} review for trades contractors. ${asSentence(provider.tagline)} ${provider.reputation_flag ? 'Includes documented reputation context. ' : ''}Updated ${new Date().getFullYear()}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -202,7 +202,7 @@ const faqSchema = {
             <dt class="text-xs uppercase tracking-wider text-slate-500">Affiliate program</dt>
             <dd class="mt-1 text-slate-700">
               <strong class="text-slate-900">{provider.affiliate_program === 'none' ? 'None' : provider.affiliate_program === 'unknown' ? 'Unknown' : provider.affiliate_program}.</strong>
-              {' '}{provider.affiliate_payout_note}.
+              {' '}{asSentence(provider.affiliate_payout_note)}
             </dd>
           </div>
         </dl>
