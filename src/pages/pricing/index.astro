@@ -49,7 +49,7 @@ const itemListSchema = {
         <span class="text-slate-300">·</span>
         <span><span class="font-bold text-slate-900">{freeTierTools.length}</span> with free tiers</span>
         <span class="text-slate-300">·</span>
-        <span><span class="font-bold text-slate-900">{customQuotedTools.length}</span> custom-quoted enterprise</span>
+        <span><span class="font-bold text-slate-900">{customQuotedTools.length}</span> quote-only (no published price)</span>
         <span class="text-slate-300">·</span>
         <span>Verified quarterly</span>
       </div>
@@ -58,7 +58,7 @@ const itemListSchema = {
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-bold tracking-tight text-slate-900">Pricing by trade</h2>
       <p class="mb-6 text-slate-600">
-        Each vertical pricing page includes: full pricing table sorted cheapest first, best-value picks by tier (entry/mid/enterprise), estimated cost at 3/10/25 techs per tool, hidden cost callouts, and 8 FAQs.
+        Each vertical pricing page includes: full pricing table sorted cheapest first, best-value picks by tier (entry/mid/top tier), estimated cost at 3/10/25 techs per tool, hidden cost callouts, and 8 FAQs.
       </p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {verticals.map((v) => {
@@ -96,10 +96,10 @@ const itemListSchema = {
           </p>
         </div>
         <div>
-          <div class="text-xs font-bold uppercase tracking-wider text-orange-700">Enterprise / custom-quoted</div>
+          <div class="text-xs font-bold uppercase tracking-wider text-orange-700">Quote-only (no published price)</div>
           <div class="mt-2 text-lg font-semibold text-slate-900">{customQuotedTools.length} tools</div>
           <p class="mt-1 text-sm text-slate-600">
-            ServiceTitan, BuildOps, Procore. User-reported $250-$800 per user per month + $5K-$50K implementation. Sales call required for actual quote.
+            Including ServiceTitan, BuildOps, and Procore. No published price, so a sales call is required for a quote; ask for implementation fees in the same quote.
           </p>
         </div>
       </div>
@@ -112,9 +112,9 @@ const itemListSchema = {
       </p>
       <ul>
         <li><strong>Quick price comparison table</strong> — every tool serving the vertical, sorted cheapest first, with pricing model + free trial + verification date.</li>
-        <li><strong>Best-value picks by tier</strong> — highest-rated tool in each price bracket (entry under $100/mo, mid $100-$250, enterprise $250+).</li>
+        <li><strong>Best-value picks by tier</strong> — highest-rated tool in each price bracket (entry under $100/mo, mid $100-$250, top tier $250+ or quote-only).</li>
         <li><strong>Pricing scenarios by team size</strong> — estimated monthly cost at 3, 10, and 25 techs per tool. Per-user platforms scale linearly; flat-rate platforms barely change.</li>
-        <li><strong>Hidden costs callout</strong> — payment processing fees (2.59-2.99% + $0.30), implementation fees ($500-$50K), add-on integrations ($20-$200/mo each).</li>
+        <li><strong>Hidden costs callout</strong> — payment processing fees (2.59-2.99% + $0.30), implementation fees, add-on integrations ($20-$200/mo each).</li>
         <li><strong>Per-tool pricing breakdown</strong> — all tiers for each platform with custom-quote tools showing user-reported ranges.</li>
         <li><strong>8 FAQs</strong> — average cost, cheapest options, per-user vs flat-rate analysis, pricing verification, hidden costs, scaling math, negotiability.</li>
       </ul>

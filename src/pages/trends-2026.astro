@@ -211,7 +211,7 @@ const articleSchema = {
       <h2>Pricing — what trades software actually costs</h2>
 
       <p>
-        The trades software market in 2026 spans an order of magnitude in price. Entry-tier platforms like Joist ($10/month Basics) and Tradify ($47/user/month Lite tier) live alongside enterprise platforms like ServiceTitan and BuildOps where user-reported pricing reaches $250-$800 per user per month. The median published entry price across our directory is <strong>${medianPrice}/month</strong>. That blended figure mixes two pricing models and is not a per-seat rate: {perUserTools().length} platforms charge per user (median <strong>${perUserMedian()} per user/month</strong>) and {flatFeeTools().length} charge a flat monthly platform fee (median <strong>${flatFeeMedian()}/month</strong>). Counting from the blended number, with {tierDist.entry} platforms in the under-$100 tier, {tierDist.mid} in $100-$249, {tierDist.enterprise} publishing $250+, and {tierDist['quote-only']} publishing no price at all.
+        The trades software market in 2026 spans an order of magnitude in price. Entry-tier platforms like Joist ($10/month Basics) and Tradify ($47/user/month Lite tier) live alongside platforms like ServiceTitan and BuildOps that publish no price at all. The median published entry price across our directory is <strong>${medianPrice}/month</strong>. That blended figure mixes two pricing models and is not a per-seat rate: {perUserTools().length} platforms charge per user (median <strong>${perUserMedian()} per user/month</strong>) and {flatFeeTools().length} charge a flat monthly platform fee (median <strong>${flatFeeMedian()}/month</strong>). Counting from the blended number, with {tierDist.entry} platforms in the under-$100 tier, {tierDist.mid} in $100-$249, {tierDist.enterprise} publishing $250+, and {tierDist['quote-only']} publishing no price at all.
       </p>
 
       <div class="not-prose my-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -234,13 +234,13 @@ const articleSchema = {
       </div>
 
       <p>
-        The pricing distribution is heavily bimodal: {tierDist.entry} platforms compete fiercely under $100/user/month (Jobber, Housecall Pro, Tradify, Service Autopilot, Joist), while {tierDist['quote-only']} publish no price at all, the group that includes ServiceTitan, BuildOps and Procore, where user reports peg the real figure at $250-$800 per user per month, alongside vendors such as Aspire and FieldRoutes that quote by company size or customer count. A further {tierDist.enterprise} publish a starting price of $250 or more. Those two groups are counted separately here on purpose: an unpublished price is not evidence of an expensive one. The middle is sparse, with only {tierDist.mid} platforms genuinely in the $100-$249 band.
+        The pricing distribution is heavily bimodal: {tierDist.entry} platforms compete fiercely under $100/user/month (Jobber, Housecall Pro, Tradify, Service Autopilot, Joist), while {tierDist['quote-only']} publish no price at all, a group that includes ServiceTitan, BuildOps and Procore alongside vendors such as Aspire and FieldRoutes that quote by company size or customer count. A further {tierDist.enterprise} publish a starting price of $250 or more. Those two groups are counted separately here on purpose: an unpublished price is not evidence of an expensive one. The middle is sparse, with only {tierDist.mid} platforms genuinely in the $100-$249 band.
       </p>
 
       <h2>The "custom-quoted" opacity tax</h2>
 
       <p>
-        <strong>{customQuoted} of {tools.length} platforms ({customQuotedPct}%)</strong> publish no public pricing whatsoever. To get a number, you book a discovery call, sit through a 30-60 minute demo, and then receive a quote tailored to your team size and module selection. The custom-quoted segment is concentrated at the enterprise end: ServiceTitan, BuildOps, Procore, FieldEdge, FieldRoutes, Aspire, Simpro, ServiceTrade Enterprise tier, BigChange, MaintainX Enterprise, Praxedo.
+        <strong>{customQuoted} of {tools.length} platforms ({customQuotedPct}%)</strong> publish no public pricing whatsoever. To get a number, you contact sales, usually through a demo, and receive a quote for your team size and modules. The group includes ServiceTitan, BuildOps, Procore, FieldEdge, FieldRoutes, Aspire, Simpro, ServiceTrade and BigChange.
       </p>
 
       <p>
@@ -486,7 +486,7 @@ const articleSchema = {
       <ul>
         <li><strong>If your team is 3+ techs and you're shopping under $250/user/month</strong> — evaluate per-company-pricing options (Jobber Connect, Housecall Pro flat-rate, JobTread, Skimmer) carefully. The per-company math wins decisively at scale.</li>
         <li><strong>If you're on QuickBooks Desktop specifically</strong> — your platform choices narrow significantly. {withQuickBooks} platforms integrate with QuickBooks broadly but many are QuickBooks Online only. FieldEdge is the standout for QuickBooks Desktop integration depth.</li>
-        <li><strong>If you're at $5M+ revenue</strong> — the custom-quoted enterprise tier is unavoidable. Plan 30-60 minute discovery calls with 3-5 enterprise platforms. Cite published user-reported pricing as your anchor.</li>
+        <li><strong>If you're at $5M+ revenue</strong> — many platforms built for your size quote by account, so book demos with 3-5 of them and compare written quotes. User-reported ranges in our pricing notes are a rough anchor, not a quote.</li>
         <li><strong>If you're on Xero</strong> (AU/NZ/UK markets) — Tradify, Simpro, BigChange are your strongest matches. US-rooted platforms typically have weaker Xero integration than QuickBooks integration.</li>
         <li><strong>If you do significant insurance restoration work</strong> — photo documentation discipline matters more than FSM choice. CompanyCam pairs with whatever FSM you use.</li>
         <li><strong>If you're solo or 1-2 techs</strong> — Joist (from $10/mo Basics) and Markate (from about $40/mo) are genuinely viable starting points before committing to mid-tier FSM.</li>

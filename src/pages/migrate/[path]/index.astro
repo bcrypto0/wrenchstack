@@ -49,14 +49,11 @@ const toPrice = toTool.pricing.starting_at_usd;
 const monthlyDelta = (fromPrice !== null && toPrice !== null) ? Math.round(toPrice - fromPrice) : null;
 const annualDelta = monthlyDelta !== null ? monthlyDelta * 12 : null;
 
-// Classify TO tool by pricing tier for implementation cost estimate
-function implementationCost(t: Tool): { range: string; description: string } {
-  const p = t.pricing.starting_at_usd;
-  if (p === null) return { range: '$5,000-$50,000+', description: 'Enterprise platforms ($5K-$30K typical; ServiceTitan/Procore $15K-$50K)' };
-  if (p >= 200) return { range: '$1,500-$5,000', description: 'Mid-tier platforms often charge for guided onboarding' };
-  return { range: '$0-$1,500', description: 'Entry-tier platforms typically offer self-service; optional paid setup $500-$1,500' };
-}
-const implCost = implementationCost(toTool);
+// No tier-guessed fee: vendors at the same price differ (some include onboarding,
+// some charge for it), so point to the pricing note and a written quote instead.
+const implSummary = toPrice === null
+  ? `not published for ${toTool.name}; ask for it in the written quote`
+  : `check ${toTool.name}'s pricing note and confirm its setup fee in writing, since some vendors include onboarding and others charge for it`;
 
 const pageTitle = `How to migrate from ${fromTool.name} to ${toTool.name} (2026)`;
 const pageDescription = `Practical guide to switching from ${fromTool.name} to ${toTool.name}. Why teams migrate, what to expect, timeline, and what to watch out for.`;
@@ -97,7 +94,7 @@ const faqs = [
   },
   {
     q: `What's the total cost of switching from ${fromTool.name} to ${toTool.name}?`,
-    a: `Three components: (1) software-cost change — ${monthlyDelta !== null ? `${monthlyDelta > 0 ? `~$${monthlyDelta}/month more` : `~$${Math.abs(monthlyDelta)}/month less`} at the entry tier` : 'depends on quoted pricing for both'}. (2) Implementation fees — ${implCost.range} for ${toTool.name} (${implCost.description}). (3) Team time during transition — typically 40-100 hours of office-staff time across the 4-12 week migration, plus 2-4 hours per field technician for training. For most shops, the total switching cost is recovered within 6-18 months if the new platform delivers on its value proposition.`,
+    a: `Three components: (1) software-cost change — ${monthlyDelta !== null ? `${monthlyDelta > 0 ? `~$${monthlyDelta}/month more` : `~$${Math.abs(monthlyDelta)}/month less`} at the entry tier` : 'depends on quoted pricing for both'}. (2) Implementation fees — ${implSummary}. (3) Team time during transition — typically 40-100 hours of office-staff time across the 4-12 week migration, plus 2-4 hours per field technician for training. For most shops, the total switching cost is recovered within 6-18 months if the new platform delivers on its value proposition.`,
   },
   {
     q: `Can I run ${fromTool.name} and ${toTool.name} in parallel during migration?`,
@@ -239,7 +236,7 @@ const faqSchema = {
                 ? `~$${Math.abs(monthlyDelta)}/month less on ${toTool.name} (${formatPrice(toTool)} vs ${formatPrice(fromTool)}). Annual savings: ~$${Math.abs(annualDelta ?? 0)}.`
                 : `Entry pricing is identical. Compare based on features and integrations, not price.`}
         </li>
-        <li><strong>Implementation fees:</strong> {implCost.range} for {toTool.name}. {asSentence(implCost.description)}</li>
+        <li><strong>Implementation fees:</strong> {toPrice === null ? `${toTool.name} has no published list price or setup fee, so ask for the implementation fee in the same written quote.` : `Check ${toTool.name}'s pricing note and confirm its setup fee in writing: some vendors include onboarding in the subscription and others charge for guided setup.`}</li>
         <li><strong>Team time during transition:</strong> 40-100 hours of office-staff time across the 4-12 week migration, plus 2-4 hours per field technician for training. For a 10-tech shop with 2 office staff, total internal labor cost typically runs $5,000-$15,000 at loaded hourly rates.</li>
       </ul>
       <p>For most shops, the total switching cost is recovered within 6-18 months if the new platform delivers on its value proposition. Below 6 months, the math usually doesn't work — make sure your reason for switching justifies the friction.</p>
@@ -309,7 +306,7 @@ const faqSchema = {
         <li><strong>Ignoring custom workflows.</strong> If your office staff built custom workflows or automations on {fromTool.name} (specific dispatch rules, custom email templates, automated billing sequences), those won't transfer. List every custom workflow you depend on and rebuild equivalents in {toTool.name} before cutover.</li>
         <li><strong>Underestimating team adoption resistance.</strong> Get tech-resistant team members on a {toTool.name} demo BEFORE signing the contract. If they hate it, your timeline doubles or the migration fails. Train champions first, peer-train resistant team members second.</li>
         <li><strong>Migrating during peak season.</strong> Don't switch HVAC software in July or roofing software during storm season. Migration friction during peak demand cascades into missed customers and lost revenue.</li>
-        <li><strong>Not budgeting for parallel-run cost.</strong> 2-4 weeks of running both subscriptions adds ${monthlyDelta !== null && fromPrice !== null && toPrice !== null ? `~$${Math.round((fromPrice + toPrice) / 2)}` : '$200-$1,000'} in subscription overlap. Plan for it; don't surprise yourself.</li>
+        <li><strong>Not budgeting for parallel-run cost.</strong> 2-4 weeks of running both subscriptions adds ${monthlyDelta !== null && fromPrice !== null && toPrice !== null ? `~$${Math.round((fromPrice + toPrice) / 2)}` : 'up to a month of both fees'} in subscription overlap. Plan for it; don't surprise yourself.</li>
       </ul>
 
       <h2>Things to verify BEFORE you sign the new contract</h2>

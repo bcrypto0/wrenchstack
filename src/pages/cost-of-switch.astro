@@ -21,8 +21,8 @@ const calculatorTools = tools.map((t) => ({
 
 const faqs = [
   {
-    q: 'How do you estimate the implementation cost for the new tool?',
-    a: 'Implementation fees are tier-based estimates from observed deployments: free-tier tools have $0 self-service setup; entry-tier tools (under $100/user/mo) typically have $0-500 self-service setup; mid-tier tools ($100-249/user/mo) cost $500-2,000 with optional paid onboarding; enterprise and custom-quoted tools ($250+/user/mo or no published price) commonly hit $5,000-50,000 in implementation, with $15,000 a defensible mid-case. The calculator uses $0 / $500 / $1,500 / $15,000 as the defaults for free / entry / mid / enterprise (custom-quoted tools use the enterprise default too). You can override if you have a real vendor quote.',
+    q: 'Does the calculator include an implementation fee?',
+    a: 'The calculator does not assume an implementation fee. Vendors differ too much: some include onboarding in the subscription, some charge for guided setup, and quote-only vendors set the fee in the quote. Enter the fee from your quote; until you do, the totals and break-even exclude it and say so. Tools with no published list price also need the monthly figure from your quote.',
   },
   {
     q: 'Why include a parallel-run month?',
@@ -38,11 +38,11 @@ const faqs = [
   },
   {
     q: 'What if the new tool costs more per month?',
-    a: 'You are paying a premium for features, support, or scale. The calculator will show negative monthly savings and break-even "never on price alone" — meaning the switch only pays back through revenue uplift, not cost savings. Most enterprise FSM upgrades fall in this category: ServiceTitan does not save you money over Jobber, it earns you more money. Pair this calculator with the ROI calculator to see the revenue side.',
+    a: 'You are paying a premium for features, support, or scale. The calculator will show negative monthly savings and break-even "never on price alone" — meaning the switch only pays back through revenue uplift, not cost savings. Most upgrades to a larger platform fall in this category: the case rests on revenue, not savings. Pair this calculator with the ROI calculator to see the revenue side.',
   },
   {
     q: 'Why does flat-rate pricing show "1 user" math?',
-    a: 'Some tools (Jobber Connect tier, Housecall Pro plans, Skimmer, JobTread) charge per company instead of per user. For those tools the monthly cost does not scale with team size. The calculator detects "per company" or "flat" in the pricing notes and uses the published price as-is. If a vendor changed to per-user since we last verified, the math will be wrong — override the monthly cost field with your real quote.',
+    a: 'Some tools (Jobber Connect tier, Housecall Pro plans, Skimmer, JobTread) charge per company instead of per user. For those tools the monthly cost does not scale with team size. The calculator reads the pricing model of each tool (per user, flat, or base plus seats) from our data and uses the published price as-is for flat plans. If a vendor changed to per-user since we last verified, the math will be wrong — override the monthly cost field with your real quote.',
   },
 ];
 
@@ -111,7 +111,7 @@ const faqSchema = {
           </div>
         </div>
 
-        <div class="grid gap-6 md:grid-cols-3">
+        <div class="grid gap-6 md:grid-cols-2">
           <div>
             <label for="techs" class="mb-2 block text-sm font-semibold text-slate-900">
               Number of techs
@@ -136,7 +136,20 @@ const faqSchema = {
               min="0"
               class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
             />
-            <p class="mt-1 text-xs text-slate-500">Override if your actual bill differs from published pricing.</p>
+            <p class="mt-1 text-xs text-slate-500">Override if your actual bill differs from published pricing. Required if your current tool has no published list price.</p>
+          </div>
+          <div>
+            <label for="target-cost" class="mb-2 block text-sm font-semibold text-slate-900">
+              Quoted monthly cost for the new tool ($)
+            </label>
+            <input
+              id="target-cost"
+              type="number"
+              placeholder="auto"
+              min="0"
+              class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+            />
+            <p class="mt-1 text-xs text-slate-500">Required if the new tool has no published list price; enter the quote you were given.</p>
           </div>
           <div>
             <label for="impl-fee" class="mb-2 block text-sm font-semibold text-slate-900">
@@ -145,11 +158,11 @@ const faqSchema = {
             <input
               id="impl-fee"
               type="number"
-              placeholder="auto"
+              placeholder="not entered"
               min="0"
               class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
             />
-            <p class="mt-1 text-xs text-slate-500">Override if you have a real vendor quote.</p>
+            <p class="mt-1 text-xs text-slate-500">Enter the fee from your quote; totals exclude it until you do.</p>
           </div>
         </div>
       </form>
@@ -172,7 +185,7 @@ const faqSchema = {
 
       <ul>
         <li><strong>New subscription cost</strong> for the target tool, scaled by team size if per-user; plans with a base price plus seat fees are shown at the base price, with a note.</li>
-        <li><strong>Implementation fee</strong> — what the vendor charges to set up your account. Tier-based estimate: $0 for entry-tier self-service, $1,500 for mid-tier, $15,000 for enterprise. Override if you have a quote.</li>
+        <li><strong>Implementation fee</strong> — what the vendor charges to set up your account. Enter it from your quote; the calculator does not guess one, and totals exclude it until you do.</li>
         <li><strong>Training cost</strong> — wages of techs and office staff during product training. Default assumption: 8 hours per tech at $50/hour fully-burdened, plus 60 office-staff hours at $35/hour.</li>
         <li><strong>Parallel-run cost</strong> — one extra month of paying both subscriptions during cutover. Most shops run both for 2-4 weeks; skipping this is operationally risky.</li>
         <li><strong>Net monthly savings</strong> (or premium) — the recurring difference between old and new subscription, post-cutover.</li>
@@ -222,18 +235,14 @@ const faqSchema = {
     const toSelect = document.getElementById('to-tool');
     const techsInput = document.getElementById('techs');
     const currentCostInput = document.getElementById('current-cost');
+    const targetCostInput = document.getElementById('target-cost');
     const implFeeInput = document.getElementById('impl-fee');
     const outputDiv = document.getElementById('cos-output');
     const promptDiv = document.getElementById('cos-prompt');
 
-    // Implementation fee defaults by tier
-    const IMPL_FEE_BY_TIER = {
-      free: 0,
-      entry: 500,
-      mid: 1500,
-      enterprise: 15000,
-      'quote-only': 15000,
-    };
+    // No implementation-fee defaults: vendors differ too much (some include
+    // onboarding, some charge, quote-only vendors set it in the quote), so the
+    // user enters it and totals say when it is missing.
     const TRAINING_HOURS_PER_TECH = 8;
     const TECH_RATE_PER_HOUR = 50;
     const OFFICE_HOURS = 60;
@@ -264,8 +273,8 @@ const faqSchema = {
 
     function monthlyCostOf(t, techs) {
       if (t.startingPrice === null || t.startingPrice === undefined) {
-        // Custom-quoted enterprise; use $400/user/mo as the mid-case fallback
-        return 400 * techs;
+        // No published price: the user has to supply a quote; we never invent one.
+        return null;
       }
       if (t.startingPrice === 0) return 0;
       if (isFlatRate(t) || isBasePlusSeat(t)) return t.startingPrice;
@@ -293,13 +302,27 @@ const faqSchema = {
 
       const fromTool = findTool(fromSlug);
       const toTool = findTool(toSlug);
-      const techs = parseInt(techsInput.value, 10) || 5;
+      const techsRaw = parseInt(techsInput.value, 10);
+      const techs = Number.isNaN(techsRaw) ? 5 : Math.max(1, techsRaw);
 
-      const fromMonthly = parseInt(currentCostInput.value, 10) || monthlyCostOf(fromTool, techs);
-      const toMonthly = monthlyCostOf(toTool, techs);
+      const fromEntered = parseInt(currentCostInput.value, 10);
+      const toEntered = parseInt(targetCostInput.value, 10);
+      const fromMonthly = !isNaN(fromEntered) && fromEntered >= 0 ? fromEntered : monthlyCostOf(fromTool, techs);
+      const toMonthly = !isNaN(toEntered) && toEntered >= 0 ? toEntered : monthlyCostOf(toTool, techs);
+      if (fromMonthly === null || toMonthly === null) {
+        const missing = [];
+        if (fromMonthly === null) missing.push(fromTool.name + ' has no published list price. Enter your current monthly bill.');
+        if (toMonthly === null) missing.push(toTool.name + ' has no published list price. Enter the monthly quote you were given.');
+        outputDiv.classList.remove('hidden');
+        promptDiv.classList.add('hidden');
+        outputDiv.innerHTML = '<div class="rounded-md border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">' + missing.join(' ') + ' We do not estimate prices a vendor does not publish for your team size.</div>';
+        return;
+      }
 
       const implFee = parseInt(implFeeInput.value, 10);
-      const targetImplFee = !isNaN(implFee) && implFee >= 0 ? implFee : IMPL_FEE_BY_TIER[toTool.tier];
+      const implKnown = !isNaN(implFee) && implFee >= 0;
+      const targetImplFee = implKnown ? implFee : 0;
+      const exclNote = implKnown ? '' : ' (excluding the implementation fee you have not entered)';
 
       const trainingCost = techs * TRAINING_HOURS_PER_TECH * TECH_RATE_PER_HOUR + OFFICE_HOURS * OFFICE_RATE_PER_HOUR;
       const parallelRunCost = fromMonthly; // one extra month of source subscription
@@ -312,7 +335,7 @@ const faqSchema = {
       const toTCO12 = toMonthly * 12 + totalSwitchingCost;
       const netDelta12 = toTCO12 - fromTCO12;
 
-      const seatTools = [...new Set([toTool, ...(currentCostInput.value ? [] : [fromTool])])].filter(isBasePlusSeat);
+      const seatTools = [...new Set([...(!isNaN(toEntered) && toEntered >= 0 ? [] : [toTool]), ...(!isNaN(fromEntered) && fromEntered >= 0 ? [] : [fromTool])])].filter(isBasePlusSeat);
       const seatNote = seatTools.length
         ? `<p class="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">${seatTools.map((t) => t.name).join(' and ')} ${seatTools.length === 1 ? 'charges' : 'charge'} a base price that includes some users, plus a fee for each extra seat. This estimate uses the base price only, so the real monthly cost is higher for larger teams; check the pricing note on the tool page.</p>`
         : '';
@@ -325,6 +348,7 @@ const faqSchema = {
         if (months > 60) breakEvenLabel = months + ' months (>5 years — likely not worth on cost alone)';
         else breakEvenLabel = months + ' month' + (months === 1 ? '' : 's');
       }
+      if (monthlySavings > 0) breakEvenLabel += exclNote;
 
       let recommendation;
       let recommendationStyle;
@@ -343,6 +367,8 @@ const faqSchema = {
         recommendationStyle = 'border-rose-200 bg-rose-50 text-rose-900';
       }
 
+      if (!implKnown && monthlySavings > 0) recommendation = 'Excluding the implementation fee you have not entered: ' + recommendation.charAt(0).toLowerCase() + recommendation.slice(1);
+
       outputDiv.classList.remove('hidden');
       promptDiv.classList.add('hidden');
 
@@ -358,7 +384,7 @@ const faqSchema = {
             <div class="mt-1 text-xs text-slate-500">${formatCurrency(fromMonthly)}/mo × 12 months</div>
           </div>
           <div class="rounded-lg border ${netDelta12 > 0 ? 'border-rose-200 bg-rose-50' : 'border-emerald-200 bg-emerald-50'} p-4">
-            <div class="text-xs font-semibold uppercase tracking-wider ${netDelta12 > 0 ? 'text-rose-700' : 'text-emerald-700'}">${toTool.name} 12-mo total</div>
+            <div class="text-xs font-semibold uppercase tracking-wider ${netDelta12 > 0 ? 'text-rose-700' : 'text-emerald-700'}">${toTool.name} 12-mo total${implKnown ? '' : ' (excl. implementation fee)'}</div>
             <div class="mt-2 text-2xl font-bold ${netDelta12 > 0 ? 'text-rose-900' : 'text-emerald-900'}">${formatCurrency(toTCO12)}</div>
             <div class="mt-1 text-xs ${netDelta12 > 0 ? 'text-rose-700' : 'text-emerald-700'}">${formatCurrency(toMonthly)}/mo × 12 + ${formatCurrency(totalSwitchingCost)} switching cost</div>
           </div>
@@ -373,8 +399,8 @@ const faqSchema = {
         <table class="w-full text-sm">
           <tbody class="divide-y divide-slate-100">
             <tr>
-              <td class="py-2 text-slate-700">${toTool.name} implementation fee</td>
-              <td class="py-2 text-right font-medium text-slate-900">${formatCurrency(targetImplFee)}</td>
+              <td class="py-2 text-slate-700">${toTool.name} implementation fee${implKnown ? '' : ' (not entered; add it from your quote)'}</td>
+              <td class="py-2 text-right font-medium text-slate-900">${implKnown ? formatCurrency(targetImplFee) : 'Not entered'}</td>
             </tr>
             <tr>
               <td class="py-2 text-slate-700">Training cost (${techs} techs × ${TRAINING_HOURS_PER_TECH}h + ${OFFICE_HOURS}h office)</td>
@@ -385,7 +411,7 @@ const faqSchema = {
               <td class="py-2 text-right font-medium text-slate-900">${formatCurrency(parallelRunCost)}</td>
             </tr>
             <tr class="font-bold">
-              <td class="pt-3 text-slate-900">Total switching cost</td>
+              <td class="pt-3 text-slate-900">Total switching cost${exclNote}</td>
               <td class="pt-3 text-right text-slate-900">${formatCurrency(totalSwitchingCost)}</td>
             </tr>
           </tbody>
@@ -423,6 +449,7 @@ const faqSchema = {
     toSelect.addEventListener('change', calculate);
     techsInput.addEventListener('input', calculate);
     currentCostInput.addEventListener('input', calculate);
+    targetCostInput.addEventListener('input', calculate);
     implFeeInput.addEventListener('input', calculate);
 
     // Run once on load in case URL params pre-filled

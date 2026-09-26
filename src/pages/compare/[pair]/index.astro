@@ -248,13 +248,13 @@ const decisionMatrix = getDecisionMatrix();
 // --- PRICING ANALYSIS NARRATIVE ---
 function pricingAnalysis(): string {
   if (!aHasPublicPricing && !bHasPublicPricing) {
-    return `Both ${a.name} and ${b.name} use custom-quoted pricing — typical for enterprise-tier FSM platforms. Expect 30-60 minute discovery calls from each before getting a number, with pricing in the $250-$800 per user per month range for either. Request quotes from both for apples-to-apples comparison at your specific team size and feature requirements.`;
+    return `Neither ${a.name} nor ${b.name} has a published list price, so both need a quote before you can compare them. Request quotes for the same team size and feature set, and get what is included (users, integrations, onboarding) in writing.`;
   }
   if (!aHasPublicPricing) {
-    return `${a.name} uses custom-quoted pricing (typically $250-$800/user/mo for enterprise FSM platforms); ${b.name} has transparent public pricing starting at $${b.pricing.starting_at_usd}/mo. If budget predictability matters, ${b.name} wins on transparency alone. If you need enterprise-tier features and don't mind the sales process, ${a.name}'s custom pricing reflects the deeper feature set.`;
+    return `${a.name} has no published list price; ${b.name} has transparent public pricing starting at $${b.pricing.starting_at_usd}/mo. If budget predictability matters, ${b.name} wins on transparency alone. To compare, get a written quote from ${a.name} for your team size.`;
   }
   if (!bHasPublicPricing) {
-    return `${b.name} uses custom-quoted pricing (typically $250-$800/user/mo for enterprise FSM platforms); ${a.name} has transparent public pricing starting at $${a.pricing.starting_at_usd}/mo. If budget predictability matters, ${a.name} wins on transparency alone. If you need enterprise-tier features and don't mind the sales process, ${b.name}'s custom pricing reflects the deeper feature set.`;
+    return `${b.name} has no published list price; ${a.name} has transparent public pricing starting at $${a.pricing.starting_at_usd}/mo. If budget predictability matters, ${a.name} wins on transparency alone. To compare, get a written quote from ${b.name} for your team size.`;
   }
 
   // Both have public pricing

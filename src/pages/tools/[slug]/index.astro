@@ -102,7 +102,7 @@ function pricingAnalysis(): string {
   const topPrice = tool.pricing.tier_prices_usd?.[tierCount - 1];
 
   if (!hasPublicPricing) {
-    return `${tool.name} uses custom-quoted pricing — typical for enterprise field service platforms where deployment includes data migration, training, and pricebook setup. Expect a 30-60 minute discovery call before getting a number, and the spread between quoted figures can be wide depending on your team size, vertical, and feature requirements. Always get quotes in writing and confirm what's included (number of users, integrations, support tier) before signing.`;
+    return `${tool.name} does not publish a list price we can compare, so you need a quote first. Quote-only is not the same as expensive or enterprise: vendors quote by team size, customer count, company size or usage. Get the quote in writing and confirm what's included (number of users, integrations, onboarding, support tier) before signing.`;
   }
 
   if (isFree) {
@@ -723,8 +723,9 @@ const breadcrumbs = [
           </div>
         </div>
         <p class="mt-3 text-xs text-slate-600" id="pw-note">
-          Estimate uses the published starting tier and detects per-user vs per-company pricing automatically.
-          For an exact quote at your team size and feature requirements, request a quote from {tool.name}.
+          {hasPublicPricing
+            ? `Estimate uses the published starting tier and detects per-user vs per-company pricing automatically. For an exact quote at your team size and feature requirements, request a quote from ${tool.name}.`
+            : `${tool.name} has no published price we can model at your team size, so we do not estimate one: any figure here would be a guess. Ask ${tool.name} for a quote.`}
         </p>
         <div class="mt-3 flex flex-wrap gap-2 text-xs">
           <a
@@ -1016,10 +1017,10 @@ const breadcrumbs = [
       const pricingNote = (widget.dataset.pricingNote ?? '').toLowerCase();
       const toolName = widget.dataset.toolName ?? 'this tool';
 
-      // Custom-quoted (no published starting price) — use $400/user/mo as
-      // mid-case fallback for enterprise tools.
+      // No published price: show that instead of inventing a figure (a per-user
+      // fallback was removed 2026-09-27).
       const isCustomQuoted = !startingPriceRaw || startingPriceRaw === '';
-      const startingPrice = isCustomQuoted ? 400 : parseFloat(startingPriceRaw);
+      const startingPrice = isCustomQuoted ? 0 : parseFloat(startingPriceRaw);
       const isFree = startingPrice === 0;
       // Structure comes from pricing_model (hand-classified 2026-09-09); the old
       // note-text guess treated any note mentioning "per month" as per-company.
@@ -1034,19 +1035,23 @@ const breadcrumbs = [
 
       function update() {
         const techs = parseInt(techsInput!.value, 10) || 1;
+        if (isCustomQuoted) {
+          techsInput!.disabled = true;
+          monthlyEl!.textContent = 'Quote only';
+          annualEl!.textContent = 'Quote only';
+          return;
+        }
         if (isFree) {
           monthlyEl!.textContent = 'Free';
           annualEl!.textContent = 'Free';
           noteEl!.innerHTML = `${toolName} has a free tier — usable indefinitely for solo or 1-2 person operations. Paid tiers unlock advanced features once your team grows. For an exact quote at your size and feature mix, request pricing from ${toolName}.`;
           return;
         }
-        const monthly = isPerUser || isCustomQuoted ? startingPrice * techs : startingPrice;
+        const monthly = isPerUser ? startingPrice * techs : startingPrice;
         const annual = monthly * 12;
         monthlyEl!.textContent = format(monthly);
         annualEl!.textContent = format(annual);
-        if (isCustomQuoted) {
-          noteEl!.innerHTML = `${toolName} uses custom-quoted pricing. We model it at <strong>$400/user/mo</strong> as the mid-case (range: $250-$800/user/mo). Actual quotes vary significantly by team size and modules. Request a real quote from ${toolName} for precision.`;
-        } else if (isFlat) {
+        if (isFlat) {
           noteEl!.innerHTML = `${toolName} charges a <strong>flat monthly price per plan</strong>, so this estimate doesn't scale with team size. Plans can cap users or usage, so check which plan fits your team in the pricing note above.`;
         } else if (isBasePlusSeat) {
           noteEl!.innerHTML = `${toolName} charges a <strong>base price that includes some users</strong>, plus a fee for each extra seat. This estimate shows the base price only; see the pricing note above for seat costs.`;

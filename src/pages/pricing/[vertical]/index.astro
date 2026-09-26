@@ -72,7 +72,7 @@ function scenarioCost(t: Tool, teamSize: number): string {
 const faqs = [
   {
     q: `How much does ${verticalLower} software cost?`,
-    a: `${freeTier ? `Entry-level tools start at free (${freeTier.name}). ` : cheapestPublic ? `Entry-level tools start at $${cheapestPublic.pricing.starting_at_usd}/month (${cheapestPublic.name}). ` : `Most ${verticalLower} platforms are custom-quoted rather than publicly priced, so entry cost depends on your team size and modules. `}Mid-tier tools run $99-$300/month for small teams. Enterprise platforms like ${customQuoteOnly[0]?.name ?? 'ServiceTitan'} use custom quotes and typically run $300-$800/user/month at typical configurations.`,
+    a: `${freeTier ? `Entry-level tools start at free (${freeTier.name}). ` : cheapestPublic ? `Entry-level tools start at $${cheapestPublic.pricing.starting_at_usd}/month (${cheapestPublic.name}). ` : `Most ${verticalLower} platforms are custom-quoted rather than publicly priced, so entry cost depends on your team size and modules. `}Mid-tier tools run $99-$300/month for small teams. Platforms that publish no price, such as ${customQuoteOnly[0]?.name ?? 'ServiceTitan'}, quote each account, so their cost depends on the quote you get.`,
   },
   {
     q: `What's the cheapest ${verticalLower} software?`,
@@ -94,19 +94,19 @@ const faqs = [
   },
   {
     q: `Why don't some tools show pricing?`,
-    a: `Enterprise platforms (ServiceTitan, FieldEdge, BuildOps, etc.) don't publish pricing publicly — they require a sales call to get a custom quote. This is typical for software targeting $1M+ revenue businesses. Reports from users put their pricing in the $100-800/user/month range depending on tier and team size.`,
+    a: `Some vendors, including ServiceTitan, FieldEdge, and BuildOps, publish no prices and quote each account after a sales call. Some of their pricing notes cite ranges that users have reported publicly; treat those as a rough guide, not a quote, and compare written quotes for the same team size.`,
   },
   {
     q: `What hidden costs should I expect beyond the monthly subscription?`,
-    a: `Three usual hidden costs: (1) Payment processing fees — 2.59-2.99% + $0.30 per transaction if you process payments through the platform. For $100K+ annual card volume, switching to standalone Stripe saves 20-50 basis points. (2) Implementation fees — mid-tier platforms often charge $500-$2,000 for guided setup; enterprise platforms $5K-$50K. (3) Add-on integrations — Wisetack consumer financing, FinanceIt, advanced GPS tracking, premium phone systems often added separately at $20-$100/month each.`,
+    a: `Three usual hidden costs: (1) Payment processing fees — 2.59-2.99% + $0.30 per transaction if you process payments through the platform. For $100K+ annual card volume, switching to standalone Stripe saves 20-50 basis points. (2) Implementation fees — some vendors include onboarding in the subscription, others charge for guided setup, and quote-only vendors set it in the quote, so get it in writing. (3) Add-on integrations — Wisetack consumer financing, FinanceIt, advanced GPS tracking, premium phone systems often added separately at $20-$100/month each.`,
   },
   {
     q: `How does pricing scale as I grow from 3 to 10 to 25 techs?`,
-    a: `It depends on how each platform charges. Per-user pricing grows with headcount: Jobber's plans are priced by team size and add $29/month per extra user, and ServiceTitan is custom-quoted (user reports put it around $300-$800 per user per month). Flat plans barely move with headcount: Service Fusion includes unlimited users on every plan ($208-$533/month billed annually), and ServiceM8 prices by job volume rather than users (paid plans $29-$349/month). Seat-bundle plans sit in between: Housecall Pro Essentials includes 5 users for $149/month billed annually, then $100/month per extra user. The crossover depends on the specific plans, so model your projected 18-month team size against each vendor's current pricing page.`,
+    a: `It depends on how each platform charges. Per-user pricing grows with headcount: Jobber's plans are priced by team size and add $29/month per extra user, and ServiceTitan publishes no price, so ask how its quote scales with seats. Flat plans barely move with headcount: Service Fusion includes unlimited users on every plan ($208-$533/month billed annually), and ServiceM8 prices by job volume rather than users (paid plans $29-$349/month). Seat-bundle plans sit in between: Housecall Pro Essentials includes 5 users for $149/month billed annually, then $100/month per extra user. The crossover depends on the specific plans, so model your projected 18-month team size against each vendor's current pricing page.`,
   },
   {
     q: `Can I negotiate ${verticalLower} software pricing?`,
-    a: `For custom-quoted enterprise platforms (ServiceTitan, BuildOps, Procore, FieldEdge enterprise tier), yes — pricing is always negotiable. Standard discounts: 10-20% off list price for annual contracts, additional 5-10% for multi-year commitments. End-of-quarter or end-of-year purchases often get extra leverage as sales reps chase quotas. For published-pricing platforms (Jobber, Housecall Pro), pricing is usually firm — discounts come from annual commitment (typically 15-20% off monthly rates) rather than negotiation.`,
+    a: `For quote-only platforms (ServiceTitan, BuildOps, Procore, FieldEdge), the price is set in the sales process, so ask about annual and multi-year terms and get every discount in writing. For published-pricing platforms (Jobber, Housecall Pro), pricing is usually firm; the saving comes from paying annually, so compare each tool's monthly and annual prices on its pricing page.`,
   },
 ];
 
@@ -226,7 +226,7 @@ const breadcrumbs = [
           )}
           {enterpriseBest && (
             <div class="rounded-lg border border-orange-200 bg-orange-50 p-5">
-              <div class="mb-1 text-xs font-bold uppercase tracking-wider text-orange-700">Enterprise ($250+/user/mo or custom)</div>
+              <div class="mb-1 text-xs font-bold uppercase tracking-wider text-orange-700">Top tier ($250+/mo or quote-only)</div>
               <h3 class="text-lg font-bold text-slate-900">
                 <a href={`/tools/${enterpriseBest.slug}/`} class="hover:text-orange-600">{enterpriseBest.name}</a>
               </h3>
@@ -289,7 +289,7 @@ const breadcrumbs = [
           <strong class="text-slate-900">Payment processing fees</strong> — Most FSM platforms charge 2.59-2.99% + $0.30 per credit card transaction (similar to Stripe). For $100K+/year card volume, standalone Stripe or Adyen can save 20-50 basis points. ACH is cheaper ($0.50-$1.00/transaction) but slower.
         </li>
         <li>
-          <strong class="text-slate-900">Implementation fees</strong> — Mid-tier platforms often offer $500-$2,000 paid setup packages (Quick Start, Pro Setup, Concierge tiers). Enterprise platforms (ServiceTitan, Procore, BuildOps) charge $5K-$50K for required implementation services.
+          <strong class="text-slate-900">Implementation fees</strong> — Some platforms include setup in the subscription and others sell paid setup packages. Quote-only platforms (ServiceTitan, Procore, BuildOps) publish no implementation fee, so ask for it in the same written quote.
         </li>
         <li>
           <strong class="text-slate-900">Add-on integrations and features</strong> — Consumer financing (Wisetack, FinanceIt), advanced GPS tracking, premium phone systems, additional users beyond tier limits, custom integrations — typically $20-$200/month each. Stack these carefully.
