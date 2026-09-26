@@ -52,6 +52,11 @@ export interface Tool {
   name: string;
   vendor_url: string;
   affiliate_url: string;
+  // What the public affiliate ledger on /methodology/ says when affiliate_url
+  // is not a tracked link. Unset = no relationship (not applied, or not
+  // checked). Source of truth: docs/affiliate-status-ledger.md.
+  affiliate_status?: 'applied' | 'approved_unused' | 'declined' | 'no_program';
+  affiliate_note?: string;
   tagline: string;
   verticals: string[];
   vertical_fit?: Record<string, number>;

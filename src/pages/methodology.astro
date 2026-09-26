@@ -18,10 +18,13 @@ const breadcrumbs = [
   { name: 'Methodology', url: '/methodology/' },
 ];
 
-// Build affiliate-status table from the live tools.json. The data rule
-// is: affiliate_url is "TBD" until we have a confirmed tracked URL from
-// the vendor; only then does it get replaced with a real http URL.
-type AffiliateStatus = 'Active' | 'Pending' | 'None';
+// Build affiliate-status table from the live tools.json. Active comes only
+// from affiliate_url being a real tracked http URL; nothing else can make a
+// tool Active. Every other state comes from the explicit affiliate_status
+// field (mirrors docs/affiliate-status-ledger.md). affiliate_url "TBD" means
+// only "no tracked link" and says nothing about an application, so a tool
+// with no affiliate_status is shown as having no relationship.
+type AffiliateStatus = 'Active' | 'Approved' | 'Pending' | 'None';
 
 interface ToolStatus {
   slug: string;
@@ -30,25 +33,27 @@ interface ToolStatus {
   note: string;
 }
 
+const STATUS_FROM_DATA = {
+  approved_unused: {
+    status: 'Approved',
+    note: 'Our affiliate account was approved, but we do not use its tracked link anywhere on the site. We earn nothing from this tool.',
+  },
+  applied: {
+    status: 'Pending',
+    note: 'Application submitted; no decision received. We earn nothing from this tool today.',
+  },
+  declined: {
+    status: 'None',
+    note: 'We applied and were not accepted. No affiliate relationship.',
+  },
+  no_program: {
+    status: 'None',
+    note: 'We found no affiliate program open to publishers (checked May to June 2026). No affiliate relationship.',
+  },
+} as const;
+
 function classifyAffiliate(t: typeof tools[number]): ToolStatus {
-  const url = t.affiliate_url;
-  if (!url || url === '') {
-    return {
-      slug: t.slug,
-      name: t.name,
-      status: 'None',
-      note: 'No affiliate program currently active.',
-    };
-  }
-  if (url === 'TBD') {
-    return {
-      slug: t.slug,
-      name: t.name,
-      status: 'Pending',
-      note: 'Application submitted or tracking URL not yet confirmed.',
-    };
-  }
-  if (url.startsWith('http')) {
+  if (t.affiliate_url.startsWith('http')) {
     return {
       slug: t.slug,
       name: t.name,
@@ -56,27 +61,42 @@ function classifyAffiliate(t: typeof tools[number]): ToolStatus {
       note: 'WrenchStack may earn a commission on signups from this link.',
     };
   }
+  if (t.affiliate_status === undefined) {
+    return {
+      slug: t.slug,
+      name: t.name,
+      status: 'None',
+      note: t.affiliate_note ?? 'No affiliate relationship.',
+    };
+  }
+  const known = STATUS_FROM_DATA[t.affiliate_status];
+  if (!known) {
+    // A typo here would otherwise publish silently as "None".
+    throw new Error(`tools.json: unknown affiliate_status "${t.affiliate_status}" on ${t.slug}`);
+  }
   return {
     slug: t.slug,
     name: t.name,
-    status: 'None',
-    note: 'No affiliate program currently active.',
+    status: known.status,
+    note: t.affiliate_note ?? known.note,
   };
 }
+
+const STATUS_ORDER: AffiliateStatus[] = ['Active', 'Approved', 'Pending', 'None'];
 
 const toolStatuses = tools
   .map(classifyAffiliate)
   .sort((a, b) => {
-    // Active first, then Pending, then None; alphabetical within each
-    const order: AffiliateStatus[] = ['Active', 'Pending', 'None'];
-    const aIdx = order.indexOf(a.status);
-    const bIdx = order.indexOf(b.status);
+    // Active, Approved, Pending, then None; alphabetical within each
+    const aIdx = STATUS_ORDER.indexOf(a.status);
+    const bIdx = STATUS_ORDER.indexOf(b.status);
     if (aIdx !== bIdx) return aIdx - bIdx;
     return a.name.localeCompare(b.name);
   });
 
 const counts = {
   Active: toolStatuses.filter((t) => t.status === 'Active').length,
+  Approved: toolStatuses.filter((t) => t.status === 'Approved').length,
   Pending: toolStatuses.filter((t) => t.status === 'Pending').length,
   None: toolStatuses.filter((t) => t.status === 'None').length,
 };
@@ -84,7 +104,7 @@ const counts = {
 
 <Layout
   title="WrenchStack Fit Score™ Methodology v1.2 — How we rank trades vendors"
-  description="The WrenchStack Fit Score™ is our published, versioned methodology for evaluating trades vendors across 10 categories — software, payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI. Five weighted factors. Public scoring rubric. Independence statement. Per-vendor affiliate ledger."
+  description="The WrenchStack Fit Score™ is our published, versioned methodology for evaluating trades vendors across 10 categories: software, payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI. Four weighted factors. Public scoring rubric. Independence statement. Per-vendor affiliate ledger."
   breadcrumbs={breadcrumbs}
 >
   <article class="mx-auto max-w-3xl px-4 py-12 prose prose-slate">
@@ -296,7 +316,7 @@ const counts = {
 
     <p class="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm not-prose">
       <strong class="text-emerald-900">Affiliate status doesn't affect ranking.</strong>
-      The WrenchStack Fit Score™ (vertical fit + user ratings + pricing transparency + features +
+      The WrenchStack Fit Score™ (vertical fit + user ratings + pricing transparency +
       integrations) is computed the same way for every vendor, whether we have an active affiliate
       relationship, a pending application, or no commercial relationship at all.
     </p>
@@ -307,10 +327,14 @@ const counts = {
       Full transparency. Below is the affiliate status of every software tool in the directory. Vendors in every other category — lead-gen, insurance, payroll, marketing agencies, AI tools, payments, financing, accounting, and business banking — follow the same independence rules, with vendor-specific affiliate disclosure on each review page.
     </p>
 
-    <ul class="not-prose grid grid-cols-2 gap-3 text-sm md:grid-cols-3">
+    <ul class="not-prose grid grid-cols-2 gap-3 text-sm md:grid-cols-4">
       <li class="rounded-lg bg-emerald-50 px-3 py-2 ring-1 ring-emerald-200">
         <span class="font-semibold text-emerald-900">Active:</span>
         <span class="text-emerald-700">{counts.Active} {counts.Active === 1 ? 'tool' : 'tools'}</span>
+      </li>
+      <li class="rounded-lg bg-sky-50 px-3 py-2 ring-1 ring-sky-200">
+        <span class="font-semibold text-sky-900">Approved:</span>
+        <span class="text-sky-700">{counts.Approved} {counts.Approved === 1 ? 'tool' : 'tools'}</span>
       </li>
       <li class="rounded-lg bg-amber-50 px-3 py-2 ring-1 ring-amber-200">
         <span class="font-semibold text-amber-900">Pending:</span>
@@ -334,6 +358,7 @@ const counts = {
         {toolStatuses.map((t) => {
           const statusStyles = {
             Active: 'bg-emerald-100 text-emerald-800 ring-emerald-200',
+            Approved: 'bg-sky-100 text-sky-800 ring-sky-200',
             Pending: 'bg-amber-100 text-amber-800 ring-amber-200',
             None: 'bg-slate-100 text-slate-700 ring-slate-200',
           };
@@ -356,23 +381,30 @@ const counts = {
       </tbody>
     </table>
 
-    <h3 class="mt-8">What "Active", "Pending", and "None" mean</h3>
+    <h3 class="mt-8">What "Active", "Approved", "Pending", and "None" mean</h3>
 
     <ul>
       <li>
-        <strong>Active</strong> — we have an approved affiliate relationship and use a tracked
+        <strong>Active</strong>: we have an approved affiliate relationship and use a tracked
         URL on this tool's review page. If you sign up via our link, we earn a commission. This
         does not affect what we write about the tool, including the cons section.
       </li>
       <li>
-        <strong>Pending</strong> — we've applied to the affiliate program but tracking is not yet
-        confirmed. The "Visit" button currently points to the vendor's public page directly,
-        meaning we don't earn anything from clicks on this tool today.
+        <strong>Approved</strong>: the vendor accepted us into its affiliate program, but we do
+        not use the tracked link anywhere on the site. The "Visit" button points to the vendor's
+        public page and we earn nothing from it. We list it because an approved account is a
+        relationship you should know about.
       </li>
       <li>
-        <strong>None</strong> — no affiliate program exists for this tool, or we've chosen not
-        to participate. The "Visit" button points to the vendor's public page. We earn no
-        commission from this tool.
+        <strong>Pending</strong>: we have applied to the vendor's affiliate program and have not
+        had a decision. The "Visit" button points to the vendor's public page directly, so we
+        don't earn anything from clicks on this tool today.
+      </li>
+      <li>
+        <strong>None</strong>: we have no affiliate relationship with this vendor. Where we have
+        a reason on record, the note gives it: the vendor has no program open to publishers, or
+        we applied and were not accepted. The "Visit" button points to the vendor's public page.
+        We earn no commission from this tool.
       </li>
     </ul>
 
