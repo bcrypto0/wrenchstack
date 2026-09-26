@@ -37,6 +37,22 @@ const foundedYears = tools.filter((t) => t.founded).map((t) => t.founded!);
 const avgFounded = Math.round(foundedYears.reduce((a, b) => a + b, 0) / foundedYears.length);
 const post2015 = tools.filter((t) => t.founded && t.founded >= 2015).length;
 const pre2010 = tools.filter((t) => t.founded && t.founded < 2010).length;
+// Named cohort examples take their years from tools.json so the prose can't drift from the data.
+const cohortExamples = (picks: [string, string][], inCohort: (year: number) => boolean) =>
+  picks
+    .map(([slug, label]) => ({ label, year: tools.find((t) => t.slug === slug)?.founded }))
+    .filter((p): p is { label: string; year: number } => !!p.year && inCohort(p.year))
+    .sort((a, b) => a.year - b.year)
+    .map((p) => `${p.label} (${p.year})`)
+    .join(', ');
+const post2015Examples = cohortExamples([
+  ['fieldpulse', 'FieldPulse'], ['limble', 'Limble'], ['skimmer', 'Skimmer'], ['maintainx', 'MaintainX'],
+  ['jobtread', 'JobTread'], ['sera-systems', 'Sera Systems'], ['roofr', 'Roofr'],
+], (y) => y >= 2015);
+const pre2010Examples = cohortExamples([
+  ['pestpac', 'PestPac'], ['vonigo', 'Vonigo'], ['cleantelligent', 'Otuvy'], ['fieldedge', 'FieldEdge'],
+  ['simpro', 'Simpro'], ['service-autopilot', 'Service Autopilot'], ['acculynx', 'AccuLynx'], ['tradify', 'Tradify'], ['procore', 'Procore'],
+], (y) => y < 2010);
 
 // Integration prevalence
 const withQuickBooks = tools.filter((t) => t.integrations.some((i) => i.includes('quickbooks'))).length;
@@ -344,11 +360,11 @@ const articleSchema = {
       <h2>The modern-cloud cohort</h2>
 
       <p>
-        <strong>{post2015} platforms</strong> in the directory were founded since 2015 — the "modern cloud" cohort that defines the current product expectations for trades software. CompanyCam (2014), FieldPulse (2017), Limble (2017), Skimmer (2017), MaintainX (2018), JobTread (2019), Sera Systems (2020), Roofr (2020). This cohort tends to share design conventions: mobile-first architecture, cloud-native deployment, customer portals, modern dashboards, AI features in product roadmaps.
+        <strong>{post2015} platforms</strong> in the directory were founded since 2015 — the "modern cloud" cohort that defines the current product expectations for trades software. {post2015Examples}. This cohort tends to share design conventions: mobile-first architecture, cloud-native deployment, customer portals, modern dashboards, AI features in product roadmaps.
       </p>
 
       <p>
-        At the other end, <strong>{pre2010} platforms</strong> were founded before 2010 — the legacy cohort. PestPac (1985), Vonigo (2009), CleanTelligent (1999), FieldEdge (predecessor to ServiceTitan's QuickBooks integration), Simpro (2002), Service Autopilot (2008), AccuLynx (2007), Tradify (2009), Procore (2002). These platforms have deeper customer bases, more integration depth in their target verticals, but typically slower UI evolution and harder migration paths to newer alternatives.
+        At the other end, <strong>{pre2010} platforms</strong> were founded before 2010 — the legacy cohort. {pre2010Examples}. These platforms have deeper customer bases, more integration depth in their target verticals, but typically slower UI evolution and harder migration paths to newer alternatives.
       </p>
 
       <h2>Vertical coverage — where the market is dense</h2>
