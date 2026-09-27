@@ -89,7 +89,7 @@
         },
         {
           "q": "Should quotes integrate with consumer financing?",
-          "a": "For high-ticket trades (HVAC replacements $5K+, full roofing jobs, panel upgrades), yes. In-app financing offers (Wisetack, GreenSky, FinanceIt) close 25-40% more deals at the moment of decision rather than after customers sleep on it. Housecall Pro has the most seamless native integration; ServiceTitan and others integrate via partners."
+          "a": "For high-ticket trades (HVAC replacements $5K+, full roofing jobs, panel upgrades), yes. In-app financing offers (Wisetack, GreenSky, FinanceIt) help close more deals at the moment of decision rather than after customers sleep on it. Housecall Pro has the most seamless native integration; ServiceTitan and others integrate via partners."
         }
       ]
     },
@@ -188,7 +188,7 @@
     "inventory": {
       "name": "Inventory Management",
       "definition": "Tracking parts, materials, and equipment across vehicles and warehouses with usage automation.",
-      "description": "Inventory tracking in FSM software covers parts in technician vehicles (truck stock), warehouse inventory, low-stock alerts, automatic usage deduction when parts are added to work orders, supplier integration for ordering, barcode/QR scanning for fast counts, and cost allocation to specific jobs for accurate job-profitability reporting. Critical for HVAC, plumbing, and other parts-heavy trades where parts costs are 25-40% of total revenue.",
+      "description": "Inventory tracking in FSM software covers parts in technician vehicles (truck stock), warehouse inventory, low-stock alerts, automatic usage deduction when parts are added to work orders, supplier integration for ordering, barcode/QR scanning for fast counts, and cost allocation to specific jobs for accurate job-profitability reporting. Critical for HVAC, plumbing, and other parts-heavy trades where parts are a large share of job cost.",
       "why_matters": "Parts inventory mismanagement is a silent profit-killer. Common failure modes: parts shrinkage from poor tracking (typically 5-10% of inventory value annually), wrong-part-on-truck creating return trips that waste 1-2 hours per incident, overordering safety stock that ties up cash, and miscoded job costs that hide unprofitable services. Good inventory management recovers 15-30% of these losses, plus enables data-driven decisions about which services are actually profitable.",
       "buying_tips": "Look for: per-vehicle inventory tracking (not just warehouse), automatic deduction when parts go on work orders, low-stock alerts with reorder suggestions, supplier catalog integration for ordering (Ferguson, Beacon, ABC), barcode/QR scanning support, cost allocation to specific jobs for job-cost accuracy. Most FSM platforms have basic inventory; enterprise platforms (ServiceTitan, BuildOps) have deeper supplier integrations and analytics.",
       "related_features": ["scheduling", "invoicing", "quickbooks_integration"],
@@ -304,7 +304,7 @@
       "name": "Consumer Financing",
       "definition": "In-app financing offers (Wisetack, GreenSky, Synchrony, FinanceIt) for big-ticket repairs and installations.",
       "description": "Consumer financing integrations let customers split big-ticket repairs and installations into monthly payments ($89/mo over 60 months instead of $5,000 upfront). Better implementations show financing options inside the quote workflow with one-click application, instant approval decisions, and automatic deposit to your account. Critical for trades with high-ticket work: HVAC system replacements ($5K-$15K), full roofing jobs ($8K-$30K), panel upgrades ($3K-$8K), bathroom remodels ($10K-$50K).",
-      "why_matters": "Big-ticket trades close 25-40% more deals at the moment of decision when financing is offered vs requiring customers to 'think about it' or 'discuss with spouse.' For HVAC: in-app financing typically lifts replacement-sale conversion from 30% to 45%. For roofing: from 40% to 60%. For a shop doing $500K/year in replacement work, that's $100K-$200K incremental revenue annually with zero increase in lead spend.",
+      "why_matters": "Financing offered at the moment of decision gives big-ticket customers a monthly payment option instead of a reason to 'think about it' or 'discuss with spouse.' It matters most on replacement work (HVAC systems, full roofs), where the ticket is large enough that a monthly payment changes the decision. Ask each financing partner for its approval rates and merchant fees before you count on it.",
       "buying_tips": "Best implementations are NATIVE rather than bolted on. Housecall Pro embeds Wisetack natively in the quote workflow — customer sees monthly payment options inline, applies in one click, gets approval in minutes. ServiceTitan integrates FinanceIt similarly. Jobber and other platforms integrate financing via third-party tools (Wisetack standalone, GreenSky standalone) with more friction. For trades with $3K+ average tickets, native financing is a real competitive advantage.",
       "related_features": ["estimates_quotes", "payment_processing", "membership_management"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor"],

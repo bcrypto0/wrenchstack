@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { priceScaling } from '../../../lib/data';
+import { priceScaling, priceTier } from '../../../lib/data';
 import {
   verticals,
   toolsForVertical,
@@ -45,9 +45,12 @@ const flatRateTools = verticalTools.filter((t) => priceScaling(t) === 'flat' || 
 const perUserTools = verticalTools.filter((t) => priceScaling(t) === 'per_user');
 
 // Best value picks by tier
-const entryTierTools = verticalTools.filter((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0 && t.pricing.starting_at_usd < 100);
-const midTierTools = verticalTools.filter((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd >= 100 && t.pricing.starting_at_usd < 250);
-const enterpriseTierTools = verticalTools.filter((t) => t.pricing.starting_at_usd === null || (t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd >= 250));
+// priceTier compares cost per user (flat plans split across a 5-person team). Until
+// 2026-09-27 these used the starting price alone, so flat company plans of $250+
+// were shown as top-tier picks next to per-user plans.
+const entryTierTools = verticalTools.filter((t) => priceTier(t) === 'entry');
+const midTierTools = verticalTools.filter((t) => priceTier(t) === 'mid');
+const enterpriseTierTools = verticalTools.filter((t) => priceTier(t) === 'enterprise' || priceTier(t) === 'quote-only');
 
 function bestValueIn(set: Tool[]): Tool | null {
   if (set.length === 0) return null;
@@ -72,7 +75,7 @@ function scenarioCost(t: Tool, teamSize: number): string {
 const faqs = [
   {
     q: `How much does ${verticalLower} software cost?`,
-    a: `${freeTier ? `Entry-level tools start at free (${freeTier.name}). ` : cheapestPublic ? `Entry-level tools start at $${cheapestPublic.pricing.starting_at_usd}/month (${cheapestPublic.name}). ` : `Most ${verticalLower} platforms are custom-quoted rather than publicly priced, so entry cost depends on your team size and modules. `}Mid-tier tools run $99-$300/month for small teams. Platforms that publish no price, such as ${customQuoteOnly[0]?.name ?? 'ServiceTitan'}, quote each account, so their cost depends on the quote you get.`,
+    a: `${freeTier ? `Entry-level tools start at free (${freeTier.name}). ` : cheapestPublic ? `Entry-level tools start at $${cheapestPublic.pricing.starting_at_usd}/month (${cheapestPublic.name}). ` : `Most ${verticalLower} platforms are custom-quoted rather than publicly priced, so entry cost depends on your team size and modules. `}Platforms that publish no price, such as ${customQuoteOnly[0]?.name ?? 'ServiceTitan'}, quote each account, so their cost depends on the quote you get.`,
   },
   {
     q: `What's the cheapest ${verticalLower} software?`,
@@ -197,12 +200,12 @@ const breadcrumbs = [
       <section class="mb-12">
         <h2 class="mb-4 text-2xl font-bold text-slate-900">Best value picks by tier</h2>
         <p class="mb-6 text-slate-600">
-          Highest-rated tool in each pricing tier — combining price-tier classification with aggregate user ratings to surface the best value per spending bracket.
+          Highest-rated tool in each price tier. Tiers compare cost per user per month, with a flat company plan split across a 5-person team, so a $300/mo flat plan counts as $60 per user.
         </p>
         <div class="grid gap-4 md:grid-cols-3">
           {entryBest && (
             <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-5">
-              <div class="mb-1 text-xs font-bold uppercase tracking-wider text-emerald-700">Entry tier (under $100/mo)</div>
+              <div class="mb-1 text-xs font-bold uppercase tracking-wider text-emerald-700">Entry tier (under $100/user/mo)</div>
               <h3 class="text-lg font-bold text-slate-900">
                 <a href={`/tools/${entryBest.slug}/`} class="hover:text-orange-600">{entryBest.name}</a>
               </h3>
@@ -214,7 +217,7 @@ const breadcrumbs = [
           )}
           {midBest && (
             <div class="rounded-lg border border-blue-200 bg-blue-50 p-5">
-              <div class="mb-1 text-xs font-bold uppercase tracking-wider text-blue-700">Mid tier ($100-$250/mo)</div>
+              <div class="mb-1 text-xs font-bold uppercase tracking-wider text-blue-700">Mid tier ($100-$249/user/mo)</div>
               <h3 class="text-lg font-bold text-slate-900">
                 <a href={`/tools/${midBest.slug}/`} class="hover:text-orange-600">{midBest.name}</a>
               </h3>
@@ -226,7 +229,7 @@ const breadcrumbs = [
           )}
           {enterpriseBest && (
             <div class="rounded-lg border border-orange-200 bg-orange-50 p-5">
-              <div class="mb-1 text-xs font-bold uppercase tracking-wider text-orange-700">Top tier ($250+/mo or quote-only)</div>
+              <div class="mb-1 text-xs font-bold uppercase tracking-wider text-orange-700">Top tier ($250+/user/mo or quote-only)</div>
               <h3 class="text-lg font-bold text-slate-900">
                 <a href={`/tools/${enterpriseBest.slug}/`} class="hover:text-orange-600">{enterpriseBest.name}</a>
               </h3>

@@ -10,6 +10,7 @@ import { asSentence,
   readingTimeMinutes,
   medianUsd,
   verticalFitScore,
+  priceTier,
   type Vertical,
   type Tool,
 } from '../../lib/data';
@@ -80,17 +81,16 @@ const valuePick = topPicks
 // entry price into honest bands (custom-quote tools surfaced separately). The
 // most AI-citable answer to "how much does [trade] software cost", all derived
 // live from verified pricing, so it can't go stale silently.
-const inBand = (lo: number, hi: number) =>
-  ranked.filter((t) => {
-    const p = t.pricing.starting_at_usd;
-    return p !== null && p >= lo && p <= hi;
-  });
+// Bands come from priceTier, which compares cost per user (flat plans split across a
+// 5-person team). Until 2026-09-27 they used the starting price alone, so a $297/mo
+// flat company plan was listed as Premium next to per-user plans.
+const inTier = (tier: string) => ranked.filter((t) => priceTier(t) === tier);
 const pricingBands = [
-  { label: 'Free / freemium', range: '$0 to start', tools: ranked.filter((t) => t.pricing.starting_at_usd === 0) },
-  { label: 'Budget', range: 'under $100/mo', tools: inBand(1, 99) },
-  { label: 'Mid-market', range: '$100–$249/mo', tools: inBand(100, 249) },
-  { label: 'Premium', range: '$250+/mo', tools: ranked.filter((t) => (t.pricing.starting_at_usd ?? -1) >= 250) },
-  { label: 'Custom quote only', range: 'sales call required', tools: ranked.filter((t) => t.pricing.starting_at_usd === null) },
+  { label: 'Free / freemium', range: '$0 to start', tools: inTier('free') },
+  { label: 'Budget', range: 'under $100/user/mo', tools: inTier('entry') },
+  { label: 'Mid-market', range: '$100-$249/user/mo', tools: inTier('mid') },
+  { label: 'Premium', range: '$250+/user/mo', tools: inTier('enterprise') },
+  { label: 'Custom quote only', range: 'sales call required', tools: inTier('quote-only') },
 ].filter((b) => b.tools.length > 0);
 const priceLo = publicPrices.length ? `$${publicPrices[0]}/mo` : null;
 const priceHi = publicPrices.length ? `$${publicPrices[publicPrices.length - 1]}/mo` : null;
@@ -369,7 +369,7 @@ const breadcrumbs = [
           </table>
         </div>
         <p class="mt-2 text-xs text-slate-500">
-          Entry price = the lowest published tier per tool; most platforms add per-user or higher-tier costs above this (see each review for the full tier breakdown). <a href="/methodology/" class="underline hover:text-slate-700">How we verify pricing →</a>
+          Bands compare the lowest published tier per user per month; a flat company plan is split across a 5-person team, so a $300/mo flat plan counts as $60 per user. Most platforms add per-user or higher-tier costs above this (see each review for the full tier breakdown). <a href="/methodology/" class="underline hover:text-slate-700">How we verify pricing →</a>
         </p>
       </section>
     )}

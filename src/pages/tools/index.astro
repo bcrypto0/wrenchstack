@@ -125,12 +125,12 @@ const itemListSchema = {
 
         <div class="grid gap-3 md:grid-cols-2">
           <div>
-            <div class="mb-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Price tier</div>
+            <div class="mb-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Price tier <span class="font-normal normal-case tracking-normal text-slate-400">(per user per month; flat plans split across 5 users)</span></div>
             <div class="flex flex-wrap gap-1.5" data-filter-group="tier">
               <button type="button" data-filter-value="free" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Free tier</button>
-              <button type="button" data-filter-value="entry" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Entry (&lt;$100/mo)</button>
+              <button type="button" data-filter-value="entry" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Entry (under $100)</button>
               <button type="button" data-filter-value="mid" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Mid ($100-249)</button>
-              <button type="button" data-filter-value="enterprise" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Enterprise ($250+)</button>
+              <button type="button" data-filter-value="enterprise" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Top ($250+)</button>
               <button type="button" data-filter-value="quote-only" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Quote-only (no public price)</button>
             </div>
           </div>

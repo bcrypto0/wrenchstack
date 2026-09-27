@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import migrationsData from '../../data/migrations.json';
-import { getTool, type Tool } from '../../lib/data';
+import { getTool, priceTier, type Tool } from '../../lib/data';
 
 const MIGRATIONS = migrationsData.migrations;
 
@@ -26,11 +26,13 @@ const resolved: Resolved[] = MIGRATIONS.map(m => {
   };
 }).filter((r): r is Resolved => r !== null);
 
-// Categorize migrations by destination tool tier (where you're going)
+// Categorize migrations by destination tool tier (where you're going). Uses priceTier,
+// which compares cost per user; until 2026-09-27 a flat company plan of $250+/mo was
+// filed with the quote-only enterprise platforms.
 function destinationTier(t: Tool): 'enterprise' | 'mid' | 'entry' {
-  const p = t.pricing.starting_at_usd;
-  if (p === null || p >= 250) return 'enterprise';
-  if (p >= 100) return 'mid';
+  const tier = priceTier(t);
+  if (tier === 'quote-only' || tier === 'enterprise') return 'enterprise';
+  if (tier === 'mid') return 'mid';
   return 'entry';
 }
 
@@ -103,7 +105,7 @@ const itemListSchema = {
       <section class="mb-12">
         <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Migrating to mid-tier platforms</h2>
         <p class="mb-6 text-slate-600">
-          Moving to mid-tier FSM platforms ($100-$250/user/mo). Plan 4-8 weeks with optional paid onboarding ($500-$2K).
+          Moving to platforms priced at $100-$249 per user per month. Plan on several weeks, and ask whether onboarding is self-service or a paid service.
         </p>
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {toMidTier.map(r => (
@@ -125,7 +127,7 @@ const itemListSchema = {
       <section class="mb-12">
         <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Migrating to entry-tier platforms</h2>
         <p class="mb-6 text-slate-600">
-          Moving to entry-tier FSM ($39-$99/user/mo or free tier). Plan 1-3 weeks for self-service onboarding.
+          Moving to platforms under $100 per user per month (flat plans split across a 5-person team) or with a free tier. Most are built for self-service setup; check whether the destination charges a setup fee.
         </p>
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {toEntryTier.map(r => (

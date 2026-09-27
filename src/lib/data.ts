@@ -286,6 +286,27 @@ const FSM_CORE_FEATURES = new Set([
   'recurring_scheduling',
   'route_optimization',
   'recurring_services',
+  // Same capabilities under the names other entries use. Added 2026-09-27: without
+  // them ServiceTitan, FieldEdge, PestPac, GorillaDesk and others typed as 'unknown',
+  // which skips the type checks, and ServiceTitan's closest alternative was Procore.
+  'call_booking',
+  'online_booking',
+  'ai_dispatcher',
+  'routing',
+  'service_calendar',
+  'automated_invoicing',
+  'billing',
+  'estimates_quotes',
+  'mobile_estimates',
+  'service_agreements',
+  'agreements',
+  'membership_management',
+  'flat_rate_pricing',
+  'flat_rate_pricebook',
+  'pricebook',
+  'pricebook_pro',
+  'automated_reminders',
+  'service_history',
 ]);
 
 // CMMS / internal-maintenance signature features. Tools dominated by
@@ -336,8 +357,27 @@ export function toolType(t: Tool): ToolType {
   return 'unknown';
 }
 
-export function priceTier(t: Tool): PriceTier {
+/**
+ * Price tiers compare cost per user per month. A flat company plan, or the base
+ * fee of a base-plus-seat plan, is spread across a reference team of this many
+ * users first. Until 2026-09-27 the tier used the starting price alone, so a $399
+ * flat company plan sat in the same tier as a $400-per-user plan, and the matcher
+ * and the "top tier" copy treated them as the same kind of purchase.
+ */
+export const REFERENCE_TEAM_SIZE = 5;
+
+/** Starting price per user per month (flat plans spread over REFERENCE_TEAM_SIZE). */
+export function perUserEquivalentUsd(t: Tool): number | null {
   const p = t.pricing.starting_at_usd;
+  if (p === null || p === 0) return p;
+  const s = priceScaling(t);
+  if (s === 'flat' || s === 'base_plus_seat') return p / REFERENCE_TEAM_SIZE;
+  // per_user as published; 'unclear' is left undivided because we cannot tell.
+  return p;
+}
+
+export function priceTier(t: Tool): PriceTier {
+  const p = perUserEquivalentUsd(t);
   if (p === null) return 'quote-only';
   if (p === 0) return 'free';
   if (p < 100) return 'entry';
@@ -347,6 +387,9 @@ export function priceTier(t: Tool): PriceTier {
 
 export function teamSizeBucket(t: Tool): TeamSizeBucket {
   const ts = t.best_team_size ?? '';
+  // "10+" has no upper bound. Until 2026-09-27 it fell through to 'small', which
+  // put ServiceTitan, Procore and MarketSharp in the 3-15 person bucket.
+  if (/^\s*\d+\s*\+\s*$/.test(ts)) return 'large';
   const match = ts.match(/(\d+)-(\d+)/);
   if (!match) {
     // Fall back to a small operation if unspecified
@@ -490,6 +533,22 @@ const TYPE_MATCH_BONUS = 2.0;
 // out-rank real category matches.
 const TYPE_MISMATCH_PENALTY = 1.0;
 
+// Features most tools list, which say nothing about what kind of tool it is.
+const GENERIC_FEATURES = new Set([
+  'mobile_app',
+  'reporting',
+  'reports',
+  'custom_workflows',
+  'workflow_automation',
+  'offline_mode',
+  'quickbooks_integration',
+  'photo_documentation',
+  'esignature',
+  'payment_processing',
+  'checklists',
+  'document_management',
+]);
+
 export function smartAlternatives(t: Tool, n: number = 6): ScoredAlternative[] {
   const sourceType = toolType(t);
   const sourceTier = priceTier(t);
@@ -562,6 +621,17 @@ export function smartAlternatives(t: Tool, n: number = 6): ScoredAlternative[] {
       // Specialty tools surfacing as alternatives to definite-type sources
       // get a penalty so real category matches win.
       score -= TYPE_MISMATCH_PENALTY;
+    } else if (sourceType === 'unknown') {
+      // An unclassified source is a specialty (takeoff, time tracking, sales CRM,
+      // photo app), so compare what the tools do: one point per distinctive feature in
+      // common (up to three), and none in common counts as a mismatch. Until
+      // 2026-09-27 these pairs were unscored, so MarketSharp (a sales CRM) was matched
+      // to CompanyCam (a photo app) and PlanSwift (takeoff) to SafetyCulture.
+      const shared = (c.key_features ?? []).filter(
+        (f) => !GENERIC_FEATURES.has(f) && (t.key_features ?? []).includes(f),
+      ).length;
+      if (shared === 0) score -= TYPE_MISMATCH_PENALTY;
+      else score += Math.min(shared, 3);
     }
 
     const reason = buildAlternativeRationale(t, c);

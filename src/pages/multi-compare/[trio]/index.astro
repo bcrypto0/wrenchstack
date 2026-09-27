@@ -8,6 +8,7 @@ import { asSentence,
   wrenchStackScore,
   verticals,
   verticalToUrl,
+  priceTier,
   type Tool,
 } from '../../../lib/data';
 import WrenchScore from '../../../components/WrenchScore.astro';
@@ -84,13 +85,15 @@ function verticalWinner(verticalSlug: string): { winner: Tool | null; scores: { 
   return { winner, scores };
 }
 
-// Implementation timeline per tool (based on price tier)
+// Implementation timeline per tool, typical for its price tier. Same wording as the
+// two-way compare pages; until 2026-09-27 this used the raw starting price and
+// asserted a dedicated PM that no vendor publishes.
 function implementationTimeline(t: Tool): string {
-  const p = t.pricing.starting_at_usd;
-  if (p === null) return 'Not published (quote-only, ask for the onboarding plan in writing)';
-  if (p >= 250) return '3-6 months (enterprise tier — dedicated PM required)';
-  if (p >= 100) return '4-8 weeks (mid-tier — optional paid onboarding)';
-  return '1-3 weeks (self-service onboarding)';
+  const tier = priceTier(t);
+  if (tier === 'quote-only') return 'Not published (quote-only, ask for the onboarding plan in writing)';
+  if (tier === 'enterprise') return '3-6 months is typical at this price level; ask for the onboarding plan in writing';
+  if (tier === 'mid') return '4-8 weeks is typical at this price level; confirm whether onboarding is self-service or a paid service';
+  return '1-3 weeks is typical at this price level; ask whether there is a setup fee';
 }
 
 // Decision-matrix reasons per tool
@@ -172,7 +175,7 @@ const faqs = [
   },
   {
     q: `How do they compare on implementation time?`,
-    a: `${a.name}: ${implementationTimeline(a)}. ${b.name}: ${implementationTimeline(b)}. ${c.name}: ${implementationTimeline(c)}. Implementation length tracks pricing tier — enterprise platforms ($250+/user/mo) need 3-6 months with dedicated PM; mid-tier reach operational status in 4-8 weeks; entry-tier are self-service in 1-3 weeks.`,
+    a: `${a.name}: ${implementationTimeline(a)}. ${b.name}: ${implementationTimeline(b)}. ${c.name}: ${implementationTimeline(c)}. These are typical ranges for each price level, not figures the vendors publish: the top price tier ($250+/user/mo) often takes 3-6 months, mid-tier platforms often reach operational status in 4-8 weeks, and entry-tier platforms often go live in 1-3 weeks. Ask each vendor for its onboarding plan in writing.`,
   },
   {
     q: `Can I migrate from any of these to another later?`,

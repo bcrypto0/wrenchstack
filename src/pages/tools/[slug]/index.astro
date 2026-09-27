@@ -15,6 +15,10 @@ import { asSentence,
   readingTimeMinutes,
   linkifyTools,
   smartAlternatives,
+  priceTier,
+  priceScaling,
+  perUserEquivalentUsd,
+  REFERENCE_TEAM_SIZE,
   type Tool,
 } from '../../../lib/data';
 
@@ -65,9 +69,25 @@ const isFree = startingPrice === 0;
 // is not evidence of an expensive one. Conflating them made this page assert an enterprise
 // rollout and $1M+ revenue requirements for products that may cost $40/month.
 const isQuoteOnly = !hasPublicPricing;
-const isEnterprise = startingPrice !== null && startingPrice >= 250;
-const isMidTier = hasPublicPricing && startingPrice !== null && startingPrice >= 100 && startingPrice < 250;
-const isEntryTier = hasPublicPricing && startingPrice !== null && startingPrice < 100;
+// Tiers come from priceTier, which compares cost per user: until 2026-09-27 this page
+// used the starting price alone, so a $297/mo flat company plan was called
+// "enterprise" next to per-user plans a 5-person team pays more for.
+const tier = priceTier(tool);
+const isEnterprise = tier === 'enterprise';
+const isMidTier = tier === 'mid';
+const isEntryTier = tier === 'entry';
+const scaling = priceScaling(tool);
+const perUserEq = perUserEquivalentUsd(tool);
+const isCompanyPlan = scaling === 'flat' || scaling === 'base_plus_seat';
+// "$297/mo for the company" vs "$29/user/mo", for prose that quotes the entry price.
+const priceText = startingPrice === null
+  ? ''
+  : isCompanyPlan
+  ? `$${startingPrice}/mo for the company`
+  : scaling === 'per_user'
+  ? `$${startingPrice}/user/mo`
+  : `$${startingPrice}/mo`;
+const hasSetupFee = /(setup|set-up|onboarding|implementation) fee/i.test(tool.pricing.pricing_note ?? '');
 const hasFreeTrial = (tool.pricing.free_trial_days ?? 0) > 0;
 const hasQuickBooks = tool.integrations.some((i) => i.includes('quickbooks'));
 const hasStripe = tool.integrations.some((i) => i.includes('stripe'));
@@ -109,23 +129,32 @@ function pricingAnalysis(): string {
   }
 
   const tierLadder = tool.pricing.tiers.join(' → ');
-  const valueBracket = isEntryTier
-    ? 'budget-friendly entry tier'
+  const band = isEntryTier
+    ? 'entry price band (under $100 per user per month)'
     : isMidTier
-    ? 'mid-tier'
-    : 'premium';
+    ? 'mid price band ($100-$249 per user per month)'
+    : 'top price band ($250 or more per user per month)';
+  const perUserNote = perUserEq === null
+    ? ''
+    : scaling === 'flat'
+    ? `That is a price for the company, not per user: spread across a ${REFERENCE_TEAM_SIZE}-person team it works out to about $${Math.round(perUserEq)} per user. `
+    : scaling === 'base_plus_seat'
+    ? `That is a base price for the account, with seats added on top (see the pricing note): spread across a ${REFERENCE_TEAM_SIZE}-person team the base alone works out to about $${Math.round(perUserEq)} per user. `
+    : scaling === 'per_user'
+    ? `That is a per-user price, so the bill grows as you add seats; check the pricing note for seat minimums and plan limits. `
+    : `We have not confirmed how that price scales with team size, so check before you compare it. `;
 
   return `${tool.name} starts at $${startingPrice}/mo on the ${tool.pricing.tiers[0]} tier${
-    topPrice && typeof topPrice === 'number' && topPrice > 0
+    tierCount > 1 && topPrice && typeof topPrice === 'number' && topPrice > 0 && topPrice !== startingPrice
       ? ` and scales to $${topPrice}/mo on ${tool.pricing.tiers[tierCount - 1]}`
       : ''
-  }. The ${tierLadder} ladder places it in the ${valueBracket} segment of the FSM market. ${
+  }. ${perUserNote}The ${tierLadder} ladder places it in our ${band}. ${
     isEntryTier
-      ? `At this price point you're getting core scheduling, invoicing, and a mobile app — but expect to upgrade once you need advanced features like dispatch optimization, automated reminders, or recurring-service contracts.`
+      ? `Tools in this band usually cover the core workflow. Check the tier list before you buy: features like dispatch optimization, automated reminders and recurring-service contracts are often kept for higher plans.`
       : isMidTier
-      ? `At this tier you'll typically get the full FSM feature set — scheduling, dispatching, invoicing, customer portal, and most automation. The jump from entry to this tier is usually where the software starts paying for itself.`
-      : `At this tier you're paying for enterprise-grade reporting, custom workflows, dedicated account management, and integration depth. Justified for established shops ($1M+ revenue, 10+ techs); overkill for smaller teams.`
-  }${hasFreeTrial ? ` ${tool.pricing.free_trial_days}-day free trial available — no credit card typically required.` : ` No public free trial — demo required to evaluate.`}`;
+      ? `At this price, expect the core workflow plus automation and reporting. Check which features ${tool.name} keeps for its higher tiers.`
+      : `At this price you are paying for depth: reporting, custom workflows and integration work. Confirm each one in the demo, since vendors package them differently.`
+  }${hasFreeTrial ? ` ${tool.pricing.free_trial_days}-day free trial available.` : ` No public free trial, so plan on a demo to evaluate it.`}`;
 }
 
 // --- PROS (DETAILED, TEMPLATED FROM EXISTING DATA) ---
@@ -276,7 +305,9 @@ function implementationTimeline(): { headline: string; detail: string } {
   }
   return {
     headline: '1–3 weeks for a small team',
-    detail: `Entry-tier FSM platforms are designed for self-service onboarding. You can typically be running real jobs through the system within a week: import customers (or build from scratch), configure your services and pricing, and start scheduling. The bigger time sink is usually adapting your existing workflow rather than the software setup itself.`,
+    detail: hasSetupFee
+      ? `${tool.name} charges a one-time setup or onboarding fee (see the pricing note), so ask what it covers and how long it takes before you sign. Most tools in this price band can be running real jobs within a few weeks once customers are imported and services and pricing are configured. The bigger time sink is usually adapting your existing workflow rather than the software setup itself.`
+      : `Most tools in this price band are built for self-service setup. You can typically be running real jobs through the system within a week: import customers (or build from scratch), configure your services and pricing, and start scheduling. The bigger time sink is usually adapting your existing workflow rather than the software setup itself.`,
   };
 }
 
@@ -290,11 +321,11 @@ function getFaqs(): { q: string; a: string }[] {
     a: `${tool.name} is worth it if you fit the target profile: ${asSentence(tool.best_for)} ${
       isQuoteOnly
         ? `${tool.name} does not publish a price, so the ROI maths cannot be done from public information. Get a written quote for your seat count before comparing it against anything here.`
+        : isFree
+        ? `The free tier lets you test that with real jobs before you pay anything; check which features the paid tiers add before your team grows into them.`
         : isEnterprise
-        ? `At enterprise pricing, the ROI math requires established revenue ($1M+) and a team large enough to absorb the implementation overhead.`
-        : isMidTier
-        ? `At mid-tier pricing ($${startingPrice}+/mo), you typically recoup the cost within 2-3 months from faster invoicing, fewer missed appointments, and reduced manual scheduling.`
-        : `At entry-tier pricing ($${startingPrice}/mo), the ROI is usually quick — one prevented missed appointment per month covers the cost.`
+        ? `At ${priceText}, the maths works only for a team large enough to use the depth you are paying for, so price it for your seat count and compare it with the alternatives below.`
+        : `At ${priceText}, weigh the price against the admin time it saves on scheduling, invoicing and follow-up, and run a real week of jobs through it in a trial or demo before you commit.`
     } If you're outside the target profile, alternatives below are likely a better fit.`,
   });
 

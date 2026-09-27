@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, verticals, medianUsd as sharedMedianUsd, perUserMedian, flatFeeMedian, perUserTools, flatFeeTools, priceTier, teamSizeBucket, freshnessTier, aggregateRating, accountingSoftware, paymentProcessors, bankingProviders, financingProviders, insuranceProviders, leadGenPlatforms, payrollServices, marketingAgencies, aiTools } from '../lib/data';
+import { tools, verticals, medianUsd as sharedMedianUsd, perUserMedian, flatFeeMedian, perUserTools, flatFeeTools, priceTier, REFERENCE_TEAM_SIZE, teamSizeBucket, freshnessTier, aggregateRating, accountingSoftware, paymentProcessors, bankingProviders, financingProviders, insuranceProviders, leadGenPlatforms, payrollServices, marketingAgencies, aiTools } from '../lib/data';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -12,6 +12,11 @@ const breadcrumbs = [
 // Pricing distribution
 const tierDist = { free: 0, entry: 0, mid: 0, enterprise: 0, 'quote-only': 0 };
 for (const t of tools) tierDist[priceTier(t)]++;
+const topPricedSentence = tierDist.enterprise === 0
+  ? 'None publishes a starting price of $250 or more per user.'
+  : tierDist.enterprise === 1
+  ? 'Only one publishes a starting price of $250 or more per user.'
+  : `A further ${tierDist.enterprise} publish a starting price of $250 or more per user.`;
 
 const pricedTools = tools.filter((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0);
 const prices = pricedTools.map((t) => t.pricing.starting_at_usd!).sort((a, b) => a - b);
@@ -83,9 +88,6 @@ const ratings = tools.map((t) => aggregateRating(t)).filter((r): r is number => 
 const avgRating = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(2);
 const above47 = ratings.filter((r) => r >= 4.7).length;
 const below43 = ratings.filter((r) => r < 4.3).length;
-
-// Verticals breakdown by tier
-const enterpriseSpread = tools.filter((t) => priceTier(t) === 'enterprise');
 
 // Per-company vs per-user pricing
 function detectsPerCompany(t: typeof tools[number]): boolean {
@@ -211,7 +213,7 @@ const articleSchema = {
       <h2>Pricing — what trades software actually costs</h2>
 
       <p>
-        The trades software market in 2026 spans an order of magnitude in price. Entry-tier platforms like Joist ($10/month Basics) and Tradify ($47/user/month Lite tier) live alongside platforms like ServiceTitan and BuildOps that publish no price at all. The median published entry price across our directory is <strong>${medianPrice}/month</strong>. That blended figure mixes two pricing models and is not a per-seat rate: {perUserTools().length} platforms charge per user (median <strong>${perUserMedian()} per user/month</strong>) and {flatFeeTools().length} charge a flat monthly platform fee (median <strong>${flatFeeMedian()}/month</strong>). Counting from the blended number, with {tierDist.entry} platforms in the under-$100 tier, {tierDist.mid} in $100-$249, {tierDist.enterprise} publishing $250+, and {tierDist['quote-only']} publishing no price at all.
+        The trades software market in 2026 spans an order of magnitude in price. Entry-tier platforms like Joist ($10/month Basics) and Tradify ($47/user/month Lite tier) live alongside platforms like ServiceTitan and BuildOps that publish no price at all. The median published entry price across our directory is <strong>${medianPrice}/month</strong>. That blended figure mixes two pricing models and is not a per-seat rate: {perUserTools().length} platforms charge per user (median <strong>${perUserMedian()} per user/month</strong>) and {flatFeeTools().length} charge a flat monthly platform fee (median <strong>${flatFeeMedian()}/month</strong>). Our price tiers compare cost per user instead, with each flat plan split across a {REFERENCE_TEAM_SIZE}-person team: {tierDist.entry} platforms come in under $100 per user a month, {tierDist.mid} at $100-$249, {tierDist.enterprise} at $250 or more, and {tierDist['quote-only']} publish no price at all.
       </p>
 
       <div class="not-prose my-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -221,20 +223,20 @@ const articleSchema = {
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
           <div class="text-2xl font-bold text-slate-900">{tierDist.entry}</div>
-          <div class="mt-1 text-xs text-slate-600">Entry-tier (&lt;$100)</div>
+          <div class="mt-1 text-xs text-slate-600">Entry-tier (under $100/user)</div>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
           <div class="text-2xl font-bold text-slate-900">{tierDist.mid}</div>
-          <div class="mt-1 text-xs text-slate-600">Mid-tier ($100-249)</div>
+          <div class="mt-1 text-xs text-slate-600">Mid-tier ($100-249/user)</div>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
           <div class="text-2xl font-bold text-slate-900">{tierDist.enterprise + tierDist['quote-only']}</div>
-          <div class="mt-1 text-xs text-slate-600">$250+ or quote-only ({tierDist.enterprise} priced, {tierDist['quote-only']} unpublished)</div>
+          <div class="mt-1 text-xs text-slate-600">$250+/user or quote-only ({tierDist.enterprise} priced, {tierDist['quote-only']} unpublished)</div>
         </div>
       </div>
 
       <p>
-        The pricing distribution is heavily bimodal: {tierDist.entry} platforms compete fiercely under $100/user/month (Jobber, Housecall Pro, Tradify, Service Autopilot, Joist), while {tierDist['quote-only']} publish no price at all, a group that includes ServiceTitan, BuildOps and Procore alongside vendors such as Aspire and FieldRoutes that quote by company size or customer count. A further {tierDist.enterprise} publish a starting price of $250 or more. Those two groups are counted separately here on purpose: an unpublished price is not evidence of an expensive one. The middle is sparse, with only {tierDist.mid} platforms genuinely in the $100-$249 band.
+        The pricing distribution is heavily bimodal: {tierDist.entry} platforms come in under $100 per user a month once flat plans are split across a {REFERENCE_TEAM_SIZE}-person team (Jobber, Housecall Pro, Tradify, Service Autopilot, Joist), while {tierDist['quote-only']} publish no price at all, a group that includes ServiceTitan, BuildOps and Procore alongside vendors such as Aspire and FieldRoutes that quote by company size or customer count. {topPricedSentence} Those two groups are counted separately here on purpose: an unpublished price is not evidence of an expensive one. The middle is sparse, with only {tierDist.mid} platforms in the $100-$249 per-user band.
       </p>
 
       <h2>The "custom-quoted" opacity tax</h2>
