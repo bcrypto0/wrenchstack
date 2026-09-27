@@ -290,9 +290,9 @@ function implementationTimeline(t: Tool): string {
   // described as a 3-6 month rollout with a dedicated implementation manager, which was
   // invented for 45 of the 54 tools it was applied to.
   if (tier === 'quote-only') return 'Not published; the vendor quotes per account, so ask for the onboarding plan in writing before signing';
-  if (tier === 'enterprise') return '3-6 months for full deployment with dedicated implementation manager';
-  if (tier === 'mid') return '4-8 weeks self-service or with optional paid onboarding';
-  if (tier === 'free' || tier === 'entry') return '1-3 weeks self-service onboarding';
+  if (tier === 'enterprise') return '3-6 months is typical at this price level; ask for the onboarding plan in writing';
+  if (tier === 'mid') return '4-8 weeks is typical at this price level; confirm whether onboarding is self-service or a paid service';
+  if (tier === 'free' || tier === 'entry') return '1-3 weeks is typical for self-service onboarding';
   return '2-4 weeks typical';
 }
 
@@ -392,7 +392,7 @@ const faqs = [
   },
   {
     q: `How long does ${a.name} vs ${b.name} take to implement?`,
-    a: `${a.name}: ${implementationTimeline(a)}. ${b.name}: ${implementationTimeline(b)}. Implementation length scales with pricing tier — enterprise platforms ($250+/user/mo) require 3-6 months with dedicated admin time; mid-tier platforms typically reach operational status in 4-8 weeks with optional paid onboarding.`,
+    a: `${a.name}: ${implementationTimeline(a)}. ${b.name}: ${implementationTimeline(b)}. These are typical ranges for each price level, not figures the vendors publish: the top price tier often takes 3-6 months with dedicated admin time, and mid-tier platforms often reach operational status in 4-8 weeks. Ask each vendor for its onboarding plan in writing.`,
   },
   {
     q: `Can I migrate from ${a.name} to ${b.name} (or vice versa)?`,
@@ -670,7 +670,7 @@ const breadcrumbs = [
         </div>
       </div>
       <p class="mt-4 text-sm text-slate-600 leading-relaxed">
-        Enterprise-tier platforms ($250+/user/mo) typically require 3-6 months with dedicated admin time, custom pricebook setup, and phased rollout to field techs. Mid-tier platforms reach operational status in 4-8 weeks with optional paid onboarding. Entry-tier platforms are designed for self-service onboarding in 1-3 weeks. Always plan for 2-4 weeks of parallel operation with your existing system before cutting over.
+        Typical ranges, not vendor figures: platforms in the top price tier ($250+/user/mo) often take 3-6 months with dedicated admin time, custom pricebook setup, and phased rollout to field techs. Mid-tier platforms often reach operational status in 4-8 weeks, and entry-tier platforms are designed for self-service onboarding in 1-3 weeks. Ask each vendor for its onboarding plan in writing, and plan for 2-4 weeks of parallel operation with your existing system before cutting over.
       </p>
     </section>
 
