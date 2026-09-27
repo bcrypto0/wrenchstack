@@ -572,16 +572,23 @@ export function smartAlternatives(t: Tool, n: number = 6): ScoredAlternative[] {
     // Jobber vs Housecall Pro sharing 10 verticals at 7+) over narrow
     // specialty matches (e.g. Jobber vs ZenMaid sharing 1 vertical at 10).
     let strongOverlapCount = 0;
+    let strongOverlapDepth = 0;
     let weakOverlapCount = 0;
     for (const v of t.verticals) {
       if (!c.verticals.includes(v)) continue;
       const tFit = t.vertical_fit?.[v] ?? 5;
       const cFit = c.vertical_fit?.[v] ?? 5;
-      if (tFit >= 7 && cFit >= 7) strongOverlapCount++;
+      if (tFit >= 7 && cFit >= 7) {
+        strongOverlapCount++;
+        strongOverlapDepth += Math.min(tFit, cFit) - 7;
+      }
       else if (tFit >= 5 && cFit >= 5) weakOverlapCount++;
     }
-    // Strong overlap worth 2 points each (capped at 10), weak worth 0.5
-    const vfNormalized = Math.min(10, strongOverlapCount * 2 + weakOverlapCount * 0.5);
+    // Strong overlap worth 2 points each (capped at 10), weak worth 0.5. Each strong
+    // overlap also earns 0.2 per point both tools score above 7, so a pest specialist
+    // (10/10) outranks a generalist rated 7/10 for pest: until 2026-09-27 both counted
+    // the same and PestPac's closest alternative was Vonigo, not FieldRoutes.
+    const vfNormalized = Math.min(10, strongOverlapCount * 2 + strongOverlapDepth * 0.2 + weakOverlapCount * 0.5);
 
     // 2. Price tier proximity (max 10): same tier = 10, 1 away = 5, 2+ = 0.
     // If either side is quote-only there is no distance to measure, so score it neutral

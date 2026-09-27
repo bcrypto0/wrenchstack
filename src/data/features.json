@@ -5,7 +5,7 @@
       "name": "Scheduling",
       "definition": "Calendar-based assignment of jobs to specific technicians at specific times.",
       "description": "Scheduling is the foundation of field service software. At minimum it shows a calendar view (day, week, month) where dispatchers assign jobs to technicians. Better implementations include drag-and-drop reassignment, real-time technician availability based on existing jobs and drive time, color-coding by job type or status, recurring job support for maintenance contracts, and mobile sync so technicians see schedule changes in real-time. The gap between 'has a calendar' and 'has dispatch-grade scheduling' is bigger than vendors admit.",
-      "why_matters": "Without dedicated scheduling, trades businesses lose money in three ways: double-bookings (two technicians sent to one job, or one technician booked for two simultaneous jobs), under-utilization (technicians have gaps because dispatchers can't see real availability), and missed appointments (job request received but never put on the calendar). For a 5-technician shop, dispatch inefficiency typically costs 10-20% of potential revenue — the equivalent of running one technician shorter than your roster. Scheduling software pays for itself within the first month for most shops by capturing previously-missed bookings alone.",
+      "why_matters": "Without dedicated scheduling, trades businesses lose money in three ways: double-bookings (two technicians sent to one job, or one technician booked for two simultaneous jobs), under-utilization (technicians have gaps because dispatchers can't see real availability), and missed appointments (job request received but never put on the calendar). Every one of those is a job you paid to win and then lost or delivered late, which is why scheduling is usually the first thing a growing shop buys.",
       "buying_tips": "Evaluate scheduling on three dimensions: speed (how fast can a dispatcher reassign a job mid-day?), visibility (can field technicians see their schedule on mobile in real-time?), and intelligence (does it surface conflicts before they happen?). Avoid platforms where scheduling is bolted on as an afterthought to invoicing — the workflow asymmetry shows up daily. For shops doing 50+ jobs per week, dispatch optimization features (suggested job assignment based on technician location, skill, historical close rate) start paying off meaningfully.",
       "related_features": ["dispatching", "gps_tracking", "ai_dispatcher", "team_management"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "landscaping", "cleaning", "pest_control"],
@@ -28,14 +28,14 @@
       "name": "Dispatching",
       "definition": "Real-time assignment and routing of jobs to field technicians, with mobile sync.",
       "description": "Dispatching is the dynamic side of scheduling — what happens after the calendar is built and the day starts. Good dispatching shows real-time technician location (GPS), allows quick reassignment when delays cascade, sends ETA notifications to customers automatically, optimizes routes between jobs to minimize drive time, and matches the right technician to each job based on skill and equipment. Enterprise platforms add AI-suggested assignments based on historical close rate, customer preferences, and equipment availability.",
-      "why_matters": "Drive time is the single biggest cost in field service operations. Industry data shows technicians spend 30-40% of their billable day in transit — a poorly-dispatched shop can lose 20% of that time to inefficient routing. For a 10-technician shop, optimizing dispatch typically captures 30-60 minutes per technician per day, which equates to one additional service call per technician daily. Customer-facing benefits matter too: automated ETA notifications reduce no-show rates by 30-50%, and real-time updates when technicians are delayed prevent the angry-customer-because-tech-is-2-hours-late scenarios that destroy reviews.",
+      "why_matters": "Drive time is one of the largest non-billable costs in field service, and it grows with every technician and every stop. Good dispatching assigns each job to the technician who is nearest and qualified, reshuffles the day when a job runs long, and keeps routes tight. Customer-facing benefits matter too: automated ETA notifications cut down on missed appointments, and real-time updates when a technician is running late prevent the angry-customer scenarios that end up in reviews.",
       "buying_tips": "Strong dispatching requires three integrations: live GPS tracking on mobile devices, customer-facing ETA notifications (SMS or app push), and skill/equipment matching for jobs. Enterprise platforms add AI dispatcher features that suggest optimal technician for each call. For shops running 10+ technicians, manual dispatching breaks down — invest in platforms with dispatch optimization (ServiceTitan, Workiz Pro, BuildOps). For smaller shops (3-5 techs), basic dispatching in Jobber or Housecall Pro is usually enough.",
       "related_features": ["scheduling", "gps_tracking", "ai_dispatcher", "two_way_texting"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "locksmith", "garage_door", "appliance_repair", "pest_control"],
       "faqs": [
         {
           "q": "What is route optimization in dispatching?",
-          "a": "Route optimization analyzes the day's jobs across all technicians and suggests the most efficient sequence to minimize total drive time. For shops running multi-stop routes (pest control, landscaping, pool service), proper route optimization saves 15-25% of drive time. Specialty platforms (FieldRoutes, Aspire, OptimoRoute) do this best; general FSM tools offer it but less sophisticated."
+          "a": "Route optimization analyzes the day's jobs across all technicians and suggests the most efficient sequence to minimize total drive time. It matters most for shops running dense multi-stop routes (pest control, landscaping, pool service). Specialty platforms (FieldRoutes, Aspire, OptimoRoute) lead on this; general FSM tools offer it, usually in a simpler form. Test it on one of your real days before you rely on it."
         },
         {
           "q": "How does AI dispatcher differ from regular dispatching?",
@@ -51,18 +51,18 @@
       "name": "Invoicing",
       "definition": "Creating, sending, and tracking invoices for completed work, with payment collection.",
       "description": "Invoicing in FSM software covers the full workflow from job completion to cash collection: generating invoices automatically from work orders, sending via email or SMS with payment links, accepting credit card and ACH payments in-app, tracking aging receivables, and syncing to accounting (QuickBooks, Xero). Better platforms support recurring invoices for membership plans, automated payment reminders, partial payments, deposits, and consumer financing integration for high-ticket jobs.",
-      "why_matters": "Cash flow is the single biggest financial pain in trades businesses. Manual invoicing creates 2-4 day lag between job completion and invoice send, then another 30+ days to collection. Same-day invoice send + in-app payment options accelerate collection to 5-15 days average — meaningful working capital improvement for any shop. Plus the time savings: a 10-tech shop sending paper invoices burns 10-20 hours per week of admin time that automated invoicing reclaims.",
+      "why_matters": "Cash flow is a constant pressure in trades businesses. Manual invoicing adds days between finishing a job and sending the bill, and a mailed invoice then waits for a mailed check. Sending the invoice from the job site with a payment link shortens both gaps. It also saves office time: every invoice typed up by hand is time automated invoicing gives back.",
       "buying_tips": "Look for: automated invoice generation from completed work orders (not manual data entry), one-click sending via email + SMS with embedded payment link, native credit card processing (avoids juggling Stripe/Square separately), partial payment + deposit support, recurring invoice generation for membership plans, and bidirectional QuickBooks sync. Most modern FSM platforms hit these basics; the differentiator is QuickBooks integration depth (FieldEdge leads on Desktop, most others lead on Online).",
       "related_features": ["estimates_quotes", "payment_processing", "quickbooks_integration", "membership_management"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "cleaning", "landscaping"],
       "faqs": [
         {
           "q": "Can I send invoices via SMS instead of email?",
-          "a": "Yes — most modern FSM platforms (Jobber, Housecall Pro, ServiceTitan) support SMS invoice delivery with payment links. SMS invoices have 90%+ open rates vs 40-60% for email, and collection speed is typically 2-3 days faster. Recommended for residential customers who don't check email regularly."
+          "a": "Yes. Most modern FSM platforms (Jobber, Housecall Pro, ServiceTitan) support SMS invoice delivery with payment links. Customers tend to see a text sooner than an email, so it suits residential customers who don't check email regularly."
         },
         {
           "q": "How does in-app payment processing compare to separate Stripe?",
-          "a": "Most FSM platforms charge 2.6-2.9% + $0.30 for credit cards, similar to standalone Stripe (2.9% + $0.30). The convenience of in-app processing usually outweighs the marginal fee difference for shops under $200K/year in card volume. Above that, a standalone payment processor may save 20-50 basis points."
+          "a": "Built-in card processing is usually priced close to standalone processors. For reference, Stripe publishes 2.9% + 30 cents per successful domestic card payment online. Compare each platform's published rates for cards, ACH and instant payouts; at high card volume, a standalone processor or negotiated rate can be worth pricing out."
         },
         {
           "q": "Can I take deposits before starting a job?",
@@ -74,14 +74,14 @@
       "name": "Estimates & Quotes",
       "definition": "Creating professional quotes with line-item pricing, sending for customer approval, converting to jobs.",
       "description": "Estimates workflow turns leads into bookable jobs. Strong implementations include line-item pricing pulled from a pricebook, photo attachment from inspection visits, customer e-signature capture, automatic follow-up sequences for unsold quotes, conversion to scheduled work orders with one click, and good/better/best pricing options. Enterprise platforms add advanced features like Pricebook Pro (ServiceTitan) for dynamic pricing updates and AI-suggested upsells based on customer profile.",
-      "why_matters": "Quote-to-close conversion is the most leveraged number in trade businesses. Average conversion rates for residential service: 30-50% on simple repairs, 15-25% on big-ticket replacements. Software that supports good/better/best pricing increases average ticket by 15-25% vs single-price quotes. Automated follow-up on unsold quotes recovers 10-20% of would-be lost deals. For shops doing 200+ quotes per month, these gains compound into meaningful annual revenue improvements.",
+      "why_matters": "Quote-to-close conversion is one of the most leveraged numbers in a trade business. Software that sends a professional quote from the job site, offers good/better/best options, and follows up automatically on unsold quotes works directly on that number. For shops sending many quotes a month, small improvements in close rate or average ticket add up.",
       "buying_tips": "Evaluate on: how fast can a tech create a quote in the field (target: under 2 minutes for typical job), good/better/best option support, e-signature capture for instant approval, photo attachment from inspection visits, automated follow-up sequences for unsold quotes (3-day, 7-day, 14-day cadence), and pricebook integration. For HVAC and plumbing shops, consumer financing integration within quotes (Wisetack, GreenSky) is critical for closing high-ticket replacements.",
       "related_features": ["invoicing", "consumer_financing", "online_booking", "automated_marketing"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping"],
       "faqs": [
         {
           "q": "What is good/better/best pricing and why does it matter?",
-          "a": "Three-tier quoting (basic repair, mid-tier with parts upgrade, premium with full replacement) lets customers choose their comfort level rather than accepting or rejecting a single price. Industry data shows 20-30% higher average tickets vs single-price quotes because mid-tier and premium options anchor pricing and surface upsell opportunities customers wouldn't ask about."
+          "a": "Three-tier quoting (basic repair, mid-tier with parts upgrade, premium with full replacement) lets customers choose their comfort level rather than accepting or rejecting a single price. The middle and premium options anchor the price and surface upgrades customers wouldn't think to ask about, which is why many shops use it to raise average tickets."
         },
         {
           "q": "How fast can a tech create a quote in the field?",
@@ -89,22 +89,22 @@
         },
         {
           "q": "Should quotes integrate with consumer financing?",
-          "a": "For high-ticket trades (HVAC replacements $5K+, full roofing jobs, panel upgrades), yes. In-app financing offers (Wisetack, GreenSky, FinanceIt) help close more deals at the moment of decision rather than after customers sleep on it. Housecall Pro has the most seamless native integration; ServiceTitan and others integrate via partners."
+          "a": "For high-ticket trades (HVAC replacements, full roofing jobs, panel upgrades), yes. In-app financing offers (Wisetack, GreenSky, FinanceIt) help close more deals at the moment of decision rather than after customers sleep on it. Ask each platform which lenders it supports and whether the application happens inside the quote."
         }
       ]
     },
     "payment_processing": {
       "name": "Payment Processing",
       "definition": "In-app credit card and ACH payment collection with same-day or next-business-day deposits.",
-      "description": "Native payment processing eliminates the need to juggle a separate Stripe or Square account for in-app payments. Better implementations support credit card, ACH, Apple Pay, instant payouts (for a fee), recurring billing for membership plans, partial payments, deposits, and customer-facing payment links sent via SMS or email. Pricing typically runs 2.59-2.99% + $0.30 per credit card transaction, comparable to standalone processors.",
-      "why_matters": "Faster collection = better cash flow. Native payment processing accelerates average collection from 30+ days (paper invoices, mailed checks) to 5-15 days (SMS-delivered invoices with embedded payment links). For a $1M revenue shop, that working-capital improvement is meaningful. Customer experience matters too: paying with tap-to-pay at job completion is dramatically better than waiting for a mailed invoice and writing a check.",
-      "buying_tips": "Compare fees carefully — most FSM platforms charge 2.59-2.99% + $0.30 for credit cards (similar to Stripe/Square). Look for: native ACH support (lower fees, ~$0.50 per transaction), instant payout options for fee, recurring billing for membership plans, partial payment support, and PCI compliance handled by the platform. Housecall Pro Pay and ServiceTitan Pay are tightly integrated; Jobber and most others rely on Stripe integration.",
+      "description": "Native payment processing eliminates the need to juggle a separate Stripe or Square account for in-app payments. Better implementations support credit card, ACH, Apple Pay, instant payouts (for a fee), recurring billing for membership plans, partial payments, deposits, and customer-facing payment links sent via SMS or email. Pricing is usually comparable to standalone processors; check each platform's published rates.",
+      "why_matters": "Faster collection means better cash flow. Taking payment at the job site, or sending an invoice by text with a payment link, removes the wait for a mailed invoice and a mailed check. Customer experience matters too: paying with tap-to-pay when the job is done is far easier than writing a check later.",
+      "buying_tips": "Compare fees carefully against a standalone processor: Stripe publishes 2.9% + 30 cents per successful domestic card payment online and 0.8% for ACH Direct Debit, capped at $5. Look for: native ACH support (usually cheaper than cards on large invoices), instant payout options and their fee, recurring billing for membership plans, partial payment support, and PCI compliance handled by the platform. Ask whether processing is the platform's own or a linked Stripe or Square account, since that decides who you call when a payment fails.",
       "related_features": ["invoicing", "membership_management", "consumer_financing", "quickbooks_integration"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "roofing", "cleaning", "landscaping", "pest_control"],
       "faqs": [
         {
           "q": "What are typical FSM payment processing fees?",
-          "a": "Credit card: 2.59-2.99% + $0.30 per transaction. ACH: $0.50-$1.00 per transaction. Instant payouts: usually additional 1% on top. Rates vary slightly by platform but are comparable to standalone Stripe (2.9% + $0.30) or Square (2.6% + $0.10). Shops processing $200K+/year in cards may save 20-50 basis points using standalone processors."
+          "a": "It depends on the platform, so get the published rate card before you sign. For comparison, Stripe publishes 2.9% + 30 cents per successful domestic card payment online and 0.8% for ACH Direct Debit, capped at $5. Instant payouts usually cost extra. At high card volume, a standalone processor or negotiated rate can be worth pricing out."
         },
         {
           "q": "Can I take tap-to-pay or Apple Pay payments?",
@@ -112,22 +112,22 @@
         },
         {
           "q": "How fast do payments hit my bank?",
-          "a": "Standard payouts arrive in 2-3 business days. Instant payout options (for an additional fee, typically 1% of payout amount) deliver same-day or next-day. Most shops use standard payouts; instant becomes valuable for cash-flow-tight operations needing same-day liquidity."
+          "a": "Standard payouts usually arrive within a few business days. Instant payout options deliver same-day or next-day for an additional fee. Most shops use standard payouts; instant becomes valuable for cash-flow-tight operations needing same-day liquidity."
         }
       ]
     },
     "customer_portal": {
       "name": "Customer Portal",
       "definition": "Self-service web interface where customers view jobs, invoices, schedules, and account history.",
-      "description": "Customer portals let homeowners and business customers self-serve account management: view upcoming appointments, see past invoices, pay outstanding balances, update payment methods, view service history, request additional service, manage membership plan details, and approve quotes. Reduces office-staff communication load 30-50% by removing repetitive 'when is my next appointment' and 'what was my last invoice' inquiries.",
-      "why_matters": "Modern customers expect self-service access to their accounts — the same experience they get from banking, utilities, and consumer subscriptions. Shops without customer portals field constant low-value inbound calls and emails that drain office-staff time. For mid-size operations (10+ recurring customers per office staff member), portal adoption reduces inbound communication by 30-50% and improves customer retention 15-25% by making repeat-service requests friction-free.",
+      "description": "Customer portals let homeowners and business customers self-serve account management: view upcoming appointments, see past invoices, pay outstanding balances, update payment methods, view service history, request additional service, manage membership plan details, and approve quotes. That takes repetitive 'when is my next appointment' and 'what was my last invoice' questions off the office staff.",
+      "why_matters": "Modern customers expect self-service access to their accounts, the same experience they get from banking, utilities, and consumer subscriptions. Shops without customer portals field constant low-value calls and emails that drain office-staff time. The more recurring customers each office person handles, the more a portal saves, and making repeat-service requests easy helps keep those customers.",
       "buying_tips": "Best customer portals (Buildertrend for construction, ZenMaid for cleaning, Housecall Pro for service trades) include: mobile-optimized interface, real-time job and schedule visibility, in-app payment, document download for past invoices, selections management for custom work, and integration with email/SMS notifications. For shops where customer-facing experience is a competitive advantage (custom home builders, premium residential service), portal quality is a real closing tool.",
       "related_features": ["online_booking", "two_way_texting", "review_management", "membership_management"],
       "best_for_verticals": ["general_contractor", "hvac", "plumbing", "cleaning", "landscaping", "pool_service"],
       "faqs": [
         {
           "q": "Do customers actually use customer portals?",
-          "a": "Adoption varies by demographic and business type. Custom home builders see 70%+ portal adoption (homeowners actively check selections and schedules). Residential service shops see 30-50% adoption — better for tech-savvy customers, less for older demographics. Portals with strong notification systems (SMS prompts when there's a portal update) drive much higher adoption."
+          "a": "Adoption varies by demographic and business type. Custom home builders tend to see strong use, because homeowners actively check selections and schedules. Residential service customers use portals less, especially older customers. Portals with strong notification systems (SMS prompts when there's a portal update) get used much more."
         },
         {
           "q": "Can customers schedule new service through the portal?",
@@ -143,7 +143,7 @@
       "name": "Online Booking",
       "definition": "Customer-facing self-scheduling with real-time technician availability.",
       "description": "Online booking embeds a scheduling widget on your website where customers select a service, pick an available time slot (showing real-time technician availability), enter their details, and confirm the job — all without phone or email interaction. Better implementations support service type-specific booking rules, deposit collection at booking, automatic confirmation messages, and integration with online ads for direct booking from Google Local Services or Facebook.",
-      "why_matters": "Online booking captures customers outside business hours — when most service requests actually happen. Industry data: 40-60% of residential service inquiries occur evenings, weekends, or before 8am. Shops without online booking either miss these inquiries entirely or rely on voicemail-to-callback workflows that lose 30-50% of leads. Direct online booking conversion is 20-40% higher than phone-callback conversion because there's no friction loss.",
+      "why_matters": "Online booking captures customers outside business hours, when many homeowners get around to arranging service. Shops without it either miss those inquiries or rely on voicemail and callbacks, and some of those callers book with whoever answered first. Letting the customer pick a slot on the spot removes that gap.",
       "buying_tips": "Strong online booking features: configurable service types with appropriate buffer times (don't book back-to-back service calls without drive time), real-time availability that respects existing schedule, deposit collection at booking for filter screening, customizable booking forms by service type, native integration with Google Local Services / Facebook for direct conversion, and automatic confirmation + reminder messages.",
       "related_features": ["customer_portal", "scheduling", "ai_receptionist", "two_way_texting"],
       "best_for_verticals": ["cleaning", "hvac", "plumbing", "landscaping", "pool_service", "pest_control", "appliance_repair"],
@@ -154,7 +154,7 @@
         },
         {
           "q": "How do I prevent low-quality leads from online booking?",
-          "a": "Two filters work well: require a deposit at booking (typically $25-$100 service call fee, refunded toward final invoice) to filter tire-kickers, and require service-type-specific qualifying questions before showing availability. Together these reduce no-show rates from 15-25% (open booking) to 3-8% (gated booking)."
+          "a": "Two filters work well: require a deposit at booking (a service-call fee credited toward the final invoice) to filter tire-kickers, and require service-type-specific qualifying questions before showing availability. Together they cut down on no-shows and on bookings you can't actually serve."
         },
         {
           "q": "Does online booking work for high-ticket installation work?",
@@ -189,14 +189,14 @@
       "name": "Inventory Management",
       "definition": "Tracking parts, materials, and equipment across vehicles and warehouses with usage automation.",
       "description": "Inventory tracking in FSM software covers parts in technician vehicles (truck stock), warehouse inventory, low-stock alerts, automatic usage deduction when parts are added to work orders, supplier integration for ordering, barcode/QR scanning for fast counts, and cost allocation to specific jobs for accurate job-profitability reporting. Critical for HVAC, plumbing, and other parts-heavy trades where parts are a large share of job cost.",
-      "why_matters": "Parts inventory mismanagement is a silent profit-killer. Common failure modes: parts shrinkage from poor tracking (typically 5-10% of inventory value annually), wrong-part-on-truck creating return trips that waste 1-2 hours per incident, overordering safety stock that ties up cash, and miscoded job costs that hide unprofitable services. Good inventory management recovers 15-30% of these losses, plus enables data-driven decisions about which services are actually profitable.",
+      "why_matters": "Parts inventory mismanagement is a silent profit-killer. Common failure modes: parts shrinkage from poor tracking, wrong-part-on-truck creating return trips, overordering safety stock that ties up cash, and miscoded job costs that hide unprofitable services. Good inventory tracking shrinks each of these, and it shows which services are actually profitable.",
       "buying_tips": "Look for: per-vehicle inventory tracking (not just warehouse), automatic deduction when parts go on work orders, low-stock alerts with reorder suggestions, supplier catalog integration for ordering (Ferguson, Beacon, ABC), barcode/QR scanning support, cost allocation to specific jobs for job-cost accuracy. Most FSM platforms have basic inventory; enterprise platforms (ServiceTitan, BuildOps) have deeper supplier integrations and analytics.",
       "related_features": ["scheduling", "invoicing", "quickbooks_integration"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "appliance_repair", "garage_door"],
       "faqs": [
         {
           "q": "Do I need inventory tracking if my parts are simple?",
-          "a": "Shops with under $50K annual parts spend often skip dedicated inventory tracking (the overhead exceeds savings). Past $100K parts spend, tracking pays for itself in reduced shrinkage and wrong-part trips. HVAC and plumbing shops typically cross this threshold around 5-8 technicians."
+          "a": "Shops with a small annual parts spend often skip dedicated inventory tracking, because the overhead can exceed the savings. As parts spend and the number of stocked trucks grow, tracking starts to pay for itself in reduced shrinkage and fewer wrong-part trips. Parts-heavy trades such as HVAC and plumbing reach that point sooner."
         },
         {
           "q": "How do I track inventory across multiple vehicles?",
@@ -227,7 +227,7 @@
         },
         {
           "q": "How does GPS enable customer ETA notifications?",
-          "a": "When a tech is en route to a customer, the FSM platform tracks their GPS position and sends an automated SMS to the customer when they're 30/15/5 minutes away. Reduces customer no-shows by 30-50% and dramatically improves customer experience. Critical for residential service work where customers don't want to wait around all day."
+          "a": "When a tech is en route to a customer, the FSM platform tracks their GPS position and sends an automated SMS to the customer when they're 30/15/5 minutes away. It cuts down on missed appointments and improves the customer experience. Critical for residential service work where customers don't want to wait around all day."
         }
       ]
     },
@@ -235,14 +235,14 @@
       "name": "Automated Marketing",
       "definition": "Email and SMS sequences for customer retention, lead nurturing, and recurring service reminders.",
       "description": "Automated marketing in FSM software covers customer-retention sequences: post-job thank-you and review request, recurring service reminders (annual HVAC tune-ups, quarterly pest treatments), seasonal campaigns (pre-summer AC check, pre-winter heating inspection), unsold quote follow-up sequences, and birthday/anniversary touches. Better platforms integrate with email marketing tools (Mailchimp, Constant Contact) or include native email/SMS capabilities.",
-      "why_matters": "Customer acquisition is 5-10x more expensive than customer retention. Trades businesses with strong retention programs generate 60-80% of annual revenue from repeat customers vs 30-50% for shops without marketing automation. The math: a 20% improvement in customer retention typically drives 30-50% more profit over 3 years because retained customers cost nothing to acquire and have higher LTV (more services, higher trust, more referrals).",
+      "why_matters": "Winning a new customer usually costs far more than keeping an existing one. Trades businesses that stay in touch (maintenance reminders, seasonal offers, review requests, win-back messages) earn more repeat work from the customers they already have. Automation makes that contact happen on schedule instead of when someone in the office remembers.",
       "buying_tips": "Evaluate three capabilities: (1) recurring service reminders (annual tune-ups, quarterly visits) with automated booking links, (2) post-job review requests sent automatically after job completion (drives long-term SEO benefit), (3) unsold quote follow-up sequences (typically 3-day, 7-day, 14-day cadence). ServiceTitan and Housecall Pro have the strongest native marketing automation; Jobber and others integrate with Mailchimp.",
       "related_features": ["review_management", "two_way_texting", "membership_management", "customer_portal"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "pest_control", "landscaping", "cleaning"],
       "faqs": [
         {
           "q": "What's the ROI of automated marketing for trades shops?",
-          "a": "Typical results: 20-40% improvement in customer retention, 15-25% lift in average annual revenue per customer (from upsell campaigns), and 200-400 review increase over 12 months from automated review requests. For a $1M revenue shop, this commonly drives $50K-$150K incremental annual revenue."
+          "a": "Results depend on your customer list, your trade and how consistently the campaigns run. The usual gains are more repeat bookings from maintenance and seasonal reminders, upsells from targeted offers, and more reviews from automated review requests. Measure against your own baseline: track repeat-customer revenue and review count before and after you switch it on."
         },
         {
           "q": "Can FSM marketing replace dedicated email marketing tools?",
@@ -258,14 +258,14 @@
       "name": "Review Management",
       "definition": "Automated requests for Google, Facebook, and BBB reviews after job completion, with response workflows.",
       "description": "Review management features automate the hardest part of online reputation: actually asking for reviews. Better implementations send SMS or email requests to customers within hours of job completion (highest conversion window), with one-click links to Google, Facebook, or BBB review pages. Some platforms include negative-review intercept (asking unhappy customers to email management directly rather than post publicly), response templates for replying to reviews, and reputation monitoring dashboards.",
-      "why_matters": "Google reviews are the single most important local SEO ranking factor for trades businesses. Shops with 100+ reviews and 4.5+ rating dominate local search results vs shops with 20-30 reviews. Automated request systems typically generate 5-15x more reviews than manual asks. For a residential service business, the math is brutal: each star above competitors typically drives 20-30% more inbound calls from local search.",
-      "buying_tips": "Look for: automated SMS request within 4-24 hours of job completion (highest conversion window — same-day asks see 30-40% conversion vs 5-10% for week-later asks), one-click review links to Google/Facebook/BBB, customer-facing 'how was your service' rating before review request (filters unhappy customers to email management instead of public review), and response workflows for replying to reviews. Housecall Pro and ServiceTitan have strongest native review automation.",
+      "why_matters": "Google says more reviews and positive ratings can help a business's local ranking, and customers read reviews before they call. Asking every customer automatically, right after the job, produces far more reviews than asking when someone remembers. For a residential service business, a steady flow of recent reviews is one of the few ranking signals you directly control.",
+      "buying_tips": "Look for: an automated SMS request within hours of job completion (the sooner you ask, the more customers respond), one-click review links to Google/Facebook/BBB, a customer-facing 'how was your service' rating before the review request, and response workflows for replying to reviews. Check Google's current review policies before you filter who gets asked: Google prohibits selectively soliciting positive reviews.",
       "related_features": ["automated_marketing", "customer_portal", "two_way_texting"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "roofing", "cleaning", "landscaping", "pest_control"],
       "faqs": [
         {
           "q": "What's the typical conversion rate on automated review requests?",
-          "a": "10-25% of customers who receive an automated request actually leave a review. Conversion is highest when sent within 24 hours of job completion (same-day SMS asks convert at 20-40%; week-later emails convert at 3-8%). Quality of service matters too — happy customers convert at 30-50%; unhappy customers either don't respond or post negatively."
+          "a": "Only a minority of customers who receive a request leave a review, so volume comes from asking everyone. Response is highest when the request goes out soon after the job, by text rather than a week later by email. Quality of service matters too: happy customers respond, and unhappy ones either stay silent or post negatively."
         },
         {
           "q": "How does negative-review intercept work?",
@@ -281,14 +281,14 @@
       "name": "Membership Management",
       "definition": "Recurring service plans with auto-renewal billing, member-priority dispatching, and tier-specific pricing.",
       "description": "Membership / maintenance plan management handles the recurring-revenue subscription side of trades businesses: plan signup with auto-renewal billing, member-priority dispatching, plan-tier pricing differentiation (basic plan vs premium plan get different discounts), renewal reminder workflows, plan-specific service scheduling (annual tune-ups for HVAC, quarterly visits for pest), and customer-facing plan management portals. Critical for HVAC, pest control, pool service, and any trade with significant recurring revenue.",
-      "why_matters": "Mature HVAC shops generate 20-40% of annual revenue from maintenance plans (typically $150-300 per plan × 200-1,500 plans per shop). Pest control operations generate 70%+ of revenue from recurring plans. Pool service: similar pattern. Without dedicated membership management, shops handle plans via spreadsheets — which breaks down past 100-200 members and creates revenue leakage from missed renewals, billing failures, and inconsistent service delivery.",
-      "buying_tips": "Best-in-class platforms (ServiceTitan, Housecall Pro, FieldRoutes for pest, Skimmer for pool) handle: tier-specific plan structures (basic/premium pricing), auto-renewal billing with retry workflows for failed payments, member-priority dispatching during peak demand, plan-specific service schedules (HVAC: 2 visits/year; pest: 4 visits/year), and customer-facing plan management portals. For trades where memberships drive 20%+ of revenue, this is non-negotiable.",
+      "why_matters": "Maintenance plans are a major source of recurring revenue for HVAC shops, and recurring service plans are the core of most pest control and pool service businesses. Without dedicated membership management, shops handle plans in spreadsheets, which breaks down as the plan count grows and leaks revenue through missed renewals, billing failures, and inconsistent service delivery.",
+      "buying_tips": "Best-in-class platforms (ServiceTitan, Housecall Pro, FieldRoutes for pest, Skimmer for pool) handle: tier-specific plan structures (basic/premium pricing), auto-renewal billing with retry workflows for failed payments, member-priority dispatching during peak demand, plan-specific service schedules (HVAC: 2 visits/year; pest: 4 visits/year), and customer-facing plan management portals. If memberships are a meaningful share of your revenue, treat this as a must-have.",
       "related_features": ["customer_portal", "automated_marketing", "invoicing", "payment_processing"],
       "best_for_verticals": ["hvac", "plumbing", "pest_control", "pool_service", "landscaping"],
       "faqs": [
         {
           "q": "What does a typical HVAC membership plan look like?",
-          "a": "Most common structure: $150-$300/year for 2 annual maintenance visits (spring AC check, fall heating check) + priority service + 10-20% discount on repairs. Premium tiers ($300-$500/year) add same-day priority service, equipment replacement discounts, and waived diagnostic fees. Drives 20-40% of mature HVAC shop revenue."
+          "a": "A common structure is an annual plan with two maintenance visits (spring AC check, fall heating check), priority service and a discount on repairs. Premium tiers add same-day priority service, equipment replacement discounts, and waived diagnostic fees. Price the plan so the visits cover their own cost; the value to the shop is the repair and replacement work that follows."
         },
         {
           "q": "How does member-priority dispatching work?",
@@ -303,9 +303,9 @@
     "consumer_financing": {
       "name": "Consumer Financing",
       "definition": "In-app financing offers (Wisetack, GreenSky, Synchrony, FinanceIt) for big-ticket repairs and installations.",
-      "description": "Consumer financing integrations let customers split big-ticket repairs and installations into monthly payments ($89/mo over 60 months instead of $5,000 upfront). Better implementations show financing options inside the quote workflow with one-click application, instant approval decisions, and automatic deposit to your account. Critical for trades with high-ticket work: HVAC system replacements ($5K-$15K), full roofing jobs ($8K-$30K), panel upgrades ($3K-$8K), bathroom remodels ($10K-$50K).",
+      "description": "Consumer financing integrations let customers split big-ticket repairs and installations into monthly payments instead of paying upfront. Better implementations show financing options inside the quote workflow with a short application, a quick approval decision, and automatic deposit to your account. It matters most for high-ticket work: HVAC system replacements, full roofing jobs, panel upgrades, bathroom remodels.",
       "why_matters": "Financing offered at the moment of decision gives big-ticket customers a monthly payment option instead of a reason to 'think about it' or 'discuss with spouse.' It matters most on replacement work (HVAC systems, full roofs), where the ticket is large enough that a monthly payment changes the decision. Ask each financing partner for its approval rates and merchant fees before you count on it.",
-      "buying_tips": "Best implementations are NATIVE rather than bolted on. Housecall Pro embeds Wisetack natively in the quote workflow — customer sees monthly payment options inline, applies in one click, gets approval in minutes. ServiceTitan integrates FinanceIt similarly. Jobber and other platforms integrate financing via third-party tools (Wisetack standalone, GreenSky standalone) with more friction. For trades with $3K+ average tickets, native financing is a real competitive advantage.",
+      "buying_tips": "The best implementations show the monthly payment inside the quote, so the customer can apply without leaving it. Several FSM platforms embed a lender such as Wisetack this way; others link out to the lender's own site. Ask each platform which lenders it supports, whether the application happens inside the quote, and who carries the lender's fee. For trades with big average tickets, financing at the point of sale is a real competitive advantage.",
       "related_features": ["estimates_quotes", "payment_processing", "membership_management"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor"],
       "faqs": [
@@ -315,7 +315,7 @@
         },
         {
           "q": "How much do financing providers charge the contractor?",
-          "a": "Typical dealer fees: 5-12% of financed amount, deducted from your payout. So a $10,000 financed job nets you $8,800-$9,500. Higher fees for longer terms or lower-credit borrowers. Most contractors pass nothing to customers; some markup pricing by 5-10% to cover financing cost. Either way, the close-rate lift typically exceeds the fee."
+          "a": "Many financing programs charge the contractor a merchant fee (often called a dealer fee) on each financed job, deducted from your payout, and the fee usually rises for longer or promotional zero-interest terms. Ask each lender for its fee schedule before you offer it. Some contractors absorb the fee; others build it into their pricing."
         },
         {
           "q": "Can I offer multiple financing options?",
@@ -342,7 +342,7 @@
         },
         {
           "q": "Do I need an AI receptionist with my phone system?",
-          "a": "Optional but increasingly valuable. AI receptionists (Workiz Pro tier and above) handle simple inbound bookings without human intervention — useful for after-hours overflow when human dispatchers are unavailable. Not a replacement for human CSRs during business hours, but recovers 10-20% of after-hours calls that would otherwise go to voicemail."
+          "a": "Optional but increasingly valuable. AI receptionists (Workiz Pro tier and above) handle simple inbound bookings without human intervention, which is useful for after-hours overflow when human dispatchers are unavailable. Not a replacement for human CSRs during business hours, but it answers calls that would otherwise go to voicemail."
         }
       ]
     },
@@ -351,7 +351,7 @@
       "definition": "Anonymized phone numbers for technician-customer communication that preserve privacy and call records.",
       "description": "Call masking creates anonymized phone numbers that route between technicians and customers without revealing either party's actual number. When a tech calls a customer, the customer sees a masked number (tied to the shop, not the tech's personal phone); the call is recorded and tied to the customer record. Prevents techs from being contacted by customers outside business hours and protects technician privacy. Common in on-demand service models (Uber-style: drivers and riders never see each other's real number).",
       "why_matters": "Two pain points solved: privacy (techs don't want customers calling personal cell phones at all hours; customers don't want random calls from unknown numbers they recognize as their tech), and accountability (every tech-customer communication captured in the platform vs lost in WhatsApp/personal text threads). For shops with high turnover or contractor-style teams, call masking prevents 'customer follows the tech' situations when employees leave.",
-      "buying_tips": "Most common in on-demand service platforms (Workiz, ServiceTitan) and platforms with strong gig-economy roots. If your team uses personal cell phones for customer communication, call masking provides immediate operational and security benefits. For shops with company-issued phones and stable teams, less critical. Per-number monthly fees typically $1-$5; included in higher tiers of major FSM platforms.",
+      "buying_tips": "Most common in on-demand service platforms (Workiz, ServiceTitan) and platforms with strong gig-economy roots. If your team uses personal cell phones for customer communication, call masking provides immediate operational and security benefits. For shops with company-issued phones and stable teams, less critical. Some platforms charge per masked number each month; others include it in higher tiers.",
       "related_features": ["phone_system", "two_way_texting", "ai_receptionist"],
       "best_for_verticals": ["locksmith", "garage_door", "appliance_repair", "hvac", "plumbing"],
       "faqs": [
@@ -373,7 +373,7 @@
       "name": "AI Dispatcher",
       "definition": "AI-powered job assignment that automatically routes calls to the optimal technician based on skill, location, history, and availability.",
       "description": "AI dispatchers replace human dispatch decision-making for routine call assignment. The AI evaluates each incoming job against current technician locations, skill certifications, equipment in vehicle, historical close rate on similar jobs, customer preferences, and existing schedule — then recommends the optimal technician (or auto-assigns in some implementations). Especially valuable during peak call times when human dispatchers become bottlenecks. ServiceTitan and Workiz lead this category.",
-      "why_matters": "Peak season call volume kills shops without AI dispatch help. A busy summer HVAC day might generate 80-150 incoming service calls — human dispatchers managing this volume make assignment mistakes (wrong skill for the job, wrong area, conflicting schedule) that cascade into customer disappointment and tech inefficiency. AI dispatchers handle the routine 70% of dispatches automatically, freeing human dispatchers to focus on complex calls (emergencies, VIP customers, ambiguous job descriptions).",
+      "why_matters": "Peak-season call volume strains shops without dispatch help. On a busy summer HVAC day, human dispatchers juggling a flood of calls make assignment mistakes (wrong skill for the job, wrong area, conflicting schedule) that cascade into customer disappointment and wasted technician time. AI dispatchers take the routine assignments, freeing human dispatchers for complex calls (emergencies, VIP customers, ambiguous job descriptions).",
       "buying_tips": "AI dispatcher quality varies dramatically. Best implementations (ServiceTitan, Workiz Pro+) consider 8-12 factors per assignment. Lesser implementations are basically 'closest available tech' algorithms. Evaluate based on: factor count (more is better), historical data sensitivity (does it learn from your shop's actual closing patterns?), override mechanisms (can human dispatchers easily override AI suggestions?), and integration with skill / certification data. For shops under 5 techs, AI dispatch is overkill — human dispatchers handle this volume fine.",
       "related_features": ["dispatching", "scheduling", "phone_system", "ai_receptionist"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "locksmith", "garage_door", "pest_control"],
@@ -384,7 +384,7 @@
         },
         {
           "q": "Can AI dispatchers replace human dispatchers entirely?",
-          "a": "Not yet. AI handles routine assignments (70-80% of calls) — straightforward service requests with clear job type and area. Human dispatchers still handle: emergency triage, ambiguous job descriptions requiring callback for clarification, VIP customer routing, multi-stop coordination, and exception handling. AI augments human dispatchers; doesn't replace them."
+          "a": "Not yet. AI handles routine assignments: straightforward service requests with a clear job type and area. Human dispatchers still handle emergency triage, ambiguous job descriptions requiring a callback for clarification, VIP customer routing, multi-stop coordination, and exception handling. AI augments human dispatchers; it doesn't replace them."
         },
         {
           "q": "Does AI dispatching work better than route optimization?",
@@ -395,19 +395,19 @@
     "ai_receptionist": {
       "name": "AI Receptionist (AI Phone Agent)",
       "definition": "AI-powered phone agent that answers calls, qualifies leads, and books service appointments without human intervention.",
-      "description": "AI receptionists handle inbound service calls when humans aren't available — primarily after-hours, weekends, peak overflow times, and lunch hours. The AI greets callers, asks qualifying questions, identifies the service need, accesses real-time technician availability, and books an appointment directly. Workiz pioneered this for trades; other platforms are adding similar capabilities. Real value: recovering the 30-40% of inbound calls that would otherwise go to voicemail during off-hours.",
-      "why_matters": "Off-hours and overflow calls represent significant lost revenue. A busy HVAC shop missing 10 after-hours emergency calls per week loses $5K-$15K in potential booked revenue weekly. AI receptionists capture these calls with same-day booking, no human intervention required. For on-demand trades (locksmith, plumbing emergencies, garage door), AI receptionists fundamentally change competitive dynamics — shops with AI answer at 3am while competitors send to voicemail.",
+      "description": "AI receptionists handle inbound service calls when humans aren't available, primarily after hours, on weekends, at peak overflow times, and over lunch. The AI greets callers, asks qualifying questions, identifies the service need, checks real-time technician availability, and books an appointment directly. Several trades platforms now offer this. The value is answering calls that would otherwise go to voicemail.",
+      "why_matters": "Off-hours and overflow calls are revenue at risk: an emergency caller who reaches voicemail often calls the next shop on the list. AI receptionists can answer and book those calls with no human on duty. For on-demand trades (locksmith, emergency plumbing, garage door), that changes who wins the job: the shop that answers at 3am.",
       "buying_tips": "Quality varies dramatically. Best implementations (Workiz Pro and Ultimate tiers) handle natural conversation, integrate with real-time tech availability, escalate complex calls to human callback, and learn from each interaction. Lesser implementations are essentially IVR systems with voice ('press 1 for service, press 2 for billing'). Test with real call scenarios before committing — generic AI voice agents don't yet handle trades-specific calls well.",
       "related_features": ["phone_system", "ai_dispatcher", "online_booking", "scheduling"],
       "best_for_verticals": ["locksmith", "garage_door", "plumbing", "hvac", "appliance_repair"],
       "faqs": [
         {
           "q": "How do customers react to AI receptionists?",
-          "a": "Mixed but improving. Modern AI agents (post-2024) using GPT-4 class models handle natural conversation well enough that 60-80% of customers don't realize they're talking to AI for routine bookings. Customers requiring nuanced conversation or complex troubleshooting still prefer humans. Best practice: AI handles routine bookings, escalates complex calls to human callback within 10 minutes."
+          "a": "Mixed but improving. Current AI voice agents handle routine booking conversations well, and some callers won't notice. Customers who need nuanced conversation or complex troubleshooting still prefer humans. Best practice: let AI handle routine bookings and escalate complex calls to a quick human callback."
         },
         {
           "q": "What percentage of after-hours calls does AI capture?",
-          "a": "Workiz reports 40-60% of after-hours calls successfully booked through AI vs typical 5-15% callback success rate on voicemail-routed calls. For on-demand trades doing significant after-hours work, this is meaningful incremental revenue with low marginal cost (most platforms charge $0.10-$0.50 per AI-handled call)."
+          "a": "It can, if you take significant after-hours or overflow calls: every answered and booked call is one that voicemail might have lost. Ask the vendor how the AI receptionist is priced (per call, per minute or per plan) and run it for a month against your own missed-call count before you judge it."
         },
         {
           "q": "Can AI receptionists handle emergency service routing?",
@@ -419,7 +419,7 @@
       "name": "QuickBooks Integration",
       "definition": "Bidirectional sync between FSM and QuickBooks for customers, invoices, payments, and chart of accounts.",
       "description": "QuickBooks integration is the most-requested feature in trades FSM. Better implementations sync bidirectionally in real-time: customer records (new customers in either platform appear in the other), invoices (created in FSM, posted to QB), payments (collected in FSM, recorded in QB), and chart of accounts mapping (FSM line items mapped to QB income accounts). Critical distinction: QuickBooks Online vs Desktop support. Most FSM platforms favor Online; FieldEdge inverted that priority and has the deepest Desktop integration.",
-      "why_matters": "Manual sync between FSM and accounting is the #1 source of operational pain in trades businesses. Without integration, office staff manually re-enter every invoice from FSM into QB — typically 5-15 hours per week for a 5-tech shop. Integration eliminates this entirely. More important: bidirectional sync prevents the 'two sources of truth' problem where FSM and QB show different customer balances, causing collection disputes and missed payments.",
+      "why_matters": "Manual sync between FSM and accounting is a common source of operational pain in trades businesses. Without integration, office staff re-enter every invoice from the FSM into QuickBooks by hand, and the hours grow with job volume. Integration removes that work. More important: bidirectional sync prevents the 'two sources of truth' problem where the FSM and QuickBooks show different customer balances, causing collection disputes and missed payments.",
       "buying_tips": "Three things to verify before committing: (1) QuickBooks Online vs Desktop support — most FSM platforms are QB Online-first with weak Desktop. FieldEdge has best Desktop integration; ServiceTitan and Procore have strong Online + Sage Intacct. (2) Sync direction — one-way push (FSM to QB) is weaker than bidirectional. (3) Chart of accounts mapping flexibility — can you map FSM line items to your specific QB income accounts, or does the integration force a generic structure?",
       "related_features": ["invoicing", "payment_processing", "inventory"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control"],
@@ -449,7 +449,7 @@
       "faqs": [
         {
           "q": "Why is two-way texting better than email for customer communication?",
-          "a": "SMS open rates are 90%+ within 3 minutes; email open rates are 20-30% over 24+ hours. For time-sensitive communication (appointment confirmations, ETA updates, urgent questions), SMS is dramatically more effective. Email still works for invoices and longer-form content; SMS for everything that needs quick response."
+          "a": "Texts are usually read faster than emails. For time-sensitive communication (appointment confirmations, ETA updates, urgent questions), SMS is far more effective. Email still works for invoices and longer-form content; use SMS for everything that needs a quick response."
         },
         {
           "q": "Are there compliance requirements for business SMS?",

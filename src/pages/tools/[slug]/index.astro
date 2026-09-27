@@ -171,9 +171,15 @@ function getPros(): string[] {
   }
 
   // Pricing transparency
+  // "Every tier price is published" only when it is: until 2026-09-27 this claimed it for
+  // any tool with a starting price, including ones whose top tier is quote-only.
+  const tierPrices = tool.pricing.tier_prices_usd ?? [];
+  const allTiersPriced = tierPrices.length === tool.pricing.tiers.length && tierPrices.every((p) => typeof p === 'number');
   if (hasPublicPricing) {
     pros.push(
-      `**Transparent public pricing** — every tier price is published, so you can budget without a sales call. Unusual at the enterprise end of the market.`,
+      allTiersPriced
+        ? `**Transparent public pricing**: every tier price is published, so you can budget without a sales call.`
+        : `**Published starting price**: the entry price is public, so you can budget the first tier without a sales call.`,
     );
   }
 
