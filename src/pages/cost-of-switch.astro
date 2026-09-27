@@ -38,11 +38,11 @@ const faqs = [
   },
   {
     q: 'What if the new tool costs more per month?',
-    a: 'You are paying a premium for features, support, or scale. The calculator will show negative monthly savings and break-even "never on price alone" — meaning the switch only pays back through revenue uplift, not cost savings. Most upgrades to a larger platform fall in this category: the case rests on revenue, not savings. Pair this calculator with the ROI calculator to see the revenue side.',
+    a: 'You are paying a premium for features, support, or scale. The calculator will show negative monthly savings and break-even "never on price alone", meaning the switch only pays back through revenue uplift, not cost savings. Most upgrades to a larger platform fall in this category: the case rests on revenue, not savings. Pair this calculator with the ROI calculator to see the revenue side.',
   },
   {
     q: 'Why does flat-rate pricing show "1 user" math?',
-    a: 'Some tools (Jobber Connect tier, Housecall Pro plans, Skimmer, JobTread) charge per company instead of per user. For those tools the monthly cost does not scale with team size. The calculator reads the pricing model of each tool (per user, flat, or base plus seats) from our data and uses the published price as-is for flat plans. If a vendor changed to per-user since we last verified, the math will be wrong — override the monthly cost field with your real quote.',
+    a: 'Some tools (Jobber Connect tier, Housecall Pro plans, Skimmer, JobTread) charge per company instead of per user. For those tools the monthly cost does not scale with team size. The calculator reads the pricing model of each tool (per user, flat, or base plus seats) from our data and uses the published price as-is for flat plans. If a vendor changed to per-user since we last verified, the math will be wrong; override the monthly cost field with your real quote.',
   },
 ];
 
@@ -185,7 +185,7 @@ const faqSchema = {
 
       <ul>
         <li><strong>New subscription cost</strong> for the target tool, scaled by team size if per-user; plans with a base price plus seat fees are shown at the base price, with a note.</li>
-        <li><strong>Implementation fee</strong> — what the vendor charges to set up your account. Enter it from your quote; the calculator does not guess one, and totals exclude it until you do.</li>
+        <li><strong>Implementation fee</strong>: what the vendor charges to set up your account. Enter it from your quote; the calculator does not guess one, and totals exclude it until you do.</li>
         <li><strong>Training cost</strong> — wages of techs and office staff during product training. Default assumption: 8 hours per tech at $50/hour fully-burdened, plus 60 office-staff hours at $35/hour.</li>
         <li><strong>Parallel-run cost</strong> — one extra month of paying both subscriptions during cutover. Most shops run both for 2-4 weeks; skipping this is operationally risky.</li>
         <li><strong>Net monthly savings</strong> (or premium) — the recurring difference between old and new subscription, post-cutover.</li>

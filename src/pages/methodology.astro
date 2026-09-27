@@ -58,7 +58,7 @@ function classifyAffiliate(t: typeof tools[number]): ToolStatus {
       slug: t.slug,
       name: t.name,
       status: 'Active',
-      note: 'WrenchStack may earn a commission on signups from this link.',
+      note: t.affiliate_note ?? 'WrenchStack may earn a commission on signups from this link.',
     };
   }
   if (t.affiliate_status === undefined) {
