@@ -15,7 +15,6 @@ import { asSentence,
   readingTimeMinutes,
   linkifyTools,
   smartAlternatives,
-  bestMonetizedAlternative,
   type Tool,
 } from '../../../lib/data';
 
@@ -87,10 +86,10 @@ const strongVerticals = Object.entries(tool.vertical_fit ?? {})
 const smartAlts = smartAlternatives(tool, 6);
 const topCompetitor: Tool | undefined = smartAlts[0]?.tool;
 
-// Competitor-routing: if THIS tool isn't monetized, the best-matching tool we
-// DO earn on (same honest matcher). Renders an "also consider" CTA near the top.
-// Null when the tool is already monetized or has no comparable monetized match.
-const monetizedPick = bestMonetizedAlternative(tool);
+// "Also worth comparing": the matcher's top alternative, chosen without regard to
+// whether we earn on it. Until 2026-09-27 this picked the best match that had an
+// affiliate link, which contradicted the methodology's promise.
+const comparePick = smartAlts[0] ?? null;
 
 const verticalsForThisTool = tool.verticals
   .map((v) => verticals.find((x) => x.slug === v))
@@ -530,29 +529,29 @@ const breadcrumbs = [
 
       <AffiliateDisclosure />
 
-      {monetizedPick && (
+      {comparePick && (
         <aside class="mt-6 rounded-lg border border-orange-200 bg-orange-50/70 p-4">
           <div class="flex items-start gap-3">
             <div class="hidden shrink-0 sm:block">
-              <ToolLogo tool={monetizedPick.tool} size={40} />
+              <ToolLogo tool={comparePick.tool} size={40} />
             </div>
             <div class="min-w-0 flex-1">
               <div class="text-xs font-semibold uppercase tracking-wider text-orange-700">Also worth comparing</div>
               <p class="mt-1 text-sm leading-relaxed text-slate-700">
-                Considering {tool.name}? <a href={`/tools/${monetizedPick.tool.slug}/`} class="font-semibold text-slate-900 hover:text-orange-700">{monetizedPick.tool.name}</a> ({formatPrice(monetizedPick.tool)}) is a comparable option in the same trades.
+                Considering {tool.name}? <a href={`/tools/${comparePick.tool.slug}/`} class="font-semibold text-slate-900 hover:text-orange-700">{comparePick.tool.name}</a> ({formatPrice(comparePick.tool)}) is a comparable option in the same trades.
               </p>
-              <p class="mt-1 text-xs italic text-slate-500">{monetizedPick.tool.tagline}</p>
+              <p class="mt-1 text-xs italic text-slate-500">{comparePick.tool.tagline}</p>
               <div class="mt-3 flex flex-wrap gap-2">
                 <a
-                  href={monetizedPick.tool.affiliate_url}
+                  href={comparePick.tool.affiliate_url.startsWith('http') ? comparePick.tool.affiliate_url : comparePick.tool.vendor_url}
                   rel="sponsored nofollow noopener"
                   target="_blank"
                   class="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600"
                 >
-                  Visit {monetizedPick.tool.name} →
+                  Visit {comparePick.tool.name} →
                 </a>
                 <a
-                  href={`/compare/${[tool.slug, monetizedPick.tool.slug].sort().join('-vs-')}/`}
+                  href={`/compare/${[tool.slug, comparePick.tool.slug].sort().join('-vs-')}/`}
                   class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:border-orange-400 hover:bg-orange-50"
                 >
                   Compare side-by-side →
