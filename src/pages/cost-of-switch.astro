@@ -26,11 +26,11 @@ const faqs = [
   },
   {
     q: 'Why include a parallel-run month?',
-    a: 'Most field service shops run both the old and new systems in parallel for 2-4 weeks during cutover. The calculator assumes one full month of dual subscription. Skipping this is possible but operationally risky — invoices and jobs can fall through the cracks during a hard cutover.',
+    a: 'Most field service shops run both the old and new systems in parallel for 2-4 weeks during cutover. The calculator assumes one full month of dual subscription. Skipping this is possible but operationally risky: invoices and jobs can fall through the cracks during a hard cutover.',
   },
   {
     q: 'What does "training cost" actually include?',
-    a: 'It includes the wage cost of techs and office staff during product training. We assume 8 hours per tech at a $50/hour fully-burdened rate, plus 60 hours of office-staff transition work at $35/hour. This is what real shops report — it is not the same as "implementation fee" which is the vendor charging you.',
+    a: 'It includes the wage cost of techs and office staff during product training. We assume 8 hours per tech at a $50/hour fully-burdened rate, plus 60 hours of office-staff transition work at $35/hour. This is what real shops report; it is not the same as "implementation fee" which is the vendor charging you.',
   },
   {
     q: 'How accurate is the break-even calculation?',
@@ -58,7 +58,7 @@ const faqSchema = {
 ---
 
 <Layout
-  title="Cost of switch calculator — what does switching field service software actually cost?"
+  title="Cost of switch calculator: what does switching field service software actually cost?"
   description="Switching between trades software platforms is a 4-12 week project with real costs beyond just the new subscription. Plug in your current tool, target tool, and team size to see the 12-month total cost of switching."
   breadcrumbs={breadcrumbs}
 >
@@ -73,7 +73,7 @@ const faqSchema = {
         Cost of switching field service software
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        Switching between trades software platforms is a 4-12 week project with real costs beyond just the new subscription — implementation fees, training time, parallel-run dual subscriptions, and lost productivity during transition. Plug in your current tool, target tool, and team size; see the realistic 12-month total cost.
+        Switching between trades software platforms is a 4-12 week project with real costs beyond just the new subscription: implementation fees, training time, parallel-run dual subscriptions, and lost productivity during transition. Plug in your current tool, target tool, and team size; see the realistic 12-month total cost.
       </p>
     </header>
 
@@ -88,7 +88,7 @@ const faqSchema = {
               id="from-tool"
               class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
             >
-              <option value="">— Select your current tool —</option>
+              <option value="">Select your current tool</option>
               {calculatorTools.map((t) => (
                 <option value={t.slug}>{t.name}</option>
               ))}
@@ -103,7 +103,7 @@ const faqSchema = {
               id="to-tool"
               class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
             >
-              <option value="">— Select target tool —</option>
+              <option value="">Select target tool</option>
               {calculatorTools.map((t) => (
                 <option value={t.slug}>{t.name}</option>
               ))}
@@ -186,10 +186,10 @@ const faqSchema = {
       <ul>
         <li><strong>New subscription cost</strong> for the target tool, scaled by team size if per-user; plans with a base price plus seat fees are shown at the base price, with a note.</li>
         <li><strong>Implementation fee</strong>: what the vendor charges to set up your account. Enter it from your quote; the calculator does not guess one, and totals exclude it until you do.</li>
-        <li><strong>Training cost</strong> — wages of techs and office staff during product training. Default assumption: 8 hours per tech at $50/hour fully-burdened, plus 60 office-staff hours at $35/hour.</li>
-        <li><strong>Parallel-run cost</strong> — one extra month of paying both subscriptions during cutover. Most shops run both for 2-4 weeks; skipping this is operationally risky.</li>
-        <li><strong>Net monthly savings</strong> (or premium) — the recurring difference between old and new subscription, post-cutover.</li>
-        <li><strong>Break-even month</strong> — when monthly savings cover the total switching cost. Shows "never on price alone" if the new tool is more expensive.</li>
+        <li><strong>Training cost</strong>: wages of techs and office staff during product training. Default assumption: 8 hours per tech at $50/hour fully-burdened, plus 60 office-staff hours at $35/hour.</li>
+        <li><strong>Parallel-run cost</strong>: one extra month of paying both subscriptions during cutover. Most shops run both for 2-4 weeks; skipping this is operationally risky.</li>
+        <li><strong>Net monthly savings</strong> (or premium): the recurring difference between old and new subscription, post-cutover.</li>
+        <li><strong>Break-even month</strong>: when monthly savings cover the total switching cost. Shows "never on price alone" if the new tool is more expensive.</li>
       </ul>
 
       <h2>What the calculator does not include</h2>
@@ -198,11 +198,11 @@ const faqSchema = {
         <li><strong>Revenue uplift</strong> from better dispatching, faster quoting, or improved customer experience. Use the <a href="/roi-calculator/">ROI calculator</a> for the revenue side.</li>
         <li><strong>Integration migration costs</strong> if you need to rebuild custom integrations.</li>
         <li><strong>Data migration consulting</strong> if you're hiring help to move from one system to another.</li>
-        <li><strong>Productivity lost</strong> during adoption — staff are slower for 2-4 weeks while learning the new system.</li>
+        <li><strong>Productivity lost</strong> during adoption: staff are slower for 2-4 weeks while learning the new system.</li>
       </ul>
 
       <p>
-        For most shops, the cost-of-switch math is the conservative case. The revenue uplift (in the ROI calculator) is usually the bigger number — but it's also the less certain one, because it depends on team adoption and execution.
+        For most shops, the cost-of-switch math is the conservative case. The revenue uplift (in the ROI calculator) is usually the bigger number, but it's also the less certain one, because it depends on team adoption and execution.
       </p>
     </section>
 
@@ -342,10 +342,10 @@ const faqSchema = {
 
       let breakEvenLabel;
       if (monthlySavings <= 0) {
-        breakEvenLabel = 'Never on price alone — new tool costs the same or more';
+        breakEvenLabel = 'Never on price alone: new tool costs the same or more';
       } else {
         const months = Math.ceil(totalSwitchingCost / monthlySavings);
-        if (months > 60) breakEvenLabel = months + ' months (>5 years — likely not worth on cost alone)';
+        if (months > 60) breakEvenLabel = months + ' months (>5 years, likely not worth on cost alone)';
         else breakEvenLabel = months + ' month' + (months === 1 ? '' : 's');
       }
       if (monthlySavings > 0) breakEvenLabel += exclNote;
@@ -353,13 +353,13 @@ const faqSchema = {
       let recommendation;
       let recommendationStyle;
       if (monthlySavings > 0 && totalSwitchingCost / monthlySavings <= 18) {
-        recommendation = 'Switching pays back within 18 months on pure cost savings — favorable.';
+        recommendation = 'Switching pays back within 18 months on pure cost savings: favorable.';
         recommendationStyle = 'border-emerald-200 bg-emerald-50 text-emerald-900';
       } else if (monthlySavings > 0) {
         recommendation = 'Switching saves money long-term but break-even takes over 18 months. Consider revenue-uplift case (ROI calculator) before committing.';
         recommendationStyle = 'border-amber-200 bg-amber-50 text-amber-900';
       } else if (monthlySavings === 0) {
-        recommendation = 'No monthly savings — new tool costs the same. Only switch if features or fit are materially better. Use the ROI calculator to size revenue uplift.';
+        recommendation = 'No monthly savings: new tool costs the same. Only switch if features or fit are materially better. Use the ROI calculator to size revenue uplift.';
         recommendationStyle = 'border-amber-200 bg-amber-50 text-amber-900';
       } else {
         const premium = -monthlySavings;

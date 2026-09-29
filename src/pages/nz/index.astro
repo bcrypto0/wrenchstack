@@ -24,17 +24,17 @@ const vendors = (nzData as { vendors: NzVendor[] }).vendors;
 
 const categories = ['software', 'lead-gen', 'insurance', 'payroll', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'software': { label: 'Field service software', description: 'NZ-built FSM ecosystem — Fergus (founded by NZ plumber), NextMinute (4.9★ ratings), and globally-scaled Tradify (NZ-origin). Native ACC, GST, PAYE handling.' },
-  'lead-gen': { label: 'Lead-generation platforms', description: 'Smaller NZ market — Builderscrack dominates as the leading NZ-only marketplace.' },
+  'software': { label: 'Field service software', description: 'NZ-built FSM ecosystem: Fergus (founded by NZ plumber), NextMinute (4.9★ ratings), and globally-scaled Tradify (NZ-origin). Native ACC, GST, PAYE handling.' },
+  'lead-gen': { label: 'Lead-generation platforms', description: 'Smaller NZ market: Builderscrack dominates as the leading NZ-only marketplace.' },
   'insurance': { label: 'Business insurance', description: 'NZ-licensed insurance with IAG family (NZI, AMI) and major underwriter Vero. PL coverage typically NZ$1-5M standard.' },
-  'payroll': { label: 'Payroll software', description: 'IRD-compliant NZ payroll — iPayroll, Smartly. KiwiSaver + ACC levy handling native.' },
-  'certification': { label: 'Required certifications', description: 'NZ mandatory licensing — EWRB for electrical (38K registered), PGDB for plumbing/gas/drainage (combined multi-discipline body).' },
+  'payroll': { label: 'Payroll software', description: 'IRD-compliant NZ payroll: iPayroll, Smartly. KiwiSaver + ACC levy handling native.' },
+  'certification': { label: 'Required certifications', description: 'NZ mandatory licensing: EWRB for electrical (38K registered), PGDB for plumbing/gas/drainage (combined multi-discipline body).' },
 };
 
 const vendorsByCategory: Record<string, NzVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
-const pageTitle = 'NZ Trades Vendor Directory — WrenchStack New Zealand';
+const pageTitle = 'NZ Trades Vendor Directory | WrenchStack New Zealand';
 const pageDescription = `WrenchStack's New Zealand trades vendor directory: ${vendors.length} platforms across software, lead-gen, insurance, payroll, and required certifications. Built for NZ contractors with native NZ compliance (ACC, GST, PAYE, EWRB, PGDB).`;
 
 const breadcrumbs = [
@@ -71,7 +71,7 @@ const breadcrumbs = [
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See NZ vendors compared side by side — a clear verdict, pros and cons, NZ-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See NZ vendors compared side by side: a clear verdict, pros and cons, NZ-specific notes, and pricing, head to head.</p>
       </div>
       <a href="/nz/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare NZ vendors →</a>
     </section>
@@ -79,7 +79,7 @@ const breadcrumbs = [
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What's different about NZ trades vendor selection</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        New Zealand's trades market is smaller than US/UK/AU/CA but with a disproportionately strong native FSM software ecosystem — Fergus, NextMinute, and Tradify are all NZ-built (Tradify scaled internationally; the others stayed AU/NZ-focused). Licensing is structurally simpler than fragmented AU/CA — single national bodies (EWRB for electrical, PGDB for plumbing/gas/drainage) cover the entire country. Payroll requires native IRD/KiwiSaver/ACC handling that international platforms don't match.
+        New Zealand's trades market is smaller than US/UK/AU/CA but with a disproportionately strong native FSM software ecosystem: Fergus, NextMinute, and Tradify are all NZ-built (Tradify scaled internationally; the others stayed AU/NZ-focused). Licensing is structurally simpler than fragmented AU/CA: single national bodies (EWRB for electrical, PGDB for plumbing/gas/drainage) cover the entire country. Payroll requires native IRD/KiwiSaver/ACC handling that international platforms don't match.
       </p>
     </section>
 

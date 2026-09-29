@@ -14,7 +14,7 @@ const intlVendorCount = Object.values(intlModules).reduce(
   0
 );
 
-const pageTitle = 'Submit your product for review — WrenchStack vendor program';
+const pageTitle = 'Submit your product for review | WrenchStack vendor program';
 const pageDescription = 'WrenchStack accepts submissions from trades-contractor vendors across software, lead-gen, insurance, payroll, and marketing agencies. Published methodology. No pay-to-play. Editorial review within 5 business days.';
 
 const breadcrumbs = [
@@ -34,7 +34,7 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
         Submit your product for editorial review
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        WrenchStack covers {totalVendorCount}+ US vendors across {categoryCount} categories — plus {intlVendorCount} listings across {intlMarkets} international markets — serving trades and construction businesses. If your platform serves the trades and you believe it deserves coverage, submit it below — we respond within 5 business days.
+        WrenchStack covers {totalVendorCount}+ US vendors across {categoryCount} categories, plus {intlVendorCount} listings across {intlMarkets} international markets, serving trades and construction businesses. If your platform serves the trades and you believe it deserves coverage, submit it below. We respond within 5 business days.
       </p>
     </header>
 
@@ -63,7 +63,7 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
         <div class="rounded-lg border border-slate-200 bg-white p-5">
           <div class="mb-2 text-xs font-bold uppercase tracking-wider text-orange-600">1. Submit</div>
           <p class="text-sm text-slate-700 leading-relaxed">
-            Send us your company name, website, primary trade verticals served, distinguishing characteristics vs comparable vendors, and current customer count. Form below — or email <a href="mailto:partners@wrenchstack.com" class="text-orange-600 hover:underline">partners@wrenchstack.com</a> directly.
+            Send us your company name, website, primary trade verticals served, distinguishing characteristics vs comparable vendors, and current customer count. Form below, or email <a href="mailto:partners@wrenchstack.com" class="text-orange-600 hover:underline">partners@wrenchstack.com</a> directly.
           </p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-5">
@@ -88,9 +88,9 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
     </section>
 
     <section class="mb-10 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-6">
-      <h2 class="mb-3 text-lg font-bold text-emerald-900">What inclusion means — and doesn't</h2>
+      <h2 class="mb-3 text-lg font-bold text-emerald-900">What inclusion means (and doesn't)</h2>
       <ul class="space-y-2 text-sm text-emerald-900 leading-relaxed">
-        <li><strong>✓ Inclusion is editorial.</strong> We evaluate, write, and publish — independent of whether you have an affiliate program or sponsor placements.</li>
+        <li><strong>✓ Inclusion is editorial.</strong> We evaluate, write, and publish, independent of whether you have an affiliate program or sponsor placements.</li>
         <li><strong>✓ Same methodology applies.</strong> Your WrenchStack Fit Score™ comes from the same formula as every other vendor in your category.</li>
         <li><strong>✓ Affiliate relationships disclosed.</strong> If you run a program we join, it's flagged in our per-vendor ledger. Recommendation isn't conditional on it.</li>
         <li><strong>✗ Inclusion does not guarantee a positive review.</strong> If our research surfaces concerns (FTC actions, audit-pattern complaints, customer-hostile contract terms), the review will document them with citations.</li>
@@ -102,7 +102,7 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
     <section class="mb-10 rounded-lg border border-slate-200 bg-white p-6">
       <h2 class="mb-2 text-lg font-bold text-slate-900">Already listed? Show it.</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        If you're already in the directory, you can embed a free <a href="/badges/" class="text-orange-600 hover:underline font-semibold">"Rated on WrenchStack" badge</a> on your site — it links back to your independent review, signals to your customers that a neutral third party assessed you, and costs nothing. Displaying it never changes your score. <a href="/badges/" class="text-orange-600 hover:underline">Get your badge →</a>
+        If you're already in the directory, you can embed a free <a href="/badges/" class="text-orange-600 hover:underline font-semibold">"Rated on WrenchStack" badge</a> on your site; it links back to your independent review, signals to your customers that a neutral third party assessed you, and costs nothing. Displaying it never changes your score. <a href="/badges/" class="text-orange-600 hover:underline">Get your badge →</a>
       </p>
     </section>
 
@@ -133,7 +133,7 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
             <div>
               <label for="vs-category" class="block text-sm font-semibold text-slate-900">Category <span class="text-rose-600">*</span></label>
               <select id="vs-category" name="category" required class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500">
-                <option value="">— Select —</option>
+                <option value="">Select</option>
                 <option>Software (FSM / CMMS / Construction PM / CRM)</option>
                 <option>Payments / payment processing</option>
                 <option>Accounting software</option>
@@ -222,7 +222,7 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
           </div>
 
           <div id="vendor-submission-status" class="hidden rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
-            Thanks — your submission was received. Our editorial team will review and respond within 5 business days at the email you provided.
+            Thanks. Your submission was received. Our editorial team will review and respond within 5 business days at the email you provided.
           </div>
         </form>
 
@@ -250,7 +250,7 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
                   alert('Submission failed: ' + (data.message || 'unknown error'));
                 }
               } catch (err) {
-                alert('Submission failed — please email partners@wrenchstack.com instead.');
+                alert('Submission failed. Please email partners@wrenchstack.com instead.');
               }
             });
           })();
@@ -275,15 +275,15 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
         </details>
         <details class="rounded-lg border border-slate-200 bg-white p-4">
           <summary class="cursor-pointer font-semibold text-slate-900">What if the review surfaces concerns about our product?</summary>
-          <p class="mt-3 text-sm text-slate-700">Our reviews include both pros and cons — sometimes the cons are significant. Where we document patterns warranting a reputation_flag (FTC actions, BBB complaint volume, audit-pattern complaints, customer-hostile contract terms), the warning appears prominently. Concerns get cited to documented sources.</p>
+          <p class="mt-3 text-sm text-slate-700">Our reviews include both pros and cons; sometimes the cons are significant. Where we document patterns warranting a reputation_flag (FTC actions, BBB complaint volume, audit-pattern complaints, customer-hostile contract terms), the warning appears prominently. Concerns get cited to documented sources.</p>
         </details>
         <details class="rounded-lg border border-slate-200 bg-white p-4">
           <summary class="cursor-pointer font-semibold text-slate-900">Can I update my listing after publication?</summary>
-          <p class="mt-3 text-sm text-slate-700">Yes — for factual updates (pricing changes, new features, new integrations, geographic expansion), email <a href="mailto:partners@wrenchstack.com" class="text-orange-600 hover:underline">partners@wrenchstack.com</a> with documentation. We refresh on a quarterly cadence and incorporate factual updates promptly.</p>
+          <p class="mt-3 text-sm text-slate-700">Yes. For factual updates (pricing changes, new features, new integrations, geographic expansion), email <a href="mailto:partners@wrenchstack.com" class="text-orange-600 hover:underline">partners@wrenchstack.com</a> with documentation. We refresh on a quarterly cadence and incorporate factual updates promptly.</p>
         </details>
         <details class="rounded-lg border border-slate-200 bg-white p-4">
           <summary class="cursor-pointer font-semibold text-slate-900">Do you cover international vendors?</summary>
-          <p class="mt-3 text-sm text-slate-700">Yes — extensively. Alongside deep US coverage, we run {intlMarkets} international markets: the UK, Canada, Australia, New Zealand, Ireland, the six GCC states, South Africa, France, Morocco, Jordan, Egypt and Malaysia — with the Gulf and other MENA markets published in both English and Arabic. Non-US vendors are welcome to submit; the editorial timeline depends on category readiness in your market.</p>
+          <p class="mt-3 text-sm text-slate-700">Yes, extensively. Alongside deep US coverage, we run {intlMarkets} international markets: the UK, Canada, Australia, New Zealand, Ireland, the six GCC states, South Africa, France, Morocco, Jordan, Egypt and Malaysia, with the Gulf and other MENA markets published in both English and Arabic. Non-US vendors are welcome to submit; the editorial timeline depends on category readiness in your market.</p>
         </details>
       </div>
     </section>

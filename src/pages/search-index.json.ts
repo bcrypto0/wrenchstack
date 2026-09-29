@@ -15,12 +15,12 @@ interface MigrationRecord {
   intent?: string;
 }
 
-// Static endpoint — Astro generates /search-index.json at build time.
+// Static endpoint: Astro generates /search-index.json at build time.
 // Client-side search fetches this once on first focus.
 export const GET: APIRoute = () => {
   const items: Array<Record<string, unknown>> = [];
 
-  // Tools (59) — richest entries with all searchable text
+  // Tools (59): richest entries with all searchable text
   for (const t of tools) {
     items.push({
       type: 'tool',
@@ -201,18 +201,18 @@ export const GET: APIRoute = () => {
     { name: 'ROI Calculator', url: '/roi-calculator/', tagline: 'Calculate your annual savings and payback period from new field service software' },
     { name: 'Cost-of-Switch Calculator', url: '/cost-of-switch/', tagline: 'Calculate the real 12-month cost of switching between trades software platforms' },
     { name: 'Glossary', url: '/glossary/', tagline: 'Plain-English definitions for FSM, CMMS, AIA billing, dispatching, and other trades software jargon' },
-    { name: 'Trades Software Market Report 2026', url: '/trends-2026/', tagline: '15 data findings from analysis of 59 platforms — pricing distribution, integration prevalence, founded-year cohorts, vertical density' },
-    { name: 'Methodology', url: '/methodology/', tagline: 'How WrenchStack scores and ranks tools — formula, sources, and affiliate disclosure' },
+    { name: 'Trades Software Market Report 2026', url: '/trends-2026/', tagline: `Data findings from analysis of ${tools.length} platforms: pricing distribution, integration prevalence, founded-year cohorts, vertical density` },
+    { name: 'Methodology', url: '/methodology/', tagline: 'How WrenchStack scores and ranks tools: formula, sources, and affiliate disclosure' },
     { name: 'All Tools', url: '/tools/', tagline: `Browse all ${tools.length} trades software tools` },
     { name: 'Compare Tools', url: '/compare/', tagline: 'Head-to-head pairings of every shared-vertical tool combination' },
-    { name: 'Build Custom Comparison', url: '/compare-builder/', tagline: 'Interactive builder — pick any 2-5 tools and see them compared instantly' },
+    { name: 'Build Custom Comparison', url: '/compare-builder/', tagline: 'Interactive builder: pick any 2-5 tools and see them compared instantly' },
     { name: 'Pricing Comparison', url: '/pricing/', tagline: 'Pricing tables and per-tool tier breakdowns by trade' },
     { name: 'Buyer Guides', url: '/best-software-for/', tagline: 'Best software for specific trade + team size combinations' },
     { name: 'Migration Guides', url: '/migrate/', tagline: 'Practical guides for switching between tools' },
     { name: 'Multi-tool Comparisons', url: '/multi-compare/', tagline: 'Three-way tool comparisons for specific buyer segments' },
     { name: 'Features', url: '/features/', tagline: 'Browse tools by specific feature (QuickBooks, GPS tracking, etc.)' },
     { name: 'About WrenchStack', url: '/about/', tagline: 'Who we are and why this directory exists' },
-    { name: 'Contact', url: '/contact/', tagline: 'Get in touch — vendor corrections, partnership inquiries' },
+    { name: 'Contact', url: '/contact/', tagline: 'Get in touch: vendor corrections, partnership inquiries' },
   ];
 
   for (const p of utilityPages) {

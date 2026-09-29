@@ -5,7 +5,7 @@ import { insuranceProviders, insuranceTier, type InsuranceProvider } from '../..
 import MissingFromList from '../../components/MissingFromList.astro';
 
 const pageTitle = `Best Business Insurance for Trades Contractors (2026)`;
-const pageDescription = `Independent reviews of ${insuranceProviders.length} business-insurance providers for HVAC, plumbing, electrical, roofing, and other trades — NEXT, Hiscox, Simply Business, CoverWallet, Acuity, Erie, and more. Honest reputation flags + real affiliate disclosure.`;
+const pageDescription = `Independent reviews of ${insuranceProviders.length} business-insurance providers for HVAC, plumbing, electrical, roofing, and other trades: NEXT, Hiscox, Simply Business, CoverWallet, Acuity, Erie, and more. Honest reputation flags + real affiliate disclosure.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -20,20 +20,20 @@ for (const p of insuranceProviders) {
 
 const tierMeta = {
   S: {
-    label: 'Tier S — strongest recommendations',
+    label: 'Tier S: strongest recommendations',
     description: 'Carriers and brokers with the best contractor experience: competitive pricing, strong claims, and either documented affiliate programs (NEXT, Hiscox via CJ, Simply Business, CoverWallet) or such strong reputation we recommend them anyway (Acuity, Erie).',
     badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300',
     cardBorder: 'border-emerald-300',
   },
   A: {
-    label: 'Tier A — workable depending on profile',
+    label: 'Tier A: workable depending on profile',
     description: 'Solid carriers that work for specific contractor profiles (mid-market, multi-line, professional liability, large-coverage limits). Not the standout for typical SMB trades but credible options.',
     badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300',
     cardBorder: 'border-blue-300',
   },
   F: {
-    label: 'Tier F — listed with reputation warnings',
-    description: 'Providers with documented reputation concerns (Pie audit pattern, Hiscox 2025 renewal trend). Listed for completeness with explicit warnings — proceed with the documented caveats in mind.',
+    label: 'Tier F: listed with reputation warnings',
+    description: 'Providers with documented reputation concerns (Pie audit pattern, Hiscox 2025 renewal trend). Listed for completeness with explicit warnings; proceed with the documented caveats in mind.',
     badgeColor: 'bg-rose-100 text-rose-900 ring-rose-300',
     cardBorder: 'border-rose-300',
   },
@@ -74,14 +74,14 @@ const itemListSchema = {
     <section class="mb-10 rounded-lg border-l-4 border-orange-500 bg-orange-50/40 p-5">
       <p class="text-xs font-bold uppercase tracking-wider text-orange-600">The short answer</p>
       <p class="mt-2 text-slate-800 leading-relaxed">
-        Most trades contractors are best served by getting two quotes. Start with a fast digital baseline from <a href="/insurance/next-insurance/" class="font-semibold text-orange-700 hover:underline">NEXT</a> (quote-and-bind online in 10–15 minutes), then have a local independent agent shop the cult-favorite mutuals <a href="/insurance/acuity/" class="font-semibold text-orange-700 hover:underline">Acuity</a> and <a href="/insurance/erie-insurance/" class="font-semibold text-orange-700 hover:underline">Erie</a> — often cheaper for clean-claim accounts, but agent-only and 1–3 days to bind. We flag documented reputation issues honestly and recommend the mutuals even though they pay us no commission. No vendor pays for placement.
+        Most trades contractors are best served by getting two quotes. Start with a fast digital baseline from <a href="/insurance/next-insurance/" class="font-semibold text-orange-700 hover:underline">NEXT</a> (quote-and-bind online in 10–15 minutes), then have a local independent agent shop the cult-favorite mutuals <a href="/insurance/acuity/" class="font-semibold text-orange-700 hover:underline">Acuity</a> and <a href="/insurance/erie-insurance/" class="font-semibold text-orange-700 hover:underline">Erie</a> (often cheaper for clean-claim accounts, but agent-only and 1–3 days to bind). We flag documented reputation issues honestly and recommend the mutuals even though they pay us no commission. No vendor pays for placement.
       </p>
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">The headline filter: agent vs direct</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        The biggest structural choice in contractor insurance: <strong>direct-digital carriers</strong> (NEXT, Hiscox, Simply Business, CoverWallet — quote-and-bind online in 10-15 min, no agent calls) vs <strong>agent-only mutuals</strong> (Acuity, Erie — work with a local independent agent, takes 1-3 days, often cheaper for clean-claim accounts). Most SMB contractors are best served by trying both — get a digital quote from NEXT to establish a baseline, then have a local agent shop Acuity / Erie / regional carriers to see if they can beat it.
+        The biggest structural choice in contractor insurance: <strong>direct-digital carriers</strong> (NEXT, Hiscox, Simply Business, CoverWallet: quote-and-bind online in 10-15 min, no agent calls) vs <strong>agent-only mutuals</strong> (Acuity, Erie: work with a local independent agent, takes 1-3 days, often cheaper for clean-claim accounts). Most SMB contractors are best served by trying both: get a digital quote from NEXT to establish a baseline, then have a local agent shop Acuity / Erie / regional carriers to see if they can beat it.
       </p>
     </section>
 
@@ -135,11 +135,11 @@ const itemListSchema = {
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Trustpilot</dt>
-                    <dd class="font-semibold text-slate-900">{p.ratings.trustpilot !== null ? `${p.ratings.trustpilot.toFixed(1)} / 5` : '—'}</dd>
+                    <dd class="font-semibold text-slate-900">{p.ratings.trustpilot !== null ? `${p.ratings.trustpilot.toFixed(1)} / 5` : '-'}</dd>
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">A.M. Best</dt>
-                    <dd class="font-semibold text-slate-900">{p.ratings.am_best ?? '—'}</dd>
+                    <dd class="font-semibold text-slate-900">{p.ratings.am_best ?? '-'}</dd>
                   </div>
                 </dl>
 

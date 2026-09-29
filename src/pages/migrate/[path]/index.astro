@@ -71,24 +71,24 @@ const faqs = [
   },
   {
     q: `Will all my ${fromTool.name} data transfer?`,
-    a: `Customer records and active job data typically transfer cleanly via CSV export from ${fromTool.name} and import into ${toTool.name}. Historical job data, custom fields, and recurring service agreements often need manual review or rebuilding. Plan to export everything from ${fromTool.name} before terminating your subscription — vendors typically lock out access immediately after cancellation.`,
+    a: `Customer records and active job data typically transfer cleanly via CSV export from ${fromTool.name} and import into ${toTool.name}. Historical job data, custom fields, and recurring service agreements often need manual review or rebuilding. Plan to export everything from ${fromTool.name} before terminating your subscription; vendors typically lock out access immediately after cancellation.`,
   },
   {
     q: `What about integrations I rely on?`,
     a: lostIntegrations.length > 0
-      ? `Heads up — ${fromTool.name} integrates with ${lostIntegrations.map(i => i.replace(/_/g, ' ')).join(', ')}, but ${toTool.name} doesn't (at least natively). You'll need to find workarounds via Zapier, custom middleware, or rebuilding the workflow internally before cutover.`
-      : `${toTool.name} covers the same integrations you're already using on ${fromTool.name} — no major workflow disruptions expected.`,
+      ? `Heads up: ${fromTool.name} integrates with ${lostIntegrations.map(i => i.replace(/_/g, ' ')).join(', ')}, but ${toTool.name} doesn't (at least natively). You'll need to find workarounds via Zapier, custom middleware, or rebuilding the workflow internally before cutover.`
+      : `${toTool.name} covers the same integrations you're already using on ${fromTool.name}: no major workflow disruptions expected.`,
   },
   {
     q: `Is ${toTool.name} more expensive than ${fromTool.name}?`,
     a: (() => {
       const fp = fromTool.pricing.starting_at_usd;
       const tp = toTool.pricing.starting_at_usd;
-      if (fp === null && tp === null) return 'Both use custom-quote pricing — request quotes from both for a real comparison at your team size.';
+      if (fp === null && tp === null) return 'Both use custom-quote pricing; request quotes from both for a real comparison at your team size.';
       if (fp === null) return `${fromTool.name} uses custom pricing; ${toTool.name} starts at ${formatPrice(toTool)}. Compare the actual quote you got from ${fromTool.name} against ${toTool.name}'s public tier closest to your team size.`;
-      if (tp === null) return `${toTool.name} uses custom pricing — request a quote at your team size and compare against your current ${fromTool.name} bill.`;
-      if (tp > fp) return `${toTool.name} starts at ${formatPrice(toTool)} vs ${fromTool.name}'s ${formatPrice(fromTool)} — about ${Math.round(((tp - fp) / fp) * 100)}% more at the entry tier. Worth it if you're hitting feature ceilings on ${fromTool.name}.`;
-      if (tp < fp) return `${toTool.name} starts at ${formatPrice(toTool)} vs ${fromTool.name}'s ${formatPrice(fromTool)} — about ${Math.round(((fp - tp) / fp) * 100)}% cheaper at entry. Read the feature differences below to make sure you're not downgrading capability.`;
+      if (tp === null) return `${toTool.name} uses custom pricing; request a quote at your team size and compare against your current ${fromTool.name} bill.`;
+      if (tp > fp) return `${toTool.name} starts at ${formatPrice(toTool)} vs ${fromTool.name}'s ${formatPrice(fromTool)}, about ${Math.round(((tp - fp) / fp) * 100)}% more at the entry tier. Worth it if you're hitting feature ceilings on ${fromTool.name}.`;
+      if (tp < fp) return `${toTool.name} starts at ${formatPrice(toTool)} vs ${fromTool.name}'s ${formatPrice(fromTool)}, about ${Math.round(((fp - tp) / fp) * 100)}% cheaper at entry. Read the feature differences below to make sure you're not downgrading capability.`;
       return 'Entry pricing is roughly the same. Compare based on features and integrations rather than price.';
     })(),
   },
@@ -98,15 +98,15 @@ const faqs = [
   },
   {
     q: `Can I run ${fromTool.name} and ${toTool.name} in parallel during migration?`,
-    a: `Yes, and you should. Plan for 2-4 weeks of parallel operation: new jobs entered in ${toTool.name}, in-flight jobs completed in ${fromTool.name}. Both subscriptions active during this window. The parallel period catches data-integrity issues before you've cancelled ${fromTool.name} and lost access. Don't try to cut over in a single day — that's how shops lose customer data and miss appointments during the chaos.`,
+    a: `Yes, and you should. Plan for 2-4 weeks of parallel operation: new jobs entered in ${toTool.name}, in-flight jobs completed in ${fromTool.name}. Both subscriptions active during this window. The parallel period catches data-integrity issues before you've cancelled ${fromTool.name} and lost access. Don't try to cut over in a single day; that's how shops lose customer data and miss appointments during the chaos.`,
   },
   {
     q: `What if my team resists the move from ${fromTool.name}?`,
-    a: `Team adoption resistance is the #1 cause of failed migrations. Mitigate by: (1) getting your 2-3 most software-resistant techs and office staff into a ${toTool.name} demo BEFORE signing the contract — if they push back hard, your timeline doubles or the migration fails outright; (2) frame ${toTool.name} as solving specific pain points they complain about (not as "we're switching"); (3) train champions first (tech-comfortable team members) who then peer-train the rest. Skipping team buy-in causes 6-month migration projects to stretch into 18-month disasters.`,
+    a: `Team adoption resistance is the #1 cause of failed migrations. Mitigate by: (1) getting your 2-3 most software-resistant techs and office staff into a ${toTool.name} demo BEFORE signing the contract (if they push back hard, your timeline doubles or the migration fails outright); (2) frame ${toTool.name} as solving specific pain points they complain about (not as "we're switching"); (3) train champions first (tech-comfortable team members) who then peer-train the rest. Skipping team buy-in causes 6-month migration projects to stretch into 18-month disasters.`,
   },
   {
     q: `Should I migrate during peak season or off-season?`,
-    a: `Off-season, almost always. HVAC: avoid summer (peak cooling) and winter (peak heating) — best window is March-May or September-October. Plumbing: same pattern. Pest control: avoid spring-summer peak. Landscaping: avoid spring setup and fall cleanup. The reasoning is simple: migration consumes office-staff capacity that you need for customer-facing work during peak demand. Migrate during a quiet period when missed dispatch decisions don't compound into lost revenue.`,
+    a: `Off-season, almost always. HVAC: avoid summer (peak cooling) and winter (peak heating); best window is March-May or September-October. Plumbing: same pattern. Pest control: avoid spring-summer peak. Landscaping: avoid spring setup and fall cleanup. The reasoning is simple: migration consumes office-staff capacity that you need for customer-facing work during peak demand. Migrate during a quiet period when missed dispatch decisions don't compound into lost revenue.`,
   },
 ];
 
@@ -165,8 +165,8 @@ const faqSchema = {
         </div>
         <dl class="space-y-1 text-sm">
           <div class="flex justify-between"><dt class="text-slate-500">Price</dt><dd class="font-medium">{formatPrice(fromTool)}</dd></div>
-          <div class="flex justify-between"><dt class="text-slate-500">Best for</dt><dd class="font-medium text-right">{fromTool.best_team_size ?? '—'} techs</dd></div>
-          <div class="flex justify-between"><dt class="text-slate-500">Rating</dt><dd class="font-medium">{fromRating !== null ? `${fromRating.toFixed(1)} / 5` : '—'}</dd></div>
+          <div class="flex justify-between"><dt class="text-slate-500">Best for</dt><dd class="font-medium text-right">{fromTool.best_team_size ?? '-'} techs</dd></div>
+          <div class="flex justify-between"><dt class="text-slate-500">Rating</dt><dd class="font-medium">{fromRating !== null ? `${fromRating.toFixed(1)} / 5` : 'n/a'}</dd></div>
         </dl>
       </div>
 
@@ -183,8 +183,8 @@ const faqSchema = {
         </div>
         <dl class="space-y-1 text-sm">
           <div class="flex justify-between"><dt class="text-slate-500">Price</dt><dd class="font-medium">{formatPrice(toTool)}</dd></div>
-          <div class="flex justify-between"><dt class="text-slate-500">Best for</dt><dd class="font-medium text-right">{toTool.best_team_size ?? '—'} techs</dd></div>
-          <div class="flex justify-between"><dt class="text-slate-500">Rating</dt><dd class="font-medium">{toRating !== null ? `${toRating.toFixed(1)} / 5` : '—'}</dd></div>
+          <div class="flex justify-between"><dt class="text-slate-500">Best for</dt><dd class="font-medium text-right">{toTool.best_team_size ?? '-'} techs</dd></div>
+          <div class="flex justify-between"><dt class="text-slate-500">Rating</dt><dd class="font-medium">{toRating !== null ? `${toRating.toFixed(1)} / 5` : 'n/a'}</dd></div>
         </dl>
         <a
           href={toTool.affiliate_url.startsWith('http') ? toTool.affiliate_url : toTool.vendor_url}
@@ -211,7 +211,7 @@ const faqSchema = {
           {onlyInToFeatures.map(f => <li><strong>{f.replace(/_/g, ' ')}</strong></li>)}
         </ul>
       ) : (
-        <p>No major new features — the migration would be about something else (pricing structure, integration depth, UX preference, team size scaling).</p>
+        <p>No major new features; the migration would be about something else (pricing structure, integration depth, UX preference, team size scaling).</p>
       )}
 
       <h2>What you might LOSE leaving {fromTool.name}</h2>
@@ -229,7 +229,7 @@ const faqSchema = {
         <li>
           <strong>Software-cost change:</strong>{' '}
           {monthlyDelta === null
-            ? `${fromPrice === null ? fromTool.name : toTool.name} uses custom-quoted pricing — request actual quotes for both to compare at your team size.`
+            ? `${fromPrice === null ? fromTool.name : toTool.name} uses custom-quoted pricing; request actual quotes for both to compare at your team size.`
             : monthlyDelta > 0
               ? `~$${monthlyDelta}/month more on ${toTool.name} (${formatPrice(toTool)} vs ${formatPrice(fromTool)}). Annual delta: ~$${annualDelta} extra.`
               : monthlyDelta < 0
@@ -239,18 +239,18 @@ const faqSchema = {
         <li><strong>Implementation fees:</strong> {toPrice === null ? `${toTool.name} has no published list price or setup fee, so ask for the implementation fee in the same written quote.` : `Check ${toTool.name}'s pricing note and confirm its setup fee in writing: some vendors include onboarding in the subscription and others charge for guided setup.`}</li>
         <li><strong>Team time during transition:</strong> 40-100 hours of office-staff time across the 4-12 week migration, plus 2-4 hours per field technician for training. For a 10-tech shop with 2 office staff, total internal labor cost typically runs $5,000-$15,000 at loaded hourly rates.</li>
       </ul>
-      <p>For most shops, the total switching cost is recovered within 6-18 months if the new platform delivers on its value proposition. Below 6 months, the math usually doesn't work — make sure your reason for switching justifies the friction.</p>
+      <p>For most shops, the total switching cost is recovered within 6-18 months if the new platform delivers on its value proposition. Below 6 months, the math usually doesn't work; make sure your reason for switching justifies the friction.</p>
 
       <h2>Migration timeline (realistic)</h2>
 
       <h3>Week 1–2: Account setup + initial config</h3>
-      <p>Sign up for {toTool.name}, configure company settings, set up users + permissions, build pricebook (if applicable). Don't import anything yet — get the foundation right first.</p>
+      <p>Sign up for {toTool.name}, configure company settings, set up users + permissions, build pricebook (if applicable). Don't import anything yet; get the foundation right first.</p>
 
       <h3>Week 2–4: Data import</h3>
-      <p>Export customer list + active jobs from {fromTool.name} via CSV. Import to {toTool.name}. Spot-check 20–30 customers for data integrity. Recurring service agreements often don't transfer cleanly — plan to rebuild these.</p>
+      <p>Export customer list + active jobs from {fromTool.name} via CSV. Import to {toTool.name}. Spot-check 20–30 customers for data integrity. Recurring service agreements often don't transfer cleanly; plan to rebuild these.</p>
 
       <h3>Week 4–8: Team training + parallel run</h3>
-      <p>Train dispatchers and office staff first, then field techs. Run both systems in parallel for 2–4 weeks — new jobs in {toTool.name}, complete pre-cutover jobs in {fromTool.name}.</p>
+      <p>Train dispatchers and office staff first, then field techs. Run both systems in parallel for 2–4 weeks: new jobs in {toTool.name}, complete pre-cutover jobs in {fromTool.name}.</p>
 
       <h3>Week 8–12: Full cutover</h3>
       <p>Stop entering new data in {fromTool.name}. Export all historical data before terminating. Cancel {fromTool.name} subscription.</p>
@@ -259,18 +259,18 @@ const faqSchema = {
       <p>Build out automation workflows {toTool.name} unlocks that you couldn't do on {fromTool.name}. This is where the ROI of switching actually shows up.</p>
 
       <h2>Data export checklist (before cancelling {fromTool.name})</h2>
-      <p>Export everything from {fromTool.name} BEFORE you cancel — vendors typically lock out access immediately after subscription termination. Your checklist:</p>
+      <p>Export everything from {fromTool.name} BEFORE you cancel; vendors typically lock out access immediately after subscription termination. Your checklist:</p>
       <ul>
-        <li><strong>Customer records</strong> — full export with names, addresses, contact info, custom fields, service notes</li>
-        <li><strong>Active job data</strong> — open work orders, scheduled appointments, recurring service agreements</li>
-        <li><strong>Historical invoices</strong> — at minimum the last 12 months for accounting reference; ideally everything for tax/audit purposes</li>
-        <li><strong>Payment records</strong> — past payments, outstanding balances, payment method history (with tokenization concerns)</li>
-        <li><strong>Photo and document attachments</strong> — job site photos, signed agreements, equipment photos — often the hardest to migrate cleanly</li>
-        <li><strong>Pricebook / service catalog</strong> — your service offerings with pricing structure (often rebuilt in new platform regardless)</li>
-        <li><strong>Membership/maintenance plan data</strong> — recurring billing setups, plan tiers, member status</li>
-        <li><strong>Integration configurations</strong> — screenshot/document existing QuickBooks sync, Stripe setup, Zapier workflows for re-creation</li>
-        <li><strong>User accounts and permissions</strong> — list of staff with their role assignments (rebuilt in new platform)</li>
-        <li><strong>Reports and saved views</strong> — note custom dashboards or reports you'll need to rebuild</li>
+        <li><strong>Customer records</strong>: full export with names, addresses, contact info, custom fields, service notes</li>
+        <li><strong>Active job data</strong>: open work orders, scheduled appointments, recurring service agreements</li>
+        <li><strong>Historical invoices</strong>: at minimum the last 12 months for accounting reference; ideally everything for tax/audit purposes</li>
+        <li><strong>Payment records</strong>: past payments, outstanding balances, payment method history (with tokenization concerns)</li>
+        <li><strong>Photo and document attachments</strong>: job site photos, signed agreements, equipment photos (often the hardest to migrate cleanly)</li>
+        <li><strong>Pricebook / service catalog</strong>: your service offerings with pricing structure (often rebuilt in new platform regardless)</li>
+        <li><strong>Membership/maintenance plan data</strong>: recurring billing setups, plan tiers, member status</li>
+        <li><strong>Integration configurations</strong>: screenshot/document existing QuickBooks sync, Stripe setup, Zapier workflows for re-creation</li>
+        <li><strong>User accounts and permissions</strong>: list of staff with their role assignments (rebuilt in new platform)</li>
+        <li><strong>Reports and saved views</strong>: note custom dashboards or reports you'll need to rebuild</li>
       </ul>
 
       <h2>Integration migration checklist</h2>
@@ -278,7 +278,7 @@ const faqSchema = {
         <>
           <p><strong>Continues to work without disruption:</strong></p>
           <ul>
-            {sharedIntegrations.map(i => <li>{i.replace(/_/g, ' ')} — both {fromTool.name} and {toTool.name} support this natively</li>)}
+            {sharedIntegrations.map(i => <li>{i.replace(/_/g, ' ')}: both {fromTool.name} and {toTool.name} support this natively</li>)}
           </ul>
         </>
       )}
@@ -286,7 +286,7 @@ const faqSchema = {
         <>
           <p><strong>Need rebuilding or workarounds:</strong></p>
           <ul>
-            {lostIntegrations.map(i => <li><strong>{i.replace(/_/g, ' ')}</strong> — {fromTool.name} has this natively, but {toTool.name} doesn't. Bridge via Zapier, custom middleware, or accept the workflow loss.</li>)}
+            {lostIntegrations.map(i => <li><strong>{i.replace(/_/g, ' ')}</strong>: {fromTool.name} has this natively, but {toTool.name} doesn't. Bridge via Zapier, custom middleware, or accept the workflow loss.</li>)}
           </ul>
         </>
       )}
@@ -302,7 +302,7 @@ const faqSchema = {
       <h2>Common migration pitfalls (and how to avoid them)</h2>
       <ul>
         <li><strong>Cancelling {fromTool.name} too early.</strong> Don't terminate until you've verified data exported cleanly and the new platform is operational. Keep both subscriptions active during the 2-4 week parallel run, even though it's painful to pay double.</li>
-        <li><strong>Skipping the pricebook rebuild.</strong> Pricebook data rarely migrates cleanly between platforms (different schemas, line-item structures). Rebuild fresh in {toTool.name} during the parallel period — don't try to import.</li>
+        <li><strong>Skipping the pricebook rebuild.</strong> Pricebook data rarely migrates cleanly between platforms (different schemas, line-item structures). Rebuild fresh in {toTool.name} during the parallel period; don't try to import.</li>
         <li><strong>Ignoring custom workflows.</strong> If your office staff built custom workflows or automations on {fromTool.name} (specific dispatch rules, custom email templates, automated billing sequences), those won't transfer. List every custom workflow you depend on and rebuild equivalents in {toTool.name} before cutover.</li>
         <li><strong>Underestimating team adoption resistance.</strong> Get tech-resistant team members on a {toTool.name} demo BEFORE signing the contract. If they hate it, your timeline doubles or the migration fails. Train champions first, peer-train resistant team members second.</li>
         <li><strong>Migrating during peak season.</strong> Don't switch HVAC software in July or roofing software during storm season. Migration friction during peak demand cascades into missed customers and lost revenue.</li>
@@ -313,7 +313,7 @@ const faqSchema = {
       <ul>
         <li><strong>Data export from {fromTool.name}.</strong> Confirm you can export customers, jobs, invoices in usable CSV format. Some platforms restrict this aggressively at cancellation.</li>
         <li><strong>QuickBooks integration parity.</strong> If you're QuickBooks-heavy, the new tool's QB integration depth + sync direction matters more than any single feature.</li>
-        <li><strong>Cancellation terms on {fromTool.name}.</strong> Most field service software is month-to-month — confirm there's no annual lock-in surprise.</li>
+        <li><strong>Cancellation terms on {fromTool.name}.</strong> Most field service software is month-to-month; confirm there's no annual lock-in surprise.</li>
         <li><strong>Implementation cost on {toTool.name}.</strong> Enterprise platforms often charge $5–20K+ for implementation services. Ask upfront.</li>
         <li><strong>Team adoption.</strong> Get your 2–3 most software-resistant team members on a {toTool.name} demo. If they push back hard, your migration timeline doubles.</li>
       </ul>

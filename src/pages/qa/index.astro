@@ -13,15 +13,15 @@ interface QaVendor {
 const vendors = (qaData as { vendors: QaVendor[] }).vendors;
 const categories = ['software', 'insurance', 'lead-gen', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'insurance': { label: 'Contractor insurance', description: "Contractor & engineering cover from Qatari insurers — market leader QIC, digital takaful Beema, and engineering specialist QGIRCO. Quote-based." },
-  'lead-gen': { label: 'Lead generation & project intelligence', description: "Construction project intelligence for Qatar via ProTenders and BNC Network — pan-GCC platforms surfacing the project pipeline and decision-maker contacts (the Monaqasat tender portal sits under compliance)." },
-  'software': { label: 'Construction & trades software', description: 'The giga-project stack (Oracle Aconex & Primavera — Ashghal’s reference platform, Autodesk via Doha partners), regional ERPs with Qatar presence (Focus Softnet, PACT), Qatar-native SkyStruct, and CAFM tools (SWG, Insight) for facilities and labour-accommodation management.' },
+  'insurance': { label: 'Contractor insurance', description: "Contractor & engineering cover from Qatari insurers: market leader QIC, digital takaful Beema, and engineering specialist QGIRCO. Quote-based." },
+  'lead-gen': { label: 'Lead generation & project intelligence', description: "Construction project intelligence for Qatar via ProTenders and BNC Network, pan-GCC platforms surfacing the project pipeline and decision-maker contacts (the Monaqasat tender portal sits under compliance)." },
+  'software': { label: 'Construction & trades software', description: 'The giga-project stack (Oracle Aconex & Primavera, Ashghal’s reference platform; Autodesk via Doha partners), regional ERPs with Qatar presence (Focus Softnet, PACT), Qatar-native SkyStruct, and CAFM tools (SWG, Insight) for facilities and labour-accommodation management.' },
   'certification': { label: 'Licensing & compliance', description: 'Monaqasat contractor classification, the GTA (no VAT yet) and a draft e-invoicing law, Qatarization (Law No. 12 of 2024), Baladiya building permits, Ashghal’s QCS 2014 construction code, and Kahramaa contractor accreditation.' },
 };
 const vendorsByCategory: Record<string, QaVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
-const pageTitle = 'Qatar Construction & Trades Software — WrenchStack';
+const pageTitle = 'Qatar Construction & Trades Software | WrenchStack';
 const pageDescription = `Independent directory of ${vendors.length} construction & trades vendors for Qatar: the giga-project PM/BIM stack, regional ERPs and CAFM, plus Monaqasat classification, QCS 2014, Qatarization and the (no-VAT-yet) tax landscape.`;
 const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Qatar', url: '/qa/' } ];
 const enUrl = new URL('/qa/', Astro.site).toString();
@@ -39,7 +39,7 @@ const arUrl = new URL('/qa/ar/', Astro.site).toString();
       </div>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">Qatar Construction & Trades Software Directory</h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} Qatar-relevant vendors — built around the post-World-Cup, LNG-funded pipeline. The giga-project platforms (Oracle Aconex & Primavera, the Ashghal standard), regional ERPs with real Doha presence (Focus Softnet, PACT), Qatar-native SkyStruct, and CAFM tools — with the local context (Monaqasat classification, Qatar Construction Specifications, Qatarization, and a tax regime with <em>no VAT yet</em>) that off-the-shelf software ignores.
+        Independent reviews of {vendors.length} Qatar-relevant vendors, built around the post-World-Cup, LNG-funded pipeline. The giga-project platforms (Oracle Aconex & Primavera, the Ashghal standard), regional ERPs with real Doha presence (Focus Softnet, PACT), Qatar-native SkyStruct, and CAFM tools, with the local context (Monaqasat classification, Qatar Construction Specifications, Qatarization, and a tax regime with <em>no VAT yet</em>) that off-the-shelf software ignores.
       </p>
     </header>
     <section class="mb-10 grid gap-3 grid-cols-2 sm:grid-cols-4">
@@ -55,14 +55,14 @@ const arUrl = new URL('/qa/ar/', Astro.site).toString();
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See Qatar vendors compared side by side — verdict, pros and cons, Qatar-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See Qatar vendors compared side by side: verdict, pros and cons, Qatar-specific notes, and pricing, head to head.</p>
       </div>
       <a href="/qa/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare Qatar vendors →</a>
     </section>
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What’s different about choosing software in Qatar</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Qatar’s biggest contrast with Saudi: <strong>there is no VAT yet</strong> — so construction billing software does <em>not</em> need a VAT/e-invoicing engine today (a GCC-framework ~5% VAT and a draft e-invoicing law are anticipated, but not in force). The tax that matters is corporate, not consumption. Labour runs on <strong>Qatarization</strong> (Law No. 12 of 2024), a different ruleset from Nitaqat/Emiratisation. Public work is gated by a <strong>Monaqasat classification</strong> certificate, the technical bible is <strong>QCS 2014</strong> (Ashghal-maintained, not an international code), and MEP/utility work needs <strong>Kahramaa</strong> accreditation. Pricing is in Qatari Riyal, and the local software ecosystem is thin — most options are regional/global with confirmed Doha delivery, plus the one Qatar-native product, SkyStruct.
+        Qatar’s biggest contrast with Saudi: <strong>there is no VAT yet</strong>, so construction billing software does <em>not</em> need a VAT/e-invoicing engine today (a GCC-framework ~5% VAT and a draft e-invoicing law are anticipated, but not in force). The tax that matters is corporate, not consumption. Labour runs on <strong>Qatarization</strong> (Law No. 12 of 2024), a different ruleset from Nitaqat/Emiratisation. Public work is gated by a <strong>Monaqasat classification</strong> certificate, the technical bible is <strong>QCS 2014</strong> (Ashghal-maintained, not an international code), and MEP/utility work needs <strong>Kahramaa</strong> accreditation. Pricing is in Qatari Riyal, and the local software ecosystem is thin: most options are regional/global with confirmed Doha delivery, plus the one Qatar-native product, SkyStruct.
       </p>
     </section>
     {categories.map(c => {

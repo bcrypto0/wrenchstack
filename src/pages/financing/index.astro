@@ -7,7 +7,7 @@ import MissingFromList from '../../components/MissingFromList.astro';
 const grouped = financingByModel();
 
 const pageTitle = `Best Contractor Financing for Big-Ticket Jobs (2026)`;
-const pageDescription = `Independent comparison of consumer financing for contractors — Wisetack, GreenSky, Hearth, Acorn Finance — by model (embedded point-of-sale vs lender marketplace). Real fees, APRs, and how to close more big-ticket HVAC, roofing, and remodel jobs.`;
+const pageDescription = `Independent comparison of consumer financing for contractors (Wisetack, GreenSky, Hearth, Acorn Finance) by model (embedded point-of-sale vs lender marketplace). Real fees, APRs, and how to close more big-ticket HVAC, roofing, and remodel jobs.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -42,21 +42,21 @@ const itemListSchema = {
         Best Contractor Financing for Big-Ticket Jobs (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        On a $9,000 repair, "that's about $180/month" closes jobs that a lump sum loses. We compare the consumer-financing options contractors actually use to offer monthly payments — organized by how they work, what they cost you, and the honest trade-offs (including the deferred-interest fine print).
+        On a $9,000 repair, "that's about $180/month" closes jobs that a lump sum loses. We compare the consumer-financing options contractors actually use to offer monthly payments, organized by how they work, what they cost you, and the honest trade-offs (including the deferred-interest fine print).
       </p>
     </header>
 
     <section class="mb-10 rounded-lg border-l-4 border-orange-500 bg-orange-50/40 p-5">
       <p class="text-xs font-bold uppercase tracking-wider text-orange-600">The short answer</p>
       <p class="mt-2 text-slate-800 leading-relaxed">
-        To offer monthly payments on big-ticket jobs, the choice is the <strong>financing model</strong>. <a href="/financing/wisetack/" class="font-semibold text-orange-700 hover:underline">Wisetack</a> and <a href="/financing/greensky/" class="font-semibold text-orange-700 hover:underline">GreenSky</a> embed point-of-sale financing inside your own checkout — you absorb a merchant fee and the customer applies in seconds. <a href="/financing/hearth/" class="font-semibold text-orange-700 hover:underline">Hearth</a> and <a href="/financing/acorn-finance/" class="font-semibold text-orange-700 hover:underline">Acorn Finance</a> are lender marketplaces that send customers a link to compare prequalified offers, and you typically get paid upfront. Pick by job size and how much fee you'll absorb — and be straight with customers about deferred-interest terms, not just the headline "0%." No vendor pays for placement.
+        To offer monthly payments on big-ticket jobs, the choice is the <strong>financing model</strong>. <a href="/financing/wisetack/" class="font-semibold text-orange-700 hover:underline">Wisetack</a> and <a href="/financing/greensky/" class="font-semibold text-orange-700 hover:underline">GreenSky</a> embed point-of-sale financing inside your own checkout: you absorb a merchant fee and the customer applies in seconds. <a href="/financing/hearth/" class="font-semibold text-orange-700 hover:underline">Hearth</a> and <a href="/financing/acorn-finance/" class="font-semibold text-orange-700 hover:underline">Acorn Finance</a> are lender marketplaces that send customers a link to compare prequalified offers, and you typically get paid upfront. Pick by job size and how much fee you'll absorb, and be straight with customers about deferred-interest terms, not just the headline "0%." No vendor pays for placement.
       </p>
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">The headline filter: financing model</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        <strong>Embedded point-of-sale</strong> financing (Wisetack, GreenSky) lets you offer payments inside your own checkout — you pay a merchant or dealer fee, the customer applies in seconds. <strong>Lender marketplaces</strong> (Hearth, Acorn Finance) send customers a link to compare prequalified offers from many lenders, and you typically get paid upfront. The right pick depends on job size, how much fee you'll absorb, and whether you want financing embedded in your FSM or a free comparison link. For any model, be straight with customers about deferred-interest terms — not just the headline "0%."
+        <strong>Embedded point-of-sale</strong> financing (Wisetack, GreenSky) lets you offer payments inside your own checkout: you pay a merchant or dealer fee, the customer applies in seconds. <strong>Lender marketplaces</strong> (Hearth, Acorn Finance) send customers a link to compare prequalified offers from many lenders, and you typically get paid upfront. The right pick depends on job size, how much fee you'll absorb, and whether you want financing embedded in your FSM or a free comparison link. For any model, be straight with customers about deferred-interest terms, not just the headline "0%."
       </p>
     </section>
 
@@ -107,7 +107,7 @@ const itemListSchema = {
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Founded</dt>
-                    <dd class="font-semibold text-slate-900">{p.founded ?? '—'}</dd>
+                    <dd class="font-semibold text-slate-900">{p.founded ?? '-'}</dd>
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Customer APR</dt>

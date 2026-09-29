@@ -41,17 +41,17 @@ const intlVendorCount = Object.values(intlModules).reduce(
   0
 );
 
-const pageTitle = 'Press & Media Room — WrenchStack';
-const pageDescription = 'Press kit, fact sheet, ready-to-cite story leads and editorial contacts for journalists covering trades & construction software, contractor vendors, and e-invoicing compliance — including the independent reputation-flag ledger and the English-and-Arabic Gulf coverage.';
+const pageTitle = 'Press & Media Room | WrenchStack';
+const pageDescription = 'Press kit, fact sheet, ready-to-cite story leads and editorial contacts for journalists covering trades & construction software, contractor vendors, and e-invoicing compliance, including the independent reputation-flag ledger and the English-and-Arabic Gulf coverage.';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Press', url: '/press/' },
 ];
 
-const boilerplate = `WrenchStack is an independent research desk for the trades and construction industries — it reviews software and services for contractors with no paid placements (vendors cannot pay for placement or scores). It evaluates ${totalStackVendors} US vendors across ${totalCategories} categories — field-service software, payments, accounting, banking, financing, payroll, insurance, lead generation, marketing agencies and AI tools — plus ${intlVendorCount} localized vendor listings across ${intlMarkets} international markets (UK, Canada, Australia, New Zealand, Ireland, the six GCC states, South Africa, France, Morocco, Jordan, Egypt and Malaysia), with the Gulf and other MENA markets covered in both English and Arabic. Every recommendation carries a published WrenchStack Fit Score™ and per-vendor affiliate disclosure. Based in the United States.`;
+const boilerplate = `WrenchStack is an independent research desk for the trades and construction industries. It reviews software and services for contractors with no paid placements (vendors cannot pay for placement or scores). It evaluates ${totalStackVendors} US vendors across ${totalCategories} categories (field-service software, payments, accounting, banking, financing, payroll, insurance, lead generation, marketing agencies and AI tools) plus ${intlVendorCount} localized vendor listings across ${intlMarkets} international markets (UK, Canada, Australia, New Zealand, Ireland, the six GCC states, South Africa, France, Morocco, Jordan, Egypt and Malaysia), with the Gulf and other MENA markets covered in both English and Arabic. Every recommendation carries a published WrenchStack Fit Score™ and per-vendor affiliate disclosure. Based in the United States.`;
 
-// Recent citation log — empty until we land first citations. Structure ready.
+// Recent citation log: empty until we land first citations. Structure ready.
 const citations: Array<{ outlet: string; title: string; date: string; url: string }> = [];
 ---
 
@@ -64,11 +64,11 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
         Press Room
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Resources for journalists, industry analysts and trade-publication editors — including ready-to-cite story leads with verified, reproducible numbers. WrenchStack is independent: no vendor pays for placement or scores, which is exactly why we can publish things vendor-funded listicles can't.
+        Resources for journalists, industry analysts and trade-publication editors, including ready-to-cite story leads with verified, reproducible numbers. WrenchStack is independent: no vendor pays for placement or scores, which is exactly why we can publish things vendor-funded listicles can't.
       </p>
     </header>
 
-    <!-- STORY LEADS — the reason a journalist is here -->
+    <!-- STORY LEADS: the reason a journalist is here -->
     <section class="mb-12">
       <h2 class="mb-2 text-2xl font-bold text-slate-900">Story leads for journalists</h2>
       <p class="mb-5 text-sm text-slate-600 leading-relaxed">
@@ -76,48 +76,48 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
       </p>
 
       <div class="space-y-4">
-        <!-- Hook 3 — TIME-SENSITIVE, surfaced first while live -->
+        <!-- Hook 3: TIME-SENSITIVE, surfaced first while live -->
         <article class="rounded-lg border-2 border-amber-300 bg-amber-50 p-5">
           <div class="mb-2 flex flex-wrap items-center gap-2">
             <span class="rounded-full bg-amber-200 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-amber-900">⏰ Time-sensitive</span>
-            <h3 class="text-lg font-bold text-slate-900">The Gulf e-invoicing deadline — and the Arabic gap</h3>
+            <h3 class="text-lg font-bold text-slate-900">The Gulf e-invoicing deadline, and the Arabic gap</h3>
           </div>
           <p class="text-sm text-slate-700 leading-relaxed">
-            Saudi Arabia's <strong>ZATCA Phase-2 Wave 24 reaches the SAR 375,000-revenue band on 30 June 2026</strong>, sweeping in a large share of small contractors who've never needed compliant billing software — and almost no one is comparing their options in Arabic. WrenchStack maintains what we believe is the only independent <strong>English-and-Arabic</strong> construction-software directory, spanning the Gulf plus the live mandates in Egypt (ETA), Jordan (JoFotara), Malaysia (MyInvois) and Oman (Fawtara, to all VAT-registered firms by 2027).
+            Saudi Arabia's <strong>ZATCA Phase-2 Wave 24 reaches the SAR 375,000-revenue band on 30 June 2026</strong>, sweeping in a large share of small contractors who've never needed compliant billing software, and almost no one is comparing their options in Arabic. WrenchStack maintains what we believe is the only independent <strong>English-and-Arabic</strong> construction-software directory, spanning the Gulf plus the live mandates in Egypt (ETA), Jordan (JoFotara), Malaysia (MyInvois) and Oman (Fawtara, to all VAT-registered firms by 2027).
           </p>
           <p class="mt-2 text-xs text-slate-600">Evergreen angle (the EN+AR first-mover position) outlives the 30 June peg. → <a href="/sa/guides/zatca-e-invoicing-contractors/" class="font-semibold text-orange-600 hover:underline">ZATCA guide</a> · <a href="/software-by-country/" class="font-semibold text-orange-600 hover:underline">all {intlMarkets} markets</a></p>
         </article>
 
-        <!-- Hook 1 — the honesty ledger -->
+        <!-- Hook 1: the honesty ledger -->
         <article class="rounded-lg border border-slate-200 bg-white p-5">
           <h3 class="mb-2 text-lg font-bold text-slate-900">The "who to avoid" ledger</h3>
           <p class="text-sm text-slate-700 leading-relaxed">
-            We flag <strong>{totalFlagged} vendors</strong> across the contractor stack for documented harm — and publish the specific reason on each. The pattern is concentrated in the money categories: <strong>{financingRow.flagged} of {financingRow.total} consumer-financing providers</strong> (deferred-interest fine print), <strong>{leadGenRow.flagged} of {leadGenRow.total} lead-generation platforms</strong> (including FTC enforcement actions), and <strong>{bankingRow.flagged} of {bankingRow.total} fintech-banking options</strong> (account-freeze patterns). A directory that takes vendor money structurally can't publish this.
+            We flag <strong>{totalFlagged} vendors</strong> across the contractor stack for documented harm, and publish the specific reason on each. The pattern is concentrated in the money categories: <strong>{financingRow.flagged} of {financingRow.total} consumer-financing providers</strong> (deferred-interest fine print), <strong>{leadGenRow.flagged} of {leadGenRow.total} lead-generation platforms</strong> (including FTC enforcement actions), and <strong>{bankingRow.flagged} of {bankingRow.total} fintech-banking options</strong> (account-freeze patterns). A directory that takes vendor money structurally can't publish this.
           </p>
           <p class="mt-2 text-xs text-slate-600">→ <a href="/research/" class="font-semibold text-orange-600 hover:underline">Reputation-flag ledger</a> · <a href="/lead-gen/" class="font-semibold text-orange-600 hover:underline">Lead-gen reviews</a></p>
         </article>
 
-        <!-- Hook 2 — pricing opacity -->
+        <!-- Hook 2: pricing opacity -->
         <article class="rounded-lg border border-slate-200 bg-white p-5">
           <h3 class="mb-2 text-lg font-bold text-slate-900">The opacity tax</h3>
           <p class="text-sm text-slate-700 leading-relaxed">
-            <strong>{customQuotedPct}% of trades-software platforms publish no price at all</strong> — you have to sit through a sales call to get a number. The median <em>published</em> entry price is <strong>${medianPrice}/month</strong>, and that figure mixes two models: {perUserTools().length} platforms charge per seat (median <strong>${perUserMedian()} per user/month</strong>) while {flatFeeTools().length} charge a flat monthly fee (median <strong>${flatFeeMedian()}/month</strong>). Quoting the blended number as a per-seat rate overstates what a one-person shop pays and understates a large team. Contractor insurance is worse: every carrier we track is quote-only — not one publishes a flat rate.
+            <strong>{customQuotedPct}% of trades-software platforms publish no price at all</strong>: you have to sit through a sales call to get a number. The median <em>published</em> entry price is <strong>${medianPrice}/month</strong>, and that figure mixes two models: {perUserTools().length} platforms charge per seat (median <strong>${perUserMedian()} per user/month</strong>) while {flatFeeTools().length} charge a flat monthly fee (median <strong>${flatFeeMedian()}/month</strong>). Quoting the blended number as a per-seat rate overstates what a one-person shop pays and understates a large team. Contractor insurance is worse: every carrier we track is quote-only; not one publishes a flat rate.
           </p>
           <p class="mt-2 text-xs text-slate-600">→ <a href="/trends-2026/" class="font-semibold text-orange-600 hover:underline">Market report</a> · <a href="/pricing/" class="font-semibold text-orange-600 hover:underline">Pricing comparison</a></p>
         </article>
 
-        <!-- Hook 4 — QuickBooks lock-in -->
+        <!-- Hook 4: QuickBooks lock-in -->
         <article class="rounded-lg border border-slate-200 bg-white p-5">
           <h3 class="mb-2 text-lg font-bold text-slate-900">The QuickBooks tax</h3>
           <p class="text-sm text-slate-700 leading-relaxed">
-            <strong>{qbPct}% of trades software integrates QuickBooks</strong> — the closest thing the category has to a universal standard, and a real adoption tax on any vendor who skips it. It's a useful lens on how much the back office, not the field, still dictates software choice for contractors.
+            <strong>{qbPct}% of trades software integrates QuickBooks</strong>, the closest thing the category has to a universal standard, and a real adoption tax on any vendor who skips it. It's a useful lens on how much the back office, not the field, still dictates software choice for contractors.
           </p>
           <p class="mt-2 text-xs text-slate-600">→ <a href="/trends-2026/" class="font-semibold text-orange-600 hover:underline">Market report</a> · <a href="/accounting/" class="font-semibold text-orange-600 hover:underline">Accounting reviews</a></p>
         </article>
       </div>
 
       <p class="mt-4 rounded-lg bg-slate-50 px-4 py-3 text-xs text-slate-500 leading-relaxed">
-        <strong class="text-slate-700">Standard citation line:</strong> "WrenchStack Trades Software Market Report 2026, WrenchStack Research" — free to cite with a link to <a href="/trends-2026/" class="underline">wrenchstack.com/trends-2026</a>. All figures are dated and reproducible from the public methodology.
+        <strong class="text-slate-700">Standard citation line:</strong> "WrenchStack Trades Software Market Report 2026, WrenchStack Research". Free to cite with a link to <a href="/trends-2026/" class="underline">wrenchstack.com/trends-2026</a>. All figures are dated and reproducible from the public methodology.
       </p>
     </section>
 
@@ -139,7 +139,7 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
     </section>
 
     <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-bold text-slate-900">About WrenchStack — boilerplate</h2>
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">About WrenchStack: boilerplate</h2>
       <div class="rounded-lg border border-slate-200 bg-white p-5">
         <p class="text-slate-700 leading-relaxed">{boilerplate}</p>
         <div class="mt-4 flex flex-wrap gap-2">
@@ -220,15 +220,15 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
         <div class="flex flex-wrap gap-3">
           <div class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2">
             <span class="inline-block h-5 w-5 rounded bg-orange-500"></span>
-            <span class="font-mono text-xs">#F97316 — Orange</span>
+            <span class="font-mono text-xs">#F97316 (Orange)</span>
           </div>
           <div class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2">
             <span class="inline-block h-5 w-5 rounded bg-slate-900"></span>
-            <span class="font-mono text-xs">#0F172A — Slate</span>
+            <span class="font-mono text-xs">#0F172A (Slate)</span>
           </div>
           <div class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2">
             <span class="inline-block h-5 w-5 rounded bg-emerald-500"></span>
-            <span class="font-mono text-xs">#10B981 — Emerald</span>
+            <span class="font-mono text-xs">#10B981 (Emerald)</span>
           </div>
         </div>
 
@@ -245,7 +245,7 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
       <div class="space-y-3">
         <a href="/trends-2026/" class="block rounded-lg border border-slate-200 bg-white p-4 no-underline hover:border-orange-300 hover:bg-orange-50">
           <p class="font-semibold text-slate-900">Trades Software Market Report 2026</p>
-          <p class="mt-1 text-sm text-slate-600">Data findings across the full {totalStackVendors}-vendor contractor stack ({totalCategories} categories) and {intlMarkets} international markets — pricing transparency, integration prevalence, the reputation-flag ledger, and the English-and-Arabic Gulf picture.</p>
+          <p class="mt-1 text-sm text-slate-600">Data findings across the full {totalStackVendors}-vendor contractor stack ({totalCategories} categories) and {intlMarkets} international markets: pricing transparency, integration prevalence, the reputation-flag ledger, and the English-and-Arabic Gulf picture.</p>
         </a>
         <a href="/research/" class="block rounded-lg border border-slate-200 bg-white p-4 no-underline hover:border-orange-300 hover:bg-orange-50">
           <p class="font-semibold text-slate-900">Research hub & the WrenchStack Index</p>
@@ -292,7 +292,7 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
       </p>
       <ul class="grid gap-2 sm:grid-cols-2 text-sm text-slate-700">
         <li class="rounded-md bg-slate-50 px-3 py-2">Gulf &amp; MENA e-invoicing mandates (ZATCA, ETA, JoFotara, MyInvois, Fawtara)</li>
-        <li class="rounded-md bg-slate-50 px-3 py-2">The reputation-flag ledger — documented vendor harm across the stack</li>
+        <li class="rounded-md bg-slate-50 px-3 py-2">The reputation-flag ledger: documented vendor harm across the stack</li>
         <li class="rounded-md bg-slate-50 px-3 py-2">Trades-software pricing transparency and benchmarks</li>
         <li class="rounded-md bg-slate-50 px-3 py-2">Lead-generation platform reputation patterns &amp; FTC actions</li>
         <li class="rounded-md bg-slate-50 px-3 py-2">Contractor insurance &amp; financing market structure</li>

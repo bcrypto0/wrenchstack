@@ -1,10 +1,11 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { tools, verticals, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies } from '../../lib/data';
+import { intlMarketCount } from '../../lib/intl';
 
 const totalVendorCount = tools.length + leadGenPlatforms.length + insuranceProviders.length + payrollServices.length + marketingAgencies.length;
 
-const pageTitle = 'Research & Data — WrenchStack';
+const pageTitle = 'Research & Data | WrenchStack';
 const pageDescription = 'WrenchStack research products: industry reports, market data, vendor analysis, and the WrenchStack Index of trades-vendor benchmarks. Citable, dated, methodology-backed.';
 
 const breadcrumbs = [
@@ -19,15 +20,15 @@ const research = [
     legacyUrl: '/trends-2026/',
     title: 'Trades Software Market Report 2026',
     pubDate: '2026-05-26',
-    description: 'Data findings from 120 FSM platforms, now expanded to the full 273-vendor contractor software stack (10 categories) and 13 international markets. Pricing distribution, the custom-quote opacity tax, integration prevalence, the reputation-flag ledger, and the multi-market picture. Updated June 2026. Cite as: WrenchStack Trades Software Market Report 2026.',
+    description: `Data findings from ${tools.length} field service platforms, now expanded to the full contractor software stack (10 categories) and ${intlMarketCount} international markets. Pricing distribution, the custom-quote opacity tax, integration prevalence, the reputation-flag ledger, and the multi-market picture. Updated June 2026. Cite as: WrenchStack Trades Software Market Report 2026.`,
     tags: ['Industry report', 'Annual', 'Software', 'Cross-category'],
   },
   {
     slug: 'wrenchstack-index-q2-2026',
     legacyUrl: '/research/index/',
-    title: 'WrenchStack Index — Q2 2026',
+    title: 'WrenchStack Index: Q2 2026',
     pubDate: '2026-05-29',
-    description: 'Quarterly benchmark stats across all 10 categories (software, payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing, AI) plus 13 international markets. Full-stack reputation-flag ledger and headline metrics designed for citation.',
+    description: `Quarterly benchmark stats across all 10 categories (software, payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing, AI) plus ${intlMarketCount} international markets. Full-stack reputation-flag ledger and headline metrics designed for citation.`,
     tags: ['Quarterly index', 'Cross-category'],
   },
   {
@@ -99,11 +100,11 @@ const research = [
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Upcoming research (2026 roadmap)</h2>
       <ul class="space-y-2 text-sm text-slate-700">
-        <li>• <strong>Q3 2026:</strong> Lead-Gen Platform Reputation Index — quantified contractor sentiment across 13 platforms</li>
-        <li>• <strong>Q3 2026:</strong> Trades Insurance Market Report 2026 — direct-vs-agent + reputation flag analysis</li>
-        <li>• <strong>Q4 2026:</strong> WrenchStack Index Q4 2026 — annual rollup with year-over-year deltas</li>
-        <li>• <strong>Q4 2026:</strong> International expansion data drop — UK, CA, AU, NZ, IE vendor landscape</li>
-        <li>• <strong>Q1 2027:</strong> State of Trades Software 2027 — flagship annual report</li>
+        <li>• <strong>Q3 2026:</strong> Lead-Gen Platform Reputation Index: quantified contractor sentiment across 13 platforms</li>
+        <li>• <strong>Q3 2026:</strong> Trades Insurance Market Report 2026: direct-vs-agent + reputation flag analysis</li>
+        <li>• <strong>Q4 2026:</strong> WrenchStack Index Q4 2026: annual rollup with year-over-year deltas</li>
+        <li>• <strong>Q4 2026:</strong> International expansion data drop: UK, CA, AU, NZ, IE vendor landscape</li>
+        <li>• <strong>Q1 2027:</strong> State of Trades Software 2027: flagship annual report</li>
         <li>• <strong>Q1 2027:</strong> WrenchStack Awards 2027</li>
       </ul>
     </section>

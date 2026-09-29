@@ -13,16 +13,16 @@ interface BaVendor {
 const vendors = (baData as { vendors: BaVendor[] }).vendors;
 const categories = ['software', 'insurance', 'lead-gen', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'insurance': { label: 'Contractor insurance', description: "Contractor & engineering cover from Bahraini insurers — market leader BKIC (GIG), the consolidating Solidarity, and GIG Takaful. Quote-based." },
-  'lead-gen': { label: 'Lead generation & project intelligence', description: "Construction lead-gen is thin in Bahrain — ProTenders' pan-GCC project intelligence is the one genuine option; local home-services apps are residential, not construction-contractor." },
+  'insurance': { label: 'Contractor insurance', description: "Contractor & engineering cover from Bahraini insurers: market leader BKIC (GIG), the consolidating Solidarity, and GIG Takaful. Quote-based." },
+  'lead-gen': { label: 'Lead generation & project intelligence', description: "Construction lead-gen is thin in Bahrain: ProTenders' pan-GCC project intelligence is the one genuine option; local home-services apps are residential, not construction-contractor." },
   'software': { label: 'Construction & trades software', description: 'From global PM/BIM platforms (Oracle Primavera, Aconex, Autodesk, Bentley) served via Manama resellers, to regional ERPs with a real Bahrain entity (Focus Softnet, PACT), the genuine Bahrain-native option (Diamond/Catalyst), and public-priced accounting (Zoho, Tally) for 10% NBR VAT.' },
-  'certification': { label: 'Licensing & compliance', description: 'The Bahrain bodies every contractor deals with — NBR (10% VAT), CRPEP engineering licensing, Ministry of Works contractor classification, the Tender Board, LMRA & Bahrainisation, Benayat building permits, and Civil Defence fire safety.' },
+  'certification': { label: 'Licensing & compliance', description: 'The Bahrain bodies every contractor deals with: NBR (10% VAT), CRPEP engineering licensing, Ministry of Works contractor classification, the Tender Board, LMRA & Bahrainisation, Benayat building permits, and Civil Defence fire safety.' },
 };
 const vendorsByCategory: Record<string, BaVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
-const pageTitle = 'Bahrain Construction & Trades Software — WrenchStack';
-const pageDescription = `Independent directory of ${vendors.length} construction & trades vendors for Bahrain: global PM/BIM platforms, Bahrain-native and regional ERPs, and 10%-VAT accounting — plus the NBR, CRPEP, contractor-classification, Tender Board, Benayat and Bahrainisation compliance you must handle.`;
+const pageTitle = 'Bahrain Construction & Trades Software | WrenchStack';
+const pageDescription = `Independent directory of ${vendors.length} construction & trades vendors for Bahrain: global PM/BIM platforms, Bahrain-native and regional ERPs, and 10%-VAT accounting, plus the NBR, CRPEP, contractor-classification, Tender Board, Benayat and Bahrainisation compliance you must handle.`;
 const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Bahrain', url: '/ba/' } ];
 ---
 <Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
@@ -34,7 +34,7 @@ const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Bahrain', url: '/ba/'
       </div>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">Bahrain Construction & Trades Software Directory</h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} Bahrain-relevant vendors — global PM/BIM platforms (Oracle Primavera, Aconex, Autodesk, Bentley) served through Manama resellers, regional and Bahrain-native ERPs (Focus Softnet, PACT, Diamond/Catalyst), and public-priced accounting (Zoho, Tally) — with the local compliance context (NBR 10% VAT, CRPEP, Ministry of Works classification, Tender Board, LMRA, Benayat) that off-the-shelf software ignores.
+        Independent reviews of {vendors.length} Bahrain-relevant vendors: global PM/BIM platforms (Oracle Primavera, Aconex, Autodesk, Bentley) served through Manama resellers, regional and Bahrain-native ERPs (Focus Softnet, PACT, Diamond/Catalyst), and public-priced accounting (Zoho, Tally), with the local compliance context (NBR 10% VAT, CRPEP, Ministry of Works classification, Tender Board, LMRA, Benayat) that off-the-shelf software ignores.
       </p>
     </header>
 
@@ -45,7 +45,7 @@ const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Bahrain', url: '/ba/'
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">10%</div>
-        <div class="mt-1 text-xs text-slate-600">VAT — highest in the GCC</div>
+        <div class="mt-1 text-xs text-slate-600">VAT, highest in the GCC</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">~$3.3B</div>
@@ -60,7 +60,7 @@ const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Bahrain', url: '/ba/'
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See Bahrain vendors compared side by side — a clear verdict, pros and cons, Bahrain-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See Bahrain vendors compared side by side: a clear verdict, pros and cons, Bahrain-specific notes, and pricing, head to head.</p>
       </div>
       <a href="/ba/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare Bahrain vendors →</a>
     </section>
@@ -68,7 +68,7 @@ const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Bahrain', url: '/ba/'
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What's different about choosing software in Bahrain</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Bahrain has the GCC's smallest construction market, and that shapes the software landscape. First, <strong>most platforms are served remotely</strong> — global PM/BIM tools reach Bahrain through Manama resellers or out of Dubai, so local implementation support is the thing to verify, and the genuinely Bahrain-native options (like Diamond's Catalyst) are few but valuable. Second, <strong>VAT is 10% — the highest in the GCC</strong> (raised from 5% in 2022), so accounting software must be set to Bahrain's rate, not the GCC-typical 5%. Third, <strong>there is no e-invoicing mandate yet</strong> — unlike Saudi (ZATCA) or the UAE — so "e-invoicing certified" isn't a buying requirement here today, though it's worth a forward look. And public-sector work is gated by <strong>Ministry of Works contractor classification</strong> plus <strong>Tender Board</strong> registration, while <strong>CRPEP</strong> licensing controls who can practise engineering and file permits through <strong>Benayat</strong>.
+        Bahrain has the GCC's smallest construction market, and that shapes the software landscape. First, <strong>most platforms are served remotely</strong>: global PM/BIM tools reach Bahrain through Manama resellers or out of Dubai, so local implementation support is the thing to verify, and the genuinely Bahrain-native options (like Diamond's Catalyst) are few but valuable. Second, <strong>VAT is 10%, the highest in the GCC</strong> (raised from 5% in 2022), so accounting software must be set to Bahrain's rate, not the GCC-typical 5%. Third, <strong>there is no e-invoicing mandate yet</strong>, unlike Saudi (ZATCA) or the UAE, so "e-invoicing certified" isn't a buying requirement here today, though it's worth a forward look. And public-sector work is gated by <strong>Ministry of Works contractor classification</strong> plus <strong>Tender Board</strong> registration, while <strong>CRPEP</strong> licensing controls who can practise engineering and file permits through <strong>Benayat</strong>.
       </p>
     </section>
 

@@ -24,13 +24,13 @@ const breadcrumbs = [
   { name: 'About', url: '/about/' },
 ];
 
-// Organization schema (not Person — repositioning as research firm)
+// Organization schema (not Person, repositioning as research firm)
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'WrenchStack',
   url: 'https://wrenchstack.com',
-  description: `WrenchStack is an independent research desk covering trades-contractor vendors across ${categoryCount} categories — software, lead-generation, insurance, payroll, and marketing agencies. We publish the WrenchStack Fit Score™ methodology and per-vendor affiliate disclosure for every recommendation.`,
+  description: `WrenchStack is an independent research desk covering trades-contractor vendors across ${categoryCount} categories: software, lead-generation, insurance, payroll, and marketing agencies. We publish the WrenchStack Fit Score™ methodology and per-vendor affiliate disclosure for every recommendation.`,
   foundingDate: '2026',
   knowsAbout: [
     'Field service management software',
@@ -50,8 +50,8 @@ const organizationSchema = {
 ---
 
 <Layout
-  title="About WrenchStack — independent trades vendor research desk"
-  description={`WrenchStack is an independent research desk covering ${totalVendorCount}+ trades-contractor vendors across 10 categories — software, payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI — plus 13 international markets. Published methodology, transparent affiliate disclosure, honest reputation flags.`}
+  title="About WrenchStack: independent trades vendor research desk"
+  description={`WrenchStack is an independent research desk covering ${totalVendorCount}+ trades-contractor vendors across 10 categories (software, payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI) plus 13 international markets. Published methodology, transparent affiliate disclosure, honest reputation flags.`}
   breadcrumbs={breadcrumbs}
 >
   <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
@@ -64,7 +64,7 @@ const organizationSchema = {
         The independent research desk for trades vendors.
       </h1>
       <p class="mt-6 text-lg text-slate-700 leading-relaxed sm:text-xl">
-        WrenchStack covers every vendor a trades contractor buys from — software, lead-generation, insurance, payroll, and marketing agencies — under a single published methodology and per-vendor affiliate ledger. {totalVendorCount}+ vendors evaluated. {reputationFlagCount} reputation flags issued. Zero pay-to-play.
+        WrenchStack covers every vendor a trades contractor buys from (software, lead-generation, insurance, payroll, and marketing agencies) under a single published methodology and per-vendor affiliate ledger. {totalVendorCount}+ vendors evaluated. {reputationFlagCount} reputation flags issued. Zero pay-to-play.
       </p>
     </header>
 
@@ -92,21 +92,21 @@ const organizationSchema = {
       <h2>What we do</h2>
 
       <p>
-        We are an independent research desk publishing comparative analysis of the vendors trades contractors buy from. Across {categoryCount} categories — field service software, customer lead-generation platforms, business insurance providers, payroll services, and marketing agencies — we publish a unified <a href="/methodology/">WrenchStack Fit Score™</a> methodology, per-vendor affiliate disclosure, and reputation flags on the platforms whose track records earn them.
+        We are an independent research desk publishing comparative analysis of the vendors trades contractors buy from. Across {categoryCount} categories (field service software, customer lead-generation platforms, business insurance providers, payroll services, and marketing agencies), we publish a unified <a href="/methodology/">WrenchStack Fit Score™</a> methodology, per-vendor affiliate disclosure, and reputation flags on the platforms whose track records earn them.
       </p>
 
       <p>
-        Our editorial position is uncomplicated: contractors deserve evaluation that's not paid for by the vendors being evaluated. The methodology applies identically to every vendor in the directory — whether we have an active affiliate relationship, a pending application, or no commercial alignment at all. The reputation flags get attached based on documented patterns (FTC actions, BBB complaint volume, audit-pattern customer reports, Reddit sentiment) regardless of whether a flagged vendor pays us anything.
+        Our editorial position is uncomplicated: contractors deserve evaluation that's not paid for by the vendors being evaluated. The methodology applies identically to every vendor in the directory, whether we have an active affiliate relationship, a pending application, or no commercial alignment at all. The reputation flags get attached based on documented patterns (FTC actions, BBB complaint volume, audit-pattern customer reports, Reddit sentiment) regardless of whether a flagged vendor pays us anything.
       </p>
 
       <h2>Why this exists</h2>
 
       <p>
-        The trades-vendor evaluation market is fragmented between two structurally compromised models. Lead-generation directories (Capterra, G2, Software Advice, BeltStack, ContractorNerd) monetize by routing contractor inquiries to vendors who pay for placement — which means stale data, hidden pricing behind sales-call walls, and rankings that correlate with bid amount rather than product fit. Vendor-published comparisons (Housecall Pro vs Jobber pages, Workyard's "best HVAC software" rankings) put the publishing vendor at #1 by definition.
+        The trades-vendor evaluation market is fragmented between two structurally compromised models. Lead-generation directories (Capterra, G2, Software Advice, BeltStack, ContractorNerd) monetize by routing contractor inquiries to vendors who pay for placement, which means stale data, hidden pricing behind sales-call walls, and rankings that correlate with bid amount rather than product fit. Vendor-published comparisons (Housecall Pro vs Jobber pages, Workyard's "best HVAC software" rankings) put the publishing vendor at #1 by definition.
       </p>
 
       <p>
-        Neither model produces evaluation a contractor researching software at 11pm after a 10-hour install day can actually trust. WrenchStack is what the third option looks like — independent research with published methodology, transparent monetization, and honest reputation flags on vendors with documented patterns of contractor-hostile behavior.
+        Neither model produces evaluation a contractor researching software at 11pm after a 10-hour install day can actually trust. WrenchStack is what the third option looks like: independent research with published methodology, transparent monetization, and honest reputation flags on vendors with documented patterns of contractor-hostile behavior.
       </p>
 
       <h2>Editorial structure</h2>
@@ -135,7 +135,7 @@ const organizationSchema = {
       </ul>
 
       <p>
-        For the full process behind every review — how we research, verify, source, flag, and correct — see our <a href="/editorial-standards/">editorial standards</a>.
+        For the full process behind every review (how we research, verify, source, flag, and correct), see our <a href="/editorial-standards/">editorial standards</a>.
       </p>
 
       <h2>What makes us structurally different</h2>
@@ -144,13 +144,13 @@ const organizationSchema = {
 
       <ol>
         <li>
-          <strong>Multi-category coverage under one methodology.</strong> Software, lead-gen, insurance, payroll, marketing agencies — same WrenchStack Fit Score™ formula, same independence rules, same reputation-flag standards. Single-category competitors structurally cannot match the cross-category coverage; multi-category competitors don't exist.
+          <strong>Multi-category coverage under one methodology.</strong> Software, lead-gen, insurance, payroll, marketing agencies: same WrenchStack Fit Score™ formula, same independence rules, same reputation-flag standards. Single-category competitors structurally cannot match the cross-category coverage; multi-category competitors don't exist.
         </li>
         <li>
           <strong>Verified pricing with visible dates.</strong> Every pricing tier shows a <code>verified_date</code> stamp. Pricing under 90 days old gets a green freshness pill; 91–180 days gets amber; over 180 gets red. The freshness signal is a UI element, not buried metadata.
         </li>
         <li>
-          <strong>Buyer-side decision tools.</strong> <a href="/quiz/">Matching quiz</a>, <a href="/roi-calculator/">ROI calculator</a>, <a href="/cost-of-switch/">cost-of-switch calculator</a>, per-tool pricing widgets, interactive <a href="/compare-builder/">comparison builder</a>. Tools that make the decision real — competitor directories don't ship these because their business model depends on form-fills, not self-service.
+          <strong>Buyer-side decision tools.</strong> <a href="/quiz/">Matching quiz</a>, <a href="/roi-calculator/">ROI calculator</a>, <a href="/cost-of-switch/">cost-of-switch calculator</a>, per-tool pricing widgets, interactive <a href="/compare-builder/">comparison builder</a>. Tools that make the decision real. Competitor directories don't ship these because their business model depends on form-fills, not self-service.
         </li>
         <li>
           <strong>Honest reputation flags.</strong> {reputationFlagCount} vendors carry a reputation_flag warning citing specific documented concerns: FTC and state actions (HomeAdvisor's $7.2M FTC order, Angi's Vermont Attorney General settlement), audit-pattern complaints (Pie Insurance), fake-lead complaint patterns (Bark), lock-in contract patterns (Townsquare Interactive, Marketing 360), and renewal-rate-increase patterns (Hiscox 2025, ADP Run, Paychex Flex). Every flag includes citation to documented sources.
@@ -166,7 +166,7 @@ const organizationSchema = {
         <li><strong>{payrollCount} payroll services</strong> with company-size guides (1-5, 6-20, 20+ employees)</li>
         <li><strong>{agencyCount} marketing agencies</strong> with trade-specific specialists flagged and documented lock-in contract warnings</li>
         <li><strong>Methodology page</strong> with version number, effective date, scoring rubric, evaluation timeline, and per-vendor affiliate ledger</li>
-        <li><strong>WrenchStack Awards 2026</strong> — 18 editorial designations, no paid placement, methodology-backed</li>
+        <li><strong>WrenchStack Awards 2026</strong>: 18 editorial designations, no paid placement, methodology-backed</li>
         <li><strong>State-level coverage</strong> across all 50 US states × top 5 trades with licensing context</li>
         <li><strong>4,900+ pages</strong> of editorial content covering individual reviews, comparison pages, per-trade buyer guides, state-level pages, and multi-tool comparisons</li>
       </ul>
@@ -174,7 +174,7 @@ const organizationSchema = {
       <h2>Geographic coverage</h2>
 
       <p>
-        WrenchStack covers the United States with all-state coverage, plus five English-speaking international markets that are <strong>live now</strong>: the United Kingdom, Canada, Australia, New Zealand, and Ireland. Each has its own vendor directory, per-vendor reviews, head-to-head comparisons, and a certification guide reflecting local requirements — Checkatrade and Gas Safe (UK), Hipages (AU), HomeStars and Red Seal (CA), Fergus and the PGDB (NZ), and MyBuilder and RGI (IE).
+        WrenchStack covers the United States with all-state coverage, plus five English-speaking international markets that are <strong>live now</strong>: the United Kingdom, Canada, Australia, New Zealand, and Ireland. Each has its own vendor directory, per-vendor reviews, head-to-head comparisons, and a certification guide reflecting local requirements: Checkatrade and Gas Safe (UK), Hipages (AU), HomeStars and Red Seal (CA), Fergus and the PGDB (NZ), and MyBuilder and RGI (IE).
       </p>
 
       <h2>What we will never do</h2>
@@ -184,7 +184,7 @@ const organizationSchema = {
         <li>Accept payment to raise a vendor's WrenchStack Fit Score™</li>
         <li>Accept payment to omit or soften cons in a vendor review</li>
         <li>Accept payment to remove a reputation_flag warning</li>
-        <li>Hide an affiliate relationship — every software vendor's status is on the <a href="/methodology/#affiliate-ledger">methodology page ledger</a>; lead-gen/insurance/payroll/agency vendors disclose per-page</li>
+        <li>Hide an affiliate relationship: every software vendor's status is on the <a href="/methodology/#affiliate-ledger">methodology page ledger</a>; lead-gen/insurance/payroll/agency vendors disclose per-page</li>
         <li>Recommend a vendor we wouldn't recommend if no commission existed</li>
         <li>Gate pricing data behind a sales call</li>
         <li>Publish "experts agree" content with no editorial accountability</li>
@@ -209,7 +209,7 @@ const organizationSchema = {
       </ul>
 
       <p class="not-prose mt-8 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-        <strong class="text-slate-900">Editorial integrity</strong> is the only product we ship. The minute readers stop trusting that the cons section is honest, the reputation flags are documented, and the pricing is verified — WrenchStack stops being useful to anyone. Every decision about content, scoring, partnerships, and methodology gets filtered through that test.
+        <strong class="text-slate-900">Editorial integrity</strong> is the only product we ship. The minute readers stop trusting that the cons section is honest, the reputation flags are documented, and the pricing is verified, WrenchStack stops being useful to anyone. Every decision about content, scoring, partnerships, and methodology gets filtered through that test.
       </p>
 
     </section>

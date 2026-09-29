@@ -6,7 +6,7 @@
       "definition": "Calendar-based assignment of jobs to specific technicians at specific times.",
       "description": "Scheduling is the foundation of field service software. At minimum it shows a calendar view (day, week, month) where dispatchers assign jobs to technicians. Better implementations include drag-and-drop reassignment, real-time technician availability based on existing jobs and drive time, color-coding by job type or status, recurring job support for maintenance contracts, and mobile sync so technicians see schedule changes in real-time. The gap between 'has a calendar' and 'has dispatch-grade scheduling' is bigger than vendors admit.",
       "why_matters": "Without dedicated scheduling, trades businesses lose money in three ways: double-bookings (two technicians sent to one job, or one technician booked for two simultaneous jobs), under-utilization (technicians have gaps because dispatchers can't see real availability), and missed appointments (job request received but never put on the calendar). Every one of those is a job you paid to win and then lost or delivered late, which is why scheduling is usually the first thing a growing shop buys.",
-      "buying_tips": "Evaluate scheduling on three dimensions: speed (how fast can a dispatcher reassign a job mid-day?), visibility (can field technicians see their schedule on mobile in real-time?), and intelligence (does it surface conflicts before they happen?). Avoid platforms where scheduling is bolted on as an afterthought to invoicing — the workflow asymmetry shows up daily. For shops doing 50+ jobs per week, dispatch optimization features (suggested job assignment based on technician location, skill, historical close rate) start paying off meaningfully.",
+      "buying_tips": "Evaluate scheduling on three dimensions: speed (how fast can a dispatcher reassign a job mid-day?), visibility (can field technicians see their schedule on mobile in real-time?), and intelligence (does it surface conflicts before they happen?). Avoid platforms where scheduling is bolted on as an afterthought to invoicing; the workflow asymmetry shows up daily. For shops doing 50+ jobs per week, dispatch optimization features (suggested job assignment based on technician location, skill, historical close rate) start paying off meaningfully.",
       "related_features": ["dispatching", "gps_tracking", "ai_dispatcher", "team_management"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "landscaping", "cleaning", "pest_control"],
       "faqs": [
@@ -16,20 +16,20 @@
         },
         {
           "q": "Do I need scheduling software if I have a Google Calendar workflow?",
-          "a": "Google Calendar works for solo operators with 5-10 jobs per week. Past that, you need software that handles multiple technicians, customer records, recurring jobs, and mobile sync simultaneously — none of which Google Calendar does well. The transition usually happens around the 2-technician mark."
+          "a": "Google Calendar works for solo operators with 5-10 jobs per week. Past that, you need software that handles multiple technicians, customer records, recurring jobs, and mobile sync simultaneously, none of which Google Calendar does well. The transition usually happens around the 2-technician mark."
         },
         {
           "q": "How do recurring jobs (weekly mowing, monthly maintenance) work in scheduling?",
-          "a": "Most FSM platforms handle recurring jobs natively — set a customer to weekly/bi-weekly/monthly cadence, and the platform auto-schedules future visits. Quality varies on rescheduling: when a recurring visit gets bumped, do future visits shift too? Better platforms (ServiceTitan, Aspire) handle this; weaker ones require manual intervention."
+          "a": "Most FSM platforms handle recurring jobs natively: set a customer to weekly/bi-weekly/monthly cadence, and the platform auto-schedules future visits. Quality varies on rescheduling: when a recurring visit gets bumped, do future visits shift too? Better platforms (ServiceTitan, Aspire) handle this; weaker ones require manual intervention."
         }
       ]
     },
     "dispatching": {
       "name": "Dispatching",
       "definition": "Real-time assignment and routing of jobs to field technicians, with mobile sync.",
-      "description": "Dispatching is the dynamic side of scheduling — what happens after the calendar is built and the day starts. Good dispatching shows real-time technician location (GPS), allows quick reassignment when delays cascade, sends ETA notifications to customers automatically, optimizes routes between jobs to minimize drive time, and matches the right technician to each job based on skill and equipment. Enterprise platforms add AI-suggested assignments based on historical close rate, customer preferences, and equipment availability.",
+      "description": "Dispatching is the dynamic side of scheduling: what happens after the calendar is built and the day starts. Good dispatching shows real-time technician location (GPS), allows quick reassignment when delays cascade, sends ETA notifications to customers automatically, optimizes routes between jobs to minimize drive time, and matches the right technician to each job based on skill and equipment. Enterprise platforms add AI-suggested assignments based on historical close rate, customer preferences, and equipment availability.",
       "why_matters": "Drive time is one of the largest non-billable costs in field service, and it grows with every technician and every stop. Good dispatching assigns each job to the technician who is nearest and qualified, reshuffles the day when a job runs long, and keeps routes tight. Customer-facing benefits matter too: automated ETA notifications cut down on missed appointments, and real-time updates when a technician is running late prevent the angry-customer scenarios that end up in reviews.",
-      "buying_tips": "Strong dispatching requires three integrations: live GPS tracking on mobile devices, customer-facing ETA notifications (SMS or app push), and skill/equipment matching for jobs. Enterprise platforms add AI dispatcher features that suggest optimal technician for each call. For shops running 10+ technicians, manual dispatching breaks down — invest in platforms with dispatch optimization (ServiceTitan, Workiz Pro, BuildOps). For smaller shops (3-5 techs), basic dispatching in Jobber or Housecall Pro is usually enough.",
+      "buying_tips": "Strong dispatching requires three integrations: live GPS tracking on mobile devices, customer-facing ETA notifications (SMS or app push), and skill/equipment matching for jobs. Enterprise platforms add AI dispatcher features that suggest optimal technician for each call. For shops running 10+ technicians, manual dispatching breaks down; invest in a platform with dispatch optimization (ServiceTitan's Dispatch Pro is one example). For smaller shops (3-5 techs), basic dispatching in Jobber or Housecall Pro is usually enough.",
       "related_features": ["scheduling", "gps_tracking", "ai_dispatcher", "two_way_texting"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "locksmith", "garage_door", "appliance_repair", "pest_control"],
       "faqs": [
@@ -39,7 +39,7 @@
         },
         {
           "q": "How does AI dispatcher differ from regular dispatching?",
-          "a": "AI dispatchers (ServiceTitan, Workiz Pro+) automatically recommend the best technician for each incoming job based on multiple factors: current location, skill set, historical close rate on similar jobs, equipment in their vehicle, customer history. Regular dispatching requires human decision-making for each job. AI dispatchers shine when call volume exceeds what one dispatcher can handle (typically 50+ daily calls)."
+          "a": "AI dispatch tools recommend a technician for each incoming job from several factors; ServiceTitan's Dispatch Pro, for example, uses technician skills, location, recent sales performance and conversion rates. Regular dispatching requires human decision-making for each job. AI dispatchers shine when call volume exceeds what one dispatcher can handle (typically 50+ daily calls)."
         },
         {
           "q": "Can I dispatch from my phone instead of a desktop?",
@@ -85,7 +85,7 @@
         },
         {
           "q": "How fast can a tech create a quote in the field?",
-          "a": "Best-in-class FSM platforms (Jobber, Housecall Pro mobile apps) let techs build a quote in 60-90 seconds from a pre-built pricebook. Without pricebook automation (Pricebook Pro, Coolfront, FieldEdge), expect 5-10 minutes of manual line-item entry per quote — meaningful drag on tech efficiency."
+          "a": "Best-in-class FSM platforms (Jobber, Housecall Pro mobile apps) let techs build a quote in 60-90 seconds from a pre-built pricebook. Without pricebook automation (Pricebook Pro, Coolfront, FieldEdge), expect 5-10 minutes of manual line-item entry per quote, a meaningful drag on tech efficiency."
         },
         {
           "q": "Should quotes integrate with consumer financing?",
@@ -131,7 +131,7 @@
         },
         {
           "q": "Can customers schedule new service through the portal?",
-          "a": "Most FSM platforms support customer-initiated service requests through the portal. The platform then routes the request to the office for scheduling confirmation. True self-booking with real-time availability (customer picks time slot directly) requires online_booking features — different from basic portal request submission."
+          "a": "Most FSM platforms support customer-initiated service requests through the portal. The platform then routes the request to the office for scheduling confirmation. True self-booking with real-time availability (customer picks time slot directly) requires online_booking features, which differ from basic portal request submission."
         },
         {
           "q": "How does portal differ from a mobile app?",
@@ -142,7 +142,7 @@
     "online_booking": {
       "name": "Online Booking",
       "definition": "Customer-facing self-scheduling with real-time technician availability.",
-      "description": "Online booking embeds a scheduling widget on your website where customers select a service, pick an available time slot (showing real-time technician availability), enter their details, and confirm the job — all without phone or email interaction. Better implementations support service type-specific booking rules, deposit collection at booking, automatic confirmation messages, and integration with online ads for direct booking from Google Local Services or Facebook.",
+      "description": "Online booking embeds a scheduling widget on your website where customers select a service, pick an available time slot (showing real-time technician availability), enter their details, and confirm the job, all without phone or email interaction. Better implementations support service type-specific booking rules, deposit collection at booking, automatic confirmation messages, and integration with online ads for direct booking from Google Local Services or Facebook.",
       "why_matters": "Online booking captures customers outside business hours, when many homeowners get around to arranging service. Shops without it either miss those inquiries or rely on voicemail and callbacks, and some of those callers book with whoever answered first. Letting the customer pick a slot on the spot removes that gap.",
       "buying_tips": "Strong online booking features: configurable service types with appropriate buffer times (don't book back-to-back service calls without drive time), real-time availability that respects existing schedule, deposit collection at booking for filter screening, customizable booking forms by service type, native integration with Google Local Services / Facebook for direct conversion, and automatic confirmation + reminder messages.",
       "related_features": ["customer_portal", "scheduling", "ai_receptionist", "two_way_texting"],
@@ -166,7 +166,7 @@
       "name": "Team Management",
       "definition": "Multi-user workflows for scheduling, time tracking, communication, and compliance across technicians.",
       "description": "Team management covers the employee-facing side of FSM: technician roster with role permissions, time clock with GPS verification, in-app team chat replacing WhatsApp groups, certification and license tracking with expiration alerts, training and onboarding workflows for new hires, and payroll integration. For trades shops with 5+ technicians, dedicated team management features become as important as customer-facing workflows.",
-      "why_matters": "Trades businesses with multiple technicians need workflows that pure-FSM tools weren't built for: shift scheduling across rotating crews, time clock with GPS verification, certifications tracking for licensing compliance, internal communication that doesn't pollute personal WhatsApp, and onboarding flows for new hires. Without team management, shops fall back to spreadsheets and group chats — which break down past 5-10 technicians.",
+      "why_matters": "Trades businesses with multiple technicians need workflows that pure-FSM tools weren't built for: shift scheduling across rotating crews, time clock with GPS verification, certifications tracking for licensing compliance, internal communication that doesn't pollute personal WhatsApp, and onboarding flows for new hires. Without team management, shops fall back to spreadsheets and group chats, which break down past 5-10 technicians.",
       "buying_tips": "Three different approaches: (1) primary FSM with team management built in (ServiceTitan, BuildOps include strong team management); (2) primary FSM + dedicated workforce platform (Jobber + Connecteam is a common combo); (3) bare-bones approach for very small shops (under 5 technicians can use Jobber alone). Past 10 technicians, dedicated team management features (or a workforce-specific tool like Connecteam) are usually justified.",
       "related_features": ["scheduling", "gps_tracking", "two_way_texting"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "landscaping", "cleaning", "pest_control", "general_contractor"],
@@ -181,7 +181,7 @@
         },
         {
           "q": "How do I track technician certifications?",
-          "a": "Most enterprise FSM platforms (ServiceTitan, FieldEdge) track certifications natively with expiration alerts (EPA Section 608, state HVAC license, etc.). Mid-market platforms vary — some track basics, others require workarounds. Specialty workforce tools (Connecteam, BambooHR) handle this well but require separate platform."
+          "a": "Most enterprise FSM platforms (ServiceTitan, FieldEdge) track certifications natively with expiration alerts (EPA Section 608, state HVAC license, etc.). Mid-market platforms vary: some track basics, others require workarounds. Specialty workforce tools (Connecteam, BambooHR) handle this well but require separate platform."
         }
       ]
     },
@@ -213,13 +213,13 @@
       "definition": "Real-time location tracking of technician vehicles for dispatching, route verification, and accountability.",
       "description": "GPS tracking covers three use cases: dispatching (sending the closest technician to a new job), route verification (confirming techs took efficient routes vs taking long lunch breaks), and customer ETA notifications (automatically updating customers when their technician is approaching). Implementations range from basic vehicle GPS via plug-in OBD-II devices to integrated mobile-app-based tracking that requires no hardware.",
       "why_matters": "Drive time is the single biggest cost in field service. GPS tracking enables three optimizations: dispatching efficiency (closest tech to new job typically saves 20-40 minutes per call), route accountability (techs taking unauthorized long routes or stops are visible), and customer experience (automatic ETA texts reduce no-show and 'where's my tech' calls). For shops with 5+ vehicles, GPS tracking typically pays for itself within months through fuel savings and dispatch efficiency.",
-      "buying_tips": "Two options: (1) integrated FSM GPS via the technician's phone or vehicle telematics — easier setup, no separate hardware. (2) standalone GPS fleet tracking (Verizon Connect, Samsara, Geotab) — more accurate, harder to subvert, but separate subscription. Most trades shops use FSM-integrated GPS; larger commercial operations with 20+ vehicles often add standalone fleet tracking for insurance and compliance reasons.",
+      "buying_tips": "Two options: (1) integrated FSM GPS via the technician's phone or vehicle telematics: easier setup, no separate hardware. (2) standalone GPS fleet tracking (Verizon Connect, Samsara, Geotab): more accurate, harder to subvert, but separate subscription. Most trades shops use FSM-integrated GPS; larger commercial operations with 20+ vehicles often add standalone fleet tracking for insurance and compliance reasons.",
       "related_features": ["dispatching", "scheduling", "two_way_texting"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "landscaping", "cleaning", "pest_control", "pool_service"],
       "faqs": [
         {
           "q": "Can I track technicians' phones or do I need vehicle GPS?",
-          "a": "FSM-integrated GPS uses the technician's phone — no separate hardware. Vehicle GPS (OBD-II plug-ins or hardwired devices) is more accurate and tracks the vehicle whether or not the tech is in it. Most trades shops use phone GPS; larger commercial operations add vehicle GPS for insurance discount qualification."
+          "a": "FSM-integrated GPS uses the technician's phone: no separate hardware. Vehicle GPS (OBD-II plug-ins or hardwired devices) is more accurate and tracks the vehicle whether or not the tech is in it. Most trades shops use phone GPS; larger commercial operations add vehicle GPS for insurance discount qualification."
         },
         {
           "q": "What if techs turn off their phone GPS?",
@@ -246,7 +246,7 @@
         },
         {
           "q": "Can FSM marketing replace dedicated email marketing tools?",
-          "a": "For trades-specific use cases (service reminders, post-job thanks, review requests), yes — FSM-native marketing handles these well. For broader content marketing (newsletters, educational content, brand campaigns), dedicated tools (Mailchimp, ActiveCampaign) are more capable. Most shops use both: FSM for transactional/operational, dedicated tools for brand."
+          "a": "For trades-specific use cases (service reminders, post-job thanks, review requests), yes; FSM-native marketing handles these well. For broader content marketing (newsletters, educational content, brand campaigns), dedicated tools (Mailchimp, ActiveCampaign) are more capable. Most shops use both: FSM for transactional/operational, dedicated tools for brand."
         },
         {
           "q": "How do I send seasonal campaigns from FSM software?",
@@ -273,7 +273,7 @@
         },
         {
           "q": "Should I ask for reviews on Google or Facebook?",
-          "a": "Google reviews dominate for local SEO — they're the most valuable. Facebook reviews matter less for SEO but more for social proof on Facebook itself. Best practice: ask for Google reviews primarily, with secondary mention of Facebook for customers who don't use Google. BBB reviews matter for older demographics in some trades."
+          "a": "Google reviews dominate for local SEO; they're the most valuable. Facebook reviews matter less for SEO but more for social proof on Facebook itself. Best practice: ask for Google reviews primarily, with secondary mention of Facebook for customers who don't use Google. BBB reviews matter for older demographics in some trades."
         }
       ]
     },
@@ -296,7 +296,7 @@
         },
         {
           "q": "Can membership plans handle commercial customers?",
-          "a": "Most FSM membership features are designed for residential. Commercial memberships (property managers with multi-building contracts) need different structures — per-building pricing, custom service schedules per property, multi-stakeholder approval. Aspire (commercial landscaping) and BuildOps (commercial mechanical) handle commercial recurring service better than residential FSM tools."
+          "a": "Most FSM membership features are designed for residential. Commercial memberships (property managers with multi-building contracts) need different structures: per-building pricing, custom service schedules per property, multi-stakeholder approval. Aspire (commercial landscaping) and BuildOps (commercial mechanical) handle commercial recurring service better than residential FSM tools."
         }
       ]
     },
@@ -319,7 +319,7 @@
         },
         {
           "q": "Can I offer multiple financing options?",
-          "a": "Yes — most platforms support multiple financing providers so customers can compare offers (Wisetack vs Synchrony vs Foundry). Different providers serve different credit profiles. Offering 2-3 options ensures more customers qualify for at least one. Important for shops working with mixed-credit customer bases."
+          "a": "Yes. Most platforms support multiple financing providers so customers can compare offers (Wisetack vs Synchrony vs Foundry). Different providers serve different credit profiles. Offering 2-3 options ensures more customers qualify for at least one. Important for shops working with mixed-credit customer bases."
         }
       ]
     },
@@ -334,7 +334,7 @@
       "faqs": [
         {
           "q": "Can I keep my existing phone number with FSM VoIP?",
-          "a": "Yes — most FSM phone systems support number porting from your existing carrier. Porting typically takes 1-2 weeks. During porting, you can run parallel (old phone + new FSM phone) to avoid downtime. Some shops add a NEW number for FSM-tracked calls while keeping the existing number for non-tracked use."
+          "a": "Yes. Most FSM phone systems support number porting from your existing carrier. Porting typically takes 1-2 weeks. During porting, you can run parallel (old phone + new FSM phone) to avoid downtime. Some shops add a NEW number for FSM-tracked calls while keeping the existing number for non-tracked use."
         },
         {
           "q": "How does call recording help my business?",
@@ -342,7 +342,7 @@
         },
         {
           "q": "Do I need an AI receptionist with my phone system?",
-          "a": "Optional but increasingly valuable. AI receptionists (Workiz Pro tier and above) handle simple inbound bookings without human intervention, which is useful for after-hours overflow when human dispatchers are unavailable. Not a replacement for human CSRs during business hours, but it answers calls that would otherwise go to voicemail."
+          "a": "Optional but increasingly valuable. AI receptionists (Workiz's Genius Answering is one example) handle simple inbound bookings without human intervention, which is useful for after-hours overflow when human dispatchers are unavailable. Not a replacement for human CSRs during business hours, but it answers calls that would otherwise go to voicemail."
         }
       ]
     },
@@ -361,7 +361,7 @@
         },
         {
           "q": "Can customers still text our techs directly?",
-          "a": "Through the masked number, yes — and these texts get logged. Direct texts to a tech's personal cell phone bypass the system entirely and aren't captured. The whole point of call masking is to route ALL customer communication through the platform; techs giving out personal numbers defeats the purpose."
+          "a": "Through the masked number, yes, and these texts get logged. Direct texts to a tech's personal cell phone bypass the system entirely and aren't captured. The whole point of call masking is to route ALL customer communication through the platform; techs giving out personal numbers defeats the purpose."
         },
         {
           "q": "Do I need call masking for a small shop?",
@@ -372,15 +372,15 @@
     "ai_dispatcher": {
       "name": "AI Dispatcher",
       "definition": "AI-powered job assignment that automatically routes calls to the optimal technician based on skill, location, history, and availability.",
-      "description": "AI dispatchers replace human dispatch decision-making for routine call assignment. The AI evaluates each incoming job against current technician locations, skill certifications, equipment in vehicle, historical close rate on similar jobs, customer preferences, and existing schedule — then recommends the optimal technician (or auto-assigns in some implementations). Especially valuable during peak call times when human dispatchers become bottlenecks. ServiceTitan and Workiz lead this category.",
+      "description": "AI dispatchers replace human dispatch decision-making for routine call assignment. The AI evaluates each incoming job against current technician locations, skill certifications, equipment in vehicle, historical close rate on similar jobs, customer preferences, and existing schedule, then recommends the optimal technician (or auto-assigns in some implementations). Especially valuable during peak call times when human dispatchers become bottlenecks. ServiceTitan and Workiz lead this category.",
       "why_matters": "Peak-season call volume strains shops without dispatch help. On a busy summer HVAC day, human dispatchers juggling a flood of calls make assignment mistakes (wrong skill for the job, wrong area, conflicting schedule) that cascade into customer disappointment and wasted technician time. AI dispatchers take the routine assignments, freeing human dispatchers for complex calls (emergencies, VIP customers, ambiguous job descriptions).",
-      "buying_tips": "AI dispatcher quality varies dramatically. Best implementations (ServiceTitan, Workiz Pro+) consider 8-12 factors per assignment. Lesser implementations are basically 'closest available tech' algorithms. Evaluate based on: factor count (more is better), historical data sensitivity (does it learn from your shop's actual closing patterns?), override mechanisms (can human dispatchers easily override AI suggestions?), and integration with skill / certification data. For shops under 5 techs, AI dispatch is overkill — human dispatchers handle this volume fine.",
+      "buying_tips": "AI dispatcher quality varies dramatically. Better implementations weigh several factors per assignment (ServiceTitan's Dispatch Pro uses skills, location, recent sales performance and conversion rates). Lesser implementations are basically 'closest available tech' algorithms. Evaluate based on: factor count (more is better), historical data sensitivity (does it learn from your shop's actual closing patterns?), override mechanisms (can human dispatchers easily override AI suggestions?), and integration with skill / certification data. For shops under 5 techs, AI dispatch is overkill; human dispatchers handle this volume fine.",
       "related_features": ["dispatching", "scheduling", "phone_system", "ai_receptionist"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "locksmith", "garage_door", "pest_control"],
       "faqs": [
         {
           "q": "When does AI dispatching pay for itself?",
-          "a": "Typically past 10 technicians or 50+ daily calls — the point where human dispatchers become bottlenecks during peak times. Below that volume, human dispatchers handle assignment fine and AI dispatch is overhead. Peak-season operations (summer HVAC, winter heating) often justify AI dispatch even at smaller team sizes for surge handling."
+          "a": "Typically past 10 technicians or 50+ daily calls, the point where human dispatchers become bottlenecks during peak times. Below that volume, human dispatchers handle assignment fine and AI dispatch is overhead. Peak-season operations (summer HVAC, winter heating) often justify AI dispatch even at smaller team sizes for surge handling."
         },
         {
           "q": "Can AI dispatchers replace human dispatchers entirely?",
@@ -397,7 +397,7 @@
       "definition": "AI-powered phone agent that answers calls, qualifies leads, and books service appointments without human intervention.",
       "description": "AI receptionists handle inbound service calls when humans aren't available, primarily after hours, on weekends, at peak overflow times, and over lunch. The AI greets callers, asks qualifying questions, identifies the service need, checks real-time technician availability, and books an appointment directly. Several trades platforms now offer this. The value is answering calls that would otherwise go to voicemail.",
       "why_matters": "Off-hours and overflow calls are revenue at risk: an emergency caller who reaches voicemail often calls the next shop on the list. AI receptionists can answer and book those calls with no human on duty. For on-demand trades (locksmith, emergency plumbing, garage door), that changes who wins the job: the shop that answers at 3am.",
-      "buying_tips": "Quality varies dramatically. Best implementations (Workiz Pro and Ultimate tiers) handle natural conversation, integrate with real-time tech availability, escalate complex calls to human callback, and learn from each interaction. Lesser implementations are essentially IVR systems with voice ('press 1 for service, press 2 for billing'). Test with real call scenarios before committing — generic AI voice agents don't yet handle trades-specific calls well.",
+      "buying_tips": "Quality varies dramatically. Better implementations handle natural conversation, integrate with real-time tech availability, escalate complex calls to human callback, and learn from each interaction. Lesser implementations are essentially IVR systems with voice ('press 1 for service, press 2 for billing'). Test with real call scenarios before committing; generic AI voice agents don't yet handle trades-specific calls well.",
       "related_features": ["phone_system", "ai_dispatcher", "online_booking", "scheduling"],
       "best_for_verticals": ["locksmith", "garage_door", "plumbing", "hvac", "appliance_repair"],
       "faqs": [
@@ -420,7 +420,7 @@
       "definition": "Bidirectional sync between FSM and QuickBooks for customers, invoices, payments, and chart of accounts.",
       "description": "QuickBooks integration is the most-requested feature in trades FSM. Better implementations sync bidirectionally in real-time: customer records (new customers in either platform appear in the other), invoices (created in FSM, posted to QB), payments (collected in FSM, recorded in QB), and chart of accounts mapping (FSM line items mapped to QB income accounts). Critical distinction: QuickBooks Online vs Desktop support. Many FSM platforms support Online only (Jobber, for example), some sync one way to Desktop (Housecall Pro), and a few are built around QuickBooks (FieldEdge markets a real-time two-way integration).",
       "why_matters": "Manual sync between FSM and accounting is a common source of operational pain in trades businesses. Without integration, office staff re-enter every invoice from the FSM into QuickBooks by hand, and the hours grow with job volume. Integration removes that work. More important: bidirectional sync prevents the 'two sources of truth' problem where the FSM and QuickBooks show different customer balances, causing collection disputes and missed payments.",
-      "buying_tips": "Three things to verify before committing: (1) QuickBooks Online vs Desktop support — most FSM platforms are QB Online-first with weak Desktop. FieldEdge has best Desktop integration; ServiceTitan and Procore have strong Online + Sage Intacct. (2) Sync direction — one-way push (FSM to QB) is weaker than bidirectional. (3) Chart of accounts mapping flexibility — can you map FSM line items to your specific QB income accounts, or does the integration force a generic structure?",
+      "buying_tips": "Three things to verify before committing: (1) QuickBooks Online vs Desktop support: most FSM platforms are QB Online-first with weak Desktop. FieldEdge has best Desktop integration; ServiceTitan and Procore have strong Online + Sage Intacct. (2) Sync direction: one-way push (FSM to QB) is weaker than bidirectional. (3) Chart of accounts mapping flexibility: can you map FSM line items to your specific QB income accounts, or does the integration force a generic structure?",
       "related_features": ["invoicing", "payment_processing", "inventory"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "roofing", "general_contractor", "landscaping", "cleaning", "pest_control"],
       "faqs": [
@@ -434,15 +434,15 @@
         },
         {
           "q": "What happens when QuickBooks and FSM disagree on a customer balance?",
-          "a": "Better integrations have conflict resolution rules — typically FSM takes precedence on operational data (customer info, scheduled jobs), QB takes precedence on accounting data (payment status, balance owed). Weaker integrations create duplicate records or conflicting balances that office staff have to manually reconcile. Test integration quality with real scenarios before committing."
+          "a": "Better integrations have conflict resolution rules: typically FSM takes precedence on operational data (customer info, scheduled jobs), QB takes precedence on accounting data (payment status, balance owed). Weaker integrations create duplicate records or conflicting balances that office staff have to manually reconcile. Test integration quality with real scenarios before committing."
         }
       ]
     },
     "two_way_texting": {
       "name": "Two-Way SMS Texting",
       "definition": "Send and receive text messages with customers from within the FSM platform, with conversation history tied to customer records.",
-      "description": "Two-way texting embeds SMS conversations in the FSM platform — every text sent to or received from a customer is captured against their customer record. Better implementations include: native SMS via the platform's phone number (not the tech's personal phone), MMS for photo sharing, automated SMS for appointment reminders and ETA notifications, click-to-text from any customer record, and AI-suggested responses for common customer questions. Eliminates the 'customer texts went to my old tech's phone' problem.",
-      "why_matters": "Customers prefer SMS over phone calls for routine communication (confirming appointments, asking quick questions, sharing photos of issues). Shops without two-way texting either miss SMS entirely (customer texts go to voicemail-only office number) or rely on personal cell phones (texts lost when techs leave). Native two-way texting captures all customer communication in one searchable history — critical for service quality and customer experience.",
+      "description": "Two-way texting embeds SMS conversations in the FSM platform: every text sent to or received from a customer is captured against their customer record. Better implementations include: native SMS via the platform's phone number (not the tech's personal phone), MMS for photo sharing, automated SMS for appointment reminders and ETA notifications, click-to-text from any customer record, and AI-suggested responses for common customer questions. Eliminates the 'customer texts went to my old tech's phone' problem.",
+      "why_matters": "Customers prefer SMS over phone calls for routine communication (confirming appointments, asking quick questions, sharing photos of issues). Shops without two-way texting either miss SMS entirely (customer texts go to voicemail-only office number) or rely on personal cell phones (texts lost when techs leave). Native two-way texting captures all customer communication in one searchable history, which is critical for service quality and customer experience.",
       "buying_tips": "Look for: native SMS through the platform (not just integration with Twilio), MMS support for photo sharing (customers love sending pictures of broken equipment), automated message templates (appointment reminders, ETA notifications, post-job thanks), AI-suggested responses for common questions, and call-to-text from any customer or job record. Most modern FSM platforms include basic SMS; the depth varies on automation and template features.",
       "related_features": ["customer_portal", "phone_system", "automated_marketing", "review_management"],
       "best_for_verticals": ["hvac", "plumbing", "electrical", "cleaning", "landscaping", "pest_control", "pool_service"],

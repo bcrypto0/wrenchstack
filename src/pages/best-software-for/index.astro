@@ -43,8 +43,8 @@ const itemListSchema = {
 ---
 
 <Layout
-  title={`Best software for trades — ${useCases.length} buyer-specific guides`}
-  description={`${useCases.length} buyer-specific software guides for trades and field-service businesses. Each guide ranks 5 tools that actually fit the profile — by team size, vertical, or specific need.`}
+  title={`Best software for trades: ${useCases.length} buyer-specific guides`}
+  description={`${useCases.length} buyer-specific software guides for trades and field-service businesses. Each guide ranks 5 tools that actually fit the profile (by team size, vertical, or specific need).`}
   breadcrumbs={breadcrumbs}
 >
   <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
@@ -55,7 +55,7 @@ const itemListSchema = {
         Buyer guides for trades software
       </h1>
       <p class="mt-4 max-w-3xl text-lg text-slate-600">
-        Software picks for specific buyer situations — by team size, vertical, or specific operational need. Each guide ranks 5 tools that actually fit the profile, with the rationale for why and the trade-off analysis between them.
+        Software picks for specific buyer situations: by team size, vertical, or specific operational need. Each guide ranks 5 tools that actually fit the profile, with the rationale for why and the trade-off analysis between them.
       </p>
       <p class="mt-3 text-sm text-slate-500">
         Not sure which guide fits? Take the <a href="/quiz/" class="text-orange-600 hover:underline">60-second matching quiz</a> for ranked picks tailored to your situation.
@@ -65,7 +65,7 @@ const itemListSchema = {
     <section class="mb-12">
       <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">By trade + scale</h2>
       <p class="mb-6 text-slate-600">
-        Guides combining a specific trade (HVAC, plumbing, cleaning, etc.) with operational scale — the most common buyer situation.
+        Guides combining a specific trade (HVAC, plumbing, cleaning, etc.) with operational scale, the most common buyer situation.
       </p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {tradeGuides.map((uc) => (
@@ -86,7 +86,7 @@ const itemListSchema = {
       <section class="mb-12">
         <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">By team size</h2>
         <p class="mb-6 text-slate-600">
-          Guides focused on a specific team-size bracket where the right software changes — solo operators, small teams, growing operations.
+          Guides focused on a specific team-size bracket where the right software changes: solo operators, small teams, growing operations.
         </p>
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {teamSizeGuides.map((uc) => (
@@ -108,7 +108,7 @@ const itemListSchema = {
       <section class="mb-12">
         <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">By specialty need</h2>
         <p class="mb-6 text-slate-600">
-          Guides focused on a specific must-have — QuickBooks integration depth, insurance restoration workflow, snow management, etc.
+          Guides focused on a specific must-have: QuickBooks integration depth, insurance restoration workflow, snow management, etc.
         </p>
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {specialtyGuides.map((uc) => (

@@ -62,20 +62,20 @@ const faqs = [
         },
         null,
       );
-      if (!cheapest) return 'All picks here use custom-quote pricing — request quotes from each to compare.';
-      return `${cheapest.name} starts at ${formatPrice(cheapest)}. Note: cheapest starting price isn't always cheapest total cost — per-user pricing scales differently than per-company pricing as you grow.`;
+      if (!cheapest) return 'All picks here use custom-quote pricing; request quotes from each to compare.';
+      return `${cheapest.name} starts at ${formatPrice(cheapest)}. Note: cheapest starting price isn't always cheapest total cost: per-user pricing scales differently than per-company pricing as you grow.`;
     })(),
   },
   {
     q: `Which one has the best mobile app?`,
-    a: 'All five picks on this list have native iOS and Android apps. For mobile-first workflows specifically, look at the picks that explicitly highlight mobile experience in their key features (see each tool detail page for the full feature list).',
+    a: 'It depends on how your crew works. Each tool detail page lists the mobile apps under its key features and description, and some tools are iPhone-first, so confirm iOS and Android support with the vendor before you buy.',
   },
   {
     q: `Do these integrate with QuickBooks?`,
     a: (() => {
       const withQb = picks.filter((t) => t.integrations.some((i) => i.includes('quickbooks')));
       if (withQb.length === picks.length) {
-        return 'Yes — all five picks integrate with QuickBooks. Integration depth varies (one-way push vs two-way sync) — check each tool detail page for specifics.';
+        return 'Yes, all five picks integrate with QuickBooks. Integration depth varies (one-way push vs two-way sync); check each tool detail page for specifics.';
       }
       return `${withQb.length} of the ${picks.length} picks integrate with QuickBooks: ${withQb.map((t) => t.name).join(', ')}. The others use Zapier or have no native QuickBooks integration.`;
     })(),
@@ -182,7 +182,7 @@ const breadcrumbs = [
                 </div>
                 <div>
                   <dt class="font-semibold text-slate-900">Best team size</dt>
-                  <dd class="text-slate-700">{tool.best_team_size ?? '—'}</dd>
+                  <dd class="text-slate-700">{tool.best_team_size ?? 'n/a'}</dd>
                 </div>
                 <div class="md:col-span-2">
                   <dt class="font-semibold text-slate-900">Why it ranks here</dt>

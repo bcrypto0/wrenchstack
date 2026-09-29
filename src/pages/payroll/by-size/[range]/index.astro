@@ -11,12 +11,12 @@ const SIZE_BUCKETS: Record<string, { bucket: EmployeeBucket; label: string; intr
   '6-20-employees': {
     bucket: '6-20',
     label: '6-20 employees',
-    intro: 'This is the SMB payroll sweet spot. Most trades shops in this range benefit from modern SMB payroll (Gusto Plus, OnPay) with full feature breadth — tax filing, benefits administration, time tracking integration. Avoid legacy options (ADP, Paychex) at this size unless you have compliance complexity that specifically requires them.',
+    intro: 'This is the SMB payroll sweet spot. Most trades shops in this range benefit from modern SMB payroll (Gusto Plus, OnPay) with full feature breadth: tax filing, benefits administration, time tracking integration. Avoid legacy options (ADP, Paychex) at this size unless you have compliance complexity that specifically requires them.',
   },
   '20-plus-employees': {
     bucket: '20+',
     label: '20+ employees',
-    intro: 'At 20+ employees, payroll considerations shift — multi-state compliance, complex benefits administration, and HR workflow integration become real factors. Gusto Plus or Premium remains a strong default; Rippling earns consideration if HR + IT consolidation is needed; ADP/Paychex become credible if compliance complexity (multi-state, prevailing-wage, union) requires their depth.',
+    intro: 'At 20+ employees, payroll considerations shift: multi-state compliance, complex benefits administration, and HR workflow integration become real factors. Gusto Plus or Premium remains a strong default; Rippling earns consideration if HR + IT consolidation is needed; ADP/Paychex become credible if compliance complexity (multi-state, prevailing-wage, union) requires their depth.',
   },
 };
 
@@ -69,7 +69,7 @@ const faqs = [
   },
   {
     q: `Do I really need payroll software at this size?`,
-    a: 'Yes — once you have any W-2 employees, the tax-filing complexity (quarterly 941, year-end W-2 issuance, multi-state withholdings) creates risk + time cost that almost always exceeds the $40-$70/mo payroll software cost. Hand-filing or check-writing for employees is a false economy.',
+    a: 'Yes. Once you have any W-2 employees, the tax-filing complexity (quarterly 941, year-end W-2 issuance, multi-state withholdings) creates risk + time cost that almost always exceeds the $40-$70/mo payroll software cost. Hand-filing or check-writing for employees is a false economy.',
   },
   {
     q: `What about my 1099 subcontractors?`,
@@ -122,7 +122,7 @@ const faqSchema = {
                     <p class="text-sm italic text-slate-500">{s.tagline}</p>
                   </div>
                   <div class="shrink-0 text-right text-xs">
-                    <p class="text-slate-500">{s.pricing_summary.split(';')[0].split('—')[0].trim()}</p>
+                    <p class="text-slate-500">{s.pricing_summary.split(';')[0].split(String.fromCharCode(0x2014))[0].trim()}</p>
                   </div>
                 </div>
 

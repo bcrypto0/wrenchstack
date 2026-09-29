@@ -73,7 +73,7 @@ const weaknessBullets = tool.weaknesses
 const fitScore = tool.vertical_fit?.[primaryVertical] ?? 5;
 const fitLine =
   fitScore >= 9
-    ? `${tool.name} scores ${fitScore}/10 on our ${primaryVerticalLabel} fit assessment — one of the top picks in the category.`
+    ? `${tool.name} scores ${fitScore}/10 on our ${primaryVerticalLabel} fit assessment: one of the top picks in the category.`
     : `${tool.name} is a solid mid-tier choice for ${primaryVerticalLabel} but ranks below the top picks; see the alternatives below for higher-scoring options.`;
 
 const cheapestAlt = alternatives.length > 0
@@ -107,11 +107,11 @@ const faqs = [
   },
   {
     q: `How do I migrate customer data from ${tool.name} to another platform?`,
-    a: `${tool.name} typically supports CSV export of customer records, invoices, and active jobs through admin settings. Historical job data (completed work orders, photo attachments, custom fields) often doesn't migrate cleanly — most shops leave historical data in ${tool.name} as archival reference rather than attempting full migration. Recurring service agreements and membership plans usually need to be manually rebuilt in the new platform.`,
+    a: `${tool.name} typically supports CSV export of customer records, invoices, and active jobs through admin settings. Historical job data (completed work orders, photo attachments, custom fields) often doesn't migrate cleanly; most shops leave historical data in ${tool.name} as archival reference rather than attempting full migration. Recurring service agreements and membership plans usually need to be manually rebuilt in the new platform.`,
   },
   {
     q: `When should I NOT switch from ${tool.name}?`,
-    a: `If you're under 6 months into using ${tool.name}, switching costs typically exceed the savings unless the platform is actively failing you. Wait until your team has fully adopted it. Also, if your office staff has built custom workflows, integrations, or automations on top of ${tool.name}, those won't transfer — quantify the rebuild cost before committing to migration.`,
+    a: `If you're under 6 months into using ${tool.name}, switching costs typically exceed the savings unless the platform is actively failing you. Wait until your team has fully adopted it. Also, if your office staff has built custom workflows, integrations, or automations on top of ${tool.name}, those won't transfer; quantify the rebuild cost before committing to migration.`,
   },
   {
     q: `How long does it take to migrate from ${tool.name} to a new platform?`,
@@ -200,7 +200,7 @@ const breadcrumbs = [
             <tr class="bg-orange-50">
               <td class="p-3 font-bold text-slate-900">{tool.name} <span class="ml-1 text-xs font-normal text-orange-600">(this tool)</span></td>
               <td class="p-3 text-slate-700">{formatPrice(tool)}</td>
-              <td class="p-3 text-slate-700">{aggregateRating(tool) !== null ? `${aggregateRating(tool)?.toFixed(1)} / 5` : '—'}</td>
+              <td class="p-3 text-slate-700">{aggregateRating(tool) !== null ? `${aggregateRating(tool)?.toFixed(1)} / 5` : '-'}</td>
               <td class="p-3 text-slate-600 text-xs">{tool.best_for}</td>
             </tr>
             {alternatives.map((alt) => {
@@ -211,7 +211,7 @@ const breadcrumbs = [
                     <a href={`/tools/${alt.slug}/`} class="hover:text-orange-600">{alt.name}</a>
                   </td>
                   <td class="p-3 text-slate-700">{formatPrice(alt)}</td>
-                  <td class="p-3 text-slate-700">{r !== null ? `${r.toFixed(1)} / 5` : '—'}</td>
+                  <td class="p-3 text-slate-700">{r !== null ? `${r.toFixed(1)} / 5` : '-'}</td>
                   <td class="p-3 text-slate-600 text-xs">{alt.best_for}</td>
                 </tr>
               );
@@ -274,7 +274,7 @@ const breadcrumbs = [
                   {isCheaper && `you need a lower entry price (${formatPrice(alt)} vs ${formatPrice(tool)})`}
                   {isCheaper && isHigherRated && '; '}
                   {isHigherRated && `you prioritize post-purchase satisfaction (${rating!.toFixed(1)} vs ${toolRating!.toFixed(1)} user rating)`}
-                  {!isCheaper && !isHigherRated && altOnlyFeatures.length > 0 && `you need ${altOnlyFeatures[0].replace(/_/g, ' ')} — ${alt.name} has it, ${tool.name} doesn't`}
+                  {!isCheaper && !isHigherRated && altOnlyFeatures.length > 0 && `you need ${altOnlyFeatures[0].replace(/_/g, ' ')}: ${alt.name} has it, ${tool.name} doesn't`}
                   {!isCheaper && !isHigherRated && altOnlyFeatures.length === 0 && `the target profile matches: ${alt.best_for}`}
                 </dd>
               </div>
@@ -353,7 +353,7 @@ const breadcrumbs = [
                     href={`/tools/${a.slug}/`}
                     class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-sm hover:border-orange-400 hover:text-orange-600"
                   >
-                    {a.name} ({a.vertical_fit?.[primaryVertical] ?? '—'}/10)
+                    {a.name} ({a.vertical_fit?.[primaryVertical] ?? '-'}/10)
                   </a>
                 ))}
               </div>
@@ -363,7 +363,7 @@ const breadcrumbs = [
             <div class="rounded-lg border border-slate-200 bg-white p-5">
               <h3 class="mb-3 font-bold text-slate-900">With QuickBooks integration</h3>
               <p class="mb-3 text-sm text-slate-600">
-                These alternatives integrate with QuickBooks natively — critical for QB-heavy shops where deep accounting sync matters more than other features.
+                These alternatives integrate with QuickBooks natively, critical for QB-heavy shops where deep accounting sync matters more than other features.
               </p>
               <div class="flex flex-wrap gap-2">
                 {qbAlternatives.map((a) => (
@@ -387,9 +387,9 @@ const breadcrumbs = [
         Switching field service software is significant operational change. Before committing to migration, audit these four areas:
       </p>
       <ul class="space-y-3 text-slate-700">
-        <li><strong class="text-slate-900">Data export support</strong> — {tool.name} typically allows CSV export of customer records, invoices, and active jobs. Historical job data (completed work orders, attached photos, custom fields) often doesn't migrate cleanly. Most shops leave historical data in {tool.name} as archival reference.</li>
-        <li><strong class="text-slate-900">Integration parity</strong> — confirm your QuickBooks setup will work on the new platform with the same sync depth. Other integrations (Stripe, Zapier, Google Local Services, custom APIs) need to be re-evaluated for parity.</li>
-        <li><strong class="text-slate-900">Pricing math at your team size</strong> — per-user vs per-company pricing structures change the math significantly past 5-8 users. Run the actual cost comparison at your team size, not just entry-tier price.</li>
+        <li><strong class="text-slate-900">Data export support</strong>: {tool.name} typically allows CSV export of customer records, invoices, and active jobs. Historical job data (completed work orders, attached photos, custom fields) often doesn't migrate cleanly. Most shops leave historical data in {tool.name} as archival reference.</li>
+        <li><strong class="text-slate-900">Integration parity</strong>: confirm your QuickBooks setup will work on the new platform with the same sync depth. Other integrations (Stripe, Zapier, Google Local Services, custom APIs) need to be re-evaluated for parity.</li>
+        <li><strong class="text-slate-900">Pricing math at your team size</strong>: per-user vs per-company pricing structures change the math significantly past 5-8 users. Run the actual cost comparison at your team size, not just entry-tier price.</li>
         <li><strong class="text-slate-900">Implementation cost and timeline</strong>: mid-tier alternatives typically take 4-8 weeks to fully operate; enterprise alternatives 3-6 months. Some charge migration or setup fees, so ask for them in writing. Factor in the parallel-run period when both systems are active.</li>
       </ul>
     </section>

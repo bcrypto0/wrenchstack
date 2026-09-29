@@ -37,14 +37,14 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     flag: '🇬🇧',
     noteField: 'uk_specific_note',
     intro: 'UK trades vendor selection is shaped by mandatory certification (Gas Safe, NICEIC, OFTEC), compressed compliance (HMRC RTI, CIS deductions, auto-enrolment pensions, VAT), and directory-led consumer behavior (Checkatrade, MyBuilder).',
-    certContext: 'Gas Safe Register (gas), NICEIC (electrical / Part P), and OFTEC (oil heating) are legal requirements — unlicensed work is a criminal offense, and software/insurance must handle RTI, CIS, and VAT natively.',
+    certContext: 'Gas Safe Register (gas), NICEIC (electrical / Part P), and OFTEC (oil heating) are legal requirements; unlicensed work is a criminal offense, and software/insurance must handle RTI, CIS, and VAT natively.',
   },
   au: {
     code: 'au',
     name: 'Australia',
     flag: '🇦🇺',
     noteField: 'au_specific_note',
-    intro: 'Australian trades vendor selection is shaped by state-based licensing, Single Touch Payroll (STP) reporting to the ATO, superannuation obligations, and GST handling — plus local lead-gen platforms like hipages.',
+    intro: 'Australian trades vendor selection is shaped by state-based licensing, Single Touch Payroll (STP) reporting to the ATO, superannuation obligations, and GST handling, plus local lead-gen platforms like hipages.',
     certContext: 'Licensing is state-administered (e.g., electrical and plumbing licenses per state/territory), and payroll software must lodge Single Touch Payroll (STP) to the ATO and handle superannuation and GST.',
   },
   ca: {
@@ -53,7 +53,7 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     flag: '🇨🇦',
     noteField: 'ca_specific_note',
     intro: 'Canadian trades vendor selection is shaped by provincial trade certification (often Red Seal), CRA payroll remittances, GST/HST/PST handling, and bilingual (English/French) requirements in some provinces.',
-    certContext: 'Trade certification is provincial (with the interprovincial Red Seal endorsement), and payroll/accounting software must handle CRA source deductions, GST/HST/PST, and — for Quebec — French-language and Revenu Québec requirements.',
+    certContext: 'Trade certification is provincial (with the interprovincial Red Seal endorsement), and payroll/accounting software must handle CRA source deductions, GST/HST/PST, and (for Quebec) French-language and Revenu Québec requirements.',
   },
   nz: {
     code: 'nz',
@@ -77,7 +77,7 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     flag: '🇸🇦',
     noteField: 'sa_specific_note',
     intro: 'Saudi construction & trades software selection is shaped by Vision 2030\'s giga-project boom (NEOM, Red Sea, Qiddiya, ROSHN), mandatory ZATCA e-invoicing (Fatoora), Arabic/RTL and Saudi-Riyal requirements, contractor classification (Grades 1–6), Saudi Building Code compliance, and Saudization (Nitaqat) labour rules.',
-    certContext: 'Engineering practice requires Saudi Council of Engineers (SCE) registration; contractors need a MOMRAH classification grade to bid public work; permits run through Balady under the mandatory Saudi Building Code; and accounting/invoicing must integrate with ZATCA\'s Fatoora e-invoicing — so local software has to handle Arabic, SAR and 15% VAT.',
+    certContext: 'Engineering practice requires Saudi Council of Engineers (SCE) registration; contractors need a MOMRAH classification grade to bid public work; permits run through Balady under the mandatory Saudi Building Code; and accounting/invoicing must integrate with ZATCA\'s Fatoora e-invoicing, so local software has to handle Arabic, SAR and 15% VAT.',
   },
   ae: {
     code: 'ae',
@@ -92,7 +92,7 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     name: 'Qatar',
     flag: '🇶🇦',
     noteField: 'qa_specific_note',
-    intro: 'Qatar construction & trades software selection is shaped by a post-World-Cup, LNG-funded pipeline, the Ashghal QCS 2014 construction standard, Monaqasat contractor classification, Qatarization (Law No. 12 of 2024), Qatari-Riyal pricing, and — unlike Saudi — no VAT and no mandatory e-invoicing yet.',
+    intro: 'Qatar construction & trades software selection is shaped by a post-World-Cup, LNG-funded pipeline, the Ashghal QCS 2014 construction standard, Monaqasat contractor classification, Qatarization (Law No. 12 of 2024), Qatari-Riyal pricing, and (unlike Saudi) no VAT and no mandatory e-invoicing yet.',
     certContext: 'Government work is gated by a Monaqasat (Ministry of Finance) classification certificate; the General Tax Authority administers tax (no VAT yet, with a draft e-invoicing law); Qatarization governs labour; Baladiya issues permits to the QCS 2014 code maintained by Ashghal; and Kahramaa accredits MEP/utility contractors.',
   },
   kw: {
@@ -100,7 +100,7 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     name: 'Kuwait',
     flag: '🇰🇼',
     noteField: 'kw_specific_note',
-    intro: 'Kuwait construction & trades software selection is shaped by the New Kuwait 2035 / Silk City pipeline, CAPT contractor classification, Kuwaitization labour quotas, the mandatory KFSD fire code, Kuwaiti-Dinar pricing, and — like Qatar — no VAT and no e-invoicing mandate.',
+    intro: 'Kuwait construction & trades software selection is shaped by the New Kuwait 2035 / Silk City pipeline, CAPT contractor classification, Kuwaitization labour quotas, the mandatory KFSD fire code, Kuwaiti-Dinar pricing, and (like Qatar) no VAT and no e-invoicing mandate.',
     certContext: 'The Central Agency for Public Tenders (CAPT) classifies contractors and gates public work; the Ministry of Finance levies 15% corporate income tax on foreign-owned entities (no VAT); the Public Authority for Manpower enforces Kuwaitization; Kuwait Municipality issues permits; and the Kuwait Fire Force owns the mandatory KFSD fire-safety code.',
   },
   za: {
@@ -108,7 +108,7 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     name: 'South Africa',
     flag: '🇿🇦',
     noteField: 'za_specific_note',
-    intro: 'South African trades vendor selection is shaped by Certificate-of-Compliance culture (electrical CoCs via DoEL-registered persons, SAQCC Gas, PIRB plumbing CoCs), CIDB contractor grading (1–9) gating public work, NHBRC registration for home builders, SARS compliance (15% VAT, monthly EMP201, e-invoicing phasing in ~2026–28), the COIDA Letter of Good Standing — and the solar-installation boom the load-shedding era created.',
+    intro: 'South African trades vendor selection is shaped by Certificate-of-Compliance culture (electrical CoCs via DoEL-registered persons, SAQCC Gas, PIRB plumbing CoCs), CIDB contractor grading (1–9) gating public work, NHBRC registration for home builders, SARS compliance (15% VAT, monthly EMP201, e-invoicing phasing in ~2026–28), the COIDA Letter of Good Standing, and the solar-installation boom the load-shedding era created.',
     certContext: 'Electrical work legally requires Department of Employment & Labour registration (registered persons issue the mandatory Certificate of Compliance); gas work requires SAQCC Gas registration (unregistered work voids home insurance); PIRB plumbing CoCs are required for geysers and solar water heaters; CIDB grading gates public construction; NHBRC registration is mandatory for home builders; and employers need a current COIDA Letter of Good Standing for site access.',
   },
   ba: {
@@ -116,15 +116,15 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     name: 'Bahrain',
     flag: '🇧🇭',
     noteField: 'ba_specific_note',
-    intro: 'Bahrain construction software selection is shaped by the GCC’s highest VAT rate (10%, via the NBR), mandatory CRPEP licensing for engineers and engineering offices, Ministry of Works contractor classification gating public works, Tender Board registration, LMRA work permits and Bahrainisation quotas, and building permits through the Benayat e-system — with no e-invoicing mandate yet, unlike Saudi or the UAE.',
-    certContext: 'VAT is administered by the National Bureau for Revenue at 10% — the GCC’s highest — with no e-invoicing mandate yet; CRPEP licensing is mandatory to practise engineering or run an engineering office (and to file Benayat permits); the Ministry of Works classifies contractors for public works; Tender Board registration is required to bid; LMRA controls work permits and enforces Bahrainisation; building permits run through Benayat; and Civil Defence enforces NFPA-based fire safety.',
+    intro: 'Bahrain construction software selection is shaped by the GCC’s highest VAT rate (10%, via the NBR), mandatory CRPEP licensing for engineers and engineering offices, Ministry of Works contractor classification gating public works, Tender Board registration, LMRA work permits and Bahrainisation quotas, and building permits through the Benayat e-system, with no e-invoicing mandate yet, unlike Saudi or the UAE.',
+    certContext: 'VAT is administered by the National Bureau for Revenue at 10% (the GCC’s highest), with no e-invoicing mandate yet; CRPEP licensing is mandatory to practise engineering or run an engineering office (and to file Benayat permits); the Ministry of Works classifies contractors for public works; Tender Board registration is required to bid; LMRA controls work permits and enforces Bahrainisation; building permits run through Benayat; and Civil Defence enforces NFPA-based fire safety.',
   },
   om: {
     code: 'om',
     name: 'Oman',
     flag: '🇴🇲',
     noteField: 'om_specific_note',
-    intro: 'Oman construction software selection is defined by an imminent e-invoicing mandate — the Oman Tax Authority’s Peppol-based “Fawtara” system reaches large taxpayers in August 2026 and all VAT-registered businesses by August 2027 — alongside 5% VAT, OSE engineer accreditation (now tied to work permits), contractor classification via the Authority for Projects, Tenders & Local Content, Omanisation quotas, municipal building permits, the new Oman Building Code, and CDAA fire safety.',
+    intro: 'Oman construction software selection is defined by an imminent e-invoicing mandate (the Oman Tax Authority’s Peppol-based “Fawtara” system reaches large taxpayers in August 2026 and all VAT-registered businesses by August 2027), alongside 5% VAT, OSE engineer accreditation (now tied to work permits), contractor classification via the Authority for Projects, Tenders & Local Content, Omanisation quotas, municipal building permits, the new Oman Building Code, and CDAA fire safety.',
     certContext: 'The Oman Tax Authority runs 5% VAT and the phased Fawtara e-invoicing mandate (large taxpayers August 2026; all VAT-registered businesses August 2027); OSE accreditation is required for engineer work permits (since August 2025); the Authority for Projects, Tenders & Local Content runs contractor classification and procurement; the Ministry of Labour enforces Omanisation; municipalities issue building permits; MoHUP owns the new Oman Building Code (phasing in to 2030); and the CDAA is the national fire-safety authority.',
   },
   fr: {
@@ -133,22 +133,22 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     flag: '🇫🇷',
     noteField: 'fr_specific_note',
     intro: 'French artisan (bâtiment) vendor selection is shaped by the incoming facturation électronique mandate (reception for all businesses from 1 September 2026, issuance for SMEs/micro from 1 September 2027, via approved PDP platforms), mandatory ten-year assurance décennale under the Loi Spinetta, multi-rate TVA (20/10/5.5%), RGE certification for subsidised renovation work, and the micro-entrepreneur regime that most solo tradespeople operate under.',
-    certContext: 'Facturation électronique is becoming mandatory via approved platforms (PDP) — reception for all businesses from 1 September 2026, issuance for SMEs and micro-entreprises from 1 September 2027; assurance décennale (Loi Spinetta) is legally mandatory before a worksite opens, with a criminal penalty for working uninsured; TVA is multi-rate (20% standard, 10% renovation, 5.5% energy); RGE certification is commercially essential for clients to claim MaPrimeRénov’ and other subsidies; business registration runs through the CMA/guichet unique; and regulated trades require a qualification (diploma or three years’ experience).',
+    certContext: 'Facturation électronique is becoming mandatory via approved platforms (PDP): reception for all businesses from 1 September 2026, issuance for SMEs and micro-entreprises from 1 September 2027; assurance décennale (Loi Spinetta) is legally mandatory before a worksite opens, with a criminal penalty for working uninsured; TVA is multi-rate (20% standard, 10% renovation, 5.5% energy); RGE certification is commercially essential for clients to claim MaPrimeRénov’ and other subsidies; business registration runs through the CMA/guichet unique; and regulated trades require a qualification (diploma or three years’ experience).',
   },
   ma: {
     code: 'ma',
     name: 'Morocco',
     flag: '🇲🇦',
     noteField: 'ma_specific_note',
-    intro: 'Moroccan construction & trades software selection is shaped by the incoming DGI facturation électronique mandate (a clearance model under Article 145-IX of the CGI, rolling out in 2026 to large firms first — the exact start date pending the implementing decree), mandatory construction insurance under Loi 59-13 (Tous Risques Chantier + responsabilité civile décennale, in force since end-2024), multi-rate TVA (20% standard), CNSS social security, the Ministry of Equipment’s Qualification & Classification system gating public BTP tenders, and a construction pipeline lifted by World Cup 2030 and Al Haouz earthquake reconstruction. B2B runs predominantly in French.',
-    certContext: 'The DGI runs tax (20% TVA, IS, IR via the SIMPL portal) and the phased 2026 e-invoicing clearance mandate — large enterprises / B2B first, exact start pending the implementing decree; the Ministère de l’Équipement’s Qualification & Classification certificate is required to bid public construction tenders; mandatory construction insurance (Tous Risques Chantier + responsabilité civile décennale) under Loi 59-13 requires a prior contrôle technique and is broker-placed; and employers must register with the CNSS (declarations via Damancom) and carry the ICE on every invoice.',
+    intro: 'Moroccan construction & trades software selection is shaped by the incoming DGI facturation électronique mandate (a clearance model under Article 145-IX of the CGI, rolling out in 2026 to large firms first, the exact start date pending the implementing decree), mandatory construction insurance under Loi 59-13 (Tous Risques Chantier + responsabilité civile décennale, in force since end-2024), multi-rate TVA (20% standard), CNSS social security, the Ministry of Equipment’s Qualification & Classification system gating public BTP tenders, and a construction pipeline lifted by World Cup 2030 and Al Haouz earthquake reconstruction. B2B runs predominantly in French.',
+    certContext: 'The DGI runs tax (20% TVA, IS, IR via the SIMPL portal) and the phased 2026 e-invoicing clearance mandate (large enterprises / B2B first, exact start pending the implementing decree); the Ministère de l’Équipement’s Qualification & Classification certificate is required to bid public construction tenders; mandatory construction insurance (Tous Risques Chantier + responsabilité civile décennale) under Loi 59-13 requires a prior contrôle technique and is broker-placed; and employers must register with the CNSS (declarations via Damancom) and carry the ICE on every invoice.',
   },
   jo: {
     code: 'jo',
     name: 'Jordan',
     flag: '🇯🇴',
     noteField: 'jo_specific_note',
-    intro: 'Jordanian construction & trades software selection is dominated by one force: the JoFotara national e-invoicing mandate, which is live and enforced — a centralized clearance model run by the Income & Sales Tax Department (ISTD), mandatory for all businesses with no threshold since Phase 2 on 1 April 2025, where only cleared invoices are tax-deductible and non-compliance bars you from public tenders. Add 16% General Sales Tax, mandatory Social Security (SSC) from the first employee, JCCA contractor classification gating public works, and a dinar pegged to the US dollar.',
+    intro: 'Jordanian construction & trades software selection is dominated by one force: the JoFotara national e-invoicing mandate, which is live and enforced, a centralized clearance model run by the Income & Sales Tax Department (ISTD), mandatory for all businesses with no threshold since Phase 2 on 1 April 2025, where only cleared invoices are tax-deductible and non-compliance bars you from public tenders. Add 16% General Sales Tax, mandatory Social Security (SSC) from the first employee, JCCA contractor classification gating public works, and a dinar pegged to the US dollar.',
     certContext: 'The ISTD runs tax (16% GST, income tax) and the mandatory JoFotara e-invoicing clearance platform (live since 1 April 2025, all businesses, UBL 2.1 + QR, only cleared invoices deductible); JCCA working membership plus a contractor classification (Govt Works Regulation 71/1986) is the legal gate to bidding public works; Jordan Engineers Association (JEA) registration is mandatory to practice engineering; companies register at the Companies Control Department (CCD); and every employer must enrol in Social Security (SSC) from the first worker (~21.75% of the insured wage).',
   },
   eg: {
@@ -156,16 +156,16 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     name: 'Egypt',
     flag: '🇪🇬',
     noteField: 'eg_specific_note',
-    intro: 'Egyptian construction & trades software selection is shaped above all by the ETA (Egyptian Tax Authority) e-invoicing mandate — live and enforced (full B2B mandate from April 2023; paper invoices invalid for deduction since ~July 2023), a real-time clearance model where only cleared e-invoices allow VAT/cost deduction, and now reaching small businesses (the VAT-registration threshold was halved to EGP 250,000, with small firms required to register by 31 March 2026). Add a volatile, un-pegged Egyptian pound (which favours local EGP-priced vendors over USD-billed foreign SaaS), 14% VAT, mandatory EFCBC contractor classification, Engineers-Syndicate registration, and a megaproject pipeline led by the New Administrative Capital. B2B runs in Arabic and English.',
-    certContext: 'The ETA runs tax (14% VAT, 22.5% corporate tax) and the mandatory e-invoicing/e-receipt clearance system (JSON/XML, UUID, digital signature — only cleared invoices are deductible, and non-compliance bars government work); EFCBC ("Tasheed") membership and classification (Law 104/1992) is required to take work above EGP 50,000 or bid public tenders; engineers must register with the Egyptian Engineers Syndicate; companies incorporate via GAFI (Commercial Register + Tax Card); employers must enrol every worker in social insurance (NOSI, Law 148/2019); and building in the new cities is permitted through NUCA.',
+    intro: 'Egyptian construction & trades software selection is shaped above all by the ETA (Egyptian Tax Authority) e-invoicing mandate: live and enforced (full B2B mandate from April 2023; paper invoices invalid for deduction since ~July 2023), a real-time clearance model where only cleared e-invoices allow VAT/cost deduction, and now reaching small businesses (the VAT-registration threshold was halved to EGP 250,000, with small firms required to register by 31 March 2026). Add a volatile, un-pegged Egyptian pound (which favours local EGP-priced vendors over USD-billed foreign SaaS), 14% VAT, mandatory EFCBC contractor classification, Engineers-Syndicate registration, and a megaproject pipeline led by the New Administrative Capital. B2B runs in Arabic and English.',
+    certContext: 'The ETA runs tax (14% VAT, 22.5% corporate tax) and the mandatory e-invoicing/e-receipt clearance system (JSON/XML, UUID, digital signature; only cleared invoices are deductible, and non-compliance bars government work); EFCBC ("Tasheed") membership and classification (Law 104/1992) is required to take work above EGP 50,000 or bid public tenders; engineers must register with the Egyptian Engineers Syndicate; companies incorporate via GAFI (Commercial Register + Tax Card); employers must enrol every worker in social insurance (NOSI, Law 148/2019); and building in the new cities is permitted through NUCA.',
   },
   my: {
     code: 'my',
     name: 'Malaysia',
     flag: '🇲🇾',
     noteField: 'my_specific_note',
-    intro: 'Malaysian construction & trades software selection is shaped above all by MyInvois — the national e-invoicing system run by LHDN/IRBM (the Inland Revenue Board), phasing in by turnover (largest firms since August 2024, mid-market through 2025, businesses above RM1m from January 2026, and the smallest firms following). Construction is treated as a special case: many progress claims and certain transactions must be e-invoiced individually rather than batched into a monthly consolidated e-invoice — so "MyInvois-ready / LHDN-compliant" is the lead selling point for local accounting and construction-ERP vendors. Add the Ringgit (MYR), SST (Sales & Service Tax, not VAT), CIDB G1–G7 contractor grading across ~130,000 registered contractors, and a government digitalisation grant nudging SMEs onto the software. Business runs in English.',
-    certContext: 'CIDB (the Construction Industry Development Board) registers and grades contractors G1–G7 by project value and issues the mandatory Green Card for site workers under Act 520 — registration is required to undertake or bid construction work; LHDN/IRBM runs income tax, SST and the MyInvois e-invoicing system (XML/JSON with a validated UIN and QR code); SSM (the Companies Commission of Malaysia) handles company incorporation; the Board of Engineers Malaysia (BEM) registers engineers; and employers must register every worker with EPF/KWSP (provident fund), SOCSO/PERKESO (social security) and EIS.',
+    intro: 'Malaysian construction & trades software selection is shaped above all by MyInvois, the national e-invoicing system run by LHDN/IRBM (the Inland Revenue Board), phasing in by turnover (largest firms since August 2024, mid-market through 2025, businesses above RM1m from January 2026, and the smallest firms following). Construction is treated as a special case: many progress claims and certain transactions must be e-invoiced individually rather than batched into a monthly consolidated e-invoice, so "MyInvois-ready / LHDN-compliant" is the lead selling point for local accounting and construction-ERP vendors. Add the Ringgit (MYR), SST (Sales & Service Tax, not VAT), CIDB G1–G7 contractor grading across ~130,000 registered contractors, and a government digitalisation grant nudging SMEs onto the software. Business runs in English.',
+    certContext: 'CIDB (the Construction Industry Development Board) registers and grades contractors G1–G7 by project value and issues the mandatory Green Card for site workers under Act 520 (registration is required to undertake or bid construction work); LHDN/IRBM runs income tax, SST and the MyInvois e-invoicing system (XML/JSON with a validated UIN and QR code); SSM (the Companies Commission of Malaysia) handles company incorporation; the Board of Engineers Malaysia (BEM) registers engineers; and employers must register every worker with EPF/KWSP (provident fund), SOCSO/PERKESO (social security) and EIS.',
   },
 };
 
@@ -195,7 +195,7 @@ export function intlTierMeta(tier: 'S' | 'A' | 'F'): { label: string; badge: str
 
 // Hreflang cluster for the parallel English-market homepages. Shared, self-
 // referential set (each page lists every alternate including itself, per
-// Google's reciprocity rules) — signals these are regional variants of one
+// Google's reciprocity rules) - signals these are regional variants of one
 // directory, not duplicate content competing against each other.
 export const EN_MARKET_HREFLANG: { hreflang: string; href: string }[] = [
   { hreflang: 'en-US', href: 'https://wrenchstack.com/' },

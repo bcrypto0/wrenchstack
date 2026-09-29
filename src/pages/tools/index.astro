@@ -72,7 +72,7 @@ const itemListSchema = {
 ---
 
 <Layout
-  title={`All ${tools.length} trades software tools — compare every platform`}
+  title={`All ${tools.length} trades software tools: compare every platform`}
   description={`Browse every field service and trades software platform in our directory. ${tools.length} tools across ${verticals.length} trades, ranked by pricing, features, and user ratings. Includes ${flagshipTools.length} flagship reviews with deep editorial coverage.`}
   breadcrumbs={breadcrumbs}
 >
@@ -84,7 +84,7 @@ const itemListSchema = {
         All {tools.length} trades software tools
       </h1>
       <p class="mt-4 max-w-3xl text-lg text-slate-600">
-        Every field service and trades software platform we track — sorted by user ratings, organized by trade, and featuring deep editorial reviews of the {flagshipTools.length} most-searched tools.
+        Every field service and trades software platform we track, sorted by user ratings, organized by trade, and featuring deep editorial reviews of the {flagshipTools.length} most-searched tools.
       </p>
       <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500">
         <span><span class="font-bold text-slate-900">{tools.length}</span> tools tracked</span>
@@ -177,7 +177,7 @@ const itemListSchema = {
     <section id="flagship" class="mb-16 scroll-mt-8">
       <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Flagship reviews</h2>
       <p class="mb-6 text-slate-600">
-        These {flagshipTools.length} tools have our deepest editorial coverage — 1,400-1,700 word reviews with custom narrative, detailed pros/cons, implementation timelines, and tool-specific FAQs. Cover all major trade-software segments.
+        These {flagshipTools.length} tools have our deepest editorial coverage: 1,400-1,700 word reviews with custom narrative, detailed pros/cons, implementation timelines, and tool-specific FAQs. Cover all major trade-software segments.
       </p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {flagshipTools.map((t) => {
@@ -222,7 +222,7 @@ const itemListSchema = {
     <section id="by-trade" class="mb-16 scroll-mt-8">
       <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Browse by trade</h2>
       <p class="mb-6 text-slate-600">
-        Tools grouped by the trades they serve. Most platforms cover multiple trades — they'll appear in each relevant section. Sorted by user rating within each trade.
+        Tools grouped by the trades they serve. Most platforms cover multiple trades; they'll appear in each relevant section. Sorted by user rating within each trade.
       </p>
       <div class="space-y-10">
         {toolsByVertical.map(({ vertical, tools: verticalTools }) => (

@@ -147,7 +147,7 @@ const breadcrumbs = [
       </h2>
       {toolsWithFeature.length === 0 ? (
         <div class="rounded-lg border border-slate-200 bg-white p-6 text-slate-600">
-          No tools in our directory list this feature in their key features. This may indicate a niche feature or one that's typically marketed differently — check individual tool reviews for details.
+          No tools in our directory list this feature in their key features. This may indicate a niche feature or one that's typically marketed differently; check individual tool reviews for details.
         </div>
       ) : (
         <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
@@ -169,7 +169,7 @@ const breadcrumbs = [
                       <a href={`/tools/${t.slug}/`} class="font-semibold text-slate-900 hover:text-orange-600">{t.name}</a>
                     </td>
                     <td class="p-3 text-slate-700">{formatPrice(t)}</td>
-                    <td class="p-3 text-slate-700">{r !== null ? `${r.toFixed(1)} / 5` : '—'}</td>
+                    <td class="p-3 text-slate-700">{r !== null ? `${r.toFixed(1)} / 5` : '-'}</td>
                     <td class="p-3 text-slate-600 text-xs">{t.best_for}</td>
                   </tr>
                 );
@@ -186,7 +186,7 @@ const breadcrumbs = [
           High-rated tools that don't have {feature.name.toLowerCase()}
         </h2>
         <p class="mb-4 text-sm text-slate-600">
-          These platforms have strong user ratings but don't list {feature.name.toLowerCase()} as a core feature. If you need this capability, consider alternatives above — or evaluate whether you actually need it for your operation.
+          These platforms have strong user ratings but don't list {feature.name.toLowerCase()} as a core feature. If you need this capability, consider alternatives above, or evaluate whether you actually need it for your operation.
         </p>
         <div class="grid gap-3 sm:grid-cols-2">
           {toolsWithoutFeature.map((t) => {
@@ -198,7 +198,7 @@ const breadcrumbs = [
               >
                 <div class="font-semibold text-slate-900 group-hover:text-orange-600">{t.name}</div>
                 <div class="mt-1 text-xs text-slate-500">
-                  {r !== null ? `${r.toFixed(1)} / 5 rating` : '—'} · {formatPrice(t)}
+                  {r !== null ? `${r.toFixed(1)} / 5 rating` : '-'} · {formatPrice(t)}
                 </div>
                 <div class="mt-2 text-xs text-slate-500">{t.tagline}</div>
               </a>

@@ -24,7 +24,7 @@ const related = [...sameCategory, ...otherCategory].slice(0, 6);
 const pageTitle = vendor.category === 'certification'
   ? `${vendor.name}: ${categoryLabel} in ${market.name} (2026)`
   : `${vendor.name} ${market.name} Review (2026): ${categoryLabel}`;
-const pageDescription = `${vendor.name} for ${market.name} trades — ${asSentence(vendor.tagline)} Market position, ${market.name}-specific compliance notes, pros and cons, and typical pricing. Independent WrenchStack review.`;
+const pageDescription = `${vendor.name} for ${market.name} trades: ${asSentence(vendor.tagline)} Market position, ${market.name}-specific compliance notes, pros and cons, and typical pricing. Independent WrenchStack review.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -40,7 +40,7 @@ const productSchema = {
   category: categoryLabel,
 };
 
-// Data-derived FAQ (no fabricated facts — built from the vendor's own fields).
+// Data-derived FAQ (no fabricated facts: built from the vendor's own fields).
 const faqs: { q: string; a: string }[] = [
   {
     q: `Is ${vendor.name} a good fit for ${market.name} trades?`,
@@ -48,16 +48,16 @@ const faqs: { q: string; a: string }[] = [
   },
   {
     q: `What does ${vendor.name} cost in ${market.name}?`,
-    a: `${asSentence(vendor.typical_pricing)} Pricing and availability can change by region — confirm current ${market.name} pricing on the vendor's site before committing.`,
+    a: `${asSentence(vendor.typical_pricing)} Pricing and availability can change by region; confirm current ${market.name} pricing on the vendor's site before committing.`,
   },
 ];
 if (vendor.tier === 'F' && vendor.reputation_flag) {
   faqs.push({ q: `Is ${vendor.name} reputable?`, a: `We flag a caution: ${vendor.reputation_flag} Weigh this against the pros before relying on it.` });
 } else if (vendor.tier === 'S') {
-  faqs.push({ q: `Is ${vendor.name} recommended?`, a: `Yes — it is a Tier S (Recommended) pick in our ${market.name} directory for ${categoryLabel.toLowerCase()}, based on market fit and reputation. Still compare it against the alternatives for your specific trade and region.` });
+  faqs.push({ q: `Is ${vendor.name} recommended?`, a: `Yes, it is a Tier S (Recommended) pick in our ${market.name} directory for ${categoryLabel.toLowerCase()}, based on market fit and reputation. Still compare it against the alternatives for your specific trade and region.` });
 }
 if (vendor.is_cross_market && vendor.cross_market_link) {
-  faqs.push({ q: `Does ${vendor.name} operate outside ${market.name}?`, a: `Yes — ${vendor.name} is a cross-market vendor with presence beyond ${market.name}. See our full review in US-market context for deeper editorial detail, then weigh the ${market.name}-specific notes above.` });
+  faqs.push({ q: `Does ${vendor.name} operate outside ${market.name}?`, a: `Yes, ${vendor.name} is a cross-market vendor with presence beyond ${market.name}. See our full review in US-market context for deeper editorial detail, then weigh the ${market.name}-specific notes above.` });
 }
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -153,7 +153,7 @@ const faqSchema = {
       </div>
     </section>
 
-    {/* Certifications have no head-to-head compare pages (excluded from the compare route), so don't link to them — those links 404. */}
+    {/* Certifications have no head-to-head compare pages (excluded from the compare route), so don't link to them; those links 404. */}
     {vendor.category !== 'certification' && sameCategory.length > 0 && (
       <section class="mb-10">
         <h2 class="mb-5 text-2xl font-bold text-slate-900">Compare {vendor.name} head-to-head</h2>

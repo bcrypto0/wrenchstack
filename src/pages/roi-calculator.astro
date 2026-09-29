@@ -21,7 +21,7 @@ const roiFaqs = [
   },
   {
     q: 'What about the 8% revenue uplift assumption?',
-    a: 'Better dispatching captures 8-12% more jobs (less drive time, more daily appointments). Faster quoting closes 15-25% more high-ticket deals at the moment of decision. We use 8% combined as a conservative mid-case — actual numbers vary by trade (HVAC consumer financing pushes this higher; pure scheduled-recurring services like pest control see less of this lift since revenue is contract-bound, not capacity-bound).',
+    a: 'Better dispatching captures 8-12% more jobs (less drive time, more daily appointments). Faster quoting closes 15-25% more high-ticket deals at the moment of decision. We use 8% combined as a conservative mid-case; actual numbers vary by trade (HVAC consumer financing pushes this higher; pure scheduled-recurring services like pest control see less of this lift since revenue is contract-bound, not capacity-bound).',
   },
   {
     q: 'Should I trust this for a software-purchase decision?',
@@ -41,7 +41,7 @@ const roiFaqSchema = {
 ---
 
 <Layout
-  title="Field service software ROI calculator — see your savings"
+  title="Field service software ROI calculator: see your savings"
   description="Calculate the realistic ROI of investing in field service management software for your trades business. Free, instant, takes 30 seconds."
   breadcrumbs={breadcrumbs}
 >
@@ -53,7 +53,7 @@ const roiFaqSchema = {
         Field service software ROI calculator
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        Plug in 4 numbers about your business — get a realistic estimate of monthly software cost, annual ROI, and payback period. Based on industry-standard 15–25% efficiency gains documented across HVAC, plumbing, electrical, and roofing operations.
+        Plug in 4 numbers about your business. Get a realistic estimate of monthly software cost, annual ROI, and payback period. Based on industry-standard 15–25% efficiency gains documented across HVAC, plumbing, electrical, and roofing operations.
       </p>
     </header>
 
@@ -154,7 +154,7 @@ const roiFaqSchema = {
         </li>
       </ul>
       <p>
-        Combined, mid-case ROI on FSM software at small shops (3–15 techs) typically runs 8×–25× the software cost in year one — assuming actual adoption by the team.
+        Combined, mid-case ROI on FSM software at small shops (3–15 techs) typically runs 8×–25× the software cost in year one, assuming actual adoption by the team.
       </p>
 
       <h2>How accurate are these numbers</h2>
@@ -220,7 +220,7 @@ const roiFaqSchema = {
         <li>✅ Net benefit (after software cost): <strong>${fmt(netBenefit)}/year</strong></li>
       `;
 
-      // Recommendation — links to flagship reviews + buyer guides
+      // Recommendation: links to flagship reviews + buyer guides
       let rec, recLink, recLabel;
       if (techs <= 3) {
         rec = `For a ${techs}-tech operation, you want low-cost software that doesn't overcomplicate things. Jobber Core, Joist, ServiceM8 (iPhone-first), and Markate are typically the best fit at this size. See our solo-contractor buyer guide for ranked picks.`;

@@ -5,7 +5,7 @@ import ToolLogo from '../../../components/ToolLogo.astro';
 import WrenchScore from '../../../components/WrenchScore.astro';
 
 const pageTitle = `WrenchStack Awards ${awards.year}: Best Trades Software by Category`;
-const pageDescription = `WrenchStack's ${awards.year} editorial awards for trades software — winners in ${awards.categories.length} categories spanning HVAC, plumbing, electrical, roofing, landscaping, cleaning, pest control, pool service, CMMS, and construction PM. No vendor paid for placement.`;
+const pageDescription = `WrenchStack's ${awards.year} editorial awards for trades software: winners in ${awards.categories.length} categories spanning HVAC, plumbing, electrical, roofing, landscaping, cleaning, pest control, pool service, CMMS, and construction PM. No vendor paid for placement.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -124,12 +124,12 @@ const itemListSchema = {
                 <div>
                   <dt class="text-xs uppercase tracking-wider text-slate-500">User rating</dt>
                   <dd class="font-semibold text-slate-900">
-                    {aggregateRating(cat.winner) !== null ? `${aggregateRating(cat.winner)!.toFixed(1)} / 5` : '—'}
+                    {aggregateRating(cat.winner) !== null ? `${aggregateRating(cat.winner)!.toFixed(1)} / 5` : 'n/a'}
                   </dd>
                 </div>
                 <div>
                   <dt class="text-xs uppercase tracking-wider text-slate-500">Best team size</dt>
-                  <dd class="font-semibold text-slate-900">{cat.winner.best_team_size ?? '—'}</dd>
+                  <dd class="font-semibold text-slate-900">{cat.winner.best_team_size ?? 'n/a'}</dd>
                 </div>
                 <div>
                   <dt class="text-xs uppercase tracking-wider text-slate-500">Free trial</dt>

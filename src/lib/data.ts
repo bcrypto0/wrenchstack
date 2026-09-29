@@ -254,7 +254,7 @@ export function readingTimeMinutes(wordCount: number): number {
 // like ServiceTitan and Jobber on every page. The new ranking factors in
 // (1) tool-type compatibility (FSM vs CMMS vs construction PM), (2) price
 // tier proximity, (3) shared vertical fit strength, and (4) team-size
-// bucket overlap — with rating as a tiebreaker, not the primary signal.
+// bucket overlap, with rating as a tiebreaker, not the primary signal.
 
 export type ToolType = 'fsm' | 'cmms' | 'construction_pm' | 'estimating' | 'crm' | 'specialty' | 'unknown';
 // 'quote-only' split out from 'enterprise' on 2026-09-01. They were one bucket, and
@@ -266,7 +266,7 @@ export type PriceTier = 'free' | 'entry' | 'mid' | 'enterprise' | 'quote-only';
 export type TeamSizeBucket = 'solo' | 'small' | 'mid' | 'large';
 
 // Customer-facing FSM signature features. A tool with these is dispatch /
-// scheduling / billing software customers see — i.e. real FSM.
+// scheduling / billing software customers see, i.e. real FSM.
 const FSM_CORE_FEATURES = new Set([
   'scheduling',
   'dispatching',
@@ -683,7 +683,7 @@ export function freshnessLabel(t: Tool): string {
   return `Verified ${Math.round(d / 365)}+ year(s) ago`;
 }
 
-// Sitewide freshness stats — used on homepage widget.
+// Sitewide freshness stats: used on homepage widget.
 export interface FreshnessStats {
   fresh: number;
   aging: number;
@@ -799,7 +799,7 @@ export function linkifyTools(text: string | undefined, currentSlug: string): str
   // Track positions already wrapped so we don't double-link inside an <a>
   // that a longer name already created. The regex's left-to-right pass with
   // greedy alternation handles ordering, so we only need to guard against
-  // post-replacement substring matches — but since we run the regex once
+  // post-replacement substring matches, but since we run the regex once
   // against the original escaped text, no double-linking happens.
   const withToolLinks = escaped.replace(pattern, (match) => {
     const slug = nameToSlug.get(match);
@@ -884,7 +884,7 @@ function linkifyGlossary(html: string): string {
       const lastOpenA = before.lastIndexOf('<a ');
       const lastCloseA = before.lastIndexOf('</a>');
       if (lastOpenA > lastCloseA) {
-        // Inside an existing link — skip this occurrence and continue
+        // Inside an existing link: skip this occurrence and continue
         searchFrom = m.index + m[0].length;
         continue;
       }
@@ -1223,7 +1223,7 @@ export function payrollPicksForBucket(bucket: EmployeeBucket): PayrollService[] 
       // Sweet spot for modern SMB payroll
       return all.filter((s) => ['gusto', 'onpay', 'hourly', 'quickbooks-payroll', 'patriot-payroll'].includes(s.slug));
     case '20+':
-      // Mid-market — Gusto Plus, Rippling, possibly legacy options
+      // Mid-market: Gusto Plus, Rippling, possibly legacy options
       return all.filter((s) => ['gusto', 'rippling', 'adp-run', 'paychex-flex', 'onpay'].includes(s.slug));
   }
 }
@@ -1292,7 +1292,7 @@ export function agencyTier(a: MarketingAgency): 'S' | 'A' | 'F' {
 }
 
 // --- AI tools (Phase 1 net-new category: AI front office for trades) ----------
-// Distinct from FSM software — AI receptionists, estimating, marketing, etc.
+// Distinct from FSM software: AI receptionists, estimating, marketing, etc.
 // Many vendors are early-stage with volatile or sales-quoted pricing, so
 // starting_price_usd / founded / headquartered are nullable and the template
 // renders them conditionally.
@@ -1348,7 +1348,7 @@ export function getAiTool(slug: string): AiTool | undefined {
 }
 
 export const AI_CATEGORY_META: Record<AiToolCategory, { label: string; blurb: string }> = {
-  'ai-receptionist': { label: 'AI Receptionists & Call Answering', blurb: 'AI voice agents that answer inbound calls 24/7, book jobs, and stop missed-call revenue leakage — the highest-ROI AI category for trades, since service businesses miss a large share of inbound calls.' },
+  'ai-receptionist': { label: 'AI Receptionists & Call Answering', blurb: 'AI voice agents that answer inbound calls 24/7, book jobs, and stop missed-call revenue leakage: the highest-ROI AI category for trades, since service businesses miss a large share of inbound calls.' },
   'ai-estimating': { label: 'AI Estimating & Measurement', blurb: 'AI that measures from photos or satellite imagery and generates priced quotes in minutes.' },
   'ai-scheduling': { label: 'AI Scheduling & Dispatch', blurb: 'AI that books appointments against live availability and optimizes crew routes.' },
   'ai-marketing': { label: 'AI Marketing & Reviews', blurb: 'AI for review collection, before/after imagery, and marketing content.' },
@@ -1363,7 +1363,7 @@ export function aiToolsByCategory(): Array<{ category: AiToolCategory; tools: Ai
 }
 
 // --- Payment processors (Phase 2 new category: payments) ----------------------
-// Trade-agnostic — every contractor takes payments. Grouped by pricing MODEL
+// Trade-agnostic: every contractor takes payments. Grouped by pricing MODEL
 // (flat-rate / interchange-plus / subscription), which is the core buyer decision.
 
 export type PaymentPricingModel = 'flat-rate' | 'interchange-plus' | 'subscription' | 'tiered' | 'custom-quote';
@@ -1415,7 +1415,7 @@ export const PAYMENT_MODEL_META: Record<PaymentPricingModel, { label: string; bl
   'flat-rate': { label: 'Flat-Rate Processors', blurb: 'Simple, predictable per-transaction rates (for example 2.6% + 10 cents). Easiest to understand and start with; best for lower-volume shops where simplicity beats squeezing out basis points.' },
   'interchange-plus': { label: 'Interchange-Plus Processors', blurb: 'You pay the interchange cost set by the card networks plus a transparent fixed markup. Usually the cheapest and most transparent model, especially for higher-volume businesses.' },
   'subscription': { label: 'Subscription / Membership Pricing', blurb: 'A flat monthly fee plus interchange and a small per-transaction fee, with no percentage markup on processing. Saves money once monthly volume is high enough to amortize the subscription.' },
-  'tiered': { label: 'Tiered Pricing', blurb: 'Rates bucketed into qualified, mid, and non-qualified tiers — generally the least transparent model; included for completeness.' },
+  'tiered': { label: 'Tiered Pricing', blurb: 'Rates bucketed into qualified, mid, and non-qualified tiers, generally the least transparent model; included for completeness.' },
   'custom-quote': { label: 'Custom-Quote Processors', blurb: 'No public rate card: pricing is set in a sales quote. Get the full fee schedule, contract term and any early-termination fee in writing before you sign.' },
 };
 
@@ -1544,11 +1544,11 @@ export function getAccountingSoftware(slug: string): AccountingSoftware | undefi
 }
 
 export const ACCOUNTING_POSITION_META: Record<AccountingPositioning, { label: string; blurb: string }> = {
-  'full-accounting': { label: 'Full Double-Entry Accounting', blurb: 'Complete accounting — bank reconciliation, A/R and A/P, reporting — that scales with the business. The standard once you have employees, inventory, or an accountant. Every major FSM integrates with these.' },
+  'full-accounting': { label: 'Full Double-Entry Accounting', blurb: 'Complete accounting (bank reconciliation, A/R and A/P, reporting) that scales with the business. The standard once you have employees, inventory, or an accountant. Every major FSM integrates with these.' },
   'invoicing-first': { label: 'Invoicing-First Accounting', blurb: 'Built around invoicing, time tracking, and getting paid, with lighter bookkeeping. Great for solo and small service businesses that prioritize billing over deep accounting.' },
   'free': { label: 'Free Accounting', blurb: 'Core accounting and invoicing at no monthly cost, monetized through payments and payroll add-ons. Best for very small or new businesses watching every dollar.' },
   'enterprise': { label: 'Mid-Market / Enterprise Accounting', blurb: 'Heavier accounting for larger or multi-entity operations.' },
-  'bill-pay': { label: 'Bill Pay / Accounts Payable', blurb: 'Pays your vendors, subs, and suppliers (ACH, check, or card) and syncs to your books — an accounts-payable layer that sits alongside accounting rather than replacing it.' },
+  'bill-pay': { label: 'Bill Pay / Accounts Payable', blurb: 'Pays your vendors, subs, and suppliers (ACH, check, or card) and syncs to your books, an accounts-payable layer that sits alongside accounting rather than replacing it.' },
 };
 
 export function accountingByPosition(): Array<{ position: AccountingPositioning; software: AccountingSoftware[] }> {
@@ -1607,9 +1607,9 @@ export function getBankingProvider(slug: string): BankingProvider | undefined {
 }
 
 export const BANKING_FOCUS_META: Record<BankingFocus, { label: string; blurb: string }> = {
-  'self-employed': { label: 'Self-Employed & Solo Banking', blurb: 'Banking built for 1099 and solo operators — automatic tax set-aside, bookkeeping, and contractor payments in one app.' },
+  'self-employed': { label: 'Self-Employed & Solo Banking', blurb: 'Banking built for 1099 and solo operators: automatic tax set-aside, bookkeeping, and contractor payments in one app.' },
   'business-checking': { label: 'Small-Business Checking', blurb: 'No-fee business checking for growing operations, with a strong app, integrations, and (with Relay) multi-account cash management for methods like Profit First.' },
-  'credit-and-lending': { label: 'Banking + Credit & Lending', blurb: 'Business checking paired with revolving credit lines and higher-yield savings — for shops that want banking and working capital in one place.' },
+  'credit-and-lending': { label: 'Banking + Credit & Lending', blurb: 'Business checking paired with revolving credit lines and higher-yield savings, for shops that want banking and working capital in one place.' },
 };
 
 export function bankingByFocus(): Array<{ focus: BankingFocus; providers: BankingProvider[] }> {

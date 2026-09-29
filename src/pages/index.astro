@@ -33,7 +33,7 @@ const formattedLastVerified = new Date(lastVerifiedDate).toLocaleDateString('en-
   day: 'numeric',
 });
 
-// Live freshness stats — surfacing this on the homepage is our direct
+// Live freshness stats: surfacing this on the homepage is our direct
 // attack on competitors' staleness (Capterra ServiceTitan profile last
 // updated Aug 2025 = 9 months stale at time of this writing).
 const freshness = freshnessStats();
@@ -50,11 +50,11 @@ const verticalsWithCounts = verticals.map((v) => ({
   toolCount: toolsForVertical(v.slug).length,
 }));
 
-// Featured head-to-head comparisons — the highest-search-volume pairings in the trades software space.
+// Featured head-to-head comparisons: the highest-search-volume pairings in the trades software space.
 // Each pair must share at least one vertical so the comparison page exists.
 const featuredComparisons = [
   { a: 'jobber', b: 'housecall-pro', label: 'Jobber vs Housecall Pro', context: 'The most-searched residential FSM comparison' },
-  { a: 'jobber', b: 'servicetitan', label: 'Jobber vs ServiceTitan', context: 'Entry-tier vs enterprise — when to upgrade' },
+  { a: 'jobber', b: 'servicetitan', label: 'Jobber vs ServiceTitan', context: 'Entry-tier vs enterprise: when to upgrade' },
   { a: 'housecall-pro', b: 'servicetitan', label: 'Housecall Pro vs ServiceTitan', context: 'Mid-market vs enterprise residential' },
   { a: 'fieldedge', b: 'servicetitan', label: 'FieldEdge vs ServiceTitan', context: 'QuickBooks Desktop depth vs enterprise reporting' },
   { a: 'buildops', b: 'servicetitan', label: 'BuildOps vs ServiceTitan', context: 'Commercial mechanical vs residential leader' },
@@ -63,13 +63,13 @@ const featuredComparisons = [
   { a: 'workiz', b: 'jobber', label: 'Workiz vs Jobber', context: 'On-demand specialty vs broad multi-vertical' },
 ];
 
-// Helper to build comparison URL — slugs must be sorted alphabetically (template convention)
+// Helper to build comparison URL; slugs must be sorted alphabetically (template convention)
 function comparisonUrl(a: string, b: string): string {
   const [first, second] = [a, b].sort();
   return `/compare/${first}-vs-${second}/`;
 }
 
-// Featured features — surface the new features axis with highest-value entries
+// Featured features: surface the new features axis with highest-value entries
 const features = (featuresData as { features: Record<string, { name: string; definition: string }> }).features;
 const featuredFeatures = [
   'quickbooks_integration',
@@ -86,7 +86,7 @@ function featureToUrl(slug: string): string {
 ---
 
 <Layout
-  title="WrenchStack — The trades vendor directory: software, lead-gen, insurance, payroll, marketing"
+  title="WrenchStack | The trades vendor directory: software, lead-gen, insurance, payroll, marketing"
   description={`Independent reviews of ${totalVendorCount} vendors: ${toolCount} field-service platforms, ${adjacentCount} adjacent US vendors (insurance, payroll, lead-gen, payments, financing, banking, accounting, agencies, AI), and ${intlVendorCount} listings across ${intlMarketCount} international markets. Honest reputation flags. Real pricing. No lead-gen sales calls.`}
   alternateUrls={EN_MARKET_HREFLANG}
 >
@@ -153,22 +153,22 @@ function featureToUrl(slug: string): string {
         <a href="/tools/" class="group rounded-lg border-2 border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm">
           <div class="text-xs font-bold uppercase tracking-wider text-orange-600">Software</div>
           <div class="mt-2 text-2xl font-bold text-slate-900 group-hover:text-orange-600">{toolCount} tools</div>
-          <p class="mt-2 text-sm text-slate-600 leading-snug">Field service, CMMS, construction PM, CRM — the operational stack.</p>
+          <p class="mt-2 text-sm text-slate-600 leading-snug">Field service, CMMS, construction PM, CRM: the operational stack.</p>
         </a>
         <a href="/lead-gen/" class="group rounded-lg border-2 border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm">
           <div class="text-xs font-bold uppercase tracking-wider text-orange-600">Lead-gen</div>
           <div class="mt-2 text-2xl font-bold text-slate-900 group-hover:text-orange-600">{leadGenCount} platforms</div>
-          <p class="mt-2 text-sm text-slate-600 leading-snug">Google LSA, Service Direct, Thumbtack — and honest warnings on Bark, HomeAdvisor, Angi.</p>
+          <p class="mt-2 text-sm text-slate-600 leading-snug">Google LSA, Service Direct, Thumbtack, and honest warnings on Bark, HomeAdvisor, Angi.</p>
         </a>
         <a href="/insurance/" class="group rounded-lg border-2 border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm">
           <div class="text-xs font-bold uppercase tracking-wider text-orange-600">Insurance</div>
           <div class="mt-2 text-2xl font-bold text-slate-900 group-hover:text-orange-600">{insuranceCount} providers</div>
-          <p class="mt-2 text-sm text-slate-600 leading-snug">NEXT, Hiscox, Simply Business, Acuity, Erie — direct carriers + brokers + mutuals.</p>
+          <p class="mt-2 text-sm text-slate-600 leading-snug">NEXT, Hiscox, Simply Business, Acuity, Erie: direct carriers + brokers + mutuals.</p>
         </a>
         <a href="/payroll/" class="group rounded-lg border-2 border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm">
           <div class="text-xs font-bold uppercase tracking-wider text-orange-600">Payroll</div>
           <div class="mt-2 text-2xl font-bold text-slate-900 group-hover:text-orange-600">{payrollCount} services</div>
-          <p class="mt-2 text-sm text-slate-600 leading-snug">Gusto, OnPay, Patriot, Hourly.io — modern SMB payroll plus honest ADP/Paychex coverage.</p>
+          <p class="mt-2 text-sm text-slate-600 leading-snug">Gusto, OnPay, Patriot, Hourly.io: modern SMB payroll plus honest ADP/Paychex coverage.</p>
         </a>
         <a href="/agencies/" class="group rounded-lg border-2 border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm">
           <div class="text-xs font-bold uppercase tracking-wider text-orange-600">Agencies</div>
@@ -186,7 +186,7 @@ function featureToUrl(slug: string): string {
         <a href="/methodology/" class="text-sm font-medium text-orange-600 hover:underline">How we verify →</a>
       </div>
       <p class="mb-6 text-slate-600">
-        We re-check pricing quarterly. These are the tools we've verified most recently — every price you see has a date stamp underneath. Capterra's ServiceTitan profile, by comparison, is dated August 2025.
+        We re-check pricing quarterly. These are the tools we've verified most recently. Every price you see has a date stamp underneath. Capterra's ServiceTitan profile, by comparison, is dated August 2025.
       </p>
       <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {recentlyVerified.map((t) => {
@@ -240,7 +240,7 @@ function featureToUrl(slug: string): string {
     <div class="mx-auto max-w-6xl px-4 py-16">
       <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Popular head-to-head comparisons</h2>
       <p class="mb-8 text-slate-600">
-        The most-searched matchups in the trades software space — decision matrix, pricing side-by-side, pros and cons.
+        The most-searched matchups in the trades software space: decision matrix, pricing side-by-side, pros and cons.
       </p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {featuredComparisons.map((c) => (
@@ -298,13 +298,13 @@ function featureToUrl(slug: string): string {
         The editorial position no competitor can copy
       </h2>
       <p class="mb-8 max-w-3xl text-slate-600">
-        Every other directory in the trades space is either a single-category lead-gen funnel (Capterra, Software Advice for software; BeltStack for lead-gen; ContractorNerd for insurance) or a vendor publishing its own competitor comparisons. We're the only independent multi-category directory — which means we can name the FTC settlements, document the audit-pattern complaints, and recommend the unaffiliated carriers when they're the best fit.
+        Every other directory in the trades space is either a single-category lead-gen funnel (Capterra, Software Advice for software; BeltStack for lead-gen; ContractorNerd for insurance) or a vendor publishing its own competitor comparisons. We're the only independent multi-category directory, which means we can name the FTC settlements, document the audit-pattern complaints, and recommend the unaffiliated carriers when they're the best fit.
       </p>
       <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <div class="rounded-lg border border-rose-200 bg-rose-50 p-5">
           <div class="mb-2 text-xs font-bold uppercase tracking-wider text-rose-700">⚠ We flag the bad actors</div>
           <p class="text-sm text-rose-900 leading-relaxed">
-            HomeAdvisor's <strong>$7.2M FTC settlement</strong>. Angi's Vermont Attorney General settlement. Bark's "<strong>Bark scam</strong>" search query. Pie Insurance's audit pattern. Townsquare's cancellation-term complaints. Marketing 360 lock-ins. We name them — competitors structurally can't.
+            HomeAdvisor's <strong>$7.2M FTC settlement</strong>. Angi's Vermont Attorney General settlement. Bark's "<strong>Bark scam</strong>" search query. Pie Insurance's audit pattern. Townsquare's cancellation-term complaints. Marketing 360 lock-ins. We name them; competitors structurally can't.
           </p>
         </div>
         <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-5">
@@ -316,13 +316,13 @@ function featureToUrl(slug: string): string {
         <div class="rounded-lg border border-slate-200 bg-slate-50 p-5">
           <div class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-700">📋 Verified, transparent, dated</div>
           <p class="text-sm text-slate-700 leading-relaxed">
-            Every pricing tier verified directly from vendor pages with a date stamp. Every affiliate relationship disclosed in our <a href="/methodology/" class="underline hover:text-slate-900">per-vendor ledger</a>. The <a href="/methodology/">WrenchStack Score</a> formula is published — same rubric for every tool.
+            Every pricing tier verified directly from vendor pages with a date stamp. Every affiliate relationship disclosed in our <a href="/methodology/" class="underline hover:text-slate-900">per-vendor ledger</a>. The <a href="/methodology/">WrenchStack Score</a> formula is published: same rubric for every tool.
           </p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-5">
           <div class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-700">🛠 Built for how contractors actually buy</div>
           <p class="text-sm text-slate-700 leading-relaxed">
-            Filter by trade, team size, integration need — not generic SaaS taxonomy. <a href="/quiz/" class="text-orange-600 hover:underline">Matching quiz</a>, <a href="/roi-calculator/" class="text-orange-600 hover:underline">ROI calculator</a>, <a href="/cost-of-switch/" class="text-orange-600 hover:underline">cost-of-switch math</a> — tools that make the decision real.
+            Filter by trade, team size, integration need, not generic SaaS taxonomy. <a href="/quiz/" class="text-orange-600 hover:underline">Matching quiz</a>, <a href="/roi-calculator/" class="text-orange-600 hover:underline">ROI calculator</a>, <a href="/cost-of-switch/" class="text-orange-600 hover:underline">cost-of-switch math</a>: tools that make the decision real.
           </p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-5">
@@ -348,7 +348,7 @@ function featureToUrl(slug: string): string {
       </h2>
       <p class="mt-4 text-lg text-slate-300">
         Answer 5 quick questions about your trade, team size, and what you need.
-        Get ranked picks in 60 seconds — or browse by category below.
+        Get ranked picks in 60 seconds, or browse by category below.
       </p>
       <a
         href="/quiz/"

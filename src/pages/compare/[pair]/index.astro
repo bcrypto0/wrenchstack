@@ -179,65 +179,65 @@ function getDecisionMatrix(): { pickA: string[]; pickB: string[] } {
 
   // Cheaper at entry
   if (cheaperTool === a) {
-    pickA.push(`**Budget is the constraint** — ${a.name} starts at $${a.pricing.starting_at_usd}/mo vs $${b.pricing.starting_at_usd}/mo for ${b.name}`);
+    pickA.push(`**Budget is the constraint**: ${a.name} starts at $${a.pricing.starting_at_usd}/mo vs $${b.pricing.starting_at_usd}/mo for ${b.name}`);
   } else if (cheaperTool === b) {
-    pickB.push(`**Budget is the constraint** — ${b.name} starts at $${b.pricing.starting_at_usd}/mo vs $${a.pricing.starting_at_usd}/mo for ${a.name}`);
+    pickB.push(`**Budget is the constraint**: ${b.name} starts at $${b.pricing.starting_at_usd}/mo vs $${a.pricing.starting_at_usd}/mo for ${a.name}`);
   }
 
   // Free trial advantage
   if (aHasTrial && !bHasTrial && !(b.pricing.starting_at_usd === 0)) {
-    pickA.push(`**You want to try before buying** — ${a.name} offers a ${a.pricing.free_trial_days}-day free trial; ${b.name} requires a demo`);
+    pickA.push(`**You want to try before buying**: ${a.name} offers a ${a.pricing.free_trial_days}-day free trial; ${b.name} requires a demo`);
   } else if (bHasTrial && !aHasTrial && !(a.pricing.starting_at_usd === 0)) {
-    pickB.push(`**You want to try before buying** — ${b.name} offers a ${b.pricing.free_trial_days}-day free trial; ${a.name} requires a demo`);
+    pickB.push(`**You want to try before buying**: ${b.name} offers a ${b.pricing.free_trial_days}-day free trial; ${a.name} requires a demo`);
   }
 
   // QuickBooks
   if (aHasQB && !bHasQB) {
-    pickA.push(`**QuickBooks is critical** — ${a.name} has native integration; ${b.name} requires Zapier or manual workarounds`);
+    pickA.push(`**QuickBooks is critical**: ${a.name} has native integration; ${b.name} requires Zapier or manual workarounds`);
   } else if (bHasQB && !aHasQB) {
-    pickB.push(`**QuickBooks is critical** — ${b.name} has native integration; ${a.name} requires Zapier or manual workarounds`);
+    pickB.push(`**QuickBooks is critical**: ${b.name} has native integration; ${a.name} requires Zapier or manual workarounds`);
   }
 
   // Higher rating
   if (higherRated === a && ratingA !== null && ratingB !== null && (ratingA - ratingB) >= 0.2) {
-    pickA.push(`**Post-purchase satisfaction matters** — ${a.name} has a higher aggregate user rating (${ratingA.toFixed(1)} vs ${ratingB.toFixed(1)} on G2 + Capterra)`);
+    pickA.push(`**Post-purchase satisfaction matters**: ${a.name} has a higher aggregate user rating (${ratingA.toFixed(1)} vs ${ratingB.toFixed(1)} on G2 + Capterra)`);
   } else if (higherRated === b && ratingA !== null && ratingB !== null && (ratingB - ratingA) >= 0.2) {
-    pickB.push(`**Post-purchase satisfaction matters** — ${b.name} has a higher aggregate user rating (${ratingB.toFixed(1)} vs ${ratingA.toFixed(1)} on G2 + Capterra)`);
+    pickB.push(`**Post-purchase satisfaction matters**: ${b.name} has a higher aggregate user rating (${ratingB.toFixed(1)} vs ${ratingA.toFixed(1)} on G2 + Capterra)`);
   }
 
   // Multi-vertical
   if (a.verticals.length > b.verticals.length + 1) {
-    pickA.push(`**You serve multiple trades** — ${a.name} covers ${a.verticals.length} verticals vs ${b.name}'s ${b.verticals.length}`);
+    pickA.push(`**You serve multiple trades**: ${a.name} covers ${a.verticals.length} verticals vs ${b.name}'s ${b.verticals.length}`);
   } else if (b.verticals.length > a.verticals.length + 1) {
-    pickB.push(`**You serve multiple trades** — ${b.name} covers ${b.verticals.length} verticals vs ${a.name}'s ${a.verticals.length}`);
+    pickB.push(`**You serve multiple trades**: ${b.name} covers ${b.verticals.length} verticals vs ${a.name}'s ${a.verticals.length}`);
   }
 
   // Feature breadth
   if (a.key_features.length > b.key_features.length + 2) {
-    pickA.push(`**You want broader feature coverage** — ${a.name} ships ${a.key_features.length} core features vs ${b.name}'s ${b.key_features.length}`);
+    pickA.push(`**You want broader feature coverage**: ${a.name} ships ${a.key_features.length} core features vs ${b.name}'s ${b.key_features.length}`);
   } else if (b.key_features.length > a.key_features.length + 2) {
-    pickB.push(`**You want broader feature coverage** — ${b.name} ships ${b.key_features.length} core features vs ${a.name}'s ${a.key_features.length}`);
+    pickB.push(`**You want broader feature coverage**: ${b.name} ships ${b.key_features.length} core features vs ${a.name}'s ${a.key_features.length}`);
   }
 
   // Integration breadth
   if (a.integrations.length > b.integrations.length + 1) {
-    pickA.push(`**Integration ecosystem matters** — ${a.name} has ${a.integrations.length} native integrations vs ${b.name}'s ${b.integrations.length}`);
+    pickA.push(`**Integration ecosystem matters**: ${a.name} has ${a.integrations.length} native integrations vs ${b.name}'s ${b.integrations.length}`);
   } else if (b.integrations.length > a.integrations.length + 1) {
-    pickB.push(`**Integration ecosystem matters** — ${b.name} has ${b.integrations.length} native integrations vs ${a.name}'s ${a.integrations.length}`);
+    pickB.push(`**Integration ecosystem matters**: ${b.name} has ${b.integrations.length} native integrations vs ${a.name}'s ${a.integrations.length}`);
   }
 
   // GLS for inbound-call businesses
   if (aHasGLS && !bHasGLS) {
-    pickA.push(`**Google Local Services Ads drive your inbound calls** — ${a.name} has native GLS integration; ${b.name} doesn't`);
+    pickA.push(`**Google Local Services Ads drive your inbound calls**: ${a.name} has native GLS integration; ${b.name} doesn't`);
   } else if (bHasGLS && !aHasGLS) {
-    pickB.push(`**Google Local Services Ads drive your inbound calls** — ${b.name} has native GLS integration; ${a.name} doesn't`);
+    pickB.push(`**Google Local Services Ads drive your inbound calls**: ${b.name} has native GLS integration; ${a.name} doesn't`);
   }
 
   // Founding maturity (only if significant)
   if (a.founded && b.founded && (a.founded < b.founded - 5)) {
-    pickA.push(`**You want a longer track record** — ${a.name} dates from ${a.founded} (${2026 - a.founded} years) vs ${b.name}'s ${b.founded}`);
+    pickA.push(`**You want a longer track record**: ${a.name} dates from ${a.founded} (${2026 - a.founded} years) vs ${b.name}'s ${b.founded}`);
   } else if (b.founded && a.founded && (b.founded < a.founded - 5)) {
-    pickB.push(`**You want a longer track record** — ${b.name} dates from ${b.founded} (${2026 - b.founded} years) vs ${a.name}'s ${a.founded}`);
+    pickB.push(`**You want a longer track record**: ${b.name} dates from ${b.founded} (${2026 - b.founded} years) vs ${a.name}'s ${a.founded}`);
   }
 
   return { pickA: pickA.slice(0, 6), pickB: pickB.slice(0, 6) };
@@ -305,13 +305,13 @@ function getPros(t: Tool, isCheaper: boolean, isHigherRated: boolean): string[] 
   const hasFreeTrial = (t.pricing.free_trial_days ?? 0) > 0;
   const r = aggregateRating(t);
 
-  if (isCheaper) pros.push(`Lower entry price — ${formatPrice(t)}`);
+  if (isCheaper) pros.push(`Lower entry price: ${formatPrice(t)}`);
   if (hasFreeTrial) pros.push(`${t.pricing.free_trial_days}-day free trial, no credit card required`);
   if (isHigherRated && r) pros.push(`Higher aggregate user rating (${r.toFixed(1)} / 5)`);
   if (hasQB) pros.push(`Native QuickBooks integration (bidirectional sync)`);
   if (hasStripe) pros.push(`Built-in Stripe payment processing`);
   if (hasGLS) pros.push(`Native Google Local Services Ads integration`);
-  if (t.verticals.length >= 5) pros.push(`Covers ${t.verticals.length} trade verticals — strong multi-vertical fit`);
+  if (t.verticals.length >= 5) pros.push(`Covers ${t.verticals.length} trade verticals (strong multi-vertical fit)`);
   if (t.key_features.length >= 8) pros.push(`Broad feature coverage (${t.key_features.length} core features)`);
   if (t.founded && t.founded <= 2015) pros.push(`${2026 - t.founded}-year track record (since ${t.founded})`);
   if (priceScaling(t) === 'flat') pros.push(`Flat monthly price per plan, not per user`);
@@ -340,7 +340,7 @@ function getCons(t: Tool, otherT: Tool): string[] {
   const otherHasTrial = (otherT.pricing.free_trial_days ?? 0) > 0;
   if (otherHasTrial && !tHasTrial && t.pricing.starting_at_usd !== 0) cons.push(`No free trial (${otherT.name} offers ${otherT.pricing.free_trial_days} days)`);
 
-  if (t.pricing.starting_at_usd === null) cons.push(`No public pricing — sales call required for a quote`);
+  if (t.pricing.starting_at_usd === null) cons.push(`No public pricing: sales call required for a quote`);
 
   return cons.slice(0, 5);
 }
@@ -365,14 +365,14 @@ const verticalWinners = getVerticalWinners();
 const faqs = [
   {
     q: `Which is better, ${a.name} or ${b.name}?`,
-    a: `Neither is universally better — they target different buyers. ${a.name} is best for ${asSentence(a.best_for)} ${b.name} is best for ${asSentence(b.best_for)} See the decision matrix above for situation-specific guidance, or jump to the per-vertical winner table if you're in a specific trade.`,
+    a: `Neither is universally better; they target different buyers. ${a.name} is best for ${asSentence(a.best_for)} ${b.name} is best for ${asSentence(b.best_for)} See the decision matrix above for situation-specific guidance, or jump to the per-vertical winner table if you're in a specific trade.`,
   },
   {
     q: `Is ${a.name} cheaper than ${b.name}?`,
     a:
       cheaperTool !== null
-        ? `${cheaperTool.name} has a lower starting price (${formatPrice(cheaperTool)} vs ${formatPrice(cheaperTool === a ? b : a)}). However, total cost depends on team size, features needed, and tier — see the full pricing breakdown above.`
-        : `Both ${a.name} and ${b.name} use custom pricing or have similar entry costs — request quotes from both to compare apples-to-apples for your specific team size.`,
+        ? `${cheaperTool.name} has a lower starting price (${formatPrice(cheaperTool)} vs ${formatPrice(cheaperTool === a ? b : a)}). However, total cost depends on team size, features needed, and tier. See the full pricing breakdown above.`
+        : `Both ${a.name} and ${b.name} use custom pricing or have similar entry costs; request quotes from both to compare apples-to-apples for your specific team size.`,
   },
   {
     q: `Can ${a.name} and ${b.name} integrate with QuickBooks?`,
@@ -396,11 +396,11 @@ const faqs = [
   },
   {
     q: `Can I migrate from ${a.name} to ${b.name} (or vice versa)?`,
-    a: `Yes, but expect data normalization work. Customer records and active jobs typically import cleanly via CSV. Historical job data, recurring service agreements, and custom pricebooks rarely transfer perfectly — most shops leave historical data in the source system as archival reference rather than migrating it. Budget 2-4 weeks of parallel operation between the two systems during the cutover.`,
+    a: `Yes, but expect data normalization work. Customer records and active jobs typically import cleanly via CSV. Historical job data, recurring service agreements, and custom pricebooks rarely transfer perfectly; most shops leave historical data in the source system as archival reference rather than migrating it. Budget 2-4 weeks of parallel operation between the two systems during the cutover.`,
   },
   {
     q: `${a.name} vs ${b.name}: which has better customer support?`,
-    a: `Both ${a.name} and ${b.name} offer email support across all tiers, with phone and live chat typically reserved for higher tiers. Response time SLAs vary by tier — entry-tier customers usually get 24-48 hour email response; enterprise customers get dedicated account managers with same-day response. Read recent G2 reviews specifically for support-quality signals before committing.`,
+    a: `Both ${a.name} and ${b.name} offer email support across all tiers, with phone and live chat typically reserved for higher tiers. Response time SLAs vary by tier: entry-tier customers usually get 24-48 hour email response; enterprise customers get dedicated account managers with same-day response. Read recent G2 reviews specifically for support-quality signals before committing.`,
   },
   {
     q: `Which is better for solo contractors vs growing teams?`,
@@ -493,11 +493,11 @@ const breadcrumbs = [
               </div>
               <div class="flex justify-between">
                 <dt class="text-slate-500">Aggregate rating</dt>
-                <dd class="font-semibold text-slate-900">{r !== null ? `${r.toFixed(1)} / 5` : '—'}</dd>
+                <dd class="font-semibold text-slate-900">{r !== null ? `${r.toFixed(1)} / 5` : 'n/a'}</dd>
               </div>
               <div class="flex justify-between">
                 <dt class="text-slate-500">Best team size</dt>
-                <dd class="font-semibold text-slate-900">{t.best_team_size ?? '—'}</dd>
+                <dd class="font-semibold text-slate-900">{t.best_team_size ?? 'n/a'}</dd>
               </div>
               <div class="flex justify-between">
                 <dt class="text-slate-500">Free trial</dt>
@@ -560,7 +560,7 @@ const breadcrumbs = [
     </section>
 
     <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-bold text-slate-900">Decision matrix — which one is right for you?</h2>
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Decision matrix: which one is right for you?</h2>
       <div class="grid gap-6 md:grid-cols-2">
         <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-6">
           <h3 class="mb-4 text-lg font-bold text-emerald-900">Pick {a.name} if…</h3>
@@ -610,8 +610,8 @@ const breadcrumbs = [
               return (
                 <tr>
                   <td class="p-3 font-semibold text-slate-900">Tier {i + 1}</td>
-                  <td class="p-3 text-slate-700">{aTier ? `${aTier} — ${fmt(aPrice)}` : '—'}</td>
-                  <td class="p-3 text-slate-700">{bTier ? `${bTier} — ${fmt(bPrice)}` : '—'}</td>
+                  <td class="p-3 text-slate-700">{aTier ? `${aTier}: ${fmt(aPrice)}` : '-'}</td>
+                  <td class="p-3 text-slate-700">{bTier ? `${bTier}: ${fmt(bPrice)}` : '-'}</td>
                 </tr>
               );
             })}
@@ -686,7 +686,7 @@ const breadcrumbs = [
               {onlyA.map((f) => <li>+ {f.replace(/_/g, ' ')}</li>)}
             </ul>
           ) : (
-            <p class="text-sm text-slate-500">— No exclusive features —</p>
+            <p class="text-sm text-slate-500">No exclusive features</p>
           )}
         </div>
         <div class="rounded-lg border border-green-200 bg-green-50 p-4">
@@ -706,7 +706,7 @@ const breadcrumbs = [
               {onlyB.map((f) => <li>+ {f.replace(/_/g, ' ')}</li>)}
             </ul>
           ) : (
-            <p class="text-sm text-slate-500">— No exclusive features —</p>
+            <p class="text-sm text-slate-500">No exclusive features</p>
           )}
         </div>
       </div>
@@ -724,7 +724,7 @@ const breadcrumbs = [
               {onlyAIntegrations.map((f) => <li>+ {f.replace(/_/g, ' ')}</li>)}
             </ul>
           ) : (
-            <p class="text-sm text-slate-500">— None unique —</p>
+            <p class="text-sm text-slate-500">None unique</p>
           )}
         </div>
         <div class="rounded-lg border border-green-200 bg-green-50 p-4">
@@ -736,7 +736,7 @@ const breadcrumbs = [
               {sharedIntegrations.map((f) => <li>✓ {f.replace(/_/g, ' ')}</li>)}
             </ul>
           ) : (
-            <p class="text-sm text-green-700">— No common integrations —</p>
+            <p class="text-sm text-green-700">No common integrations</p>
           )}
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
@@ -748,7 +748,7 @@ const breadcrumbs = [
               {onlyBIntegrations.map((f) => <li>+ {f.replace(/_/g, ' ')}</li>)}
             </ul>
           ) : (
-            <p class="text-sm text-slate-500">— None unique —</p>
+            <p class="text-sm text-slate-500">None unique</p>
           )}
         </div>
       </div>

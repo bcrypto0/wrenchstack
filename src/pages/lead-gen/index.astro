@@ -9,7 +9,7 @@ import {
 } from '../../lib/data';
 
 const pageTitle = `Best Lead-Gen Platforms for Trades Contractors (2026)`;
-const pageDescription = `Independent reviews of 13 lead-generation platforms for HVAC, plumbing, electrical, roofing, and other residential trades — including Google LSA, Service Direct, Thumbtack, Angi, Bark, and more. Honest reputation flags, real affiliate disclosure, exclusive-vs-shared comparison.`;
+const pageDescription = `Independent reviews of 13 lead-generation platforms for HVAC, plumbing, electrical, roofing, and other residential trades, including Google LSA, Service Direct, Thumbtack, Angi, Bark, and more. Honest reputation flags, real affiliate disclosure, exclusive-vs-shared comparison.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -25,20 +25,20 @@ for (const p of leadGenPlatforms) {
 
 const tierMeta = {
   S: {
-    label: 'Tier S — strongest contractor experience',
+    label: 'Tier S: strongest contractor experience',
     description: 'Exclusive leads or pay-per-call models with working dispute systems and positive contractor sentiment.',
     badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300',
     cardBorder: 'border-emerald-300',
   },
   A: {
-    label: 'Tier A — workable with discipline',
+    label: 'Tier A: workable with discipline',
     description: 'Shared-lead or marketplace models. Can work for the right contractor profile but require selectivity, cost discipline, and realistic expectations.',
     badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300',
     cardBorder: 'border-blue-300',
   },
   F: {
-    label: 'Tier F — not recommended (with reasons)',
-    description: 'Platforms with documented FTC actions, predatory practices, or structural contractor-hostile design. Listed for completeness with explicit warnings — we cannot recommend them.',
+    label: 'Tier F: not recommended (with reasons)',
+    description: 'Platforms with documented FTC actions, predatory practices, or structural contractor-hostile design. Listed for completeness with explicit warnings: we cannot recommend them.',
     badgeColor: 'bg-rose-100 text-rose-900 ring-rose-300',
     cardBorder: 'border-rose-300',
   },
@@ -74,14 +74,14 @@ const itemListSchema = {
         Best Lead-Gen Platforms for Trades Contractors (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {leadGenPlatforms.length} lead-generation platforms used by HVAC, plumbing, electrical, roofing, and other residential trades. We flag platforms with FTC actions and documented predatory practices honestly — and we recommend the contractor-friendly alternatives even when there's no affiliate commission.
+        Independent reviews of {leadGenPlatforms.length} lead-generation platforms used by HVAC, plumbing, electrical, roofing, and other residential trades. We flag platforms with FTC actions and documented predatory practices honestly, and we recommend the contractor-friendly alternatives even when there's no affiliate commission.
       </p>
     </header>
 
     <section class="mb-10 rounded-lg border-l-4 border-orange-500 bg-orange-50/40 p-5">
       <p class="text-xs font-bold uppercase tracking-wider text-orange-600">The short answer</p>
       <p class="mt-2 text-slate-800 leading-relaxed">
-        The factor that decides everything is <strong>shared vs exclusive</strong> leads. For most residential service trades, exclusive-lead platforms — <a href="/lead-gen/google-local-services-ads/" class="font-semibold text-orange-700 hover:underline">Google Local Services Ads</a>, <a href="/lead-gen/service-direct/" class="font-semibold text-orange-700 hover:underline">Service Direct</a>, and <a href="/lead-gen/33-mile-radius/" class="font-semibold text-orange-700 hover:underline">33 Mile Radius</a> — deliver a better cost-per-acquired-customer (30–50% conversion) than cheaper shared-lead marketplaces (5–15%, because customers price-shop across 3–5 bids). We list FTC-flagged and contractor-hostile platforms honestly, with the reasons. No vendor pays for placement.
+        The factor that decides everything is <strong>shared vs exclusive</strong> leads. For most residential service trades, exclusive-lead platforms (<a href="/lead-gen/google-local-services-ads/" class="font-semibold text-orange-700 hover:underline">Google Local Services Ads</a>, <a href="/lead-gen/service-direct/" class="font-semibold text-orange-700 hover:underline">Service Direct</a>, and <a href="/lead-gen/33-mile-radius/" class="font-semibold text-orange-700 hover:underline">33 Mile Radius</a>) deliver a better cost-per-acquired-customer (30–50% conversion) than cheaper shared-lead marketplaces (5–15%, because customers price-shop across 3–5 bids). We list FTC-flagged and contractor-hostile platforms honestly, with the reasons. No vendor pays for placement.
       </p>
     </section>
 
@@ -138,12 +138,12 @@ const itemListSchema = {
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Exclusivity</dt>
-                    <dd class="font-semibold text-slate-900">{p.exclusivity.split('—')[0].trim()}</dd>
+                    <dd class="font-semibold text-slate-900">{p.exclusivity.split('\u2014')[0].trim()}</dd>
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Trustpilot</dt>
                     <dd class="font-semibold text-slate-900">
-                      {p.ratings.trustpilot !== null ? `${p.ratings.trustpilot.toFixed(1)} / 5` : '—'}
+                      {p.ratings.trustpilot !== null ? `${p.ratings.trustpilot.toFixed(1)} / 5` : 'n/a'}
                     </dd>
                   </div>
                   <div>
@@ -207,7 +207,7 @@ const itemListSchema = {
           <strong class="text-slate-900">Affiliate disclosure is per-platform.</strong> Where we earn commission on a recommendation (Service Direct, 33 Mile Radius, Houzz Pro, CallRail), it's disclosed. Where we don't (Google LSA, Thumbtack), we recommend anyway when the platform fits.
         </li>
         <li>
-          <strong class="text-slate-900">Reputation flags are honest.</strong> The 'we cannot recommend' designations (HomeAdvisor, Angi, Bark) reflect documented patterns. Vendor pressure to soften flags isn't a factor — our methodology is published.
+          <strong class="text-slate-900">Reputation flags are honest.</strong> The 'we cannot recommend' designations (HomeAdvisor, Angi, Bark) reflect documented patterns. Vendor pressure to soften flags isn't a factor; our methodology is published.
         </li>
       </ul>
     </section>

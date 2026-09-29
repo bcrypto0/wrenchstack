@@ -8,6 +8,13 @@ const breadcrumbs = [
   { name: 'Build comparison', url: '/compare-builder/' },
 ];
 
+// Counts shown in the copy, computed so they cannot go stale.
+const choose = (n: number, k: number) => { let r = 1; for (let i = 1; i <= k; i++) r = (r * (n - k + i)) / i; return Math.round(r); };
+const comboCount = [2, 3, 4, 5].reduce((sum, k) => sum + choose(tools.length, k), 0);
+const comboMillions = Math.round(comboCount / 1e6);
+let sharedPairs = 0;
+for (let i = 0; i < tools.length; i++) for (let j = i + 1; j < tools.length; j++) if (tools[i].verticals.some((v) => tools[j].verticals.includes(v))) sharedPairs++;
+
 // Tool data shipped to client-side JS
 const builderTools = tools.map((t) => ({
   slug: t.slug,
@@ -22,7 +29,7 @@ const builderTools = tools.map((t) => ({
   verifiedDate: t.pricing.verified_date,
   freshness: freshnessTier(t),
   freshnessLabel: freshnessLabel(t),
-  bestTeamSize: t.best_team_size ?? '—',
+  bestTeamSize: t.best_team_size ?? '-',
   teamBucket: teamSizeBucket(t),
   rating: aggregateRating(t),
   verticals: t.verticals,
@@ -43,7 +50,7 @@ const builderTools = tools.map((t) => ({
 ---
 
 <Layout
-  title="Build your own comparison — pick any 2-5 trades software tools"
+  title="Build your own comparison: pick any 2-5 trades software tools"
   description="Interactive side-by-side comparison builder. Pick any 2-5 trades software platforms from our directory and see them compared instantly across pricing, features, integrations, ratings, and freshness."
   breadcrumbs={breadcrumbs}
 >
@@ -56,7 +63,7 @@ const builderTools = tools.map((t) => ({
         Build your own side-by-side comparison
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        Pick any 2-5 trades software platforms from our directory. We'll show them compared instantly — pricing, features, integrations, ratings, freshness — without you having to find a pre-built comparison page that happens to include your exact tools.
+        Pick any 2-5 trades software platforms from our directory. We'll show them compared instantly (pricing, features, integrations, ratings, freshness) without you having to find a pre-built comparison page that happens to include your exact tools.
       </p>
     </header>
 
@@ -69,7 +76,7 @@ const builderTools = tools.map((t) => ({
           id="cb-search"
           type="search"
           autocomplete="off"
-          placeholder="Start typing — e.g. ServiceTitan, Jobber, MaintainX…"
+          placeholder="Start typing, e.g. ServiceTitan, Jobber, MaintainX…"
           class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
         />
         <div
@@ -105,34 +112,34 @@ const builderTools = tools.map((t) => ({
         Pick at least 2 tools above to see your custom side-by-side comparison.
       </p>
       <p class="mt-2 text-xs text-slate-500">
-        Need pre-built comparisons instead? Browse <a href="/compare/" class="text-orange-600 hover:underline">~1,760 head-to-head pairings</a>.
+        Need pre-built comparisons instead? Browse <a href="/compare/" class="text-orange-600 hover:underline">{sharedPairs.toLocaleString('en-US')} head-to-head pairings</a>.
       </p>
     </section>
 
     <section class="mt-12 prose prose-slate max-w-none">
       <h2>Why an interactive builder?</h2>
       <p>
-        Pre-built comparison pages cover the most-searched matchups (Jobber vs Housecall Pro, ServiceTitan vs FieldEdge, etc.). But what if you're comparing three tools? Or your shortlist includes a niche specialty platform that doesn't have a popular comparison page yet? The interactive builder lets you compare any combination across our directory — 1.5+ trillion possible 2-5-tool combinations from {tools.length} platforms.
+        Pre-built comparison pages cover the most-searched matchups (Jobber vs Housecall Pro, ServiceTitan vs FieldEdge, etc.). But what if you're comparing three tools? Or your shortlist includes a niche specialty platform that doesn't have a popular comparison page yet? The interactive builder lets you compare any combination across our directory: about {comboMillions} million possible 2-5-tool combinations from {tools.length} platforms.
       </p>
 
       <h2>What the comparison includes</h2>
       <ul>
-        <li><strong>Headline metrics</strong> — Starting price (per-user or flat-rate detected), aggregate rating (G2 + Capterra average), best team size, founded year, headquarters.</li>
-        <li><strong>Freshness badge</strong> — When we last verified the pricing tier against the vendor's public page. Green if under 90 days; amber if 91-180; red if older.</li>
-        <li><strong>Integration check</strong> — Does the tool integrate with QuickBooks, Stripe, Xero, Zapier, Google Local Services Ads? Y/N per integration.</li>
-        <li><strong>Feature counts</strong> — Number of key features and integrations shipped, with samples listed.</li>
-        <li><strong>Vertical fit</strong> — Which trades the tool serves and how well (1-10 scoring).</li>
-        <li><strong>Best for / target buyer</strong> — Each tool's stated target customer profile.</li>
+        <li><strong>Headline metrics</strong>: Starting price (per-user or flat-rate detected), aggregate rating (G2 + Capterra average), best team size, founded year, headquarters.</li>
+        <li><strong>Freshness badge</strong>: When we last verified the pricing tier against the vendor's public page. Green if under 90 days; amber if 91-180; red if older.</li>
+        <li><strong>Integration check</strong>: Does the tool integrate with QuickBooks, Stripe, Xero, Zapier, Google Local Services Ads? Y/N per integration.</li>
+        <li><strong>Feature counts</strong>: Number of key features and integrations shipped, with samples listed.</li>
+        <li><strong>Vertical fit</strong>: Which trades the tool serves and how well (1-10 scoring).</li>
+        <li><strong>Best for / target buyer</strong>: Each tool's stated target customer profile.</li>
       </ul>
 
       <h2>Sharing your comparison</h2>
       <p>
-        The URL updates as you add and remove tools — so you can copy the URL bar to share your specific comparison with a colleague, business partner, or industry advisor. The URL pattern is <code>/compare-builder/?tools=slug1,slug2,slug3</code>. No account required.
+        The URL updates as you add and remove tools, so you can copy the URL bar to share your specific comparison with a colleague, business partner, or industry advisor. The URL pattern is <code>/compare-builder/?tools=slug1,slug2,slug3</code>. No account required.
       </p>
 
       <h2>Other ways to compare</h2>
       <p>
-        For deep editorial side-by-side analysis (decision matrix, pros/cons, implementation timelines, 8-FAQ pairings), see our <a href="/compare/">1,760 pre-built head-to-head comparison pages</a> — every tool-pair that shares at least one vertical. For curated 3-way matchups by buyer segment, see the <a href="/multi-compare/">28 multi-tool comparison pages</a>.
+        For deep editorial side-by-side analysis (decision matrix, pros/cons, implementation timelines, 8-FAQ pairings), see our <a href="/compare/">{sharedPairs.toLocaleString('en-US')} pre-built head-to-head comparisons</a>: every tool-pair that shares at least one vertical. For curated 3-way matchups by buyer segment, see the <a href="/multi-compare/">28 multi-tool comparison pages</a>.
       </p>
     </section>
   </article>
@@ -260,7 +267,7 @@ const builderTools = tools.map((t) => ({
           },
           {
             label: 'Aggregate rating',
-            cells: cols.map((t) => t.rating !== null ? `<strong>${t.rating.toFixed(1)} / 5</strong><div class="mt-1 text-xs text-slate-500">G2 + Capterra avg</div>` : '<span class="text-slate-400">—</span>'),
+            cells: cols.map((t) => t.rating !== null ? `<strong>${t.rating.toFixed(1)} / 5</strong><div class="mt-1 text-xs text-slate-500">G2 + Capterra avg</div>` : '<span class="text-slate-400">-</span>'),
           },
           {
             label: 'Best team size',
@@ -279,31 +286,31 @@ const builderTools = tools.map((t) => ({
           },
           {
             label: 'Founded',
-            cells: cols.map((t) => t.founded ? `${t.founded}<div class="mt-1 text-xs text-slate-500">${2026 - t.founded} years</div>` : '<span class="text-slate-400">—</span>'),
+            cells: cols.map((t) => t.founded ? `${t.founded}<div class="mt-1 text-xs text-slate-500">${2026 - t.founded} years</div>` : '<span class="text-slate-400">-</span>'),
           },
           {
             label: 'Headquarters',
-            cells: cols.map((t) => escHtml(t.headquartered || '—')),
+            cells: cols.map((t) => escHtml(t.headquartered || '-')),
           },
           {
             label: 'QuickBooks',
-            cells: cols.map((t) => t.hasQuickBooks ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">—</span>'),
+            cells: cols.map((t) => t.hasQuickBooks ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">-</span>'),
           },
           {
             label: 'Stripe',
-            cells: cols.map((t) => t.hasStripe ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">—</span>'),
+            cells: cols.map((t) => t.hasStripe ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">-</span>'),
           },
           {
             label: 'Xero',
-            cells: cols.map((t) => t.hasXero ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">—</span>'),
+            cells: cols.map((t) => t.hasXero ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">-</span>'),
           },
           {
             label: 'Zapier',
-            cells: cols.map((t) => t.hasZapier ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">—</span>'),
+            cells: cols.map((t) => t.hasZapier ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">-</span>'),
           },
           {
             label: 'Google LSA',
-            cells: cols.map((t) => t.hasLSA ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">—</span>'),
+            cells: cols.map((t) => t.hasLSA ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">-</span>'),
           },
           {
             label: 'Key features (count)',
@@ -382,7 +389,7 @@ const builderTools = tools.map((t) => ({
           </div>
         `;
 
-        // Pairwise links — for any pair, link to the full pre-built comparison page
+        // Pairwise links: for any pair, link to the full pre-built comparison page
         let pairLinks = '';
         if (cols.length >= 2) {
           const pairs = [];

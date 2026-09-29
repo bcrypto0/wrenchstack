@@ -14,17 +14,17 @@ const vendors = (saData as { vendors: SaVendor[] }).vendors;
 
 const categories = ['software', 'insurance', 'lead-gen', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'insurance': { label: 'Contractor insurance', description: "Contractor & engineering cover (CAR, EAR, professional indemnity, workmen's comp) from Saudi insurers — Tawuniya, Walaa and GIG Saudi. All quote-based, as is standard for Gulf engineering risks." },
-  'lead-gen': { label: 'Lead generation & project intelligence', description: "How Saudi contractors actually find work — the Saudi Contractors Authority's Muqawil owner↔contractor exchange and ProTenders' project intelligence (the government tender portal Etimad sits under licensing & compliance)." },
+  'insurance': { label: 'Contractor insurance', description: "Contractor & engineering cover (CAR, EAR, professional indemnity, workmen's comp) from Saudi insurers: Tawuniya, Walaa and GIG Saudi. All quote-based, as is standard for Gulf engineering risks." },
+  'lead-gen': { label: 'Lead generation & project intelligence', description: "How Saudi contractors actually find work: the Saudi Contractors Authority's Muqawil owner↔contractor exchange and ProTenders' project intelligence (the government tender portal Etimad sits under licensing & compliance)." },
   'software': { label: 'Construction & trades software', description: 'From giga-project platforms (Oracle Aconex, Primavera, Autodesk) to Saudi-native construction ERPs (First Bit, PACT), ZATCA-certified accounting (Qoyod, Wafeq) and field-service tools (FSM Grid) for MEP and facilities contractors.' },
-  'certification': { label: 'Licensing & compliance', description: 'The Saudi bodies every contractor deals with — Saudi Council of Engineers, MOMRAH contractor classification, Balady permits, the Saudi Building Code, ZATCA e-invoicing, Qiwa/Nitaqat Saudization, and Etimad government tendering.' },
+  'certification': { label: 'Licensing & compliance', description: 'The Saudi bodies every contractor deals with: Saudi Council of Engineers, MOMRAH contractor classification, Balady permits, the Saudi Building Code, ZATCA e-invoicing, Qiwa/Nitaqat Saudization, and Etimad government tendering.' },
 };
 
 const vendorsByCategory: Record<string, SaVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
-const pageTitle = 'Saudi Arabia Construction & Trades Software — WrenchStack';
-const pageDescription = `Independent directory of ${vendors.length} construction & trades vendors for Saudi Arabia: giga-project PM/BIM, Saudi-native ERPs, ZATCA-certified accounting, and field-service tools — plus the SCE, contractor-classification, Balady, SBC and ZATCA compliance you must handle.`;
+const pageTitle = 'Saudi Arabia Construction & Trades Software | WrenchStack';
+const pageDescription = `Independent directory of ${vendors.length} construction & trades vendors for Saudi Arabia: giga-project PM/BIM, Saudi-native ERPs, ZATCA-certified accounting, and field-service tools, plus the SCE, contractor-classification, Balady, SBC and ZATCA compliance you must handle.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -50,7 +50,7 @@ const arUrl = new URL('/sa/ar/', Astro.site).toString();
         Saudi Construction & Trades Software Directory
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} Saudi-relevant vendors — built for the Vision 2030 construction boom. Giga-project platforms (Oracle Aconex, Primavera, Autodesk), Saudi-native construction ERPs (First Bit, PACT), ZATCA-certified accounting (Qoyod, Wafeq), and field-service tools — with the local compliance context (SCE, contractor classification, Balady, Saudi Building Code, ZATCA e-invoicing, Nitaqat) that off-the-shelf US software ignores.
+        Independent reviews of {vendors.length} Saudi-relevant vendors, built for the Vision 2030 construction boom. Giga-project platforms (Oracle Aconex, Primavera, Autodesk), Saudi-native construction ERPs (First Bit, PACT), ZATCA-certified accounting (Qoyod, Wafeq), and field-service tools, with the local compliance context (SCE, contractor classification, Balady, Saudi Building Code, ZATCA e-invoicing, Nitaqat) that off-the-shelf US software ignores.
       </p>
     </header>
 
@@ -74,7 +74,7 @@ const arUrl = new URL('/sa/ar/', Astro.site).toString();
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See Saudi vendors compared side by side — a clear verdict, pros and cons, Saudi-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See Saudi vendors compared side by side: a clear verdict, pros and cons, Saudi-specific notes, and pricing, head to head.</p>
       </div>
       <a href="/sa/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare Saudi vendors →</a>
     </section>
@@ -83,7 +83,7 @@ const arUrl = new URL('/sa/ar/', Astro.site).toString();
       <div>
         <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">✅ Compliance guide · Wave 24 closed 30 June 2026</p>
         <h2 class="mt-1 text-base font-bold text-slate-900">ZATCA Phase 2 e-invoicing for construction companies</h2>
-        <p class="mt-1 text-sm text-slate-700">Wave 24 (SAR 375k threshold) has closed — it reached every VAT-registered business, and no later wave is announced yet. What Fatoora integration requires, how progress claims and retention are handled — and which platforms are actually ZATCA-ready.</p>
+        <p class="mt-1 text-sm text-slate-700">Wave 24 (SAR 375k threshold) has closed; it reached every VAT-registered business, and no later wave is announced yet. What Fatoora integration requires, how progress claims and retention are handled, and which platforms are actually ZATCA-ready.</p>
       </div>
       <a href="/sa/guides/zatca-e-invoicing-contractors/" class="shrink-0 rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Read the guide →</a>
     </section>
@@ -91,7 +91,7 @@ const arUrl = new URL('/sa/ar/', Astro.site).toString();
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What's different about choosing software in Saudi Arabia</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Saudi construction software selection has structural differences from the US. First, <strong>ZATCA e-invoicing (Fatoora) is mandatory</strong> — invoicing software must integrate with ZATCA's platform (UUID, cryptographic stamp, QR, real-time clearance), so freeform US tools simply can't comply; you need a Phase-2-certified system. Second, software must be <strong>Arabic / RTL and Saudi-Riyal native</strong>, with 15% VAT handling. Third, <strong>contractor classification (Grades 1–6) and Etimad registration</strong> gate public-sector work, while <strong>Nitaqat Saudization</strong> (via Qiwa) ties your labour mix to your ability to win tenders and renew visas — concepts with no US equivalent. And the demand engine is unique: <strong>Vision 2030 giga-projects</strong> (NEOM, Red Sea, Qiddiya, ROSHN) increasingly mandate BIM and digital workflows down the whole supply chain.
+        Saudi construction software selection has structural differences from the US. First, <strong>ZATCA e-invoicing (Fatoora) is mandatory</strong>: invoicing software must integrate with ZATCA's platform (UUID, cryptographic stamp, QR, real-time clearance), so freeform US tools simply can't comply; you need a Phase-2-certified system. Second, software must be <strong>Arabic / RTL and Saudi-Riyal native</strong>, with 15% VAT handling. Third, <strong>contractor classification (Grades 1–6) and Etimad registration</strong> gate public-sector work, while <strong>Nitaqat Saudization</strong> (via Qiwa) ties your labour mix to your ability to win tenders and renew visas (concepts with no US equivalent). And the demand engine is unique: <strong>Vision 2030 giga-projects</strong> (NEOM, Red Sea, Qiddiya, ROSHN) increasingly mandate BIM and digital workflows down the whole supply chain.
       </p>
     </section>
 

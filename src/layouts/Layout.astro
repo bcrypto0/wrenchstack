@@ -38,7 +38,7 @@ const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toStri
 // PNG, not SVG: LinkedIn/X/Facebook do not render SVG og:images (the card shows blank).
 const ogImageUrl = ogImage ?? new URL('/og-default.png', Astro.site).toString();
 // Brand suffix only when the title doesn't already contain the brand AND the
-// result stays within Google's ~60-char SERP display — never push a title past
+// result stays within Google's ~60-char SERP display; never push a title past
 // the cut or repeat the brand twice.
 const TITLE_SUFFIX = ' | WrenchStack';
 const fullTitle = title.includes('WrenchStack')
@@ -53,7 +53,7 @@ const metaDescription = description.length > 160
   : description;
 const isHomepage = Astro.url.pathname === '/';
 
-// Country/region switcher — detect the active market from the URL path.
+// Country/region switcher: detect the active market from the URL path.
 const COUNTRIES = [
   { code: 'us', flag: '🇺🇸', label: 'United States', href: '/' },
   { code: 'uk', flag: '🇬🇧', label: 'United Kingdom', href: '/uk/' },
@@ -81,11 +81,11 @@ const currentCountry = COUNTRIES.find((c) => c.code === currentCountryCode) ?? C
 // Analytics. Both read from build env vars and stay completely inert until set,
 // so this is safe to ship before the IDs exist. Cloudflare Web Analytics is
 // cookieless (loads unconditionally). GA4 sets cookies, so it loads ONLY after
-// the visitor accepts the consent banner (GDPR/UK-GDPR — we now serve UK/IE/FR).
+// the visitor accepts the consent banner (GDPR/UK-GDPR: we now serve UK/IE/FR).
 // To activate: set PUBLIC_GA_ID (e.g. 'G-XXXXXXXXXX') and PUBLIC_CF_BEACON in the
 // Cloudflare build env, or hardcode the values here.
 const GA_MEASUREMENT_ID = import.meta.env.PUBLIC_GA_ID || 'G-S7V98KD153';
-// Cloudflare Web Analytics (RUM) site token — public by design (ships in HTML).
+// Cloudflare Web Analytics (RUM) site token: public by design (ships in HTML).
 // Site was created 2026-05-20 but auto-install never injected the beacon on
 // Workers-served pages, so we ship it ourselves. Overridable via env.
 const CF_BEACON_TOKEN = import.meta.env.PUBLIC_CF_BEACON || '4a623739a8db4cd4aeb0496f7859a4e2';
@@ -140,7 +140,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Favicons on tool/listing cards load from Google's s2 service — warm the connection early. -->
+    <!-- Favicons on tool/listing cards load from Google's s2 service; warm the connection early. -->
     <link rel="preconnect" href="https://www.google.com" />
     <link rel="dns-prefetch" href="https://www.google.com" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
@@ -267,7 +267,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
       {affiliate && (
         <div class="border-b border-amber-200/70 bg-amber-50/60">
           <p class="mx-auto max-w-6xl px-4 py-2 text-xs text-slate-600">
-            Some links on this page are affiliate links — WrenchStack may earn a commission at no extra cost to you, which never affects our ratings or what we write. <a href="/disclosure/" class="font-medium underline hover:text-slate-900">How we make money</a>.
+            Some links on this page are affiliate links; WrenchStack may earn a commission at no extra cost to you, which never affects our ratings or what we write. <a href="/disclosure/" class="font-medium underline hover:text-slate-900">How we make money</a>.
           </p>
         </div>
       )}
@@ -360,7 +360,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
           <span>Independent · no pay-to-play. WrenchStack may earn affiliate commissions from some links, which never affect our ratings or reviews. <a href="/disclosure/" class="text-slate-700 hover:underline">Affiliate disclosure</a> · <a href="/methodology/" class="text-slate-700 hover:underline">WrenchStack Fit Score™ Methodology v1.0</a></span>
         </div>
         <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
-          <span>© {new Date().getFullYear()} WrenchStack — independent research publication.</span>
+          <span>© {new Date().getFullYear()} WrenchStack. Independent research publication.</span>
           <a href="/privacy/" class="hover:text-slate-900">Privacy</a>
           <a href="/terms/" class="hover:text-slate-900">Terms</a>
           <a href="/disclosure/" class="hover:text-slate-900">Affiliate disclosure</a>
@@ -370,7 +370,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
     </footer>
 
     <script>
-      // Sitewide search — fetches /search-index.json on first focus, then
+      // Sitewide search: fetches /search-index.json on first focus, then
       // filters client-side on each keypress. Detects "X vs Y" queries
       // and constructs the comparison URL on the fly.
       (() => {
@@ -627,7 +627,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
     <script>
       // Geo-banner: detect the visitor's country via Cloudflare's free /cdn-cgi/trace and, if we
       // cover that market and they're not already on it, offer the local directory. Client-side +
-      // dismissible, so it never affects Googlebot (which sees the default page) — SEO-safe.
+      // dismissible, so it never affects Googlebot (which sees the default page): SEO-safe.
       (() => {
         const banner = document.getElementById('geo-banner');
         const textEl = document.getElementById('geo-banner-text');

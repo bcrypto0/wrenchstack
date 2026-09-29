@@ -24,8 +24,8 @@ const marketsData = order.map((code) => ({
 }));
 const totalCerts = marketsData.reduce((n, m) => n + m.certs.length, 0);
 
-const pageTitle = 'Trades Certification & Licensing by Country (2026) — UK, Australia, Canada, NZ, Ireland, South Africa';
-const pageDescription = `The trade-certification and licensing bodies that matter across ${marketsData.length} markets — ${totalCerts} schemes covering gas, electrical, plumbing, and building work. Which are legally mandatory, who runs them, and how to verify a licence.`;
+const pageTitle = 'Trades Certification & Licensing by Country (2026): UK, Australia, Canada, NZ, Ireland, South Africa';
+const pageDescription = `The trade-certification and licensing bodies that matter across ${marketsData.length} markets: ${totalCerts} schemes covering gas, electrical, plumbing, and building work. Which are legally mandatory, who runs them, and how to verify a licence.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -53,7 +53,7 @@ const itemListSchema = {
         Trades Certification &amp; Licensing by Country
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Unlike software or insurance, trade certification is often a legal requirement, not a competitive edge — and the rules differ sharply by country (and sometimes by state or province). This is the map of the {totalCerts} key certification and licensing bodies across the {marketsData.length} English-speaking markets we cover, for gas, electrical, plumbing, and building work. Each links to a full breakdown and the official body.
+        Unlike software or insurance, trade certification is often a legal requirement, not a competitive edge, and the rules differ sharply by country (and sometimes by state or province). This is the map of the {totalCerts} key certification and licensing bodies across the {marketsData.length} English-speaking markets we cover, for gas, electrical, plumbing, and building work. Each links to a full breakdown and the official body.
       </p>
     </header>
 
@@ -70,7 +70,7 @@ const itemListSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-2 text-base font-bold text-slate-900">Why certification works differently abroad</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        In most of these markets, gas, electrical, and (often) plumbing work for hire is restricted to licensed or registered practitioners — doing it unlicensed is a criminal offense, not just a reputational risk. The schemes also double as consumer-trust signals: homeowners are taught to check for the Gas Safe, NICEIC, RGI, ECRA/ESA, or equivalent registration before hiring. A few schemes (like Canada's Red Seal or the HVAC institute HRAI) are about portable qualification and industry standing rather than a legal licence. The US is the outlier: there is no single national trades-licensing body — it is regulated state by state.
+        In most of these markets, gas, electrical, and (often) plumbing work for hire is restricted to licensed or registered practitioners; doing it unlicensed is a criminal offense, not just a reputational risk. The schemes also double as consumer-trust signals: homeowners are taught to check for the Gas Safe, NICEIC, RGI, ECRA/ESA, or equivalent registration before hiring. A few schemes (like Canada's Red Seal or the HVAC institute HRAI) are about portable qualification and industry standing rather than a legal licence. The US is the outlier: there is no single national trades-licensing body; it is regulated state by state.
       </p>
     </section>
 

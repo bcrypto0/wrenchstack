@@ -13,17 +13,17 @@ interface FrVendor {
 const vendors = (frData as { vendors: FrVendor[] }).vendors;
 const categories = ['software', 'lead-gen', 'payroll', 'insurance', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'software': { label: 'Devis-facture & job-management software', description: 'French-native BTP tools for quotes (devis), invoicing (factures) and worksite tracking — Obat and Tolteck for artisans, EBP and Batappli for fuller coverage, Organilog for maintenance rounds — all built around multi-rate TVA (20/10/5.5).' },
-  'lead-gen': { label: 'Lead generation', description: 'French renovation marketplaces connecting homeowners to artisans — Habitatpresto (subscription, no commission), Quotatis (backed by Leroy Merlin), and the energy-renovation/RGE-angled Allotravaux.' },
-  'payroll': { label: 'Payroll (paie)', description: 'URSSAF-compliant payroll for small French firms — PayFit direct-to-business, Silae via your expert-comptable, plus EBP and Sage. Check BTP specifics (caisses CIBTP) for building crews.' },
-  'insurance': { label: 'Insurance — décennale & RC Pro', description: 'Mandatory ten-year decennial cover and pro liability — SMABTP (the historic BTP mutual), the per-trade specialist April, online insurtech Orus, plus AXA and MAAF.' },
-  'certification': { label: 'Compliance & qualifications', description: 'What French artisans must navigate — the facturation électronique mandate, mandatory assurance décennale, RGE for subsidised work, multi-rate TVA, URSSAF/micro-entrepreneur, CMA registration and trade qualifications.' },
+  'software': { label: 'Devis-facture & job-management software', description: 'French-native BTP tools for quotes (devis), invoicing (factures) and worksite tracking: Obat and Tolteck for artisans, EBP and Batappli for fuller coverage, Organilog for maintenance rounds, all built around multi-rate TVA (20/10/5.5).' },
+  'lead-gen': { label: 'Lead generation', description: 'French renovation marketplaces connecting homeowners to artisans: Habitatpresto (subscription, no commission), Quotatis (backed by Leroy Merlin), and the energy-renovation/RGE-angled Allotravaux.' },
+  'payroll': { label: 'Payroll (paie)', description: 'URSSAF-compliant payroll for small French firms: PayFit direct-to-business, Silae via your expert-comptable, plus EBP and Sage. Check BTP specifics (caisses CIBTP) for building crews.' },
+  'insurance': { label: 'Insurance: décennale & RC Pro', description: 'Mandatory ten-year decennial cover and pro liability: SMABTP (the historic BTP mutual), the per-trade specialist April, online insurtech Orus, plus AXA and MAAF.' },
+  'certification': { label: 'Compliance & qualifications', description: 'What French artisans must navigate: the facturation électronique mandate, mandatory assurance décennale, RGE for subsidised work, multi-rate TVA, URSSAF/micro-entrepreneur, CMA registration and trade qualifications.' },
 };
 const vendorsByCategory: Record<string, FrVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
-const pageTitle = 'France Trades Software & Services (Artisans du Bâtiment) — WrenchStack';
-const pageDescription = `Independent directory of ${vendors.length} vendors for French tradespeople: devis-facture software, renovation lead-gen, URSSAF payroll, mandatory décennale insurance — plus the facturation électronique, RGE, multi-rate TVA and CMA compliance every artisan must handle.`;
+const pageTitle = 'France Trades Software & Services (Artisans du Bâtiment) | WrenchStack';
+const pageDescription = `Independent directory of ${vendors.length} vendors for French tradespeople: devis-facture software, renovation lead-gen, URSSAF payroll, mandatory décennale insurance, plus the facturation électronique, RGE, multi-rate TVA and CMA compliance every artisan must handle.`;
 const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'France', url: '/fr/' } ];
 const enUrl = new URL('/fr/', Astro.site).toString();
 const frUrl = new URL('/fr/fr/', Astro.site).toString();
@@ -40,7 +40,7 @@ const frUrl = new URL('/fr/fr/', Astro.site).toString();
       </div>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">France Trades Software & Services Directory</h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} France-relevant vendors for artisans du bâtiment — French-native devis-facture software (Obat, Tolteck, EBP), renovation lead-gen (Habitatpresto, Quotatis), URSSAF payroll (PayFit, Silae) and mandatory décennale insurance (SMABTP, April, Orus) — built around the local realities: the facturation électronique mandate, multi-rate TVA, RGE for subsidised work, and the micro-entrepreneur regime.
+        Independent reviews of {vendors.length} France-relevant vendors for artisans du bâtiment: French-native devis-facture software (Obat, Tolteck, EBP), renovation lead-gen (Habitatpresto, Quotatis), URSSAF payroll (PayFit, Silae) and mandatory décennale insurance (SMABTP, April, Orus), built around the local realities: the facturation électronique mandate, multi-rate TVA, RGE for subsidised work, and the micro-entrepreneur regime.
       </p>
     </header>
 
@@ -75,7 +75,7 @@ const frUrl = new URL('/fr/fr/', Astro.site).toString();
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See French vendors compared side by side — a clear verdict, pros and cons, France-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See French vendors compared side by side: a clear verdict, pros and cons, France-specific notes, and pricing, head to head.</p>
       </div>
       <a href="/fr/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare French vendors →</a>
     </section>
@@ -83,7 +83,7 @@ const frUrl = new URL('/fr/fr/', Astro.site).toString();
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What's different about running a trades business in France</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        French artisan software selection has structural differences from the US or UK. First, <strong>structured e-invoicing is becoming mandatory</strong> — from 1 September 2026 every business must be able to receive e-invoices, and from 1 September 2027 SMEs and micro-entreprises must issue them through an approved platform (PDP); the planned free public portal was scrapped, so software choice now carries compliance weight. Second, <strong>assurance décennale is mandatory</strong> — ten-year structural liability under the Loi Spinetta, required before a worksite opens, with a criminal penalty for working without it — and French clients expect your insurer and policy number on the quote. Third, <strong>TVA is multi-rate</strong> (20% standard, 10% renovation, 5.5% energy-renovation), so software must apply the right rate per line. Fourth, <strong>RGE certification</strong> is commercially essential: only RGE-qualified artisans let their clients claim MaPrimeRénov' and other renovation subsidies. And most solo tradespeople run as <strong>micro-entrepreneurs</strong>, with a VAT franchise and the "TVA non applicable, art. 293 B" invoice mention.
+        French artisan software selection has structural differences from the US or UK. First, <strong>structured e-invoicing is becoming mandatory</strong>: from 1 September 2026 every business must be able to receive e-invoices, and from 1 September 2027 SMEs and micro-entreprises must issue them through an approved platform (PDP); the planned free public portal was scrapped, so software choice now carries compliance weight. Second, <strong>assurance décennale is mandatory</strong>: ten-year structural liability under the Loi Spinetta, required before a worksite opens, with a criminal penalty for working without it. And French clients expect your insurer and policy number on the quote. Third, <strong>TVA is multi-rate</strong> (20% standard, 10% renovation, 5.5% energy-renovation), so software must apply the right rate per line. Fourth, <strong>RGE certification</strong> is commercially essential: only RGE-qualified artisans let their clients claim MaPrimeRénov' and other renovation subsidies. And most solo tradespeople run as <strong>micro-entrepreneurs</strong>, with a VAT franchise and the "TVA non applicable, art. 293 B" invoice mention.
       </p>
     </section>
 

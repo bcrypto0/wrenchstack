@@ -14,17 +14,17 @@ interface ZaVendor {
 const vendors = (zaData as { vendors: ZaVendor[] }).vendors;
 const categories = ['software', 'lead-gen', 'payroll', 'insurance', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'software': { label: 'Job management & trades software', description: 'SA-native platforms (ServCraft — with solar & electrical editions, Field Service Cloud, Odyssey) alongside globals with real ZAR pricing (Tradify, ServiceM8) and offline-capable options (Eworks Manager) — plus free solar design tooling (OpenSolar) for the installer boom.' },
+  'software': { label: 'Job management & trades software', description: 'SA-native platforms (ServCraft, with solar & electrical editions; Field Service Cloud; Odyssey) alongside globals with real ZAR pricing (Tradify, ServiceM8) and offline-capable options (Eworks Manager), plus free solar design tooling (OpenSolar) for the installer boom.' },
   'lead-gen': { label: 'Lead generation', description: 'Kandua (SA’s biggest home-services marketplace, Santam-owned), pay-per-lead platforms with published pricing (ProCompare, R40–R150/lead), high-volume Snupit, and free-listing Uptasker.' },
   'payroll': { label: 'Payroll', description: 'SARS-compliance-first payroll: SimplePay (auto EMP201/UIF, e@syFile), PaySpace by Deel (EMP501/COIDA depth) and Sage Payroll SA (one-click submissions, published entry pricing).' },
-  'insurance': { label: 'Business insurance', description: 'Contractor-grade cover: Santam (Contractors’ All Risks, defective-workmanship liability), direct SME options (MiWay, Old Mutual iWYZE — which explicitly targets tradespeople), King Price and Hollard via brokers.' },
+  'insurance': { label: 'Business insurance', description: 'Contractor-grade cover: Santam (Contractors’ All Risks, defective-workmanship liability), direct SME options (MiWay, Old Mutual iWYZE, which explicitly targets tradespeople), King Price and Hollard via brokers.' },
   'certification': { label: 'Licensing & compliance', description: 'What’s legally required vs voluntary: DoEL electrical registration + CoCs, SAQCC Gas, PIRB plumbing CoCs, CIDB grading (the gate to public work), NHBRC for home builders, SARS (VAT/EMP201), and the COIDA Letter of Good Standing sites demand.' },
 };
 const vendorsByCategory: Record<string, ZaVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
-const pageTitle = 'South Africa Trades Software & Services — WrenchStack';
-const pageDescription = `Independent directory of ${vendors.length} South African trades vendors: job-management software (incl. the solar-installer boom), lead-gen marketplaces, SARS-compliant payroll, contractor insurance — plus the PIRB, DoEL, SAQCC Gas, CIDB, NHBRC and COIDA compliance every SA trades business navigates.`;
+const pageTitle = 'South Africa Trades Software & Services | WrenchStack';
+const pageDescription = `Independent directory of ${vendors.length} South African trades vendors: job-management software (incl. the solar-installer boom), lead-gen marketplaces, SARS-compliant payroll, contractor insurance, plus the PIRB, DoEL, SAQCC Gas, CIDB, NHBRC and COIDA compliance every SA trades business navigates.`;
 const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'South Africa', url: '/za/' } ];
 ---
 <Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} alternateUrls={EN_MARKET_HREFLANG}>
@@ -36,7 +36,7 @@ const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'South Africa', url: '
       </div>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">South Africa Trades Software & Services Directory</h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} South Africa-relevant vendors — job management (with SA-native options like ServCraft and real ZAR pricing from the globals), lead-gen marketplaces, SARS-compliant payroll and contractor insurance — built around the local realities: Certificates of Compliance, CIDB grading, EMP201 deadlines, and the solar-installation industry the load-shedding era created.
+        Independent reviews of {vendors.length} South Africa-relevant vendors: job management (with SA-native options like ServCraft and real ZAR pricing from the globals), lead-gen marketplaces, SARS-compliant payroll and contractor insurance, all built around the local realities: Certificates of Compliance, CIDB grading, EMP201 deadlines, and the solar-installation industry the load-shedding era created.
       </p>
     </header>
 
@@ -62,7 +62,7 @@ const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'South Africa', url: '
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See SA vendors compared side by side — a clear verdict, pros and cons, SA-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See SA vendors compared side by side: a clear verdict, pros and cons, SA-specific notes, and pricing, head to head.</p>
       </div>
       <a href="/za/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare SA vendors →</a>
     </section>
@@ -70,7 +70,7 @@ const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'South Africa', url: '
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What's different about running a trades business in South Africa</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Three structural differences shape SA vendor selection. First, <strong>Certificates of Compliance run the trades</strong>: electrical CoCs (DoEL-registered persons only — required on every installation and property transfer), gas CoCs (SAQCC Gas practitioners; unregistered work voids home insurance) and PIRB plumbing CoCs for geysers and solar water heaters — software that numbers and tracks CoCs per job is a genuinely local need. Second, <strong>compliance documents gate the work</strong>: a CIDB grade (1–9) caps the public tenders you can bid, NHBRC registration is criminal-sanction-mandatory for home builders, and an annually renewed COIDA Letter of Good Standing is a de-facto site-access pass. Third, <strong>SARS sets the rhythm</strong> — 15% VAT (compulsory only above R2.3m turnover from April 2026), monthly EMP201 within 7 days of month-end, and a Peppol-based e-invoicing mandate phasing in around 2026–2028. And the market's big structural story: the load-shedding era built a <strong>solar-installation industry</strong> — rooftop PV up ~215% since 2022 to ~7.5 GW, 18,000+ jobs — that now buys trades software like any other vertical.
+        Three structural differences shape SA vendor selection. First, <strong>Certificates of Compliance run the trades</strong>: electrical CoCs (DoEL-registered persons only; required on every installation and property transfer), gas CoCs (SAQCC Gas practitioners; unregistered work voids home insurance) and PIRB plumbing CoCs for geysers and solar water heaters; software that numbers and tracks CoCs per job is a genuinely local need. Second, <strong>compliance documents gate the work</strong>: a CIDB grade (1–9) caps the public tenders you can bid, NHBRC registration is criminal-sanction-mandatory for home builders, and an annually renewed COIDA Letter of Good Standing is a de-facto site-access pass. Third, <strong>SARS sets the rhythm</strong>: 15% VAT (compulsory only above R2.3m turnover from April 2026), monthly EMP201 within 7 days of month-end, and a Peppol-based e-invoicing mandate phasing in around 2026–2028. And the market's big structural story: the load-shedding era built a <strong>solar-installation industry</strong> (rooftop PV up ~215% since 2022 to ~7.5 GW, 18,000+ jobs) that now buys trades software like any other vertical.
       </p>
     </section>
 

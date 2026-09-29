@@ -7,7 +7,7 @@ import MissingFromList from '../../components/MissingFromList.astro';
 const grouped = bankingByFocus();
 
 const pageTitle = `Best Business Banking for Contractors & Trades (2026)`;
-const pageDescription = `Independent comparison of business banking for contractors — Found, Novo, Relay, Bluevine — by focus (self-employed vs business checking vs banking + credit). Real fees, APYs, and the cash-deposit and account-freeze caveats most reviews skip.`;
+const pageDescription = `Independent comparison of business banking for contractors (Found, Novo, Relay, Bluevine) by focus (self-employed vs business checking vs banking + credit). Real fees, APYs, and the cash-deposit and account-freeze caveats most reviews skip.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -42,21 +42,21 @@ const itemListSchema = {
         Best Business Banking for Contractors & Trades (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        The right business account separates your money from your taxes, earns interest on reserves, and — for some — comes with a credit line. We compare the fintech banking platforms trades use, by what they're built for, with the caveats most reviews skip: cash deposits and account freezes.
+        The right business account separates your money from your taxes, earns interest on reserves, and, for some, comes with a credit line. We compare the fintech banking platforms trades use, by what they're built for, with the caveats most reviews skip: cash deposits and account freezes.
       </p>
     </header>
 
     <section class="mb-10 rounded-lg border-l-4 border-orange-500 bg-orange-50/40 p-5">
       <p class="text-xs font-bold uppercase tracking-wider text-orange-600">The short answer</p>
       <p class="mt-2 text-slate-800 leading-relaxed">
-        Fintech business accounts like <a href="/banking/mercury/" class="font-semibold text-orange-700 hover:underline">Mercury</a> and <a href="/banking/relay/" class="font-semibold text-orange-700 hover:underline">Relay</a> separate your money from your taxes and earn interest on reserves — but two honest caveats decide this category: most fintechs <strong>don't handle cash deposits</strong> well (if your trade still takes cash, keep a traditional bank too), and they can <strong>freeze accounts</strong> for risk review, so never run your <em>only</em> operating account on one. Pick by what you actually need — multiple sub-accounts for job costing, a built-in credit line, or the highest yield — and always keep a backup account and a cash buffer. No vendor pays for placement.
+        Fintech business accounts like <a href="/banking/mercury/" class="font-semibold text-orange-700 hover:underline">Mercury</a> and <a href="/banking/relay/" class="font-semibold text-orange-700 hover:underline">Relay</a> separate your money from your taxes and earn interest on reserves, but two honest caveats decide this category: most fintechs <strong>don't handle cash deposits</strong> well (if your trade still takes cash, keep a traditional bank too), and they can <strong>freeze accounts</strong> for risk review, so never run your <em>only</em> operating account on one. Pick by what you actually need (multiple sub-accounts for job costing, a built-in credit line, or the highest yield) and always keep a backup account and a cash buffer. No vendor pays for placement.
       </p>
     </section>
 
     <section class="mb-10 rounded-lg border-2 border-amber-200 bg-amber-50 p-6">
       <h2 class="mb-2 text-base font-bold text-amber-900">Two things to know before you switch</h2>
       <p class="text-sm text-amber-900 leading-relaxed">
-        <strong>1. Cash deposits:</strong> these are fintechs (FDIC-insured via partner banks), and most do <em>not</em> handle cash deposits well. If your trade still takes cash, you'll likely need a traditional bank too. <strong>2. Account freezes:</strong> fintech-banking platforms periodically freeze accounts for risk review (Bluevine's pattern is especially well-documented). Funds stay FDIC-insured, but never run your <em>only</em> operating account on one of these — keep a backup and a cash buffer.
+        <strong>1. Cash deposits:</strong> these are fintechs (FDIC-insured via partner banks), and most do <em>not</em> handle cash deposits well. If your trade still takes cash, you'll likely need a traditional bank too. <strong>2. Account freezes:</strong> fintech-banking platforms periodically freeze accounts for risk review (Bluevine's pattern is especially well-documented). Funds stay FDIC-insured, but never run your <em>only</em> operating account on one of these; keep a backup and a cash buffer.
       </p>
     </section>
 
@@ -106,11 +106,11 @@ const itemListSchema = {
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Founded</dt>
-                    <dd class="font-semibold text-slate-900">{p.founded ?? '—'}</dd>
+                    <dd class="font-semibold text-slate-900">{p.founded ?? 'n/a'}</dd>
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Trustpilot</dt>
-                    <dd class="font-semibold text-slate-900">{p.ratings.trustpilot !== null ? `${p.ratings.trustpilot.toFixed(1)} / 5` : '—'}</dd>
+                    <dd class="font-semibold text-slate-900">{p.ratings.trustpilot !== null ? `${p.ratings.trustpilot.toFixed(1)} / 5` : 'n/a'}</dd>
                   </div>
                 </dl>
 
@@ -132,7 +132,7 @@ const itemListSchema = {
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Where to start</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        Solo/1099 operator who dreads taxes? <strong>Found</strong> (auto tax set-aside + bookkeeping). Want disciplined cash management (Profit First)? <strong>Relay</strong> (up to 20 accounts). Want the simplest free checking? <strong>Novo</strong>. Want real APY plus a credit line? <strong>Bluevine</strong> — but keep a backup given its freeze pattern. And if you take meaningful cash, pair any of these with a traditional bank.
+        Solo/1099 operator who dreads taxes? <strong>Found</strong> (auto tax set-aside + bookkeeping). Want disciplined cash management (Profit First)? <strong>Relay</strong> (up to 20 accounts). Want the simplest free checking? <strong>Novo</strong>. Want real APY plus a credit line? <strong>Bluevine</strong>, but keep a backup given its freeze pattern. And if you take meaningful cash, pair any of these with a traditional bank.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/banking/relay/" class="rounded-md bg-emerald-500 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-600">See Relay →</a>

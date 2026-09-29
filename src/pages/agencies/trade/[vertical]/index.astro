@@ -15,7 +15,7 @@ interface Props { verticalSlug: string; }
 const { verticalSlug } = Astro.props;
 const vertical = getVertical(verticalSlug)!;
 
-// Match agencies to this vertical — specialty agencies first, then home-services generalists
+// Match agencies to this vertical: specialty agencies first, then home-services generalists
 const matched = marketingAgencies.filter(
   (a) => a.verticals_specialty.includes(verticalSlug) || a.agency_type === 'home-services-focus' || a.agency_type === 'generalist'
 );
@@ -24,7 +24,7 @@ const byTier: Record<'S' | 'A' | 'F', MarketingAgency[]> = { S: [], A: [], F: []
 for (const a of matched) byTier[agencyTier(a)].push(a);
 
 const pageTitle = `Best Marketing Agencies for ${vertical.name} Contractors (2026)`;
-const pageDescription = `Independent reviews of marketing agencies serving ${vertical.name.toLowerCase()} contractors specifically — trade specialists, home-services generalists, and honest reputation warnings on Townsquare Interactive and Marketing 360.`;
+const pageDescription = `Independent reviews of marketing agencies serving ${vertical.name.toLowerCase()} contractors specifically: trade specialists, home-services generalists, and honest reputation warnings on Townsquare Interactive and Marketing 360.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -60,7 +60,7 @@ const faqs = [
   },
   {
     q: `What does a typical marketing retainer cost for ${vertical.name.toLowerCase()}?`,
-    a: 'Most trade-specific specialists run $1,500-$8,000/mo retainer ranges. Home-services generalists run similar pricing. Enterprise agencies (such as Scorpion) run $5,000-$25,000/mo. Cost-to-acquired-customer math typically lands at $200-$600 per closed job for shops in the recommended-agency tier — far better than DIY marketing for most operators.',
+    a: 'Most trade-specific specialists run $1,500-$8,000/mo retainer ranges. Home-services generalists run similar pricing. Enterprise agencies (such as Scorpion) run $5,000-$25,000/mo. Cost-to-acquired-customer math typically lands at $200-$600 per closed job for shops in the recommended-agency tier, far better than DIY marketing for most operators.',
   },
   {
     q: `Should I avoid Townsquare Interactive and Marketing 360?`,

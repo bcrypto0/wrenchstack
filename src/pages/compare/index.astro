@@ -24,7 +24,7 @@ for (let i = 0; i < tools.length; i++) {
   }
 }
 
-// Featured comparisons — curated list of highest-search-volume pairs.
+// Featured comparisons: curated list of highest-search-volume pairs.
 const featuredSlugPairs: [string, string][] = [
   ['jobber', 'housecall-pro'],
   ['jobber', 'servicetitan'],
@@ -75,7 +75,7 @@ const breadcrumbs = [
 ---
 
 <Layout
-  title={`Compare trades software side-by-side — ${pairs.length} head-to-head comparisons`}
+  title={`Compare trades software side-by-side: ${pairs.length} head-to-head comparisons`}
   description={`${pairs.length} head-to-head comparisons of trades software. Decision matrix, pricing side-by-side, pros and cons, implementation timelines. Updated ${new Date().getFullYear()}.`}
   breadcrumbs={breadcrumbs}
 >
@@ -115,7 +115,7 @@ const breadcrumbs = [
             Don't see your specific matchup? Build a custom 2-5 tool comparison.
           </h2>
           <p class="mt-2 text-sm text-slate-700">
-            The pre-built pages cover most-searched pairings. The interactive builder lets you pick any combination from {pairs.length === 0 ? '59' : 'all'} tools — pricing, freshness, integrations, ratings side-by-side, instantly.
+            The pre-built pages cover most-searched pairings. The interactive builder lets you pick any combination from all {tools.length} tools: pricing, freshness, integrations, ratings side-by-side, instantly.
           </p>
         </div>
         <a
@@ -130,7 +130,7 @@ const breadcrumbs = [
     <section id="featured" class="mb-16 scroll-mt-8">
       <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Most popular comparisons</h2>
       <p class="mb-6 text-slate-600">
-        The most-searched matchups in trades software — the comparisons buyers actually look up when deciding.
+        The most-searched matchups in trades software: the comparisons buyers actually look up when deciding.
       </p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {featuredPairs.map(({ a, b }) => {
@@ -158,7 +158,7 @@ const breadcrumbs = [
     <section id="by-trade" class="mb-16 scroll-mt-8">
       <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Browse by trade</h2>
       <p class="mb-6 text-slate-600">
-        Top-rated comparisons within each trade — the head-to-head matchups most relevant when both tools serve the same vertical.
+        Top-rated comparisons within each trade: the head-to-head matchups most relevant when both tools serve the same vertical.
       </p>
       <div class="space-y-10">
         {pairsByVertical.map(({ vertical, pairs: verticalPairs }) => (

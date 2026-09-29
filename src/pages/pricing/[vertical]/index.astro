@@ -85,15 +85,15 @@ const faqs = [
           : `${cheapestPublic.name} at ${formatPrice(cheapestPublic)} is the cheapest paid option with full features. There's no genuinely free option in this category for established businesses.`)
       : (freeTier
           ? `${freeTier.name} offers a free tier. Most other ${verticalLower} platforms in this category are custom-quoted rather than publicly priced, so request quotes to compare full-featured options.`
-          : `Most ${verticalLower} platforms in this category are custom-quoted rather than publicly priced — request quotes from the vendors to compare. See the pricing table above for what each publishes.`),
+          : `Most ${verticalLower} platforms in this category are custom-quoted rather than publicly priced; request quotes from the vendors to compare. See the pricing table above for what each publishes.`),
   },
   {
-    q: `Per-user pricing vs flat-rate pricing — which is better?`,
+    q: `Per-user pricing vs flat-rate pricing: which is better?`,
     a: 'Per-user pricing (like Jobber, ServiceTitan, Workiz) starts cheap but scales painfully as you hire. Flat-rate per-company pricing (Service Fusion, RazorSync) starts higher but stays predictable. Rough breakeven: per-user wins below 5 techs, flat-rate wins above 8 techs. Calculate at your projected team size 12 months out, not today.',
   },
   {
     q: `Are these prices verified?`,
-    a: `Yes. Every pricing tier on this page has a "verified" date — we re-check pricing quarterly by visiting each vendor's public pricing page and (where applicable) requesting current quotes. Pricing older than 90 days gets flagged. See our methodology page for details.`,
+    a: `Yes. Every pricing tier on this page has a "verified" date; we re-check pricing quarterly by visiting each vendor's public pricing page and (where applicable) requesting current quotes. Pricing older than 90 days gets flagged. See our methodology page for details.`,
   },
   {
     q: `Why don't some tools show pricing?`,
@@ -184,9 +184,9 @@ const breadcrumbs = [
                     {isFree ? 'Free tier' : isCustom ? 'Custom' : `$${t.pricing.starting_at_usd}/mo`}
                   </td>
                   <td class="p-3 text-slate-600 text-xs">
-                    {t.pricing.pricing_note ?? (isCustom ? 'Custom quote — request from vendor' : 'Per-user/month (typical)')}
+                    {t.pricing.pricing_note ?? (isCustom ? 'Custom quote: request from vendor' : 'Per-user/month (typical)')}
                   </td>
-                  <td class="p-3 text-slate-600">{trial && trial > 0 ? `${trial} days` : '—'}</td>
+                  <td class="p-3 text-slate-600">{trial && trial > 0 ? `${trial} days` : '-'}</td>
                   <td class="p-3 text-slate-500 text-xs">{t.pricing.verified_date}</td>
                 </tr>
               );
@@ -210,7 +210,7 @@ const breadcrumbs = [
                 <a href={`/tools/${entryBest.slug}/`} class="hover:text-orange-600">{entryBest.name}</a>
               </h3>
               <div class="mt-1 text-sm text-slate-700">
-                {formatPrice(entryBest)} · {aggregateRating(entryBest)?.toFixed(1) ?? '—'} / 5
+                {formatPrice(entryBest)} · {aggregateRating(entryBest)?.toFixed(1) ?? '-'} / 5
               </div>
               <p class="mt-2 text-xs text-slate-600">{entryBest.best_for}</p>
             </div>
@@ -222,7 +222,7 @@ const breadcrumbs = [
                 <a href={`/tools/${midBest.slug}/`} class="hover:text-orange-600">{midBest.name}</a>
               </h3>
               <div class="mt-1 text-sm text-slate-700">
-                {formatPrice(midBest)} · {aggregateRating(midBest)?.toFixed(1) ?? '—'} / 5
+                {formatPrice(midBest)} · {aggregateRating(midBest)?.toFixed(1) ?? '-'} / 5
               </div>
               <p class="mt-2 text-xs text-slate-600">{midBest.best_for}</p>
             </div>
@@ -234,7 +234,7 @@ const breadcrumbs = [
                 <a href={`/tools/${enterpriseBest.slug}/`} class="hover:text-orange-600">{enterpriseBest.name}</a>
               </h3>
               <div class="mt-1 text-sm text-slate-700">
-                {formatPrice(enterpriseBest)} · {aggregateRating(enterpriseBest)?.toFixed(1) ?? '—'} / 5
+                {formatPrice(enterpriseBest)} · {aggregateRating(enterpriseBest)?.toFixed(1) ?? '-'} / 5
               </div>
               <p class="mt-2 text-xs text-slate-600">{enterpriseBest.best_for}</p>
             </div>
@@ -289,13 +289,13 @@ const breadcrumbs = [
       </p>
       <ul class="space-y-3 text-slate-700">
         <li>
-          <strong class="text-slate-900">Payment processing fees</strong> — Most FSM platforms charge 2.59-2.99% + $0.30 per credit card transaction (similar to Stripe). For $100K+/year card volume, standalone Stripe or Adyen can save 20-50 basis points. ACH is cheaper ($0.50-$1.00/transaction) but slower.
+          <strong class="text-slate-900">Payment processing fees</strong>: Most FSM platforms charge 2.59-2.99% + $0.30 per credit card transaction (similar to Stripe). For $100K+/year card volume, standalone Stripe or Adyen can save 20-50 basis points. ACH is cheaper ($0.50-$1.00/transaction) but slower.
         </li>
         <li>
           <strong class="text-slate-900">Implementation fees</strong>: Some platforms include setup in the subscription and others sell paid setup packages. Quote-only platforms (ServiceTitan, Procore, BuildOps) publish no implementation fee, so ask for it in the same written quote.
         </li>
         <li>
-          <strong class="text-slate-900">Add-on integrations and features</strong> — Consumer financing (Wisetack, FinanceIt), advanced GPS tracking, premium phone systems, additional users beyond tier limits, custom integrations — typically $20-$200/month each. Stack these carefully.
+          <strong class="text-slate-900">Add-on integrations and features</strong>: Consumer financing (Wisetack, FinanceIt), advanced GPS tracking, premium phone systems, additional users beyond tier limits, custom integrations, typically $20-$200/month each. Stack these carefully.
         </li>
       </ul>
     </section>

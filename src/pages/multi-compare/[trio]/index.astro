@@ -109,7 +109,7 @@ function getDecisionReasonsFor(t: Tool): string[] {
 
   // Cheapest of trio
   if (cheapest && cheapest.slug === t.slug && t.pricing.starting_at_usd !== null) {
-    reasons.push(`**Budget is the constraint** — ${t.name} has the lowest starting price among these three (${formatPrice(t)})`);
+    reasons.push(`**Budget is the constraint**: ${t.name} has the lowest starting price among these three (${formatPrice(t)})`);
   }
 
   // Highest rated
@@ -117,34 +117,34 @@ function getDecisionReasonsFor(t: Tool): string[] {
     const r = aggregateRating(t)!;
     const minOther = Math.min(...others.map(o => aggregateRating(o) ?? 0));
     if (r - minOther >= 0.2) {
-      reasons.push(`**Post-purchase satisfaction matters** — ${t.name} has the highest user rating in this trio (${r.toFixed(1)} / 5)`);
+      reasons.push(`**Post-purchase satisfaction matters**: ${t.name} has the highest user rating in this trio (${r.toFixed(1)} / 5)`);
     }
   }
 
   // QuickBooks
   if (aHasQB && others.some(o => !o.integrations.some(i => i.includes('quickbooks')))) {
-    reasons.push(`**QuickBooks is critical** — ${t.name} integrates natively; not all alternatives in this comparison do`);
+    reasons.push(`**QuickBooks is critical**: ${t.name} integrates natively; not all alternatives in this comparison do`);
   }
 
   // GLS
   if (aHasGLS && others.some(o => !o.integrations.some(i => i.includes('google_local_services')))) {
-    reasons.push(`**Google Local Services Ads drive inbound** — ${t.name} has native GLS integration`);
+    reasons.push(`**Google Local Services Ads drive inbound**: ${t.name} has native GLS integration`);
   }
 
   // Free trial advantage
   if (aHasTrial && others.every(o => !((o.pricing.free_trial_days ?? 0) > 0))) {
-    reasons.push(`**You want to try before buying** — ${t.name} offers a ${t.pricing.free_trial_days}-day free trial; the alternatives don't`);
+    reasons.push(`**You want to try before buying**: ${t.name} offers a ${t.pricing.free_trial_days}-day free trial; the alternatives don't`);
   }
 
   // Multi-vertical advantage
   if (others.every(o => t.verticals.length > o.verticals.length + 1)) {
-    reasons.push(`**You serve multiple trades** — ${t.name} covers ${t.verticals.length} verticals vs the alternatives' ${Math.max(...others.map(o => o.verticals.length))}`);
+    reasons.push(`**You serve multiple trades**: ${t.name} covers ${t.verticals.length} verticals vs the alternatives' ${Math.max(...others.map(o => o.verticals.length))}`);
   }
 
   // Unique features
   const unique = uniqueFeatures(t);
   if (unique.length > 0) {
-    reasons.push(`**You specifically need** ${unique.slice(0, 2).map(f => f.replace(/_/g, ' ')).join(' or ')} — only ${t.name} has ${unique.length === 1 ? 'it' : 'these'} in this comparison`);
+    reasons.push(`**You specifically need** ${unique.slice(0, 2).map(f => f.replace(/_/g, ' ')).join(' or ')}; only ${t.name} has ${unique.length === 1 ? 'it' : 'these'} in this comparison`);
   }
 
   return reasons.slice(0, 5);
@@ -155,20 +155,20 @@ const decisionMatrix = trioTools.map(t => ({ tool: t, reasons: getDecisionReason
 // FAQs
 const faqs = [
   {
-    q: `Which is best — ${a.name}, ${b.name}, or ${c.name}?`,
-    a: `Based on our WrenchStack Score, ${winner.name} ranks highest of the three for ${category.toLowerCase()}. But "best" depends on your specific buyer profile — see the decision matrix above for situation-specific guidance, the per-vertical winner table below if you serve a specific trade, or the cheapest/highest-rated quick callouts at the top.`,
+    q: `Which is best: ${a.name}, ${b.name}, or ${c.name}?`,
+    a: `Based on our WrenchStack Score, ${winner.name} ranks highest of the three for ${category.toLowerCase()}. But "best" depends on your specific buyer profile. See the decision matrix above for situation-specific guidance, the per-vertical winner table below if you serve a specific trade, or the cheapest/highest-rated quick callouts at the top.`,
   },
   {
     q: `What's the cheapest of the three?`,
     a: cheapest
-      ? `${cheapest.name} starts at ${formatPrice(cheapest)}, the lowest entry point of these three. Cheapest starting price isn't always cheapest total cost though — per-user pricing scales differently than per-company pricing as team size grows. Check the pricing table for tier-by-tier comparison.`
-      : `All three use custom-quote pricing — request quotes from each for accurate apples-to-apples comparison at your team size.`,
+      ? `${cheapest.name} starts at ${formatPrice(cheapest)}, the lowest entry point of these three. Cheapest starting price isn't always cheapest total cost though: per-user pricing scales differently than per-company pricing as team size grows. Check the pricing table for tier-by-tier comparison.`
+      : `All three use custom-quote pricing; request quotes from each for accurate apples-to-apples comparison at your team size.`,
   },
   {
     q: `Do they all integrate with QuickBooks?`,
     a: (() => {
       const withQb = trioTools.filter(t => t.integrations.some(i => i.includes('quickbooks')));
-      if (withQb.length === 3) return 'Yes — all three integrate with QuickBooks. Depth varies (one-way push vs two-way sync, QuickBooks Online vs Desktop support). Check each tool detail page for specifics.';
+      if (withQb.length === 3) return 'Yes, all three integrate with QuickBooks. Depth varies (one-way push vs two-way sync, QuickBooks Online vs Desktop support). Check each tool detail page for specifics.';
       if (withQb.length === 0) return 'None of the three integrate with QuickBooks natively. You\'ll need Zapier middleware or manual exports for accounting sync.';
       return `${withQb.length} of the 3 integrate with QuickBooks natively: ${withQb.map(t => t.name).join(', ')}. The remaining ${3 - withQb.length} require Zapier workarounds or don't support QB at all.`;
     })(),
@@ -187,7 +187,7 @@ const faqs = [
   },
   {
     q: `What if my team size is on the edge between these three?`,
-    a: `Pricing math changes meaningfully past 6-8 users for per-user platforms vs flat-rate platforms. If you're at 5-7 users today and growing, model the cost at your projected 12-18 month team size — not just today's. Flat-rate platforms (like Service Fusion) become meaningfully cheaper at scale; per-user platforms add up quickly. Run the actual numbers for your projected growth.`,
+    a: `Pricing math changes meaningfully past 6-8 users for per-user platforms vs flat-rate platforms. If you're at 5-7 users today and growing, model the cost at your projected 12-18 month team size, not just today's. Flat-rate platforms (like Service Fusion) become meaningfully cheaper at scale; per-user platforms add up quickly. Run the actual numbers for your projected growth.`,
   },
 ];
 
@@ -250,11 +250,11 @@ const breadcrumbs = [
               </div>
               <div class="flex justify-between">
                 <dt class="text-slate-500">User rating</dt>
-                <dd class="font-semibold text-slate-900">{r !== null ? `${r.toFixed(1)} / 5` : '—'}</dd>
+                <dd class="font-semibold text-slate-900">{r !== null ? `${r.toFixed(1)} / 5` : 'n/a'}</dd>
               </div>
               <div class="flex justify-between">
                 <dt class="text-slate-500">Best team size</dt>
-                <dd class="font-semibold text-slate-900">{t.best_team_size ?? '—'}</dd>
+                <dd class="font-semibold text-slate-900">{t.best_team_size ?? 'n/a'}</dd>
               </div>
               <div class="flex justify-between">
                 <dt class="text-slate-500">Free trial</dt>
@@ -288,14 +288,14 @@ const breadcrumbs = [
         </p>
         {cheapest && (
           <p class="mt-3 text-sm text-slate-600">
-            <strong>{cheapest.name}</strong> has the lowest entry price ({formatPrice(cheapest)}). <strong>{highestRated.name}</strong> has the highest user rating ({aggregateRating(highestRated)?.toFixed(1) ?? '—'} / 5). <strong>{winner.name}</strong> ranks highest on our combined WrenchStack Score.
+            <strong>{cheapest.name}</strong> has the lowest entry price ({formatPrice(cheapest)}). <strong>{highestRated.name}</strong> has the highest user rating ({aggregateRating(highestRated)?.toFixed(1) ?? '-'} / 5). <strong>{winner.name}</strong> ranks highest on our combined WrenchStack Score.
           </p>
         )}
       </div>
     </section>
 
     <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-bold text-slate-900">Decision matrix — which to pick</h2>
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Decision matrix: which to pick</h2>
       <div class="grid gap-4 md:grid-cols-3">
         {decisionMatrix.map(({ tool: t, reasons }) => (
           <div class="rounded-lg border border-slate-200 bg-white p-5">
@@ -334,7 +334,7 @@ const breadcrumbs = [
                 <tr>
                   <td class="p-3 font-semibold text-slate-900">Tier {i + 1}</td>
                   {trioTools.map((t, j) => (
-                    <td class="p-3 text-slate-700">{tiers[j] ? `${tiers[j]} — ${fmt(prices[j])}` : '—'}</td>
+                    <td class="p-3 text-slate-700">{tiers[j] ? `${tiers[j]}: ${fmt(prices[j])}` : '-'}</td>
                   ))}
                 </tr>
               );
@@ -355,7 +355,7 @@ const breadcrumbs = [
           ))}
         </div>
       ) : (
-        <p class="text-slate-600">No features are present in all three — these tools serve different buyer profiles.</p>
+        <p class="text-slate-600">No features are present in all three; these tools serve different buyer profiles.</p>
       )}
     </section>
 
@@ -372,7 +372,7 @@ const breadcrumbs = [
                   {unique.map(f => <li>+ {f.replace(/_/g, ' ')}</li>)}
                 </ul>
               ) : (
-                <p class="text-sm text-slate-500">— No exclusive features —</p>
+                <p class="text-sm text-slate-500">No exclusive features</p>
               )}
             </div>
           );
@@ -392,7 +392,7 @@ const breadcrumbs = [
               {sharedIntegrations.map(i => <li>✓ {i.replace(/_/g, ' ')}</li>)}
             </ul>
           ) : (
-            <p class="text-sm text-green-700">— No integrations are common across all three —</p>
+            <p class="text-sm text-green-700">No integrations are common across all three</p>
           )}
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">

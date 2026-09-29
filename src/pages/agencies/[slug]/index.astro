@@ -31,7 +31,7 @@ const breadcrumbs = [
 const tierMeta = {
   S: { label: 'Tier S', color: 'bg-emerald-100 text-emerald-900 ring-emerald-300' },
   A: { label: 'Tier A', color: 'bg-blue-100 text-blue-900 ring-blue-300' },
-  F: { label: 'Tier F — reputation warning applies', color: 'bg-rose-100 text-rose-900 ring-rose-300' },
+  F: { label: 'Tier F: reputation warning applies', color: 'bg-rose-100 text-rose-900 ring-rose-300' },
 };
 
 const serviceSchema = {
@@ -201,15 +201,15 @@ const faqSchema = {
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-4">
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <p class="text-xs uppercase tracking-wider text-slate-500">Google</p>
-          <p class="mt-1 text-2xl font-bold text-slate-900">{agency.ratings.google !== null ? `${agency.ratings.google.toFixed(1)} / 5` : '—'}</p>
+          <p class="mt-1 text-2xl font-bold text-slate-900">{agency.ratings.google !== null ? `${agency.ratings.google.toFixed(1)} / 5` : '-'}</p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <p class="text-xs uppercase tracking-wider text-slate-500">Trustpilot</p>
-          <p class="mt-1 text-2xl font-bold text-slate-900">{agency.ratings.trustpilot !== null ? `${agency.ratings.trustpilot.toFixed(1)} / 5` : '—'}</p>
+          <p class="mt-1 text-2xl font-bold text-slate-900">{agency.ratings.trustpilot !== null ? `${agency.ratings.trustpilot.toFixed(1)} / 5` : '-'}</p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <p class="text-xs uppercase tracking-wider text-slate-500">BBB</p>
-          <p class="mt-1 text-base font-semibold text-slate-900">{agency.ratings.bbb ?? '—'}</p>
+          <p class="mt-1 text-base font-semibold text-slate-900">{agency.ratings.bbb ?? '-'}</p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <p class="text-xs uppercase tracking-wider text-slate-500">Reddit</p>

@@ -25,17 +25,17 @@ const vendors = (caData as { vendors: CaVendor[] }).vendors;
 
 const categories = ['software', 'lead-gen', 'insurance', 'payroll', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'software': { label: 'Field service software', description: 'Jobber leads — Canadian-founded (Edmonton, 2011), the CA success story in trades software. Plus cross-market Housecall Pro and ServiceTitan with CA presence.' },
-  'lead-gen': { label: 'Lead-generation platforms', description: 'HomeStars dominates (owned by Angi/IAC — same corporate concerns apply). TrustedPros is the independent CA-only alternative.' },
-  'insurance': { label: 'Business insurance', description: 'CA-built insurance brokers — Zensurance leads with 100K+ businesses and 50+ insurer panel. APOLLO for 24/7 digital purchase. TruShield for trade-specialty focus.' },
-  'payroll': { label: 'Payroll software', description: 'CA-built payroll with Quebec capability — Wagepoint accessible at small scale, Payworks for mid-market, Knit People for modern UI.' },
+  'software': { label: 'Field service software', description: 'Jobber leads: Canadian-founded (Edmonton, 2011), the CA success story in trades software. Plus cross-market Housecall Pro and ServiceTitan with CA presence.' },
+  'lead-gen': { label: 'Lead-generation platforms', description: 'HomeStars dominates (owned by Angi/IAC; same corporate concerns apply). TrustedPros is the independent CA-only alternative.' },
+  'insurance': { label: 'Business insurance', description: 'CA-built insurance brokers: Zensurance leads with 100K+ businesses and 50+ insurer panel. APOLLO for 24/7 digital purchase. TruShield for trade-specialty focus.' },
+  'payroll': { label: 'Payroll software', description: 'CA-built payroll with Quebec capability: Wagepoint accessible at small scale, Payworks for mid-market, Knit People for modern UI.' },
   'certification': { label: 'National + provincial certifications', description: 'Red Seal Program is the national interprovincial standard (cross-province mobility). HRAI for HVAC industry recognition. TSSA for Ontario gas/elevator licensing.' },
 };
 
 const vendorsByCategory: Record<string, CaVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
-const pageTitle = 'CA Trades Vendor Directory — WrenchStack Canada';
+const pageTitle = 'CA Trades Vendor Directory | WrenchStack Canada';
 const pageDescription = `WrenchStack's Canada trades vendor directory: ${vendors.length} platforms across software, lead-gen, insurance, payroll, and national/provincial licensing. Jobber Canadian-founded coverage, Red Seal Program, Quebec-capable payroll, CRA-compliant tooling.`;
 
 const breadcrumbs = [
@@ -56,7 +56,7 @@ const breadcrumbs = [
         Canada Trades Vendor Directory
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} Canada-relevant vendors across 5 categories — built for CA contractors with native CA compliance context. Jobber's Canadian heritage (Edmonton-founded), Red Seal Program national standard, Quebec-capable payroll (Wagepoint, Payworks), CRA compliance, GST/PST/HST handling, ROE generation, and provincial licensing patterns (TSSA Ontario, BC Safety Authority, Alberta Apprenticeship).
+        Independent reviews of {vendors.length} Canada-relevant vendors across 5 categories, built for CA contractors with native CA compliance context. Jobber's Canadian heritage (Edmonton-founded), Red Seal Program national standard, Quebec-capable payroll (Wagepoint, Payworks), CRA compliance, GST/PST/HST handling, ROE generation, and provincial licensing patterns (TSSA Ontario, BC Safety Authority, Alberta Apprenticeship).
       </p>
     </header>
 
@@ -72,7 +72,7 @@ const breadcrumbs = [
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See CA vendors compared side by side — a clear verdict, pros and cons, CA-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See CA vendors compared side by side: a clear verdict, pros and cons, CA-specific notes, and pricing, head to head.</p>
       </div>
       <a href="/ca/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare CA vendors →</a>
     </section>
@@ -80,7 +80,7 @@ const breadcrumbs = [
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What's different about CA trades vendor selection</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        CA trades vendor selection has three important structural differences from US. First, <strong>Jobber is Canadian-born</strong> (Edmonton, 2011) — for CA contractors, this means native CA support timezones, CAD pricing, and product understanding of CA trades workflows that US-origin platforms don't match. Second, <strong>Red Seal Program is the only national trade standard</strong> — provincial Apprenticeship Boards handle most administration, but Red Seal endorsement provides cross-province mobility that no provincial-only certification does. Third, <strong>Quebec payroll is structurally complex</strong> — different deductions, RQ (Revenu Québec) handling separate from CRA, French-language requirements — most CA payroll software handles Quebec poorly; Wagepoint and Payworks are the exceptions.
+        CA trades vendor selection has three important structural differences from US. First, <strong>Jobber is Canadian-born</strong> (Edmonton, 2011): for CA contractors, this means native CA support timezones, CAD pricing, and product understanding of CA trades workflows that US-origin platforms don't match. Second, <strong>Red Seal Program is the only national trade standard</strong>: provincial Apprenticeship Boards handle most administration, but Red Seal endorsement provides cross-province mobility that no provincial-only certification does. Third, <strong>Quebec payroll is structurally complex</strong>: different deductions, RQ (Revenu Québec) handling separate from CRA, French-language requirements. Most CA payroll software handles Quebec poorly; Wagepoint and Payworks are the exceptions.
       </p>
     </section>
 
@@ -167,7 +167,7 @@ const breadcrumbs = [
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">CA research is an active expansion</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        {vendors.length} CA vendors covered today across {categories.length} categories. We're actively expanding CA depth — full editorial reviews of CA-only vendors (Zensurance, Wagepoint, HomeStars) at the same depth as our US reviews are in the editorial queue. Want a CA vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
+        {vendors.length} CA vendors covered today across {categories.length} categories. We're actively expanding CA depth: full editorial reviews of CA-only vendors (Zensurance, Wagepoint, HomeStars) at the same depth as our US reviews are in the editorial queue. Want a CA vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Back to US directory →</a>

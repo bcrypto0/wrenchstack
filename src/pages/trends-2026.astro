@@ -114,7 +114,7 @@ const priciestTrade = pricedByTrade[pricedByTrade.length - 1];
 // Freshness
 const freshCount = tools.filter((t) => freshnessTier(t) === 'fresh').length;
 
-// --- THE FULL CONTRACTOR STACK (beyond FSM) — June 2026 expansion ---
+// --- THE FULL CONTRACTOR STACK (beyond FSM): June 2026 expansion ---
 const stackCats = [
   { name: 'Accounting', items: accountingSoftware },
   { name: 'Payments', items: paymentProcessors },
@@ -146,7 +146,7 @@ const intlVendorCount = Object.values(intlModules).reduce(
 const articleSchema = {
   '@context': 'https://schema.org',
   '@type': 'Article',
-  headline: 'Trades software market report 2026 — pricing, integrations, and the state of the industry',
+  headline: 'Trades software market report 2026: pricing, integrations, and the state of the industry',
   description: `Original analysis of ${tools.length} field service platforms across ${verticals.length} verticals, expanded to the full ${totalStackVendors}-vendor contractor software stack and ${intlMarkets} international markets. Pricing distribution, integration prevalence, the reputation-flag ledger, and the multi-market picture from the WrenchStack directory.`,
   datePublished: '2026-05-26',
   dateModified: '2026-09-10',
@@ -164,7 +164,7 @@ const articleSchema = {
 ---
 
 <Layout
-  title="Trades software market report 2026 — pricing, integrations, state of the industry"
+  title="Trades software market report 2026: pricing, integrations, state of the industry"
   description={`Original analysis of ${tools.length} field service and trades software platforms. Pricing distribution, integration prevalence, founded-year cohorts, 15 data findings. Source: WrenchStack directory.`}
   breadcrumbs={breadcrumbs}
 >
@@ -179,7 +179,7 @@ const articleSchema = {
         Trades software market report 2026
       </h1>
       <p class="mt-4 text-lg text-slate-700 leading-relaxed sm:text-xl">
-        Original data findings from analysis of {tools.length} field service platforms across {verticals.length} verticals — now expanded to the full {totalStackVendors}-vendor contractor software stack ({totalCategories} categories) and {intlMarkets} international markets. What pricing actually looks like in 2026, which integrations matter, who we flag and why, and where the gaps are.
+        Original data findings from analysis of {tools.length} field service platforms across {verticals.length} verticals, now expanded to the full {totalStackVendors}-vendor contractor software stack ({totalCategories} categories) and {intlMarkets} international markets. What pricing actually looks like in 2026, which integrations matter, who we flag and why, and where the gaps are.
       </p>
       <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500">
         <span><a href="/research/" class="text-orange-600 hover:underline">WrenchStack Research</a></span>
@@ -193,14 +193,14 @@ const articleSchema = {
     <section class="mb-12 rounded-lg border border-orange-200 bg-orange-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">TL;DR for journalists and analysts</h2>
       <ul class="space-y-1 text-sm text-slate-700">
-        <li>· Median entry-tier pricing in trades software: <strong>${medianPrice}/month</strong> blended across per-user and flat-fee plans (range ${minPrice}-${maxPrice}) — per-user median <strong>${perUserMedian()}/user/month</strong>, flat-fee median <strong>${flatFeeMedian()}/month</strong></li>
+        <li>· Median entry-tier pricing in trades software: <strong>${medianPrice}/month</strong> blended across per-user and flat-fee plans (range ${minPrice}-${maxPrice}); per-user median <strong>${perUserMedian()}/user/month</strong>, flat-fee median <strong>${flatFeeMedian()}/month</strong></li>
         <li>· <strong>{customQuotedPct}%</strong> of platforms use custom-quoted "request a demo" pricing instead of publishing tier prices</li>
-        <li>· <strong>{withQuickBooks}</strong> of {tools.length} platforms integrate with QuickBooks ({Math.round(withQuickBooks/tools.length*100)}%) — the universal integration benchmark</li>
-        <li>· <strong>{post2015}</strong> platforms founded since 2015 — modern-cloud cohort now {Math.round(post2015/tools.length*100)}% of market</li>
-        <li>· <strong>{avgTrialDays}-day</strong> average free trial length — 2025 standard was 14 days, 2026 expanding</li>
-        <li>· <strong>{totalStackVendors}+</strong> vendors tracked across <strong>{totalCategories} categories</strong> — FSM software plus accounting, payments, banking, financing, insurance, lead-gen, payroll, marketing and AI</li>
-        <li>· <strong>{totalFlagged}</strong> vendors across the adjacent-category stack carry a documented reputation warning — concentrated in lead-gen (FTC actions), financing (deferred-interest), and fintech banking (account freezes)</li>
-        <li>· <strong>{intlMarkets} international markets</strong> covered ({intlVendorCount} localized listings) — including the only independent English-and-Arabic Gulf construction-software directory we're aware of</li>
+        <li>· <strong>{withQuickBooks}</strong> of {tools.length} platforms integrate with QuickBooks ({Math.round(withQuickBooks/tools.length*100)}%), the universal integration benchmark</li>
+        <li>· <strong>{post2015}</strong> platforms founded since 2015; modern-cloud cohort now {Math.round(post2015/tools.length*100)}% of market</li>
+        <li>· <strong>{avgTrialDays}-day</strong> average free trial length; 2025 standard was 14 days, 2026 expanding</li>
+        <li>· <strong>{totalStackVendors}+</strong> vendors tracked across <strong>{totalCategories} categories</strong>: FSM software plus accounting, payments, banking, financing, insurance, lead-gen, payroll, marketing and AI</li>
+        <li>· <strong>{totalFlagged}</strong> vendors across the adjacent-category stack carry a documented reputation warning, concentrated in lead-gen (FTC actions), financing (deferred-interest), and fintech banking (account freezes)</li>
+        <li>· <strong>{intlMarkets} international markets</strong> covered ({intlVendorCount} localized listings), including the only independent English-and-Arabic Gulf construction-software directory we're aware of</li>
         <li>· By trade, <strong>{cheapestTrade?.name}</strong> is the cheapest field to equip (median <strong>${cheapestTrade?.median}/mo</strong>) and <strong>{priciestTrade?.name}</strong> the priciest (<strong>${priciestTrade?.median}/mo</strong>)</li>
       </ul>
       <p class="mt-3 text-xs text-slate-600">
@@ -210,7 +210,7 @@ const articleSchema = {
 
     <section class="prose prose-slate max-w-none">
 
-      <h2>Pricing — what trades software actually costs</h2>
+      <h2>Pricing: what trades software actually costs</h2>
 
       <p>
         The trades software market in 2026 spans an order of magnitude in price. Entry-tier platforms like Joist ($10/month Basics) and Tradify ($47/user/month Lite tier) live alongside platforms like ServiceTitan and BuildOps that publish no price at all. The median published entry price across our directory is <strong>${medianPrice}/month</strong>. That blended figure mixes two pricing models and is not a per-seat rate: {perUserTools().length} platforms charge per user (median <strong>${perUserMedian()} per user/month</strong>) and {flatFeeTools().length} charge a flat monthly platform fee (median <strong>${flatFeeMedian()}/month</strong>). Our price tiers compare cost per user instead, with each flat plan split across a {REFERENCE_TEAM_SIZE}-person team: {tierDist.entry} platforms come in under $100 per user a month, {tierDist.mid} at $100-$249, {tierDist.enterprise} at $250 or more, and {tierDist['quote-only']} publish no price at all.
@@ -246,13 +246,13 @@ const articleSchema = {
       </p>
 
       <p>
-        The opacity has a tax. Contractors evaluating these platforms can't comparison-shop on price without committing time to multiple sales calls. The information asymmetry favors vendors — the buyer doesn't know if their quote is fair until they've already invested significant evaluation effort. User-reported pricing ranges (Reddit threads, G2 reviews, vendor RFP responses shared publicly) are the only public-data signal of what these platforms actually cost.
+        The opacity has a tax. Contractors evaluating these platforms can't comparison-shop on price without committing time to multiple sales calls. The information asymmetry favors vendors: the buyer doesn't know if their quote is fair until they've already invested significant evaluation effort. User-reported pricing ranges (Reddit threads, G2 reviews, vendor RFP responses shared publicly) are the only public-data signal of what these platforms actually cost.
       </p>
 
       <h2>What software costs by trade</h2>
 
       <p>
-        Median entry pricing is not uniform across trades. Pulling the publicly-priced platforms that serve each trade (those with at least four such tools), <strong>{cheapestTrade?.name}</strong> is the cheapest field to equip, at a median of <strong>${cheapestTrade?.median}/month</strong> — while <strong>{priciestTrade?.name}</strong> sits at the top at <strong>${priciestTrade?.median}/month</strong>. Most field-service trades cluster in the $45–$80 band; the high-end outliers reflect specialized, heavier platforms.
+        Median entry pricing is not uniform across trades. Pulling the publicly-priced platforms that serve each trade (those with at least four such tools), <strong>{cheapestTrade?.name}</strong> is the cheapest field to equip, at a median of <strong>${cheapestTrade?.median}/month</strong>, while <strong>{priciestTrade?.name}</strong> sits at the top at <strong>${priciestTrade?.median}/month</strong>. Most field-service trades cluster in the $45–$80 band; the high-end outliers reflect specialized, heavier platforms.
       </p>
 
       <div class="not-prose my-8 overflow-x-auto">
@@ -279,7 +279,7 @@ const articleSchema = {
         <p class="mt-2 text-xs text-slate-500">Medians of publicly-listed entry pricing; quote-only platforms excluded. Trades with fewer than four publicly-priced tools omitted.</p>
       </div>
 
-      <h2>Free tiers and free trials — buyers' leverage</h2>
+      <h2>Free tiers and free trials: buyers' leverage</h2>
 
       <div class="not-prose my-8 grid gap-4 sm:grid-cols-3">
         <div class="rounded-lg border border-slate-200 bg-white p-5">
@@ -301,7 +301,7 @@ const articleSchema = {
       </p>
 
       <p>
-        Free trial length is trending up. The 2025 standard was 14 days; the 2026 average across {withFreeTrial} platforms is <strong>{avgTrialDays} days</strong>. Skimmer (30 days), MaintainX (30 days), and Limble (30 days) lead the trial-length shift. Trial length matters because field service software's value compounds over weeks — a 14-day trial barely captures a single billing cycle and rarely captures customer follow-up workflows.
+        Free trial length is trending up. The 2025 standard was 14 days; the 2026 average across {withFreeTrial} platforms is <strong>{avgTrialDays} days</strong>. Skimmer (30 days), MaintainX (30 days), and Limble (30 days) lead the trial-length shift. Trial length matters because field service software's value compounds over weeks: a 14-day trial barely captures a single billing cycle and rarely captures customer follow-up workflows.
       </p>
 
       <h2>The integration consolidation</h2>
@@ -355,20 +355,20 @@ const articleSchema = {
       </div>
 
       <p>
-        Two integration signals matter for buyer evaluation: <strong>Xero</strong> ({withXero} platforms) is the AU/NZ/UK accounting standard and signals international roots — Tradify, Simpro, BigChange, Powered Now. <strong>Sage Intacct / NetSuite</strong> ({withSageOrNetsuite} platforms) signals commercial enterprise positioning — most platforms only integrate with QuickBooks-tier accounting, so when a vendor ships Sage Intacct or NetSuite integration, they're targeting larger commercial operations.
+        Two integration signals matter for buyer evaluation: <strong>Xero</strong> ({withXero} platforms) is the AU/NZ/UK accounting standard and signals international roots: Tradify, Simpro, BigChange, Powered Now. <strong>Sage Intacct / NetSuite</strong> ({withSageOrNetsuite} platforms) signals commercial enterprise positioning: most platforms only integrate with QuickBooks-tier accounting, so when a vendor ships Sage Intacct or NetSuite integration, they're targeting larger commercial operations.
       </p>
 
       <h2>The modern-cloud cohort</h2>
 
       <p>
-        <strong>{post2015} platforms</strong> in the directory were founded since 2015 — the "modern cloud" cohort that defines the current product expectations for trades software. {post2015Examples}. This cohort tends to share design conventions: mobile-first architecture, cloud-native deployment, customer portals, modern dashboards, AI features in product roadmaps.
+        <strong>{post2015} platforms</strong> in the directory were founded since 2015, the "modern cloud" cohort that defines the current product expectations for trades software. {post2015Examples}. This cohort tends to share design conventions: mobile-first architecture, cloud-native deployment, customer portals, modern dashboards, AI features in product roadmaps.
       </p>
 
       <p>
-        At the other end, <strong>{pre2010} platforms</strong> were founded before 2010 — the legacy cohort. {pre2010Examples}. These platforms have deeper customer bases, more integration depth in their target verticals, but typically slower UI evolution and harder migration paths to newer alternatives.
+        At the other end, <strong>{pre2010} platforms</strong> were founded before 2010, the legacy cohort. {pre2010Examples}. These platforms have deeper customer bases, more integration depth in their target verticals, but typically slower UI evolution and harder migration paths to newer alternatives.
       </p>
 
-      <h2>Vertical coverage — where the market is dense</h2>
+      <h2>Vertical coverage: where the market is dense</h2>
 
       <div class="not-prose my-8 overflow-x-auto rounded-lg border border-slate-200">
         <table class="w-full text-sm">
@@ -390,7 +390,7 @@ const articleSchema = {
       </div>
 
       <p>
-        HVAC, plumbing, and electrical are the most-covered verticals — every general FSM platform targets these because they share workflows (residential service calls, system replacement quotes, recurring service contracts). The "long tail" trades — locksmith, garage door, appliance repair, pool service — are covered by general FSM but have fewer specialty platforms. Pool service has exactly one specialty platform in the directory (Skimmer). Pest control has dedicated specialty platforms (GorillaDesk, PestPac, FieldRoutes, ServSuite). Cleaning has ZenMaid as the only major specialty option alongside multi-trade FSM coverage.
+        HVAC, plumbing, and electrical are the most-covered verticals: every general FSM platform targets these because they share workflows (residential service calls, system replacement quotes, recurring service contracts). The "long tail" trades (locksmith, garage door, appliance repair, pool service) are covered by general FSM but have fewer specialty platforms. Pool service has exactly one specialty platform in the directory (Skimmer). Pest control has dedicated specialty platforms (GorillaDesk, PestPac, FieldRoutes, ServSuite). Cleaning has ZenMaid as the only major specialty option alongside multi-trade FSM coverage.
       </p>
 
       <h2>Pricing model evolution: per-user vs per-company</h2>
@@ -406,19 +406,19 @@ const articleSchema = {
       <h2>Geographic distribution and international growth</h2>
 
       <p>
-        Of the <strong>{usHQ + intlHQ} platforms</strong> with a headquarters on record, <strong>{usHQ}</strong> are in the United States and <strong>{intlHQ}</strong> are elsewhere ({tools.length - usHQ - intlHQ} of the {tools.length} list no headquarters). The international group includes Tradify (Auckland, NZ), Simpro (Brisbane, AU), BigChange (UK), Powered Now (UK), Praxedo (Paris, France), Vonigo (Vancouver, Canada), Joist (Toronto, Canada). The international cohort has grown notably in 2024-2026 as European and Australian platforms expand US presence — Simpro, BigChange, Praxedo, and Powered Now all have growing US customer bases despite international roots.
+        Of the <strong>{usHQ + intlHQ} platforms</strong> with a headquarters on record, <strong>{usHQ}</strong> are in the United States and <strong>{intlHQ}</strong> are elsewhere ({tools.length - usHQ - intlHQ} of the {tools.length} list no headquarters). The international group includes Tradify (Auckland, NZ), Simpro (Brisbane, AU), BigChange (UK), Powered Now (UK), Praxedo (Paris, France), Vonigo (Vancouver, Canada), Joist (Toronto, Canada). The international cohort has grown notably in 2024-2026 as European and Australian platforms expand US presence: Simpro, BigChange, Praxedo, and Powered Now all have growing US customer bases despite international roots.
       </p>
 
-      <h2>User satisfaction — the rating distribution</h2>
+      <h2>User satisfaction: the rating distribution</h2>
 
       <p>
-        Average aggregate rating (G2 + Capterra combined) across the directory is <strong>{avgRating}/5</strong>. <strong>{above47} platforms</strong> rate 4.7 or higher — the top quartile concentrates around modern cloud platforms (MaintainX, Limble, JobTread, ZenMaid, Skimmer, Sera Systems, GorillaDesk, Tradify, FieldPulse, CompanyCam). <strong>{below43} platforms</strong> rate below 4.3 — typically legacy enterprise platforms with mixed reviews around UI quality and onboarding experience.
+        Average aggregate rating (G2 + Capterra combined) across the directory is <strong>{avgRating}/5</strong>. <strong>{above47} platforms</strong> rate 4.7 or higher; the top quartile concentrates around modern cloud platforms (MaintainX, Limble, JobTread, ZenMaid, Skimmer, Sera Systems, GorillaDesk, Tradify, FieldPulse, CompanyCam). <strong>{below43} platforms</strong> rate below 4.3, typically legacy enterprise platforms with mixed reviews around UI quality and onboarding experience.
       </p>
 
       <h2>Beyond FSM: the full contractor software stack</h2>
 
       <p>
-        The 2026 contractor doesn't just buy field-service software — they assemble a stack. Beyond the {tools.length} FSM platforms analyzed above, WrenchStack now tracks <strong>{adjacentVendorCount} vendors across nine adjacent categories</strong>: {stackRows.map((r, i) => `${i > 0 ? ', ' : ''}${r.total} ${r.name.toLowerCase()}`)}. That's <strong>{totalStackVendors} vendors across {totalCategories} categories</strong> in total — the complete back office a trades business actually runs on.
+        The 2026 contractor doesn't just buy field-service software; they assemble a stack. Beyond the {tools.length} FSM platforms analyzed above, WrenchStack now tracks <strong>{adjacentVendorCount} vendors across nine adjacent categories</strong>: {stackRows.map((r, i) => `${i > 0 ? ', ' : ''}${r.total} ${r.name.toLowerCase()}`)}. That's <strong>{totalStackVendors} vendors across {totalCategories} categories</strong> in total: the complete back office a trades business actually runs on.
       </p>
 
       <div class="not-prose my-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -440,16 +440,16 @@ const articleSchema = {
         </div>
       </div>
 
-      <h3>Pricing opacity is structural — and its shape differs by category</h3>
+      <h3>Pricing opacity is structural, and its shape differs by category</h3>
 
       <p>
-        The custom-quote opacity tax isn't unique to FSM; it runs through the whole stack, but it takes a different form in each category. <strong>Accounting is the most transparent</strong> — {acctPriced} of {accountingSoftware.length} providers publish a starting price. <strong>Contractor insurance is the least</strong>: none of the {insuranceProviders.length} carriers we track list a flat published rate, because premiums are underwritten per trade, payroll size, and claims history — every quote is bespoke. <strong>Payments and financing don't have a sticker price at all</strong>: they're priced by rate model (interchange-plus, flat-rate, merchant or dealer fee), so the real cost depends on your card volume, average ticket, and job size, not a monthly number. The practical takeaway for buyers is the same everywhere — the published number, where one exists, is the start of the negotiation, not the end of it.
+        The custom-quote opacity tax isn't unique to FSM; it runs through the whole stack, but it takes a different form in each category. <strong>Accounting is the most transparent</strong>: {acctPriced} of {accountingSoftware.length} providers publish a starting price. <strong>Contractor insurance is the least</strong>: none of the {insuranceProviders.length} carriers we track list a flat published rate, because premiums are underwritten per trade, payroll size, and claims history; every quote is bespoke. <strong>Payments and financing don't have a sticker price at all</strong>: they're priced by rate model (interchange-plus, flat-rate, merchant or dealer fee), so the real cost depends on your card volume, average ticket, and job size, not a monthly number. The practical takeaway for buyers is the same everywhere: the published number, where one exists, is the start of the negotiation, not the end of it.
       </p>
 
       <h3>The honesty ledger: who we flag, and why</h3>
 
       <p>
-        Across the adjacent-category stack, WrenchStack carries a documented reputation warning on <strong>{totalFlagged} vendors</strong> — and unlike vendor-funded "best of" listicles, we publish the specific reason on every one. The flags concentrate exactly where the contractor harm is real and documented:
+        Across the adjacent-category stack, WrenchStack carries a documented reputation warning on <strong>{totalFlagged} vendors</strong>, and unlike vendor-funded "best of" listicles, we publish the specific reason on every one. The flags concentrate exactly where the contractor harm is real and documented:
       </p>
 
       <div class="not-prose my-8 overflow-x-auto rounded-lg border border-slate-200">
@@ -474,31 +474,31 @@ const articleSchema = {
       </div>
 
       <p>
-        Lead generation tops the list — FTC actions and predatory shared-lead practices are well-documented in that category. Consumer financing follows, on deferred-interest fine print that contractors pass to customers without always understanding it. Fintech banking is third, on the account-freeze patterns that make these accounts risky as a sole operating account. The flip side of the same independence: we recommend commission-free vendors — Acuity, Erie, Google Local Services Ads — when they're genuinely the best fit, even though we earn nothing on them. A vendor-funded directory structurally cannot publish either half of this ledger.
+        Lead generation tops the list: FTC actions and predatory shared-lead practices are well-documented in that category. Consumer financing follows, on deferred-interest fine print that contractors pass to customers without always understanding it. Fintech banking is third, on the account-freeze patterns that make these accounts risky as a sole operating account. The flip side of the same independence: we recommend commission-free vendors (Acuity, Erie, Google Local Services Ads) when they're genuinely the best fit, even though we earn nothing on them. A vendor-funded directory structurally cannot publish either half of this ledger.
       </p>
 
       <h3>The international picture: {intlMarkets} markets</h3>
 
       <p>
-        WrenchStack's directory now spans <strong>{intlMarkets} markets beyond the US</strong> — the UK, Ireland, Canada, Australia and New Zealand; the six Gulf states (Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman); and France — with <strong>{intlVendorCount} localized vendor listings</strong>. The Gulf coverage is, as far as we can tell, the only independent <strong>English-and-Arabic</strong> construction-software comparison directory in existence; every other source is a vendor's own listing or an English-only Capterra clone. These pages track live compliance deadlines that off-the-shelf comparisons ignore — Saudi Arabia's ZATCA Phase-2 e-invoicing waves (Wave 24 hits the SAR 375k-revenue band on 30 June 2026) and Oman's Fawtara e-invoicing rollout extending to all VAT-registered businesses by 2027 — the kind of timing that decides which software a contractor can legally bill on.
+        WrenchStack's directory now spans <strong>{intlMarkets} markets beyond the US</strong>: the UK, Ireland, Canada, Australia and New Zealand; the six Gulf states (Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman); and France, with <strong>{intlVendorCount} localized vendor listings</strong>. The Gulf coverage is, as far as we can tell, the only independent <strong>English-and-Arabic</strong> construction-software comparison directory in existence; every other source is a vendor's own listing or an English-only Capterra clone. These pages track live compliance deadlines that off-the-shelf comparisons ignore: Saudi Arabia's ZATCA Phase-2 e-invoicing waves (Wave 24 hits the SAR 375k-revenue band on 30 June 2026) and Oman's Fawtara e-invoicing rollout extending to all VAT-registered businesses by 2027, the kind of timing that decides which software a contractor can legally bill on.
       </p>
 
       <h2>Implications for buyers</h2>
 
       <ul>
         <li><strong>If your team is 3+ techs and you're shopping under $250/user/month</strong>: compare unlimited-user plans (such as Service Fusion) with per-seat plans at your actual headcount; which one wins depends on team size.</li>
-        <li><strong>If you're on QuickBooks Desktop specifically</strong> — your platform choices narrow significantly. {withQuickBooks} platforms integrate with QuickBooks broadly but many are QuickBooks Online only. FieldEdge is the standout for QuickBooks Desktop integration depth.</li>
+        <li><strong>If you're on QuickBooks Desktop specifically</strong>: your platform choices narrow significantly. {withQuickBooks} platforms integrate with QuickBooks broadly but many are QuickBooks Online only. FieldEdge is the standout for QuickBooks Desktop integration depth.</li>
         <li><strong>If you're at $5M+ revenue</strong>: many platforms built for your size quote by account, so book demos with 3-5 of them and compare written quotes. User-reported ranges in our pricing notes are a rough anchor, not a quote.</li>
-        <li><strong>If you're on Xero</strong> (AU/NZ/UK markets) — Tradify, Simpro, BigChange are your strongest matches. US-rooted platforms typically have weaker Xero integration than QuickBooks integration.</li>
-        <li><strong>If you do significant insurance restoration work</strong> — photo documentation discipline matters more than FSM choice. CompanyCam pairs with whatever FSM you use.</li>
-        <li><strong>If you're solo or 1-2 techs</strong> — Joist (from $10/mo Basics) and Markate (from about $40/mo) are genuinely viable starting points before committing to mid-tier FSM.</li>
+        <li><strong>If you're on Xero</strong> (AU/NZ/UK markets): Tradify, Simpro, BigChange are your strongest matches. US-rooted platforms typically have weaker Xero integration than QuickBooks integration.</li>
+        <li><strong>If you do significant insurance restoration work</strong>: photo documentation discipline matters more than FSM choice. CompanyCam pairs with whatever FSM you use.</li>
+        <li><strong>If you're solo or 1-2 techs</strong>: Joist (from $10/mo Basics) and Markate (from about $40/mo) are genuinely viable starting points before committing to mid-tier FSM.</li>
       </ul>
 
       <h2>Implications for software vendors</h2>
 
       <ul>
         <li><strong>Custom-quoted pricing is leaving SMB demand on the table.</strong> {customQuotedPct}% of platforms in our directory publish no price at all. Buyers who are comparison-shopping skip straight to whichever competitor gives them a number.</li>
-        <li><strong>14-day free trials are below market norm now</strong> — the 30-day cohort is winning evaluation conversions. Skimmer, MaintainX, and Limble all ship 30-day trials.</li>
+        <li><strong>14-day free trials are below market norm now</strong>: the 30-day cohort is winning evaluation conversions. Skimmer, MaintainX, and Limble all ship 30-day trials.</li>
         <li><strong>Per-company pricing is a real competitive differentiator for SMB segments</strong>. Seat-inclusive bundles like Housecall Pro's Essentials and MAX are pulling share from per-user competitors at 5+ user operations.</li>
         <li><strong>Mobile-first UX is now table stakes, not differentiation.</strong> Every platform founded since 2015 ships mobile-first. The remaining differentiation is in the trade-specific workflow depth.</li>
       </ul>

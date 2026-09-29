@@ -24,17 +24,17 @@ const vendors = (ieData as { vendors: IeVendor[] }).vendors;
 
 const categories = ['software', 'lead-gen', 'insurance', 'payroll', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'software': { label: 'Field service software', description: 'Smaller Irish market — cross-market platforms (UK and AU options that operate in Ireland) cover most needs.' },
+  'software': { label: 'Field service software', description: 'Smaller Irish market: cross-market platforms (UK and AU options that operate in Ireland) cover most needs.' },
   'lead-gen': { label: 'Lead-generation platforms', description: 'MyBuilder.ie (Dublin-founded, cross-market with UK) leads; Onlinetradesmen.ie is the independent Irish-only alternative.' },
   'insurance': { label: 'Business insurance', description: 'Irish insurance with higher PL + EL standard limits than international alternatives (FBD: €6.5M PL + €13M EL standard).' },
-  'payroll': { label: 'Payroll software', description: 'Revenue Commissioners-approved Irish payroll with ROS (Revenue Online Service) integration — BrightPay Ireland (free for sole traders), Sage Payroll IE.' },
-  'certification': { label: 'Required certifications', description: 'Mandatory Irish licensing — RGI for gas installation (Energy Act 2006), Safe Electric/RECI for electrical work (regulated by CRU).' },
+  'payroll': { label: 'Payroll software', description: 'Revenue Commissioners-approved Irish payroll with ROS (Revenue Online Service) integration: BrightPay Ireland (free for sole traders), Sage Payroll IE.' },
+  'certification': { label: 'Required certifications', description: 'Mandatory Irish licensing: RGI for gas installation (Energy Act 2006), Safe Electric/RECI for electrical work (regulated by CRU).' },
 };
 
 const vendorsByCategory: Record<string, IeVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
-const pageTitle = 'IE Trades Vendor Directory — WrenchStack Ireland';
+const pageTitle = 'IE Trades Vendor Directory | WrenchStack Ireland';
 const pageDescription = `WrenchStack's Ireland trades vendor directory: ${vendors.length} platforms across lead-gen, insurance, payroll, and required certifications. Built for Irish contractors with native ROS compliance and mandatory RGI/Safe Electric licensing context.`;
 
 const breadcrumbs = [
@@ -71,7 +71,7 @@ const breadcrumbs = [
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See IE vendors compared side by side — a clear verdict, pros and cons, IE-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See IE vendors compared side by side: a clear verdict, pros and cons, IE-specific notes, and pricing, head to head.</p>
       </div>
       <a href="/ie/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare IE vendors →</a>
     </section>
@@ -79,7 +79,7 @@ const breadcrumbs = [
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What's different about IE trades vendor selection</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Ireland is the smallest English-speaking market we cover, but with structural distinctions worth knowing. <strong>Mandatory certification has criminal-offense weight</strong> — unlicensed gas work under the Energy Act 2006 is illegal, as is unlicensed electrical work under CRU regulations. <strong>Payroll requires ROS integration</strong> — PAYE Modernisation (real-time reporting) has been mandatory for Irish employers since 2019, and BrightPay Ireland is the dominant compliant option. <strong>Insurance limits standard are higher</strong> — FBD's €6.5M PL + €13M EL standard cover exceeds many international alternatives.
+        Ireland is the smallest English-speaking market we cover, but with structural distinctions worth knowing. <strong>Mandatory certification has criminal-offense weight</strong>: unlicensed gas work under the Energy Act 2006 is illegal, as is unlicensed electrical work under CRU regulations. <strong>Payroll requires ROS integration</strong>: PAYE Modernisation (real-time reporting) has been mandatory for Irish employers since 2019, and BrightPay Ireland is the dominant compliant option. <strong>Insurance limits standard are higher</strong>: FBD's €6.5M PL + €13M EL standard cover exceeds many international alternatives.
       </p>
     </section>
 

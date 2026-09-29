@@ -7,7 +7,7 @@ import MissingFromList from '../../components/MissingFromList.astro';
 const grouped = paymentsByModel();
 
 const pageTitle = `Best Payment Processing for Contractors & Trades (2026)`;
-const pageDescription = `Independent comparison of payment processors for trades businesses — Square, Stripe, Helcim, Stax — by pricing model (flat-rate vs interchange-plus vs subscription). Real rates, honest trade-offs, and how to stop overpaying on card fees.`;
+const pageDescription = `Independent comparison of payment processors for trades businesses (Square, Stripe, Helcim, Stax) by pricing model (flat-rate vs interchange-plus vs subscription). Real rates, honest trade-offs, and how to stop overpaying on card fees.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -42,7 +42,7 @@ const itemListSchema = {
         Best Payment Processing for Contractors & Trades (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Every contractor takes payments — and most overpay on card fees without realizing it. We compare the processors trades actually use, organized by the one thing that decides your cost: the <strong>pricing model</strong>. Real rates, honest trade-offs, affiliate-transparent.
+        Every contractor takes payments, and most overpay on card fees without realizing it. We compare the processors trades actually use, organized by the one thing that decides your cost: the <strong>pricing model</strong>. Real rates, honest trade-offs, affiliate-transparent.
       </p>
     </header>
 
@@ -56,7 +56,7 @@ const itemListSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">The headline filter: pricing model</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Payment cost is decided by the pricing model, not the brand. <strong>Flat-rate</strong> (Square, Stripe) is simplest and best at low volume. <strong>Interchange-plus</strong> (Helcim) is the most transparent and usually cheapest as you grow, with no monthly fee. <strong>Subscription/membership</strong> (Stax) drops the percentage markup entirely and wins at high volume once the monthly fee is amortized. The right pick depends on your monthly card volume and average ticket — and for big-ticket trades, steering large invoices to <strong>ACH</strong> beats every card model.
+        Payment cost is decided by the pricing model, not the brand. <strong>Flat-rate</strong> (Square, Stripe) is simplest and best at low volume. <strong>Interchange-plus</strong> (Helcim) is the most transparent and usually cheapest as you grow, with no monthly fee. <strong>Subscription/membership</strong> (Stax) drops the percentage markup entirely and wins at high volume once the monthly fee is amortized. The right pick depends on your monthly card volume and average ticket, and for big-ticket trades, steering large invoices to <strong>ACH</strong> beats every card model.
       </p>
     </section>
 
@@ -106,11 +106,11 @@ const itemListSchema = {
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Founded</dt>
-                    <dd class="font-semibold text-slate-900">{p.founded ?? '—'}</dd>
+                    <dd class="font-semibold text-slate-900">{p.founded ?? '-'}</dd>
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Capterra</dt>
-                    <dd class="font-semibold text-slate-900">{p.ratings.capterra !== null ? `${p.ratings.capterra.toFixed(1)} / 5` : '—'}</dd>
+                    <dd class="font-semibold text-slate-900">{p.ratings.capterra !== null ? `${p.ratings.capterra.toFixed(1)} / 5` : '-'}</dd>
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Best team size</dt>
@@ -136,7 +136,7 @@ const itemListSchema = {
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Where to start</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        Low volume or want the simplest setup? <strong>Square</strong> or <strong>Stripe</strong> (flat-rate, no monthly fee). Processing real volume and want the lowest transparent cost with no monthly fee? <strong>Helcim</strong> (interchange-plus). High-volume, big-ticket shop that can amortize a subscription? <strong>Stax</strong>. And for large invoices on any processor, push customers to <strong>ACH</strong> — it beats card fees by a wide margin on big-ticket jobs.
+        Low volume or want the simplest setup? <strong>Square</strong> or <strong>Stripe</strong> (flat-rate, no monthly fee). Processing real volume and want the lowest transparent cost with no monthly fee? <strong>Helcim</strong> (interchange-plus). High-volume, big-ticket shop that can amortize a subscription? <strong>Stax</strong>. And for large invoices on any processor, push customers to <strong>ACH</strong>: it beats card fees by a wide margin on big-ticket jobs.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/payments/helcim/" class="rounded-md bg-teal-500 px-5 py-3 text-sm font-semibold text-white hover:bg-teal-600">See Helcim →</a>

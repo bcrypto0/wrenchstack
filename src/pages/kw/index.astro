@@ -13,16 +13,16 @@ interface KwVendor {
 const vendors = (kwData as { vendors: KwVendor[] }).vendors;
 const categories = ['software', 'insurance', 'lead-gen', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'insurance': { label: 'Contractor insurance', description: "Contractor & engineering cover from Kuwaiti insurers — market leader GIG Kuwait, Al Ahleia, and Shariah-compliant First Takaful. Quote-based." },
+  'insurance': { label: 'Contractor insurance', description: "Contractor & engineering cover from Kuwaiti insurers: market leader GIG Kuwait, Al Ahleia, and Shariah-compliant First Takaful. Quote-based." },
   'lead-gen': { label: 'Lead generation & project intelligence', description: "Construction project intelligence for Kuwait via ProTenders and BNC Network (the government tender portal CAPT sits under licensing & compliance)." },
-  'software': { label: 'Construction & trades software', description: 'The enterprise stack for large public EPC work (Oracle, Autodesk via GIC Middle East), the strongest local ERP footprint (Focus Softnet — Kuwait office since 1996), accessible site tools (PlanRadar), regional ERPs (PACT, First Bit), and Kuwait-native/localised options (Octonics, Matiyas, In4Suite).' },
+  'software': { label: 'Construction & trades software', description: 'The enterprise stack for large public EPC work (Oracle, Autodesk via GIC Middle East), the strongest local ERP footprint (Focus Softnet, Kuwait office since 1996), accessible site tools (PlanRadar), regional ERPs (PACT, First Bit), and Kuwait-native/localised options (Octonics, Matiyas, In4Suite).' },
   'certification': { label: 'Licensing & compliance', description: 'CAPT contractor classification (the gate to public tenders), the Ministry of Finance tax regime (no VAT; 15% CIT on foreign entities), Public Authority for Manpower (Kuwaitization), Kuwait Municipality permits, and the mandatory KFSD fire code.' },
 };
 const vendorsByCategory: Record<string, KwVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
-const pageTitle = 'Kuwait Construction & Trades Software — WrenchStack';
-const pageDescription = `Independent directory of ${vendors.length} construction & trades vendors for Kuwait: the enterprise EPC stack, the strongest local ERPs, and site tools — plus CAPT classification, Kuwaitization, the KFSD fire code, and Kuwait’s no-VAT tax landscape.`;
+const pageTitle = 'Kuwait Construction & Trades Software | WrenchStack';
+const pageDescription = `Independent directory of ${vendors.length} construction & trades vendors for Kuwait: the enterprise EPC stack, the strongest local ERPs, and site tools, plus CAPT classification, Kuwaitization, the KFSD fire code, and Kuwait’s no-VAT tax landscape.`;
 const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Kuwait', url: '/kw/' } ];
 const enUrl = new URL('/kw/', Astro.site).toString();
 const arUrl = new URL('/kw/ar/', Astro.site).toString();
@@ -39,7 +39,7 @@ const arUrl = new URL('/kw/ar/', Astro.site).toString();
       </div>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">Kuwait Construction & Trades Software Directory</h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} Kuwait-relevant vendors — built around the New Kuwait 2035 / Silk City public-project pipeline. The enterprise EPC stack (Oracle, Autodesk via GIC Middle East), the strongest local ERP footprint (Focus Softnet, in Kuwait since 1996), accessible site tools (PlanRadar), and Kuwait-localised options — with the local context (CAPT classification, Kuwaitization, the KFSD fire code, and a tax regime with <em>no VAT</em>) that off-the-shelf software ignores.
+        Independent reviews of {vendors.length} Kuwait-relevant vendors, built around the New Kuwait 2035 / Silk City public-project pipeline. The enterprise EPC stack (Oracle, Autodesk via GIC Middle East), the strongest local ERP footprint (Focus Softnet, in Kuwait since 1996), accessible site tools (PlanRadar), and Kuwait-localised options, with the local context (CAPT classification, Kuwaitization, the KFSD fire code, and a tax regime with <em>no VAT</em>) that off-the-shelf software ignores.
       </p>
     </header>
     <section class="mb-10 grid gap-3 grid-cols-2 sm:grid-cols-4">
@@ -55,14 +55,14 @@ const arUrl = new URL('/kw/ar/', Astro.site).toString();
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See Kuwait vendors compared side by side — verdict, pros and cons, Kuwait-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See Kuwait vendors compared side by side: verdict, pros and cons, Kuwait-specific notes, and pricing, head to head.</p>
       </div>
       <a href="/kw/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare Kuwait vendors →</a>
     </section>
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What’s different about choosing software in Kuwait</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Like Qatar, Kuwait has <strong>no VAT</strong> (officially ruled out before 2028) and <strong>no e-invoicing mandate</strong> — so "VAT-ready / FTA-compliant" selling points that matter in the UAE and Saudi are irrelevant here. The tax that bites is <strong>15% corporate income tax on foreign-owned entities</strong> (plus a 5% retention on payments to foreign parties), not consumption tax. Public work is gated by a <strong>CAPT classification</strong> (1st–4th category, tied to Kuwaiti ownership and 3+ years of history), labour runs on <strong>Kuwaitization</strong> via PAM (construction sits at the low end, ~1%), fire safety follows the mandatory <strong>KFSD code</strong>, and pricing is in Kuwaiti Dinar — the world’s highest-valued currency. Kuwait’s local software ecosystem is thin, so most options are regional/global with confirmed Kuwait presence, plus a few locally-built ERPs.
+        Like Qatar, Kuwait has <strong>no VAT</strong> (officially ruled out before 2028) and <strong>no e-invoicing mandate</strong>, so "VAT-ready / FTA-compliant" selling points that matter in the UAE and Saudi are irrelevant here. The tax that bites is <strong>15% corporate income tax on foreign-owned entities</strong> (plus a 5% retention on payments to foreign parties), not consumption tax. Public work is gated by a <strong>CAPT classification</strong> (1st–4th category, tied to Kuwaiti ownership and 3+ years of history), labour runs on <strong>Kuwaitization</strong> via PAM (construction sits at the low end, ~1%), fire safety follows the mandatory <strong>KFSD code</strong>, and pricing is in Kuwaiti Dinar, the world’s highest-valued currency. Kuwait’s local software ecosystem is thin, so most options are regional/global with confirmed Kuwait presence, plus a few locally-built ERPs.
       </p>
     </section>
     {categories.map(c => {

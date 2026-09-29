@@ -40,7 +40,7 @@ const estimatedReadingMin = readingTimeMinutes(4500); // approx page word count 
 const topPicks = ranked.slice(0, 5);
 const verticalLower = vertical.name.toLowerCase();
 
-// Quotable, dated stats computed from THIS vertical's tools — the answer-first
+// Quotable, dated stats computed from THIS vertical's tools: the answer-first
 // numbers AI assistants and journalists can lift with attribution. All derived
 // live from the data, so they update with every verification pass.
 const publicPrices = ranked
@@ -55,7 +55,7 @@ const qbCount = ranked.filter((t) => t.integrations.some((i) => i.includes('quic
 const lastVerifiedLabel = new Date(lastVerifiedDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 const showStatStrip = ranked.length >= 3;
 
-// Forward freshness promise — pricing is re-verified quarterly (see /methodology/).
+// Forward freshness promise: pricing is re-verified quarterly (see /methodology/).
 // A visible "next review" date is a cheap, honest trust signal almost no
 // competitor publishes.
 const nextReviewDate = (() => {
@@ -64,20 +64,20 @@ const nextReviewDate = (() => {
   return d.toISOString().slice(0, 10);
 })();
 
-// Cheapest published-price option — drives the "tightest budget" callout in
+// Cheapest published-price option: drives the "tightest budget" callout in
 // the decision block. Null when every option hides pricing behind a sales call.
 const budgetPick = ranked
   .filter((t) => t.pricing.starting_at_usd !== null && (t.pricing.starting_at_usd as number) > 0)
   .sort((a, b) => (a.pricing.starting_at_usd as number) - (b.pricing.starting_at_usd as number))[0] ?? null;
 
 // "Best value" award = cheapest published-price option AMONG the top picks
-// (excluding the #1 overall) — an honest value flag for the recommended set,
+// (excluding the #1 overall), an honest value flag for the recommended set,
 // rather than crowning a low-ranked budget tool.
 const valuePick = topPicks
   .filter((t, i) => i !== 0 && t.pricing.starting_at_usd !== null && (t.pricing.starting_at_usd as number) > 0)
   .sort((a, b) => (a.pricing.starting_at_usd as number) - (b.pricing.starting_at_usd as number))[0] ?? null;
 
-// "What it actually costs" pricing guide — buckets ranked tools by published
+// "What it actually costs" pricing guide: buckets ranked tools by published
 // entry price into honest bands (custom-quote tools surfaced separately). The
 // most AI-citable answer to "how much does [trade] software cost", all derived
 // live from verified pricing, so it can't go stale silently.
@@ -96,7 +96,7 @@ const priceLo = publicPrices.length ? `$${publicPrices[0]}/mo` : null;
 const priceHi = publicPrices.length ? `$${publicPrices[publicPrices.length - 1]}/mo` : null;
 const showPricingGuide = ranked.length >= 4 && pricingBands.length >= 2;
 
-// Phase 3 custom content flags — use deep content when present
+// Phase 3 custom content flags: use deep content when present
 const hasIndustryContext = !!vertical.industry_context;
 const hasBuyingPersonas = !!vertical.buying_personas;
 const hasFeaturePriorities = !!vertical.feature_priorities;
@@ -110,7 +110,7 @@ const templatedFaqs = [
     a: `Based on our analysis of pricing, features, integrations, and aggregated G2/Capterra ratings, the top three options are ${topPicks
       .slice(0, 3)
       .map((t) => t.name)
-      .join(', ')}. The right pick depends on your team size and budget — see the buyer's guide below for size-specific recommendations.`,
+      .join(', ')}. The right pick depends on your team size and budget; see the buyer's guide below for size-specific recommendations.`,
   },
   {
     q: `How much does ${verticalLower} software cost?`,
@@ -133,7 +133,7 @@ const templatedFaqs = [
 ];
 
 // Lead the FAQ (and its FAQPage schema) with the exact high-intent query plus
-// a full ranked answer — the most AI-citable FAQ we can publish, and the only
+// a full ranked answer, the most AI-citable FAQ we can publish, and the only
 // place the complete ranking lands in structured data. Skip if the curated set
 // already answers the general "best … in 2026" form, to avoid a duplicate.
 const baseFaqs = hasCustomFaqs ? vertical.vertical_faqs! : templatedFaqs;
@@ -142,7 +142,7 @@ const rankingFaq = {
   a: `Ranked by our independent WrenchStack Fit Score (vertical fit, aggregated G2/Capterra ratings, pricing transparency, and integrations), the best ${verticalLower} software in 2026 is: ${ranked
     .slice(0, 8)
     .map((t, i) => `${i + 1}. ${t.name}`)
-    .join('; ')}. ${topPicks[0]?.name ?? 'The top pick'} leads overall${topPicks[0] ? ` (${formatPrice(topPicks[0])})` : ''}, but the right choice depends on your team size and budget — see the decision guide on this page for size-specific picks.`,
+    .join('; ')}. ${topPicks[0]?.name ?? 'The top pick'} leads overall${topPicks[0] ? ` (${formatPrice(topPicks[0])})` : ''}, but the right choice depends on your team size and budget; see the decision guide on this page for size-specific picks.`,
 };
 const alreadyHasRankingFaq = baseFaqs.some((f) => /\bbest\b/i.test(f.q) && /2026/.test(f.q));
 const faqs = alreadyHasRankingFaq ? baseFaqs : [rankingFaq, ...baseFaqs];
@@ -207,7 +207,7 @@ const breadcrumbs = [
       <section class="mb-10 rounded-lg border-l-4 border-orange-500 bg-orange-50/40 p-5">
         <p class="text-xs font-bold uppercase tracking-wider text-orange-600">The short answer</p>
         <p class="mt-2 text-slate-800 leading-relaxed">
-          For most {verticalLower} businesses in 2026, <a href={`/tools/${topPicks[0].slug}/`} class="font-semibold text-orange-700 hover:underline">{topPicks[0].name}</a> is our top pick ({formatPrice(topPicks[0])}{topPicks[0].best_team_size ? `, best for ${topPicks[0].best_team_size} techs` : ''}){topPicks.length > 1 ? (<>, followed by {topPicks.slice(1, 3).map((t, i) => (<>{i > 0 ? ' and ' : ''}<a href={`/tools/${t.slug}/`} class="font-semibold text-orange-700 hover:underline">{t.name}</a></>))}</>) : null}. Picks come from our independent <a href="/methodology/" class="underline hover:text-orange-700">Fit Score</a> — vertical fit, aggregated G2/Capterra ratings, pricing transparency and integrations — and no vendor pays for placement. Full ranking, pricing and trade-offs below.
+          For most {verticalLower} businesses in 2026, <a href={`/tools/${topPicks[0].slug}/`} class="font-semibold text-orange-700 hover:underline">{topPicks[0].name}</a> is our top pick ({formatPrice(topPicks[0])}{topPicks[0].best_team_size ? `, best for ${topPicks[0].best_team_size} techs` : ''}){topPicks.length > 1 ? (<>, followed by {topPicks.slice(1, 3).map((t, i) => (<>{i > 0 ? ' and ' : ''}<a href={`/tools/${t.slug}/`} class="font-semibold text-orange-700 hover:underline">{t.name}</a></>))}</>) : null}. Picks come from our independent <a href="/methodology/" class="underline hover:text-orange-700">Fit Score</a> (vertical fit, aggregated G2/Capterra ratings, pricing transparency and integrations), and no vendor pays for placement. Full ranking, pricing and trade-offs below.
         </p>
       </section>
     )}
@@ -294,8 +294,8 @@ const breadcrumbs = [
                     <WrenchScore score={score} size="sm" />
                   </td>
                   <td class="p-3 text-slate-700">{formatPrice(t)}</td>
-                  <td class="p-3 text-slate-600">{t.best_team_size ?? '—'} techs</td>
-                  <td class="p-3 text-slate-700">{r !== null ? `${r.toFixed(1)} / 5` : '—'}</td>
+                  <td class="p-3 text-slate-600">{t.best_team_size ?? '-'} techs</td>
+                  <td class="p-3 text-slate-700">{r !== null ? `${r.toFixed(1)} / 5` : '-'}</td>
                 </tr>
               );
             })}
@@ -311,7 +311,7 @@ const breadcrumbs = [
     {topPicks.length >= 2 && (
       <section class="mb-12">
         <h2 id="which-to-choose" class="mb-1 scroll-mt-20 text-2xl font-bold text-slate-900">Which {verticalLower} software should you choose?</h2>
-        <p class="mb-5 text-sm text-slate-600">The short, honest version by situation — full reasoning in the reviews below.</p>
+        <p class="mb-5 text-sm text-slate-600">The short, honest version by situation; full reasoning in the reviews below.</p>
         <div class="space-y-3">
           {topPicks.slice(0, 4).map((t) => {
             const watch = t.weaknesses ? t.weaknesses.split(';')[0].trim() : null;
@@ -330,7 +330,7 @@ const breadcrumbs = [
           })}
           {budgetPick && (
             <div class="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-700">
-              <span class="font-semibold text-slate-900">Tightest budget:</span> <a href={`/tools/${budgetPick.slug}/`} class="font-semibold text-orange-700 hover:underline">{budgetPick.name}</a> has the lowest published entry price — {formatPrice(budgetPick)}.
+              <span class="font-semibold text-slate-900">Tightest budget:</span> <a href={`/tools/${budgetPick.slug}/`} class="font-semibold text-orange-700 hover:underline">{budgetPick.name}</a> has the lowest published entry price: {formatPrice(budgetPick)}.
             </div>
           )}
         </div>
@@ -433,7 +433,7 @@ const breadcrumbs = [
       <p>
         The category has matured enough that even the lowest-priced options ($39–65/month per
         user) include scheduling, dispatching, invoicing, mobile apps, customer portals, and
-        payment processing. The decision today isn't <em>whether</em> to adopt FSM software —
+        payment processing. The decision today isn't <em>whether</em> to adopt FSM software;
         it's <em>which platform fits your team size and operating model.</em>
       </p>
       <p>
@@ -581,7 +581,7 @@ const breadcrumbs = [
       <p>
         Look at <strong>ServiceTitan</strong> (residential, all-in-one), <strong>FieldEdge</strong>{' '}
         (mid-size, QuickBooks-heavy), or <strong>BuildOps</strong> (commercial-only). Plan for a
-        3–6 month implementation. Get pricing in writing — these are custom-quoted and the spread
+        3–6 month implementation. Get pricing in writing; these are custom-quoted and the spread
         is wide.
       </p>
 
@@ -591,7 +591,7 @@ const breadcrumbs = [
       <p>
         The most expensive mistake we see: solo contractors pick Joist or a free tier, grow to
         5 techs in 8 months, and discover their software has no dispatching or team management.
-        The migration to a real FSM platform mid-growth is brutal — historical job data, customer
+        The migration to a real FSM platform mid-growth is brutal: historical job data, customer
         history, and recurring service agreements often don't transfer cleanly.
         <strong>Buy software for your team size 12-18 months out, not today.</strong>
       </p>
@@ -611,10 +611,10 @@ const breadcrumbs = [
         until it's too late. Things to verify before signing:
       </p>
       <ul>
-        <li><strong>QuickBooks Desktop vs Online support</strong> — some tools only support one. If your accountant is on Desktop, FieldEdge or Knowify is a safer bet than Method:CRM (which prefers Online).</li>
-        <li><strong>Sync direction</strong> — one-way push (FSM → QuickBooks) vs two-way sync. Two-way matters if your accountant adjusts entries in QB.</li>
-        <li><strong>Sync frequency</strong> — real-time (FieldEdge, Smart Service) vs nightly batches (most others). Matters less if you reconcile weekly, matters a lot if you reconcile daily.</li>
-        <li><strong>Customer record merge behavior</strong> — what happens when a customer exists in both systems with slightly different addresses. Some tools merge intelligently, some create duplicates.</li>
+        <li><strong>QuickBooks Desktop vs Online support</strong>: some tools only support one. If your accountant is on Desktop, FieldEdge or Knowify is a safer bet than Method:CRM (which prefers Online).</li>
+        <li><strong>Sync direction</strong>: one-way push (FSM → QuickBooks) vs two-way sync. Two-way matters if your accountant adjusts entries in QB.</li>
+        <li><strong>Sync frequency</strong>: real-time (FieldEdge, Smart Service) vs nightly batches (most others). Matters less if you reconcile weekly, matters a lot if you reconcile daily.</li>
+        <li><strong>Customer record merge behavior</strong>: what happens when a customer exists in both systems with slightly different addresses. Some tools merge intelligently, some create duplicates.</li>
       </ul>
 
       <h3>4. Over-indexing on price at the entry tier</h3>
@@ -633,7 +633,7 @@ const breadcrumbs = [
         keep shopping.
       </p>
 
-      <h2>Implementation timeline — what to actually expect</h2>
+      <h2>Implementation timeline: what to actually expect</h2>
 
       <p>
         Skip the vendor-promised "2-week go-live" fantasy. Here's the realistic timeline based on
@@ -661,7 +661,7 @@ const breadcrumbs = [
         </>
       )}
 
-      <h2>Glossary — terms used in this guide</h2>
+      <h2>Glossary: terms used in this guide</h2>
 
       <dl class="not-prose grid gap-3 text-sm">
         <div class="rounded-lg border border-slate-200 bg-white p-4">
@@ -686,7 +686,7 @@ const breadcrumbs = [
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <dt class="font-semibold text-slate-900">AIA billing</dt>
-          <dd class="text-slate-600">An invoicing standard used in commercial construction and large contracting projects. Progress-based billing tied to project milestones. If you do commercial work, your software needs to support this — generic FSM tools usually don't.</dd>
+          <dd class="text-slate-600">An invoicing standard used in commercial construction and large contracting projects. Progress-based billing tied to project milestones. If you do commercial work, your software needs to support this; generic FSM tools usually don't.</dd>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <dt class="font-semibold text-slate-900">Two-way QuickBooks sync</dt>
@@ -718,7 +718,7 @@ const breadcrumbs = [
     <section class="mb-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Ready to compare side-by-side?</h2>
       <p class="mt-2 text-slate-300">
-        Build a custom comparison of any two tools on this list — pricing, features, integrations,
+        Build a custom comparison of any two tools on this list: pricing, features, integrations,
         and ratings shown head-to-head.
       </p>
       <a

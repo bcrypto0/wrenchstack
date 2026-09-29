@@ -89,15 +89,15 @@ function stateMarketContext(): string {
 const faqs = [
   {
     q: `What's the best ${vertical.name.toLowerCase()} software for ${state.name} contractors?`,
-    a: `Based on user ratings, vertical fit, and pricing transparency, ${featuredTool.name} ranks at the top for ${vertical.name.toLowerCase()} contractors in ${state.name}. ${asSentence(featuredTool.tagline)} None of the field service platforms in our directory have ${state.name}-specific limitations — they all work nationwide. The "best" choice comes down to your team size, vertical specialization, and budget. See the ranked list above or take our matching quiz.`,
+    a: `Based on user ratings, vertical fit, and pricing transparency, ${featuredTool.name} ranks at the top for ${vertical.name.toLowerCase()} contractors in ${state.name}. ${asSentence(featuredTool.tagline)} None of the field service platforms in our directory have ${state.name}-specific limitations; they all work nationwide. The "best" choice comes down to your team size, vertical specialization, and budget. See the ranked list above or take our matching quiz.`,
   },
   {
     q: `Do I need ${vertical.name.toLowerCase()} software that's specific to ${state.name}?`,
-    a: `No. Field service software is nationwide — none of the major platforms restrict by state. However, your software should handle ${state.name}'s licensing context cleanly. ${state.licensing_note} Look for tools that let you record license numbers on quotes/invoices, store certificates of insurance, and track per-tech credentials.`,
+    a: `No. Field service software is nationwide; none of the major platforms restrict by state. However, your software should handle ${state.name}'s licensing context cleanly. ${state.licensing_note} Look for tools that let you record license numbers on quotes/invoices, store certificates of insurance, and track per-tech credentials.`,
   },
   {
     q: `How much should a ${vertical.name.toLowerCase()} business in ${state.name} spend on software?`,
-    a: `For a typical 2-10 user ${vertical.name.toLowerCase()} shop, software costs run $50-$250/user/month or $150-$300/month on flat-rate platforms. Most shops underspend on software relative to revenue — a $1M/year ${vertical.name.toLowerCase()} business typically gets meaningful ROI from spending 0.3-0.8% of revenue on field service software (so $3,000-$8,000/year). Use our <a href="/roi-calculator/" class="underline">ROI calculator</a> to model your specific case.`,
+    a: `For a typical 2-10 user ${vertical.name.toLowerCase()} shop, software costs run $50-$250/user/month or $150-$300/month on flat-rate platforms. Most shops underspend on software relative to revenue; a $1M/year ${vertical.name.toLowerCase()} business typically gets meaningful ROI from spending 0.3-0.8% of revenue on field service software (so $3,000-$8,000/year). Use our <a href="/roi-calculator/" class="underline">ROI calculator</a> to model your specific case.`,
   },
   {
     q: `Which platforms are most popular with ${state.name} contractors?`,
@@ -181,11 +181,11 @@ const noindex = !isStatePageIndexable(state.slug, verticalToUrl(verticalSlug));
                 </div>
                 <div>
                   <dt class="text-slate-500">User rating</dt>
-                  <dd class="font-semibold text-slate-900">{rating !== null ? `${rating.toFixed(1)} / 5` : '—'}</dd>
+                  <dd class="font-semibold text-slate-900">{rating !== null ? `${rating.toFixed(1)} / 5` : 'n/a'}</dd>
                 </div>
                 <div>
                   <dt class="text-slate-500">Best team size</dt>
-                  <dd class="font-semibold text-slate-900">{tool.best_team_size ?? '—'}</dd>
+                  <dd class="font-semibold text-slate-900">{tool.best_team_size ?? 'n/a'}</dd>
                 </div>
                 <div>
                   <dt class="text-slate-500">Pricing verified</dt>
