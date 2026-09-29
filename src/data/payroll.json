@@ -1,6 +1,6 @@
 {
   "_schema": {
-    "description": "Payroll services for trades contractors. Different shape from insurance/lead-gen — pricing tiers, employee+contractor handling, tax filing, integrations. Schema documents the data shape.",
+    "description": "Payroll services for trades contractors. Different shape from insurance/lead-gen: pricing tiers, employee+contractor handling, tax filing, integrations. Schema documents the data shape.",
     "service_shape": {
       "slug": "string (URL-safe)",
       "name": "string",
@@ -65,20 +65,20 @@
       "geographic_coverage": "us-nationwide",
       "founded": 2011,
       "headquartered": "San Francisco, CA",
-      "long_description": "Gusto is the modern SMB payroll platform that contractors with employees consistently recommend to each other. What sets Gusto apart structurally: it was built for SMB-without-HR-staff use cases (no minimum employee count, no per-call sales team required, full self-service onboarding), the tax-filing automation actually works (federal + state + local withholdings, year-end W-2 and 1099 issuance, quarterly filings — all automatic), and the contractor + W-2 mixed-workforce handling is genuinely good (most trades shops have a mix of W-2 employees and 1099 subcontractors, and Gusto handles both cleanly).\n\nThe market position: Gusto serves the segment of SMB contractors who have outgrown 'I write personal checks to my one employee' but haven't reached 'I need ADP's enterprise complexity.' For a 2-15 employee trades shop, Gusto's combination of features (payroll + tax filing + employee benefits + time tracking + onboarding) at $40-$80/mo base + $6-$12/employee is structurally well-priced compared to legacy alternatives (ADP, Paychex) that often run 2-3x more for comparable feature breadth. The Plus tier ($80/mo + $12/employee) includes the time tracking and PTO management most growing trades shops eventually need.\n\nReddit and small-business-forum sentiment on Gusto is consistently strong. The common refrains: 'paying employees actually works,' 'tax filing automation is the killer feature,' 'support responds to email within hours,' 'the onboarding workflow makes new hires feel professional.' The criticisms — and they exist — concentrate around: (a) limited customization for shops with unusual pay structures (multiple per-job pay rates, complex commission structures), (b) some integration depth gaps with smaller FSM platforms (the major ones are covered — Jobber, Housecall Pro, QuickBooks — but specialty FSM may need Zapier), (c) pricing increases as company grows (the $40 base + $6/employee math is competitive at 5 employees, less so at 25+).",
-      "how_it_works": "Sign up on Gusto's website (no sales call required for Simple or Plus tiers — full self-service onboarding). Enter business info (EIN, state, bank account, employees). Gusto handles the federal + state + local tax registration where possible. Run your first payroll: enter hours (or import from time-tracking integration), Gusto calculates withholdings, you approve, employees get paid via direct deposit, tax payments process automatically. Year-end W-2s and 1099s issue automatically. Add employees, manage PTO, run reports — all in the dashboard. Integrations with QuickBooks, Xero, Jobber, Housecall Pro, ServiceTitan, and most major FSM platforms push payroll data into your accounting and operational systems.",
+      "long_description": "Gusto is the modern SMB payroll platform that contractors with employees consistently recommend to each other. What sets Gusto apart structurally: it was built for SMB-without-HR-staff use cases (no minimum employee count, no per-call sales team required, full self-service onboarding), the tax-filing automation actually works (federal + state + local withholdings, year-end W-2 and 1099 issuance, and quarterly filings, all automatic), and the contractor + W-2 mixed-workforce handling is genuinely good (most trades shops have a mix of W-2 employees and 1099 subcontractors, and Gusto handles both cleanly).\n\nThe market position: Gusto serves the segment of SMB contractors who have outgrown 'I write personal checks to my one employee' but haven't reached 'I need ADP's enterprise complexity.' For a 2-15 employee trades shop, Gusto's combination of features (payroll + tax filing + employee benefits + time tracking + onboarding) at $40-$80/mo base + $6-$12/employee is structurally well-priced compared to legacy alternatives (ADP, Paychex) that often run 2-3x more for comparable feature breadth. The Plus tier ($80/mo + $12/employee) includes the time tracking and PTO management most growing trades shops eventually need.\n\nReddit and small-business-forum sentiment on Gusto is consistently strong. The common refrains: 'paying employees actually works,' 'tax filing automation is the killer feature,' 'support responds to email within hours,' 'the onboarding workflow makes new hires feel professional.' The criticisms (and they exist) concentrate around: (a) limited customization for shops with unusual pay structures (multiple per-job pay rates, complex commission structures), (b) some integration depth gaps with smaller FSM platforms (the major ones are covered: Jobber, Housecall Pro, QuickBooks; but specialty FSM may need Zapier), (c) pricing increases as company grows (the $40 base + $6/employee math is competitive at 5 employees, less so at 25+).",
+      "how_it_works": "Sign up on Gusto's website (no sales call required for Simple or Plus tiers; full self-service onboarding). Enter business info (EIN, state, bank account, employees). Gusto handles the federal + state + local tax registration where possible. Run your first payroll: enter hours (or import from time-tracking integration), Gusto calculates withholdings, you approve, employees get paid via direct deposit, tax payments process automatically. Year-end W-2s and 1099s issue automatically. Add employees, manage PTO, and run reports, all in the dashboard. Integrations with QuickBooks, Xero, Jobber, Housecall Pro, ServiceTitan, and most major FSM platforms push payroll data into your accounting and operational systems.",
       "pros_detail": [
         {
           "title": "Self-service onboarding without sales calls",
-          "explanation": "Sign up, enter your business info, run payroll same day. No 'schedule a demo' gate, no quoted-pricing-after-call, no minimum-employee thresholds. The full SMB experience is available without sales-team intermediation — a structural improvement over ADP/Paychex."
+          "explanation": "Sign up, enter your business info, run payroll same day. No 'schedule a demo' gate, no quoted-pricing-after-call, no minimum-employee thresholds. The full SMB experience is available without sales-team intermediation, a structural improvement over ADP/Paychex."
         },
         {
           "title": "Tax filing automation that actually works",
-          "explanation": "Federal withholdings, state withholdings (in all 50 states), local taxes where applicable, quarterly 941 filings, year-end W-2 and 1099 issuance — all automatic. The few cases that require manual intervention (multi-state employees, unusual local jurisdictions) are flagged proactively in the dashboard."
+          "explanation": "Federal withholdings, state withholdings (in all 50 states), local taxes where applicable, quarterly 941 filings, and year-end W-2 and 1099 issuance, all automatic. The few cases that require manual intervention (multi-state employees, unusual local jurisdictions) are flagged proactively in the dashboard."
         },
         {
           "title": "W-2 + 1099 mixed-workforce handling",
-          "explanation": "Most trades shops have a mix of W-2 employees and 1099 subcontractors. Gusto handles both cleanly — same dashboard, separate compliance workflows, accurate year-end tax document generation for both. Some payroll competitors treat 1099 as an afterthought; Gusto treats it as a first-class workflow."
+          "explanation": "Most trades shops have a mix of W-2 employees and 1099 subcontractors. Gusto handles both cleanly: same dashboard, separate compliance workflows, accurate year-end tax document generation for both. Some payroll competitors treat 1099 as an afterthought; Gusto treats it as a first-class workflow."
         },
         {
           "title": "Integration depth with major FSM platforms",
@@ -100,7 +100,7 @@
         },
         {
           "title": "Limited customization for unusual pay structures",
-          "explanation": "Multiple per-job pay rates, complex commission structures, prevailing-wage compliance (some construction projects), tipped employees with tip credit — these edge cases either don't work in Gusto or require manual workarounds. For unusual pay setups, you may need an enterprise payroll system."
+          "explanation": "Multiple per-job pay rates, complex commission structures, prevailing-wage compliance (some construction projects), tipped employees with tip credit: these edge cases either don't work in Gusto or require manual workarounds. For unusual pay setups, you may need an enterprise payroll system."
         },
         {
           "title": "Some FSM integration gaps with smaller platforms",
@@ -123,7 +123,7 @@
         "g2": 4.4,
         "capterra": 4.7,
         "trustpilot": 4,
-        "reddit_sentiment": "strongly positive — most-recommended SMB payroll in r/smallbusiness, r/HVAC, r/Plumbing"
+        "reddit_sentiment": "strongly positive: most-recommended SMB payroll in r/smallbusiness, r/HVAC, r/Plumbing"
       },
       "key_features": [
         "self_service_onboarding",
@@ -156,7 +156,7 @@
       "service_faqs": [
         {
           "q": "Is Gusto worth it for a 2-employee trades shop?",
-          "a": "Yes — at $40 base + $6×2 = $52/mo, Gusto is cost-competitive with even the cheapest manual-payroll alternatives once you factor in tax-filing automation. The setup time investment (60-90 minutes) pays back within the first quarter because you're not manually filing quarterly 941s or hand-calculating withholdings."
+          "a": "Yes, at $40 base + $6×2 = $52/mo, Gusto is cost-competitive with even the cheapest manual-payroll alternatives once you factor in tax-filing automation. The setup time investment (60-90 minutes) pays back within the first quarter because you're not manually filing quarterly 941s or hand-calculating withholdings."
         },
         {
           "q": "Does Gusto handle 1099 contractors?",
@@ -177,7 +177,7 @@
       "name": "OnPay",
       "vendor_url": "https://onpay.com",
       "affiliate_url": "TBD",
-      "tagline": "Lean SMB payroll with flat pricing — favorite of small trades shops who don't need Gusto's bolt-ons",
+      "tagline": "Lean SMB payroll with flat pricing, favorite of small trades shops who don't need Gusto's bolt-ons",
       "service_type": "modern-saas",
       "pricing_model": "tiered-monthly",
       "starting_price_usd": 49,
@@ -198,7 +198,7 @@
       "geographic_coverage": "us-nationwide",
       "founded": 2007,
       "headquartered": "Atlanta, GA",
-      "long_description": "OnPay is the lean alternative to Gusto for SMB trades shops that want payroll done well at one core price without Gusto-style payroll tiers. The product is feature-comparable to Gusto's Plus tier — payroll + tax filing + direct deposit + employee self-service + year-end W-2/1099 + multi-state support — at a single core price ($49 base + $6/worker, with optional paid HR and compliance add-ons) without the Simple/Plus/Premium upsell ladder. For contractors who looked at Gusto's pricing page and thought 'I just want payroll, not the bolt-ons,' OnPay is structurally appropriate.\n\nThe market position: OnPay has built a strong reputation among small trades shops (1-10 employees typically) that prioritize price discipline + clean product + responsive support. Reddit and forum sentiment is consistently positive. The platform doesn't have Gusto's marketing budget or brand recognition, but operators who have used both consistently describe OnPay as 'just as good as Gusto Plus at a lower total cost.'\n\nThe limitations are real but narrow. OnPay's integration breadth is smaller than Gusto's — QuickBooks and Xero are well-covered, but native FSM integrations (Jobber, Housecall Pro, ServiceTitan) are sparser. Zapier middleware fills most gaps but it's an additional step. Benefits administration is more basic — for contractors moving into health insurance + 401(k), Gusto's broker tooling has more polish.\n\nFor the price-conscious SMB segment, OnPay genuinely deserves the recommendation.",
+      "long_description": "OnPay is the lean alternative to Gusto for SMB trades shops that want payroll done well at one core price without Gusto-style payroll tiers. The product is feature-comparable to Gusto's Plus tier (payroll + tax filing + direct deposit + employee self-service + year-end W-2/1099 + multi-state support) at a single core price ($49 base + $6/worker, with optional paid HR and compliance add-ons) without the Simple/Plus/Premium upsell ladder. For contractors who looked at Gusto's pricing page and thought 'I just want payroll, not the bolt-ons,' OnPay is structurally appropriate.\n\nThe market position: OnPay has built a strong reputation among small trades shops (1-10 employees typically) that prioritize price discipline + clean product + responsive support. Reddit and forum sentiment is consistently positive. The platform doesn't have Gusto's marketing budget or brand recognition, but operators who have used both consistently describe OnPay as 'just as good as Gusto Plus at a lower total cost.'\n\nThe limitations are real but narrow. OnPay's integration breadth is smaller than Gusto's: QuickBooks and Xero are well-covered, but native FSM integrations (Jobber, Housecall Pro, ServiceTitan) are sparser. Zapier middleware fills most gaps but it's an additional step. Benefits administration is more basic; for contractors moving into health insurance + 401(k), Gusto's broker tooling has more polish.\n\nFor the price-conscious SMB segment, OnPay genuinely deserves the recommendation.",
       "how_it_works": "Sign up on OnPay's website, enter business and employee info, run payroll same day. One core plan covers the payroll features (multi-state, contractor handling, tax filing, year-end documents); HR and compliance tools are optional paid add-ons. Direct deposit standard. Employee self-service portal included. Integrations push to QuickBooks, Xero, and major accounting; FSM integration coverage is narrower than Gusto.",
       "pros_detail": [
         {
@@ -221,7 +221,7 @@
       "cons_detail": [
         {
           "title": "Narrower FSM integration coverage than Gusto",
-          "explanation": "QuickBooks and Xero are well-covered. Native integrations with Jobber, Housecall Pro, ServiceTitan are sparser — Zapier middleware fills gaps but adds steps. For FSM-integration-dependent contractors, Gusto's breadth is structurally advantageous."
+          "explanation": "QuickBooks and Xero are well-covered. Native integrations with Jobber, Housecall Pro, ServiceTitan are sparser; Zapier middleware fills gaps but adds steps. For FSM-integration-dependent contractors, Gusto's breadth is structurally advantageous."
         },
         {
           "title": "More basic benefits administration",
@@ -240,7 +240,7 @@
         "g2": 4.8,
         "capterra": 4.8,
         "trustpilot": 4.1,
-        "reddit_sentiment": "positive — 'cheaper Gusto with same core features' is a common refrain"
+        "reddit_sentiment": "positive: 'cheaper Gusto with same core features' is a common refrain"
       },
       "key_features": [
         "flat_pricing",
@@ -266,7 +266,7 @@
           "a": "Feature-comparable to Gusto Plus at a lower total cost. Trade-offs: narrower FSM integration coverage, more basic benefits tooling. For most SMB trades shops the trade-offs are acceptable; for contractors needing extensive FSM integration depth or premium benefits, Gusto remains the better choice."
         },
         {
-          "q": "Is OnPay safe — will my taxes get filed correctly?",
+          "q": "Is OnPay safe? Will my taxes get filed correctly?",
           "a": "Yes. OnPay has been processing payroll since 2007 with a clean tax-filing track record. The compliance infrastructure is mature. The 'will this platform mess up my taxes?' concern is unfounded."
         }
       ]
@@ -276,7 +276,7 @@
       "name": "Patriot Payroll",
       "vendor_url": "https://www.patriotsoftware.com/payroll/",
       "affiliate_url": "TBD",
-      "tagline": "Ultra-affordable payroll for 1-3 employee shops — cheapest tax-filing payroll in the market",
+      "tagline": "Ultra-affordable payroll for 1-3 employee shops, cheapest tax-filing payroll in the market",
       "service_type": "modern-saas",
       "pricing_model": "tiered-monthly",
       "starting_price_usd": 17,
@@ -297,7 +297,7 @@
       "geographic_coverage": "us-nationwide",
       "founded": 2002,
       "headquartered": "Canton, OH",
-      "long_description": "Patriot Payroll is the ultra-affordable payroll platform that serves the very-small-shop segment (1-5 employees) where Gusto's $40 base feels expensive relative to revenue. At $17/mo Basic (you handle tax filing) or $37/mo Full Service (Patriot files taxes), Patriot is the cheapest tax-filing payroll service in the US market. For solo operators with one assistant or a 3-person crew where every dollar of overhead counts, Patriot's pricing is structurally aligned with the business reality.\n\nThe trade-offs are real and worth flagging clearly. Patriot's product is functional but the UX is less polished than Gusto or OnPay — the interface feels like 2015-era software, the mobile experience is weaker, and the integration breadth is narrow. Patriot integrates with QuickBooks Desktop better than most competitors (legacy ProAdvisor partnership) and adequately with QuickBooks Online and Xero, but native FSM-platform integrations are essentially absent. Reports are basic; payroll reminders are functional but not contextually smart.\n\nWhat Patriot does have: a strong tax-filing track record over 20+ years, US-based customer support that responds quickly, an honest customer-service culture (forum sentiment consistently positive on support quality), and a price point that lets very-small shops afford payroll automation without overspending on features they don't need.\n\nFor the price-conscious very-small-shop segment the recommendation is structurally strong: Patriot is the right choice for the 1-3-employee operations that Gusto's pricing structure squeezes.",
+      "long_description": "Patriot Payroll is the ultra-affordable payroll platform that serves the very-small-shop segment (1-5 employees) where Gusto's $40 base feels expensive relative to revenue. At $17/mo Basic (you handle tax filing) or $37/mo Full Service (Patriot files taxes), Patriot is the cheapest tax-filing payroll service in the US market. For solo operators with one assistant or a 3-person crew where every dollar of overhead counts, Patriot's pricing is structurally aligned with the business reality.\n\nThe trade-offs are real and worth flagging clearly. Patriot's product is functional but the UX is less polished than Gusto or OnPay: the interface feels like 2015-era software, the mobile experience is weaker, and the integration breadth is narrow. Patriot integrates with QuickBooks Desktop better than most competitors (legacy ProAdvisor partnership) and adequately with QuickBooks Online and Xero, but native FSM-platform integrations are essentially absent. Reports are basic; payroll reminders are functional but not contextually smart.\n\nWhat Patriot does have: a strong tax-filing track record over 20+ years, US-based customer support that responds quickly, an honest customer-service culture (forum sentiment consistently positive on support quality), and a price point that lets very-small shops afford payroll automation without overspending on features they don't need.\n\nFor the price-conscious very-small-shop segment the recommendation is structurally strong: Patriot is the right choice for the 1-3-employee operations that Gusto's pricing structure squeezes.",
       "how_it_works": "Sign up on Patriot's website (30-day free trial, no credit card required). Enter business and employee info. Choose Basic (you file taxes) or Full Service (Patriot files). Run payroll: enter hours, approve, employees get paid via direct deposit. Tax filings happen automatically on Full Service tier. Year-end W-2 and 1099 generation included.",
       "pros_detail": [
         {
@@ -306,7 +306,7 @@
         },
         {
           "title": "30-day free trial without credit card",
-          "explanation": "Genuinely free trial — no credit card required, no automatic conversion. For very-small shops evaluating payroll automation for the first time, the no-risk trial structure is structurally helpful."
+          "explanation": "Genuinely free trial: no credit card required, no automatic conversion. For very-small shops evaluating payroll automation for the first time, the no-risk trial structure is structurally helpful."
         },
         {
           "title": "20-year operational history with clean tax-filing track record",
@@ -337,13 +337,13 @@
       ],
       "best_for": "Very-small trades shops (1-5 employees) who want tax-filing payroll automation at the lowest possible price and don't need extensive FSM integration or benefits administration",
       "best_team_size": "1-10 users",
-      "weaknesses": "Dated UX, minimal FSM integration, basic reporting, limited benefits — but the price + clean tax-filing track record + strong support is structurally right for very-small shops",
+      "weaknesses": "Dated UX, minimal FSM integration, basic reporting, limited benefits; but the price + clean tax-filing track record + strong support is structurally right for very-small shops",
       "reputation_flag": null,
       "ratings": {
         "g2": 4.8,
         "capterra": 4.8,
         "trustpilot": 4.3,
-        "reddit_sentiment": "positive among 1-3 employee shops — 'cheapest legitimate option' is the consistent refrain"
+        "reddit_sentiment": "positive among 1-3 employee shops: 'cheapest legitimate option' is the consistent refrain"
       },
       "key_features": [
         "ultra_affordable",
@@ -368,7 +368,7 @@
         },
         {
           "q": "Should I pick Basic or Full Service?",
-          "a": "Full Service for almost every contractor — the $20/mo difference covers tax-filing automation which is worth far more than $20 in time savings + risk reduction. Basic only makes sense if you have specific reasons to file taxes yourself (CPA already does it as part of their package, multi-state complexity that Patriot can't handle, etc.)."
+          "a": "Full Service for almost every contractor: the $20/mo difference covers tax-filing automation which is worth far more than $20 in time savings + risk reduction. Basic only makes sense if you have specific reasons to file taxes yourself (CPA already does it as part of their package, multi-state complexity that Patriot can't handle, etc.)."
         }
       ]
     },
@@ -377,7 +377,7 @@
       "name": "Hourly.io",
       "vendor_url": "https://www.hourly.io",
       "affiliate_url": "TBD",
-      "tagline": "Payroll + pay-as-you-go workers comp combined — the only payroll service with WC built in, structurally relevant for trades",
+      "tagline": "Payroll + pay-as-you-go workers comp combined: the only payroll service with WC built in, structurally relevant for trades",
       "service_type": "specialty",
       "pricing_model": "tiered-monthly",
       "starting_price_usd": 80,
@@ -397,8 +397,8 @@
       "geographic_coverage": "us-regional",
       "founded": 2018,
       "headquartered": "Palo Alto, CA",
-      "long_description": "Hourly.io is the structural anomaly in this payroll directory — the only payroll service that bundles pay-as-you-go workers comp insurance directly into the payroll workflow, making the WC premium calculation accurate by-the-pay-period rather than estimated-up-front-then-audited-at-end. For trades contractors specifically (HVAC, roofing, construction, landscaping — trades with high WC class rates and significant audit-period premium volatility), Hourly's structural integration of payroll + WC eliminates one of the most painful operational dynamics in the trades insurance + payroll workflow.\n\nThe model: instead of estimating annual payroll up front, paying WC premium based on the estimate, then getting hit with an end-of-period audit for additional premium when actual payroll exceeds estimate (the Pie Insurance pattern documented in our /insurance/pie-insurance/ review), Hourly calculates WC premium each pay period based on the actual payroll that just ran. The audit-shock dynamic that affects most trades shops on traditional WC arrangements is structurally eliminated. For a trades shop where payroll varies significantly (seasonal landscaping, overtime-heavy HVAC summer months, storm-recovery roofing windows), the cash-flow + audit-shock improvement is meaningful.\n\nThe trade-offs are real and worth flagging. Hourly is available in a limited geographic footprint — roughly 30 states as of 2026, expanding but not nationwide. The platform is younger than Gusto/OnPay/Patriot (founded 2018) so the long-term track record is shorter. The payroll feature breadth is solid but not best-in-class — direct deposit, tax filing, year-end documents all work; benefits administration is more basic than Gusto. And the WC pricing isn't always cheaper than a traditional WC carrier — the value is the integration + audit-shock elimination, not necessarily lower premium.\n\nFor trades contractors specifically, where WC is often the largest insurance expense and payroll + WC together represent 40-60% of monthly overhead, Hourly's integrated model can be structurally transformative. For contractors who already have a long-term WC relationship that works well (Acuity-via-agent, Erie-via-agent), switching to Hourly may not be worth the disruption. For contractors using Pie or another problematic WC carrier, Hourly's audit-elimination model is a structural improvement.",
-      "how_it_works": "Sign up on Hourly's website, enter business + employee info. Hourly underwrites your WC coverage based on trade class and projected payroll. Each pay period, Hourly calculates WC premium based on actual payroll that just ran — you pay WC premium per-pay-period instead of estimated-upfront-then-audited. Payroll features work like Gusto/OnPay — direct deposit, tax filing, year-end W-2/1099. WC and payroll share a single dashboard.",
+      "long_description": "Hourly.io is the structural anomaly in this payroll directory: the only payroll service that bundles pay-as-you-go workers comp insurance directly into the payroll workflow, making the WC premium calculation accurate by-the-pay-period rather than estimated-up-front-then-audited-at-end. For trades contractors specifically (HVAC, roofing, construction, landscaping: trades with high WC class rates and significant audit-period premium volatility), Hourly's structural integration of payroll + WC eliminates one of the most painful operational dynamics in the trades insurance + payroll workflow.\n\nThe model: instead of estimating annual payroll up front, paying WC premium based on the estimate, then getting hit with an end-of-period audit for additional premium when actual payroll exceeds estimate (the Pie Insurance pattern documented in our /insurance/pie-insurance/ review), Hourly calculates WC premium each pay period based on the actual payroll that just ran. The audit-shock dynamic that affects most trades shops on traditional WC arrangements is structurally eliminated. For a trades shop where payroll varies significantly (seasonal landscaping, overtime-heavy HVAC summer months, storm-recovery roofing windows), the cash-flow + audit-shock improvement is meaningful.\n\nThe trade-offs are real and worth flagging. Hourly is available in a limited geographic footprint: roughly 30 states as of 2026, expanding but not nationwide. The platform is younger than Gusto/OnPay/Patriot (founded 2018) so the long-term track record is shorter. The payroll feature breadth is solid but not best-in-class: direct deposit, tax filing, year-end documents all work; benefits administration is more basic than Gusto. And the WC pricing isn't always cheaper than a traditional WC carrier; the value is the integration + audit-shock elimination, not necessarily lower premium.\n\nFor trades contractors specifically, where WC is often the largest insurance expense and payroll + WC together represent 40-60% of monthly overhead, Hourly's integrated model can be structurally transformative. For contractors who already have a long-term WC relationship that works well (Acuity-via-agent, Erie-via-agent), switching to Hourly may not be worth the disruption. For contractors using Pie or another problematic WC carrier, Hourly's audit-elimination model is a structural improvement.",
+      "how_it_works": "Sign up on Hourly's website, enter business + employee info. Hourly underwrites your WC coverage based on trade class and projected payroll. Each pay period, Hourly calculates WC premium based on actual payroll that just ran: you pay WC premium per-pay-period instead of estimated-upfront-then-audited. Payroll features work like Gusto/OnPay: direct deposit, tax filing, year-end W-2/1099. WC and payroll share a single dashboard.",
       "pros_detail": [
         {
           "title": "Pay-as-you-go WC eliminates audit-shock dynamic",
@@ -410,7 +410,7 @@
         },
         {
           "title": "Cash-flow improvement for variable-payroll trades",
-          "explanation": "Seasonal landscaping (high summer payroll, low winter), storm-recovery roofing (high during events), overtime-heavy HVAC summer months — variable-payroll patterns work better with pay-as-you-go WC than with estimated-upfront WC."
+          "explanation": "Seasonal landscaping (high summer payroll, low winter), storm-recovery roofing (high during events), overtime-heavy HVAC summer months: variable-payroll patterns work better with pay-as-you-go WC than with estimated-upfront WC."
         },
         {
           "title": "Built specifically for trades and similar high-WC-class businesses",
@@ -441,13 +441,13 @@
       ],
       "best_for": "Trades contractors (HVAC, plumbing, electrical, roofing, landscaping) in Hourly's geographic footprint who want to eliminate WC audit-shock dynamics or who are migrating away from problematic WC carriers (Pie Insurance pattern)",
       "best_team_size": "2-30 users",
-      "weaknesses": "Limited state availability (~30 states), younger platform with shorter track record, WC pricing not always cheaper than traditional carriers, basic benefits — but for trades specifically, the structural integration of payroll + WC is genuinely differentiating",
+      "weaknesses": "Limited state availability (~30 states), younger platform with shorter track record, WC pricing not always cheaper than traditional carriers, basic benefits; but for trades specifically, the structural integration of payroll + WC is genuinely differentiating",
       "reputation_flag": null,
       "ratings": {
         "g2": 4.7,
         "capterra": 4.6,
         "trustpilot": 4.2,
-        "reddit_sentiment": "positive among trades contractors specifically — 'finally a WC solution that doesn't shock me at audit' is the recurring refrain"
+        "reddit_sentiment": "positive among trades contractors specifically: 'finally a WC solution that doesn't shock me at audit' is the recurring refrain"
       },
       "key_features": [
         "pay_as_you_go_wc",
@@ -485,7 +485,7 @@
       "name": "QuickBooks Payroll (plans branded QuickBooks Workforce)",
       "vendor_url": "https://quickbooks.intuit.com/payroll/",
       "affiliate_url": "TBD",
-      "tagline": "Payroll embedded in QuickBooks Online — convenient for QBO users, mediocre as standalone product",
+      "tagline": "Payroll embedded in QuickBooks Online: convenient for QBO users, mediocre as standalone product",
       "service_type": "embedded",
       "pricing_model": "tiered-monthly",
       "starting_price_usd": 50,
@@ -507,7 +507,7 @@
       "geographic_coverage": "us-nationwide",
       "founded": 2003,
       "headquartered": "Mountain View, CA (Intuit subsidiary)",
-      "long_description": "QuickBooks Payroll is the payroll module bundled with (or available as add-on to) QuickBooks Online — the dominant accounting platform for SMB trades contractors. The value proposition is structural rather than feature-driven: payroll data flows directly into QuickBooks Online accounting without any integration layer, journal entries post automatically, employee labor costs allocate to jobs (when set up properly), and W-2/1099 generation pulls from QBO directly. For contractors already running QuickBooks Online as their accounting platform, the integration depth is genuinely seamless in a way no third-party payroll (Gusto, OnPay) can match.\n\nThe trade-offs are also structural. As a standalone payroll product, QBO Payroll is generally less polished than Gusto or OnPay — the UX feels like a bolt-on module rather than a primary product, the employee self-service experience is weaker, the support quality is more variable, and the pricing is higher than competitors for equivalent feature breadth. The Elite tier ($130/mo + $11/employee) includes time tracking and HR support that bring it closer to Gusto Plus parity but at a meaningful premium.\n\nThe pricing math: for a 5-employee shop, QBO Payroll Core = $50 + $30 = $80/mo. Gusto Simple = $40 + $30 = $70/mo. OnPay = $40 + $30 = $70/mo. QBO Payroll runs ~15-20% more expensive than Gusto/OnPay for similar coverage. The premium is what you pay for the QuickBooks integration depth.\n\nWe list QBO Payroll because most trades contractors using QuickBooks Online encounter it directly, and for QBO users specifically, the integration depth often outweighs the price/UX trade-offs.",
+      "long_description": "QuickBooks Payroll is the payroll module bundled with (or available as add-on to) QuickBooks Online, the dominant accounting platform for SMB trades contractors. The value proposition is structural rather than feature-driven: payroll data flows directly into QuickBooks Online accounting without any integration layer, journal entries post automatically, employee labor costs allocate to jobs (when set up properly), and W-2/1099 generation pulls from QBO directly. For contractors already running QuickBooks Online as their accounting platform, the integration depth is genuinely seamless in a way no third-party payroll (Gusto, OnPay) can match.\n\nThe trade-offs are also structural. As a standalone payroll product, QBO Payroll is generally less polished than Gusto or OnPay: the UX feels like a bolt-on module rather than a primary product, the employee self-service experience is weaker, the support quality is more variable, and the pricing is higher than competitors for equivalent feature breadth. The Elite tier ($130/mo + $11/employee) includes time tracking and HR support that bring it closer to Gusto Plus parity but at a meaningful premium.\n\nThe pricing math: for a 5-employee shop, QBO Payroll Core = $50 + $30 = $80/mo. Gusto Simple = $40 + $30 = $70/mo. OnPay = $40 + $30 = $70/mo. QBO Payroll runs ~15-20% more expensive than Gusto/OnPay for similar coverage. The premium is what you pay for the QuickBooks integration depth.\n\nWe list QBO Payroll because most trades contractors using QuickBooks Online encounter it directly, and for QBO users specifically, the integration depth often outweighs the price/UX trade-offs.",
       "how_it_works": "Add Payroll as a module to your existing QuickBooks Online subscription (or sign up new). Enter employee info, run payroll within QBO, payroll data flows automatically into accounting. Tax filing handled on Core+ tiers. Year-end W-2/1099 generation pulls from existing QBO data.",
       "pros_detail": [
         {
@@ -538,18 +538,18 @@
         },
         {
           "title": "Support quality variability is documented",
-          "explanation": "Intuit support quality is widely described as inconsistent — some contractors get fast helpful responses, others get long waits and unhelpful first-line agents. The variability is structural rather than isolated incidents."
+          "explanation": "Intuit support quality is widely described as inconsistent: some contractors get fast helpful responses, others get long waits and unhelpful first-line agents. The variability is structural rather than isolated incidents."
         }
       ],
       "best_for": "Trades contractors already running QuickBooks Online as their accounting platform who value single-vendor consolidation and seamless integration over standalone product polish",
       "best_team_size": "2-30 users",
-      "weaknesses": "Less polished UX than Gusto/OnPay, 15-20% price premium, support quality variability, value drops without QBO accounting — but for QBO-dependent shops the integration is structurally compelling",
+      "weaknesses": "Less polished UX than Gusto/OnPay, 15-20% price premium, support quality variability, value drops without QBO accounting; but for QBO-dependent shops the integration is structurally compelling",
       "reputation_flag": null,
       "ratings": {
         "g2": 3.8,
         "capterra": 4,
         "trustpilot": 3.5,
-        "reddit_sentiment": "mixed — 'works because I'm on QBO already' vs 'overpriced for what you get'"
+        "reddit_sentiment": "mixed: 'works because I'm on QBO already' vs 'overpriced for what you get'"
       },
       "key_features": [
         "qbo_integration",
@@ -569,7 +569,7 @@
       "service_faqs": [
         {
           "q": "Should I use QuickBooks Payroll if I'm on QBO?",
-          "a": "Probably yes — the integration depth typically outweighs the price/UX trade-offs. The exception: if you specifically value Gusto's superior employee experience or need features QBO Payroll lacks (more polished mobile, better benefits administration), the Gusto + QBO integration via API is functional enough to justify switching."
+          "a": "Probably yes: the integration depth typically outweighs the price/UX trade-offs. The exception: if you specifically value Gusto's superior employee experience or need features QBO Payroll lacks (more polished mobile, better benefits administration), the Gusto + QBO integration via API is functional enough to justify switching."
         },
         {
           "q": "What if I'm on Xero instead of QBO?",
@@ -582,7 +582,7 @@
       "name": "Square Payroll",
       "vendor_url": "https://squareup.com/us/en/payroll",
       "affiliate_url": "TBD",
-      "tagline": "Payroll embedded in Square ecosystem — convenient for Square-POS users, narrow fit outside that context",
+      "tagline": "Payroll embedded in Square ecosystem: convenient for Square-POS users, narrow fit outside that context",
       "service_type": "embedded",
       "pricing_model": "tiered-monthly",
       "starting_price_usd": 35,
@@ -601,12 +601,12 @@
       "geographic_coverage": "us-nationwide",
       "founded": 2015,
       "headquartered": "San Francisco, CA",
-      "long_description": "Square Payroll is the payroll module embedded in the Square ecosystem — the same Square that runs the point-of-sale terminals many home-service businesses use for in-field payment collection. For contractors already on Square POS, Square Payroll's integration is genuinely useful: customer payments flow into Square, employee time-tracking via Square Team Management feeds into payroll, the same dashboard manages both customer-facing and employee-facing financial operations.\n\nThe value proposition is narrow but real. If you're already a Square POS customer, adding Square Payroll consolidates vendors and provides clean data flow. If you're not on Square POS, Square Payroll is mediocre as a standalone product — feature breadth is narrower than Gusto, integration depth with non-Square platforms is limited, and the price advantage isn't large enough to overcome the feature gaps.\n\nOne genuine differentiator: Square Payroll has the cleanest contractor-only ($6/contractor) pricing in the market. For shops running primarily 1099 subcontractors with minimal W-2 employees, the contractor-only tier is $6/contractor with no base fee — meaningfully cheaper than Gusto's $40 base for the same use case. This is the segment where Square Payroll structurally wins.",
+      "long_description": "Square Payroll is the payroll module embedded in the Square ecosystem, the same Square that runs the point-of-sale terminals many home-service businesses use for in-field payment collection. For contractors already on Square POS, Square Payroll's integration is genuinely useful: customer payments flow into Square, employee time-tracking via Square Team Management feeds into payroll, the same dashboard manages both customer-facing and employee-facing financial operations.\n\nThe value proposition is narrow but real. If you're already a Square POS customer, adding Square Payroll consolidates vendors and provides clean data flow. If you're not on Square POS, Square Payroll is mediocre as a standalone product: feature breadth is narrower than Gusto, integration depth with non-Square platforms is limited, and the price advantage isn't large enough to overcome the feature gaps.\n\nOne genuine differentiator: Square Payroll has the cleanest contractor-only ($6/contractor) pricing in the market. For shops running primarily 1099 subcontractors with minimal W-2 employees, the contractor-only tier is $6/contractor with no base fee, meaningfully cheaper than Gusto's $40 base for the same use case. This is the segment where Square Payroll structurally wins.",
       "how_it_works": "Sign up via existing Square account or new. Add employees + contractors. Square Team Management (free) tracks employee time at job sites; payroll calculates based on tracked hours. Direct deposit + tax filing standard. Year-end W-2/1099 generation included.",
       "pros_detail": [
         {
           "title": "Seamless Square POS + Team Management integration",
-          "explanation": "For contractors already on Square for in-field payment collection, payroll integration is clean — payment data, time-tracking, and payroll all live in one dashboard."
+          "explanation": "For contractors already on Square for in-field payment collection, payroll integration is clean: payment data, time-tracking, and payroll all live in one dashboard."
         },
         {
           "title": "Cheapest contractor-only payroll ($6/contractor, no base fee)",
@@ -620,7 +620,7 @@
       "cons_detail": [
         {
           "title": "Limited value outside Square ecosystem",
-          "explanation": "If you're not on Square POS, Square Payroll is mediocre as standalone — feature breadth is narrower, integrations beyond Square are limited, support quality is variable."
+          "explanation": "If you're not on Square POS, Square Payroll is mediocre as standalone: feature breadth is narrower, integrations beyond Square are limited, support quality is variable."
         },
         {
           "title": "Narrow integration with major FSM platforms",
@@ -633,7 +633,7 @@
       ],
       "best_for": "Contractors already on Square POS or running primarily 1099 subcontractors who want the cheapest contractor-only payroll in the market",
       "best_team_size": "1-15 users",
-      "weaknesses": "Narrow value outside Square ecosystem, limited FSM integration, mediocre as standalone product — works structurally for Square POS users and 1099-only shops",
+      "weaknesses": "Narrow value outside Square ecosystem, limited FSM integration, mediocre as standalone product; works structurally for Square POS users and 1099-only shops",
       "reputation_flag": null,
       "ratings": {
         "g2": 4,
@@ -672,12 +672,12 @@
       "name": "Rippling",
       "vendor_url": "https://www.rippling.com",
       "affiliate_url": "TBD",
-      "tagline": "All-in-one HR + IT + payroll platform — comprehensive but overkill for most trades shops",
+      "tagline": "All-in-one HR + IT + payroll platform: comprehensive but overkill for most trades shops",
       "service_type": "all-in-one-hr",
       "pricing_model": "quote-only",
       "starting_price_usd": null,
       "per_employee_fee_usd": null,
-      "pricing_summary": "No public pricing — rippling.com/pricing is now a custom-quote request form collecting work email, company name, employee count and HQ country. Modules (payroll, benefits, IT management, time tracking, recruiting) are scoped into a per-company quote.",
+      "pricing_summary": "No public pricing; rippling.com/pricing is now a custom-quote request form collecting work email, company name, employee count and HQ country. Modules (payroll, benefits, IT management, time tracking, recruiting) are scoped into a per-company quote.",
       "free_trial_days": 0,
       "verticals_supported": [
         "general_contractor",
@@ -686,7 +686,7 @@
       "geographic_coverage": "us-nationwide",
       "founded": 2016,
       "headquartered": "San Francisco, CA",
-      "long_description": "Rippling is the comprehensive all-in-one HR + IT + payroll platform that has captured significant mid-market traction in tech companies and professional-services firms. For trades shops specifically, Rippling is structurally overkill — the platform is built for businesses with HR teams, IT management needs (device provisioning, SaaS management), and complex employee lifecycle workflows that most trades shops don't have. A 10-employee plumbing shop doesn't need device provisioning automation or recruiting workflows.\n\nThe pricing reflects the broader scope. Base $8/employee/mo + modular pricing for payroll, benefits, IT management, time tracking, recruiting — total monthly cost for a 10-employee trades shop using payroll + benefits + time tracking lands in the $300-$500/mo range. Compare with Gusto Plus at $80 + $12*10 = $200/mo for largely equivalent payroll + benefits + time tracking coverage.\n\nWe list Rippling for completeness because some larger trades operations (50+ employees, multi-location, complex HR needs) genuinely benefit from Rippling's comprehensive approach. For the typical SMB trades shop in our 2-25 employee target, Rippling is wrong-shape.",
+      "long_description": "Rippling is the comprehensive all-in-one HR + IT + payroll platform that has captured significant mid-market traction in tech companies and professional-services firms. For trades shops specifically, Rippling is structurally overkill: the platform is built for businesses with HR teams, IT management needs (device provisioning, SaaS management), and complex employee lifecycle workflows that most trades shops don't have. A 10-employee plumbing shop doesn't need device provisioning automation or recruiting workflows.\n\nThe pricing reflects the broader scope. Base $8/employee/mo + modular pricing for payroll, benefits, IT management, time tracking, recruiting; total monthly cost for a 10-employee trades shop using payroll + benefits + time tracking lands in the $300-$500/mo range. Compare with Gusto Plus at $80 + $12*10 = $200/mo for largely equivalent payroll + benefits + time tracking coverage.\n\nWe list Rippling for completeness because some larger trades operations (50+ employees, multi-location, complex HR needs) genuinely benefit from Rippling's comprehensive approach. For the typical SMB trades shop in our 2-25 employee target, Rippling is wrong-shape.",
       "how_it_works": "Sign up, configure modules you need (payroll + benefits + time tracking minimum for trades use case). Per-module pricing applies. Single dashboard for all HR/IT functions. Device provisioning and IT management are differentiating features but typically not needed by trades shops.",
       "pros_detail": [
         {
@@ -714,7 +714,7 @@
       ],
       "best_for": "Mid-market trades operations (50+ employees, multi-location, dedicated HR staff) needing comprehensive HR/IT/payroll consolidation in a single platform",
       "best_team_size": "50-500 users",
-      "weaknesses": "Overkill for typical SMB trades shops, more expensive than purpose-built SMB payroll, sales-driven onboarding — wrong shape for the 2-25 employee shop sweet spot",
+      "weaknesses": "Overkill for typical SMB trades shops, more expensive than purpose-built SMB payroll, sales-driven onboarding; wrong shape for the 2-25 employee shop sweet spot",
       "reputation_flag": null,
       "ratings": {
         "g2": 4.8,
@@ -750,12 +750,12 @@
       "name": "ADP Run",
       "vendor_url": "https://www.adp.com/what-we-offer/products/run-powered-by-adp.aspx",
       "affiliate_url": "TBD",
-      "tagline": "Legacy mass-market SMB payroll — solid product with documented aggressive renewal-pricing pattern",
+      "tagline": "Legacy mass-market SMB payroll: solid product with documented aggressive renewal-pricing pattern",
       "service_type": "legacy-payroll",
       "pricing_model": "custom",
       "starting_price_usd": null,
       "per_employee_fee_usd": null,
-      "pricing_summary": "Sales-quoted pricing — typically $79-$200+/mo base + $5-$10/employee depending on tier and negotiation",
+      "pricing_summary": "Sales-quoted pricing; typically $79-$200+/mo base + $5-$10/employee depending on tier and negotiation",
       "free_trial_days": 0,
       "verticals_supported": [
         "hvac",
@@ -775,7 +775,7 @@
       "geographic_coverage": "us-nationwide",
       "founded": 1949,
       "headquartered": "Roseland, NJ",
-      "long_description": "ADP Run is ADP's SMB-tier payroll product — a market leader by customer count and brand recognition, with mature tax-filing infrastructure and broad payroll feature coverage. The product itself is solid for what it does. The structural concerns are around the sales process, pricing transparency, and renewal-rate increases that have been documented in contractor forum sentiment over many years.\n\nThe sales process: ADP Run pricing is sales-quoted rather than published. You'll get a phone-call demo, a tailored quote, and pricing that depends partly on negotiation. Initial pricing is often competitive — but the documented pattern is that ADP renewal pricing increases significantly each year, often 15-30% annually on accounts with no major change in employee count or feature usage. Cancellation is described in many forum threads as involving retention-call pressure and friction.\n\nFor mid-market trades shops (25+ employees) where the volume math may favor ADP's enterprise underwriting capacity, the product is credible — particularly for shops needing complex multi-state compliance, prevailing-wage compliance, or union compliance that smaller SMB payroll platforms don't handle. For typical 2-25 employee trades shops, the combination of opaque pricing + aggressive renewal pattern + sales-process friction makes ADP a structurally worse choice than Gusto or OnPay.\n\nWe list ADP for completeness because most contractors encounter it via brand recognition and sales outreach. The honest editorial position: ADP works as a product but the commercial relationship is structurally less contractor-friendly than modern SMB-focused alternatives.",
+      "long_description": "ADP Run is ADP's SMB-tier payroll product, a market leader by customer count and brand recognition, with mature tax-filing infrastructure and broad payroll feature coverage. The product itself is solid for what it does. The structural concerns are around the sales process, pricing transparency, and renewal-rate increases that have been documented in contractor forum sentiment over many years.\n\nThe sales process: ADP Run pricing is sales-quoted rather than published. You'll get a phone-call demo, a tailored quote, and pricing that depends partly on negotiation. Initial pricing is often competitive, but the documented pattern is that ADP renewal pricing increases significantly each year, often 15-30% annually on accounts with no major change in employee count or feature usage. Cancellation is described in many forum threads as involving retention-call pressure and friction.\n\nFor mid-market trades shops (25+ employees) where the volume math may favor ADP's enterprise underwriting capacity, the product is credible, particularly for shops needing complex multi-state compliance, prevailing-wage compliance, or union compliance that smaller SMB payroll platforms don't handle. For typical 2-25 employee trades shops, the combination of opaque pricing + aggressive renewal pattern + sales-process friction makes ADP a structurally worse choice than Gusto or OnPay.\n\nWe list ADP for completeness because most contractors encounter it via brand recognition and sales outreach. The honest editorial position: ADP works as a product but the commercial relationship is structurally less contractor-friendly than modern SMB-focused alternatives.",
       "how_it_works": "Phone-call demo + sales-quoted pricing. Onboarding handled by ADP sales team. Multi-tier feature options. Renewal happens annually with potential rate increases.",
       "pros_detail": [
         {
@@ -784,7 +784,7 @@
         },
         {
           "title": "Capacity for mid-market complexity (multi-state, prevailing-wage, union)",
-          "explanation": "ADP can handle complex compliance scenarios that smaller SMB platforms don't — multi-state employee withholdings, prevailing-wage compliance for public-works projects, union-shop reporting. For mid-market trades operations, this depth is valuable."
+          "explanation": "ADP can handle complex compliance scenarios that smaller SMB platforms don't: multi-state employee withholdings, prevailing-wage compliance for public-works projects, union-shop reporting. For mid-market trades operations, this depth is valuable."
         },
         {
           "title": "Strong brand recognition",
@@ -813,15 +813,15 @@
           "explanation": "Account-management quality varies significantly. Some contractors report excellent dedicated-rep relationships; others describe being passed between unhelpful first-line agents."
         }
       ],
-      "best_for": "Mid-market and larger trades operations (25+ employees) needing complex multi-state, prevailing-wage, or union-compliance capacity that smaller SMB platforms don't handle — and contractors who already have an established ADP relationship that's working well",
+      "best_for": "Mid-market and larger trades operations (25+ employees) needing complex multi-state, prevailing-wage, or union-compliance capacity that smaller SMB platforms don't handle, and contractors who already have an established ADP relationship that's working well",
       "best_team_size": "25-500 users",
-      "weaknesses": "Documented aggressive renewal-rate increases, opaque sales-quoted pricing, cancellation friction, overkill for SMB — for typical 2-25 employee shops, Gusto/OnPay are structurally better choices",
+      "weaknesses": "Documented aggressive renewal-rate increases, opaque sales-quoted pricing, cancellation friction, overkill for SMB; for typical 2-25 employee shops, Gusto/OnPay are structurally better choices",
       "reputation_flag": null,
       "ratings": {
         "g2": 4.5,
         "capterra": 4.5,
         "trustpilot": 1.4,
-        "reddit_sentiment": "mixed — strong product reputation undermined by sales/renewal/cancellation friction complaints"
+        "reddit_sentiment": "mixed: strong product reputation undermined by sales/renewal/cancellation friction complaints"
       },
       "key_features": [
         "enterprise_compliance_capacity",
@@ -846,7 +846,7 @@
         },
         {
           "q": "What about the renewal-rate-increase pattern?",
-          "a": "Documented widely in forum threads. Existing ADP customers report 15-30% annual increases on accounts with no changes. If you're on ADP currently, shop alternatives at every renewal — don't assume the rate stays competitive."
+          "a": "Documented widely in forum threads. Existing ADP customers report 15-30% annual increases on accounts with no changes. If you're on ADP currently, shop alternatives at every renewal; don't assume the rate stays competitive."
         }
       ]
     },
@@ -855,12 +855,12 @@
       "name": "Paychex Flex",
       "vendor_url": "https://www.paychex.com/payroll/payroll-services",
       "affiliate_url": "TBD",
-      "tagline": "Legacy SMB payroll competitor to ADP — similar structural concerns around sales process and renewal pricing",
+      "tagline": "Legacy SMB payroll competitor to ADP: similar structural concerns around sales process and renewal pricing",
       "service_type": "legacy-payroll",
       "pricing_model": "custom",
       "starting_price_usd": null,
       "per_employee_fee_usd": null,
-      "pricing_summary": "Sales-quoted pricing — comparable range to ADP Run, varies with negotiation",
+      "pricing_summary": "Sales-quoted pricing; comparable range to ADP Run, varies with negotiation",
       "free_trial_days": 0,
       "verticals_supported": [
         "hvac",
@@ -880,8 +880,8 @@
       "geographic_coverage": "us-nationwide",
       "founded": 1971,
       "headquartered": "Rochester, NY",
-      "long_description": "Paychex Flex is ADP Run's primary legacy competitor in SMB payroll — same general structural profile, similar product depth, comparable sales-process and renewal-pricing patterns documented in contractor forum sentiment. The product itself is solid for what it does; the commercial relationship has the same structural friction as ADP.\n\nFor most analysis purposes, treat Paychex Flex as ADP-equivalent: capable mid-market compliance, mature tax infrastructure, opaque sales-quoted pricing, documented renewal-rate-increase pattern, and cancellation-friction complaints. The differentiation between Paychex and ADP is mostly relationship-driven (which rep do you work with, what's local market presence like) rather than product-driven.\n\nFor typical SMB trades shops, the same recommendation as ADP applies: Gusto or OnPay are structurally better choices. Paychex Flex becomes credible at 25+ employees with complex compliance needs.",
-      "how_it_works": "Same as ADP — sales-quoted pricing, phone-call demo, sales-team onboarding, annual renewal with potential rate adjustments.",
+      "long_description": "Paychex Flex is ADP Run's primary legacy competitor in SMB payroll: same general structural profile, similar product depth, comparable sales-process and renewal-pricing patterns documented in contractor forum sentiment. The product itself is solid for what it does; the commercial relationship has the same structural friction as ADP.\n\nFor most analysis purposes, treat Paychex Flex as ADP-equivalent: capable mid-market compliance, mature tax infrastructure, opaque sales-quoted pricing, documented renewal-rate-increase pattern, and cancellation-friction complaints. The differentiation between Paychex and ADP is mostly relationship-driven (which rep do you work with, what's local market presence like) rather than product-driven.\n\nFor typical SMB trades shops, the same recommendation as ADP applies: Gusto or OnPay are structurally better choices. Paychex Flex becomes credible at 25+ employees with complex compliance needs.",
+      "how_it_works": "Same as ADP: sales-quoted pricing, phone-call demo, sales-team onboarding, annual renewal with potential rate adjustments.",
       "pros_detail": [
         {
           "title": "Mature tax-filing infrastructure",
@@ -889,7 +889,7 @@
         },
         {
           "title": "Mid-market compliance capacity",
-          "explanation": "Multi-state, prevailing-wage, union — same depth as ADP at the higher end of SMB."
+          "explanation": "Multi-state, prevailing-wage, union: same depth as ADP at the higher end of SMB."
         }
       ],
       "cons_detail": [
@@ -908,13 +908,13 @@
       ],
       "best_for": "Mid-market trades operations needing legacy-payroll compliance depth, or contractors with existing Paychex relationships that work well",
       "best_team_size": "25-500 users",
-      "weaknesses": "Same structural concerns as ADP Run — renewal pattern, opaque pricing, cancellation friction. For typical SMB trades, Gusto or OnPay is structurally better.",
+      "weaknesses": "Same structural concerns as ADP Run: renewal pattern, opaque pricing, cancellation friction. For typical SMB trades, Gusto or OnPay is structurally better.",
       "reputation_flag": null,
       "ratings": {
         "g2": 4.2,
         "capterra": 4.2,
         "trustpilot": 1.5,
-        "reddit_sentiment": "mixed — similar profile to ADP"
+        "reddit_sentiment": "mixed: similar profile to ADP"
       },
       "key_features": [
         "enterprise_compliance_capacity",
@@ -932,7 +932,7 @@
       "verified_date": "2026-05-28",
       "service_faqs": [
         {
-          "q": "Paychex Flex vs ADP Run — which is better?",
+          "q": "Paychex Flex vs ADP Run: which is better?",
           "a": "Functionally equivalent. The choice is usually driven by which local rep you have a better relationship with rather than product differentiation. For typical SMB trades shops, neither is the right choice vs Gusto or OnPay."
         }
       ]
@@ -942,7 +942,7 @@
       "name": "Justworks",
       "vendor_url": "https://www.justworks.com",
       "affiliate_url": "TBD",
-      "tagline": "PEO model bundling payroll + benefits + HR — typically wrong shape for trades shops",
+      "tagline": "PEO model bundling payroll + benefits + HR: typically wrong shape for trades shops",
       "service_type": "peo",
       "pricing_model": "per-employee",
       "starting_price_usd": 50,
@@ -956,7 +956,7 @@
       "geographic_coverage": "us-nationwide",
       "founded": 2012,
       "headquartered": "New York, NY",
-      "long_description": "Justworks operates as a Professional Employer Organization (PEO) — a model where Justworks technically becomes the employer-of-record for your employees, bundling payroll + benefits + workers comp + HR compliance into a single all-inclusive per-employee fee ($49-$109/employee/mo). The model is structurally appropriate for some businesses but typically wrong-shape for trades contractors.\n\nThe PEO trade-off: in exchange for the all-inclusive bundled price, you give up direct employer relationships with your employees (they're co-employed with Justworks), lose flexibility on benefit selection (you take Justworks' bundled benefits, not custom plans), and accept Justworks' HR policies (which may not match how trades shops actually operate). For tech startups and professional-services firms with non-physical work environments and standard W-2 employee patterns, PEOs can simplify HR overhead. For trades shops with W-2 + 1099 mixed workforces, variable seasonal payroll, and trade-specific operational realities, the PEO model adds friction without clear value.\n\nWe list Justworks for completeness because trades contractors occasionally encounter it via marketing or referrals — but for the typical trades shop, the recommendation is clear: stick with standalone payroll (Gusto, OnPay) + standalone WC (NEXT, Acuity, Erie, or Hourly.io for integrated WC+payroll if appropriate). The PEO model adds complexity that trades shops generally don't need.",
+      "long_description": "Justworks operates as a Professional Employer Organization (PEO), a model where Justworks technically becomes the employer-of-record for your employees, bundling payroll + benefits + workers comp + HR compliance into a single all-inclusive per-employee fee ($49-$109/employee/mo). The model is structurally appropriate for some businesses but typically wrong-shape for trades contractors.\n\nThe PEO trade-off: in exchange for the all-inclusive bundled price, you give up direct employer relationships with your employees (they're co-employed with Justworks), lose flexibility on benefit selection (you take Justworks' bundled benefits, not custom plans), and accept Justworks' HR policies (which may not match how trades shops actually operate). For tech startups and professional-services firms with non-physical work environments and standard W-2 employee patterns, PEOs can simplify HR overhead. For trades shops with W-2 + 1099 mixed workforces, variable seasonal payroll, and trade-specific operational realities, the PEO model adds friction without clear value.\n\nWe list Justworks for completeness because trades contractors occasionally encounter it via marketing or referrals, but for the typical trades shop, the recommendation is clear: stick with standalone payroll (Gusto, OnPay) + standalone WC (NEXT, Acuity, Erie, or Hourly.io for integrated WC+payroll if appropriate). The PEO model adds complexity that trades shops generally don't need.",
       "how_it_works": "Sign up, employees are co-employed with Justworks. Bundled monthly per-employee fee covers payroll, benefits (health, 401k from Justworks' bundled offerings), workers comp (Justworks-arranged), HR compliance, and basic HR support.",
       "pros_detail": [
         {
@@ -986,9 +986,9 @@
           "explanation": "You take Justworks' bundled benefits. Customizing health plans, 401(k) matching structures, or PTO policies is limited or impossible."
         }
       ],
-      "best_for": "Tech startups, professional services firms, and non-trades businesses with standard W-2 patterns and no in-house HR — NOT typically a fit for trades contractors",
+      "best_for": "Tech startups, professional services firms, and non-trades businesses with standard W-2 patterns and no in-house HR; NOT typically a fit for trades contractors",
       "best_team_size": "5-200 users (but wrong-shape for trades regardless of size)",
-      "weaknesses": "PEO model adds complexity trades shops don't need, structurally expensive per-employee, loss of direct employer relationship, limited benefit customization — Gusto + standalone WC is structurally better for almost all trades shops",
+      "weaknesses": "PEO model adds complexity trades shops don't need, structurally expensive per-employee, loss of direct employer relationship, limited benefit customization; Gusto + standalone WC is structurally better for almost all trades shops",
       "reputation_flag": null,
       "ratings": {
         "g2": 4.6,
@@ -1044,7 +1044,7 @@
       "geographic_coverage": "us-nationwide",
       "founded": 2000,
       "headquartered": "Glenview, IL",
-      "long_description": "SurePayroll is a small-business payroll specialist that has been processing payroll since 2000 and has been owned by Paychex since 2011 — so it pairs the simplicity of a focused online product with the tax-compliance backbone of one of the biggest names in payroll. It targets the exact profile of most trades shops: small employers (roughly 1-25 employees) that want straightforward, affordable payroll without the complexity or cost of an enterprise HCM platform. It also serves household employers, which is a niche but tells you how light-touch it is built to be.\n\nPricing is among the more affordable in the category. Full-service payroll starts at $29/month plus $7 per worker with federal and state payroll taxes filed for you; year-end W-2 and 1099-NEC forms are billed annually ($50 base plus $5 per form), and a self-service plan is no longer shown on its pricing page. Promotional discounts — such as several months free — are common, which can make the first-year cost very competitive. For a small contractor running a handful of W-2 employees, that math is friendlier than the mid-market platforms.\n\nThe most-praised feature in reviews is tax compliance — SurePayroll reliably calculates, files, and pays payroll taxes, and contractors credit it with keeping them out of trouble with the IRS and state agencies. The recurring complaint is customer service: long wait times and occasionally inconsistent answers. For a product whose whole value is removing payroll headaches, slow support when something goes wrong is the main risk to weigh.\n\nFor a small trades business that wants cheap, reliable, tax-compliant payroll backed by Paychex's infrastructure — and does not need deep HR or scheduling — SurePayroll is a strong-value pick. Shops that want bundled HR, benefits, and a slicker modern experience may prefer Gusto; those that want team scheduling and time tracking baked in may prefer Homebase.",
+      "long_description": "SurePayroll is a small-business payroll specialist that has been processing payroll since 2000 and has been owned by Paychex since 2011, so it pairs the simplicity of a focused online product with the tax-compliance backbone of one of the biggest names in payroll. It targets the exact profile of most trades shops: small employers (roughly 1-25 employees) that want straightforward, affordable payroll without the complexity or cost of an enterprise HCM platform. It also serves household employers, which is a niche but tells you how light-touch it is built to be.\n\nPricing is among the more affordable in the category. Full-service payroll starts at $29/month plus $7 per worker with federal and state payroll taxes filed for you; year-end W-2 and 1099-NEC forms are billed annually ($50 base plus $5 per form), and a self-service plan is no longer shown on its pricing page. Promotional discounts, such as several months free, are common, which can make the first-year cost very competitive. For a small contractor running a handful of W-2 employees, that math is friendlier than the mid-market platforms.\n\nThe most-praised feature in reviews is tax compliance: SurePayroll reliably calculates, files, and pays payroll taxes, and contractors credit it with keeping them out of trouble with the IRS and state agencies. The recurring complaint is customer service: long wait times and occasionally inconsistent answers. For a product whose whole value is removing payroll headaches, slow support when something goes wrong is the main risk to weigh.\n\nFor a small trades business that wants cheap, reliable, tax-compliant payroll backed by Paychex's infrastructure, and does not need deep HR or scheduling, SurePayroll is a strong-value pick. Shops that want bundled HR, benefits, and a slicker modern experience may prefer Gusto; those that want team scheduling and time tracking baked in may prefer Homebase.",
       "how_it_works": "You set up your business, employees, and pay schedule online, then run payroll in a few clicks; SurePayroll calculates wages, withholdings, and payroll taxes. It files and deposits federal and state payroll taxes for you (a separate fee applies in areas with local taxes). Direct deposit and employee self-service are included. Because SurePayroll is owned by Paychex, the tax-compliance engine is enterprise-grade despite the small-business price. You manage everything online or via the mobile app, and support is available by phone (though wait times are a common complaint).",
       "pros_detail": [
         {
@@ -1053,7 +1053,7 @@
         },
         {
           "title": "Strong tax compliance",
-          "explanation": "Its most-praised feature — SurePayroll reliably calculates, files, and pays payroll taxes, which contractors credit with keeping them clear of IRS and state penalties."
+          "explanation": "Its most-praised feature: SurePayroll reliably calculates, files, and pays payroll taxes, which contractors credit with keeping them clear of IRS and state penalties."
         },
         {
           "title": "Paychex backing",
@@ -1065,7 +1065,7 @@
         },
         {
           "title": "Simple, focused product",
-          "explanation": "It does payroll well without forcing you into a complex HR platform — a plus for owners who just want employees paid and taxes filed correctly."
+          "explanation": "It does payroll well without forcing you into a complex HR platform, a plus for owners who just want employees paid and taxes filed correctly."
         }
       ],
       "cons_detail": [
@@ -1111,7 +1111,7 @@
         "quickbooks"
       ],
       "affiliate_program": "unknown",
-      "affiliate_payout_note": "No public publisher affiliate program confirmed — outreach required (Paychex-owned).",
+      "affiliate_payout_note": "No public publisher affiliate program confirmed; outreach required (Paychex-owned).",
       "verified_date": "2026-09-10",
       "service_faqs": [
         {
@@ -1120,7 +1120,7 @@
         },
         {
           "q": "Is SurePayroll good for a small contractor?",
-          "a": "Yes — it is built for small employers (roughly 1-25 employees) and is among the more affordable reliable options, with strong payroll-tax compliance backed by Paychex. The main caveat is customer-service wait times, and it lacks deep HR or scheduling."
+          "a": "Yes, it is built for small employers (roughly 1-25 employees) and is among the more affordable reliable options, with strong payroll-tax compliance backed by Paychex. The main caveat is customer-service wait times, and it lacks deep HR or scheduling."
         },
         {
           "q": "Who owns SurePayroll?",
@@ -1137,7 +1137,7 @@
       "name": "Roll by ADP",
       "vendor_url": "https://www.rollbyadp.com",
       "affiliate_url": "TBD",
-      "tagline": "Chat-based, mobile-first payroll from ADP — run payroll by text in minutes",
+      "tagline": "Chat-based, mobile-first payroll from ADP: run payroll by text in minutes",
       "service_type": "modern-saas",
       "pricing_model": "tiered-monthly",
       "starting_price_usd": 39,
@@ -1159,12 +1159,12 @@
       "geographic_coverage": "us-nationwide",
       "founded": 2021,
       "headquartered": "Roseland, NJ",
-      "long_description": "Roll by ADP is ADP's answer to the modern, mobile-first small-business payroll wave: a chat-driven app where you run payroll by typing a command (\"run payroll\") the way you would text a colleague. Launched in 2021 and backed by ADP's payroll-tax infrastructure, it strips the complexity out of ADP's enterprise heritage and aims it at owner-operators and small trades shops who want to pay their crew from a phone in a few minutes.\n\nThe pricing is refreshingly simple: a flat $39/month for unlimited payroll runs plus $5 per employee, with the first three months free for new customers and no long-term contract. Unlimited runs is a genuine plus for trades that pay weekly or run off-cycle bonuses — you are not nickel-and-dimed per payroll. Reviewers consistently praise how fast and easy it is, with owners reporting they run payroll in about five minutes, and the app earns high marks in app stores for simplicity and accuracy.\n\nThe trade-offs reviewers raise are a somewhat dated web experience (it is built mobile-first, so the desktop side can feel secondary) and the usual ADP-ecosystem notes about support and pricing opacity on broader ADP products (less so on Roll, which is transparently priced). It is also payroll-and-basic-tax-focused rather than a full HR/scheduling suite.\n\nFor a small trades business that wants dead-simple, mobile, ADP-backed payroll with predictable flat pricing and unlimited runs, Roll by ADP is one of the most frictionless options available — especially for owners who would rather text a command than navigate a dashboard. Shops wanting bundled HR/benefits should compare Gusto; those wanting scheduling and time tracking should compare Homebase.",
+      "long_description": "Roll by ADP is ADP's answer to the modern, mobile-first small-business payroll wave: a chat-driven app where you run payroll by typing a command (\"run payroll\") the way you would text a colleague. Launched in 2021 and backed by ADP's payroll-tax infrastructure, it strips the complexity out of ADP's enterprise heritage and aims it at owner-operators and small trades shops who want to pay their crew from a phone in a few minutes.\n\nThe pricing is refreshingly simple: a flat $39/month for unlimited payroll runs plus $5 per employee, with the first three months free for new customers and no long-term contract. Unlimited runs is a genuine plus for trades that pay weekly or run off-cycle bonuses; you are not nickel-and-dimed per payroll. Reviewers consistently praise how fast and easy it is, with owners reporting they run payroll in about five minutes, and the app earns high marks in app stores for simplicity and accuracy.\n\nThe trade-offs reviewers raise are a somewhat dated web experience (it is built mobile-first, so the desktop side can feel secondary) and the usual ADP-ecosystem notes about support and pricing opacity on broader ADP products (less so on Roll, which is transparently priced). It is also payroll-and-basic-tax-focused rather than a full HR/scheduling suite.\n\nFor a small trades business that wants dead-simple, mobile, ADP-backed payroll with predictable flat pricing and unlimited runs, Roll by ADP is one of the most frictionless options available, especially for owners who would rather text a command than navigate a dashboard. Shops wanting bundled HR/benefits should compare Gusto; those wanting scheduling and time tracking should compare Homebase.",
       "how_it_works": "You set up your business and employees in the Roll app (guided by an AI assistant), then run payroll by typing a natural-language command like \"run payroll.\" Roll calculates pay and taxes and, backed by ADP, files and pays payroll taxes automatically. Direct deposit, new-hire reporting, and employee self-service are included. Pricing is a flat $39/month for unlimited payroll runs plus $5 per employee, with the first three months free. It is mobile-first, so most owners run everything from their phone; a web experience exists but is secondary.",
       "pros_detail": [
         {
           "title": "Chat-based, run payroll in minutes",
-          "explanation": "You run payroll by typing a command like a text message. Owners report finishing in about five minutes — arguably the lowest-friction payroll experience for a busy contractor."
+          "explanation": "You run payroll by typing a command like a text message. Owners report finishing in about five minutes, arguably the lowest-friction payroll experience for a busy contractor."
         },
         {
           "title": "Flat price with unlimited runs",
@@ -1213,7 +1213,7 @@
         "g2": null,
         "capterra": null,
         "trustpilot": null,
-        "reddit_sentiment": "positive — praised as fast, simple mobile payroll at a reasonable cost; high app-store ratings; some note a dated web UI"
+        "reddit_sentiment": "positive: praised as fast, simple mobile payroll at a reasonable cost; high app-store ratings; some note a dated web UI"
       },
       "key_features": [
         "chat_based_payroll",
@@ -1226,7 +1226,7 @@
         "quickbooks"
       ],
       "affiliate_program": "unknown",
-      "affiliate_payout_note": "No public publisher affiliate program confirmed — outreach required (ADP product).",
+      "affiliate_payout_note": "No public publisher affiliate program confirmed; outreach required (ADP product).",
       "verified_date": "2026-09-10",
       "service_faqs": [
         {
@@ -1235,7 +1235,7 @@
         },
         {
           "q": "How does Roll by ADP work?",
-          "a": "It is a chat-based, mobile-first app — you run payroll by typing a natural-language command like \"run payroll,\" and Roll (backed by ADP) calculates pay and files/pays payroll taxes automatically. Owners report running payroll in about five minutes."
+          "a": "It is a chat-based, mobile-first app: you run payroll by typing a natural-language command like \"run payroll,\" and Roll (backed by ADP) calculates pay and files/pays payroll taxes automatically. Owners report running payroll in about five minutes."
         },
         {
           "q": "Is Roll by ADP good for small contractors?",
@@ -1252,7 +1252,7 @@
       "name": "Wave Payroll",
       "vendor_url": "https://www.waveapps.com/payroll",
       "affiliate_url": "TBD",
-      "tagline": "Low-cost payroll that plugs into Wave's free accounting — simple and affordable for tiny shops",
+      "tagline": "Low-cost payroll that plugs into Wave's free accounting, simple and affordable for tiny shops",
       "service_type": "embedded",
       "pricing_model": "tiered-monthly",
       "starting_price_usd": 40,
@@ -1274,12 +1274,12 @@
       "geographic_coverage": "us-nationwide",
       "founded": 2010,
       "headquartered": "Toronto, Canada",
-      "long_description": "Wave Payroll is the payroll module of Wave, the long-running small-business financial suite known for its genuinely free accounting and invoicing. Founded in 2010 in Toronto and acquired by H&R Block in 2019, Wave's pitch to a tiny trades shop is integration and price: run your books on Wave's free accounting, then bolt on payroll so wages, taxes, and expenses flow into the same ledger automatically. For a solo operator or micro-shop that already wants free invoicing and accounting, adding payroll in the same place is the path of least resistance.\n\nPricing is straightforward and cheap. After Wave's 2025 plan change, payroll is $20/month plus $6 per active employee or contractor on a self-service basis (you handle tax filings), or $40/month plus $6 per employee/contractor for full-service with automatic tax calculation, filing, and payment in all 50 states. Either way it is among the lower-cost options, and the tight link to Wave's free accounting is the real differentiator.\n\nReviewers (G2 around 4.1) praise the easy-to-use interface, the automated tax filing on the full-service plan, and the seamless accounting integration. The recurring gripes are a clunky two-step process for paying 1099 contractors and no support for international payroll — both fine for a typical US trades shop with W-2 employees, but worth knowing.\n\nFor a very small trades business — especially a solo operator or micro-shop already using or open to Wave's free accounting — Wave Payroll is a low-cost, simple way to add compliant payroll without a separate system. Larger shops or those wanting deep HR, scheduling, or benefits will outgrow it and should look at Gusto or Homebase.",
-      "how_it_works": "If you use Wave's (free) accounting, you add the Payroll module; you can also use Payroll standalone. You set up employees/contractors and pay schedules, and run payroll online — wages, taxes, and expenses post automatically into Wave's accounting ledger. On the full-service plan ($40/mo + $6/employee), Wave calculates, files, and pays payroll taxes in all 50 states; on the self-service plan ($20/mo + $6/employee) you handle the filings. Direct deposit and employee self-service are included. The defining feature is the tight integration with Wave's free accounting and invoicing.",
+      "long_description": "Wave Payroll is the payroll module of Wave, the long-running small-business financial suite known for its genuinely free accounting and invoicing. Founded in 2010 in Toronto and acquired by H&R Block in 2019, Wave's pitch to a tiny trades shop is integration and price: run your books on Wave's free accounting, then bolt on payroll so wages, taxes, and expenses flow into the same ledger automatically. For a solo operator or micro-shop that already wants free invoicing and accounting, adding payroll in the same place is the path of least resistance.\n\nPricing is straightforward and cheap. After Wave's 2025 plan change, payroll is $20/month plus $6 per active employee or contractor on a self-service basis (you handle tax filings), or $40/month plus $6 per employee/contractor for full-service with automatic tax calculation, filing, and payment in all 50 states. Either way it is among the lower-cost options, and the tight link to Wave's free accounting is the real differentiator.\n\nReviewers (G2 around 4.1) praise the easy-to-use interface, the automated tax filing on the full-service plan, and the seamless accounting integration. The recurring gripes are a clunky two-step process for paying 1099 contractors and no support for international payroll, both fine for a typical US trades shop with W-2 employees, but worth knowing.\n\nFor a very small trades business, especially a solo operator or micro-shop already using or open to Wave's free accounting, Wave Payroll is a low-cost, simple way to add compliant payroll without a separate system. Larger shops or those wanting deep HR, scheduling, or benefits will outgrow it and should look at Gusto or Homebase.",
+      "how_it_works": "If you use Wave's (free) accounting, you add the Payroll module; you can also use Payroll standalone. You set up employees/contractors and pay schedules, and run payroll online; wages, taxes, and expenses post automatically into Wave's accounting ledger. On the full-service plan ($40/mo + $6/employee), Wave calculates, files, and pays payroll taxes in all 50 states; on the self-service plan ($20/mo + $6/employee) you handle the filings. Direct deposit and employee self-service are included. The defining feature is the tight integration with Wave's free accounting and invoicing.",
       "pros_detail": [
         {
           "title": "Low cost",
-          "explanation": "From $20/mo + $6/employee (self-service) or $40/mo + $6/employee (full-service tax filing), Wave Payroll is among the cheapest compliant payroll options — ideal for solo operators and micro-shops."
+          "explanation": "From $20/mo + $6/employee (self-service) or $40/mo + $6/employee (full-service tax filing), Wave Payroll is among the cheapest compliant payroll options, ideal for solo operators and micro-shops."
         },
         {
           "title": "Seamless Wave accounting integration",
@@ -1287,11 +1287,11 @@
         },
         {
           "title": "Automatic tax filing (full-service)",
-          "explanation": "The $40/mo plan calculates, files, and pays payroll taxes automatically in all 50 states — hands-off compliance for a low price."
+          "explanation": "The $40/mo plan calculates, files, and pays payroll taxes automatically in all 50 states, hands-off compliance for a low price."
         },
         {
           "title": "Easy to use",
-          "explanation": "Reviewers (G2 ~4.1) consistently praise the simple, clean interface and straightforward payroll process — well-suited to non-experts."
+          "explanation": "Reviewers (G2 ~4.1) consistently praise the simple, clean interface and straightforward payroll process, well-suited to non-experts."
         },
         {
           "title": "H&R Block-backed",
@@ -1301,11 +1301,11 @@
       "cons_detail": [
         {
           "title": "Clunky 1099 contractor process",
-          "explanation": "Reviewers note paying 1099 contractors is a two-step process — a minor friction for trades that lean heavily on subcontractors."
+          "explanation": "Reviewers note paying 1099 contractors is a two-step process, a minor friction for trades that lean heavily on subcontractors."
         },
         {
           "title": "No international payroll",
-          "explanation": "Wave Payroll is US (and Canada) focused with no international payroll support — fine for typical US trades, but a hard limit if you ever need it."
+          "explanation": "Wave Payroll is US (and Canada) focused with no international payroll support: fine for typical US trades, but a hard limit if you ever need it."
         },
         {
           "title": "Self-service plan offloads tax filing",
@@ -1320,7 +1320,7 @@
           "explanation": "The biggest advantage is integration with Wave accounting; if you do not use Wave for books, some of the appeal is lost versus a standalone payroll specialist."
         }
       ],
-      "best_for": "Solo operators and micro trades shops — especially those using Wave's free accounting — that want simple, low-cost, compliant payroll in the same place as their books",
+      "best_for": "Solo operators and micro trades shops, especially those using Wave's free accounting, that want simple, low-cost, compliant payroll in the same place as their books",
       "best_team_size": "1-15 employees",
       "weaknesses": "A two-step 1099 process, no international payroll, and a cheapest plan that offloads tax filing. But the low price and seamless Wave-accounting integration make it strong for very small shops.",
       "reputation_flag": "Wave Financial's BBB profile shows 224 total complaints in the last three years, 127 closed in the last 12 months, with BBB publishing the text of only 50% of complaints \"due to the volume of complaints received\" (checked 31 July 2026). The recurring theme is money movement rather than payroll tax filing: accounts frozen and customer payments held for review, with one complaint citing a stated hold of up to 120 days. Wave is BBB-accredited with an A- rating; these complaints concern the same Wave account, so confirm payout and hold terms before relying on it for cash flow.",
@@ -1341,7 +1341,7 @@
         "wave_accounting"
       ],
       "affiliate_program": "unknown",
-      "affiliate_payout_note": "No public publisher affiliate program confirmed — outreach required (H&R Block / Wave).",
+      "affiliate_payout_note": "No public publisher affiliate program confirmed; outreach required (H&R Block / Wave).",
       "verified_date": "2026-09-10",
       "service_faqs": [
         {
@@ -1350,7 +1350,7 @@
         },
         {
           "q": "Do I need Wave accounting to use Wave Payroll?",
-          "a": "No, but the main advantage is the seamless integration — if you use Wave's free accounting, wages, taxes, and expenses post automatically to your ledger. Standalone use works, but you lose part of the appeal."
+          "a": "No, but the main advantage is the seamless integration: if you use Wave's free accounting, wages, taxes, and expenses post automatically to your ledger. Standalone use works, but you lose part of the appeal."
         },
         {
           "q": "Does Wave Payroll file my payroll taxes?",
@@ -1367,7 +1367,7 @@
       "name": "Homebase",
       "vendor_url": "https://www.joinhomebase.com",
       "affiliate_url": "TBD",
-      "tagline": "All-in-one team management for hourly crews — scheduling, time clock, and payroll in one app",
+      "tagline": "All-in-one team management for hourly crews: scheduling, time clock, and payroll in one app",
       "service_type": "all-in-one-hr",
       "pricing_model": "tiered-monthly",
       "starting_price_usd": 39,
@@ -1389,12 +1389,12 @@
       "geographic_coverage": "us-nationwide",
       "founded": 2014,
       "headquartered": "San Francisco, CA",
-      "long_description": "Homebase is a workforce-management platform built for small businesses that run hourly teams — and that makes it an unusually good fit for trades crews. Founded in 2014 in San Francisco, it combines employee scheduling, time tracking, team messaging, hiring and onboarding, HR/compliance, and payroll in a single app, with over 100,000 customers and consistently high app-store ratings (4.8 on iOS across 90,000+ reviews). For a contractor managing a rotating crew of technicians or laborers, the scheduling-plus-time-clock-plus-payroll combination tackles the actual daily pain: who is working, did they clock in, and did the hours flow correctly into pay.\n\nIts pricing is genuinely accessible. The team-management platform has a free Basic tier (up to 10 employees at one location), then Essentials ($24), Plus ($56), and All-in-One ($96) per location per month billed annually ($30, $70 and $120 billed monthly). Payroll is a separate add-on at $39/month plus $6 per employee. So a trades shop can start free for scheduling and time tracking, then layer on payroll when ready, paying for a location rather than per head on the base tiers.\n\nThe honest caveat is that Homebase's payroll module is widely seen as the weaker half of the product — reviewers (and titles like \"good for scheduling, weak on payroll\") note the payroll add-on is less mature than dedicated payroll platforms, the mobile app can be slow or crash during heavy shift management, and its integrations with external payroll/accounting are less comprehensive than competitors. Where Homebase shines is the scheduling and time-tracking core; payroll is a convenient add-on, not a best-in-class engine.\n\nFor a trades business with hourly crews whose biggest headache is scheduling and accurate time tracking, Homebase is one of the best-fit tools in this directory — and bundling payroll keeps everything in one place. Shops whose priority is the most robust payroll itself may pair Homebase scheduling with a dedicated payroll platform (Gusto integrates with Homebase) rather than using Homebase payroll alone.",
+      "long_description": "Homebase is a workforce-management platform built for small businesses that run hourly teams, and that makes it an unusually good fit for trades crews. Founded in 2014 in San Francisco, it combines employee scheduling, time tracking, team messaging, hiring and onboarding, HR/compliance, and payroll in a single app, with over 100,000 customers and consistently high app-store ratings (4.8 on iOS across 90,000+ reviews). For a contractor managing a rotating crew of technicians or laborers, the scheduling-plus-time-clock-plus-payroll combination tackles the actual daily pain: who is working, did they clock in, and did the hours flow correctly into pay.\n\nIts pricing is genuinely accessible. The team-management platform has a free Basic tier (up to 10 employees at one location), then Essentials ($24), Plus ($56), and All-in-One ($96) per location per month billed annually ($30, $70 and $120 billed monthly). Payroll is a separate add-on at $39/month plus $6 per employee. So a trades shop can start free for scheduling and time tracking, then layer on payroll when ready, paying for a location rather than per head on the base tiers.\n\nThe honest caveat is that Homebase's payroll module is widely seen as the weaker half of the product: reviewers (and titles like \"good for scheduling, weak on payroll\") note the payroll add-on is less mature than dedicated payroll platforms, the mobile app can be slow or crash during heavy shift management, and its integrations with external payroll/accounting are less comprehensive than competitors. Where Homebase shines is the scheduling and time-tracking core; payroll is a convenient add-on, not a best-in-class engine.\n\nFor a trades business with hourly crews whose biggest headache is scheduling and accurate time tracking, Homebase is one of the best-fit tools in this directory, and bundling payroll keeps everything in one place. Shops whose priority is the most robust payroll itself may pair Homebase scheduling with a dedicated payroll platform (Gusto integrates with Homebase) rather than using Homebase payroll alone.",
       "how_it_works": "You set up your location, employees, and schedules in Homebase; employees clock in/out via the time clock (with GPS and photo options), and tracked hours flow into timesheets. You can message the team, post schedules, and manage hiring and onboarding in the same app. Adding the payroll module ($39/mo + $6/employee) turns approved timesheets into a payroll run that calculates wages and taxes, files payroll taxes, and pays employees via direct deposit. The base team-management tiers (free Basic up to $96 All-in-One billed annually) are priced per location. Homebase also integrates with external payroll (e.g., Gusto) if you prefer to keep payroll elsewhere.",
       "pros_detail": [
         {
           "title": "Built for hourly crews",
-          "explanation": "Scheduling, time clock, and team messaging are tailored to hourly workforces — exactly how most trades crews operate — so daily workforce management is genuinely easier."
+          "explanation": "Scheduling, time clock, and team messaging are tailored to hourly workforces, exactly how most trades crews operate, so daily workforce management is genuinely easier."
         },
         {
           "title": "Free Basic tier, per-location pricing",
@@ -1402,11 +1402,11 @@
         },
         {
           "title": "Time tracking flows into payroll",
-          "explanation": "Approved timesheets feed the payroll add-on directly, reducing manual re-entry and timesheet-to-paycheck errors — a real win for crews paid on tracked hours."
+          "explanation": "Approved timesheets feed the payroll add-on directly, reducing manual re-entry and timesheet-to-paycheck errors, a real win for crews paid on tracked hours."
         },
         {
           "title": "All-in-one workforce app",
-          "explanation": "Scheduling, time tracking, messaging, hiring, onboarding, HR, and payroll in one app — covering more of the hourly-workforce workflow than most competitors in its price range."
+          "explanation": "Scheduling, time tracking, messaging, hiring, onboarding, HR, and payroll in one app, covering more of the hourly-workforce workflow than most competitors in its price range."
         },
         {
           "title": "Strong usability and ratings",
@@ -1416,7 +1416,7 @@
       "cons_detail": [
         {
           "title": "Payroll is the weaker half",
-          "explanation": "Reviewers consistently rate the payroll add-on below dedicated payroll platforms — fine as a convenience, but not best-in-class. Payroll-first shops may prefer a specialist."
+          "explanation": "Reviewers consistently rate the payroll add-on below dedicated payroll platforms: fine as a convenience, but not best-in-class. Payroll-first shops may prefer a specialist."
         },
         {
           "title": "Payroll is a paid add-on",
@@ -1424,7 +1424,7 @@
         },
         {
           "title": "Mobile app performance",
-          "explanation": "Some users report the mobile app loading slowly or crashing during heavy shift management — frustrating when you are managing a crew in real time."
+          "explanation": "Some users report the mobile app loading slowly or crashing during heavy shift management, frustrating when you are managing a crew in real time."
         },
         {
           "title": "Limited external integrations",
@@ -1437,13 +1437,13 @@
       ],
       "best_for": "Trades businesses with hourly crews whose biggest pain is scheduling and accurate time tracking, and who want payroll bundled into the same app",
       "best_team_size": "2-100 employees",
-      "weaknesses": "The payroll add-on is less mature than dedicated payroll platforms, payroll costs extra on top of the team-management tier, and the mobile app can lag. But for hourly-crew scheduling and time tracking, it is one of the best fits — and bundling payroll is convenient.",
+      "weaknesses": "The payroll add-on is less mature than dedicated payroll platforms, payroll costs extra on top of the team-management tier, and the mobile app can lag. But for hourly-crew scheduling and time tracking, it is one of the best fits, and bundling payroll is convenient.",
       "reputation_flag": null,
       "ratings": {
         "g2": null,
         "capterra": 4.6,
         "trustpilot": null,
-        "reddit_sentiment": "positive — loved for hourly scheduling and time tracking; payroll add-on seen as convenient but weaker than dedicated payroll tools"
+        "reddit_sentiment": "positive: loved for hourly scheduling and time tracking; payroll add-on seen as convenient but weaker than dedicated payroll tools"
       },
       "key_features": [
         "employee_scheduling",
@@ -1458,7 +1458,7 @@
         "square"
       ],
       "affiliate_program": "unknown",
-      "affiliate_payout_note": "No public publisher affiliate program confirmed — outreach required to determine availability.",
+      "affiliate_payout_note": "No public publisher affiliate program confirmed; outreach required to determine availability.",
       "verified_date": "2026-09-10",
       "service_faqs": [
         {
@@ -1467,7 +1467,7 @@
         },
         {
           "q": "Is Homebase good for trades crews?",
-          "a": "Yes — it is built for hourly workforces, so scheduling, time clock, and team messaging fit how trades crews operate. Tracked hours flow into the payroll add-on, reducing timesheet-to-paycheck errors. It is one of the best-fit workforce tools for crew-based shops."
+          "a": "Yes, it is built for hourly workforces, so scheduling, time clock, and team messaging fit how trades crews operate. Tracked hours flow into the payroll add-on, reducing timesheet-to-paycheck errors. It is one of the best-fit workforce tools for crew-based shops."
         },
         {
           "q": "Is Homebase payroll any good?",
@@ -1475,7 +1475,7 @@
         },
         {
           "q": "Can I start Homebase for free?",
-          "a": "Yes — the Basic team-management tier is free and genuinely useful for scheduling and time tracking. You can add paid tiers and the payroll module ($39/mo + $6/employee) as your needs grow."
+          "a": "Yes, the Basic team-management tier is free and genuinely useful for scheduling and time tracking. You can add paid tiers and the payroll module ($39/mo + $6/employee) as your needs grow."
         }
       ]
     },
@@ -1506,7 +1506,7 @@
       "geographic_coverage": "us-nationwide",
       "founded": 1990,
       "headquartered": "Cincinnati, OH",
-      "long_description": "Paycor is a mid-market human-capital-management (HCM) platform that has provided cloud payroll, HR, and timekeeping since 1990 out of Cincinnati. Where SMB tools like Gusto or SurePayroll fit a small shop, Paycor is built for the trades business that has outgrown basic payroll — one with real headcount, multiple roles, recruiting needs, and a desire for analytics on labor cost and turnover. It bundles payroll with HR, timekeeping, onboarding, talent management, and reporting in one system.\n\nFor a growing contractor, the appeal is consolidation and insight: instead of separate payroll, time-tracking, and HR tools, Paycor unifies them, and its analytics are a frequently-praised strength for owners who want to understand labor cost and workforce trends. It scales the people-operations side of the business as crews and office staff grow.\n\nThe trade-offs are mid-market ones. For businesses under 50 employees, Paycor now publishes a rate card: Basic $99/month plus $5 per employee, Essential $149/month plus $6-$7, Complete/Core $199/month plus $7-$8, and HCM $199/month plus $12 per employee; larger companies are directed to mid-market plans. Reviews are solid but split on support (Capterra ~4.4, G2 ~3.9), with some users citing slow customer service. It is also more platform than a very small shop needs.\n\nFor an established, growing trades business that wants HCM-grade payroll plus HR, timekeeping, and analytics in one system, Paycor is a credible mid-market choice. Small shops should stay with SMB payroll (Gusto, SurePayroll); fast-growing operations comparing mid-market HCM should weigh Paycor against Paylocity and Rippling.",
+      "long_description": "Paycor is a mid-market human-capital-management (HCM) platform that has provided cloud payroll, HR, and timekeeping since 1990 out of Cincinnati. Where SMB tools like Gusto or SurePayroll fit a small shop, Paycor is built for the trades business that has outgrown basic payroll: one with real headcount, multiple roles, recruiting needs, and a desire for analytics on labor cost and turnover. It bundles payroll with HR, timekeeping, onboarding, talent management, and reporting in one system.\n\nFor a growing contractor, the appeal is consolidation and insight: instead of separate payroll, time-tracking, and HR tools, Paycor unifies them, and its analytics are a frequently-praised strength for owners who want to understand labor cost and workforce trends. It scales the people-operations side of the business as crews and office staff grow.\n\nThe trade-offs are mid-market ones. For businesses under 50 employees, Paycor now publishes a rate card: Basic $99/month plus $5 per employee, Essential $149/month plus $6-$7, Complete/Core $199/month plus $7-$8, and HCM $199/month plus $12 per employee; larger companies are directed to mid-market plans. Reviews are solid but split on support (Capterra ~4.4, G2 ~3.9), with some users citing slow customer service. It is also more platform than a very small shop needs.\n\nFor an established, growing trades business that wants HCM-grade payroll plus HR, timekeeping, and analytics in one system, Paycor is a credible mid-market choice. Small shops should stay with SMB payroll (Gusto, SurePayroll); fast-growing operations comparing mid-market HCM should weigh Paycor against Paylocity and Rippling.",
       "how_it_works": "For businesses under 50 employees, Paycor publishes plans from $99/month plus $5 per employee (Basic) to $199/month plus $12 per employee (HCM), with setup fees currently waived; larger companies are directed to its mid-market plans. Implementation migrates your payroll, employee, and time data, then your team runs payroll and manages HR/timekeeping in the unified platform, with analytics on labor cost and workforce trends. It is built for mid-market operations rather than instant small-shop setup.",
       "pros_detail": [
         {
@@ -1515,7 +1515,7 @@
         },
         {
           "title": "Strong analytics",
-          "explanation": "Reviewers specifically praise Paycor's analytics — useful for an owner who wants visibility into labor cost, turnover, and workforce trends as the team scales."
+          "explanation": "Reviewers specifically praise Paycor's analytics, useful for an owner who wants visibility into labor cost, turnover, and workforce trends as the team scales."
         },
         {
           "title": "Built for mid-market scale",
@@ -1523,7 +1523,7 @@
         },
         {
           "title": "Timekeeping built in",
-          "explanation": "Integrated timekeeping ties hours to payroll within the same system — valuable for trades with hourly field staff and overtime to manage."
+          "explanation": "Integrated timekeeping ties hours to payroll within the same system, valuable for trades with hourly field staff and overtime to manage."
         },
         {
           "title": "Recruiting and onboarding",
@@ -1537,7 +1537,7 @@
         },
         {
           "title": "Mixed support reviews",
-          "explanation": "Ratings are solid but split (Capterra ~4.4, G2 ~3.9), with some users citing slow customer service — worth probing references on support responsiveness."
+          "explanation": "Ratings are solid but split (Capterra ~4.4, G2 ~3.9), with some users citing slow customer service. Worth probing references on support responsiveness."
         },
         {
           "title": "More platform than small shops need",
@@ -1545,7 +1545,7 @@
         },
         {
           "title": "Implementation effort",
-          "explanation": "As an HCM platform, onboarding involves data migration and configuration across payroll, HR, and timekeeping — a real implementation, not a five-minute setup."
+          "explanation": "As an HCM platform, onboarding involves data migration and configuration across payroll, HR, and timekeeping: a real implementation, not a five-minute setup."
         },
         {
           "title": "Module-based cost",
@@ -1574,7 +1574,7 @@
         "quickbooks"
       ],
       "affiliate_program": "unknown",
-      "affiliate_payout_note": "No public publisher affiliate program confirmed — outreach required to determine availability.",
+      "affiliate_payout_note": "No public publisher affiliate program confirmed; outreach required to determine availability.",
       "verified_date": "2026-09-10",
       "service_faqs": [
         {
@@ -1583,7 +1583,7 @@
         },
         {
           "q": "Is Paycor good for a trades business?",
-          "a": "For a growing operation with real headcount, yes — it unifies payroll, HR, timekeeping, onboarding, and analytics. A very small shop is better served by SMB payroll (Gusto, SurePayroll); Paycor's value shows once you have outgrown basic payroll and want HCM depth."
+          "a": "For a growing operation with real headcount, yes: it unifies payroll, HR, timekeeping, onboarding, and analytics. A very small shop is better served by SMB payroll (Gusto, SurePayroll); Paycor's value shows once you have outgrown basic payroll and want HCM depth."
         },
         {
           "q": "Paycor vs Paylocity vs Rippling?",
@@ -1591,7 +1591,7 @@
         },
         {
           "q": "Does Paycor include time tracking?",
-          "a": "Yes — Paycor includes timekeeping in its HCM platform, tying hours to payroll within the same system, which matters for trades with hourly field staff and overtime."
+          "a": "Yes, Paycor includes timekeeping in its HCM platform, tying hours to payroll within the same system, which matters for trades with hourly field staff and overtime."
         }
       ]
     },
@@ -1605,7 +1605,7 @@
       "pricing_model": "per-employee",
       "starting_price_usd": null,
       "per_employee_fee_usd": 22,
-      "pricing_summary": "Per-employee-per-month, typically ~$22-$32 PEPM depending on company size and modules. No public pricing — custom-quoted to your business needs.",
+      "pricing_summary": "Per-employee-per-month, typically ~$22-$32 PEPM depending on company size and modules. No public pricing; custom-quoted to your business needs.",
       "free_trial_days": 0,
       "verticals_supported": [
         "hvac",
@@ -1622,16 +1622,16 @@
       "geographic_coverage": "us-nationwide",
       "founded": 1997,
       "headquartered": "Schaumburg, IL",
-      "long_description": "Paylocity is a mid-market HR and payroll platform, founded in 1997 near Chicago, known for a clean, modern interface and a broad HCM feature set — payroll, HR, benefits administration, talent, and employee self-service — aimed at businesses scaling past basic SMB payroll. For a trades operation that has grown into multiple departments, benefits, and HR complexity, Paylocity offers the depth to manage it without an enterprise-grade implementation.\n\nIts most-cited strength is usability: reviewers find it easy to navigate, with a clean interface that simplifies HR and payroll tasks and strong employee self-service (a real plus for a distributed crew that wants to check pay stubs and PTO from their phones). It competes directly with Paycor and Rippling in the mid-market HCM tier.\n\nThe trade-offs mirror the category. Paylocity does not publish pricing — it is custom-quoted, typically ~$22-$32 per employee per month depending on size and modules — so you go through sales. And reviews are genuinely mixed on service: some customers call the support team \"the BEST,\" while others describe a rough payroll-transition and support experience. As with any HCM migration, the implementation and your assigned support team make or break the early experience.\n\nFor a growing trades business that values a modern, easy-to-use HR/payroll platform with strong self-service, Paylocity is a strong mid-market option. Small shops should use SMB payroll; mid-market shops should trial Paylocity against Paycor and Rippling and probe support references before committing.",
+      "long_description": "Paylocity is a mid-market HR and payroll platform, founded in 1997 near Chicago, known for a clean, modern interface and a broad HCM feature set (payroll, HR, benefits administration, talent, and employee self-service) aimed at businesses scaling past basic SMB payroll. For a trades operation that has grown into multiple departments, benefits, and HR complexity, Paylocity offers the depth to manage it without an enterprise-grade implementation.\n\nIts most-cited strength is usability: reviewers find it easy to navigate, with a clean interface that simplifies HR and payroll tasks and strong employee self-service (a real plus for a distributed crew that wants to check pay stubs and PTO from their phones). It competes directly with Paycor and Rippling in the mid-market HCM tier.\n\nThe trade-offs mirror the category. Paylocity does not publish pricing; it is custom-quoted, typically ~$22-$32 per employee per month depending on size and modules, so you go through sales. And reviews are genuinely mixed on service: some customers call the support team \"the BEST,\" while others describe a rough payroll-transition and support experience. As with any HCM migration, the implementation and your assigned support team make or break the early experience.\n\nFor a growing trades business that values a modern, easy-to-use HR/payroll platform with strong self-service, Paylocity is a strong mid-market option. Small shops should use SMB payroll; mid-market shops should trial Paylocity against Paycor and Rippling and probe support references before committing.",
       "how_it_works": "Paylocity is sold via a sales process with custom per-employee-per-month pricing (~$22-$32 PEPM, no public rate card). After scoping headcount and modules (payroll, HR, benefits, talent, self-service), implementation migrates your data and configures the platform. Your team then runs payroll and manages HR in a modern interface, while employees use self-service for pay stubs, PTO, and personal info. The early experience depends heavily on the implementation and assigned support team.",
       "pros_detail": [
         {
           "title": "Clean, modern interface",
-          "explanation": "Paylocity's most-praised quality — an easy-to-navigate, modern UI that simplifies HR and payroll tasks, reducing the learning curve for office staff."
+          "explanation": "Paylocity's most-praised quality: an easy-to-navigate, modern UI that simplifies HR and payroll tasks, reducing the learning curve for office staff."
         },
         {
           "title": "Strong employee self-service",
-          "explanation": "Employees can check pay stubs, PTO, and personal info from their phones — valuable for a distributed trades crew that is rarely at a desk."
+          "explanation": "Employees can check pay stubs, PTO, and personal info from their phones, valuable for a distributed trades crew that is rarely at a desk."
         },
         {
           "title": "Broad HCM feature set",
@@ -1653,7 +1653,7 @@
         },
         {
           "title": "Mixed support/transition experiences",
-          "explanation": "Reviews are split — some praise support as \"the BEST,\" others report a rough payroll-transition and service experience. The implementation and assigned team are decisive; check references."
+          "explanation": "Reviews are split: some praise support as \"the BEST,\" others report a rough payroll-transition and service experience. The implementation and assigned team are decisive; check references."
         },
         {
           "title": "Overkill for small shops",
@@ -1661,7 +1661,7 @@
         },
         {
           "title": "Implementation dependency",
-          "explanation": "As with any HCM migration, the early experience hinges on implementation quality — plan the transition carefully and clarify support expectations up front."
+          "explanation": "As with any HCM migration, the early experience hinges on implementation quality; plan the transition carefully and clarify support expectations up front."
         },
         {
           "title": "Module-based cost",
@@ -1676,7 +1676,7 @@
         "g2": 4.4,
         "capterra": null,
         "trustpilot": null,
-        "reddit_sentiment": "mixed — praised for a clean modern interface and self-service; some report rough payroll transitions and inconsistent support"
+        "reddit_sentiment": "mixed: praised for a clean modern interface and self-service; some report rough payroll transitions and inconsistent support"
       },
       "key_features": [
         "payroll",
@@ -1690,24 +1690,24 @@
         "quickbooks"
       ],
       "affiliate_program": "unknown",
-      "affiliate_payout_note": "No public publisher affiliate program confirmed — outreach required to determine availability.",
+      "affiliate_payout_note": "No public publisher affiliate program confirmed; outreach required to determine availability.",
       "verified_date": "2026-09-10",
       "service_faqs": [
         {
           "q": "How much does Paylocity cost?",
-          "a": "Paylocity does not publish pricing. It is per-employee-per-month, typically ~$22-$32 PEPM depending on company size and modules, and is custom-quoted — you go through sales to get a number for your headcount and feature needs."
+          "a": "Paylocity does not publish pricing. It is per-employee-per-month, typically ~$22-$32 PEPM depending on company size and modules, and is custom-quoted: you go through sales to get a number for your headcount and feature needs."
         },
         {
           "q": "What is Paylocity best at?",
-          "a": "Usability — reviewers consistently praise its clean, modern interface and strong employee self-service, which suits a distributed trades crew that checks pay stubs and PTO from their phones. It is a mid-market HCM platform with payroll, HR, benefits, and talent."
+          "a": "Usability: reviewers consistently praise its clean, modern interface and strong employee self-service, which suits a distributed trades crew that checks pay stubs and PTO from their phones. It is a mid-market HCM platform with payroll, HR, benefits, and talent."
         },
         {
           "q": "Is Paylocity good for contractors?",
-          "a": "For growing contractors with multiple departments and benefits, yes — it offers HCM depth with an easy interface. Small shops should use SMB payroll (Gusto, SurePayroll). Mid-market shops should compare it against Paycor and Rippling and check support references."
+          "a": "For growing contractors with multiple departments and benefits, yes: it offers HCM depth with an easy interface. Small shops should use SMB payroll (Gusto, SurePayroll). Mid-market shops should compare it against Paycor and Rippling and check support references."
         },
         {
           "q": "What do negative Paylocity reviews say?",
-          "a": "The split is mainly about service: while some praise support highly, others report a rough payroll-transition and support experience. As with any HCM migration, the implementation quality and your assigned support team are decisive — clarify expectations and check references before committing."
+          "a": "The split is mainly about service: while some praise support highly, others report a rough payroll-transition and support experience. As with any HCM migration, the implementation quality and your assigned support team are decisive; clarify expectations and check references before committing."
         }
       ]
     },
@@ -1721,7 +1721,7 @@
       "pricing_model": "per-employee",
       "starting_price_usd": null,
       "per_employee_fee_usd": 100,
-      "pricing_summary": "PEO co-employment, quote-based per employee per month — commonly ~$100-$150 PEPM depending on benefits package, states, and service level. Bundles payroll, benefits, HR, compliance, and workers' comp.",
+      "pricing_summary": "PEO co-employment, quote-based per employee per month; commonly ~$100-$150 PEPM depending on benefits package, states, and service level. Bundles payroll, benefits, HR, compliance, and workers' comp.",
       "free_trial_days": 0,
       "verticals_supported": [
         "hvac",
@@ -1738,12 +1738,12 @@
       "geographic_coverage": "us-nationwide",
       "founded": 1988,
       "headquartered": "Dublin, CA",
-      "long_description": "TriNet is a Professional Employer Organization (PEO), which is a fundamentally different model from a payroll tool: through co-employment, TriNet becomes the employer-of-record for HR purposes, pooling your employees with thousands of others to deliver enterprise-grade benefits, payroll, HR compliance, risk management, and workers' compensation that a small trades shop could not access on its own. Founded in 1988 and ESAC-accredited, it targets small and mid-size businesses that want to offer competitive benefits and offload HR/compliance burden as they scale.\n\nFor a growing trades business, the PEO value is real: access to better, cheaper group health benefits and 401(k) than a 20-person shop could negotiate alone, plus workers'-comp administration (pooled, often with pay-as-you-go), payroll, and a team handling compliance across states. For a contractor competing to recruit and retain skilled techs, the benefits leverage can be a genuine advantage.\n\nThe trade-offs are cost and fit. PEO pricing is high — commonly ~$100-$150 per employee per month — because it bundles benefits administration and risk pooling, not just payroll, and it is quote-based. Reviews note it suits new and scaling businesses but is poor value for very small shops (under ~5 employees) or those who just want cheap payroll. Co-employment also means giving up some HR control to the PEO.\n\nFor an established or scaling trades business that wants enterprise-grade benefits, pooled workers' comp, and offloaded HR/compliance — and is willing to pay PEO rates for it — TriNet is a strong, accredited option. Shops that only need payroll, or have very few employees, should use a payroll tool (Gusto, SurePayroll) instead; another PEO option already in this directory is Justworks.",
-      "how_it_works": "TriNet operates as a PEO via co-employment: it becomes the employer-of-record for HR/benefits/payroll-tax purposes while you retain day-to-day control of your workers. Your employees are pooled with TriNet's broader base to access group benefits (health, 401(k)) and workers'-comp programs. TriNet runs payroll, administers benefits, handles HR compliance across states, and manages risk. Pricing is quote-based per employee per month (commonly ~$100-$150 PEPM), reflecting the bundled benefits and services — far more than a standalone payroll tool, but covering much more.",
+      "long_description": "TriNet is a Professional Employer Organization (PEO), which is a fundamentally different model from a payroll tool: through co-employment, TriNet becomes the employer-of-record for HR purposes, pooling your employees with thousands of others to deliver enterprise-grade benefits, payroll, HR compliance, risk management, and workers' compensation that a small trades shop could not access on its own. Founded in 1988 and ESAC-accredited, it targets small and mid-size businesses that want to offer competitive benefits and offload HR/compliance burden as they scale.\n\nFor a growing trades business, the PEO value is real: access to better, cheaper group health benefits and 401(k) than a 20-person shop could negotiate alone, plus workers'-comp administration (pooled, often with pay-as-you-go), payroll, and a team handling compliance across states. For a contractor competing to recruit and retain skilled techs, the benefits leverage can be a genuine advantage.\n\nThe trade-offs are cost and fit. PEO pricing is high (commonly ~$100-$150 per employee per month) because it bundles benefits administration and risk pooling, not just payroll, and it is quote-based. Reviews note it suits new and scaling businesses but is poor value for very small shops (under ~5 employees) or those who just want cheap payroll. Co-employment also means giving up some HR control to the PEO.\n\nFor an established or scaling trades business that wants enterprise-grade benefits, pooled workers' comp, and offloaded HR/compliance, and is willing to pay PEO rates for it, TriNet is a strong, accredited option. Shops that only need payroll, or have very few employees, should use a payroll tool (Gusto, SurePayroll) instead; another PEO option already in this directory is Justworks.",
+      "how_it_works": "TriNet operates as a PEO via co-employment: it becomes the employer-of-record for HR/benefits/payroll-tax purposes while you retain day-to-day control of your workers. Your employees are pooled with TriNet's broader base to access group benefits (health, 401(k)) and workers'-comp programs. TriNet runs payroll, administers benefits, handles HR compliance across states, and manages risk. Pricing is quote-based per employee per month (commonly ~$100-$150 PEPM), reflecting the bundled benefits and services (far more than a standalone payroll tool, but covering much more).",
       "pros_detail": [
         {
           "title": "Enterprise-grade benefits for small shops",
-          "explanation": "By pooling your employees with thousands of others, TriNet delivers group health and 401(k) benefits a small trades shop could not negotiate alone — a real recruiting and retention edge."
+          "explanation": "By pooling your employees with thousands of others, TriNet delivers group health and 401(k) benefits a small trades shop could not negotiate alone, a real recruiting and retention edge."
         },
         {
           "title": "Bundled workers' comp and risk",
@@ -1755,7 +1755,7 @@
         },
         {
           "title": "Accredited and established",
-          "explanation": "Founded in 1988 and ESAC-accredited, TriNet is an established, vetted PEO — important when entrusting payroll, benefits, and compliance to a co-employer."
+          "explanation": "Founded in 1988 and ESAC-accredited, TriNet is an established, vetted PEO, important when entrusting payroll, benefits, and compliance to a co-employer."
         },
         {
           "title": "Good for scaling businesses",
@@ -1765,7 +1765,7 @@
       "cons_detail": [
         {
           "title": "High PEPM cost",
-          "explanation": "PEO pricing commonly runs ~$100-$150 per employee per month because it bundles benefits and risk pooling, not just payroll — far more than a standalone payroll tool."
+          "explanation": "PEO pricing commonly runs ~$100-$150 per employee per month because it bundles benefits and risk pooling, not just payroll (far more than a standalone payroll tool)."
         },
         {
           "title": "Poor fit for very small shops",
@@ -1781,7 +1781,7 @@
         },
         {
           "title": "Overkill if you only need payroll",
-          "explanation": "If you just need to run payroll and file taxes, a PEO is far more (and more expensive) than necessary — use a payroll tool like Gusto or SurePayroll instead."
+          "explanation": "If you just need to run payroll and file taxes, a PEO is far more (and more expensive) than necessary; use a payroll tool like Gusto or SurePayroll instead."
         }
       ],
       "best_for": "Established or scaling trades businesses that want enterprise-grade benefits, pooled workers' comp, and offloaded HR/compliance via a PEO, and will pay PEO rates for it",
@@ -1806,7 +1806,7 @@
         "quickbooks"
       ],
       "affiliate_program": "unknown",
-      "affiliate_payout_note": "No public publisher affiliate program confirmed — outreach required to determine availability.",
+      "affiliate_payout_note": "No public publisher affiliate program confirmed; outreach required to determine availability.",
       "verified_date": "2026-09-10",
       "service_faqs": [
         {
@@ -1815,11 +1815,11 @@
         },
         {
           "q": "How much does TriNet cost?",
-          "a": "PEO pricing is quote-based, commonly ~$100-$150 per employee per month, because it bundles benefits administration and risk pooling — not just payroll. That is far more than a standalone payroll tool, but it covers benefits, workers' comp, HR, and compliance."
+          "a": "PEO pricing is quote-based, commonly ~$100-$150 per employee per month, because it bundles benefits administration and risk pooling, not just payroll. That is far more than a standalone payroll tool, but it covers benefits, workers' comp, HR, and compliance."
         },
         {
           "q": "Is TriNet worth it for a trades business?",
-          "a": "For an established or scaling shop that wants competitive group benefits, pooled workers' comp, and offloaded HR/compliance, yes. For a business under ~5 employees or one that just wants cheap payroll, a PEO is overkill — use a payroll tool like Gusto or SurePayroll instead."
+          "a": "For an established or scaling shop that wants competitive group benefits, pooled workers' comp, and offloaded HR/compliance, yes. For a business under ~5 employees or one that just wants cheap payroll, a PEO is overkill; use a payroll tool like Gusto or SurePayroll instead."
         },
         {
           "q": "TriNet vs Justworks?",
@@ -1832,7 +1832,7 @@
       "name": "Fingercheck",
       "vendor_url": "https://fingercheck.com",
       "affiliate_url": "TBD",
-      "tagline": "All-in-one payroll, time tracking, and HR built for construction and field crews — with certified payroll",
+      "tagline": "All-in-one payroll, time tracking, and HR built for construction and field crews, with certified payroll",
       "service_type": "specialty",
       "pricing_model": "per-employee",
       "starting_price_usd": 29,
@@ -1854,12 +1854,12 @@
       "geographic_coverage": "us-nationwide",
       "founded": 2013,
       "headquartered": "Brooklyn, NY",
-      "long_description": "Fingercheck is an all-in-one payroll, time-tracking, and HR platform that is unusually well-suited to trades and construction because it was built around the field-crew reality: hours happen at job sites, not at a desk. Founded in 2013 in Brooklyn, it connects time tracking, scheduling, and payroll in a single native system, with GPS-verified time entries that automatically allocate hours to the correct job codes — giving a contractor real-time labor-cost tracking and project-level profitability rather than a month-end surprise.\n\nFor trades, two capabilities stand out. First, job costing: GPS-verified hours flowing to job codes means you can see budget-vs-actual labor by project as it happens. Second, certified payroll: Fingercheck generates the certified-payroll reports required on government/prevailing-wage construction projects, which is a genuine compliance headache it removes — and a reason construction shops specifically choose it. Overtime and break rules are calculated automatically in line with local law, and verified hours flow straight into payroll.\n\nPricing is accessible (from about $5 per user per month plus a base fee, with a free trial), and it is well-rated by users. The main considerations are that, as a specialized all-in-one, you are adopting it as your combined time/payroll/HR system rather than bolting payroll onto an existing tool, and feature tiers determine which construction capabilities you get — confirm certified payroll and job costing are in your plan if you need them.\n\nFor a construction or field-heavy trades business that wants time tracking, job costing, certified payroll, and payroll in one native system, Fingercheck is one of the best-fit options in this directory — more trades-native than generalist payroll tools. Office-only or very simple shops may not need its field depth and could use a simpler payroll tool.",
-      "how_it_works": "Field workers clock in/out with GPS-verified time entries (mobile), and Fingercheck automatically allocates those hours to the correct job codes and calculates overtime/breaks per local law. Verified hours flow directly into payroll within the same native system — no re-entry between time tracking and pay. The platform also handles HR and generates certified-payroll reports for government/prevailing-wage projects. Pricing is per user (from ~$5/user/mo plus a base fee) with a free trial; feature tiers determine which construction capabilities (job costing, certified payroll) are included.",
+      "long_description": "Fingercheck is an all-in-one payroll, time-tracking, and HR platform that is unusually well-suited to trades and construction because it was built around the field-crew reality: hours happen at job sites, not at a desk. Founded in 2013 in Brooklyn, it connects time tracking, scheduling, and payroll in a single native system, with GPS-verified time entries that automatically allocate hours to the correct job codes, giving a contractor real-time labor-cost tracking and project-level profitability rather than a month-end surprise.\n\nFor trades, two capabilities stand out. First, job costing: GPS-verified hours flowing to job codes means you can see budget-vs-actual labor by project as it happens. Second, certified payroll: Fingercheck generates the certified-payroll reports required on government/prevailing-wage construction projects, which is a genuine compliance headache it removes, and a reason construction shops specifically choose it. Overtime and break rules are calculated automatically in line with local law, and verified hours flow straight into payroll.\n\nPricing is accessible (from about $5 per user per month plus a base fee, with a free trial), and it is well-rated by users. The main considerations are that, as a specialized all-in-one, you are adopting it as your combined time/payroll/HR system rather than bolting payroll onto an existing tool, and feature tiers determine which construction capabilities you get; confirm certified payroll and job costing are in your plan if you need them.\n\nFor a construction or field-heavy trades business that wants time tracking, job costing, certified payroll, and payroll in one native system, Fingercheck is one of the best-fit options in this directory, more trades-native than generalist payroll tools. Office-only or very simple shops may not need its field depth and could use a simpler payroll tool.",
+      "how_it_works": "Field workers clock in/out with GPS-verified time entries (mobile), and Fingercheck automatically allocates those hours to the correct job codes and calculates overtime/breaks per local law. Verified hours flow directly into payroll within the same native system: no re-entry between time tracking and pay. The platform also handles HR and generates certified-payroll reports for government/prevailing-wage projects. Pricing is per user (from ~$5/user/mo plus a base fee) with a free trial; feature tiers determine which construction capabilities (job costing, certified payroll) are included.",
       "pros_detail": [
         {
           "title": "GPS time tracking to job codes",
-          "explanation": "GPS-verified field time entries automatically allocate hours to the right job codes, giving real-time labor-cost and budget-vs-actual visibility by project — a core trades need most payroll tools miss."
+          "explanation": "GPS-verified field time entries automatically allocate hours to the right job codes, giving real-time labor-cost and budget-vs-actual visibility by project, a core trades need most payroll tools miss."
         },
         {
           "title": "Certified payroll built in",
@@ -1867,7 +1867,7 @@
         },
         {
           "title": "Native time-to-payroll flow",
-          "explanation": "Time tracking, scheduling, and payroll are one native system, so verified hours flow straight into pay with overtime/break rules auto-calculated — no error-prone re-entry between tools."
+          "explanation": "Time tracking, scheduling, and payroll are one native system, so verified hours flow straight into pay with overtime/break rules auto-calculated: no error-prone re-entry between tools."
         },
         {
           "title": "Affordable and well-rated",
@@ -1875,13 +1875,13 @@
         },
         {
           "title": "Trades/construction-native",
-          "explanation": "Built around field-crew reality rather than office workers, it fits how trades actually operate — job sites, hourly crews, and project labor costing."
+          "explanation": "Built around field-crew reality rather than office workers, it fits how trades actually operate: job sites, hourly crews, and project labor costing."
         }
       ],
       "cons_detail": [
         {
           "title": "Adopt it as your whole system",
-          "explanation": "As a specialized all-in-one, Fingercheck works best when it is your combined time/payroll/HR system, not payroll bolted onto an existing tool — so switching means migrating those functions together."
+          "explanation": "As a specialized all-in-one, Fingercheck works best when it is your combined time/payroll/HR system, not payroll bolted onto an existing tool, so switching means migrating those functions together."
         },
         {
           "title": "Feature tiers gate capabilities",
@@ -1908,7 +1908,7 @@
         "g2": 4.5,
         "capterra": null,
         "trustpilot": null,
-        "reddit_sentiment": "positive — valued by construction/field businesses for GPS job-costing, certified payroll, and native time-to-payroll flow"
+        "reddit_sentiment": "positive: valued by construction/field businesses for GPS job-costing, certified payroll, and native time-to-payroll flow"
       },
       "key_features": [
         "gps_time_tracking",
@@ -1922,12 +1922,12 @@
         "quickbooks"
       ],
       "affiliate_program": "unknown",
-      "affiliate_payout_note": "No public publisher affiliate program confirmed — outreach required to determine availability.",
+      "affiliate_payout_note": "No public publisher affiliate program confirmed; outreach required to determine availability.",
       "verified_date": "2026-09-10",
       "service_faqs": [
         {
           "q": "Is Fingercheck good for construction?",
-          "a": "Yes — it is one of the most construction-native options here. GPS-verified time entries allocate hours to job codes for real-time labor costing, and it generates certified-payroll reports for government/prevailing-wage projects, with time tracking, scheduling, and payroll in one native system."
+          "a": "Yes, it is one of the most construction-native options here. GPS-verified time entries allocate hours to job codes for real-time labor costing, and it generates certified-payroll reports for government/prevailing-wage projects, with time tracking, scheduling, and payroll in one native system."
         },
         {
           "q": "How much does Fingercheck cost?",
@@ -1935,7 +1935,7 @@
         },
         {
           "q": "What is certified payroll and does Fingercheck handle it?",
-          "a": "Certified payroll is the specialized reporting required on government/prevailing-wage construction projects. Fingercheck generates these reports, removing a significant compliance burden — a key reason construction contractors choose it over generalist payroll tools."
+          "a": "Certified payroll is the specialized reporting required on government/prevailing-wage construction projects. Fingercheck generates these reports, removing a significant compliance burden, a key reason construction contractors choose it over generalist payroll tools."
         },
         {
           "q": "Fingercheck vs a generalist payroll tool?",
@@ -1967,12 +1967,12 @@
       "geographic_coverage": "us-nationwide",
       "founded": 2003,
       "headquartered": "Phoenix, AZ",
-      "long_description": "eBacon is a construction-specific HR and payroll-compliance platform built around the single hardest part of paying a prevailing-wage crew: compliance. Named after the Davis-Bacon Act (which governs prevailing wages on government-funded projects), eBacon consolidates certified payroll reporting, prevailing-wage calculations, fringe-benefit management, multi-state compliance, union payroll, time tracking, and job costing into one system for contractors and subcontractors doing public or government-funded work. Founded in 2003 in Phoenix, it targets exactly the trades that generalist payroll tools can't serve: those bidding Davis-Bacon and state prevailing-wage jobs.\n\nFor a contractor on government work, this is not a nice-to-have. Certified payroll reports, fringe-benefit tracking, and prevailing-wage calculations are legally required, error-prone, and brutally time-consuming by hand — and getting them wrong risks penalties or losing the contract. eBacon automates that compliance burden, and contractors who do prevailing-wage work consistently credit it with major time savings on reporting versus manual processes. Fringe management in particular (deciding and documenting cash vs. bona-fide-plan fringe) is a niche eBacon handles natively.\n\nThe trade-offs are cost, complexity, and service. Pricing is custom (reportedly from around $1,000 per feature per month) with no free trial, so it is a real investment aimed at contractors with meaningful prevailing-wage volume. It is self-service software requiring internal staff to run payroll and data entry, reviewers cite a learning curve, limited customization, variable post-implementation support, and mobile-access limitations for employees.\n\nFor a construction contractor or subcontractor doing Davis-Bacon or state prevailing-wage work, eBacon is purpose-built for a compliance problem generalist payroll tools simply don't solve — and that focus is its value. Contractors who don't touch prevailing-wage/government jobs don't need it and should use a standard payroll tool; those who do should weigh eBacon against Payroll4Construction and other construction-payroll specialists.",
+      "long_description": "eBacon is a construction-specific HR and payroll-compliance platform built around the single hardest part of paying a prevailing-wage crew: compliance. Named after the Davis-Bacon Act (which governs prevailing wages on government-funded projects), eBacon consolidates certified payroll reporting, prevailing-wage calculations, fringe-benefit management, multi-state compliance, union payroll, time tracking, and job costing into one system for contractors and subcontractors doing public or government-funded work. Founded in 2003 in Phoenix, it targets exactly the trades that generalist payroll tools can't serve: those bidding Davis-Bacon and state prevailing-wage jobs.\n\nFor a contractor on government work, this is not a nice-to-have. Certified payroll reports, fringe-benefit tracking, and prevailing-wage calculations are legally required, error-prone, and brutally time-consuming by hand, and getting them wrong risks penalties or losing the contract. eBacon automates that compliance burden, and contractors who do prevailing-wage work consistently credit it with major time savings on reporting versus manual processes. Fringe management in particular (deciding and documenting cash vs. bona-fide-plan fringe) is a niche eBacon handles natively.\n\nThe trade-offs are cost, complexity, and service. Pricing is custom (reportedly from around $1,000 per feature per month) with no free trial, so it is a real investment aimed at contractors with meaningful prevailing-wage volume. It is self-service software requiring internal staff to run payroll and data entry, reviewers cite a learning curve, limited customization, variable post-implementation support, and mobile-access limitations for employees.\n\nFor a construction contractor or subcontractor doing Davis-Bacon or state prevailing-wage work, eBacon is purpose-built for a compliance problem generalist payroll tools simply don't solve, and that focus is its value. Contractors who don't touch prevailing-wage/government jobs don't need it and should use a standard payroll tool; those who do should weigh eBacon against Payroll4Construction and other construction-payroll specialists.",
       "how_it_works": "Contractors set up their crews, jobs, wage determinations, and fringe rules in eBacon. As time is tracked against jobs, eBacon applies prevailing-wage rates and fringe calculations, then generates the certified payroll reports required on government/Davis-Bacon projects (plus union and multi-state payroll support). It runs payroll and compliance reporting in one system, reducing the manual effort of certified payroll. It is self-service software, so your internal staff manage payroll processing and data entry; pricing is custom-quoted (reportedly from ~$1,000/feature/month) with no free trial.",
       "pros_detail": [
         {
           "title": "Built for prevailing-wage compliance",
-          "explanation": "eBacon automates certified payroll, prevailing-wage calculations, and fringe management for Davis-Bacon and state-funded projects — a legally-required, error-prone burden generalist payroll tools don't handle."
+          "explanation": "eBacon automates certified payroll, prevailing-wage calculations, and fringe management for Davis-Bacon and state-funded projects, a legally-required, error-prone burden generalist payroll tools don't handle."
         },
         {
           "title": "Fringe-benefit management",
@@ -1980,11 +1980,11 @@
         },
         {
           "title": "Union and multi-state payroll",
-          "explanation": "Support for union payroll and multi-state compliance fits contractors working across jurisdictions and with union labor — common on larger public projects."
+          "explanation": "Support for union payroll and multi-state compliance fits contractors working across jurisdictions and with union labor, common on larger public projects."
         },
         {
           "title": "Major time savings on certified payroll",
-          "explanation": "Contractors doing prevailing-wage work credit eBacon with cutting the time spent on certified-payroll reporting versus manual spreadsheets — directly reducing a costly admin burden."
+          "explanation": "Contractors doing prevailing-wage work credit eBacon with cutting the time spent on certified-payroll reporting versus manual spreadsheets, directly reducing a costly admin burden."
         },
         {
           "title": "Construction-compliance focus",
@@ -1994,7 +1994,7 @@
       "cons_detail": [
         {
           "title": "Premium, custom pricing",
-          "explanation": "Reportedly from around $1,000 per feature per month with no free trial — a real investment that only makes sense for contractors with meaningful prevailing-wage volume."
+          "explanation": "Reportedly from around $1,000 per feature per month with no free trial, a real investment that only makes sense for contractors with meaningful prevailing-wage volume."
         },
         {
           "title": "Self-service with a learning curve",
@@ -2015,7 +2015,7 @@
       ],
       "best_for": "Construction contractors and subcontractors doing Davis-Bacon or state prevailing-wage / government-funded work who need automated certified payroll and fringe-compliance reporting",
       "best_team_size": "5-250 employees",
-      "weaknesses": "Premium custom pricing, a self-service learning curve, variable post-implementation support, and limited customization/mobile. But for prevailing-wage compliance — certified payroll, fringe, union, multi-state — it is purpose-built for a problem generalist payroll can't solve.",
+      "weaknesses": "Premium custom pricing, a self-service learning curve, variable post-implementation support, and limited customization/mobile. But for prevailing-wage compliance (certified payroll, fringe, union, multi-state), it is purpose-built for a problem generalist payroll can't solve.",
       "reputation_flag": null,
       "ratings": {
         "g2": null,
@@ -2035,12 +2035,12 @@
         "quickbooks"
       ],
       "affiliate_program": "unknown",
-      "affiliate_payout_note": "No public publisher affiliate program confirmed — outreach required to determine availability.",
+      "affiliate_payout_note": "No public publisher affiliate program confirmed; outreach required to determine availability.",
       "verified_date": "2026-09-10",
       "service_faqs": [
         {
           "q": "What is eBacon for?",
-          "a": "eBacon is construction-specific payroll-compliance software for contractors doing Davis-Bacon or state prevailing-wage / government-funded work. It automates certified payroll reporting, prevailing-wage calculations, fringe-benefit management, union payroll, and multi-state compliance — the legally-required, error-prone tasks generalist payroll tools don't handle."
+          "a": "eBacon is construction-specific payroll-compliance software for contractors doing Davis-Bacon or state prevailing-wage / government-funded work. It automates certified payroll reporting, prevailing-wage calculations, fringe-benefit management, union payroll, and multi-state compliance, the legally-required, error-prone tasks generalist payroll tools don't handle."
         },
         {
           "q": "How much does eBacon cost?",
@@ -2061,7 +2061,7 @@
       "name": "Payroll4Construction",
       "vendor_url": "https://www.payroll4construction.com",
       "affiliate_url": "TBD",
-      "tagline": "Full construction payroll service handling certified, union, and multi-state complexity — by Foundation Software",
+      "tagline": "Full construction payroll service handling certified, union, and multi-state complexity, by Foundation Software",
       "service_type": "specialty",
       "pricing_model": "custom",
       "starting_price_usd": null,
@@ -2080,12 +2080,12 @@
       "geographic_coverage": "us-nationwide",
       "founded": 2006,
       "headquartered": "Strongsville, OH",
-      "long_description": "Payroll4Construction is a full construction payroll service built specifically to handle the complexity that breaks generalist payroll: certified payroll, union fringes and benefits, multi-state and multi-locality taxes, prevailing wage, and job-cost allocation. Created in 2006 by Foundation Software — the maker of the well-known FOUNDATION construction accounting platform — it is the built-in payroll service for FOUNDATION users, processing payroll and filing taxes directly off the live FOUNDATION database with no imports or exports.\n\nFor a construction contractor, especially one already on (or considering) FOUNDATION accounting, that integration is the draw: payroll and job-cost accounting share one database, so labor costs flow to jobs automatically and certified/union reporting comes from the same source of truth. Beyond FOUNDATION users, Payroll4Construction also operates as a service that handles the full payroll process and tax filing — useful for contractors who want construction-grade payroll without building the expertise in-house.\n\nThe trade-offs are cost and ecosystem fit. Pricing generally runs ~$1,200-$2,500/month depending on configuration and support, so it is aimed at established contractors with real payroll complexity, not a small generalist shop. Its tightest value is for FOUNDATION accounting users; a contractor not using (and not wanting) FOUNDATION gets less of the integration benefit and should weigh it against standalone construction-payroll specialists like eBacon.\n\nFor a construction contractor that needs certified, union, multi-state, and prevailing-wage payroll handled correctly — particularly one on FOUNDATION accounting — Payroll4Construction is a proven, construction-native option with the backing of a long-established construction-software company. Contractors without prevailing-wage/union complexity, or those wanting a lighter modern tool, should consider Fingercheck or a generalist payroll provider instead.",
-      "how_it_works": "Payroll4Construction processes the full construction payroll cycle — wages, certified payroll, union fringes, prevailing wage, multi-state/locality taxes, and job-cost allocation — and files payroll taxes. For FOUNDATION construction-accounting users, it runs directly off the live FOUNDATION database (no imports/exports), so labor costs post to jobs and reports draw from one source of truth. Non-FOUNDATION contractors can use it as a construction payroll service. Pricing is custom (~$1,200-$2,500/month) based on configuration and support level.",
+      "long_description": "Payroll4Construction is a full construction payroll service built specifically to handle the complexity that breaks generalist payroll: certified payroll, union fringes and benefits, multi-state and multi-locality taxes, prevailing wage, and job-cost allocation. Created in 2006 by Foundation Software (the maker of the well-known FOUNDATION construction accounting platform), it is the built-in payroll service for FOUNDATION users, processing payroll and filing taxes directly off the live FOUNDATION database with no imports or exports.\n\nFor a construction contractor, especially one already on (or considering) FOUNDATION accounting, that integration is the draw: payroll and job-cost accounting share one database, so labor costs flow to jobs automatically and certified/union reporting comes from the same source of truth. Beyond FOUNDATION users, Payroll4Construction also operates as a service that handles the full payroll process and tax filing, useful for contractors who want construction-grade payroll without building the expertise in-house.\n\nThe trade-offs are cost and ecosystem fit. Pricing generally runs ~$1,200-$2,500/month depending on configuration and support, so it is aimed at established contractors with real payroll complexity, not a small generalist shop. Its tightest value is for FOUNDATION accounting users; a contractor not using (and not wanting) FOUNDATION gets less of the integration benefit and should weigh it against standalone construction-payroll specialists like eBacon.\n\nFor a construction contractor that needs certified, union, multi-state, and prevailing-wage payroll handled correctly, particularly one on FOUNDATION accounting, Payroll4Construction is a proven, construction-native option with the backing of a long-established construction-software company. Contractors without prevailing-wage/union complexity, or those wanting a lighter modern tool, should consider Fingercheck or a generalist payroll provider instead.",
+      "how_it_works": "Payroll4Construction processes the full construction payroll cycle (wages, certified payroll, union fringes, prevailing wage, multi-state/locality taxes, and job-cost allocation) and files payroll taxes. For FOUNDATION construction-accounting users, it runs directly off the live FOUNDATION database (no imports/exports), so labor costs post to jobs and reports draw from one source of truth. Non-FOUNDATION contractors can use it as a construction payroll service. Pricing is custom (~$1,200-$2,500/month) based on configuration and support level.",
       "pros_detail": [
         {
           "title": "Handles construction payroll complexity",
-          "explanation": "Certified payroll, union fringes/benefits, prevailing wage, multi-state/locality taxes, and job costing — the complexity that breaks generalist payroll — are core to what Payroll4Construction does."
+          "explanation": "Certified payroll, union fringes/benefits, prevailing wage, multi-state/locality taxes, and job costing (the complexity that breaks generalist payroll) are core to what Payroll4Construction does."
         },
         {
           "title": "Native FOUNDATION integration",
@@ -2115,18 +2115,18 @@
         },
         {
           "title": "Built for complexity, not simplicity",
-          "explanation": "If you don't have certified/union/prevailing-wage or multi-state complexity, this is more (and pricier) than you need — a generalist or lighter construction tool would serve better."
+          "explanation": "If you don't have certified/union/prevailing-wage or multi-state complexity, this is more (and pricier) than you need; a generalist or lighter construction tool would serve better."
         },
         {
           "title": "Service-oriented setup",
-          "explanation": "As a full service tied to construction accounting, onboarding involves configuring jobs, wage determinations, and union/fringe rules — a real setup, not a quick signup."
+          "explanation": "As a full service tied to construction accounting, onboarding involves configuring jobs, wage determinations, and union/fringe rules: a real setup, not a quick signup."
         },
         {
           "title": "Less modern/standalone-friendly",
           "explanation": "It shines within the FOUNDATION ecosystem; contractors wanting a sleek, mobile-first standalone tool may prefer a modern construction app like Fingercheck."
         }
       ],
-      "best_for": "Established construction contractors with certified, union, prevailing-wage, or multi-state payroll complexity — especially those using (or adopting) FOUNDATION construction accounting",
+      "best_for": "Established construction contractors with certified, union, prevailing-wage, or multi-state payroll complexity, especially those using (or adopting) FOUNDATION construction accounting",
       "best_team_size": "10-500 employees",
       "weaknesses": "Premium pricing, tightest value tied to the FOUNDATION ecosystem, and built for complexity rather than simple shops. But for construction-grade certified/union/prevailing-wage payroll with job-cost integration, it is a proven, construction-native service.",
       "reputation_flag": null,
@@ -2148,7 +2148,7 @@
         "quickbooks"
       ],
       "affiliate_program": "unknown",
-      "affiliate_payout_note": "No public publisher affiliate program confirmed — outreach required (Foundation Software).",
+      "affiliate_payout_note": "No public publisher affiliate program confirmed; outreach required (Foundation Software).",
       "verified_date": "2026-09-10",
       "service_faqs": [
         {
@@ -2161,7 +2161,7 @@
         },
         {
           "q": "Do I need FOUNDATION accounting to use it?",
-          "a": "No, but that's where it shines — for FOUNDATION users it runs off the live database with no imports/exports, so payroll and job-cost accounting share one source. Non-FOUNDATION contractors can use it as a construction payroll service, but get less of the integration benefit."
+          "a": "No, but that's where it shines: for FOUNDATION users it runs off the live database with no imports/exports, so payroll and job-cost accounting share one source. Non-FOUNDATION contractors can use it as a construction payroll service, but get less of the integration benefit."
         },
         {
           "q": "Payroll4Construction vs eBacon vs Fingercheck?",
@@ -2174,7 +2174,7 @@
       "name": "Arcoro",
       "vendor_url": "https://arcoro.com",
       "affiliate_url": "TBD",
-      "tagline": "Construction-focused HR suite — applicant tracking, onboarding, compliance, and certification management",
+      "tagline": "Construction-focused HR suite: applicant tracking, onboarding, compliance, and certification management",
       "service_type": "all-in-one-hr",
       "pricing_model": "custom",
       "starting_price_usd": null,
@@ -2193,12 +2193,12 @@
       "geographic_coverage": "us-nationwide",
       "founded": 2018,
       "headquartered": "Scottsdale, AZ",
-      "long_description": "Arcoro is an end-to-end HR software suite built specifically for construction and other high-risk, deskless industries. Founded in 2018 in Scottsdale (formed around the former InfinityHR business), it covers the people-operations lifecycle a growing contractor faces — applicant tracking and hiring, onboarding, core HR, time and attendance, performance, and learning — with a construction lens. Its standout strengths, per reviewers, are construction-specific compliance: OSHA reporting, certification and license tracking, and integrations with construction ERPs, which general-purpose HR platforms don't match.\n\nFor a contractor scaling its workforce, those construction-specific capabilities matter. Tracking which crew members hold which certifications and licenses (and when they expire), handling OSHA reporting, and connecting HR to a construction ERP are real, trade-specific needs that a generic HR tool handles poorly or not at all. Arcoro is built around them, which is why it is frequently cited among the better construction HR/workforce platforms.\n\nThe caveats are service and the post-acquisition transition. Arcoro offers only phone and email support, and numerous reviewers report customer-service issues; notably, reviews for the predecessor InfinityHR system were more positive, with a perceived decline after the rebrand/acquisition. Pricing is custom and modular, so cost depends on which modules you enable and your headcount. Note too that Arcoro is HR/workforce-focused — payroll is typically handled via integration with a payroll provider or construction ERP rather than as Arcoro's core.\n\nFor a growing construction contractor that needs construction-specific HR — hiring, onboarding, certification tracking, OSHA compliance — Arcoro is one of the strongest specialized options, provided you go in aware of the support reputation. Small shops that just need payroll should use a payroll tool; Arcoro's value is the construction HR/compliance layer for operations scaling their workforce.",
+      "long_description": "Arcoro is an end-to-end HR software suite built specifically for construction and other high-risk, deskless industries. Founded in 2018 in Scottsdale (formed around the former InfinityHR business), it covers the people-operations lifecycle a growing contractor faces (applicant tracking and hiring, onboarding, core HR, time and attendance, performance, and learning) with a construction lens. Its standout strengths, per reviewers, are construction-specific compliance: OSHA reporting, certification and license tracking, and integrations with construction ERPs, which general-purpose HR platforms don't match.\n\nFor a contractor scaling its workforce, those construction-specific capabilities matter. Tracking which crew members hold which certifications and licenses (and when they expire), handling OSHA reporting, and connecting HR to a construction ERP are real, trade-specific needs that a generic HR tool handles poorly or not at all. Arcoro is built around them, which is why it is frequently cited among the better construction HR/workforce platforms.\n\nThe caveats are service and the post-acquisition transition. Arcoro offers only phone and email support, and numerous reviewers report customer-service issues; notably, reviews for the predecessor InfinityHR system were more positive, with a perceived decline after the rebrand/acquisition. Pricing is custom and modular, so cost depends on which modules you enable and your headcount. Note too that Arcoro is HR/workforce-focused: payroll is typically handled via integration with a payroll provider or construction ERP rather than as Arcoro's core.\n\nFor a growing construction contractor that needs construction-specific HR (hiring, onboarding, certification tracking, OSHA compliance), Arcoro is one of the strongest specialized options, provided you go in aware of the support reputation. Small shops that just need payroll should use a payroll tool; Arcoro's value is the construction HR/compliance layer for operations scaling their workforce.",
       "how_it_works": "Arcoro is a modular construction HR suite: you select the modules you need (applicant tracking, onboarding, core HR, time and attendance, performance, learning), which are configured for construction workflows. It tracks certifications/licenses and expirations, handles OSHA reporting, and integrates with construction ERPs and payroll providers (payroll is typically run via integration rather than natively in Arcoro). Pricing is custom-quoted by modules and headcount, with phone and email support.",
       "pros_detail": [
         {
           "title": "Construction-specific compliance",
-          "explanation": "OSHA reporting, certification/license tracking with expirations, and construction-ERP integrations are real trade needs that general-purpose HR platforms handle poorly — Arcoro is built around them."
+          "explanation": "OSHA reporting, certification/license tracking with expirations, and construction-ERP integrations are real trade needs that general-purpose HR platforms handle poorly; Arcoro is built around them."
         },
         {
           "title": "Full HR lifecycle for contractors",
@@ -2209,7 +2209,7 @@
           "explanation": "Knowing which crew hold which certifications and when they expire is critical in the trades; Arcoro tracks this natively, reducing compliance and safety risk."
         },
         {
-          "title": "Modular — buy what you need",
+          "title": "Modular: buy what you need",
           "explanation": "Its modular structure lets a contractor adopt only the HR modules they need now and add more as they scale, rather than a monolithic all-or-nothing platform."
         },
         {
@@ -2220,11 +2220,11 @@
       "cons_detail": [
         {
           "title": "Customer-service complaints",
-          "explanation": "Arcoro offers only phone and email support, and numerous reviewers report customer-service issues. For HR/compliance software, responsive support matters — probe references."
+          "explanation": "Arcoro offers only phone and email support, and numerous reviewers report customer-service issues. For HR/compliance software, responsive support matters; probe references."
         },
         {
           "title": "Post-acquisition decline perception",
-          "explanation": "Reviews for the predecessor InfinityHR system are notably more positive, with a perceived decline after the rebrand to Arcoro — worth weighing and checking recent reviews specifically."
+          "explanation": "Reviews for the predecessor InfinityHR system are notably more positive, with a perceived decline after the rebrand to Arcoro. Worth weighing and checking recent reviews specifically."
         },
         {
           "title": "HR-focused, not core payroll",
@@ -2232,14 +2232,14 @@
         },
         {
           "title": "Custom, modular pricing",
-          "explanation": "Cost depends on modules and headcount and is quote-based, so there is no transparent rate card — scope carefully and get pricing in writing."
+          "explanation": "Cost depends on modules and headcount and is quote-based, so there is no transparent rate card; scope carefully and get pricing in writing."
         },
         {
           "title": "Overkill for small shops",
           "explanation": "Its construction-HR depth suits scaling contractors; a small shop that just needs payroll doesn't need an HR suite and should use a payroll tool."
         }
       ],
-      "best_for": "Growing construction contractors that need construction-specific HR — hiring, onboarding, certification/license tracking, and OSHA compliance — as they scale their workforce",
+      "best_for": "Growing construction contractors that need construction-specific HR (hiring, onboarding, certification/license tracking, and OSHA compliance) as they scale their workforce",
       "best_team_size": "20-500 employees",
       "weaknesses": "Customer-service complaints, a perceived post-acquisition decline from the InfinityHR era, HR-focus (payroll via integration), and custom modular pricing. But its construction-specific compliance, certification tracking, and ERP integrations are genuinely strong for scaling contractors.",
       "reputation_flag": null,
@@ -2261,12 +2261,12 @@
         "quickbooks"
       ],
       "affiliate_program": "unknown",
-      "affiliate_payout_note": "No public publisher affiliate program confirmed — outreach required to determine availability.",
+      "affiliate_payout_note": "No public publisher affiliate program confirmed; outreach required to determine availability.",
       "verified_date": "2026-09-10",
       "service_faqs": [
         {
           "q": "What is Arcoro?",
-          "a": "Arcoro is an end-to-end HR software suite built for construction and other high-risk industries, covering applicant tracking, onboarding, core HR, time, performance, and learning — with construction-specific strengths in OSHA reporting, certification/license tracking, and construction-ERP integrations. Founded 2018 in Scottsdale."
+          "a": "Arcoro is an end-to-end HR software suite built for construction and other high-risk industries, covering applicant tracking, onboarding, core HR, time, performance, and learning, with construction-specific strengths in OSHA reporting, certification/license tracking, and construction-ERP integrations. Founded 2018 in Scottsdale."
         },
         {
           "q": "Does Arcoro do payroll?",
@@ -2278,7 +2278,7 @@
         },
         {
           "q": "Who should use Arcoro?",
-          "a": "Growing construction contractors that need construction-specific HR — hiring, onboarding, certification/license tracking, OSHA compliance — as they scale their workforce. Small shops that just need payroll should use a payroll tool instead; Arcoro is the HR/compliance layer."
+          "a": "Growing construction contractors that need construction-specific HR (hiring, onboarding, certification/license tracking, OSHA compliance) as they scale their workforce. Small shops that just need payroll should use a payroll tool instead; Arcoro is the HR/compliance layer."
         }
       ]
     },
@@ -2292,7 +2292,7 @@
       "pricing_model": "per-employee",
       "starting_price_usd": null,
       "per_employee_fee_usd": null,
-      "pricing_summary": "Custom-quoted per-employee mid-market HCM. Premium-priced — consistently lands roughly 20-30% above comparable peers like Paylocity or Paycor. No public rate card.",
+      "pricing_summary": "Custom-quoted per-employee mid-market HCM. Premium-priced; consistently lands roughly 20-30% above comparable peers like Paylocity or Paycor. No public rate card.",
       "free_trial_days": 0,
       "verticals_supported": [
         "hvac",
@@ -2308,8 +2308,8 @@
       "geographic_coverage": "us-nationwide",
       "founded": 1998,
       "headquartered": "Oklahoma City, OK",
-      "long_description": "Paycom is a premium, publicly-traded mid-market HCM platform (NYSE: PAYC), founded in 1998 in Oklahoma City, that consistently earns top rankings from G2, Capterra, and analysts. It is built for organizations of roughly 50-750 employees that want a full human-capital-management suite — payroll, HR, talent, time, and benefits — with a heavy emphasis on employee self-service. Its signature, Beti, pushes payroll into employees' own hands (employees review and approve their own paychecks before submission), which is designed to reduce payroll errors and HR workload at scale.\n\nFor a larger trades operation — a multi-location contractor, a sizable HVAC or electrical company with hundreds of employees and office staff — Paycom's depth and self-service model can meaningfully reduce HR administrative burden and centralize employee data. It is most at home where there is real HR complexity and headcount to justify a single, deep HCM platform.\n\nThe trade-offs are price and fit. Paycom is premium-priced, consistently landing roughly 20-30% higher than comparable mid-market peers like Paylocity or Paycor, with custom (non-public) per-employee pricing. Its self-service-heavy model works best for organizations that will actually drive employee adoption, and it is more platform than a small trades shop needs.\n\nFor an established, larger trades operation (toward the 50-750-employee range) that wants a top-ranked, deep HCM with strong self-service and is willing to pay a premium, Paycom is a credible mid-market choice. Small and mid-size shops are better served by SMB payroll (Gusto, SurePayroll) or the lower-priced mid-market options (Paylocity, Paycor), and construction-specific needs (certified/union payroll) point to a construction specialist instead.",
-      "how_it_works": "Paycom is a single-database HCM platform sold via a sales process (custom per-employee pricing, no public rate card). After scoping headcount and modules (payroll, HR, talent, time, benefits), implementation migrates your data into the unified system. Its model leans heavily on employee self-service — with Beti, employees review and approve their own payroll before it is finalized — to reduce errors and HR workload. It fits organizations roughly 50-750 employees with real HR complexity; smaller shops typically find it more platform (and cost) than needed.",
+      "long_description": "Paycom is a premium, publicly-traded mid-market HCM platform (NYSE: PAYC), founded in 1998 in Oklahoma City, that consistently earns top rankings from G2, Capterra, and analysts. It is built for organizations of roughly 50-750 employees that want a full human-capital-management suite (payroll, HR, talent, time, and benefits) with a heavy emphasis on employee self-service. Its signature, Beti, pushes payroll into employees' own hands (employees review and approve their own paychecks before submission), which is designed to reduce payroll errors and HR workload at scale.\n\nFor a larger trades operation (a multi-location contractor, a sizable HVAC or electrical company with hundreds of employees and office staff), Paycom's depth and self-service model can meaningfully reduce HR administrative burden and centralize employee data. It is most at home where there is real HR complexity and headcount to justify a single, deep HCM platform.\n\nThe trade-offs are price and fit. Paycom is premium-priced, consistently landing roughly 20-30% higher than comparable mid-market peers like Paylocity or Paycor, with custom (non-public) per-employee pricing. Its self-service-heavy model works best for organizations that will actually drive employee adoption, and it is more platform than a small trades shop needs.\n\nFor an established, larger trades operation (toward the 50-750-employee range) that wants a top-ranked, deep HCM with strong self-service and is willing to pay a premium, Paycom is a credible mid-market choice. Small and mid-size shops are better served by SMB payroll (Gusto, SurePayroll) or the lower-priced mid-market options (Paylocity, Paycor), and construction-specific needs (certified/union payroll) point to a construction specialist instead.",
+      "how_it_works": "Paycom is a single-database HCM platform sold via a sales process (custom per-employee pricing, no public rate card). After scoping headcount and modules (payroll, HR, talent, time, benefits), implementation migrates your data into the unified system. Its model leans heavily on employee self-service (with Beti, employees review and approve their own payroll before it is finalized) to reduce errors and HR workload. It fits organizations roughly 50-750 employees with real HR complexity; smaller shops typically find it more platform (and cost) than needed.",
       "pros_detail": [
         {
           "title": "Top-ranked deep HCM",
@@ -2317,7 +2317,7 @@
         },
         {
           "title": "Strong employee self-service (Beti)",
-          "explanation": "Its self-service model — including employees reviewing and approving their own payroll via Beti — is designed to cut payroll errors and HR workload at scale."
+          "explanation": "Its self-service model, including employees reviewing and approving their own payroll via Beti, is designed to cut payroll errors and HR workload at scale."
         },
         {
           "title": "Built for 50-750 employees",
@@ -2335,7 +2335,7 @@
       "cons_detail": [
         {
           "title": "Premium pricing",
-          "explanation": "Paycom consistently lands roughly 20-30% higher than peers like Paylocity or Paycor, with custom (non-public) per-employee pricing — a meaningful premium to justify."
+          "explanation": "Paycom consistently lands roughly 20-30% higher than peers like Paylocity or Paycor, with custom (non-public) per-employee pricing, a meaningful premium to justify."
         },
         {
           "title": "Overkill for small trades shops",
@@ -2347,7 +2347,7 @@
         },
         {
           "title": "No construction-specific payroll",
-          "explanation": "Paycom is a general mid-market HCM, not a construction specialist — it doesn't natively handle certified/union/prevailing-wage payroll, so contractors with that need require a specialist."
+          "explanation": "Paycom is a general mid-market HCM, not a construction specialist; it doesn't natively handle certified/union/prevailing-wage payroll, so contractors with that need require a specialist."
         },
         {
           "title": "Custom pricing, sales-led",
@@ -2357,7 +2357,7 @@
       "best_for": "Established, larger trades operations (toward 50-750 employees) wanting a top-ranked, deep HCM with strong employee self-service, and willing to pay a premium",
       "best_team_size": "50-750 employees",
       "weaknesses": "Premium-priced (20-30% above peers), overkill for small shops, self-service-adoption-dependent, and not construction-specific (no certified/union payroll). But for larger trades operations wanting a deep, top-ranked HCM with strong self-service, it is a credible mid-market platform.",
-      "reputation_flag": "SEC settled administrative order 34-92527 (July 30, 2021) found Paycom violated the books-and-records and internal-accounting-controls provisions of the Exchange Act over \"reselling\" — billing clients for services they were already paying for — across roughly 269 instances and 245 client codes from about 2011 to 2018. Paycom returned approximately $2.8 million to affected clients and paid a $250,000 civil penalty; the order carried no fraud charge and the matter is settled. Audit your service list against your invoice.",
+      "reputation_flag": "SEC settled administrative order 34-92527 (July 30, 2021) found Paycom violated the books-and-records and internal-accounting-controls provisions of the Exchange Act over \"reselling\" (billing clients for services they were already paying for) across roughly 269 instances and 245 client codes from about 2011 to 2018. Paycom returned approximately $2.8 million to affected clients and paid a $250,000 civil penalty; the order carried no fraud charge and the matter is settled. Audit your service list against your invoice.",
       "ratings": {
         "g2": null,
         "capterra": null,
@@ -2376,16 +2376,16 @@
         "quickbooks"
       ],
       "affiliate_program": "unknown",
-      "affiliate_payout_note": "No public publisher affiliate program confirmed — outreach required to determine availability.",
+      "affiliate_payout_note": "No public publisher affiliate program confirmed; outreach required to determine availability.",
       "verified_date": "2026-09-10",
       "service_faqs": [
         {
           "q": "Is Paycom good for a trades business?",
-          "a": "For a larger trades operation (toward 50-750 employees) with real HR complexity, yes — it's a top-ranked deep HCM with strong employee self-service. For small or mid-size shops it's overkill and premium-priced; SMB payroll (Gusto, SurePayroll) or lower-cost mid-market options (Paylocity, Paycor) fit better."
+          "a": "For a larger trades operation (toward 50-750 employees) with real HR complexity, yes: it's a top-ranked deep HCM with strong employee self-service. For small or mid-size shops it's overkill and premium-priced; SMB payroll (Gusto, SurePayroll) or lower-cost mid-market options (Paylocity, Paycor) fit better."
         },
         {
           "q": "How much does Paycom cost?",
-          "a": "Paycom uses custom per-employee pricing with no public rate card, and it is premium-priced — consistently landing roughly 20-30% above comparable peers like Paylocity or Paycor. You go through sales for a quote based on headcount and modules."
+          "a": "Paycom uses custom per-employee pricing with no public rate card, and it is premium-priced, consistently landing roughly 20-30% above comparable peers like Paylocity or Paycor. You go through sales for a quote based on headcount and modules."
         },
         {
           "q": "What is Beti?",
@@ -2393,7 +2393,7 @@
         },
         {
           "q": "Does Paycom handle construction certified/union payroll?",
-          "a": "Not as a specialty — Paycom is a general mid-market HCM, not a construction-payroll specialist. Contractors needing certified payroll, prevailing wage, or union payroll should use a construction specialist (eBacon, Payroll4Construction) or a construction-native tool (Fingercheck)."
+          "a": "Not as a specialty: Paycom is a general mid-market HCM, not a construction-payroll specialist. Contractors needing certified payroll, prevailing wage, or union payroll should use a construction specialist (eBacon, Payroll4Construction) or a construction-native tool (Fingercheck)."
         }
       ]
     },
@@ -2402,7 +2402,7 @@
       "name": "Miter",
       "vendor_url": "https://www.miter.com",
       "affiliate_url": "TBD",
-      "tagline": "Modern, integrated construction HCM — payroll, HR, field ops, and expenses built for contractors",
+      "tagline": "Modern, integrated construction HCM: payroll, HR, field ops, and expenses built for contractors",
       "service_type": "specialty",
       "pricing_model": "custom",
       "starting_price_usd": null,
@@ -2421,16 +2421,16 @@
       "geographic_coverage": "us-nationwide",
       "founded": 2021,
       "headquartered": "San Francisco, CA",
-      "long_description": "Miter is a modern, venture-backed construction HCM built exclusively for contractors, founded in 2021 in San Francisco. Where the established construction-payroll specialists (eBacon, Payroll4Construction) often feel like older, compliance-first systems, Miter pitches an integrated, modern platform: human capital management (HRIS, payroll, recruiting, benefits, training) plus field operations and expense management in one product, with automation for the construction-specific hard parts — certified payroll reporting, union fringes, and complex multi-state requirements. It was named Construction Tech Review's \"Construction-Based Payroll and HR Software of the Year 2025.\"\n\nFor a contractor, Miter's appeal is the modern, all-in-one approach to construction workforce management: payroll and HR that understand prevailing wage and union complexity, tied to field ops and expenses, in a more contemporary interface than legacy tools. For shops that want construction-grade compliance without a dated system, that's a compelling pitch.\n\nThe honest counterweight is its reviews, which are genuinely mixed. Alongside the industry award, some customers report real frustrations — reporting that doesn't work as advertised, slow and unhelpful support, and persistent bugs, with one blunt verdict that it \"creates more work than it saves.\" That pattern is not unusual for a fast-moving 2021 startup still maturing a complex product, but it's a meaningful caution: construction payroll is compliance-critical, and bugs or reporting failures carry real consequences.\n\nFor a contractor drawn to a modern, integrated construction HCM — and willing to validate the specific reporting and compliance workflows carefully (and check current support quality) before committing — Miter is a promising, award-recognized option. Contractors who prioritize a proven, stable track record on compliance-critical payroll may prefer the established specialists (Payroll4Construction, eBacon) until Miter's reliability reviews stabilize.",
+      "long_description": "Miter is a modern, venture-backed construction HCM built exclusively for contractors, founded in 2021 in San Francisco. Where the established construction-payroll specialists (eBacon, Payroll4Construction) often feel like older, compliance-first systems, Miter pitches an integrated, modern platform: human capital management (HRIS, payroll, recruiting, benefits, training) plus field operations and expense management in one product, with automation for the construction-specific hard parts: certified payroll reporting, union fringes, and complex multi-state requirements. It was named Construction Tech Review's \"Construction-Based Payroll and HR Software of the Year 2025.\"\n\nFor a contractor, Miter's appeal is the modern, all-in-one approach to construction workforce management: payroll and HR that understand prevailing wage and union complexity, tied to field ops and expenses, in a more contemporary interface than legacy tools. For shops that want construction-grade compliance without a dated system, that's a compelling pitch.\n\nThe honest counterweight is its reviews, which are genuinely mixed. Alongside the industry award, some customers report real frustrations: reporting that doesn't work as advertised, slow and unhelpful support, and persistent bugs, with one blunt verdict that it \"creates more work than it saves.\" That pattern is not unusual for a fast-moving 2021 startup still maturing a complex product, but it's a meaningful caution: construction payroll is compliance-critical, and bugs or reporting failures carry real consequences.\n\nFor a contractor drawn to a modern, integrated construction HCM, and willing to validate the specific reporting and compliance workflows carefully (and check current support quality) before committing, Miter is a promising, award-recognized option. Contractors who prioritize a proven, stable track record on compliance-critical payroll may prefer the established specialists (Payroll4Construction, eBacon) until Miter's reliability reviews stabilize.",
       "how_it_works": "Miter is a custom-quoted, integrated construction HCM. After scoping your operation, it sets up payroll, HR (HRIS, recruiting, benefits, training), field operations, and expense management in one platform, with automation for certified payroll reporting, union fringes, and multi-state requirements. Time and field data feed payroll, and compliance reports generate from the same system. As a modern, newer platform, onboarding configures your jobs, wage determinations, and union/fringe rules; given mixed reliability reviews, validate the reporting and compliance workflows you depend on during evaluation.",
       "pros_detail": [
         {
           "title": "Modern, integrated construction HCM",
-          "explanation": "Miter bundles payroll, HR, field operations, and expense management in one contemporary platform built for contractors — a more integrated, modern approach than legacy construction-payroll tools."
+          "explanation": "Miter bundles payroll, HR, field operations, and expense management in one contemporary platform built for contractors, a more integrated, modern approach than legacy construction-payroll tools."
         },
         {
           "title": "Construction-compliance automation",
-          "explanation": "It automates the hard parts — certified payroll reporting, union fringes, and complex multi-state requirements — the same compliance needs that make generalist payroll unworkable for contractors."
+          "explanation": "It automates the hard parts (certified payroll reporting, union fringes, and complex multi-state requirements), the same compliance needs that make generalist payroll unworkable for contractors."
         },
         {
           "title": "Field ops + expenses tied to payroll",
@@ -2448,11 +2448,11 @@
       "cons_detail": [
         {
           "title": "Mixed reliability reviews",
-          "explanation": "Some customers report reporting that doesn't work as advertised, persistent bugs, and that it \"creates more work than it saves.\" For compliance-critical construction payroll, reliability matters — validate carefully."
+          "explanation": "Some customers report reporting that doesn't work as advertised, persistent bugs, and that it \"creates more work than it saves.\" For compliance-critical construction payroll, reliability matters; validate carefully."
         },
         {
           "title": "Support complaints",
-          "explanation": "Slow and unhelpful support appears in reviews. When certified-payroll or compliance issues arise, responsive support is essential — probe current support quality and references."
+          "explanation": "Slow and unhelpful support appears in reviews. When certified-payroll or compliance issues arise, responsive support is essential; probe current support quality and references."
         },
         {
           "title": "Newer, still maturing",
@@ -2469,13 +2469,13 @@
       ],
       "best_for": "Contractors drawn to a modern, integrated construction HCM (payroll + HR + field ops + expenses) who will carefully validate reporting/compliance reliability and support before committing",
       "best_team_size": "10-500 employees",
-      "weaknesses": "Genuinely mixed reliability and support reviews on a compliance-critical product, plus newness (2021) and no public pricing. But its modern, integrated construction HCM and compliance automation are compelling — validate the workflows and current support quality carefully versus proven specialists.",
+      "weaknesses": "Genuinely mixed reliability and support reviews on a compliance-critical product, plus newness (2021) and no public pricing. But its modern, integrated construction HCM and compliance automation are compelling; validate the workflows and current support quality carefully versus proven specialists.",
       "reputation_flag": null,
       "ratings": {
         "g2": null,
         "capterra": null,
         "trustpilot": null,
-        "reddit_sentiment": "award-winning modern construction HCM with strong ambition, but genuinely mixed user reviews citing reporting issues, bugs, and slow support — validate reliability before committing"
+        "reddit_sentiment": "award-winning modern construction HCM with strong ambition, but genuinely mixed user reviews citing reporting issues, bugs, and slow support; validate reliability before committing"
       },
       "key_features": [
         "construction_hcm",
@@ -2489,7 +2489,7 @@
         "quickbooks"
       ],
       "affiliate_program": "unknown",
-      "affiliate_payout_note": "No public publisher affiliate program confirmed — outreach required to determine availability.",
+      "affiliate_payout_note": "No public publisher affiliate program confirmed; outreach required to determine availability.",
       "verified_date": "2026-09-10",
       "service_faqs": [
         {
@@ -2498,7 +2498,7 @@
         },
         {
           "q": "Is Miter reliable for construction payroll?",
-          "a": "Reviews are mixed. It's award-recognized and ambitious, but some customers report reporting issues, bugs, and slow support — with one verdict that it \"creates more work than it saves.\" Construction payroll is compliance-critical, so validate the specific reporting/compliance workflows and current support quality carefully before committing."
+          "a": "Reviews are mixed. It's award-recognized and ambitious, but some customers report reporting issues, bugs, and slow support, with one verdict that it \"creates more work than it saves.\" Construction payroll is compliance-critical, so validate the specific reporting/compliance workflows and current support quality carefully before committing."
         },
         {
           "q": "Miter vs Payroll4Construction or eBacon?",
@@ -2571,7 +2571,7 @@
         },
         {
           "title": "Generalist, not construction-specific",
-          "explanation": "It's general small-business payroll — it won't natively handle certified payroll, union fringes, or prevailing wage. Construction contractors with those needs require a specialist."
+          "explanation": "It's general small-business payroll; it won't natively handle certified payroll, union fringes, or prevailing wage. Construction contractors with those needs require a specialist."
         },
         {
           "title": "Payments bundle now split",
@@ -2604,7 +2604,7 @@
         "quickbooks"
       ],
       "affiliate_program": "unknown",
-      "affiliate_payout_note": "No public publisher affiliate program confirmed — outreach required to determine availability.",
+      "affiliate_payout_note": "No public publisher affiliate program confirmed; outreach required to determine availability.",
       "verified_date": "2026-09-10",
       "service_faqs": [
         {
@@ -2656,11 +2656,11 @@
       "pros_detail": [
         {
           "title": "Genuinely simple",
-          "explanation": "Wagepoint is built to automate the tedious parts of payroll for small businesses, with an intuitive, easy-to-use experience — exactly what a busy trades owner wants from payroll."
+          "explanation": "Wagepoint is built to automate the tedious parts of payroll for small businesses, with an intuitive, easy-to-use experience, exactly what a busy trades owner wants from payroll."
         },
         {
           "title": "Exceptional support",
-          "explanation": "Reviews repeatedly single out the support team as quick, knowledgeable, and reliable — frequently the main reason customers love it, which matters when payroll questions arise."
+          "explanation": "Reviews repeatedly single out the support team as quick, knowledgeable, and reliable, frequently the main reason customers love it, which matters when payroll questions arise."
         },
         {
           "title": "Strong Canadian payroll",
@@ -2690,7 +2690,7 @@
         },
         {
           "title": "Not construction-specific",
-          "explanation": "It's generalist small-business payroll — no certified/union/prevailing-wage handling. Construction contractors needing that require a specialist."
+          "explanation": "It's generalist small-business payroll: no certified/union/prevailing-wage handling. Construction contractors needing that require a specialist."
         },
         {
           "title": "Prices in Canadian dollars",
@@ -2718,7 +2718,7 @@
         "quickbooks"
       ],
       "affiliate_program": "unknown",
-      "affiliate_payout_note": "No public publisher affiliate program confirmed — outreach required to determine availability.",
+      "affiliate_payout_note": "No public publisher affiliate program confirmed; outreach required to determine availability.",
       "verified_date": "2026-09-10",
       "service_faqs": [
         {
@@ -2727,7 +2727,7 @@
         },
         {
           "q": "What is Wagepoint best at?",
-          "a": "Simplicity and support. It automates the tedious parts of small-business payroll (tax calculations, filings, payments) with an intuitive interface, and reviewers repeatedly praise its support team as quick, knowledgeable, and reliable — the main reason many customers love it."
+          "a": "Simplicity and support. It automates the tedious parts of small-business payroll (tax calculations, filings, payments) with an intuitive interface, and reviewers repeatedly praise its support team as quick, knowledgeable, and reliable, the main reason many customers love it."
         },
         {
           "q": "Does Wagepoint support US payroll?",
@@ -2735,7 +2735,7 @@
         },
         {
           "q": "Does Wagepoint handle construction payroll?",
-          "a": "No — it's generalist small-business payroll, not a construction specialist, so it doesn't natively handle certified payroll, union fringes, or prevailing wage. Construction contractors needing that should use a specialist like eBacon, Payroll4Construction, or Miter."
+          "a": "No, it's generalist small-business payroll, not a construction specialist, so it doesn't natively handle certified payroll, union fringes, or prevailing wage. Construction contractors needing that should use a specialist like eBacon, Payroll4Construction, or Miter."
         }
       ]
     }

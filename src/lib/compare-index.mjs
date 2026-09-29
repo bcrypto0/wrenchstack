@@ -10,7 +10,7 @@
 // page template (to set the noindex prop) and astro.config.mjs (to filter the
 // sitemap), so the two never drift apart.
 
-// High-demand FSM / contractor brands — the ones with real "X vs Y" search
+// High-demand FSM / contractor brands: the ones with real "X vs Y" search
 // volume. A comparison is only worth indexing when BOTH tools are on this
 // list. Expand as the domain gains authority and we want to release more.
 export const POPULAR_TOOL_SLUGS = new Set([
@@ -22,7 +22,7 @@ export const POPULAR_TOOL_SLUGS = new Set([
 
 // A comparison page is indexable iff it is the canonical (alphabetical) word
 // order AND both tools are high-demand. This drops (a) every reverse-order
-// duplicate — its canonical already points at the alphabetical version — and
+// duplicate (its canonical already points at the alphabetical version) and
 // (b) every pair touching a long-tail tool nobody searches by name.
 export function isComparisonIndexable(slugA, slugB) {
   return slugA < slugB
@@ -32,7 +32,7 @@ export function isComparisonIndexable(slugA, slugB) {
 
 // Gulf markets (added 2026-06): their head-to-head pages are numerous (~266
 // templated pages) on a domain still fighting for crawl budget. Same
-// young-domain logic as /compare/ — keep them out of the sitemap and
+// young-domain logic as /compare/, so keep them out of the sitemap and
 // noindexed (via IntlComparison.astro) until the domain has authority.
 // The per-market landings, vendor pages and compare hubs stay indexable.
 // The 5 legacy markets (uk/au/ca/nz/ie, 93 pages) stay indexable as decided

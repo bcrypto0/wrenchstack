@@ -1,27 +1,27 @@
 {
-  "_note": "Internal tracker (NOT rendered on the site). Commission data sourced 2026-05-20, reconciled 2026-05-28 against actual application verdicts. Verify rates inside each dashboard once approved — public pages lag actual terms. The FULLER, current ledger (incl. Tradify/Synchroteam/WorkWave/Skimmer/GorillaDesk applications + the recurring-first apply queue) lives in MEMORY.md and docs/affiliate-audit-2026-05-27.md.",
+  "_note": "Internal tracker (NOT rendered on the site). Commission data sourced 2026-05-20, reconciled 2026-05-28 against actual application verdicts. Verify rates inside each dashboard once approved; public pages lag actual terms. The FULLER, current ledger (incl. Tradify/Synchroteam/WorkWave/Skimmer/GorillaDesk applications + the recurring-first apply queue) lives in MEMORY.md and docs/affiliate-audit-2026-05-27.md.",
   "_status_legend": {
     "not_applied": "Haven't applied yet (and viable)",
     "applied": "Application submitted, waiting",
     "approved": "Approved, link active",
     "rejected": "Rejected by the program (don't retry without traffic data)",
-    "not_viable": "Wrong program shape for a directory (customer-only / consultant-only) — do NOT apply",
-    "re_check": "Worth a fresh look — a viable route may exist that an earlier attempt missed",
+    "not_viable": "Wrong program shape for a directory (customer-only / consultant-only); do NOT apply",
+    "re_check": "Worth a fresh look: a viable route may exist that an earlier attempt missed",
     "expired": "Was approved, link no longer valid"
   },
   "_reconciled_2026_05_28": {
-    "summary": "3 LIVE, several pending, and 6 confirmed dead (customer-only/rejected). Stop re-applying to the dead ones — that was the wasted-effort risk.",
+    "summary": "3 LIVE, several pending, and 6 confirmed dead (customer-only/rejected). Stop re-applying to the dead ones; that was the wasted-effort risk.",
     "live": ["servicetitan", "workiz", "servicefusion"],
     "do_not_retry": ["housecall-pro (rejected by PartnerStack + Network)", "buildops (customer-only)", "knowify (customer-only)", "buildertrend (customer-only)", "jobnimbus (customer-only)", "houzz-pro (customer login wall)"],
-    "verified_win_2026_05_28": "servicem8 — CONFIRMED via primary source: a SEPARATE PartnerStack AFFILIATE program (not the rejected consultant one) pays 80% of the referred customer's first 12 months, 90-day cookie, open to publishers. Reached via the PartnerStack MARKETPLACE, which is gated by Network membership (see partnerstack_network).",
-    "partnerstack_network": "Network application DECLINED 2026-05-28 ('profile not a great fit right now'); re-apply 2026-06-04. Gates the MARKETPLACE (market.partnerstack.com browse-and-join) ONLY — DIRECT vendor PartnerStack links still work (Jobber applied via its direct link = pending, NOT declined). Same root cause as the Google crawl-budget issue: new domain, ~0 traffic. HOLD marketplace-only programs (ServiceM8, Limble) until Jun 4; proceed NOW on direct-link PartnerStack programs (FieldPulse=fieldpulse.partnerstack.com, QuoteIQ, Contractor Foreman) and all non-PartnerStack programs (Contractor+, GoCanvas, Commusoft, PaintScout, etc.).",
-    "strategy": "Prioritize RECURRING/lifetime programs over one-time bounties — they compound. Top unjoined recurring targets (see audit doc for URLs): Contractor+ (50% lifetime), QuoteIQ (40% lifetime), GoCanvas (30%, Content-Partner track), FieldPulse (25% lifetime), Commusoft (15% x 2yr), GorillaDesk (20% x 12mo, applied 2026-05-28), Connecteam (+10% ongoing).",
-    "data_corrections": "ServiceTitan is a CUSTOMER-referral program (not publisher-tracked) — EV cautious. Service Fusion pays a GIFT CARD, not cash. Jobber's 60% recurring is monthly-plans-only (annual plans pay flat $30-300); PartnerStack route = 90-day cookie. Connecteam = bounty + 10% ongoing, not just 25% year-1."
+    "verified_win_2026_05_28": "servicem8, CONFIRMED via primary source: a SEPARATE PartnerStack AFFILIATE program (not the rejected consultant one) pays 80% of the referred customer's first 12 months, 90-day cookie, open to publishers. Reached via the PartnerStack MARKETPLACE, which is gated by Network membership (see partnerstack_network).",
+    "partnerstack_network": "Network application DECLINED 2026-05-28 ('profile not a great fit right now'); re-apply 2026-06-04. Gates the MARKETPLACE (market.partnerstack.com browse-and-join) ONLY; DIRECT vendor PartnerStack links still work (Jobber applied via its direct link = pending, NOT declined). Same root cause as the Google crawl-budget issue: new domain, ~0 traffic. HOLD marketplace-only programs (ServiceM8, Limble) until Jun 4; proceed NOW on direct-link PartnerStack programs (FieldPulse=fieldpulse.partnerstack.com, QuoteIQ, Contractor Foreman) and all non-PartnerStack programs (Contractor+, GoCanvas, Commusoft, PaintScout, etc.).",
+    "strategy": "Prioritize RECURRING/lifetime programs over one-time bounties; they compound. Top unjoined recurring targets (see audit doc for URLs): Contractor+ (50% lifetime), QuoteIQ (40% lifetime), GoCanvas (30%, Content-Partner track), FieldPulse (25% lifetime), Commusoft (15% x 2yr), GorillaDesk (20% x 12mo, applied 2026-05-28), Connecteam (+10% ongoing).",
+    "data_corrections": "ServiceTitan is a CUSTOMER-referral program (not publisher-tracked); EV cautious. Service Fusion pays a GIFT CARD, not cash. Jobber's 60% recurring is monthly-plans-only (annual plans pay flat $30-300); PartnerStack route = 90-day cookie. Connecteam = bounty + 10% ongoing, not just 25% year-1."
   },
   "programs": {
     "jobber": {
       "status": "applied",
-      "network": "partnerstack (primary) — also CJ.com",
+      "network": "partnerstack (primary), also CJ.com",
       "signup_url": "https://jobber.partnerstack.com/?group=baseaffiliate",
       "alt_signup_url": "https://signup.cj.com/member/signup/publisher/?cid=5275645",
       "affiliate_link": null,
@@ -52,7 +52,7 @@
         "cookie_window_days": 90
       },
       "priority": 99,
-      "notes": "REJECTED by PartnerStack (and PartnerStack Network) May 2026. Do NOT retry now — reapply only after ~90 days of real organic traffic data. Generous terms ($40-400/sale by plan + 90-day cookie) make it worth a future re-try."
+      "notes": "REJECTED by PartnerStack (and PartnerStack Network) May 2026. Do NOT retry now; reapply only after ~90 days of real organic traffic data. Generous terms ($40-400/sale by plan + 90-day cookie) make it worth a future re-try."
     },
     "servicetitan": {
       "status": "approved",
@@ -71,7 +71,7 @@
         "eligibility": "Referral must be 3+ techs, 1+ office FTE, in eligible vertical"
       },
       "priority": 3,
-      "notes": "LIVE link wired. CAVEAT: this is a CUSTOMER-referral program, not a publisher-tracked affiliate — conversions require qualified business referrals (3+ techs), not anonymous directory clicks. The $10k cap is real but treat projected EV cautiously."
+      "notes": "LIVE link wired. CAVEAT: this is a CUSTOMER-referral program, not a publisher-tracked affiliate; conversions require qualified business referrals (3+ techs), not anonymous directory clicks. The $10k cap is real but treat projected EV cautiously."
     },
     "workiz": {
       "status": "approved",
@@ -90,8 +90,8 @@
     },
     "servicem8": {
       "status": "not_applied",
-      "verified_viable": "2026-05-28 — CONFIRMED a real publisher affiliate program, separate from the rejected consultant program",
-      "network": "partnerstack (affiliate) — NOT the direct consultant program",
+      "verified_viable": "2026-05-28: CONFIRMED a real publisher affiliate program, separate from the rejected consultant program",
+      "network": "partnerstack (affiliate), NOT the direct consultant program",
       "signup_url": "https://market.partnerstack.com/page/servicem8",
       "info_url": "https://www.servicem8.com/us/partners",
       "affiliate_link": null,
@@ -100,10 +100,10 @@
         "recurring": false,
         "cookie_window_days": 90,
         "cookie_resets_on_reclick": true,
-        "note": "80% of the referred customer's first 12 months of subscription (a one-time payout spread across that year, not perpetual). Open to publishers/content sites — no customer or consultant gating."
+        "note": "80% of the referred customer's first 12 months of subscription (a one-time payout spread across that year, not perpetual). Open to publishers/content sites; no customer or consultant gating."
       },
       "priority": 2,
-      "notes": "VERIFIED 2026-05-28 at market.partnerstack.com/page/servicem8. This is a SEPARATE program from the consultant/implementation one rejected 2026-05-24 (that one required $99/yr + a certification course). The PartnerStack affiliate program is open to publishers, pays 80% of the first 12 months, 90-day cookie. GATED: reached via the PartnerStack Marketplace, and the Network was declined until 2026-06-04 — apply after re-applying to the Network on Jun 4 (or via a direct ServiceM8 link if one surfaces). One of the highest one-time payouts in the portfolio (~several hundred to ~$1,000+ per referred customer by plan)."
+      "notes": "VERIFIED 2026-05-28 at market.partnerstack.com/page/servicem8. This is a SEPARATE program from the consultant/implementation one rejected 2026-05-24 (that one required $99/yr + a certification course). The PartnerStack affiliate program is open to publishers, pays 80% of the first 12 months, 90-day cookie. GATED: reached via the PartnerStack Marketplace, and the Network was declined until 2026-06-04; apply after re-applying to the Network on Jun 4 (or via a direct ServiceM8 link if one surfaces). One of the highest one-time payouts in the portfolio (~several hundred to ~$1,000+ per referred customer by plan)."
     },
     "servicefusion": {
       "status": "approved",
@@ -115,10 +115,10 @@
       "username": "bcrypto.eth@gmail.com",
       "commission_terms": {
         "per_qualified_referral_gift_card_usd": 599,
-        "payout_format": "GIFT CARD (per official welcome email 2026-05-21), not cash — verify exact terms in dashboard"
+        "payout_format": "GIFT CARD (per official welcome email 2026-05-21), not cash; verify exact terms in dashboard"
       },
       "priority": 7,
-      "notes": "LIVE link wired. Payout is a gift card, not cash — factor that into revenue forecasts."
+      "notes": "LIVE link wired. Payout is a gift card, not cash; factor that into revenue forecasts."
     },
     "connecteam": {
       "status": "applied",
@@ -144,7 +144,7 @@
         "wait_period_days": 90
       },
       "priority": 8,
-      "notes": "Applied 2026-05-24, pending. CAVEAT: rewards appear to be ACCOUNT CREDIT for existing FieldEdge customers, not publisher cash — likely not viable for a directory. Confirm there's a cash publisher track; if not, skip."
+      "notes": "Applied 2026-05-24, pending. CAVEAT: rewards appear to be ACCOUNT CREDIT for existing FieldEdge customers, not publisher cash; likely not viable for a directory. Confirm there's a cash publisher track; if not, skip."
     },
     "buildops": {
       "status": "not_viable",
@@ -156,7 +156,7 @@
         "deal_required": false
       },
       "priority": 99,
-      "notes": "NOT VIABLE — the $500/meeting is a CUSTOMER referral form, not a publisher affiliate program. Do not apply. (A LinkedIn media-partnership ask to Oliver Moorhouse at BuildOps is the alternative path, tracked in MEMORY.)"
+      "notes": "NOT VIABLE: the $500/meeting is a CUSTOMER referral form, not a publisher affiliate program. Do not apply. (A LinkedIn media-partnership ask to Oliver Moorhouse at BuildOps is the alternative path, tracked in MEMORY.)"
     },
     "knowify": {
       "status": "not_viable",
@@ -167,7 +167,7 @@
         "per_annual_signup_usd": 1000
       },
       "priority": 99,
-      "notes": "NOT VIABLE — customer-only referral program (must be an active Knowify user). Do not apply."
+      "notes": "NOT VIABLE: customer-only referral program (must be an active Knowify user). Do not apply."
     },
     "buildertrend": {
       "status": "not_viable",
@@ -179,11 +179,11 @@
         "per_builder_referred_usd_max": 250
       },
       "priority": 99,
-      "notes": "NOT VIABLE — customer-only ('share your love for Buildertrend with fellow builders'); the email submission returned 'You are not eligible to participate.' Do not apply."
+      "notes": "NOT VIABLE: customer-only ('share your love for Buildertrend with fellow builders'); the email submission returned 'You are not eligible to participate.' Do not apply."
     }
   },
   "_next_actions_in_order": [
-    "servicem8 (RE-CHECK PartnerStack 80%/12mo affiliate route — possible best-in-portfolio recurring win)",
+    "servicem8 (RE-CHECK PartnerStack 80%/12mo affiliate route, possible best-in-portfolio recurring win)",
     "Then work the recurring-first apply queue in docs/affiliate-audit-2026-05-27.md: GorillaDesk (applied 2026-05-28), FieldPulse, QuoteIQ, Contractor+, GoCanvas (Content-Partner), Commusoft",
     "Watch for approvals on the pending applications: jobber, connecteam, fieldedge, tradify, synchroteam, workwave, skimmer, gorilladesk"
   ],
@@ -191,6 +191,6 @@
     "low_end_blend": 200,
     "mid_blend": 500,
     "high_end_blend": 1500,
-    "_explanation": "Per 10 signups across the portfolio, expect blended EV $5-15k depending on tool mix. NOTE: ServiceTitan's $10k is a customer-referral, not a click-tracked affiliate — discount it in forecasts."
+    "_explanation": "Per 10 signups across the portfolio, expect blended EV $5-15k depending on tool mix. NOTE: ServiceTitan's $10k is a customer-referral, not a click-tracked affiliate; discount it in forecasts."
   }
 }
