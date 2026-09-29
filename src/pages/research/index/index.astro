@@ -53,7 +53,7 @@ const totalCategories = 10;
 const totalVendors = totalTools + adjacentCats.reduce((s, c) => s + c.items.length, 0);
 
 const pageTitle = 'WrenchStack Index Q2 2026: Trades Vendor Benchmarks';
-const pageDescription = 'Quarterly data benchmark across all 10 trades-vendor categories and 17 international markets. Software pricing distribution, the full-stack reputation-flag ledger, and multi-market coverage. Citable headline stats.';
+const pageDescription = `Quarterly data benchmark across all 10 trades-vendor categories and ${intlMarkets} international markets. Software pricing distribution, the full-stack reputation-flag ledger, and multi-market coverage. Citable headline stats.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -197,7 +197,7 @@ const updatedDate = '2026-06-19';
       </p>
       <ul class="space-y-1 text-sm text-slate-700">
         <li>• <strong>Sample size:</strong> All {totalVendors} US vendors across {totalCategories} categories, plus {intlVendorCount} localized listings across {intlMarkets} international markets, as of {updatedDate}</li>
-        <li>• <strong>Geographic scope:</strong> United States plus {intlMarkets} international markets: UK, Ireland, Canada, Australia, New Zealand, the six Gulf states (Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman), France and South Africa</li>
+        <li>• <strong>Geographic scope:</strong> United States plus {intlMarkets} international markets: UK, Ireland, Canada, Australia, New Zealand, the six Gulf states (Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman), Egypt, Jordan, Morocco, France, Malaysia and South Africa</li>
         <li>• <strong>Refresh cadence:</strong> Quarterly (Q3 2026 release: September 2026)</li>
         <li>• <strong>Data freshness:</strong> Individual pricing tiers carry verified_date stamps visible on each vendor page</li>
         <li>• <strong>Reproducibility:</strong> Every stat is derivable from the public directory + methodology</li>

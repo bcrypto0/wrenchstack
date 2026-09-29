@@ -29,12 +29,12 @@ const faqs = [
   { q: 'What exactly changed from the old quarterly system?', a: 'Under the old rules you could hold super and pay it within 28 days of each quarter’s end. Since 1 July 2026, every pay run triggers a super contribution, and the money must actually arrive in each employee’s fund within 7 business days of payday. The change was softened from 7 calendar days to 7 business days in the final legislation, but it still turns super from a quarterly batch job into part of every single pay cycle.' },
   { q: 'What happens if contributions arrive late?', a: 'The updated super guarantee charge is significantly harsher than the old regime: penalties can reach 60% of the shortfall, with daily interest accruing until the super is received. Through the transitional first year (1 July 2026 to 30 June 2027), the ATO is applying a risk-based, facilitative approach to minor errors that are corrected promptly, but it has confirmed there is no blanket amnesty for definitive shortfalls. Treat it as relief if something goes wrong, not something to plan around.' },
   { q: 'Does my job-management software (AroFlo, Simpro, Tradify…) handle payday super?', a: 'No, job-management platforms run quotes, scheduling, job costing and invoicing. Super is paid by your payroll layer (Xero, MYOB, Employment Hero and similar), which calculates the super guarantee on each pay run and pushes contributions through SuperStream rails to each fund. The standard AU trades stack is a job platform feeding payroll through an integration; payday-super readiness is a payroll question.' },
-  { q: 'I pay super through the ATO’s free clearing house (SBSCH). What happens to it?', a: 'The ATO has announced it is retiring the Small Business Superannuation Clearing House as part of the payday-super transition. If you batch quarterly payments through SBSCH today, plan to move that workflow into your payroll software, which will handle per-pay-run contributions automatically. Build the switch into your pre-July preparation rather than discovering it mid-cycle.' },
+  { q: 'I paid super through the ATO’s free clearing house (SBSCH). What happens now?', a: 'The ATO closed the Small Business Superannuation Clearing House on 1 July 2026 as part of the payday-super reform, and it is no longer available. If you used it for quarterly payments, that workflow now has to move into your payroll software (or another clearing service), which handles per-pay-run contributions. If you have not switched yet, do it before your next pay run; the ATO publishes guidance on moving off the SBSCH.' },
   { q: 'What should a trades business do now that payday super has started?', a: 'Four things: confirm your payroll platform’s payday-super support is switched on (and that your plan tier includes it); model the cash-flow change (super now leaves your account with every pay run instead of sitting in the float until quarter end, which weekly-paying trades businesses feel most); clean up employee super-fund details and stapled-fund checks so contributions don’t bounce; and watch your pay runs closely to confirm contributions are reaching funds inside the 7-business-day window.' },
 ];
 
 const pageTitle = 'Payday Super Is Now in Effect (1 July 2026): Is Your Payroll Software Ready? (AU Trades Guide)';
-const pageDescription = 'Payday super is now in effect: since 1 July 2026, super must be paid with every pay run and reach the employee’s fund within 7 business days (penalties up to 60% of the shortfall). What it means for Australian trades businesses, the cash-flow shift, and what to confirm with Xero, MYOB or Employment Hero. Updated July 2026.';
+const pageDescription = 'Payday super is now in effect: since 1 July 2026, super must be paid with every pay run and reach the employee’s fund within 7 business days (penalties up to 60% of the shortfall). What it means for Australian trades businesses, the cash-flow shift, and what to confirm with Xero, MYOB or Employment Hero. Updated September 2026.';
 
 const guideUrl = new URL('/au/guides/payday-super-payroll-software/', Astro.site).toString();
 
@@ -50,7 +50,7 @@ const articleSchema = {
   headline: pageTitle,
   description: pageDescription,
   datePublished: '2026-06-11',
-  dateModified: '2026-07-13',
+  dateModified: '2026-09-29',
   inLanguage: 'en-AU',
   author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
   publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
@@ -77,7 +77,7 @@ const faqSchema = {
       <p class="mt-3 text-lg text-slate-600 leading-relaxed">
         The quarterly super batch is over: since 1 July 2026, super goes out with every pay run and must reach each employee’s fund within 7 business days. What that means for Australian trades businesses: cash flow, clearing houses, and what to confirm with your payroll vendor.
       </p>
-      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published June 2026 · Updated 13 July 2026 · General information, not financial advice; confirm your obligations with the ATO or your adviser.</p>
+      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published June 2026 · Updated 29 September 2026 · General information, not financial advice; confirm your obligations with the ATO or your adviser.</p>
     </header>
 
     <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
@@ -117,9 +117,9 @@ const faqSchema = {
       <h2>Why trades businesses feel this most</h2>
       <ul>
         <li><strong>Weekly pay cycles:</strong> trades crews are commonly paid weekly; that’s 52 super events a year instead of 4. Manual processes that survived quarterly batching will not survive weekly.</li>
-        <li><strong>The cash-flow float disappears:</strong> the super you used to hold until quarter end now leaves with every run. On a 5-person crew, that’s a permanent working-capital shift worth modelling <em>before</em> July, not after.</li>
+        <li><strong>The cash-flow float disappears:</strong> the super you used to hold until quarter end now leaves with every run. On a 5-person crew, that’s a permanent working-capital shift worth modelling now if you have not already.</li>
         <li><strong>Casuals and turnover:</strong> high staff churn means more super-fund detail errors and stapled-fund lookups, and a bounced contribution now risks the 7-day clock, not a quarterly buffer.</li>
-        <li><strong>Clearing-house habits:</strong> the ATO has announced it is retiring its free Small Business Superannuation Clearing House as part of the transition. If your quarterly routine runs through it, the replacement is payroll software paying super per run.</li>
+        <li><strong>Clearing-house habits:</strong> the ATO closed its free Small Business Superannuation Clearing House on 1 July 2026 as part of the transition. If your quarterly routine ran through it, the replacement is payroll software paying super per run.</li>
       </ul>
 
       <h2>The payroll platforms in our AU directory</h2>
@@ -163,7 +163,7 @@ const faqSchema = {
         <li><strong>Confirm your payroll platform’s payday-super support is switched on</strong>, and that your specific plan/tier includes it.</li>
         <li><strong>Model the cash-flow shift.</strong> Take last quarter’s super bill, divide it across your actual pay cycles, and check the working-capital impact; weekly payers feel it most.</li>
         <li><strong>Clean employee super data now:</strong> fund details, member numbers, stapled-fund checks for recent hires. Bounced contributions burn the 7-day window.</li>
-        <li><strong>Move off the ATO clearing house</strong> if you still batch through SBSCH; your payroll software takes over per-run payments.</li>
+        <li><strong>Replace the ATO clearing house</strong> if SBSCH was your route: it closed on 1 July 2026, so your payroll software now handles per-run payments.</li>
         <li><strong>Tighten the timesheet pipeline</strong> from your job-management app: late timesheets now cascade into super penalties, not just payroll grumbles.</li>
         <li><strong>Watch your live pay runs closely.</strong> Track cycles end-to-end to confirm contributions actually reach funds within 7 business days.</li>
       </ol>
@@ -182,7 +182,7 @@ const faqSchema = {
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
-      <strong class="text-slate-700">Sources &amp; verification:</strong> Verified June 2026, re-verified July 2026 from the <a href="https://www.fairwork.gov.au/newsroom/news/payday-super-new-rules-starting-1-july-2026" rel="nofollow noopener" target="_blank">Fair Work Ombudsman</a> and the <a href="https://www.ato.gov.au/businesses-and-organisations/super-for-employers/about-payday-super" rel="nofollow noopener" target="_blank">ATO's payday super guidance</a> (legislation passed; in effect since 1 July 2026; 7 business days; penalties up to 60% of shortfall; transitional facilitative-compliance year to 30 June 2027) · vendor positions from each vendor's published material, June 2026. General information, not financial or tax advice. Spotted an error? <a href="/contact/" class="underline">Tell us</a> and we'll correct it.
+      <strong class="text-slate-700">Sources &amp; verification:</strong> Verified June 2026, re-verified July 2026 from the <a href="https://www.fairwork.gov.au/newsroom/news/payday-super-new-rules-starting-1-july-2026" rel="nofollow noopener" target="_blank">Fair Work Ombudsman</a> and the <a href="https://www.ato.gov.au/businesses-and-organisations/super-for-employers/about-payday-super" rel="nofollow noopener" target="_blank">ATO's payday super guidance</a> (legislation passed; in effect since 1 July 2026; 7 business days; penalties up to 60% of shortfall; transitional facilitative-compliance year to 30 June 2027); SBSCH closure on 1 July 2026 per the ATO's clearing-house pages, checked September 2026 · vendor positions from each vendor's published material, June 2026. General information, not financial or tax advice. Spotted an error? <a href="/contact/" class="underline">Tell us</a> and we'll correct it.
     </section>
 
     <section class="rounded-lg bg-slate-900 p-8 text-white">

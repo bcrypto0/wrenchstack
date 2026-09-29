@@ -11,9 +11,19 @@ const breadcrumbs = [
 const totalTools = tools.length;
 const freeTierTools = tools.filter(t => t.pricing.starting_at_usd === 0);
 const customQuotedTools = tools.filter(t => t.pricing.starting_at_usd === null);
-const cheapestPaid = tools
-  .filter(t => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0)
+const paidTools = tools.filter(t => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0);
+const cheapestPaid = [...paidTools]
   .sort((a, b) => (a.pricing.starting_at_usd ?? 999) - (b.pricing.starting_at_usd ?? 999))[0];
+const paidUnder50 = paidTools.filter(t => (t.pricing.starting_at_usd ?? 0) < 50).length;
+const paidStarts = paidTools.map(t => t.pricing.starting_at_usd as number).sort((a, b) => a - b);
+const medianPaidStartRaw = paidStarts.length === 0
+  ? null
+  : paidStarts.length % 2 === 1
+    ? paidStarts[(paidStarts.length - 1) / 2]
+    : (paidStarts[paidStarts.length / 2 - 1] + paidStarts[paidStarts.length / 2]) / 2;
+const medianPaidStart = medianPaidStartRaw === null
+  ? null
+  : Number.isInteger(medianPaidStartRaw) ? String(medianPaidStartRaw) : medianPaidStartRaw.toFixed(2);
 
 const itemListSchema = {
   '@context': 'https://schema.org',
@@ -92,7 +102,7 @@ const itemListSchema = {
           <div class="text-xs font-bold uppercase tracking-wider text-blue-700">Cheapest paid</div>
           <div class="mt-2 text-lg font-semibold text-slate-900">{cheapestPaid?.name ?? 'n/a'}</div>
           <p class="mt-1 text-sm text-slate-600">
-            From ${cheapestPaid?.pricing.starting_at_usd}/month. Below $50/month tier is sparse; most legitimate full-feature FSM starts at $39-$65/month per user.
+            From ${cheapestPaid?.pricing.starting_at_usd}/month. {paidUnder50} of the {paidTools.length} tools with a published paid price start under $50/month{medianPaidStart !== null ? `; the median starting price is $${medianPaidStart}/month` : ''} (some plans are per user, others a flat company price).
           </p>
         </div>
         <div>
