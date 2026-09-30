@@ -9,7 +9,10 @@ import {
 } from '../../../lib/data';
 
 export async function getStaticPaths() {
-  return tools.map((t) => ({
+  // Every section here ranks by shared trades. Tools with no trades (the CMMS
+  // tools since 2026-09-30) get no page; public/_redirects sends their old URLs
+  // to the tool page, whose alternatives section compares them with each other.
+  return tools.filter((t) => t.verticals.length > 0).map((t) => ({
     params: { slug: t.slug },
     props: { tool: t },
   }));

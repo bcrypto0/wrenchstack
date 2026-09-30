@@ -543,8 +543,10 @@ export function smartAlternatives(t: Tool, n: number = 6): ScoredAlternative[] {
   // Filter candidates
   const candidates = tools.filter((c) => {
     if (c.slug === t.slug) return false;
-    // Must share at least one vertical
-    if (!c.verticals.some((v) => t.verticals.includes(v))) return false;
+    // Must share at least one vertical. CMMS tools carry no trades (they serve
+    // in-house maintenance teams), so two CMMS tools match on type instead.
+    const bothCmms = sourceType === 'cmms' && toolType(c) === 'cmms';
+    if (!bothCmms && !c.verticals.some((v) => t.verticals.includes(v))) return false;
     // Tool-type compatibility check
     if (!typesCompatible(sourceType, toolType(c))) return false;
     return true;
@@ -740,6 +742,14 @@ const TOOL_NAME_ALIASES: Record<string, string> = {
   'STitan': 'servicetitan',
 };
 
+// Tool names that are also plan names or ordinary words, or that another company
+// shares. Auto-linking them made false links (found 2026-09-30): "Essential" plans at
+// MaintainX, UpKeep and Leap linked to Essential Fire; "Solo" plans and "solo
+// operators" linked to the Solo solar tool; "Leap Tools, Inc." (Roomvo's parent)
+// linked to the unrelated Leap CRM. Link these tools explicitly where needed.
+const NO_AUTOLINK_NAMES = new Set(['Essential', 'Solo']);
+const NO_AUTOLINK_WHEN_FOLLOWED_BY: Record<string, RegExp> = { Leap: /^ Tools\b/ };
+
 function escapeHtmlForLinkify(s: string): string {
   return s
     .replace(/&/g, '&amp;')
@@ -761,6 +771,7 @@ export function linkifyTools(text: string | undefined, currentSlug: string): str
   const nameToSlug = new Map<string, string>();
   for (const t of tools) {
     if (t.slug === currentSlug) continue;
+    if (NO_AUTOLINK_NAMES.has(t.name)) continue;
     nameToSlug.set(t.name, t.slug);
   }
   for (const [alias, targetSlug] of Object.entries(TOOL_NAME_ALIASES)) {
@@ -782,9 +793,11 @@ export function linkifyTools(text: string | undefined, currentSlug: string): str
   // greedy alternation handles ordering, so we only need to guard against
   // post-replacement substring matches, but since we run the regex once
   // against the original escaped text, no double-linking happens.
-  const withToolLinks = escaped.replace(pattern, (match) => {
+  const withToolLinks = escaped.replace(pattern, (match, _name, offset: number, whole: string) => {
     const slug = nameToSlug.get(match);
     if (!slug) return match;
+    const notBefore = NO_AUTOLINK_WHEN_FOLLOWED_BY[match];
+    if (notBefore && notBefore.test(whole.slice(offset + match.length))) return match;
     return `<a href="/tools/${slug}/" class="font-medium underline decoration-orange-400 decoration-2 underline-offset-2 hover:decoration-orange-600">${match}</a>`;
   });
 
@@ -970,7 +983,8 @@ export type LeadModel =
   | 'pay-per-call'
   | 'marketplace-bid'
   | 'directory-listing'
-  | 'display-ads';
+  | 'display-ads'
+  | 'call-tracking';
 
 export type PricingModel =
   | 'pay-per-lead'

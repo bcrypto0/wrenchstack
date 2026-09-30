@@ -14,6 +14,7 @@ import { asSentence,
   readingTimeMinutes,
   linkifyTools,
   smartAlternatives,
+  toolType,
   priceTier,
   priceScaling,
   perUserEquivalentUsd,
@@ -854,6 +855,13 @@ const breadcrumbs = [
 
     <section class="mb-10">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Available for these trades</h2>
+      {verticalsForThisTool.length === 0 && (
+        <p class="text-sm text-slate-600 leading-relaxed">
+          {toolType(tool) === 'cmms'
+            ? `${tool.name} is maintenance software (CMMS) for teams that look after their own equipment and buildings, not for contractors who bill customers, so it is not ranked on our trade pages. Compare it with other CMMS tools in the alternatives below.`
+            : `${tool.name}'s own site does not name any of the trades we cover, so it is not ranked on our trade pages.`}
+        </p>
+      )}
       <div class="flex flex-wrap gap-2">
         {verticalsForThisTool.map((v) => (
           <a
