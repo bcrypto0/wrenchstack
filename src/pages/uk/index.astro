@@ -25,18 +25,18 @@ const flaggedCount = vendors.filter(v => v.reputation_flag !== null).length;
 
 const categories = ['software', 'lead-gen', 'insurance', 'payroll', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'software': { label: 'Field service software', description: 'UK-built FSM platforms (Commusoft, BigChange, JobLogic, Powered Now) and cross-market vendors with UK presence (Tradify, ServiceM8).' },
-  'lead-gen': { label: 'Lead-generation platforms', description: 'UK trades directories where homeowners search for tradies: Checkatrade, MyBuilder, Rated People, TrustATrader.' },
-  'insurance': { label: 'Business insurance', description: 'UK-licensed insurance for trades: Hiscox UK, Simply Business UK, AXA, Direct Line. Employers Liability included where legally required.' },
-  'payroll': { label: 'Payroll software', description: 'HMRC-recognized UK payroll (BrightPay, Sage, Xero) with native RTI submissions and auto-enrolment compliance.' },
-  'certification': { label: 'Required certifications', description: 'UK legal-requirement certifications for gas (Gas Safe Register), electrical (NICEIC), and oil heating (OFTEC).' },
+  'software': { label: 'Field service software', description: 'Job management software sold to UK trades: BigChange (Leeds), Joblogic (Birmingham) and Powered Now (Devon); Commusoft (London and Chicago); Tradify (founded in New Zealand, part of The Access Group since 2024) and ServiceM8 (an Australian company), both priced in sterling; and the AI quoting app Sleepless Tradesman.' },
+  'lead-gen': { label: 'Lead-generation platforms', description: 'UK directories and marketplaces that connect customers with tradespeople: Checkatrade, MyBuilder, TrustATrader and Bark. Pricing models differ: Checkatrade publishes monthly plans, TrustATrader says it charges no commission or lead fees, on Bark you spend credits to respond to requests, and no MyBuilder prices could be read for this check.' },
+  'insurance': { label: 'Business insurance', description: `Business insurance for UK tradespeople from three insurers selling direct (Hiscox UK, AXA Business UK, Direct Line for Business) and one online broker (Simply Business UK). Hiscox and AXA note that employers' liability is a legal requirement once you employ staff, and Simply Business says it usually is. How it is sold differs: Hiscox sells it only together with public liability, AXA lists it as one of the covers you select, Direct Line for Business includes it among the covers you build a policy from (up to £10 million as standard), and Simply Business offers it as an add-on.` },
+  'payroll': { label: 'Payroll software', description: `Payroll software on HMRC's list of recognised payroll software: BrightPay, Sage Payroll UK and Xero Payroll (UK). Xero says it files RTI after each pay run, and BrightPay and Xero automate auto enrolment. For CIS returns, BrightPay needs the separate BrightCIS product and Xero has a £5 a month add-on.` },
+  'certification': { label: 'Registration and certification schemes', description: 'Gas Safe Register is the HSE-approved register a business must be on to legally do gas work within the scope of the Gas Safety (Installation and Use) Regulations 1998. NICEIC (electrical) and OFTEC (oil, solid fuel and renewable heating) run competent person schemes that let members self-certify certain work instead of going through building control; other authorised schemes cover the same work.' },
 };
 
 const vendorsByCategory: Record<string, UkVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
 const pageTitle = 'UK Trades Vendor Directory | WrenchStack United Kingdom';
-const pageDescription = `WrenchStack's UK trades vendor directory: ${vendors.length} platforms across software, lead-gen, insurance, payroll, and required certifications. Built for UK contractors with native UK compliance (Gas Safe, NICEIC, RTI, CIS, VAT).`;
+const pageDescription = `WrenchStack's UK trades vendor directory: ${vendors.length} entries across software, lead generation, insurance, payroll and certification, with notes for UK contractors on Gas Safe registration, competent person schemes, RTI, CIS and VAT.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -56,7 +56,7 @@ const breadcrumbs = [
         UK Trades Vendor Directory
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} UK-relevant vendors across 5 categories, built for UK contractors with native UK compliance context. Gas Safe Register, NICEIC, OFTEC, HMRC RTI, CIS deductions, Employers Liability, VAT handling: the things that matter for UK trades work, not generic SMB SaaS.
+        Independent reviews of {vendors.length} UK-relevant vendors and schemes across 5 categories, written for UK contractors. Each entry notes the UK points the vendor covers or leaves out: Gas Safe Register, NICEIC and OFTEC schemes, HMRC RTI, CIS, employers' liability and VAT.
       </p>
     </header>
 
@@ -72,7 +72,7 @@ const breadcrumbs = [
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See UK vendors compared side by side: a clear verdict, pros and cons, UK-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See UK vendors compared side by side: pros and cons, UK-specific notes and pricing, with a short summary of which one publishes its prices or carries a reputation warning.</p>
       </div>
       <a href="/uk/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare UK vendors →</a>
     </section>
@@ -80,7 +80,7 @@ const breadcrumbs = [
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border-2 border-emerald-300 bg-emerald-50 p-5">
       <div>
         <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">⏰ Compliance guide · Live since 6 April 2026</p>
-        <h2 class="mt-1 text-base font-bold text-slate-900">Making Tax Digital is here: most tradespeople are in scope</h2>
+        <h2 class="mt-1 text-base font-bold text-slate-900">Making Tax Digital for Income Tax is live for sole traders</h2>
         <p class="mt-1 text-sm text-slate-700">Mandatory now over £50k, dropping to £30k in 2027 and £20k in 2028. What sole traders and CIS subbies must change, and which software actually files it.</p>
       </div>
       <a href="/uk/guides/making-tax-digital-tradespeople/" class="shrink-0 rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Read the guide →</a>
@@ -89,7 +89,7 @@ const breadcrumbs = [
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What's different about UK trades vendor selection</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        UK trades vendor selection is structurally different from US in three important ways. First, <strong>certification is legally mandatory</strong> for gas (Gas Safe), electrical (NICEIC for Part P), and oil heating (OFTEC); unlicensed work is a criminal offense, not a competitive disadvantage. Second, <strong>compliance is more compressed</strong>: HMRC RTI submissions, CIS deductions for construction sub-contractors, auto-enrolment workplace pensions, and VAT all require software that handles UK-specific workflows natively. Third, <strong>lead-gen consumer behavior is different</strong>: UK homeowners use directories like Checkatrade and MyBuilder more than US homeowners use equivalents like Angi or Thumbtack.
+        Three UK points shape vendor choice here. First, <strong>gas work needs registration</strong>: a business must be on the Gas Safe Register to legally do gas work within the scope of the Gas Safety (Installation and Use) Regulations 1998, and HSE prosecutes unregistered gas fitters. For electrical and oil heating work, competent person schemes such as NICEIC and OFTEC let members self-certify certain work instead of going through building control, and other authorised schemes cover the same work. Second, <strong>payroll sits outside the job app</strong>: Powered Now, Tradify, ServiceM8 and Joblogic list no payroll features, so employers pair them with payroll software that files RTI to HMRC, and CIS returns may need a separate product or add-on (BrightCIS, or Xero's CIS add-on). Third, <strong>lead-generation pricing models differ</strong>: Checkatrade publishes monthly plans on 12-month memberships, TrustATrader says it charges no commission or lead fees, and on Bark you spend credits to respond to a request, with up to five professionals able to contact the same customer.
       </p>
     </section>
 
@@ -172,9 +172,9 @@ const breadcrumbs = [
     })}
 
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
-      <h2 class="text-2xl font-bold">UK research is an active expansion</h2>
+      <h2 class="text-2xl font-bold">About UK coverage</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        {vendors.length} UK vendors covered today across {categories.length} categories. We're actively expanding UK depth: full editorial reviews of UK-only vendors (Checkatrade, MyBuilder, Commusoft) at the same depth as our US software reviews are in the editorial queue. UK certification pages (Gas Safe, NICEIC) are scheduled. Want a UK vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
+        {vendors.length} UK entries across {categories.length} categories. UK profiles are shorter than our US software reviews and focus on what UK contractors need to know. Want a UK vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Back to US directory →</a>

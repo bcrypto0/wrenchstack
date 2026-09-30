@@ -13,17 +13,17 @@ interface JoVendor {
 const vendors = (joData as { vendors: JoVendor[] }).vendors;
 const categories = ['software', 'lead-gen', 'insurance', 'payroll', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'software': { label: 'Accounting / invoicing & construction software', description: 'Jordan’s software market is a JoFotara compliance gold-rush: e-invoicing platforms and connectors (InvoiceQ, Fatwarti, FawtraPlus, Tax2Gov), Arabic accounting (Daftra), and global ERPs localized for Jordan (Odoo’s native l10n_jo_edi, via partners). Genuine construction-specific tools are thin; Mozon’s contracting module is the standout.' },
-  'lead-gen': { label: 'Tenders & lead generation', description: 'Honestly thin in Jordan: the official government e-procurement portal (JONEPS), where public construction tenders are won, plus a subscription tender aggregator (JordanTenders). No Jordan-rooted construction marketplace exists; we don’t invent one.' },
-  'insurance': { label: 'Construction insurance: Contractors All Risks', description: 'CAR and engineering cover from Jordan’s major insurers: JOFICO and Arabia Insurance (which spell the cover out on their own sites), market leaders gig and JIC, and MEICO. All broker-placed, no online quotes; regulated by the Central Bank of Jordan.' },
-  'payroll': { label: 'Payroll: SSC & income tax', description: 'The Jordan-origin modern pick ZenHR (which states SSC handling on its own page), the enterprise incumbent MenaITech, plus Yomly and GTS One. Every Jordanian employer must enrol in Social Security from the first worker.' },
-  'certification': { label: 'Compliance & official bodies', description: 'The legal chain a Jordanian contractor must complete: company registration (CCD), the tax file + JoFotara (ISTD), JCCA membership + classification (the gate to public tenders), Jordan Engineers Association registration, and Social Security (SSC).' },
+  'software': { label: 'Accounting / invoicing & construction software', description: 'E-invoicing services that link existing systems to JoFotara (InvoiceQ and Tax2Gov); accounting and invoicing apps that say they send invoices to JoFotara (Daftra, FawtraPlus, Fatwarti); ERP suites (Mozon, which sells a contracting module; Odoo, whose Jordan localization includes a JoFotara module; ESKADENIA); an Amman Odoo implementation partner (Stride); and global accounting tools for which the vendor names no JoFotara integration (Zoho Books, QuickBooks).' },
+  'lead-gen': { label: 'Tenders & lead generation', description: 'The government e-procurement portal (JONEPS), where public buyers post tender invitations and suppliers register and submit electronic bids, plus a paid tender-alert service (JordanTenders) that publishes annual prices in USD.' },
+  'insurance': { label: 'Construction insurance: Contractors All Risks', description: 'Insurers whose own sites list engineering cover such as Contractors All Risks (JOFICO, gig Jordan, MEICO), plus Jordan Insurance Company (JIC), whose engineering products could not be confirmed on its site. None publishes prices; cover is quoted, and gig Jordan and MEICO take quote requests through online forms. MEICO stopped writing motor insurance from 1 January 2026.' },
+  'payroll': { label: 'Payroll: SSC & income tax', description: 'Cloud HR and payroll suites: ZenHR (whose Jordan page states SSC and Labor Law calculations), MenaITech (MenaPAY, with an Amman office), Yomly (Dubai-based, with a Jordan payroll page) and GTS One (Amman). None publishes prices. Employers pay SSC contributions of 14.25% of insured wages and employees 7.5%, per PwC; ask each vendor how it calculates them.' },
+  'certification': { label: 'Compliance & official bodies', description: 'The official bodies a Jordanian contractor deals with. Under the Construction Contractors Law a contractor is licensed, registers with the Ministry of Industry and Trade (through the CCD) and with the contractors association (JCCA), and is then classified. The list also covers the tax authority (ISTD, which runs JoFotara), the Jordan Engineers Association and Social Security (SSC).' },
 };
 const vendorsByCategory: Record<string, JoVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
 const pageTitle = 'Jordan Construction & Trades Software (JoFotara) | WrenchStack';
-const pageDescription = `Independent directory of ${vendors.length} vendors for Jordan: JoFotara-ready accounting/invoicing & construction software, public-tender access (JONEPS), SSC payroll, and Contractors All Risks insurance, plus the JoFotara e-invoicing mandate (live since April 2025), JCCA classification and SSC compliance every contractor must handle.`;
+const pageDescription = `Independent directory of ${vendors.length} vendors and official bodies for Jordan: accounting, invoicing and ERP software and its JoFotara links, public-tender access (JONEPS), payroll, and Contractors All Risks insurance, plus JoFotara e-invoicing (mandatory from April 2025, per press reports), JCCA registration and classification, and SSC contributions.`;
 const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Jordan', url: '/jo/' } ];
 const enUrl = new URL('/jo/', Astro.site).toString();
 const arUrl = new URL('/jo/ar/', Astro.site).toString();
@@ -40,18 +40,18 @@ const arUrl = new URL('/jo/ar/', Astro.site).toString();
       </div>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">Jordan Construction & Trades Software Directory</h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} Jordan-relevant vendors, built around the one force that dominates the market: the <strong>JoFotara</strong> national e-invoicing mandate, now live and enforced. JoFotara-ready accounting and invoicing tools (InvoiceQ, Mozon, Daftra, Odoo), public-tender access (JONEPS), SSC payroll (ZenHR, MenaITech) and Contractors All Risks insurance (JOFICO, gig, JIC), with the local context (16% GST, JCCA classification, Social Security from the first employee, a dinar pegged to the dollar) that off-the-shelf software ignores.
+        Independent reviews of {vendors.length} Jordan-relevant vendors and official bodies. Invoices in Jordan are issued through <strong>JoFotara</strong>, the national e-invoicing system of the Income and Sales Tax Department, or through software linked to it; Jordanian press reported that use became mandatory from the start of April 2025. Listed here: accounting, invoicing and ERP tools that say they link to JoFotara (InvoiceQ, Mozon, Daftra, Odoo and others), public-tender access (JONEPS), payroll software (ZenHR, MenaITech) and insurers that list Contractors All Risks cover (JOFICO, gig Jordan, MEICO), with local context: 16% general sales tax, JCCA registration and classification, and SSC contributions.
       </p>
     </header>
 
     <section class="mb-10 grid gap-3 grid-cols-2 sm:grid-cols-4">
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">{vendors.length}</div>
-        <div class="mt-1 text-xs text-slate-600">vendors reviewed</div>
+        <div class="mt-1 text-xs text-slate-600">vendors and official bodies</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-        <div class="text-2xl font-bold text-slate-900">+17%</div>
-        <div class="mt-1 text-xs text-slate-600">construction growth (2025)</div>
+        <div class="text-2xl font-bold text-slate-900">14.25%</div>
+        <div class="mt-1 text-xs text-slate-600">employer SSC share (per PwC)</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">16%</div>
@@ -59,15 +59,15 @@ const arUrl = new URL('/jo/ar/', Astro.site).toString();
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">Apr 2025</div>
-        <div class="mt-1 text-xs text-slate-600">JoFotara mandatory (Phase 2)</div>
+        <div class="mt-1 text-xs text-slate-600">JoFotara mandatory (press reports)</div>
       </div>
     </section>
 
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border-2 border-emerald-300 bg-emerald-50 p-5">
       <div>
-        <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">⏰ Compliance guide · JoFotara LIVE & ENFORCED · Phase 2 mandatory since 1 April 2025 · no exemptions</p>
+        <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">⏰ Compliance guide · JoFotara e-invoicing · mandatory from April 2025, per press reports</p>
         <h2 class="mt-1 text-base font-bold text-slate-900">JoFotara (الفوترة الوطنية) e-invoicing for Jordanian contractors</h2>
-        <p class="mt-1 text-sm text-slate-700">The clearance model, who must comply (everyone, no threshold), why only cleared invoices are tax-deductible and non-compliance bars you from public tenders, and which tools are actually JoFotara-integrated.</p>
+        <p class="mt-1 text-sm text-slate-700">How JoFotara works for contractors, which invoices the ISTD invoicing regulation recognises, what to check before a public tender, and which tools in this directory say they link to JoFotara.</p>
       </div>
       <a href="/jo/guides/jofotara-e-invoicing/" class="shrink-0 rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Read the guide →</a>
     </section>
@@ -83,7 +83,7 @@ const arUrl = new URL('/jo/ar/', Astro.site).toString();
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What’s different about choosing software in Jordan</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        One thing dominates Jordanian software selection: <strong>JoFotara is live and enforced.</strong> Since Phase 2 went mandatory on <strong>1 April 2025</strong>, every business (no turnover threshold, no sector exemption) must route invoices through the ISTD’s clearance platform, where each invoice is validated <em>before</em> it’s legally issued (UBL 2.1 XML/JSON, mandatory digital signature, a QR code returned on clearance). The teeth are real: an invoice not cleared through JoFotara is <strong>invalid for VAT input deduction</strong>, fines run up to JOD 500 per violation, and, critically for contractors, <strong>non-compliance excludes you from public tenders.</strong> So software choice carries compliance weight. The second reality: <strong>genuine construction-specific tools are thin</strong>; most of the market is JoFotara-driven invoicing, so a contractor often pairs a compliance tool with project tracking (Mozon’s contracting module and Odoo via local partners are the closest to all-in-one). Beyond that: <strong>16% GST</strong> (note: not Saudi’s 15% or the UAE’s 5%, so software must be tuned to Jordan), the <strong>JCCA classification</strong> that gates public works, and <strong>Social Security from the first employee</strong> (~21.75% of wage). The dinar is pegged to the US dollar, so pricing in either currency carries no FX risk.
+        Invoicing is the first thing to check. The invoicing regulation of the Income and Sales Tax Department (ISTD), as amended in 2023, recognises electronic invoices issued through the national <strong>JoFotara</strong> system or through software linked to it, and Jordanian press reported that use of the system became mandatory from the start of April 2025. ISTD publishes no list of approved software, so treat any approval claim as the vendor's own and confirm the integration scope before you buy. Among the software listed here, Mozon sells a contracting module (budgets, subcontractors and progress invoicing), Daftra lists a Real Estate & Construction industry profile with project management, and Odoo covers projects alongside accounting; the rest are e-invoicing, accounting or general ERP tools and services. Beyond invoicing: <strong>16% general sales tax</strong> under Law No. 6 of 1994, with reduced, zero and exempt rates for listed goods and services; registration and classification with the <strong>Jordan Construction Contractors Association</strong>, without which no ministry, municipality or company may sign a works contract with you; and <strong>Social Security contributions</strong> of 14.25% of insured wages from the employer and 7.5% from the employee, per PwC's tax summary.
       </p>
     </section>
 

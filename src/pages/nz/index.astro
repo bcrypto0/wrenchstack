@@ -24,18 +24,18 @@ const vendors = (nzData as { vendors: NzVendor[] }).vendors;
 
 const categories = ['software', 'lead-gen', 'insurance', 'payroll', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'software': { label: 'Field service software', description: 'NZ-built FSM ecosystem: Fergus (founded by NZ plumber), NextMinute (4.9★ ratings), and globally-scaled Tradify (NZ-origin). Native ACC, GST, PAYE handling.' },
-  'lead-gen': { label: 'Lead-generation platforms', description: 'Smaller NZ market: Builderscrack dominates as the leading NZ-only marketplace.' },
-  'insurance': { label: 'Business insurance', description: 'NZ-licensed insurance with IAG family (NZI, AMI) and major underwriter Vero. PL coverage typically NZ$1-5M standard.' },
-  'payroll': { label: 'Payroll software', description: 'IRD-compliant NZ payroll: iPayroll, Smartly. KiwiSaver + ACC levy handling native.' },
-  'certification': { label: 'Required certifications', description: 'NZ mandatory licensing: EWRB for electrical (38K registered), PGDB for plumbing/gas/drainage (combined multi-discipline body).' },
+  'software': { label: 'Job management software', description: `Fergus and NextMinute are based in Auckland and Invven is a New Zealand company. Tradify was founded in New Zealand and is now owned by the UK's Access Group. ServiceM8 is an Australian company, Simpro started in Brisbane and AroFlo is headquartered in Melbourne; Simpro and AroFlo are both part of Simpro Group. GST treatment and accounting links differ by vendor, so check each entry.` },
+  'lead-gen': { label: 'Lead-generation platforms', description: `Different models. Builderscrack (owned by Australia's hipages Group) and FairTrades NZ let homeowners post jobs free for tradies to quote on; Builderscrack does not publish its tradie fees. NoCowboys is a ratings site with a $999 a year business registration, Trade Me Services sells listings that run for 90 days, and Localist sells profile plans from $5 a month that include no leads or quote requests.` },
+  'insurance': { label: 'Business insurance', description: `Two IAG New Zealand brands, NZI (sold through brokers) and AMI (direct, online or by phone); Suncorp-owned Vero, sold through brokers and advisers; Builtin, a Tauranga broker for builders and trades; and BizCover, an online platform that acts as the insurer's agent. AMI advertises its Tradies Insurance bundle from $19 a week and BizCover publishes average monthly costs as a guide; NZI, Vero and Builtin quote per business.` },
+  'payroll': { label: 'Payroll software', description: 'New Zealand payroll services that file with Inland Revenue. iPayroll, Thankyou Payroll and Crystal Payroll say they act as PAYE intermediaries; Smartly and PayHero also file with Inland Revenue. Pricing models differ: per pay run, per employee per pay run, or a monthly base fee plus a per-employee charge.' },
+  'certification': { label: 'Licensing, regulators and associations', description: 'EWRB registers and licenses electrical workers, PGDB registers and licenses plumbers, gasfitters and drainlayers, and Restricted Building Work on homes must be done or supervised by a Licensed Building Practitioner (LBP). WorkSafe New Zealand enforces health and safety duties that apply to every trade business. The Registered Master Builders Association and Master Plumbers, Gasfitters & Drainlayers NZ are voluntary memberships and do not replace licensing.' },
 };
 
 const vendorsByCategory: Record<string, NzVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
 const pageTitle = 'NZ Trades Vendor Directory | WrenchStack New Zealand';
-const pageDescription = `WrenchStack's New Zealand trades vendor directory: ${vendors.length} platforms across software, lead-gen, insurance, payroll, and required certifications. Built for NZ contractors with native NZ compliance (ACC, GST, PAYE, EWRB, PGDB).`;
+const pageDescription = `WrenchStack's New Zealand trades vendor directory: ${vendors.length} entries across job management software, lead generation, insurance, payroll, and licensing bodies and trade associations (EWRB, PGDB, LBP), with prices where the vendor or body publishes them.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -55,7 +55,7 @@ const breadcrumbs = [
         New Zealand Trades Vendor Directory
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} New Zealand-relevant vendors across 5 categories. NZ has unusually strong native FSM software (Fergus, NextMinute, Tradify all NZ-origin), mandatory licensing schemes (EWRB for electrical, PGDB combining plumbing+gas+drainage), and IRD-compliant payroll requirements with KiwiSaver + ACC handling.
+        Independent reviews of {vendors.length} New Zealand-relevant entries across 5 categories: job management software from Auckland-based Fergus and NextMinute, Tradify (founded in New Zealand, now owned by the UK's Access Group) and Australian-origin tools; licensing through EWRB for electrical work, PGDB for plumbing, gasfitting and drainlaying, and the LBP scheme for Restricted Building Work on homes; and payroll services that file with Inland Revenue.
       </p>
     </header>
 
@@ -71,15 +71,15 @@ const breadcrumbs = [
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See NZ vendors compared side by side: a clear verdict, pros and cons, NZ-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See NZ vendors in the same category side by side: pros and cons, NZ-specific notes and pricing.</p>
       </div>
       <a href="/nz/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare NZ vendors →</a>
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
-      <h2 class="mb-3 text-base font-bold text-slate-900">What's different about NZ trades vendor selection</h2>
+      <h2 class="mb-3 text-base font-bold text-slate-900">What to check before choosing an NZ vendor</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        New Zealand's trades market is smaller than US/UK/AU/CA but with a disproportionately strong native FSM software ecosystem: Fergus, NextMinute, and Tradify are all NZ-built (Tradify scaled internationally; the others stayed AU/NZ-focused). Licensing is structurally simpler than fragmented AU/CA: single national bodies (EWRB for electrical, PGDB for plumbing/gas/drainage) cover the entire country. Payroll requires native IRD/KiwiSaver/ACC handling that international platforms don't match.
+        Licensing: electrical work needs EWRB registration and a practising licence renewed every 2 years; plumbing, gasfitting and drainlaying need PGDB registration and a practising licence renewed each year; Restricted Building Work on homes must be done or supervised by a Licensed Building Practitioner. Customers can check each on a public register. GST: NextMinute, Tradify, PayHero and Invven quote NZD prices excluding GST, Localist includes GST, and Fergus, ServiceM8, NoCowboys and FairTrades NZ do not say. Payroll: iPayroll, Thankyou Payroll and Crystal Payroll say they act as PAYE intermediaries with Inland Revenue. Ownership: Tradify belongs to the UK's Access Group, Builderscrack to Australia's hipages Group, and Simpro and AroFlo to Simpro Group.
       </p>
     </section>
 
@@ -164,9 +164,9 @@ const breadcrumbs = [
     })}
 
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
-      <h2 class="text-2xl font-bold">NZ research is an active expansion</h2>
+      <h2 class="text-2xl font-bold">Missing an NZ vendor?</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        {vendors.length} NZ vendors covered today. Want an NZ vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
+        {vendors.length} NZ entries listed today. Want an NZ vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Back to US directory →</a>

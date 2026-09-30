@@ -25,18 +25,18 @@ const vendors = (auData as { vendors: AuVendor[] }).vendors;
 
 const categories = ['software', 'lead-gen', 'insurance', 'payroll', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'software': { label: 'Field service software', description: 'AU-built FSM (AroFlo, ServiceM8, Simpro) and cross-market vendors with strong AU presence (Tradify AU, Fergus AU). Native STP Phase 2 + AU supply-house integrations (Reece/Tradelink/Coventry).' },
-  'lead-gen': { label: 'Lead-generation platforms', description: 'AU trades marketplaces: Hipages dominates metros, Oneflare for second-tier categories, ServiceSeeking for regional/outer-metro coverage.' },
-  'insurance': { label: 'Business insurance', description: 'AU-licensed business insurance: BizCover comparison + Trade Risk specialty + NRMA direct. AU$5M+ Public Liability options standard.' },
-  'payroll': { label: 'Payroll software', description: 'AU payroll with STP Phase 2 + Fair Work award-interpretation compliance: MYOB heritage, KeyPay (Employment Hero) for award complexity, Xero AU for SMB.' },
-  'certification': { label: 'State licensing bodies', description: 'Fragmented per-state licensing in AU: NSW Fair Trading, QBCC (QLD), VBA (VIC). No national body for residential trades. Multi-state contractors need separate licensing per state.' },
+  'software': { label: 'Field service software', description: `Job management software sold to Australian trade businesses. AroFlo (Melbourne) and Simpro (founded in Brisbane) are both owned by Simpro Group; ServiceM8, from an Australian company, prices by jobs per month with unlimited users on paid plans; Tradify (founded in New Zealand, owned by the UK's Access Group) and Fergus price per user. AroFlo lists supplier integrations with wholesalers such as Reece, Rexel and Actrol, and Fergus says supplier invoices from merchants such as Reece and Tradelink import and match to jobs automatically.` },
+  'lead-gen': { label: 'Lead-generation platforms', description: 'Ways Australian tradies find work, each charging differently. On hipages and ServiceSeeking customers post jobs and tradies pay a subscription; on Bark pros spend credits to respond to requests shared with up to five pros; Localsearch and Yellow Pages are directories with free listings plus paid marketing or ads. ServiceSeeking and Bark carry reputation warnings: read them before signing up.' },
+  'insurance': { label: 'Business insurance', description: `Three ways to buy tradie cover: online platforms that act as the insurer's agent rather than yours (BizCover, with a panel of 13 insurers, and upcover), brokers that quote each business (Trade Risk and Smart Business Insurance), and insurers that sell their own policies direct (NRMA Insurance and Allianz). BizCover and upcover list their own per-policy fees on top of the premium: $20-$200 plus GST at BizCover and $0-$300 ex GST at upcover.` },
+  'payroll': { label: 'Payroll software', description: 'Payroll software that reports to the ATO through Single Touch Payroll. MYOB, Employment Hero (formerly KeyPay), Xero and Reckon each describe Payday Super support on their payroll pages, and Deputy sells payroll as an add-on to its rostering and timesheet plans. Award handling differs: Employment Hero says pay rates update automatically for modern awards and Deputy includes award interpretation from its Lite plan, while MYOB, Xero and Reckon do not describe an award-interpretation feature on their payroll pages.' },
+  'certification': { label: 'State licensing bodies and the ATO', description: 'Trade licensing is run by each state: Building Commission NSW issues building and trade licences in NSW (NSW Fair Trading is the consumer protection regulator), QBCC covers Queensland (electrical work is licensed separately by the Electrical Safety Office), the Building and Plumbing Commission (formerly the VBA) covers Victoria, Building and Energy covers WA and Consumer and Business Services covers SA. Under Automatic Mutual Recognition, licence holders from participating states can work in NSW, usually after a free notification; Queensland does not take part. The ATO is the federal tax office for GST, BAS, Single Touch Payroll and super, and does not license trades.' },
 };
 
 const vendorsByCategory: Record<string, AuVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
 const pageTitle = 'AU Trades Vendor Directory | WrenchStack Australia';
-const pageDescription = `WrenchStack's Australia trades vendor directory: ${vendors.length} platforms across software, lead-gen, insurance, payroll, and state licensing. Built for Australian contractors with native AU compliance (STP Phase 2, Fair Work awards, state-by-state licensing, AU supply-house integrations).`;
+const pageDescription = `WrenchStack's Australia trades directory: ${vendors.length} entries across job management software, lead generation, insurance, payroll, and state licensing and tax bodies, with published prices where vendors list them, Single Touch Payroll and Payday Super notes, and state licensing rules.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -56,7 +56,7 @@ const breadcrumbs = [
         Australia Trades Vendor Directory
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} Australia-relevant vendors across 5 categories, built for AU contractors with native AU compliance context. STP Phase 2 payroll, Fair Work award interpretation, AU supply-house integrations (Reece/Tradelink/Coventry), state-specific licensing (NSW Fair Trading, QBCC, VBA), and the Hipages-dominant lead-gen market structure.
+        Independent reviews of {vendors.length} Australia-relevant vendors and regulators across 5 categories, for Australian contractors: Single Touch Payroll and Payday Super in payroll, how each payroll product handles awards, supplier integrations with wholesalers such as Reece, state licensing (Building Commission NSW, QBCC, the Building and Plumbing Commission in Victoria, and the WA and SA regulators), and how each lead platform charges.
       </p>
     </header>
 
@@ -72,7 +72,7 @@ const breadcrumbs = [
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See AU vendors compared side by side: a clear verdict, pros and cons, AU-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See AU vendors compared side by side: pros and cons, AU-specific notes and pricing, head to head.</p>
       </div>
       <a href="/au/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare AU vendors →</a>
     </section>
@@ -89,7 +89,7 @@ const breadcrumbs = [
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What's different about AU trades vendor selection</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        AU trades vendor selection is structurally different from US in three important ways. First, <strong>state licensing fragmentation</strong>: there's no national body for plumbing/electrical/building, each state has its own (NSW Fair Trading, QBCC, VBA), and cross-state work requires separate per-state licensing. Second, <strong>payroll compliance is complex</strong>: STP Phase 2 reporting + Fair Work award interpretation (100+ penalty/allowance rules) make award-interpretation engines like KeyPay a structural requirement, not a luxury. Third, <strong>Hipages dominates lead-gen</strong> in a way no single US platform does: AU homeowners search Hipages by name the way US homeowners search Google.
+        Three things shape the Australian picture. First, <strong>trade licensing is run by the states</strong>: building and trade licences in NSW come from Building Commission NSW, Queensland uses QBCC (with electrical work licensed by the Electrical Safety Office), and Victoria uses the Building and Plumbing Commission, which the VBA is now part of. Under Automatic Mutual Recognition, licence holders from participating states can work in NSW, usually after a free notification, but Queensland does not take part, so a licence from another state does not automatically cover work there. Second, <strong>payroll carries Single Touch Payroll reporting and Payday Super</strong>: from 1 July 2026 the super guarantee is due when wages are paid rather than quarterly, and award handling varies, with Employment Hero and Deputy describing automated award handling while MYOB, Xero and Reckon do not describe an award-interpretation feature. Third, <strong>lead platforms charge in different ways</strong>: hipages and ServiceSeeking sell subscriptions, Bark sells credits to respond to requests shared with up to five pros, and Localsearch and Yellow Pages offer free listings with paid marketing or ads, some on 6- or 12-month minimum terms.
       </p>
     </section>
 
@@ -174,9 +174,9 @@ const breadcrumbs = [
     })}
 
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
-      <h2 class="text-2xl font-bold">AU research is an active expansion</h2>
+      <h2 class="text-2xl font-bold">Missing an AU vendor?</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        {vendors.length} AU vendors covered today across {categories.length} categories. We're actively expanding AU depth: full editorial reviews of AU-only vendors (Hipages, AroFlo, KeyPay) at the same depth as our US software reviews are in the editorial queue. Want an AU vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
+        {vendors.length} AU entries covered today across {categories.length} categories. Want an AU vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Back to US directory →</a>

@@ -24,18 +24,18 @@ const vendors = (ieData as { vendors: IeVendor[] }).vendors;
 
 const categories = ['software', 'lead-gen', 'insurance', 'payroll', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'software': { label: 'Field service software', description: 'Smaller Irish market: cross-market platforms (UK and AU options that operate in Ireland) cover most needs.' },
-  'lead-gen': { label: 'Lead-generation platforms', description: 'MyBuilder.ie (Dublin-founded, cross-market with UK) leads; Onlinetradesmen.ie is the independent Irish-only alternative.' },
-  'insurance': { label: 'Business insurance', description: 'Irish insurance with higher PL + EL standard limits than international alternatives (FBD: €6.5M PL + €13M EL standard).' },
-  'payroll': { label: 'Payroll software', description: 'Revenue Commissioners-approved Irish payroll with ROS (Revenue Online Service) integration: BrightPay Ireland (free for sole traders), Sage Payroll IE.' },
-  'certification': { label: 'Required certifications', description: 'Mandatory Irish licensing: RGI for gas installation (Energy Act 2006), Safe Electric/RECI for electrical work (regulated by CRU).' },
+  'software': { label: 'Field service software', description: `Job-management software sold to Irish trades. Tradify has an Irish site with euro prices per user, and ServiceM8 prices in euro on its EU site by jobs per month; Joblogic and Eworks Manager sell from the UK with sterling headline prices; Simpro is sold by quote. Tradify, ServiceM8 and Joblogic do not list payroll, so employers need separate Irish payroll software.` },
+  'lead-gen': { label: 'Lead-generation platforms', description: `Sites that bring homeowner jobs to Irish trades, each charging differently: MyBuilder.ie (published Pro subscription), Tradesmen.ie (prepaid credits per lead plus a registration fee), Onlinetradesmen.ie (paid membership; prices not confirmed), Bark (credits spent per response; see its reputation warning) and Tradesman.ie, whose model could not be confirmed.` },
+  'insurance': { label: 'Business insurance', description: `Liability cover for Irish trades, all priced by quote: insurers FBD Insurance and AXA Ireland, brokers Arachas and Chill Insurance, and KennCo Underwriting, whose construction liability policy is sold only through brokers. Confirm public and employers' liability limits and exclusions on your quote.` },
+  'payroll': { label: 'Payroll software', description: `Irish payroll software from five vendors that each say they file payroll submissions to Revenue and handle My Future Fund auto-enrolment (on BrightPay, in the cloud version): BrightPay, whose desktop edition is supported until 31 December 2026; Thesaurus Payroll Manager and Collsoft, Windows desktop software licensed per tax year; and Parolla and Sage Payroll, cloud services billed monthly. All five publish prices.` },
+  'certification': { label: 'Registers and compliance', description: `Registers and tax rules Irish trades deal with: the RGI register, required for domestic and, since 1 September 2026, non-domestic gas works; Safe Electric registration for electrical contractors (both run for the CRU by Safe Energy Ireland); Relevant Contracts Tax on construction subcontracts; the SEAI Registered Contractor List for Better Energy Homes grant work; and CIRI, the statutory builders' register, where registration is not yet mandatory and applications open during 2027.` },
 };
 
 const vendorsByCategory: Record<string, IeVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
 const pageTitle = 'IE Trades Vendor Directory | WrenchStack Ireland';
-const pageDescription = `WrenchStack's Ireland trades vendor directory: ${vendors.length} platforms across lead-gen, insurance, payroll, and required certifications. Built for Irish contractors with native ROS compliance and mandatory RGI/Safe Electric licensing context.`;
+const pageDescription = `WrenchStack's Ireland trades directory: ${vendors.length} entries across job-management software, lead generation, insurance, payroll and the registers and tax rules Irish contractors deal with, including RGI, Safe Electric and Relevant Contracts Tax.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -55,7 +55,7 @@ const breadcrumbs = [
         Ireland Trades Vendor Directory
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} Ireland-relevant vendors. Smaller than UK/US markets but with strict mandatory licensing (RGI for gas installations is criminal-offense territory if unlicensed), Revenue Commissioners ROS-aligned payroll compliance, and Irish-specific insurance with notably higher standard PL + EL limits than international alternatives.
+        Independent reviews of {vendors.length} Ireland-relevant vendors and official schemes. Gas and electrical work need registration (RGI and Safe Electric), construction subcontract payments fall under Relevant Contracts Tax, and the Irish payroll products listed here say they file payroll submissions to Revenue and handle My Future Fund auto-enrolment, which started on 1 January 2026.
       </p>
     </header>
 
@@ -71,7 +71,7 @@ const breadcrumbs = [
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See IE vendors compared side by side: a clear verdict, pros and cons, IE-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See IE vendors side by side: pros and cons, IE-specific notes and pricing for each.</p>
       </div>
       <a href="/ie/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare IE vendors →</a>
     </section>
@@ -79,7 +79,7 @@ const breadcrumbs = [
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What's different about IE trades vendor selection</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Ireland is the smallest English-speaking market we cover, but with structural distinctions worth knowing. <strong>Mandatory certification has criminal-offense weight</strong>: unlicensed gas work under the Energy Act 2006 is illegal, as is unlicensed electrical work under CRU regulations. <strong>Payroll requires ROS integration</strong>: PAYE Modernisation (real-time reporting) has been mandatory for Irish employers since 2019, and BrightPay Ireland is the dominant compliant option. <strong>Insurance limits standard are higher</strong>: FBD's €6.5M PL + €13M EL standard cover exceeds many international alternatives.
+        A few Irish rules shape the choice. <strong>Gas and electrical work need registration</strong>: since 1 September 2026 it is illegal for anyone who is not a Registered Gas Installer to carry out domestic or non-domestic gas works, and the CRU says registration with Safe Electric is the law for electrical contractors and prosecutes unregistered ones. <strong>Payroll runs through Revenue</strong>: the payroll products listed here say they file payroll submissions to Revenue and handle My Future Fund auto-enrolment, and BrightPay Desktop is supported only until 31 December 2026. <strong>Subcontract payments can carry tax</strong>: under Relevant Contracts Tax, principal contractors in construction deduct 0%, 20% or 35% from subcontractor payments, depending on the subcontractor's tax compliance record. <strong>Insurance is quoted</strong>: all five insurance entries are priced by quote, and Safe Electric requires registered electrical contractors to hold public and products liability cover of at least €6.5 million and, if they employ staff, employers' liability of at least €13 million.
       </p>
     </section>
 
@@ -152,7 +152,7 @@ const breadcrumbs = [
                     <a href={`/ie/${v.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">Full IE review →</a>
                     <a href={v.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600">Visit {v.name} →</a>
                     {v.cross_market_link && (
-                      <a href={v.cross_market_link} class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Full review (US market context)</a>
+                      <a href={v.cross_market_link} class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Related review in another market</a>
                     )}
                   </div>
                 </article>

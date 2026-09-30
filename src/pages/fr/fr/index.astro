@@ -11,51 +11,50 @@ const vendors = (frData as { vendors: FrVendor[] }).vendors;
 
 // Concise French positioning per vendor (the detailed reviews remain in English for now).
 const fr: Record<string, string> = {
-  'obat': 'Logiciel français de devis-facture et suivi de chantier, pensé pour le bâtiment, avec une offre micro-entreprise.',
-  'tolteck': 'Devis et factures simples, conçus avec des artisans, fonctionnant hors-ligne sur le chantier.',
-  'ebp-batiment': 'L’édition Bâtiment d’EBP : devis, facture et chantier d’un éditeur français établi.',
-  'batappli': 'Logiciel BTP tout-en-un avec la bibliothèque de prix Batichiffrage intégrée.',
-  'mediabat': 'Devis, facturation et suivi de chantier pour le BTP, à tarif abordable.',
-  'vertuoza': 'Gestion bâtiment tout-en-un avec saisie vocale par IA (éditeur belge : vérifiez la conformité PDP).',
-  'organilog': 'Gestion d’interventions et de maintenance sur le terrain (idéal pour le SAV récurrent).',
-  'axonaut': 'Gestion d’entreprise tout-en-un (facturation, CRM, trésorerie), généraliste, non spécifique BTP.',
-  'habitatpresto': 'Mise en relation particuliers ↔ artisans vérifiés, par abonnement et sans commission.',
-  'quotatis': 'Mise en relation travaux adossée au groupe ADEO (Leroy Merlin).',
-  'travaux-com': 'Place de marché travaux à forte audience (propriété américaine, groupe Angi).',
-  'starofservice': 'Place de marché de services locaux française (la rénovation y est une catégorie parmi d’autres).',
-  'allotravaux': 'Mise en relation travaux avec un angle rénovation énergétique / RGE.',
-  'payfit': 'Paie et RH en ligne pour TPE/PME, la seule avec une tarification publique en libre-service.',
-  'silae': 'Moteur de paie dominant, distribué via les experts-comptables (couvre les conventions BTP).',
-  'ebp-paie': 'Paie et déclarations sociales, pertinent si vous utilisez déjà la suite EBP.',
-  'sage-paie-fr': 'Paie en ligne pour petites entreprises, d’une marque mondiale (non française à l’origine).',
-  'smabtp': 'L’assureur mutualiste historique du BTP (depuis 1859), la référence pour la décennale artisan.',
-  'april-construction': 'RC décennale sur mesure par métier, avec des prix « à partir de » publiés.',
-  'orus': 'Décennale 100 % en ligne, attestation sous 24 h, prix de départ public.',
-  'axa-batissur': 'Décennale et multirisque BTP (offre BATISSUR) d’un grand assureur mondial.',
-  'maaf-pro': 'Mutuelle généraliste française avec des solutions décennale pour artisans.',
-  'facturation-electronique': 'Facturation électronique obligatoire via plateforme agréée (PDP) : réception pour tous au 1ᵉʳ sept. 2026, émission TPE/PME au 1ᵉʳ sept. 2027.',
-  'assurance-decennale': 'Assurance décennale obligatoire (loi Spinetta) avant tout chantier : sanction pénale en cas de défaut.',
-  'rge': 'Label RGE : indispensable pour que vos clients accèdent à MaPrimeRénov’ et aux aides.',
-  'tva-batiment': 'TVA à taux multiples : 20 % standard, 10 % rénovation, 5,5 % rénovation énergétique.',
-  'urssaf-micro': 'Cotisations URSSAF et régime micro-entrepreneur (franchise de TVA sous le seuil).',
-  'cma-immatriculation': 'Immatriculation de l’entreprise via le guichet unique / RNE (SIRET), validée par la CMA.',
-  'qualification-professionnelle': 'Métiers réglementés : diplôme (CAP/BP) ou 3 ans d’expérience requis (Code de l’artisanat).',
-  'qualibat': 'Qualification volontaire de référence, et organisme majeur de délivrance du label RGE.',
+  'obat': 'Logiciel de devis, factures et suivi de chantier pour le bâtiment (Obat SAS, Nantes), avec des offres micro-entreprise ; facturation électronique via Iopole, plateforme agréée.',
+  'tolteck': 'Application de devis et factures pour artisans du bâtiment, utilisable sans réseau ; Tolteck SAS a été rachetée par Saint-Gobain en 2017.',
+  'ebp-batiment': 'Gamme bâtiment d’EBP (groupe Cegid depuis juillet 2024), en trois éditions ; facturation électronique via la plateforme agréée Shine, intégrée.',
+  'batappli': 'Logiciel BTP de Systemlog (groupe Isagri) avec la bibliothèque Batichiffrage intégrée ; facturation électronique incluse via Cecurity, plateforme agréée.',
+  'mediabat': 'Devis, factures, métré et suivi de chantier pour le BTP (Mediabat SARL, Montpellier) ; le site ne nomme pas sa plateforme agréée.',
+  'vertuoza': 'Gestion de chantier tout-en-un d’une société belge (Nivelles), avec devis dictés à la voix par IA ; tarifs sur devis, plateforme agréée non nommée.',
+  'organilog': 'Gestion d’interventions, planning et contrats de maintenance (SARL Adalgo), avec une offre Basique gratuite et des prix publiés par utilisateur.',
+  'axonaut': 'Gestion d’entreprise généraliste (devis, factures, CRM, trésorerie), non spécifique au bâtiment ; Axonaut figure elle-même sur la liste DGFiP des plateformes agréées.',
+  'habitatpresto': 'Mise en relation entre particuliers et professionnels de la rénovation ; cotisation annuelle et aucune commission sur les travaux, selon ses conditions.',
+  'quotatis': 'Le site présente désormais des forfaits de pose ; un article de La Poste de 2019 le rattachait au groupe ADEO (Leroy Merlin).',
+  'travaux-com': 'Place de marché travaux détenue par l’américain Angi Inc. ; inscription gratuite, abonnement payant pour répondre aux demandes.',
+  'starofservice': 'Place de marché de services locaux généraliste (StarOfService SAS, Paris), avec des abonnements publiés dans ses conditions, plus des frais mensuels.',
+  'payfit': 'Paie et RH en ligne pour TPE/PME, avec des prix publiés ; PayFit indique que les conventions collectives du BTP ne sont pas encore intégrées.',
+  'silae': 'Logiciel de paie distribué par des cabinets comptables et des intégrateurs ; Silae indique 900 conventions collectives intégrées. Rapprochement avec Cegid annoncé le 9 septembre 2026.',
+  'ebp-paie': 'Paie d’EBP (groupe Cegid), en logiciel ou externalisée, sur devis ; la page paie ne décrit pas de fonctions propres au BTP.',
+  'sage-paie-fr': 'Sage Business Cloud Paie : paie en ligne pour petites entreprises, du groupe britannique Sage, avec un prix d’entrée publié.',
+  'smabtp': 'Mutuelle d’assurance de la construction fondée en 1859 : décennale artisan avec responsabilité civile et protection juridique, sur devis.',
+  'april-construction': 'Décennale PROBAT via le courtier APRIL Partenaires, avec des prix « à partir de » publiés par métier, chacun pour un profil donné.',
+  'orus': 'Courtier en ligne : devis décennale en 3 minutes environ et attestation sous 24 h selon Orus, prix de départ publié.',
+  'axa-batissur': 'Contrat BATISSUR Concept d’AXA France : décennale, dommages en cours de travaux et responsabilité civile, sur devis.',
+  'maaf-pro': 'Mutuelle française du groupe Covéa ; la CAPEB la cite comme partenaire proposant la responsabilité civile décennale. Sur devis.',
+  'facturation-electronique': 'Réception des factures électroniques obligatoire pour toutes les entreprises depuis le 1ᵉʳ septembre 2026, via une plateforme agréée ; émission pour les TPE/PME et micro-entreprises au plus tard le 1ᵉʳ septembre 2027.',
+  'assurance-decennale': 'Assurance décennale obligatoire avant le début des travaux ; à défaut, jusqu’à 6 mois d’emprisonnement et/ou 75 000 euros d’amende, selon service-public.fr.',
+  'rge': 'Label RGE : ce n’est pas une autorisation d’exercer, mais selon le ministère chargé de l’écologie, vos clients n’obtiennent MaPrimeRénov’, les CEE ou l’éco-PTZ qu’avec un professionnel RGE.',
+  'tva-batiment': 'TVA à 20 %, 10 % (amélioration, transformation, aménagement, entretien) ou 5,5 % (rénovation énergétique) pour les logements achevés depuis plus de deux ans.',
+  'urssaf-micro': 'Régime micro-entrepreneur : cotisations Urssaf de 21,2 % du chiffre d’affaires pour les prestations artisanales en 2026 ; franchise de TVA jusqu’à 37 500 euros pour les services.',
+  'cma-immatriculation': 'Immatriculation au RNE via le guichet des formalités des entreprises (INPI) : gratuite pour une micro-entreprise, 45 euros pour une entreprise individuelle artisanale ; la CMA conseille.',
+  'qualification-professionnelle': 'Métiers du bâtiment réglementés : CAP, BEP, BP ou titre RNCP équivalent, ou 3 ans d’expérience, pour vous ou un salarié qui contrôle les travaux de façon effective et permanente (Code de l’artisanat).',
+  'qualibat': 'Organisme de qualification volontaire fondé en 1949, l’un des organismes habilités à délivrer la mention RGE ; grille de tarifs publiée.',
 };
 
-const tierFr: Record<string, string> = { S: 'Recommandé', A: 'Convenable', F: 'Alerte' };
+const tierFr: Record<string, string> = { S: 'Prix publiés', A: 'Référencé', F: 'Alerte de réputation' };
 const cats = [
-  { key: 'software', label: 'Logiciels devis-facture & gestion', desc: 'Outils français pour les devis, la facturation et le suivi de chantier (Obat et Tolteck pour les artisans, EBP et Batappli pour une couverture complète, Organilog pour la maintenance) avec la TVA à taux multiples (20/10/5,5).' },
-  { key: 'lead-gen', label: 'Génération de prospects', desc: 'Places de marché françaises reliant les particuliers aux artisans : Habitatpresto (abonnement, sans commission), Quotatis (groupe Leroy Merlin), Allotravaux (angle rénovation énergétique/RGE).' },
-  { key: 'payroll', label: 'Paie', desc: 'Paie conforme URSSAF pour les petites entreprises : PayFit en direct, Silae via votre expert-comptable, EBP et Sage. Vérifiez les spécificités BTP (caisses CIBTP) pour les équipes du bâtiment.' },
-  { key: 'insurance', label: 'Assurance : décennale & RC Pro', desc: 'Décennale obligatoire et responsabilité civile pro : SMABTP (la mutuelle BTP historique), le spécialiste April par métier, l’assurtech Orus en ligne, ainsi qu’AXA et MAAF.' },
-  { key: 'certification', label: 'Conformité & qualifications', desc: 'Ce que tout artisan doit gérer : la facturation électronique, l’assurance décennale obligatoire, le RGE pour les travaux aidés, la TVA à taux multiples, l’URSSAF/micro-entrepreneur, l’immatriculation CMA et les qualifications.' },
+  { key: 'software', label: 'Logiciels devis-facture & gestion', desc: 'Logiciels de devis, factures et suivi de chantier utilisés par les entreprises du bâtiment. Obat, Tolteck, EBP Bâtiment, Batappli et Mediabat sont conçus pour le bâtiment ; Vertuoza est un logiciel de gestion de chantier d’une société belge ; Organilog est centré sur les interventions et les contrats de maintenance ; Axonaut est un logiciel de gestion généraliste. Chacun dit couvrir la facturation électronique : Obat (Iopole), EBP (Shine), Batappli (Cecurity) et Tolteck (Pennylane, pour la réception) nomment leur plateforme agréée, Axonaut figure elle-même sur la liste DGFiP, et Mediabat, Vertuoza et Organilog ne nomment pas la leur.' },
+  { key: 'lead-gen', label: 'Génération de prospects', desc: 'Sites qui apportent des chantiers de particuliers, chacun avec son mode de facturation : Habitatpresto (cotisation annuelle et aucune commission sur les travaux, selon ses conditions), Travaux.com (inscription gratuite, abonnement payant pour répondre aux demandes ; détenu par Angi Inc.), StarOfService (place de marché généraliste, abonnements publiés dans ses conditions) et Quotatis, dont le site présente désormais des forfaits de pose et qu’un article de La Poste de 2019 rattachait au groupe ADEO (Leroy Merlin).' },
+  { key: 'payroll', label: 'Paie', desc: 'Paie pour les petites entreprises : PayFit en direct avec des prix publiés, Silae via les cabinets comptables et intégrateurs, EBP Paie (logiciel ou externalisé) et Sage Business Cloud Paie. PayFit indique que les conventions collectives du BTP ne sont pas encore intégrées, et les trois autres ne décrivent pas de gestion propre au BTP sur les pages consultées : faites confirmer par écrit votre convention BTP et les déclarations aux caisses CIBTP.' },
+  { key: 'insurance', label: 'Assurance : décennale & RC Pro', desc: 'Décennale obligatoire (responsabilité de dix ans) et garanties associées : SMABTP, mutuelle de la construction fondée en 1859 ; APRIL Construction et Orus, courtiers qui publient des prix de départ ; le contrat BATISSUR Concept d’AXA ; et MAAF, mutuelle du groupe Covéa. SMABTP, AXA et MAAF ne publient pas de prix : demandez des devis et comparez les activités couvertes.' },
+  { key: 'certification', label: 'Conformité & qualifications', desc: 'Règles et dispositifs pour les entreprises du bâtiment : facturation électronique via une plateforme agréée, assurance décennale obligatoire, les trois taux de TVA, l’Urssaf et le régime micro-entrepreneur, l’immatriculation et la qualification professionnelle des métiers réglementés, plus deux dispositifs volontaires : le label RGE, sans lequel vos clients n’obtiennent pas MaPrimeRénov’, les CEE ou l’éco-PTZ, et la qualification Qualibat.' },
 ];
 
 const enUrl = new URL('/fr/', Astro.site).toString();
 const frUrl = new URL('/fr/fr/', Astro.site).toString();
 const pageTitle = 'Annuaire des logiciels et services pour artisans du bâtiment | WrenchStack';
-const pageDescription = `Avis indépendants sur ${vendors.length} solutions pour les artisans du bâtiment français : logiciels de devis-facture, génération de prospects, paie URSSAF et assurance décennale obligatoire, avec la facturation électronique, le RGE et la TVA à taux multiples.`;
+const pageDescription = `Avis indépendants sur ${vendors.length} solutions et dispositifs pour les artisans du bâtiment français : logiciels de devis-facture, sources de chantiers, paie et assurance décennale, ainsi que les règles de facturation électronique, de TVA, d’immatriculation et de qualification, et le label RGE pour la rénovation énergétique.`;
 ---
 
 <Layout
@@ -77,15 +76,15 @@ const pageDescription = `Avis indépendants sur ${vendors.length} solutions pour
     <header class="mb-10">
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">Annuaire des logiciels et services pour artisans du bâtiment</h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Avis indépendants sur {vendors.length} solutions pertinentes pour les artisans du bâtiment français, logiciels de devis-facture (Obat, Tolteck, EBP), génération de prospects (Habitatpresto, Quotatis), paie (PayFit, Silae) et assurance décennale obligatoire (SMABTP, April, Orus), au regard des réalités locales : la facturation électronique, la TVA à taux multiples, le RGE et le régime micro-entrepreneur.
+        Avis indépendants sur {vendors.length} solutions et dispositifs pertinents pour les artisans du bâtiment français : logiciels de devis-facture (Obat, Tolteck, EBP Bâtiment), sources de chantiers (Habitatpresto, Travaux.com), paie (PayFit, Silae) et assurance décennale (SMABTP, APRIL Construction, Orus), au regard des règles françaises : la facturation électronique via une plateforme agréée, les trois taux de TVA, le label RGE pour les aides à la rénovation énergétique et le régime micro-entrepreneur.
       </p>
     </header>
 
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border-2 border-emerald-300 bg-emerald-50 p-5">
       <div>
-        <p class="text-xs font-bold tracking-wider text-emerald-700">⏰ Guide de conformité · Réception pour tous au 1ᵉʳ sept. 2026 · Émission TPE/PME au 1ᵉʳ sept. 2027</p>
+        <p class="text-xs font-bold tracking-wider text-emerald-700">⏰ Guide de conformité · Réception pour tous depuis le 1ᵉʳ sept. 2026 · Émission TPE/PME au plus tard le 1ᵉʳ sept. 2027</p>
         <h2 class="mt-1 text-base font-bold text-slate-900">La facturation électronique pour les artisans</h2>
-        <p class="mt-1 text-sm text-slate-700">Le calendrier par étapes, le modèle de plateforme agréée (PDP) qui remplace le portail public gratuit abandonné, et quels logiciels sont des plateformes agréées.</p>
+        <p class="mt-1 text-sm text-slate-700">Le calendrier par étapes, le fonctionnement des plateformes agréées (l’État ne propose pas de plateforme publique gratuite de facturation) et quels logiciels sont des plateformes agréées.</p>
       </div>
       <a href="/fr/fr/guides/facturation-electronique-artisans/" class="shrink-0 rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Lire le guide →</a>
     </section>
@@ -93,7 +92,7 @@ const pageDescription = `Avis indépendants sur ${vendors.length} solutions pour
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">Ce qui distingue la gestion d’une entreprise artisanale en France</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Le choix d’un logiciel pour artisan en France diffère structurellement des États-Unis ou du Royaume-Uni. D’abord, <strong>la facturation électronique devient obligatoire</strong> : dès le 1ᵉʳ septembre 2026 toute entreprise doit pouvoir recevoir des factures électroniques, et à partir du 1ᵉʳ septembre 2027 les TPE/PME et micro-entreprises devront les émettre via une plateforme agréée (PDP) ; le portail public gratuit prévu ayant été abandonné, le choix du logiciel a désormais un poids de conformité. Ensuite, <strong>l’assurance décennale est obligatoire</strong> (responsabilité de dix ans au titre de la loi Spinetta, souscrite avant l’ouverture du chantier, avec une sanction pénale en cas de défaut), et les clients attendent votre assureur et votre numéro de police sur le devis. De plus, <strong>la TVA est à taux multiples</strong> (20 % standard, 10 % rénovation, 5,5 % rénovation énergétique), donc le logiciel doit appliquer le bon taux par ligne. Le <strong>label RGE</strong> est commercialement essentiel : seuls les artisans RGE permettent à leurs clients de bénéficier de MaPrimeRénov’ et des aides. Enfin, la plupart des artisans solos sont <strong>micro-entrepreneurs</strong>, avec la franchise de TVA et la mention « TVA non applicable, art. 293 B du CGI ».
+        Le choix d’un logiciel pour artisan en France diffère des États-Unis ou du Royaume-Uni sur plusieurs points. D’abord, <strong>la facturation électronique est entrée en vigueur</strong> : depuis le 1ᵉʳ septembre 2026, toute entreprise doit pouvoir recevoir des factures électroniques via une plateforme agréée, et au plus tard le 1ᵉʳ septembre 2027 les PME, TPE et micro-entreprises devront aussi les émettre. L’État ne propose pas de plateforme publique gratuite de facturation, mais la DGFiP indique que plus de dix des 150 plateformes agréées proposaient au 1ᵉʳ août 2026 des services gratuits ou sans surcoût ; le choix du logiciel a donc un poids de conformité. Ensuite, <strong>l’assurance décennale est obligatoire</strong> : elle couvre pendant dix ans à compter de la réception (loi Spinetta), doit être souscrite avant le début des travaux, et construire sans elle est passible de 6 mois d’emprisonnement et/ou de 75 000 euros d’amende selon service-public.fr ; l’attestation d’assurance doit être jointe à chaque devis et facture. De plus, <strong>la TVA est à taux multiples</strong> (20 % normal, 10 % pour l’amélioration et l’entretien, 5,5 % pour la rénovation énergétique, dans les logements achevés depuis plus de deux ans), donc le logiciel de devis devrait permettre de fixer le taux par ligne. Le <strong>label RGE</strong> n’est pas une autorisation d’exercer, mais selon le ministère chargé de l’écologie, vos clients ne peuvent obtenir MaPrimeRénov’, les CEE ou l’éco-PTZ que si les travaux sont réalisés par un professionnel RGE. Enfin, en <strong>micro-entreprise</strong>, les cotisations Urssaf sont un pourcentage du chiffre d’affaires (21,2 % pour les prestations artisanales en 2026) et, sous le seuil de franchise de TVA (37 500 euros pour les services), les factures portent la mention « TVA non applicable - article 293 B du CGI ».
       </p>
     </section>
 

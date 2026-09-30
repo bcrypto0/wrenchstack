@@ -17,15 +17,15 @@ const tierRank = { S: 3, A: 2, F: 1 } as const;
 // Honest, data-derived verdict.
 let verdict: string;
 if (a.reputation_flag && !b.reputation_flag) {
-  verdict = `${b.name} is the safer default: ${a.name} carries a reputation caution (see below), while ${b.name} does not. Choose ${a.name} only if its specific strengths clearly outweigh that, and read the warning first.`;
+  verdict = `${a.name} carries a reputation warning (see below) and ${b.name} does not. Read the warning before you choose ${a.name}.`;
 } else if (b.reputation_flag && !a.reputation_flag) {
-  verdict = `${a.name} is the safer default: ${b.name} carries a reputation caution (see below), while ${a.name} does not. Choose ${b.name} only if its specific strengths clearly outweigh that, and read the warning first.`;
+  verdict = `${b.name} carries a reputation warning (see below) and ${a.name} does not. Read the warning before you choose ${b.name}.`;
 } else if (tierRank[a.tier] > tierRank[b.tier]) {
-  verdict = `${a.name} edges ahead on our ${market.name} tiering (Tier ${a.tier} vs ${b.tier}), but both are workable; the right pick depends on your trade, region, and the ${market.name}-specific notes below.`;
+  verdict = `${a.name} publishes its prices and ${b.name} does not, so you can compare ${a.name}'s cost before talking to sales. That is not a quality ranking: the right pick depends on your trade, region and the ${market.name}-specific notes below.`;
 } else if (tierRank[b.tier] > tierRank[a.tier]) {
-  verdict = `${b.name} edges ahead on our ${market.name} tiering (Tier ${b.tier} vs ${a.tier}), but both are workable; the right pick depends on your trade, region, and the ${market.name}-specific notes below.`;
+  verdict = `${b.name} publishes its prices and ${a.name} does not, so you can compare ${b.name}'s cost before talking to sales. That is not a quality ranking: the right pick depends on your trade, region and the ${market.name}-specific notes below.`;
 } else {
-  verdict = `${a.name} and ${b.name} are closely matched (both Tier ${a.tier}) for ${market.name} ${categoryLabel.toLowerCase()}. The right choice comes down to fit: weigh the pros, cons, pricing, and ${market.name}-specific notes for each against your trade and region.`;
+  verdict = `${a.name} and ${b.name} sit in the same tier (Tier ${a.tier}) for ${market.name} ${categoryLabel.toLowerCase()}, which only reflects whether each publishes its prices. The right choice comes down to fit: weigh the pros, cons, pricing, and ${market.name}-specific notes for each against your trade and region.`;
 }
 
 const pageTitle = `${a.name} vs ${b.name}: ${categoryLabel} for ${market.name} Trades (2026)`;

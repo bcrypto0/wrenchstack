@@ -13,16 +13,16 @@ interface AeVendor {
 const vendors = (aeData as { vendors: AeVendor[] }).vendors;
 const categories = ['software', 'insurance', 'lead-gen', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'insurance': { label: 'Contractor insurance', description: "Contractor & engineering cover (CAR, EAR, advance loss of profit, workmen's comp) from UAE insurers: Sukoon, ADNIC, and Shariah-compliant takaful from Salama. Quote-based." },
-  'lead-gen': { label: 'Lead generation & project intelligence', description: "Genuine construction lead-gen via ProTenders' UAE project intelligence and eTendering. Note UAE home-services apps (ServiceMarket, Justlife) are residential, not construction-contractor channels." },
-  'software': { label: 'Construction & trades software', description: 'Giga-project platforms (Oracle Aconex, Primavera, Autodesk; central to Dubai’s BIM mandate), strong global PM (Procore, Bentley, PlanRadar), UAE-VAT-ready ERPs (First Bit, Focus Softnet, PACT, Sage), affordable SMB stacks (Zoho), and CAFM/field-service tools (Horizon FMS, FSM Grid).' },
-  'certification': { label: 'Licensing & compliance', description: 'Dubai Municipality contractor classification (now reshaped by Dubai Law No. 7 of 2025), federal MOEI registration, the 5% VAT (FTA), the upcoming Peppol e-invoicing mandate, Emiratisation (MOHRE/Nafis), Abu Dhabi’s Estidama, and the Dubai BIM mandate.' },
+  'insurance': { label: 'Contractor insurance', description: `Engineering and contractor cover from three UAE insurers regulated by the Central Bank of the UAE: Sukoon (formerly Oman Insurance Company), ADNIC and the Shariah-compliant takaful insurer Salama. All three list Contractor’s All Risk, Erection All Risk and plant and machinery cover; ADNIC and Salama add workmen’s or employee compensation and public liability. None publishes premiums; every policy is quoted.` },
+  'lead-gen': { label: 'Lead generation & project intelligence', description: `Construction project intelligence and eTendering from ProTenders, which covers UAE projects within its GCC project data and lists an office in Abu Dhabi. A company profile is free; the Construction Intelligence and eTendering products are custom-priced, with a demo on request.` },
+  'software': { label: 'Construction & trades software', description: `Document control and scheduling from Oracle (Aconex, Primavera P6), BIM and construction platforms from Autodesk (now sold as Autodesk Forma) and Bentley, project management from Procore and site inspections from PlanRadar; ERP and finance systems (Focus Softnet, First Bit, PACT, Sage); Zoho’s accounting, project and field-service apps; and CAFM and field-service tools (Horizon FMS, FSM Grid). Focus Softnet, PACT and Zoho are on the Ministry of Finance list of accredited e-invoicing service providers.` },
+  'certification': { label: 'Licensing & compliance', description: `Dubai Municipality’s Contractors Register under Dubai Law No. 7 of 2025, MOEI e-qualification for MOEI engineering projects, 5% VAT through the Federal Tax Authority, Peppol e-invoicing through accredited service providers (mandatory in phases from 1 January 2027), Emiratisation targets (MOHRE and Nafis), Abu Dhabi DMT permits with the Estidama Pearl rating, and Dubai’s BIM model requirement.` },
 };
 const vendorsByCategory: Record<string, AeVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
 const pageTitle = 'UAE Construction & Trades Software | WrenchStack';
-const pageDescription = `Independent directory of ${vendors.length} construction & trades vendors for the UAE: BIM/PM platforms, UAE-VAT-ready ERPs, and field-service tools, plus Dubai Municipality classification, the FTA 5% VAT, Peppol e-invoicing, Emiratisation and Estidama compliance.`;
+const pageDescription = `Independent directory of ${vendors.length} construction and trades vendors and official bodies for the UAE: BIM and project platforms, ERP, accounting and field-service tools, contractor insurers, plus Dubai Municipality registration, 5% VAT (FTA), Peppol e-invoicing, Emiratisation and Estidama.`;
 const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'UAE', url: '/ae/' } ];
 const enUrl = new URL('/ae/', Astro.site).toString();
 const arUrl = new URL('/ae/ar/', Astro.site).toString();
@@ -39,7 +39,7 @@ const arUrl = new URL('/ae/ar/', Astro.site).toString();
       </div>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">UAE Construction & Trades Software Directory</h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} UAE-relevant vendors across Dubai and Abu Dhabi: BIM and project platforms (Oracle Aconex, Autodesk, Procore), UAE-VAT-ready ERPs (First Bit, Focus Softnet, Sage, Zoho Books) and field-service tools, with the local compliance context (Dubai Municipality classification, the FTA 5% VAT, the coming Peppol e-invoicing mandate, Emiratisation, Estidama and Dubai’s BIM mandate) that off-the-shelf US software ignores.
+        Independent reviews of {vendors.length} UAE-relevant vendors and official bodies across Dubai and Abu Dhabi: project and BIM platforms (Oracle Aconex, Autodesk, Procore), ERP and accounting software (Focus Softnet, First Bit, PACT, Sage, Zoho Books), field-service and CAFM tools, contractor insurers and project intelligence, with the local compliance context: Dubai Municipality’s Contractors Register, 5% VAT through the FTA, Peppol e-invoicing mandatory in phases from January 2027, Emiratisation, Abu Dhabi’s Estidama Pearl rating and Dubai’s BIM requirement.
       </p>
     </header>
     <section class="mb-10 grid gap-3 grid-cols-2 sm:grid-cols-4">
@@ -50,7 +50,7 @@ const arUrl = new URL('/ae/ar/', Astro.site).toString();
         </div>
       ))}
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center"><div class="text-2xl font-bold text-slate-900">5%</div><div class="mt-1 text-xs text-slate-600">VAT (FTA)</div></div>
-      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center"><div class="text-2xl font-bold text-slate-900">2</div><div class="mt-1 text-xs text-slate-600">emirate regulators</div></div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4 text-center"><div class="text-2xl font-bold text-slate-900">2</div><div class="mt-1 text-xs text-slate-600">emirate regulators listed</div></div>
     </section>
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
@@ -62,7 +62,7 @@ const arUrl = new URL('/ae/ar/', Astro.site).toString();
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What’s different about choosing software in the UAE</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        The UAE differs from both the US and Saudi. <strong>VAT is 5%, not 15%</strong>: a Saudi-tuned product will mis-rate every invoice, so pick FTA-correct software. <strong>E-invoicing isn’t mandatory yet</strong>, and the model is a decentralised <strong>Peppol</strong> approach (large taxpayers from Jan 2027), not Saudi’s live ZATCA clearance; buy "Peppol-ready," don’t gate on it. Labour rules run on <strong>Emiratisation</strong> (MOHRE quotas + Nafis subsidies), not Nitaqat. And compliance splits by emirate: <strong>Dubai Municipality</strong> (reshaped by Dubai Law No. 7 of 2025) vs <strong>Abu Dhabi DMT</strong> with its mandatory <strong>Estidama Pearl</strong> rating, so workflows often need per-emirate configuration. Dubai’s <strong>BIM mandate</strong> (since Jan 2024) is driving BIM down the supply chain.
+        Several UAE rules shape what your software has to handle. <strong>VAT is 5%</strong>, administered by the Federal Tax Authority since 1 January 2018: registration is mandatory once taxable supplies and imports exceed AED 375,000 over 12 months, and returns and payments are due through EmaraTax within 28 days of the end of each tax period, so set your invoicing up for UAE VAT at 5%. <strong>E-invoicing</strong> runs on a decentralised <strong>Peppol</strong> model through Accredited Service Providers: businesses with revenue of AED 50 million or more must appoint one by 30 October 2026 and go live by 1 January 2027, and smaller businesses by 31 March 2027 and 1 July 2027. E-invoice-capable software is not enough on its own; you need a contract with a provider on the Ministry of Finance list. <strong>Emiratisation</strong> targets from MOHRE apply to companies with 50 or more employees, and to companies with 20-49 employees in 14 sectors, with a financial contribution for each missed position; MOHRE points employers to the <strong>Nafis</strong> platform to find Emirati candidates. Rules also differ by emirate: Dubai work needs entry in <strong>Dubai Municipality’s Contractors Register</strong> under Dubai Law No. 7 of 2025, while Abu Dhabi runs <strong>DMT</strong> classification and building permits, which require at least one <strong>Estidama Pearl</strong> (two for government-funded projects). Dubai Municipality also announced that from 1 January 2024 it would accept planning applications above set size thresholds, and for hospitals, universities and all government projects, only with a <strong>BIM model</strong> (as reported by Global Construction Review).
       </p>
     </section>
     {categories.map(c => {

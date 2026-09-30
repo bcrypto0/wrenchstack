@@ -13,16 +13,16 @@ interface OmVendor {
 const vendors = (omData as { vendors: OmVendor[] }).vendors;
 const categories = ['software', 'insurance', 'lead-gen', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'insurance': { label: 'Contractor insurance', description: "Contractor & engineering cover from Oman insurers: GIG Oman, regional leader Liva, and the detailed CAR/EAR cover of domestic Oman United. Quote-based." },
-  'lead-gen': { label: 'Lead generation & project intelligence', description: "Construction lead-gen is thin in Oman: ProTenders' pan-GCC project intelligence (covering the Vision 2040 pipeline) is the one genuine option; local apps are residential." },
-  'software': { label: 'Construction & trades software', description: 'From global PM/BIM platforms (Bentley, Oracle Primavera, Aconex, Autodesk) via Muscat partners, to regional ERPs with real Oman offices (Focus Softnet, ePROMIS, Onyx Pro), the Oman-native option (Grey ERP), Fawtara-ready e-invoicing (ClearTax), and public-priced accounting (Zoho, Tally) for 5% VAT.' },
-  'certification': { label: 'Licensing & compliance', description: 'The Oman bodies every contractor deals with: the Tax Authority (5% VAT + the Fawtara e-invoicing mandate), OSE engineer accreditation, the Authority for Projects, Tenders & Local Content, Omanisation, municipal permits, the Oman Building Code, and CDAA fire safety.' },
+  'insurance': { label: 'Contractor insurance', description: "Contractor and engineering cover from three insurers selling in Oman: GIG Gulf (formerly AXA Gulf), Liva Insurance (formed from NLGIC and Al Ahlia Insurance, per Liva) and Oman United Insurance, which publishes its CAR and EAR cover details online. All quote-based, with no published rates." },
+  'lead-gen': { label: 'Lead generation & project intelligence', description: "ProTenders tracks GCC construction projects, with an Oman projects page, a free company profile, and custom-priced intelligence and eTendering. Omani government tenders run separately on the Esnad portal." },
+  'software': { label: 'Construction & trades software', description: 'Global project management, scheduling, document-control and design platforms (Bentley Systems, Oracle Primavera P6, Oracle Aconex, Autodesk Forma, Procore), none with an Oman reseller or partner confirmed in our check; ERPs with Muscat offices (Focus Softnet, Onyx Pro ERP, Grey ERP) plus ePROMIS, which runs an Oman page; ClearTax for Fawtara e-invoicing; and accounting software from Zoho (Books), Wafeq and TallyPrime.' },
+  'certification': { label: 'Licensing & compliance', description: 'Official bodies and rules for contractors in Oman: the Tax Authority (5% VAT and Fawtara e-invoicing), OSE engineer accreditation, the Authority for Projects, Tenders & Local Content (Esnad registration and classification), the Ministry of Labour (work permits and Omanisation), Muscat Municipality building permits, the unified Oman Building Code and the Civil Defence and Ambulance Authority (CDAA) for fire safety.' },
 };
 const vendorsByCategory: Record<string, OmVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
 const pageTitle = 'Oman Construction & Trades Software | WrenchStack';
-const pageDescription = `Independent directory of ${vendors.length} construction & trades vendors for Oman: global PM/BIM platforms, Oman-native and regional ERPs, Fawtara-ready e-invoicing, and 5%-VAT accounting, plus the Tax Authority e-invoicing mandate (2026-2027), OSE, contractor-classification, Omanisation and building-code compliance.`;
+const pageDescription = `Independent directory of ${vendors.length} construction and trades vendors and official bodies for Oman: project and design platforms, ERPs, Fawtara e-invoicing and accounting software, contractor insurers, plus the Tax Authority's e-invoicing phases (2026-2027), OSE accreditation, contractor classification, Omanisation and the building code.`;
 const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Oman', url: '/om/' } ];
 ---
 <Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
@@ -34,7 +34,7 @@ const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Oman', url: '/om/' } 
       </div>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">Oman Construction & Trades Software Directory</h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} Oman-relevant vendors: global PM/BIM platforms (Bentley, Oracle Primavera, Aconex, Autodesk) via Muscat partners, regional and Oman-native ERPs (Focus Softnet, ePROMIS, Grey ERP), and Fawtara-ready accounting, all built around the local realities: 5% VAT, the incoming e-invoicing mandate, OSE accreditation, contractor classification, Omanisation, and the new Oman Building Code.
+        Independent reviews of {vendors.length} Oman-relevant vendors and official bodies: global project, scheduling and design platforms (Bentley Systems, Oracle Primavera P6, Oracle Aconex, Autodesk Forma, Procore), ERPs (Focus Softnet, ePROMIS, Onyx Pro ERP, Grey ERP), accounting and e-invoicing software, and contractor insurers, alongside the local rules: 5% VAT, the phased Fawtara e-invoicing mandate, OSE accreditation, contractor classification, Omanisation and the unified Oman Building Code.
       </p>
     </header>
 
@@ -45,23 +45,23 @@ const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Oman', url: '/om/' } 
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">5%</div>
-        <div class="mt-1 text-xs text-slate-600">VAT, lowest in the GCC</div>
+        <div class="mt-1 text-xs text-slate-600">standard VAT rate</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-        <div class="text-2xl font-bold text-slate-900">~$7B</div>
-        <div class="mt-1 text-xs text-slate-600">construction market (2025)</div>
+        <div class="text-2xl font-bold text-slate-900">OMR 301</div>
+        <div class="mt-1 text-xs text-slate-600">firm work permit fee per non-Omani worker</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-        <div class="text-2xl font-bold text-slate-900">2040</div>
-        <div class="mt-1 text-xs text-slate-600">Oman Vision</div>
+        <div class="text-2xl font-bold text-slate-900">2030</div>
+        <div class="mt-1 text-xs text-slate-600">building code mandatory nationwide</div>
       </div>
     </section>
 
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border-2 border-emerald-300 bg-emerald-50 p-5">
       <div>
-        <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">⏰ Compliance guide · e-invoicing mandatory for ALL by Aug 2027</p>
+        <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">⏰ Compliance guide · Fawtara e-invoicing phases 2026-2027</p>
         <h2 class="mt-1 text-base font-bold text-slate-900">Oman e-invoicing (Fawtara) for construction companies</h2>
-        <p class="mt-1 text-sm text-slate-700">The phased timeline (large taxpayers Aug 2026 → all VAT-registered Aug 2027), what the Peppol-based Fawtara system requires, and which software is getting ready.</p>
+        <p class="mt-1 text-sm text-slate-700">The Tax Authority's phase dates (from 100 large VAT-registered companies in August 2026 to all remaining VAT-registered businesses in August 2027), how its 5-corner model works, and what accounting software says about Fawtara.</p>
       </div>
       <a href="/om/guides/oman-e-invoicing-contractors/" class="shrink-0 rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Read the guide →</a>
     </section>
@@ -77,7 +77,7 @@ const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Oman', url: '/om/' } 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What's different about choosing software in Oman</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Oman's defining software story is <strong>e-invoicing</strong>. The Oman Tax Authority is rolling out a mandatory, Peppol-based system (branded "Fawtara"): large taxpayers from <strong>August 2026</strong>, and <strong>every VAT-registered business, including SME trades and contractors, by August 2027</strong>. That makes "is it getting Fawtara-ready?" a real buying question, even though VAT itself is just <strong>5%</strong> (the GCC's lowest). Beyond tax, the local ecosystem is <strong>reseller-dominated</strong>: most "Oman construction software" is a global product implemented through a Muscat partner, with only a few genuinely Oman-built options (like Grey ERP). And compliance has structure: <strong>OSE accreditation</strong> now gates engineer work permits, the <strong>Authority for Projects, Tenders & Local Content</strong> runs contractor classification for public work, <strong>Omanisation</strong> quotas shape staffing, and the new <strong>Oman Building Code</strong> is phasing in toward 2030.
+        Oman is introducing mandatory <strong>e-invoicing</strong>. The Oman Tax Authority's Fawtara FAQ lists <strong>100 large VAT-registered companies from August 2026</strong>, all large VAT-registered companies from February 2027 and <strong>all remaining VAT-registered taxpayers, including SMEs, from August 2027</strong>; other sources give different dates, so check yours with the Tax Authority. E-invoices must flow through an OTA-accredited service provider, so ask any accounting or ERP vendor how it will connect. VAT itself is <strong>5%</strong>, with registration mandatory above OMR 38,500 of annual supplies. None of the global project and design platforms listed here has an Oman reseller or partner confirmed in our check, while Focus Softnet, Onyx Pro ERP and Grey ERP list Muscat offices. Compliance has structure too: <strong>OSE accreditation</strong> has been required for engineer work permits since 1 August 2025, the <strong>Authority for Projects, Tenders & Local Content</strong> registers and classifies contractors for government work on its Esnad portal, a firm's <strong>Omanisation</strong> category moves work permit and visa fees 30% down or doubles them (Muscat Daily), and the unified <strong>Oman Building Code</strong> is optional in 2026 and 2027, enforced in Muscat from 2028 and nationwide by 2030 (Muscat Daily).
       </p>
     </section>
 

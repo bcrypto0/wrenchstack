@@ -25,18 +25,18 @@ const vendors = (caData as { vendors: CaVendor[] }).vendors;
 
 const categories = ['software', 'lead-gen', 'insurance', 'payroll', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'software': { label: 'Field service software', description: 'Jobber leads: Canadian-founded (Edmonton, 2011), the CA success story in trades software. Plus cross-market Housecall Pro and ServiceTitan with CA presence.' },
-  'lead-gen': { label: 'Lead-generation platforms', description: 'HomeStars dominates (owned by Angi/IAC; same corporate concerns apply). TrustedPros is the independent CA-only alternative.' },
-  'insurance': { label: 'Business insurance', description: 'CA-built insurance brokers: Zensurance leads with 100K+ businesses and 50+ insurer panel. APOLLO for 24/7 digital purchase. TruShield for trade-specialty focus.' },
-  'payroll': { label: 'Payroll software', description: 'CA-built payroll with Quebec capability: Wagepoint accessible at small scale, Payworks for mid-market, Knit People for modern UI.' },
-  'certification': { label: 'National + provincial certifications', description: 'Red Seal Program is the national interprovincial standard (cross-province mobility). HRAI for HVAC industry recognition. TSSA for Ontario gas/elevator licensing.' },
+  'software': { label: 'Field service software', description: 'Field service and job management software sold to Canadian contractors. Canadian-based options include Jobber (founded in Edmonton in 2011; plans listed in US dollars), ServiceBox (Regina; Canadian customers billed in local currency), ProgressionLIVE (Quebec; app listed in English, French and Spanish) and Method:CRM (Toronto; Canadian customers billed in CAD). Housecall Pro (San Diego) and ServiceTitan (Glendale, California, with a Canadian subsidiary) are US-based, and Housecall Pro lists several payment and tax features as unavailable in Canada. LMN, sold by Granum, is built for landscaping and priced in US dollars.' },
+  'lead-gen': { label: 'Lead-generation platforms', description: 'HomeStars is owned by Angi Inc., also the parent of HomeAdvisor; Angi Inc. says its international businesses, HomeStars included, earn mainly from lead fees and membership subscriptions paid by pros. HomeStars carries a reputation warning. TrustedPros is a separate Toronto directory and referral service, RenovationFind certifies and grades the contractors it lists, Jiffy (owned by Intact since 2024) sends pre-priced booked jobs, and Bark sells credits to respond to requests shared with up to five pros, also with a reputation warning.' },
+  'insurance': { label: 'Business insurance', description: 'Brokers and insurers for Canadian contractors: Zensurance, a Toronto brokerage and Travelers subsidiary that says it works with more than 50 insurance providers; APOLLO, a Vancouver digital broker owned by Gallagher since August 2026, whose business pages are built around professions rather than trades; Intact Insurance, sold through independent brokers; and Foxquilt, a Toronto-founded insurtech that underwrites its own products. Neither Zensurance nor APOLLO includes Quebec among the provinces on its site.' },
+  'payroll': { label: 'Payroll software', description: 'Canadian payroll for CRA remittances and Records of Employment. Quebec handling differs: Wagepoint added built-in Quebec payroll on September 22, 2026, Employment Hero points Quebec businesses to Humi by Employment Hero, and Payworks and Knit People do not describe Quebec payroll on their main pages. Wagepoint and Knit People publish plan prices; Payworks is quote-based, and Employment Hero publishes add-on prices but quotes its core plans.' },
+  'certification': { label: 'National + provincial certifications', description: 'The Red Seal Program sets interprovincial standards for more than 50 trades, and its endorsement facilitates labour mobility, but provinces and territories remain responsible for trade certification. In Ontario, Skilled Trades Ontario issues trade certificates, ESA licenses electrical contractors, TSSA registers fuels contractors and certifies gas technicians, and WSIB runs workplace insurance and construction clearance certificates. HRAI is a national HVACR trade association, not a licensing body.' },
 };
 
 const vendorsByCategory: Record<string, CaVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
 const pageTitle = 'CA Trades Vendor Directory | WrenchStack Canada';
-const pageDescription = `WrenchStack's Canada trades vendor directory: ${vendors.length} platforms across software, lead-gen, insurance, payroll, and national/provincial licensing. Jobber Canadian-founded coverage, Red Seal Program, Quebec-capable payroll, CRA-compliant tooling.`;
+const pageDescription = `WrenchStack's Canada trades directory: ${vendors.length} entries across field service software, lead generation, insurance, payroll, and national and Ontario certification bodies, with published prices where vendors list them, currency notes, Quebec payroll support and provincial rules.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -56,7 +56,7 @@ const breadcrumbs = [
         Canada Trades Vendor Directory
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} Canada-relevant vendors across 5 categories, built for CA contractors with native CA compliance context. Jobber's Canadian heritage (Edmonton-founded), Red Seal Program national standard, Quebec-capable payroll (Wagepoint, Payworks), CRA compliance, GST/PST/HST handling, ROE generation, and provincial licensing patterns (TSSA Ontario, BC Safety Authority, Alberta Apprenticeship).
+        Independent reviews of {vendors.length} Canada-relevant vendors and regulators across 5 categories, for Canadian contractors: which software lists prices in US dollars or bills in CAD, GST and PST on invoices, Quebec payroll support, CRA remittances and Records of Employment, the Red Seal Program, and Ontario rules from Skilled Trades Ontario, ESA, TSSA and WSIB.
       </p>
     </header>
 
@@ -72,7 +72,7 @@ const breadcrumbs = [
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See CA vendors compared side by side: a clear verdict, pros and cons, CA-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See CA vendors compared side by side: pros and cons, CA-specific notes and pricing, head to head.</p>
       </div>
       <a href="/ca/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare CA vendors →</a>
     </section>
@@ -80,7 +80,7 @@ const breadcrumbs = [
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What's different about CA trades vendor selection</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        CA trades vendor selection has three important structural differences from US. First, <strong>Jobber is Canadian-born</strong> (Edmonton, 2011): for CA contractors, this means native CA support timezones, CAD pricing, and product understanding of CA trades workflows that US-origin platforms don't match. Second, <strong>Red Seal Program is the only national trade standard</strong>: provincial Apprenticeship Boards handle most administration, but Red Seal endorsement provides cross-province mobility that no provincial-only certification does. Third, <strong>Quebec payroll is structurally complex</strong>: different deductions, RQ (Revenu Québec) handling separate from CRA, French-language requirements. Most CA payroll software handles Quebec poorly; Wagepoint and Payworks are the exceptions.
+        Three things shape the Canadian picture. First, <strong>currency and sales tax vary by vendor</strong>: Jobber, founded in Edmonton in 2011, lists its plans in US dollars and adds sales tax where the province taxes software as a service; Housecall Pro prices in US dollars and applies only one tax rate per invoice; Method:CRM and ServiceBox say Canadian customers are billed in CAD or local currency. Second, <strong>trade certification is provincial</strong>: a Red Seal endorsement facilitates labour mobility across more than 50 trades, but provinces and territories remain responsible for apprenticeship and certification, and the program states that the endorsement does not by itself certify a person to carry on a trade. Third, <strong>Quebec payroll needs checking</strong>: it adds Revenu Québec remittances, QPP, QPIP and RL-1 reporting, per Wagepoint, which added built-in Quebec payroll in September 2026; Employment Hero directs Quebec businesses to Humi by Employment Hero, and Payworks and Knit People do not describe Quebec payroll on their main pages.
       </p>
     </section>
 
@@ -165,9 +165,9 @@ const breadcrumbs = [
     })}
 
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
-      <h2 class="text-2xl font-bold">CA research is an active expansion</h2>
+      <h2 class="text-2xl font-bold">Missing a CA vendor?</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        {vendors.length} CA vendors covered today across {categories.length} categories. We're actively expanding CA depth: full editorial reviews of CA-only vendors (Zensurance, Wagepoint, HomeStars) at the same depth as our US reviews are in the editorial queue. Want a CA vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
+        {vendors.length} CA entries covered today across {categories.length} categories. Want a CA vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Back to US directory →</a>

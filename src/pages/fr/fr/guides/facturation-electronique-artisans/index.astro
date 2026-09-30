@@ -4,7 +4,7 @@ import Layout from '../../../../../layouts/Layout.astro';
 // Plateformes agréées (PDP) vérifiées. Honnête : la plupart des immatriculations
 // sont « sous réserve de raccordement » ; la liste DGFiP sur impots.gouv.fr fait foi.
 const pdps = [
-  { name: 'Pennylane', status: 'Plateforme agréée (PDP)', fit: 'Comptabilité et facturation cloud française pour PME ; la PDP native de référence', note: 'Offre gratuite ; à partir d’environ 14 €/mois' },
+  { name: 'Pennylane', status: 'Plateforme agréée (PDP)', fit: 'Comptabilité et facturation cloud française pour PME', note: 'Offre gratuite ; à partir d’environ 14 €/mois' },
   { name: 'Indy', status: 'Plateforme agréée (immatriculée 2026)', fit: 'Comptabilité française pour indépendants / micro-entrepreneurs', note: 'Offre gratuite ; Plus ~9 €/mois HT' },
   { name: 'Tiime', status: 'Plateforme agréée (immatriculée 2025)', fit: 'Comptabilité et facturation pour petites entreprises', note: 'Offre gratuite ; à partir de ~17,99 €/mois HT' },
   { name: 'Sellsy', status: 'Plateforme agréée, « sous réserve », émission uniquement', fit: 'CRM et facturation pour PME', note: 'À partir de ~29 €/mois par utilisateur' },
@@ -12,16 +12,16 @@ const pdps = [
 ];
 
 const faqs = [
-  { q: 'Quand la facturation électronique devient-elle obligatoire pour un petit artisan ?', a: 'Deux dates comptent. À partir du 1ᵉʳ septembre 2026, TOUTES les entreprises assujetties à la TVA, y compris les auto-entrepreneurs, doivent pouvoir RECEVOIR des factures électroniques structurées. À partir du 1ᵉʳ septembre 2027, les PME et micro-entreprises (la plupart des artisans) doivent aussi les ÉMETTRE via une plateforme agréée. Les grandes entreprises et ETI doivent émettre dès le 1ᵉʳ septembre 2026. Une phase pilote non sanctionnée a démarré en février 2026.' },
-  { q: 'Qu’est-ce qu’une PDP, et en ai-je vraiment besoin ?', a: 'Une PDP (Plateforme de Dématérialisation Partenaire), désormais officiellement « plateforme agréée », est une plateforme agréée par la DGFiP qui émet, transmet et reçoit les factures électroniques et transmet les données à l’administration. Oui, vous en avez besoin : le portail public gratuit (PPF) initialement prévu pour émettre les factures a été abandonné par la loi de finances 2025. Le PPF ne gère plus que l’annuaire national qui aiguille les factures entre plateformes. Toute entreprise doit passer par une plateforme agréée, directement ou via son logiciel.' },
-  { q: 'Mon logiciel de devis-facture n’est pas une PDP, est-ce un problème ?', a: 'Pas nécessairement. De nombreux outils français qui ne sont pas eux-mêmes des PDP se connectent à une PDP : par exemple EBP passe par la plateforme agréée de Cegid, et Henrri s’appuie sur celle de Pennylane. L’essentiel est que votre logiciel de facturation puisse envoyer et recevoir des factures conformes via une plateforme agréée avant votre échéance. Posez la question directement : « Êtes-vous une PDP immatriculée, ou via quelle PDP passez-vous, et à partir de quand ? »' },
+  { q: 'Quand la facturation électronique devient-elle obligatoire pour un petit artisan ?', a: 'Deux dates comptent. Depuis le 1ᵉʳ septembre 2026, TOUTES les entreprises assujetties à la TVA, y compris les auto-entrepreneurs, doivent pouvoir RECEVOIR des factures électroniques structurées. Au plus tard le 1ᵉʳ septembre 2027, les PME et micro-entreprises (la plupart des artisans) doivent aussi les ÉMETTRE via une plateforme agréée. Les grandes entreprises et ETI émettent obligatoirement depuis le 1ᵉʳ septembre 2026. La DGFiP indique qu’aucune sanction ne sera appliquée en 2026, le temps que les entreprises s’adaptent.' },
+  { q: 'Qu’est-ce qu’une PDP, et en ai-je vraiment besoin ?', a: 'Une PDP (Plateforme de Dématérialisation Partenaire), désormais officiellement « plateforme agréée », est une plateforme agréée par la DGFiP qui émet, transmet et reçoit les factures électroniques et transmet les données à l’administration. Oui, vous en avez besoin : l’État gère l’annuaire national qui aiguille les factures entre plateformes, mais aucune plateforme publique gratuite de facturation. Toute entreprise doit donc passer par une plateforme agréée, directement ou via son logiciel. La DGFiP indique que plus de dix des 150 plateformes agréées proposaient au 1ᵉʳ août 2026 des services gratuits ou sans surcoût.' },
+  { q: 'Mon logiciel de devis-facture n’est pas une PDP, est-ce un problème ?', a: 'Pas nécessairement. De nombreux outils français passent par une plateforme agréée partenaire : par exemple EBP intègre la plateforme agréée Shine, Obat passe par Iopole, et Tolteck reçoit les factures via son intégration Pennylane. L’essentiel est que votre logiciel de facturation puisse envoyer et recevoir des factures conformes via une plateforme agréée avant votre échéance. Posez la question directement : « Êtes-vous une PDP immatriculée, ou via quelle PDP passez-vous, et à partir de quand ? »' },
   { q: 'Quel format pour les factures électroniques ?', a: 'La réforme utilise des formats structurés : couramment Factur-X (un PDF hybride avec XML embarqué, apprécié des petites entreprises car il reste lisible), ainsi qu’UBL et CII. Votre plateforme gère le format ; vous continuez généralement à travailler dans votre écran de facturation habituel. En parallèle, une obligation d’« e-reporting » transmet certaines données de transactions et de paiement (ventes B2C, etc.) à la DGFiP, selon le même calendrier.' },
-  { q: 'Je suis micro-entrepreneur en franchise de TVA, suis-je quand même concerné ?', a: 'Oui. L’obligation s’applique largement aux entreprises assujetties, et les micro-entrepreneurs sont concernés selon le même calendrier : réception dès septembre 2026, émission à partir de septembre 2027. Si vous facturez en franchise en base, vos factures portent toujours la mention « TVA non applicable, art. 293 B du CGI » et devront, comme les autres, transiter par une plateforme agréée.' },
-  { q: 'Que dois-je faire maintenant ?', a: 'Vérifiez l’offre de votre logiciel de facturation : sera-t-il (ou se connectera-t-il à) une plateforme agréée, selon quel calendrier et à quel coût ? Si vous facturez encore sur papier, Word ou Excel, choisissez un outil conforme bien avant septembre 2026 pour pouvoir recevoir les factures, et soyez prêt à émettre via une PDP d’ici septembre 2027. Prévoyez du temps de test : cela concerne chaque facture que vous envoyez.' },
+  { q: 'Je suis micro-entrepreneur en franchise de TVA, suis-je quand même concerné ?', a: 'Oui. L’obligation s’applique largement aux entreprises assujetties, et les micro-entrepreneurs sont concernés selon le même calendrier : réception depuis septembre 2026, émission au plus tard en septembre 2027. Si vous facturez en franchise en base, vos factures portent toujours la mention « TVA non applicable, art. 293 B du CGI » et devront, comme les autres, transiter par une plateforme agréée.' },
+  { q: 'Que dois-je faire maintenant ?', a: 'Vérifiez l’offre de votre logiciel de facturation : sera-t-il (ou se connectera-t-il à) une plateforme agréée, selon quel calendrier et à quel coût ? Si vous facturez encore sur papier, Word ou Excel, choisissez dès maintenant un outil conforme : la réception est obligatoire depuis septembre 2026, et vous devrez émettre via une plateforme agréée d’ici septembre 2027. Prévoyez du temps de test : cela concerne chaque facture que vous envoyez.' },
 ];
 
 const pageTitle = 'Facturation électronique pour les artisans du bâtiment (guide 2026)';
-const pageDescription = 'La facturation électronique expliquée aux artisans : réception pour toutes les entreprises au 1ᵉʳ septembre 2026, émission pour les TPE/PME et micro-entreprises au 1ᵉʳ septembre 2027, le modèle de plateforme agréée (PDP) qui remplace le portail gratuit abandonné, et quels logiciels sont des plateformes agréées. Indépendant, vérifié en juin 2026.';
+const pageDescription = 'La facturation électronique expliquée aux artisans : réception pour toutes les entreprises depuis le 1ᵉʳ septembre 2026, émission pour les TPE/PME et micro-entreprises au plus tard le 1ᵉʳ septembre 2027, le modèle de plateforme agréée (PDP), sans plateforme publique gratuite de l’État, et quels logiciels sont des plateformes agréées. Indépendant, vérifié en juin 2026.';
 
 const enUrl = new URL('/fr/guides/facturation-electronique-artisans/', Astro.site).toString();
 const frUrl = new URL('/fr/fr/guides/facturation-electronique-artisans/', Astro.site).toString();
@@ -64,7 +64,7 @@ const faqSchema = {
         La facturation électronique pour les artisans du bâtiment
       </h1>
       <p class="mt-3 text-lg text-slate-600 leading-relaxed">
-        Ce que le calendrier obligatoire de la facturation électronique signifie pour les artisans : les étapes, le modèle de plateforme agréée (PDP) qui remplace le portail public gratuit abandonné, et quels logiciels sont des plateformes agréées.
+        Ce que le calendrier obligatoire de la facturation électronique signifie pour les artisans : les étapes, le modèle de plateforme agréée (PDP), sans plateforme publique gratuite de l’État, et quels logiciels sont des plateformes agréées.
       </p>
       <p class="mt-3 text-sm text-slate-500">Par WrenchStack Research · Publié et vérifié en juin 2026 · Ceci n’est pas un conseil fiscal : vérifiez votre situation auprès de la DGFiP (impots.gouv.fr) ou de votre expert-comptable.</p>
     </header>
@@ -72,7 +72,7 @@ const faqSchema = {
     <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
       <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ L’essentiel</h2>
       <p class="text-slate-800 leading-relaxed">
-        À partir du <strong>1ᵉʳ septembre 2026</strong>, toute entreprise française assujettie à la TVA, y compris les auto-entrepreneurs, doit pouvoir <strong>recevoir</strong> des factures électroniques structurées. À partir du <strong>1ᵉʳ septembre 2027</strong>, les TPE/PME et micro-entreprises (la plupart des artisans) doivent aussi les <strong>émettre</strong>. Les factures transitent par une plateforme agréée par l’État (une <strong>PDP / plateforme agréée</strong>), car le portail public gratuit prévu a été abandonné. La tâche concrète : vérifier que votre logiciel de facturation est (ou se connecte à) une plateforme agréée avant votre échéance.
+        Depuis le <strong>1ᵉʳ septembre 2026</strong>, toute entreprise française assujettie à la TVA, y compris les auto-entrepreneurs, doit pouvoir <strong>recevoir</strong> des factures électroniques structurées. Au plus tard le <strong>1ᵉʳ septembre 2027</strong>, les TPE/PME et micro-entreprises (la plupart des artisans) doivent aussi les <strong>émettre</strong>. Les factures transitent par une plateforme immatriculée par l’État (une <strong>PDP / plateforme agréée</strong>) ; l’État ne propose pas de plateforme publique gratuite, mais la DGFiP indique que certaines plateformes agréées proposent des services gratuits. La tâche concrète : vérifier que votre logiciel de facturation est (ou se connecte à) une plateforme agréée avant votre échéance.
       </p>
     </section>
 
@@ -87,13 +87,13 @@ const faqSchema = {
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">PDP</div>
-        <div class="mt-1 text-xs text-slate-600">plateforme agréée (le portail gratuit a été abandonné)</div>
+        <div class="mt-1 text-xs text-slate-600">plateforme agréée (pas de plateforme gratuite de l’État)</div>
       </div>
     </section>
 
     <section class="mb-10 prose prose-slate max-w-none">
       <h2>Le calendrier par étapes</h2>
-      <p>Le calendrier a été fixé par l’article 91 de la loi de finances pour 2024, après le report du démarrage initial de 2024. Une phase pilote non sanctionnée est en cours depuis février 2026.</p>
+      <p>Le calendrier a été fixé par l’article 91 de la loi de finances pour 2024, après le report du démarrage initial de 2024. La DGFiP indique qu’aucune sanction ne sera appliquée en 2026, le temps que les entreprises s’adaptent.</p>
       <ul>
         <li><strong>1ᵉʳ septembre 2026, réception :</strong> TOUTES les entreprises assujetties à la TVA doivent pouvoir <em>recevoir</em> des factures électroniques (toutes tailles, y compris les auto-entrepreneurs).</li>
         <li><strong>1ᵉʳ septembre 2026, émission (grandes &amp; moyennes) :</strong> les grandes entreprises et ETI doivent <em>émettre</em> des factures électroniques et faire de l’e-reporting.</li>
@@ -102,7 +102,7 @@ const faqSchema = {
 
       <h2>Ce que la réforme exige réellement</h2>
       <ul>
-        <li><strong>Utiliser une plateforme agréée (PDP).</strong> Les factures sont émises, transmises et reçues via une plateforme agréée par la DGFiP : il n’existe pas d’alternative publique gratuite pour l’émission.</li>
+        <li><strong>Utiliser une plateforme agréée (PDP).</strong> Les factures sont émises, transmises et reçues via une plateforme agréée par la DGFiP : l’État ne propose pas de plateforme publique gratuite pour l’émission, mais la DGFiP indique que plus de dix des 150 plateformes agréées proposaient au 1ᵉʳ août 2026 des services gratuits ou sans surcoût.</li>
         <li><strong>Formats structurés.</strong> Les factures utilisent des formats structurés : couramment <strong>Factur-X</strong> (PDF hybride avec XML embarqué, qui reste lisible), ainsi qu’UBL et CII. Votre plateforme gère le format.</li>
         <li><strong>L’annuaire aiguille les factures.</strong> Le portail public recentré (PPF) gère l’annuaire national qui aiguille les factures entre plateformes et transmet les données à la DGFiP.</li>
         <li><strong>E-reporting.</strong> Une obligation parallèle transmet certaines données de transactions/paiement (ventes B2C, contreparties étrangères) à la DGFiP, selon le même calendrier.</li>
@@ -141,7 +141,7 @@ const faqSchema = {
           ))}
         </tbody>
       </table>
-      <p class="mt-3 text-xs text-slate-500">Source : annonces des éditeurs + liste DGFiP, vérifié en juin 2026. EBP passe par la plateforme agréée de Cegid et Henrri par celle de Pennylane : ce ne sont pas eux-mêmes des PDP. Vérifiez le statut actuel sur la liste officielle impots.gouv.fr.</p>
+      <p class="mt-3 text-xs text-slate-500">Source : annonces des éditeurs + liste DGFiP, vérifié en juin 2026. EBP intègre la plateforme agréée Shine, Obat passe par Iopole et Batappli par Cecurity (toutes trois sur la liste DGFiP), et Axonaut figure elle-même sur la liste. Vérifiez le statut actuel sur la liste officielle impots.gouv.fr.</p>
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
@@ -154,11 +154,11 @@ const faqSchema = {
     <section class="mb-10 prose prose-slate max-w-none">
       <h2>Check-list de préparation pour les artisans</h2>
       <ol>
-        <li><strong>Assurez-vous de pouvoir recevoir des factures électroniques d’ici le 1ᵉʳ septembre 2026</strong> : cela concerne toutes les entreprises, y compris les micro-entrepreneurs.</li>
+        <li><strong>Assurez-vous de pouvoir recevoir des factures électroniques dès maintenant</strong> : c’est obligatoire pour toutes les entreprises, y compris les micro-entrepreneurs, depuis le 1ᵉʳ septembre 2026.</li>
         <li><strong>Posez la question PDP à votre logiciel :</strong> êtes-vous une plateforme agréée, ou via laquelle passez-vous, et à partir de quand ?</li>
         <li><strong>Si vous êtes encore sur papier / Word / Excel,</strong> choisissez un outil conforme bien avant les échéances.</li>
         <li><strong>Vérifiez la gestion de la TVA à taux multiples</strong> (20 / 10 / 5,5 %) et, en franchise, la mention art. 293 B.</li>
-        <li><strong>Prévoyez d’émettre via une PDP d’ici le 1ᵉʳ septembre 2027</strong> (TPE/PME et micro), plus tôt pour une grande entreprise ou ETI.</li>
+        <li><strong>Prévoyez d’émettre via une PDP d’ici le 1ᵉʳ septembre 2027</strong> (TPE/PME et micro) ; les grandes entreprises et ETI émettent obligatoirement depuis le 1ᵉʳ septembre 2026.</li>
         <li><strong>Testez avant l’échéance</strong> : cela touche chaque facture que vous envoyez et recevez.</li>
       </ol>
     </section>

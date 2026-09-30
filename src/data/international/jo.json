@@ -5,702 +5,672 @@
       "name": "InvoiceQ",
       "category": "software",
       "vendor_url": "https://jo.invoiceq.com/en/",
-      "tagline": "Dedicated JoFotara e-invoicing platform + ERP/POS connector",
-      "market_position": "A specialist e-invoicing platform with a dedicated Jordan portal, built to connect businesses to the National E-Invoicing System (JoFotara). It sits as a compliance layer on top of existing ERP/accounting/POS systems (Dynamics, QuickBooks, Oracle, SAP) rather than replacing them. One of the most visible JoFotara-first vendors in the market.",
+      "tagline": "Jordanian e-invoicing platform that links existing ERP and accounting systems to the ISTD",
+      "market_position": "InvoiceQ says it was founded in 2020 in Jordan as a SaaS company for e-invoicing and integration, and lists an office at King Hussein Business Park in Amman plus a Riyadh office. Its Jordan portal issues and receives e-invoices and connects existing systems (it names Microsoft Dynamics, Oracle, QuickBooks, SAP, Xero and JD Edwards) to the Income and Sales Tax Department's national e-invoicing system. It works as a compliance layer on top of an existing back office rather than replacing it.",
       "tier": "S",
       "reputation_flag": null,
       "pros": [
-        "JoFotara-native: manages the integration end-to-end",
-        "Connects to existing ERP/accounting/POS",
-        "Publishes JOD pricing (rare here)",
-        "Arabic + English"
+        "Published annual prices in JOD with invoice-volume tiers",
+        "Connects existing systems via SOAP, REST APIs or Excel upload",
+        "Amman office and Arabic and English interface",
+        "Also links to the eFAWATEERcom payment gateway, per InvoiceQ"
       ],
       "cons": [
-        "A compliance layer, not a full accounting/construction system",
-        "No free tier",
-        "No construction-specific features",
-        "High-volume/API tier is quote-based"
+        "An e-invoicing layer, not accounting or job-management software",
+        "No free tier; the site offers a free consultation, not a trial",
+        "Lower plans cap yearly invoice volume (200 or 500)",
+        "Full API integration plan is quote-based"
       ],
-      "typical_pricing": "Published: JOD 120/yr (≤200 invoices), JOD 240/yr (≤500), JOD 500/yr (unlimited); full ISTD-integration tier quote-based.",
+      "typical_pricing": "Basic JOD 120/year (up to 200 invoices); Standard JOD 240/year (up to 500 invoices); Enterprise JOD 500/year (unlimited invoices); ISTD Integration plan with API or internal-system integration is custom-priced. VAT treatment not stated on the pricing page.",
       "is_cross_market": false,
       "cross_market_link": null,
-      "jo_specific_note": "Purpose-built around JoFotara: handles the UUID, QR, XML signing and real-time ISTD transmission, with a custom API-integration tier for firms that want to keep their existing back-office system."
+      "jo_specific_note": "InvoiceQ says its platform is compatible with the latest updates from Jordan's Income and Sales Tax Department and offers a custom ISTD Integration plan for firms that want to keep their existing ERP or accounting system. ISTD does not publish a list of approved software, so confirm the integration scope with the vendor."
     },
     {
       "slug": "mozon",
       "name": "Mozon",
       "category": "software",
       "vendor_url": "https://mozon-tech.com/en/",
-      "tagline": "Amman-built ERP with a dedicated contracting module + JoFotara connectors",
-      "market_position": "An Amman-headquartered enterprise-software house (offices also in Cairo and Dubai) offering ERP, accounting, HR and BI. Notably it ships Mozon Contracting Management (MCM) for the construction sector plus pre-built ISTD connectors. One of the few Jordan-native vendors that pairs a real contracting module with national e-invoicing compliance.",
-      "tier": "S",
+      "tagline": "Amman-based ERP vendor with a contracting-management module and JoFotara integration",
+      "market_position": "Mozon Technologies says it was founded in 2002 and is headquartered in Amman, with a branch in Cairo. It sells an ERP suite, accounting, HR, invoicing and BI software, plus Mozon Contracting Management (MCM) for contracting companies. Mozon says more than 1,500 organizations use its systems.",
+      "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "Jordan-native (Amman HQ) with regional reach",
-        "A dedicated Contracting Management module",
-        "Pre-built JoFotara/ISTD connectors",
-        "Arabic + English"
+        "Contracting module covers budgets, subcontractors and progress invoicing",
+        "ERP page lists JoFotara e-invoicing integration, including on POS",
+        "Amman head office; Arabic and English software",
+        "First-year maintenance and training included, per Mozon"
       ],
       "cons": [
-        "Quote-only / demo-gated pricing",
-        "ERP implementation effort",
-        "Smaller ecosystem than global tools",
-        "Contracting-module depth not independently benchmarked"
+        "No public prices; quote after a discovery session",
+        "ERP implementation takes weeks, per the vendor",
+        "Contracting module pricing and scope are only on request",
+        "Offices only in Jordan and Egypt"
       ],
-      "typical_pricing": "Quote-based (request a demo); no public JOD price.",
+      "typical_pricing": "Quote-based; no public prices. Mozon says pricing depends on the scope of work and includes first-year maintenance, training and support.",
       "is_cross_market": false,
       "cross_market_link": null,
-      "jo_specific_note": "The standout for Jordanian contractors specifically: a real contracting module plus \"plug-and-play\" ISTD/JoFotara connectors (it claims 3–5 day integration), from a local vendor that also offers Arabic support."
+      "jo_specific_note": "Mozon's ERP page lists JoFotara e-invoicing integration and pre-built e-invoicing connectors, and its contracting module (MCM) handles progress invoicing and subcontractor records with a direct link to the accounting system. Mozon names Jordanian contractors Ammon Contracting Co. and Zakaria Al-Tarawneh Construction Co. as MCM clients."
     },
     {
       "slug": "odoo",
       "name": "Odoo",
       "category": "software",
       "vendor_url": "https://www.odoo.com/documentation/19.0/applications/finance/fiscal_localizations/jordan.html",
-      "tagline": "Global open-source ERP with native JoFotara e-invoicing modules",
-      "market_position": "The dominant global open-source ERP, uniquely well-supported in Jordan via a native fiscal localization (l10n_jo) plus a dedicated JoFotara module (l10n_jo_edi). Widely deployed locally through partners (e.g. Stride). The most credible \"global tool, fully localized\" pick for a contractor who wants project, inventory and accounting in one platform.",
+      "tagline": "Open-source ERP from Odoo S.A. with a Jordan localization and JoFotara e-invoicing module",
+      "market_position": "Odoo is a modular ERP from Odoo S.A. covering accounting, invoicing, projects, inventory, HR and more, sold as a cloud subscription or run from the open-source Community code. Its Jordan localization installs a Jordanian chart of accounts, 16% sales tax and tax report (l10n_jo) plus a JoFotara e-invoicing module (l10n_jo_edi). Implementation is sold separately through Odoo Success Packs or partners.",
       "tier": "S",
       "reputation_flag": null,
       "pros": [
-        "Native Jordan localization + JoFotara EDI module",
-        "Full ERP: project, inventory, accounting, HR",
-        "Large ecosystem + local partners",
-        "Arabic + English; scalable from SME up"
+        "Jordan chart of accounts, taxes and JoFotara module ship with Odoo",
+        "JoFotara module is open source (LGPL-3) in the Community code",
+        "One platform for accounting, projects, inventory and HR",
+        "Published per-user prices and a free one-app plan"
       ],
       "cons": [
-        "Needs a partner to implement well",
-        "JoFotara needs ISTD API credentials configured",
-        "Construction depth depends on apps/config",
-        "Total cost = licensing + implementation"
+        "JoFotara needs ISTD credentials (Activity Number, Client ID, Secret Key)",
+        "Implementation costs extra via Success Packs or partners",
+        "First-year discount on subscriptions; regular prices are higher",
+        "Priced in USD, not JOD"
       ],
-      "typical_pricing": "Per-app SaaS (USD) on odoo.com; Community edition free/self-hosted; implementation via partner (quote).",
+      "typical_pricing": "Published on odoo.com in USD: One App Free $0 (one app, unlimited users); Standard $7.25 per user per month billed yearly or $9.10 billed monthly (first-year discount; regular $8.95 / $11.20); Custom $13.40 per user per month billed yearly or $16.90 monthly (regular $16.40 / $20.90). Implementation, Odoo.sh hosting and in-app services cost extra. Community edition is open source.",
       "is_cross_market": true,
       "cross_market_link": null,
-      "jo_specific_note": "Ships the Jordan chart of accounts, 16% sales tax and JoFotara submission (UBL 1.2, QR onto the PDF, verifiable via the Sanad app) out of the box, but you need ISTD API credentials and usually a local partner to implement it."
+      "jo_specific_note": "Odoo's Jordan localization installs the Jordanian chart of accounts, 16% sales tax, exempt and 0% export taxes and a JoFotara module that sends invoices in UBL 2.1 for real-time validation and puts the JoFotara QR code on the PDF for checking in the Sanad app. You need an Activity Number, Client ID and Secret Key from ISTD, and the company currency must be JOD."
     },
     {
       "slug": "daftra",
       "name": "Daftra",
       "category": "software",
       "vendor_url": "https://www.daftra.com/en/electronic-invoice-jo/",
-      "tagline": "Arabic-first MENA accounting & invoicing with a Jordan e-invoice module",
-      "market_position": "A widely-used regional MENA accounting/invoicing platform with a dedicated Jordanian e-invoice product and direct ISTD integration. It includes a Real Estate & Construction industry profile with project tracking, making it a workable single tool for smaller Arabic-language contracting firms that want jobs and books together.",
-      "tier": "A",
+      "tagline": "Cloud accounting and invoicing for Arab-market firms, with a Jordan e-invoice module",
+      "market_position": "Daftra is a cloud accounting and business-management system operated by Izam, Inc., according to its terms of service. It covers invoicing, accounting, inventory, CRM and HR, and Daftra says 45K+ businesses use it across 50+ industries. Its Jordan e-invoice product sends invoices directly to the national e-invoicing platform, and it lists a Real Estate & Construction industry profile with project management.",
+      "tier": "S",
       "reputation_flag": null,
       "pros": [
-        "Arabic-first, built for MENA SMEs",
-        "JoFotara/ISTD integration with auto QR",
-        "Has a Real Estate & Construction profile",
-        "14-day free trial, bilingual support"
+        "Direct link to Jordan's e-invoicing platform with automatic QR code, per Daftra",
+        "Published prices and a 14-day trial with no card required",
+        "Accounting, inventory, CRM and HR in one subscription",
+        "Jordan phone line and Arabic and English interface"
       ],
       "cons": [
-        "Regional, not Jordan-native",
-        "Construction depth is light vs a true construction ERP",
-        "JO pricing not fixed on the page",
-        "Breadth over per-module depth"
+        "Priced in USD, not JOD",
+        "Lower plans cap monthly invoices (100 or 500) and clients",
+        "Each plan includes one user; extra users cost $7-9.33 a month",
+        "Construction support is an industry profile, not a separate contracting product"
       ],
-      "typical_pricing": "Tiered SaaS (see daftra.com/en/plans); JOD-denominated invoices; 14-day trial.",
+      "typical_pricing": "Basic $30/month, or $240/year ($20/month); Advanced $55/month, or $495/year ($41.25/month); Premium $70/month, or $600/year ($50/month); prices in USD as shown on daftra.com. Each plan includes one user; extra users $7-9.33/month. 14-day free trial, no card required.",
       "is_cross_market": true,
       "cross_market_link": null,
-      "jo_specific_note": "Direct JoFotara integration with auto QR and ISTD-compliant formats, JOD-aware and bilingual; its construction support is a general industry profile rather than a deep contracting ERP, so it suits smaller firms."
+      "jo_specific_note": "Daftra says its Jordan e-invoice product integrates directly with the national e-invoicing platform, adds the required QR code automatically, issues general and specific tax invoices in line with ISTD standards and calculates tax automatically. It offers setup support for the integration and a Jordan sales line."
     },
     {
       "slug": "fawtraplus",
       "name": "FawtraPlus",
       "category": "software",
       "vendor_url": "https://www.fawtraplus.com/",
-      "tagline": "Low-cost approved JoFotara invoicing for Jordanian micro-businesses",
-      "market_position": "A budget, Jordan-native e-invoicing app (by JoPython) positioned as an approved JoFotara program and an upgrade over the government’s basic app. A strong fit for very small firms and sole traders who need compliant invoicing cheaply, with inventory and reporting on top.",
-      "tier": "A",
+      "tagline": "Low-cost Jordanian e-invoicing app from Amman software firm JoPython",
+      "market_position": "FawtraPlus is a cloud e-invoicing app made by JoPython, an Amman software company founded in 2014. It issues JoFotara e-invoices with QR code, calculates 16% sales tax and adds inventory and tax reports, sold as one annual plan. JoPython says the app is approved by ISTD for the national invoicing system.",
+      "tier": "S",
       "reputation_flag": null,
       "pros": [
-        "Very cheap (~50 JOD/yr) with a published price",
-        "JoFotara-approved, 16% GST built in",
-        "Offline (PWA) + WhatsApp/email delivery",
-        "Inventory + reports included"
+        "Published price: 50 JOD a year for all features",
+        "16% sales tax and income-tax invoices with JoFotara QR code",
+        "Works offline as a web app and sends invoices by WhatsApp or email",
+        "14-day free trial with no card required"
       ],
       "cons": [
-        "Lightweight, not for construction/project work",
-        "Small vendor (single dev house)",
-        "Not a full accounting/ERP",
-        "English info thinner than Arabic"
+        "Terms say prices may change with prior notice",
+        "No project or job-costing features listed on its site",
+        "Subscription auto-renews each year unless cancelled",
+        "Sales-tax treatment of the 50 JOD price is not stated"
       ],
-      "typical_pricing": "Published: 50 JOD/year (~4.17 JOD/month).",
+      "typical_pricing": "Published: 50 JOD per year (about 4.17 JOD a month), one plan with all features; auto-renews yearly. 14-day free trial, no card required. Sales-tax treatment of the price not stated.",
       "is_cross_market": false,
       "cross_market_link": null,
-      "jo_specific_note": "The cheapest verified compliant option: it explicitly handles 16% GST + income tax, QR and the tax number, with offline (PWA) and WhatsApp/email delivery, built squarely for the Jordanian micro-business."
+      "jo_specific_note": "Built for Jordan: FawtraPlus says it is 100% compatible with JoFotara, adds the QR code and UUID to each invoice, calculates 16% sales tax and supports income-tax invoices for self-employed professionals. It says it is approved by ISTD, though ISTD publishes no list of approved software to check this against."
     },
     {
       "slug": "fatwarti",
       "name": "Fatwarti",
       "category": "software",
       "vendor_url": "https://fatwarti.online/",
-      "tagline": "Jordanian accounting + POS with direct JoFotara invoicing",
-      "market_position": "An Amman-based accounting/POS system with direct, official-API JoFotara integration. It covers sales, purchases, expenses, receivables/payables, inventory and a cashier/POS module, aimed at retail and service SMEs rather than construction specifically.",
+      "tagline": "Amman-based cloud accounting and POS system with JoFotara e-invoicing",
+      "market_position": "Fatwarti is an Arabic-language cloud accounting system based in Amman that combines JoFotara e-invoicing, inventory and a point-of-sale module. It covers sales, purchases, expenses, receivables and payables, stock and profit-and-loss reports. Fatwarti says it connects directly to the national invoicing system through the official API.",
       "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "Jordan-native, JoFotara direct API",
-        "Accounting + POS + inventory in one",
-        "Free trial, no card required",
-        "Arabic + English"
+        "Direct JoFotara connection via the official API, per Fatwarti",
+        "Accounting, inventory and POS in one system",
+        "POS supports thermal printers, barcodes and shift management",
+        "Free trial with no credit card required"
       ],
       "cons": [
-        "Retail/service-oriented, not construction",
-        "POS only on the advanced tier",
-        "JOD pricing not displayed publicly",
-        "Smaller brand"
+        "No prices published on the site",
+        "Site says one plan has all features but also that POS is advanced-plan only",
+        "Arabic-only website; no company legal name or address beyond Amman",
+        "No project or job-costing features listed"
       ],
-      "typical_pricing": "Tiered (JOD-denominated, not displayed publicly); free trial.",
+      "typical_pricing": "No public prices; the site shows a 'one plan, all features' heading without amounts. Free trial, no credit card required.",
       "is_cross_market": false,
       "cross_market_link": null,
-      "jo_specific_note": "100% JoFotara-compatible via the official API and bilingual, usable by a small trades business for compliant books, but it is a retail/service tool, not a contracting system."
+      "jo_specific_note": "Fatwarti says it is 100% compatible with the Income and Sales Tax Department's requirements and sends invoices, including POS sales, directly to JoFotara through the official API. ISTD publishes no list of approved software to check this against."
     },
     {
       "slug": "stride-bs",
       "name": "Stride (Stride Business Solutions)",
       "category": "software",
       "vendor_url": "https://www.stridebs.com/",
-      "tagline": "Amman-based Odoo implementation partner with JoFotara integration",
-      "market_position": "A Jordanian (Amman) Odoo implementation and ERP-consulting firm that delivers Odoo as a full business system and handles the JoFotara compliance layer for local clients. Best understood as the local integrator that makes a global ERP (Odoo) work for Jordan, rather than a product vendor of its own.",
+      "tagline": "Amman-based Odoo implementation partner",
+      "market_position": "STRIDE Business Solutions is an Amman-based firm that implements, customizes and supports Odoo ERP, and sells its own Odoo add-ons for medical labs, pest control and performance management. Odoo's partner directory lists it as a Ready partner in Jordan with 16 customer references, two of them in construction and renovation. It is a services firm, so Odoo subscription costs come on top of its fees.",
       "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "Jordan-based local support (Amman)",
-        "Odoo + JoFotara integration expertise",
-        "Sector-tailored configuration",
-        "Free consultation entry point"
+        "Local Odoo partner in Amman with Arabic and English support",
+        "Listed in Odoo's official partner directory",
+        "Implementation, training, migration and ongoing support",
+        "Free discovery call"
       ],
       "cons": [
-        "A services/implementation firm, not a product",
-        "No public pricing",
-        "No dedicated construction module of its own",
-        "Value depends on Odoo licensing on top"
+        "A services firm, not a software product of its own",
+        "No public prices",
+        "Its site does not mention JoFotara or e-invoicing work",
+        "Odoo subscription costs are separate"
       ],
-      "typical_pricing": "Quote-based (free consultation); Odoo licensing separate.",
+      "typical_pricing": "Quote-based; no public prices (free discovery call). Odoo subscription costs are separate.",
       "is_cross_market": false,
       "cross_market_link": null,
-      "jo_specific_note": "The practical route to Odoo in Jordan: it configures the l10n_jo / l10n_jo_edi JoFotara modules and provides Arabic-language support for contractors who want Odoo but need the e-invoicing handled."
+      "jo_specific_note": "STRIDE is an Amman-based Odoo partner offering support in Arabic and English. Odoo's own Jordan localization includes a JoFotara e-invoicing module, but STRIDE's site does not describe JoFotara setup, so ask whether it will configure the e-invoicing link."
     },
     {
       "slug": "tax2gov",
       "name": "Tax2Gov (T2G)",
       "category": "software",
       "vendor_url": "https://tax2gov.com/jordan-jofotara-e-invoicing-api/",
-      "tagline": "Universal JoFotara API connector / middleware for ERPs & POS",
-      "market_position": "An e-invoicing middleware provider offering a universal API connector that bridges existing ERP/POS systems to Jordan’s ISTD JoFotara platform, including a documented Odoo plugin. Aimed at higher-volume, multi-industry firms that want to keep their current system and add compliance.",
+      "tagline": "API connector linking existing ERP and POS systems to Jordan's JoFotara",
+      "market_position": "Tax2Gov (T2G) is an e-invoicing middleware brand of SB International, Inc., with a head office in Delaware, USA and an office in Tangier, Morocco. It sells API connectors to government e-invoicing platforms across MENA, including a JoFotara connector that links existing ERP and POS systems to Jordan's Income and Sales Tax Department. It does not replace accounting software.",
       "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "ERP/POS-agnostic JoFotara connector (incl. Odoo plugin)",
-        "Built for high-volume e-invoicing",
-        "AI validation + Phase-1/2 coverage",
-        "Keeps your existing back-office"
+        "Keeps your existing ERP or POS and adds the JoFotara link",
+        "Custom integration work; names SAP, Oracle and Dynamics as examples",
+        "Vendor offers AI data validation and 24/7 support",
+        "Free consultation"
       ],
       "cons": [
-        "Not Jordan-HQ (US/Morocco)",
-        "Quote-only pricing",
-        "Middleware only, not accounting/construction",
-        "Newer/less locally rooted than InvoiceQ"
+        "No Jordan office; offices in the US and Morocco",
+        "No public prices",
+        "Middleware only, not accounting or job-management software",
+        "No named ready-made plugin for a specific ERP"
       ],
-      "typical_pricing": "Quote-based (free consultation).",
+      "typical_pricing": "Quote-based; no public prices (free consultation).",
       "is_cross_market": false,
       "cross_market_link": null,
-      "jo_specific_note": "A pure JoFotara compliance layer that sits between your ERP and ISTD. Useful if you have a system you like and just need the clearance bridge, but confirm local support expectations since it is not Jordan-headquartered."
+      "jo_specific_note": "Tax2Gov says its universal API connector links ERP and POS systems to ISTD's JoFotara platform and complies with JoFotara phases 1 and 2. It lists no Jordan office and does not claim ISTD approval."
     },
     {
       "slug": "eskadenia",
       "name": "ESKADENIA Software",
       "category": "software",
       "vendor_url": "https://eskadenia.com/enterprise",
-      "tagline": "Established Jordan-native ERP house (finance, SCM, HR, manufacturing)",
-      "market_position": "A long-established (2000), CMMI-5, Amman-headquartered Jordanian software company with a broad ERP suite: financials, SCM, HR, manufacturing, fleet. A credible local enterprise vendor, but its ERP is general-purpose: no dedicated construction module, and no JoFotara claim was found on its site.",
+      "tagline": "Amman-headquartered software house with a web-based ERP suite",
+      "market_position": "ESKADENIA Software was founded in 2000 and is headquartered in Amman, with offices in Dubai and Stockholm and around 300 staff. Its ESKA Business Manager is a web-based ERP covering financials, HR, supply chain, manufacturing, fleet and maintenance, alongside its larger insurance and telecom software lines. ESKADENIA says it holds CMMI Level 5 certification.",
       "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "Established Jordanian ERP vendor (CMMI-5)",
-        "Broad finance/SCM/HR/manufacturing suite",
-        "Local Amman presence + support",
-        "Arabic + English"
+        "Amman headquarters with offices in Dubai and Stockholm",
+        "ERP covers finance, HR, supply chain, manufacturing and fleet",
+        "Vendor says it holds CMMI Level 5 certification",
+        "Company has operated since 2000"
       ],
       "cons": [
-        "No dedicated construction/contracting module",
-        "JoFotara/e-invoicing not confirmed on its site",
-        "Quote-only pricing",
-        "Enterprise-oriented, heavier than SME tools"
+        "No project, contracting or construction module listed",
+        "No e-invoicing or JoFotara feature described on its site",
+        "No public prices",
+        "Aimed at medium-to-large enterprises, per the vendor"
       ],
-      "typical_pricing": "Quote-based.",
+      "typical_pricing": "Quote-based; no public prices.",
       "is_cross_market": false,
       "cross_market_link": null,
-      "jo_specific_note": "Jordan-native and locally supported, but on the public evidence it is neither construction-specific nor confirmed JoFotara-ready; a buyer should confirm e-invoicing handling and project-costing depth directly before relying on it for a contracting workflow."
+      "jo_specific_note": "ESKADENIA is headquartered in Amman, but its ERP pages do not describe JoFotara e-invoicing, Jordanian sales tax or project costing. Ask the vendor how it handles JoFotara submission before using it for a contracting business."
     },
     {
       "slug": "zoho-books",
       "name": "Zoho Books",
       "category": "software",
       "vendor_url": "https://www.zoho.com/us/books/",
-      "tagline": "Affordable global cloud accounting; JoFotara via a third-party connector",
-      "market_position": "A popular, affordable global cloud-accounting product used by Jordanian SMEs, but with no native JoFotara support. Jordan compliance is achieved via third-party Marketplace connectors. Workable for small trades firms already on Zoho, provided they add and maintain a connector.",
-      "tier": "A",
-      "reputation_flag": "No native JoFotara support: relies on a third-party Zoho Marketplace connector for ISTD compliance; verify the connector’s current certification before relying on it.",
+      "tagline": "Global cloud accounting from Zoho with published USD prices; no Jordan edition or JoFotara link listed",
+      "market_position": "Zoho Books is cloud accounting from Zoho covering invoicing, bookkeeping, bank reconciliation and, from the Professional plan, timesheet billing and project profitability. Zoho lists no Jordan edition, so Jordanian firms would use the global version, which Zoho says to evaluate for local compliance before use. Zoho's site names no integration with Jordan's national e-invoicing system (JoFotara).",
+      "tier": "S",
+      "reputation_flag": null,
       "pros": [
-        "Cheap, modern, published pricing",
-        "Huge app ecosystem; Arabic supported",
-        "Good general SME books",
-        "Connectors exist for JoFotara"
+        "Published USD prices and a free plan for small revenue",
+        "Up to 1,000 invoices a year on the free plan",
+        "Timesheet billing and project profitability from the Professional plan",
+        "14-day free trial"
       ],
       "cons": [
-        "No native JoFotara: connector required",
-        "Connector adds cost + a dependency to maintain",
-        "Not construction-specific",
-        "Compliance only as good as the third-party plugin"
+        "No Jordan edition; the global version needs a local compliance check",
+        "No JoFotara integration named by Zoho",
+        "Accounting, not construction management",
+        "Priced in USD, not JOD"
       ],
-      "typical_pricing": "Published per-org tiers (USD) on zoho.com; free tier exists; JoFotara connector priced separately.",
+      "typical_pricing": "Published in USD on Zoho's global pricing page, per organization per month: billed annually Standard $10 (3 users), Professional $20 (5 users), Premium $30 (10 users), Elite $100 (10 users), Ultimate $200 (15 users); billed monthly $12, $24, $36, $129 and $249. Free plan $0 (1 user plus 1 accountant) while revenue stays under 50K USD a year. Extra users $2.50 a month billed annually ($3 monthly). Prices exclude local taxes; 14-day free trial.",
       "is_cross_market": true,
       "cross_market_link": null,
-      "jo_specific_note": "JoFotara compliance is bolt-on, not built-in: you must install and pay for a Zoho Marketplace connector to transmit to ISTD, so confirm the connector is currently certified before you commit."
+      "jo_specific_note": "Zoho has no Jordan edition and names no JoFotara integration. If you must issue e-invoices through Jordan's Income and Sales Tax Department system, confirm how you will do it (a separate integration service or ISTD's own tools) before choosing Zoho Books."
     },
     {
       "slug": "quickbooks",
       "name": "QuickBooks",
       "category": "software",
       "vendor_url": "https://quickbooks.intuit.com/",
-      "tagline": "Global SMB accounting; JoFotara only via middleware",
-      "market_position": "Globally dominant SMB accounting software with an install base in Jordan, but not JoFotara-compliant on its own. Jordanian users connect it to the National E-Invoicing System through middleware (e.g. InvoiceQ, Tax2Gov). Reasonable for firms already standardized on QuickBooks who layer a connector on top.",
+      "tagline": "Intuit's cloud accounting, sold in Jordan through its global site; JoFotara needs a separate integration",
+      "market_position": "QuickBooks Online is cloud accounting software from Intuit. Jordan is served by Intuit's global QuickBooks site, which offers Simple Start, Essentials, Plus and Advanced plans with prices set by location and currency. Intuit's global site names no link to Jordan's national e-invoicing system (JoFotara); InvoiceQ, a Jordanian e-invoicing service, lists QuickBooks among the systems it connects.",
       "tier": "A",
-      "reputation_flag": "Not JoFotara-native: requires external middleware (e.g. InvoiceQ, Tax2Gov) to transmit to ISTD.",
+      "reputation_flag": null,
       "pros": [
-        "Mature, familiar SMB accounting",
-        "Large accountant/bookkeeper base",
-        "Supported by JoFotara middleware vendors",
-        "Published pricing"
+        "Four plans from 1 to 25 users, with accountant access",
+        "30-day free trial and no contract",
+        "InvoiceQ lists QuickBooks among the systems it connects to JoFotara"
       ],
       "cons": [
-        "No native JoFotara: middleware required",
-        "Extra integration cost/complexity",
-        "Not construction-specific",
-        "Localization weaker than Odoo for Jordan"
+        "No JoFotara link named by Intuit; needs a separate e-invoicing service",
+        "No Jordan-specific site or published Jordan price",
+        "Accounting, not construction management",
+        "Extra cost and setup for the e-invoicing integration"
       ],
-      "typical_pricing": "Published subscription (USD) on intuit.com; JoFotara middleware priced separately.",
+      "typical_pricing": "Intuit's global site lists Simple Start, Essentials, Plus and Advanced plans, billed monthly with a 30-day free trial and no contract; prices load by visitor location and currency, and no Jordan price could be read on 2026-09-30. Any e-invoicing integration is priced separately by its provider.",
       "is_cross_market": true,
       "cross_market_link": null,
-      "jo_specific_note": "Treat QuickBooks as the books and a separate ISTD connector (InvoiceQ, Tax2Gov) as the JoFotara bridge; there is no native Jordan e-invoicing inside QuickBooks itself."
+      "jo_specific_note": "Intuit names no Jordan e-invoicing feature in QuickBooks, so firms that must issue JoFotara invoices use a separate service; InvoiceQ lists QuickBooks among the systems it connects to the Income and Sales Tax Department. Check the connector's scope and price before relying on it."
     },
     {
       "slug": "joneps",
       "name": "JONEPS",
       "category": "lead-gen",
       "vendor_url": "https://www.joneps.gov.jo/",
-      "tagline": "Jordan’s official government e-procurement portal, where public tenders are won",
-      "market_position": "The national government e-procurement system (launched 2018), run by the Government Tenders Directorate and General Supplies Department. E-tendering adoption reached ~100%, so for any contractor chasing Jordanian public-sector work, registering and bidding here is effectively mandatory infrastructure, the Jordanian analogue to Saudi Etimad.",
+      "tagline": "Jordan's government e-procurement portal for public tenders, run by GPD and GTD",
+      "market_position": "JONEPS (Jordan Online E-Procurement System) is the government portal where public buyers post tender invitations and suppliers register and submit electronic bids, covering works, supplies, services and more. Its footer credits the Government Procurement Department (GPD) and the Government Tenders Department (GTD); GTD runs central works tenders such as water, wastewater, road and building projects. It is a bidding portal, not a lead service.",
       "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "The official channel for all Jordanian government tenders",
-        "Bilingual (Arabic/English), JOD-native",
-        "~100% e-tendering adoption: comprehensive public pipeline",
-        "Free registration to bid"
+        "Official government portal for public tender invitations",
+        "Arabic and English interface",
+        "Covers works tenders published by the Government Tenders Department",
+        "Annual procurement plans published on the portal"
       ],
       "cons": [
-        "Government-portal UX, not a slick lead feed",
-        "Public-sector only (no private projects)",
-        "Requires registration/qualification to bid",
-        "No notification/intelligence layer of its own"
+        "Public-sector tenders only",
+        "Registration and Sanad activation needed before bidding electronically",
+        "Some tenders charge for tender documents",
+        "Government-portal interface with no alert service described"
       ],
-      "typical_pricing": "Government platform: free to register and bid.",
+      "typical_pricing": "No registration fee stated on the portal; tender documents can carry a price, paid electronically through JONEPS.",
       "is_cross_market": false,
       "cross_market_link": null,
-      "jo_specific_note": "The single channel for government construction tenders in Jordan. You must be JoFotara-registered and JCCA-classified to participate, so it ties directly to the compliance and certification entries here."
+      "jo_specific_note": "The Government Tenders Department says all Jordanian construction contractors and technical service providers must activate the Sanad service with its e-procurement section to submit bids electronically on JONEPS. GTD also handles contractor classification, so check your classification and Sanad access before a tender closes."
     },
     {
       "slug": "jordantenders",
       "name": "JordanTenders",
       "category": "lead-gen",
       "vendor_url": "https://www.jordantenders.com/",
-      "tagline": "Subscription tender-intelligence aggregator covering Jordan (incl. construction)",
-      "market_position": "A commercial subscription tender-aggregation service that consolidates Jordanian government, PSU and private tenders into a searchable, filterable feed with alerts and Excel export. \"Construction & Real Estate\" is a primary category. A convenience/intelligence layer over sources like JONEPS, though it is not Jordan-rooted.",
-      "tier": "A",
-      "reputation_flag": "Foreign aggregator (Global Tenders Services, India) reselling tender data. Verify freshness/coverage against the free official JONEPS portal before subscribing.",
+      "tagline": "Paid Jordanian tender alerts and contract-award data from Global Tenders Services",
+      "market_position": "JordanTenders.com is a paid tender-information service that says it is part of Global Tenders Services Pvt. Ltd. (GTS), a global procurement facilitator. It offers searchable Jordanian tenders from government departments, local authorities and public and private entities, with a Construction and Real Estate category, daily email alerts and, on higher plans, contract-award data. It is an alert and search layer, not the official bidding portal.",
+      "tier": "S",
+      "reputation_flag": null,
       "pros": [
-        "Aggregates government + private + NGO tenders in one feed",
-        "Construction/Real Estate category + filters",
-        "Alerts + Excel export on paid tiers",
-        "Free trial available"
+        "Published annual prices, from $295 USD",
+        "Daily email alerts and unlimited keyword search",
+        "Construction and Real Estate sector category",
+        "Free sample tenders by email"
       ],
       "cons": [
-        "Not Jordan-based; data is resold/aggregated",
-        "Subscription pricing not transparent",
-        "Overlaps with free JONEPS for public tenders",
-        "Quality hinges on aggregation freshness"
+        "Government tender invitations are also posted on the official JONEPS portal",
+        "Contract awards not included in Basic",
+        "Priced in USD",
+        "No operator address published on the site"
       ],
-      "typical_pricing": "Paid subscription (tiers not public); free trial.",
+      "typical_pricing": "Basic $295 USD, Premium $395 USD, Platinum $495 USD, each for 12 months (1, 3 and 5 accounts); contract awards from Premium, dedicated account manager on Platinum.",
       "is_cross_market": true,
       "cross_market_link": null,
-      "jo_specific_note": "Useful if you want construction tenders pushed to you (alerts, filters, export) rather than checking JONEPS manually, but for public tenders it largely overlaps the free official portal, so weigh the subscription against going direct."
+      "jo_specific_note": "JordanTenders emails daily Jordanian tender alerts, including construction and real estate. Public tender invitations are also posted on the official JONEPS portal, so weigh the $295-$495 yearly fee against checking JONEPS yourself; the extra value is alerts, search, private-sector tenders and, from Premium, contract awards."
     },
     {
       "slug": "jofico",
       "name": "JOFICO (Jordan French Insurance)",
       "category": "insurance",
       "vendor_url": "https://jofico.jo/",
-      "tagline": "Established Jordanian-French insurer with a full engineering line",
-      "market_position": "Founded 1976 with a French insurance-group partnership; a mid-to-upper-tier multi-line insurer, ASE-listed, well-regarded for corporate and engineering lines.",
+      "tagline": "Jordanian multi-line insurer founded in 1976, with a nine-policy engineering line",
+      "market_position": "Jordan French Insurance Company (JOFICO) says it was founded in 1976 in cooperation with Compagnie Financière du Groupe Victoire. It is listed on the Amman Stock Exchange (JOFR) and sells motor, health, travel, home, fire, liability, marine, engineering, aviation and credit insurance. Saraya News reported in February 2026 that JOFICO signed a memorandum of understanding to study a possible merger with Gulf Insurance Group; no outcome had been announced on JOFICO's site by September 2026.",
       "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "Contractors All Risks + engineering named explicitly on its own site",
-        "Operating since 1976; French technical heritage",
-        "ASE-listed and transparent",
-        "Local Jordanian company"
+        "Engineering page lists Contractors All Risks and Construction Plant and Machinery",
+        "Also lists Erection All Risks and Decennial Liability policies",
+        "Operating since 1976",
+        "Listed on the Amman Stock Exchange (JOFR)"
       ],
       "cons": [
-        "Engineering page is Arabic-only",
-        "No online quote",
-        "Mid-size balance sheet vs the market leaders",
-        "English depth thinner"
+        "Website in Arabic only",
+        "No prices published; cover is quoted",
+        "Possible merger with Gulf Insurance Group under study",
+        "No online quote form found on the engineering page"
       ],
-      "typical_pricing": "Quote-only via broker/agent.",
+      "typical_pricing": "Quote-based; no public prices. Contact JOFICO by phone or through an agent or broker.",
       "is_cross_market": false,
       "cross_market_link": null,
-      "jo_specific_note": "Its own product page explicitly lists Contractors All Risks (مخاطر المقاولين الشامل), Plant & Machinery, Machinery Breakdown and Erection All Risks, the strongest first-party verification of CAR cover of any Jordanian insurer we found."
-    },
-    {
-      "slug": "arabia-insurance-jordan",
-      "name": "Arabia Insurance – Jordan (AICJ)",
-      "category": "insurance",
-      "vendor_url": "https://aicj.jo/en/",
-      "tagline": "Full engineering-line insurer with English product pages",
-      "market_position": "Incorporated 1975, Amman-HQ, ASE-listed. An established multi-line Jordanian insurer with a clearly documented engineering line.",
-      "tier": "A",
-      "reputation_flag": null,
-      "pros": [
-        "Full CAR + EAR + Plant & Machinery on an English page (rare in JO)",
-        "Operating since 1975",
-        "ASE-listed",
-        "Broad engineering sub-lines"
-      ],
-      "cons": [
-        "No online quote",
-        "No decennial/latent-defect product",
-        "Professional indemnity not confirmed on the engineering page",
-        "Brand confusable with the regional Arabia Insurance"
-      ],
-      "typical_pricing": "Quote-only via broker/agent.",
-      "is_cross_market": false,
-      "cross_market_link": null,
-      "jo_specific_note": "Its English engineering page explicitly lists Contractor’s All Risks, Erection All Risks, Plant & Machinery, Machinery Breakdown and more. Useful when you want the cover spelled out in English before talking to a broker."
+      "jo_specific_note": "JOFICO's Arabic engineering page lists Contractors All Risks, Construction Plant and Machinery, Machinery Breakdown, Erection All Risks, Electronic Equipment and Decennial Liability policies, among others. Check the status of its reported merger talks with Gulf Insurance Group before a long-term placement."
     },
     {
       "slug": "gig-jordan",
-      "name": "gig – Jordan (Arab Orient)",
+      "name": "gig Jordan (Arab Orient)",
       "category": "insurance",
       "vendor_url": "https://www.gig.com.jo/",
-      "tagline": "Market-leading, regionally-backed multi-line insurer",
-      "market_position": "Founded 1996 as Arab Orient; joined Gulf Insurance Group (a top-3 MENA insurer) in 2013. Among the largest insurers in Jordan by premium and AM Best-rated, a true market leader with deep reinsurance capacity for large infrastructure.",
-      "tier": "S",
+      "tagline": "Jordanian arm of Kuwait-based Gulf Insurance Group, majority-owned by Fairfax, with an English engineering line",
+      "market_position": "GIG Jordan says it was founded in 1996 as Arab Orient Insurance Company and joined Kuwait-based Gulf Insurance Group (GIG) in 2009. Canada's Fairfax Financial Holdings became GIG's largest shareholder in 2023 and later raised its stake to 97%, according to GIG Jordan. It is listed on the Amman Stock Exchange (GIGJ) and says AM Best rates it A-.",
+      "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "Market leader by premium",
-        "GIG group backing = deep capacity",
-        "AM Best-rated",
-        "Full engineering sub-lines + e-services portal"
+        "English engineering page lists Contractors' All Risks and Plant and Machinery",
+        "Online quote-request form for each engineering policy",
+        "Also sells professional indemnity and employers liability",
+        "Part of Gulf Insurance Group; AM Best A- rating, per GIG Jordan"
       ],
       "cons": [
-        "No fetchable static CAR page (JS-rendered site)",
-        "No online quote",
-        "Engineering buried under \"Business Insurance\"",
-        "Corporate cover needs a broker/branch"
+        "No prices published; cover is quoted",
+        "No erection all risks or decennial policy listed on the engineering page",
+        "Quote request is a form, not an instant online price"
       ],
-      "typical_pricing": "Quote-only via broker/branch.",
+      "typical_pricing": "Quote-based; no public prices. GIG Jordan takes quote requests through an online form on its site.",
       "is_cross_market": true,
       "cross_market_link": null,
-      "jo_specific_note": "The GIG backing means the capacity to underwrite large Jordanian infrastructure risk; its engineering line covers CAR, plant & machinery, machinery breakdown and more, placed through a broker rather than online."
+      "jo_specific_note": "GIG Jordan's engineering page lists Contractors' All Risks, Contractors' Plant and Machinery, Machinery Breakdown, Electronic Equipment, Deterioration of Stock and Boiler cover, and its general lines include professional indemnity and employers liability. Each engineering policy has an online quote-request form."
     },
     {
       "slug": "jordan-insurance-company",
       "name": "Jordan Insurance Company (JIC)",
       "category": "insurance",
       "vendor_url": "https://www.jicjo.com/",
-      "tagline": "Jordan’s oldest insurer (since 1951)",
-      "market_position": "Founded 1951, the oldest insurer in Jordan and among the oldest in the Middle East. ASE-listed, operating in Jordan, the UAE and Kuwait; a long-standing top-tier multi-line insurer and reinsurer.",
-      "tier": "S",
+      "tagline": "Amman insurer established in 1951, rated B (Fair) by AM Best",
+      "market_position": "Jordan Insurance Company (JIC) is an Amman-based life and non-life insurer, established in March 1951 according to its Amman Stock Exchange profile, and listed on the ASE (JOIN). AM Best says it consistently ranks in the top three in Jordan by gross written premium, with revenue concentrated in motor and medical business. In July 2026 AM Best affirmed its financial strength rating at B (Fair) with a stable outlook.",
+      "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "Oldest and most established Jordanian insurer",
-        "CAR + Erection All Risks + Plant & Machinery",
-        "Also offers professional indemnity",
-        "Regional reach; ASE-listed"
+        "Operating since 1951",
+        "AM Best says it ranks in the top three in Jordan by premium",
+        "Life and non-life lines under one insurer",
+        "Listed on the Amman Stock Exchange (JOIN)"
       ],
       "cons": [
-        "No fetchable static product page (JS-rendered)",
-        "No online quote",
-        "No decennial cover evidenced",
-        "Thin English engineering detail"
+        "AM Best financial strength rating B (Fair)",
+        "AM Best notes non-life technical losses, particularly in motor",
+        "Website product pages could not be read; confirm engineering cover directly",
+        "No prices published; cover is quoted"
       ],
-      "typical_pricing": "Quote-only via broker/agent.",
+      "typical_pricing": "Quote-based; no public prices. Contact JIC or a broker for a quote.",
       "is_cross_market": false,
       "cross_market_link": null,
-      "jo_specific_note": "Heritage plus a JO/UAE/KW footprint and a documented engineering line that includes professional indemnity. A solid established option, though you’ll confirm the specifics through an agent."
+      "jo_specific_note": "AM Best describes JIC as holding an established position in Jordan's insurance market, but JIC's website did not show its engineering products when checked, so ask JIC or your broker directly whether it writes Contractors All Risks and plant cover for your project."
     },
     {
       "slug": "meico-jordan",
       "name": "Middle East Insurance Company (MEICO)",
       "category": "insurance",
       "vendor_url": "https://meico.com.jo/en/",
-      "tagline": "Multi-line insurer strong in engineering & marine",
-      "market_position": "Founded 1962, Amman-HQ, ASE-listed. Reported #1 among Jordanian insurers in shareholders’ equity, marine and engineering. Financially strong and corporate-focused.",
+      "tagline": "Jordanian multi-line insurer since 1962 with a full engineering line; stopped writing motor in 2026",
+      "market_position": "Middle East Insurance Company (MEICO) says it has operated in Jordan since 1962 and is a public shareholding company listed on the Amman Stock Exchange (MEIN). It sells property, engineering, liability, marine, aviation, financial lines, group medical and life cover. MEICO discontinued its motor insurance license effective 1 January 2026 with Central Bank of Jordan approval, and says existing motor policies are serviced until they expire.",
       "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "Strong engineering reputation (claimed market leader)",
-        "Operating since 1962",
-        "High shareholders’ equity",
-        "Clean live English site"
+        "Engineering page lists Contractors' All Risks and Erection All Risks",
+        "Contractor's Plant and Machinery and Machinery Breakdown cover",
+        "Online quote form for engineering policies",
+        "Operating since 1962; listed on the Amman Stock Exchange (MEIN)"
       ],
       "cons": [
-        "Engineering sub-products not enumerated on a loadable page",
-        "No online quote",
-        "Recently exited its Motor line (Jan 2026)",
-        "CAR detail needs direct contact"
+        "No longer sells motor insurance, so site vehicles need another insurer",
+        "No prices published; cover is quoted",
+        "No decennial liability policy listed on the engineering page"
       ],
-      "typical_pricing": "Quote-only via broker/agent.",
+      "typical_pricing": "Quote-based; no public prices. MEICO takes quote requests through a form on its website or its contact page.",
       "is_cross_market": false,
       "cross_market_link": null,
-      "jo_specific_note": "Structures its cover into Property, General Accident, Engineering (\"risks that arise from contracting and engineering business\"), Marine and more. Strong on engineering by reputation, though you’ll get the CAR specifics by contacting them."
+      "jo_specific_note": "MEICO's English engineering page lists Contractors' All Risks, Erection All Risks, Contractor's Plant and Machinery, Machinery Breakdown with loss of profit, Electronic Equipment and Deterioration of Stock cover. It gave up its motor license from 1 January 2026, so insure company vehicles elsewhere."
     },
     {
       "slug": "zenhr",
       "name": "ZenHR",
       "category": "payroll",
       "vendor_url": "https://www.zenhr.com/en/hr-software-jordan",
-      "tagline": "Modern Jordan-origin HR & payroll SaaS: SSC + income tax on-page",
-      "market_position": "An Amman-HQ HR/payroll SaaS (founded 2016, venture-backed), the most visible Jordan-origin HRMS, serving KSA, UAE, Jordan, Egypt, Iraq and Kuwait. The default modern pick for a Jordanian firm.",
-      "tier": "S",
+      "tagline": "Bilingual cloud HR and payroll with Jordan SSC and end-of-service calculations",
+      "market_position": "ZenHR is a cloud HR and payroll platform for the Middle East and North Africa; it says it is localized for 11 MENA countries and serves clients from five offices in the region, including a Jordan phone line. Its Jordan page says the product is '100% compliant with Jordan Labor Law & SSC' and names customers in Amman, Irbid and Zarqa. Beyond payroll it covers attendance, employee self-service, performance and applicant tracking.",
+      "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "Native Jordan SSC + income-tax + end-of-service, stated on its own page",
-        "Modern bilingual cloud UI + employee self-service",
-        "Integrates SAP/Dynamics/QuickBooks/Odoo/Xero",
-        "Well-funded with an Amman office"
+        "Its Jordan page states SSC contribution and Labor Law calculations",
+        "Automates Jordanian end-of-service pay by contract type, duration and reason",
+        "Bilingual Arabic and English web and mobile apps",
+        "Payroll exports to QuickBooks, Xero, SAP, NetSuite, Dynamics 365 and Odoo",
+        "Bank salary transfer files in bank-required formats"
       ],
       "cons": [
-        "Quote-only pricing",
-        "Jordan is one of several markets it serves",
-        "A full HRMS may exceed a small contractor’s payroll-only need",
-        "SMB-to-enterprise positioning can cost more than a basic local tool"
+        "No public prices; quotes depend on headcount, countries and bundle",
+        "Demo and quote first; no free trial mentioned on the pricing page",
+        "A full HR suite may be more than a small contractor needs for payroll only"
       ],
-      "typical_pricing": "Quote-only.",
+      "typical_pricing": "Quote-based; no public prices. ZenHR says pricing is quoted per organization based on headcount, countries of operation and bundle (Value or Advanced).",
       "is_cross_market": true,
       "cross_market_link": null,
-      "jo_specific_note": "The only payroll vendor that states Jordan SSC + income-tax handling verbatim on its own Jordan page (\"100% compliant with Jordan Labor Law & SSC\"), including end-of-service. The cleanest fit if you want confidence on local compliance."
+      "jo_specific_note": "ZenHR's Jordan page says it is '100% compliant with Jordan Labor Law & SSC' and automates salary, deduction and SSC contribution calculations as well as Jordanian end-of-service benefits. It lists a Jordan phone number alongside its Saudi and UAE lines, and payroll can be run in Arabic or English."
     },
     {
       "slug": "menaitech-menapay",
       "name": "MenaITech / MenaPAY",
       "category": "payroll",
       "vendor_url": "https://menaitech.com/en/menapay/",
-      "tagline": "Amman-HQ enterprise HR/payroll incumbent (\"hire to retire\")",
-      "market_position": "An Amman-HQ HR/payroll house (founded 2003), the region’s legacy enterprise HCM incumbent, with ~2,000 clients across MENA and strong banking-sector adoption. Suite spans MenaHR, MenaPAY, MenaME and MenaTA.",
-      "tier": "S",
+      "tagline": "Regional HR and payroll suite with an Amman office",
+      "market_position": "Menaitech sells HR, payroll, attendance and self-service software across the Middle East, with its main office in Riyadh and further offices in Amman, Jeddah, New Cairo, Dubai and Kuwait City. It says it has worked in HR technology for over 20 years and has 'nearly 2,000 trusted clients'. MenaPAY is its payroll product, alongside CURIO for HR and talent management, MenaTA for time and attendance and MenaME for employee self-service.",
+      "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "Deep, long-established Jordan vendor with a bank-grade track record",
-        "Full HCM suite under one roof",
-        "Handles social-security deductions via country profiles",
-        "Local Amman presence + certified training"
+        "Amman office and a dedicated Jordan country site",
+        "Full HR suite: payroll, HR, attendance, self-service and analytics",
+        "End-of-service, provident fund and retroactive pay calculations",
+        "Vendor-run MenaPAY certification courses for payroll staff",
+        "ISO/IEC 27001:2022 certified, per Menaitech"
       ],
       "cons": [
-        "Enterprise-oriented, heavier/pricier than a small contractor needs",
-        "Jordan SSC is via \"country profiles\"; confirm granularity in a demo",
-        "Demo-only pricing",
-        "Older-incumbent UX vs newer SaaS"
+        "No public prices; demo request only",
+        "The MenaPAY page names Saudi social insurance rules, not Jordan's SSC",
+        "Main office is in Riyadh, not Amman",
+        "A full HR suite may be more than a small contractor needs"
       ],
-      "typical_pricing": "Quote-only.",
+      "typical_pricing": "Quote-based; no public prices (demo request).",
       "is_cross_market": true,
       "cross_market_link": null,
-      "jo_specific_note": "Amman-headquartered with a bank-grade Jordan track record; MenaPAY handles social-security deductions through localized country profiles. Confirm the exact Jordan SSC configuration in a demo, as its public page foregrounds Saudi WPS."
+      "jo_specific_note": "Menaitech has an Amman office and runs its Jordan site at menaitech.com/en/. The MenaPAY page describes 'pre-loaded country compliance profiles' but spells out only Saudi social insurance and wage protection, so ask in the demo how it handles Jordan SSC contributions and income tax."
     },
     {
       "slug": "yomly",
       "name": "Yomly (formerly EmiratesHR)",
       "category": "payroll",
       "vendor_url": "https://www.yomly.com/hr-payroll-software-in-jordan/",
-      "tagline": "Enterprise HR & payroll with a dedicated Jordan offering",
-      "market_position": "A Dubai-HQ enterprise HR/payroll platform (founded 2018, rebranded from EmiratesHR) with ~200+ enterprise clients across 50+ countries and a dedicated Jordan offering.",
+      "tagline": "Dubai-based cloud HR and payroll with a Jordan payroll page",
+      "market_position": "Yomly is a cloud HR and payroll platform run from Dubai Media City by SevenHR Information Technology Consultants LLC; it says it was established in 2018 as EmiratesHR. Yomly says it has '250+ Happy Clients' in more than 50 countries across MENA and Southeast Asia. Its Jordan page says the payroll system is 'designed to align with local labor laws and tax regulations in Jordan'.",
       "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "States Jordan labor/tax alignment + automated deductions",
-        "Enterprise-grade, mobile, multi-currency",
-        "Large multi-country footprint + audit/compliance reporting",
-        "Established lineage"
+        "Jordan page states alignment with Jordan labor and tax rules and automated deductions",
+        "Multi-country, multi-currency payroll",
+        "Gratuity and end-of-service tracking and bank salary files",
+        "Arabic and English interfaces with Android and iOS apps"
       ],
       "cons": [
-        "UAE-HQ: Jordan is a secondary market",
-        "Does not name \"SSC\" explicitly; confirm in a demo",
-        "Enterprise-scale likely over-budget for a small trades firm",
-        "Quote-only"
+        "Based in the UAE with no Jordan office listed",
+        "The Jordan page does not mention SSC or social security",
+        "No public prices; demo first",
+        "Aimed at larger employers, which may be more than a small trades firm needs"
       ],
-      "typical_pricing": "Quote-only.",
+      "typical_pricing": "Quote-based; no public prices (book a demo).",
       "is_cross_market": true,
       "cross_market_link": null,
-      "jo_specific_note": "Its Jordan page says it is \"designed to align with local labor laws and tax regulations in Jordan\" and automates deductions, but it does not name the SSC by acronym, so verify the Jordan social-security handling before committing."
+      "jo_specific_note": "Yomly's Jordan page says its payroll is 'designed to align with local labor laws and tax regulations in Jordan' and automates salary calculations, deductions and benefits, but it does not mention Social Security Corporation contributions, so confirm the SSC handling in a demo."
     },
     {
       "slug": "gts-one-erp",
       "name": "GTS One ERP",
       "category": "payroll",
       "vendor_url": "https://gtsys.com.jo/",
-      "tagline": "Amman-based ERP-integrated HR & payroll",
-      "market_position": "An Amman-based ERP/HR-payroll vendor serving Jordan and the GCC, targeting firms that want an Arabic HRMS/payroll tied into a broader ERP, with biometric attendance and bank direct-deposit.",
+      "tagline": "Amman-based Arabic HRMS and payroll within a wider ERP suite",
+      "market_position": "GTS Software sells GTS One, a suite of ERP, HR and payroll, CRM, point of sale, fixed asset and property management software, from an office in Jabal Al Hussein, Amman, with further offices in Ramallah and Hebron. Its HRMS is described as an Arabic HR system available in the cloud or as SaaS, covering payroll, attendance, leave, loans, self-service and recruitment. Payroll posts ledger entries to the general ledger, which suits firms that also want the ERP.",
       "tier": "A",
-      "reputation_flag": "Jordan SSC / income-tax automation is not stated on its site. A genuine Amman vendor, but confirm SSC compliance directly before relying on it as a compliant payroll.",
+      "reputation_flag": null,
       "pros": [
-        "Genuinely Amman-based with a Jordan payroll product",
-        "ERP-integrated (useful if you want the ERP too)",
-        "Biometric/attendance + auto-timesheets",
-        "Multi-bank direct deposit + trial runs"
+        "Local vendor with an office in Amman",
+        "Payroll links to biometric attendance devices and auto-generated timesheets",
+        "Bank direct deposit to multiple bank accounts, plus WPS support",
+        "Multiple trial payroll runs before the final run",
+        "Payroll ledger posting to the general ledger in its ERP"
       ],
       "cons": [
-        "No explicit SSC/income-tax statement on its site",
-        "Smaller/less-known; limited reputation signals",
-        "No public pricing",
-        "Dated web presence"
+        "Its site does not mention Jordan SSC or income tax handling",
+        "No public prices",
+        "Its own pages give conflicting company history and customer figures"
       ],
-      "typical_pricing": "Quote-only.",
+      "typical_pricing": "Quote-based; no public prices.",
       "is_cross_market": true,
       "cross_market_link": null,
-      "jo_specific_note": "A real Amman-based, ERP-integrated payroll option, but its site lists generic features without naming Jordan SSC or income-tax automation, so treat the local-compliance claim as \"verify directly\"."
+      "jo_specific_note": "GTS is based in Amman and describes an Arabic HR and payroll system, but its payroll pages list generic features (trial runs, bank deposit, WPS) without naming Social Security Corporation contributions or Jordan income tax, so confirm both before relying on it for Jordan payroll."
     },
     {
       "slug": "jordan-construction-contractors-association",
       "name": "Jordan Construction Contractors Association (JCCA)",
       "category": "certification",
       "vendor_url": "https://www.jcca.org.jo/",
-      "tagline": "The mandatory body + classification that gate public-works bidding",
-      "market_position": "The statutory contractor union (founded 1972) under Construction Contractors Law No. 13/1987. Working membership is a legal prerequisite to be licensed and classified; classification itself is administered by the Government Tenders Directorate (MPWH) under Govt Works Regulation No. 71/1986, and the certificate gates public-tender bidding.",
+      "tagline": "Statutory contractors' association: registration is required to practise contracting",
+      "market_position": "The Jordanian Construction Contractors Association is the statutory body for contractors under Construction Contractors Law No. 13 of 1987, as amended by Law No. 4 of 2014, with its main office in Amman. The law requires a contractor to be licensed, register with the Ministry of Industry and Trade and with the Association, and be classified within a temporary licence period of up to one year. The Government Tenders Department says it manages contractor licensing and classification and publishes the Contractor Classification Instructions of 2020.",
       "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "The single mandatory credential that unlocks public-works bidding",
-        "Grade signals verified financial/technical capacity",
-        "Clear statutory basis (Law 13/1987 + Reg 71/1986)",
-        "Ties contractors into the recognized professional body"
+        "Registration is the legal basis for practising contracting in Jordan",
+        "Registered, classified contractors can sign works contracts with ministries, municipalities and companies",
+        "Clear statute, published in English by the Association",
+        "Classification forms and instructions are published by the Government Tenders Department"
       ],
       "cons": [
-        "Multi-agency sequence (JCCA + CCD + license + classification), slow",
-        "Certificate expires every 3 years; renewal needs updated audited financials",
-        "Required grade is value-gated: bid below your grade and you’re excluded",
-        "Fees/thresholds not transparently published online"
+        "Several steps: licence, trade registration, Association registration and classification",
+        "Active membership is limited to Jordanian contractors; foreign contractors register as non-active members",
+        "Practising without registration carries fines of JD 1,000-5,000, doubled for a repeat",
+        "No public fee schedule was found"
       ],
-      "typical_pricing": "Membership dues + per-grade classification fees (see official schedule); certificate valid 3 years.",
+      "typical_pricing": "Registration fee plus annual subscription, set under the Association's rules; no public fee schedule was found.",
       "is_cross_market": false,
       "cross_market_link": null,
-      "jo_specific_note": "The load-bearing credential: you must be a JCCA working member and hold a classification certificate to bid public tenders, and the required grade scales with project value (grades run from a 6th entry tier up to \"first grade\"). Renewal every 3 years needs updated financials, owned-equipment evidence and a qualifying resident engineer."
+      "jo_specific_note": "Under Article 8 of the Construction Contractors Law, no one may practise contracting in Jordan without prior registration with the Association and payment of its fees, and no ministry, municipality, public shareholding company or other entity may sign a works contract with a contractor who is not registered and classified with the Association; such a contract is void. A new contractor's licence is temporary, for up to one year, during which the contractor must be classified."
     },
     {
       "slug": "jordan-engineers-association",
       "name": "Jordan Engineers Association (JEA)",
       "category": "certification",
       "vendor_url": "https://www.jea.org.jo/",
-      "tagline": "Mandatory registration to practice engineering or run an engineering office",
-      "market_position": "The statutory body (society 1948, licensed 1949; 143,000+ members) governing the engineering profession: admission, registration, certificates and standards. Projects depend on JEA-registered engineers to design and sign off work.",
+      "tagline": "Statutory engineers' association: registration is required to practise engineering",
+      "market_position": "The Jordan Engineers Association regulates the engineering profession in Jordan under the Engineers Association Law (No. 15 of 1972, as amended). It began as a society of engineers in 1948 and its first law was issued in 1972; its website shows 192,275 registered engineers and 1,332 registered engineering consulting offices and companies. It also runs health insurance, retirement and social solidarity funds and a training academy for members.",
       "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "Legally required to practice engineering or run an engineering office",
-        "A registered engineer satisfies the contractor-classification \"resident engineer\" condition",
-        "Issues a recognized certificate + ID to stamp work",
-        "Enforceable statute"
+        "Registration is the legal basis for practising engineering in Jordan",
+        "Registered engineers and engineering offices can sign and certify drawings",
+        "Published registration conditions and fees",
+        "Member health insurance, retirement and social solidarity funds"
       ],
       "cons": [
-        "Strictly mandatory, no informal path",
-        "Foreign / 3-year-degree holders face extra academic conditions",
-        "Annual dues must stay current",
-        "Fees/procedures not published as a clear schedule"
+        "Practising without registration can bring fines of 200 to 1,000 dinars, doubled for a repeat",
+        "Separate registration conditions and documents for foreign engineers and graduates of foreign universities",
+        "Annual subscription must be kept paid",
+        "Foreign engineering offices must work with a Jordanian engineering office"
       ],
-      "typical_pricing": "Admission fee + annual dues (see official schedule); office registration separate.",
+      "typical_pricing": "Graduates of Jordanian universities pay JD 136 on application (JD 75 application review fee and JD 61 annual subscription fees), per JEA's registration conditions; other applicant groups have separate conditions, and engineering office registration is separate.",
       "is_cross_market": false,
       "cross_market_link": null,
-      "jo_specific_note": "Per its governing law, no one may practice engineering in Jordan without JEA registration, and because a JEA-registered engineer also satisfies the JCCA classification \"resident engineer\" requirement, it is a direct dependency of being able to bid public works."
+      "jo_specific_note": "Under the Engineers Association Law, engineering studies and designs may be prepared only by engineering offices and companies registered with the Association, and building work may be carried out only under drawings signed by registered engineers and certified by the Association. Government bodies, municipalities and other institutions must check that an engineer or engineering office is registered before hiring or contracting with them."
     },
     {
       "slug": "companies-control-department",
       "name": "Companies Control Department (CCD)",
       "category": "certification",
       "vendor_url": "https://www.ccd.gov.jo/",
-      "tagline": "Jordan’s company registrar: the first legal step to operate",
-      "market_position": "The national company registrar under the Ministry of Industry, Trade & Supply, administering Companies Law No. 22/1997: registering LLCs, PSCs, partnerships and foreign branches, plus amendments, filings and beneficial-ownership/AML.",
+      "tagline": "Jordan's company registrar under the Ministry of Industry, Trade and Supply",
+      "market_position": "The Companies Control Department registers and supervises companies in Jordan under Companies Law No. 22 of 1997 and its amendments, and sits under the Ministry of Industry, Trade and Supply. It registers limited liability, partnership, shareholding, exempt, civil, non-profit and foreign companies, handles amendments, financial statements and liquidations, and keeps a beneficial owner registry. Registration is filed online through its e-services portal.",
       "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "Establishes the legal entity: prerequisite for licensing, tax + JCCA classification",
-        "Statutory clarity (Law 22/1997)",
-        "Online e-services",
-        "Public company-lookup for counterparty checks"
+        "Online registration; an LLC can be registered within 24 hours when no prior approvals are needed",
+        "An LLC can be formed by a single partner",
+        "Published service cards with fees and required documents",
+        "Online company search by name, partner or registration number"
       ],
       "cons": [
-        "E-services are Arabic-first",
-        "Only one link in a longer chain",
-        "Ongoing obligations (annual filings, beneficial-ownership/AML)",
-        "Fees vary by capital/type"
+        "Some business purposes need prior approvals, for example from the Ministry of Public Works or Ministry of Interior",
+        "Ongoing duties such as filing financial statements and beneficial owner records",
+        "Service guides are mostly in Arabic",
+        "Fees rise with capital"
       ],
-      "typical_pricing": "Fees scale by company type + capital (see official schedule); e-services online.",
+      "typical_pricing": "LLC registration, per CCD's service card: a registration fee based on capital (minimum JD 250), JD 10 document deposit, JD 15 publication fee and JD 10 power-of-attorney deposit, plus stamp duty on capital; other company types have their own service cards.",
       "is_cross_market": false,
       "cross_market_link": null,
-      "jo_specific_note": "Company registration here is the foundational step and an explicit prerequisite in the classification chain (registration precedes JCCA classification), the start of the CCD → ISTD → license → JCCA → classification → SSC sequence."
+      "jo_specific_note": "Under the Construction Contractors Law, a contractor first obtains a contracting licence, then registers the company with the Ministry of Industry and Trade (through this department) and with the Jordanian Construction Contractors Association, and must then be classified. CCD's LLC service card lists Ministry of Public Works approval among the possible prior approvals."
     },
     {
       "slug": "income-and-sales-tax-department",
       "name": "Income and Sales Tax Department (ISTD)",
       "category": "certification",
       "vendor_url": "https://www.istd.gov.jo/",
-      "tagline": "Jordan’s tax authority: income tax, 16% GST, and JoFotara e-invoicing",
-      "market_position": "Formed 2004 under the Ministry of Finance; it runs income/sales-tax registration, returns and payment, and the JoFotara national e-invoicing system (~97% of income returns are e-filed; payments via eFawateercom).",
+      "tagline": "Jordan's tax authority: income tax, 16% general sales tax and the JoFotara e-invoicing system",
+      "market_position": "The Income and Sales Tax Department, under the Ministry of Finance, administers Income Tax Law No. 34 of 2014 and General Sales Tax Law No. 6 of 1994; it was formed by merging the income tax and sales tax departments on 16 August 2004. It handles tax registration, returns and payments, which can be paid through eFawateercom, and says it offered 70 e-services in 2025. It also runs JoFotara, the national electronic invoicing system.",
       "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "Establishes the tax file: required to operate, invoice and bid",
-        "Mature e-government (online registration/filing/payment)",
-        "JoFotara standardizes invoices",
-        "Clear statutory mandate"
+        "Registration, returns and payments can be handled online",
+        "JoFotara registration and invoicing through a web portal or the Fawatiri app",
+        "Tax bills can be paid through eFawateercom",
+        "Published laws, rate schedules and FAQs"
       ],
       "cons": [
-        "GST registration is threshold-triggered, easy to miss as revenue grows",
-        "JoFotara e-invoicing is now mandatory (a systems requirement)",
-        "Periodic filing deadlines + late-payment exposure",
-        "Portal is Arabic-first"
+        "General sales tax registration becomes mandatory once sales pass thresholds that differ for goods and services",
+        "Invoices must be issued through JoFotara or software linked to it, which may need new invoicing software",
+        "Late sales tax payment is fined four per thousand of the tax due for each week of delay, per ISTD's sales tax FAQ",
+        "Most guidance documents are in Arabic"
       ],
-      "typical_pricing": "No registration fee; the obligation is the tax itself (GST 16%; e-filing via portal/eFawateercom).",
+      "typical_pricing": "Government authority: general sales tax is 16% under Law No. 6 of 1994, with reduced, zero and exempt rates for listed goods and services; income tax at the statutory rates. No registration fee is shown on the ISTD pages read.",
       "is_cross_market": false,
       "cross_market_link": null,
-      "jo_specific_note": "The same authority that runs the mandatory JoFotara clearance platform (live since 1 April 2025). Your tax file feeds everything, and any invoice not cleared through JoFotara is invalid for VAT input deduction, so the software and the tax registration are now inseparable."
+      "jo_specific_note": "ISTD's invoicing regulation, as amended in 2023, recognises electronic invoices issued through the national JoFotara system or through software linked to it, and Jordanian press reported that use of the system became mandatory from the start of April 2025. Contractors issuing invoices should confirm that their accounting software is linked to JoFotara."
     },
     {
       "slug": "social-security-corporation",
       "name": "Social Security Corporation (SSC)",
       "category": "certification",
       "vendor_url": "https://www.ssc.gov.jo/",
-      "tagline": "Mandatory social insurance: register from the first employee",
-      "market_position": "The statutory social-insurance institution (old-age pensions, work-injury, disability, death, maternity and unemployment), funded by employer + employee contributions. The mandatory employment-compliance backbone.",
+      "tagline": "Jordan's state social insurance fund for employers and workers",
+      "market_position": "The Social Security Corporation runs Jordan's statutory social insurance scheme under the Social Security Law, funded by employer and employee contributions on insured wages. Its insurances include old-age, disability and death pensions and work-injury cover. An amended Social Security Law, centred on retirement rules, passed the House of Representatives in June 2026, according to Petra.",
       "tier": "A",
       "reputation_flag": null,
       "pros": [
-        "Mandatory employer compliance to legally employ workers",
-        "Broad coverage protects the workforce",
-        "Fully electronic enrollment",
-        "Clear statutory contribution framework"
+        "Statutory social insurance for workers, funded jointly by employer and employee",
+        "Covers old-age, disability and death pensions and work injuries",
+        "Contributions are a fixed share of insured wages, so payroll costs are predictable"
       ],
       "cons": [
-        "Mandatory from the first employee, no small-employer exemption",
-        "~21.75% wage-based cost is material and recurring",
-        "Late payments accrue 1%/month interest",
-        "Foreign workers must subscribe before a work permit is issued"
+        "The employer share of 14.25% of insured wages is a recurring cost on top of pay",
+        "Retirement rules were being amended in 2026; check the current rules with the SSC",
+        "Rates here come from PwC's tax summary; confirm current rates and registration steps with the SSC"
       ],
-      "typical_pricing": "No registration fee; ongoing ~21.75% of insured wage (employer 14.25% + employee 7.5%); 1%/month late interest.",
+      "typical_pricing": "No fee schedule read. Contributions, per PwC's Jordan tax summary (reviewed July 2026): 14.25% of insured wages paid by the employer and 7.5% by the employee.",
       "is_cross_market": false,
       "cross_market_link": null,
-      "jo_specific_note": "Participation is mandatory for every establishment with at least one worker, at ~21.75% of the insured wage paid within 15 days of month-end, which is exactly why Jordanian payroll tools (ZenHR, MenaPAY) lead with SSC handling."
+      "jo_specific_note": "Employers in Jordan pay social security contributions for their workers to the Social Security Corporation: 14.25% from the employer and 7.5% from the employee, according to PwC's tax summary. Payroll software sold in Jordan should calculate these contributions; ask the vendor to confirm how it handles SSC."
     }
   ]
 }

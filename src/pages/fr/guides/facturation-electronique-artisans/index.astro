@@ -5,7 +5,7 @@ import Layout from '../../../../layouts/Layout.astro';
 // most registrations are "sous réserve de raccordement" until interop tests
 // finish; the DGFiP list on impots.gouv.fr is the source of truth.
 const pdps = [
-  { name: 'Pennylane', status: 'Registered PDP (plateforme agréée)', fit: 'French cloud accounting + invoicing for SMEs; the leading native PDP', note: 'Free plan; from ~€14/mo' },
+  { name: 'Pennylane', status: 'Registered PDP (plateforme agréée)', fit: 'French cloud accounting + invoicing for SMEs', note: 'Free plan; from ~€14/mo' },
   { name: 'Indy', status: 'Registered PDP (immatriculée 2026)', fit: 'French accounting aimed at independents / micro-entrepreneurs', note: 'Free tier; Plus ~€9/mo HT' },
   { name: 'Tiime', status: 'Registered PDP (immatriculée 2025)', fit: 'French accounting + invoicing for small firms', note: 'Free tier; from ~€17.99/mo HT' },
   { name: 'Sellsy', status: 'Registered PDP, "sous réserve", emission-only', fit: 'French CRM + invoicing for SMEs', note: 'From ~€29/mo per user' },
@@ -13,16 +13,16 @@ const pdps = [
 ];
 
 const faqs = [
-  { q: 'When does French e-invoicing become mandatory for a small artisan?', a: 'Two dates matter. From 1 September 2026, ALL VAT-registered businesses, including auto-entrepreneurs, must be able to RECEIVE structured e-invoices. From 1 September 2027, SMEs and micro-entreprises (most artisans) must also ISSUE them through an approved platform. Large and mid-size firms must issue from 1 September 2026. A non-penalised pilot phase has been running since February 2026.' },
-  { q: 'What is a PDP, and do I really need one?', a: 'A PDP (Plateforme de Dématérialisation Partenaire), now officially a "plateforme agréée," is a DGFiP-approved platform that issues, transmits and receives e-invoices and reports the data to the tax authority. Yes, you need one: the originally-planned free public portal (PPF) for issuing invoices was scrapped in the loi de finances 2025. The PPF now only runs the national directory (annuaire) that routes invoices between platforms; every business must use an approved platform, either directly or through their accounting software.' },
-  { q: 'My devis-facture software isn\'t a PDP: is that a problem?', a: 'Not necessarily. Many French tools that aren\'t themselves PDPs connect to one: for example EBP routes through Cegid\'s approved platform, and Henrri relies on Pennylane\'s. What matters is that your invoicing software can send and receive compliant e-invoices via an approved platform by your deadline. Ask your vendor directly: "Are you a registered PDP, or which PDP do you route through, and from when?"' },
+  { q: 'When does French e-invoicing become mandatory for a small artisan?', a: 'Two dates matter. Since 1 September 2026, ALL VAT-registered businesses, including auto-entrepreneurs, must be able to RECEIVE structured e-invoices. By 1 September 2027, SMEs and micro-entreprises (most artisans) must also ISSUE them through an approved platform. Large and mid-size firms have had to issue since 1 September 2026. DGFiP says there are no sanctions in 2026 while businesses adapt.' },
+  { q: 'What is a PDP, and do I really need one?', a: 'A PDP (Plateforme de Dématérialisation Partenaire), now officially a "plateforme agréée," is a DGFiP-approved platform that issues, transmits and receives e-invoices and reports the data to the tax authority. Yes, you need one: the State runs the national directory (annuaire) that routes invoices between platforms, but no free public invoicing platform, so every business must use an approved platform, either directly or through its accounting software. DGFiP says more than ten of the 150 approved platforms offered free or no-extra-cost services on 1 August 2026.' },
+  { q: 'My devis-facture software isn\'t a PDP: is that a problem?', a: 'Not necessarily. Many French tools work through a partner approved platform: for example EBP integrates the approved platform Shine, Obat works through Iopole, and Tolteck receives e-invoices through its Pennylane integration. What matters is that your invoicing software can send and receive compliant e-invoices via an approved platform by your deadline. Ask your vendor directly: "Are you a registered PDP, or which PDP do you route through, and from when?"' },
   { q: 'What format will e-invoices use?', a: 'France\'s reform uses structured electronic formats: commonly Factur-X (a hybrid PDF carrying embedded XML, popular with smaller businesses because it stays human-readable), as well as UBL and CII. Your platform handles the format; you generally keep working in your normal invoicing screen. Alongside invoicing, an "e-reporting" obligation transmits certain transaction and payment data (e.g. B2C sales) to the DGFiP on the same calendar.' },
-  { q: 'I\'m a micro-entrepreneur under the VAT franchise: am I still concerned?', a: 'Yes. The mandate applies to VAT-registered businesses broadly, and micro-entrepreneurs are in scope on the same calendar: reception from September 2026, issuance from September 2027. If you invoice under the franchise en base, your invoices still carry the "TVA non applicable, art. 293 B du CGI" mention, and they\'ll need to flow through an approved platform like everyone else\'s.' },
-  { q: 'What should I do now?', a: 'Confirm your invoicing software\'s plan: will it be (or connect to) a registered PDP, on what timeline, at what cost? If you\'re still on paper, Word or Excel invoices, choose a compliant tool well before September 2026 so you can receive e-invoices, and be ready to issue via a PDP by September 2027. Leave time to test: this affects every invoice you send.' },
+  { q: 'I\'m a micro-entrepreneur under the VAT franchise: am I still concerned?', a: 'Yes. The mandate applies to VAT-registered businesses broadly, and micro-entrepreneurs are in scope on the same calendar: reception since September 2026, issuance by September 2027. If you invoice under the franchise en base, your invoices still carry the "TVA non applicable, art. 293 B du CGI" mention, and they\'ll need to flow through an approved platform like everyone else\'s.' },
+  { q: 'What should I do now?', a: 'Confirm your invoicing software\'s plan: will it be (or connect to) a registered PDP, on what timeline, at what cost? If you\'re still on paper, Word or Excel invoices, choose a compliant tool now: receiving e-invoices has been compulsory since September 2026, and you must be ready to issue via an approved platform by September 2027. Leave time to test: this affects every invoice you send.' },
 ];
 
 const pageTitle = 'Facturation Électronique (E-Invoicing) for French Artisans (2026 Guide)';
-const pageDescription = 'France\'s e-invoicing mandate explained for tradespeople: reception for all businesses from 1 September 2026, issuance for SMEs and micro-entreprises from 1 September 2027, the PDP (plateforme agréée) model that replaced the scrapped free portal, and which software is a registered platform. Independent, verified June 2026.';
+const pageDescription = 'France\'s e-invoicing mandate explained for tradespeople: reception for all businesses since 1 September 2026, issuance for SMEs and micro-entreprises by 1 September 2027, the PDP (plateforme agréée) model with no free public invoicing platform run by the State, and which software is a registered platform. Independent, verified June 2026.';
 
 const guideUrl = new URL('/fr/guides/facturation-electronique-artisans/', Astro.site).toString();
 const frUrl = new URL('/fr/fr/guides/facturation-electronique-artisans/', Astro.site).toString();
@@ -59,7 +59,7 @@ const faqSchema = {
         Facturation Électronique (E-Invoicing) for French Artisans
       </h1>
       <p class="mt-3 text-lg text-slate-600 leading-relaxed">
-        What France's phased e-invoicing mandate means for tradespeople: the timeline, the PDP (plateforme agréée) model that replaced the scrapped free portal, and which software is a registered platform.
+        What France's phased e-invoicing mandate means for tradespeople: the timeline, the PDP (plateforme agréée) model (the State runs no free public invoicing platform), and which software is a registered platform.
       </p>
       <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published &amp; verified June 2026 · Not tax advice: confirm your situation with the DGFiP (impots.gouv.fr) or your expert-comptable.</p>
     </header>
@@ -67,7 +67,7 @@ const faqSchema = {
     <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
       <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ The short version</h2>
       <p class="text-slate-800 leading-relaxed">
-        From <strong>1 September 2026</strong>, every French VAT-registered business, including auto-entrepreneurs, must be able to <strong>receive</strong> structured e-invoices. From <strong>1 September 2027</strong>, SMEs and micro-entreprises (most artisans) must also <strong>issue</strong> them. Invoices flow through a government-approved platform (a <strong>PDP / plateforme agréée</strong>) because the planned free public portal was scrapped. The practical task: make sure your invoicing software is (or connects to) a registered PDP before your deadline.
+        Since <strong>1 September 2026</strong>, every French VAT-registered business, including auto-entrepreneurs, must be able to <strong>receive</strong> structured e-invoices. By <strong>1 September 2027</strong>, SMEs and micro-entreprises (most artisans) must also <strong>issue</strong> them. Invoices flow through a platform registered by the State (a <strong>PDP / plateforme agréée</strong>); the State runs no free public invoicing platform, though DGFiP says some approved platforms offer free services. The practical task: make sure your invoicing software is (or connects to) a registered PDP before your deadline.
       </p>
     </section>
 
@@ -82,13 +82,13 @@ const faqSchema = {
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">PDP</div>
-        <div class="mt-1 text-xs text-slate-600">approved platform (the free portal was scrapped)</div>
+        <div class="mt-1 text-xs text-slate-600">approved platform (no free State platform)</div>
       </div>
     </section>
 
     <section class="mb-10 prose prose-slate max-w-none">
       <h2>The phased timeline</h2>
-      <p>The calendar was set by Article 91 of the loi de finances pour 2024, after the original 2024 start was postponed. A non-penalised pilot has run since February 2026.</p>
+      <p>The calendar was set by Article 91 of the loi de finances pour 2024, after the original 2024 start was postponed. DGFiP says there are no sanctions in 2026 while businesses adapt.</p>
       <ul>
         <li><strong>1 September 2026, reception:</strong> ALL VAT-registered businesses must be able to <em>receive</em> e-invoices (every size, including auto-entrepreneurs).</li>
         <li><strong>1 September 2026, issuance (large &amp; mid-size):</strong> grandes entreprises and ETI must <em>issue</em> e-invoices and do e-reporting.</li>
@@ -97,7 +97,7 @@ const faqSchema = {
 
       <h2>What the reform actually requires</h2>
       <ul>
-        <li><strong>Use an approved platform (PDP / plateforme agréée).</strong> Invoices are issued, transmitted and received through a DGFiP-approved platform: there is no free public alternative for issuing.</li>
+        <li><strong>Use an approved platform (PDP / plateforme agréée).</strong> Invoices are issued, transmitted and received through a DGFiP-approved platform: the State runs no free public platform for issuing, though DGFiP says more than ten of the 150 approved platforms offered free or no-extra-cost services on 1 August 2026.</li>
         <li><strong>Structured formats.</strong> E-invoices use structured formats: commonly <strong>Factur-X</strong> (a hybrid PDF with embedded XML that stays human-readable), plus UBL and CII. Your platform handles the format.</li>
         <li><strong>The annuaire routes invoices.</strong> The refocused public portal (PPF) runs the national directory that routes invoices between platforms and forwards data to the DGFiP.</li>
         <li><strong>E-reporting.</strong> A parallel obligation transmits certain transaction/payment data (e.g. B2C sales, foreign counterparties) to the DGFiP on the same calendar.</li>
@@ -136,7 +136,7 @@ const faqSchema = {
           ))}
         </tbody>
       </table>
-      <p class="mt-3 text-xs text-slate-500">Source: vendor announcements + DGFiP list, verified June 2026. EBP routes through Cegid's approved platform and Henrri through Pennylane's; they are not themselves PDPs. Confirm current status on the official impots.gouv.fr list.</p>
+      <p class="mt-3 text-xs text-slate-500">Source: vendor announcements + DGFiP list, verified June 2026. EBP integrates the approved platform Shine, Obat works through Iopole and Batappli through Cecurity (all three on the DGFiP list), and Axonaut is itself on the list. Confirm current status on the official impots.gouv.fr list.</p>
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
@@ -149,11 +149,11 @@ const faqSchema = {
     <section class="mb-10 prose prose-slate max-w-none">
       <h2>Readiness checklist for artisans</h2>
       <ol>
-        <li><strong>Confirm you can receive e-invoices by 1 September 2026</strong>: this applies to every business, including micro-entrepreneurs.</li>
+        <li><strong>Confirm you can receive e-invoices now</strong>: this has applied to every business, including micro-entrepreneurs, since 1 September 2026.</li>
         <li><strong>Ask your invoicing software the PDP question:</strong> are you a registered platform, or which one do you route through, and from when?</li>
         <li><strong>If you're still on paper / Word / Excel,</strong> choose a compliant tool well ahead of the deadlines.</li>
         <li><strong>Check multi-rate TVA handling</strong> (20 / 10 / 5.5%) and, if you're under the franchise, the art. 293 B mention.</li>
-        <li><strong>Plan to issue via a PDP by 1 September 2027</strong> (SMEs / micro), earlier if you're a large or mid-size firm.</li>
+        <li><strong>Plan to issue via a PDP by 1 September 2027</strong> (SMEs / micro); large and mid-size firms have had to issue since 1 September 2026.</li>
         <li><strong>Test before the deadline</strong>: this touches every invoice you send and receive.</li>
       </ol>
     </section>

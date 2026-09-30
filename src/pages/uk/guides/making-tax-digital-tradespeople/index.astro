@@ -11,10 +11,10 @@ const softwareCount = vendors.filter(v => v.category === 'software').length;
 // MTD-relevant rows, driven by our own UK vendor data. Statuses phrased
 // honestly: HMRC's recognised-software list is the source of truth.
 const mtdRelevant = [
-  { slug: 'xero-payroll-uk', name: 'Xero (UK)', status: 'Xero accounting is an HMRC-recognised MTD family', fit: 'The default cloud accounting + payroll stack for small UK trades firms', note: 'Verify the exact product/plan on HMRC’s recognised list' },
-  { slug: 'sage-payroll-uk', name: 'Sage (UK)', status: 'Sage accounting is an HMRC-recognised MTD family', fit: 'Established UK accounting + payroll, strong accountant ecosystem', note: 'Verify the exact product/plan on HMRC’s recognised list' },
-  { slug: 'powered-now', name: 'Powered Now', status: 'UK trades app marketing MTD support', fit: 'Built for UK sole-trader tradespeople: quotes, invoicing, VAT', note: 'Confirm MTD for Income Tax (quarterly updates) support in the demo' },
-  { slug: 'brightpay', name: 'BrightPay', status: 'Payroll + CIS, not an MTD Income Tax filer', fit: 'Payroll and CIS handling for trades employers', note: 'Pairs with MTD-recognised accounting; doesn’t replace it' },
+  { slug: 'xero-payroll-uk', name: 'Xero (UK)', status: 'Xero accounting is an HMRC-recognised MTD family', fit: 'Payroll built into Xero’s UK accounting plans, with RTI filing after each pay run and an optional £5 a month CIS add-on', note: 'Verify the exact product/plan on HMRC’s recognised list' },
+  { slug: 'sage-payroll-uk', name: 'Sage (UK)', status: 'Sage accounting is an HMRC-recognised MTD family', fit: 'Cloud payroll from Sage for up to 150 employees; Sage also sells the desktop Sage 50 Payroll', note: 'Verify the exact product/plan on HMRC’s recognised list' },
+  { slug: 'powered-now', name: 'Powered Now', status: 'UK trades app marketing MTD support', fit: 'Job management for UK trades, from sole traders up to full teams: quotes, invoices, certificates, CIS and Domestic Reverse Charge', note: 'Confirm MTD for Income Tax (quarterly updates) support in the demo' },
+  { slug: 'brightpay', name: 'BrightPay', status: 'Payroll software, not an MTD Income Tax filer', fit: 'Payroll on HMRC’s recognised list for trades employers; CIS returns need the separate BrightCIS product', note: 'Pairs with MTD-recognised accounting; doesn’t replace it' },
 ];
 
 const fsmTools = [
@@ -28,7 +28,7 @@ const fsmTools = [
 const faqs = [
   { q: 'Does Making Tax Digital for Income Tax apply to tradespeople?', a: 'Yes, squarely. MTD for Income Tax applies to sole traders and landlords registered for Self Assessment, and most UK tradespeople operate as sole traders. Since 6 April 2026 it is mandatory if your qualifying income for the 2024-25 tax year was over £50,000. The threshold drops to £30,000 from April 2027 (based on 2025-26 income) and £20,000 from April 2028 (based on 2026-27 income), pulling in progressively smaller one-person trades businesses.' },
   { q: 'What actually changes versus the old Self Assessment?', a: 'Three things. You must keep digital records of business income and expenses (paper books and ad-hoc spreadsheets no longer cut it on their own); you must send HMRC quarterly updates through MTD-compatible software instead of one annual return; and you complete a final declaration through software at year end. The once-a-year January scramble becomes a quarterly rhythm that your software largely automates, if your records are digital all year.' },
-  { q: 'Is my job-management app (Commusoft, Tradify, ServiceM8…) MTD software?', a: 'Generally no: job-management platforms run your quotes, jobs and invoicing, but the MTD quarterly updates are filed by recognised accounting software. The standard UK trades setup is a job-management tool feeding an MTD-recognised accounting package (most commonly Xero, Sage or QuickBooks) through a native integration. Check HMRC’s official "find compatible software" list before assuming anything files for you.' },
+  { q: 'Is my job-management app (Commusoft, Tradify, ServiceM8…) MTD software?', a: 'Generally no: job-management platforms run your quotes, jobs and invoicing, but the MTD quarterly updates are filed by recognised accounting software. The working pattern is a job-management tool feeding an MTD-recognised accounting package through an integration; the job apps in our UK directory name integrations with packages such as Xero, QuickBooks, Sage or FreeAgent, depending on the app. Check HMRC’s official "find compatible software" list before assuming anything files for you.' },
   { q: 'I’m a CIS subcontractor: does MTD change my deductions?', a: 'CIS itself keeps working as it does today: contractors still deduct and report under the Construction Industry Scheme. What changes is how you report your income to HMRC: if your qualifying income is over the threshold, your CIS income and expenses must be kept digitally and reported through quarterly MTD updates, with CIS deductions reflected in your records. Good software handles both together; ask the vendor to show CIS within their MTD workflow.' },
   { q: 'What is "qualifying income"?', a: 'Broadly, your combined gross self-employment and property income before expenses, not your profit. A sole-trader electrician turning over £55,000 with £20,000 of materials and van costs is over the £50,000 threshold even though profit is far lower. Check your 2024-25 Self Assessment figures against the threshold, and remember the bar drops to £30,000 in April 2027.' },
   { q: 'What happens if I ignore it?', a: 'HMRC applies a points-based penalty system for late quarterly submissions: each missed deadline earns a point, and points convert into financial penalties. Beyond penalties, non-compliance compounds: four missed quarterlies leave you reconstructing a year of records anyway. Starting with compliant software early is materially cheaper than catching up.' },
@@ -154,13 +154,13 @@ const faqSchema = {
           ))}
         </tbody>
       </table>
-      <p class="mt-3 text-xs text-slate-500">Source: WrenchStack UK directory + GOV.UK, June 2026. Always cross-check the exact product and plan on HMRC’s recognised-software list.</p>
+      <p class="mt-3 text-xs text-slate-500">Source: WrenchStack UK directory (vendor facts as of September 2026) + GOV.UK (June 2026). Always cross-check the exact product and plan on HMRC’s recognised-software list.</p>
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-2 text-lg font-bold text-slate-900">Your job-management app is NOT your MTD software</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        {fsmTools.map((v, i) => (<><a href={`/uk/${v.slug}/`} class="font-medium text-orange-700 hover:underline">{v.name}</a>{i < fsmTools.length - 1 ? ', ' : ''}</>))} are job-management platforms: quotes, scheduling, job tracking, customer invoicing. They’re excellent at that, and none of it is MTD filing. The standard UK trades stack is one of these <strong>paired with MTD-recognised accounting</strong> (most commonly Xero, Sage or QuickBooks) via a native integration, so invoices raised in the job app land in the digital records that file your quarterly updates. Don’t reject a great job platform for "missing MTD", and don’t assume it covers you.
+        {fsmTools.map((v, i) => (<><a href={`/uk/${v.slug}/`} class="font-medium text-orange-700 hover:underline">{v.name}</a>{i < fsmTools.length - 1 ? ', ' : ''}</>))} are job-management platforms: quotes, scheduling, job tracking, customer invoicing. None of that is MTD filing. The working pattern is one of these <strong>paired with MTD-recognised accounting</strong> through an integration (each names integrations with packages such as Xero, QuickBooks, Sage or FreeAgent), so invoices raised in the job app land in the digital records that file your quarterly updates. Don’t reject a job platform for "missing MTD", and don’t assume it covers you.
       </p>
     </section>
 
@@ -189,12 +189,12 @@ const faqSchema = {
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
-      <strong class="text-slate-700">Sources &amp; verification:</strong> Thresholds and dates verified June 2026 from GOV.UK (<a href="https://www.gov.uk/guidance/check-if-youre-eligible-for-making-tax-digital-for-income-tax" rel="nofollow noopener" target="_blank">eligibility guidance</a>: £50,000 from 6 April 2026 · £30,000 from 6 April 2027 · £20,000 from 6 April 2028) · HMRC recognised-software list · vendor positions from each vendor’s published documentation, June 2026. General information, not tax advice; confirm your position with HMRC or your accountant. Spotted an error? <a href="/contact/" class="underline">Tell us</a> and we’ll correct it.
+      <strong class="text-slate-700">Sources &amp; verification:</strong> Thresholds and dates verified June 2026 from GOV.UK (<a href="https://www.gov.uk/guidance/check-if-youre-eligible-for-making-tax-digital-for-income-tax" rel="nofollow noopener" target="_blank">eligibility guidance</a>: £50,000 from 6 April 2026 · £30,000 from 6 April 2027 · £20,000 from 6 April 2028) · HMRC recognised-software list · vendor positions from the WrenchStack UK directory, checked against vendor pages in September 2026. General information, not tax advice; confirm your position with HMRC or your accountant. Spotted an error? <a href="/contact/" class="underline">Tell us</a> and we’ll correct it.
     </section>
 
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Compare the UK options side by side</h2>
-      <p class="mt-2 text-slate-300 leading-relaxed">Independent reviews of {vendors.length} UK trades vendors: software, payroll, insurance and lead-gen, with no pay-to-play.</p>
+      <p class="mt-2 text-slate-300 leading-relaxed">Independent reviews of {vendors.length} UK trades vendors: software, payroll, insurance, lead-gen and certification, with no pay-to-play.</p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/uk/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">🇬🇧 UK directory →</a>
         <a href="/uk/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Compare vendors</a>

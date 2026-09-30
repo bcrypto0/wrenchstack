@@ -14,17 +14,17 @@ interface ZaVendor {
 const vendors = (zaData as { vendors: ZaVendor[] }).vendors;
 const categories = ['software', 'lead-gen', 'payroll', 'insurance', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'software': { label: 'Job management & trades software', description: 'SA-native platforms (ServCraft, with solar & electrical editions; Field Service Cloud; Odyssey) alongside globals with real ZAR pricing (Tradify, ServiceM8) and offline-capable options (Eworks Manager), plus free solar design tooling (OpenSolar) for the installer boom.' },
-  'lead-gen': { label: 'Lead generation', description: 'Kandua (SA’s biggest home-services marketplace, Santam-owned), pay-per-lead platforms with published pricing (ProCompare, R40-R150/lead), high-volume Snupit, and free-listing Uptasker.' },
-  'payroll': { label: 'Payroll', description: 'SARS-compliance-first payroll: SimplePay (auto EMP201/UIF, e@syFile), PaySpace by Deel (EMP501/COIDA depth) and Sage Payroll SA (one-click submissions, published entry pricing).' },
-  'insurance': { label: 'Business insurance', description: 'Contractor-grade cover: Santam (Contractors’ All Risks, defective-workmanship liability), direct SME options (MiWay, Old Mutual iWYZE, which explicitly targets tradespeople), King Price and Hollard via brokers.' },
-  'certification': { label: 'Licensing & compliance', description: 'What’s legally required vs voluntary: DoEL electrical registration + CoCs, SAQCC Gas, PIRB plumbing CoCs, CIDB grading (the gate to public work), NHBRC for home builders, SARS (VAT/EMP201), and the COIDA Letter of Good Standing sites demand.' },
+  'software': { label: 'Job management & trades software', description: `Vendors with offices in South Africa and published rand prices (ServCraft in Randburg, Field Service Cloud in Pretoria, Odyssey Job Cards in Bloemfontein); Tradify and ServiceM8, which list rand prices on their South African sites; Eworks Manager, with a Gqeberha office, an offline mobile app and prices shown in GBP by default; and OpenSolar, solar design and proposal software that OpenSolar says is free for solar professionals.` },
+  'lead-gen': { label: 'Lead generation', description: `Kandua, a home services marketplace owned by insurer Santam, where pros choose which job requests to quote on (fees for pros not published); ProCompare, which charges per lead from a published price list and sends each request to up to six pros; and Snupit, with a free pro profile and credits spent to unlock the leads you choose (credit prices not published).` },
+  'payroll': { label: 'Payroll', description: `SimplePay generates the EMP201 for submission on eFiling, submits UIF declarations and exports the bi-annual tax certificate file for eFiling or e@syFile; PaySpace by Deel, now sold as Deel Local Payroll, handles PAYE, UIF, SDL and COIDA and produces IRP5, EMP201, EMP501 and employment-equity reports (no public prices); Sage Payroll (SA) publishes a starting price of R1,080 a year including VAT for 1-2 employees.` },
+  'insurance': { label: 'Business insurance', description: `All quoted per business, with no published premiums: Santam (Contractors' All Risks, plant and equipment cover and defective workmanship liability, mainly through intermediaries); MiWay and Old Mutual iWYZE, sold direct (iWYZE names plumbers among the businesses it targets); and King Price and Hollard, sold through brokers, with contractors' all risks (King Price) and construction and engineering cover (Hollard).` },
+  'certification': { label: 'Licensing & compliance', description: `Registration and compliance regimes: DoEL electrical contractor registration (only registered persons may issue the electrical CoC), SAQCC Gas registration of authorised gas practitioners, PIRB plumber registration and plumbing CoCs, cidb grading (registration needed for public sector contracts awarded by tender or quotation), NHBRC registration for home builders, SARS (VAT, EMP201 and EMP501), and COIDA registration and the Letter of Good Standing.` },
 };
 const vendorsByCategory: Record<string, ZaVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
 const pageTitle = 'South Africa Trades Software & Services | WrenchStack';
-const pageDescription = `Independent directory of ${vendors.length} South African trades vendors: job-management software (incl. the solar-installer boom), lead-gen marketplaces, SARS-compliant payroll, contractor insurance, plus the PIRB, DoEL, SAQCC Gas, CIDB, NHBRC and COIDA compliance every SA trades business navigates.`;
+const pageDescription = `Independent directory of ${vendors.length} South African listings for trades businesses: job management software, lead generation platforms, payroll, business insurance, and the PIRB, DoEL electrical, SAQCC Gas, cidb, NHBRC, SARS and COIDA registration and compliance regimes.`;
 const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'South Africa', url: '/za/' } ];
 ---
 <Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} alternateUrls={EN_MARKET_HREFLANG}>
@@ -36,33 +36,33 @@ const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'South Africa', url: '
       </div>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">South Africa Trades Software & Services Directory</h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} South Africa-relevant vendors: job management (with SA-native options like ServCraft and real ZAR pricing from the globals), lead-gen marketplaces, SARS-compliant payroll and contractor insurance, all built around the local realities: Certificates of Compliance, CIDB grading, EMP201 deadlines, and the solar-installation industry the load-shedding era created.
+        Independent reviews of {vendors.length} South Africa-relevant listings: job management software (including South African options such as ServCraft, and global products with rand prices on their South African sites), lead generation platforms, payroll and business insurance, plus the registration and compliance regimes South African trades work under: certificates of compliance, cidb grading, NHBRC registration, SARS returns such as the EMP201, and the COIDA Letter of Good Standing.
       </p>
     </header>
 
     <section class="mb-10 grid gap-3 grid-cols-2 sm:grid-cols-4">
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">{vendors.length}</div>
-        <div class="mt-1 text-xs text-slate-600">vendors reviewed</div>
+        <div class="mt-1 text-xs text-slate-600">listings reviewed</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-        <div class="text-2xl font-bold text-slate-900">+215%</div>
-        <div class="mt-1 text-xs text-slate-600">rooftop solar growth since 2022 (~7.5 GW)</div>
+        <div class="text-2xl font-bold text-slate-900">7 days</div>
+        <div class="mt-1 text-xs text-slate-600">to pay the monthly EMP201 after month-end</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">15%</div>
-        <div class="mt-1 text-xs text-slate-600">VAT (registration above R2.3m turnover)</div>
+        <div class="mt-1 text-xs text-slate-600">VAT (compulsory registration from R2.3m of taxable supplies a year)</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">1-9</div>
-        <div class="mt-1 text-xs text-slate-600">CIDB grades gate public work</div>
+        <div class="mt-1 text-xs text-slate-600">cidb grades cap public sector contract values</div>
       </div>
     </section>
 
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See SA vendors compared side by side: a clear verdict, pros and cons, SA-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See SA vendors compared side by side: pros and cons, SA-specific notes, pricing, and which of the two publishes its prices.</p>
       </div>
       <a href="/za/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare SA vendors →</a>
     </section>
@@ -70,7 +70,7 @@ const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'South Africa', url: '
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What's different about running a trades business in South Africa</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Three structural differences shape SA vendor selection. First, <strong>Certificates of Compliance run the trades</strong>: electrical CoCs (DoEL-registered persons only; required on every installation and property transfer), gas CoCs (SAQCC Gas practitioners; unregistered work voids home insurance) and PIRB plumbing CoCs for geysers and solar water heaters; software that numbers and tracks CoCs per job is a genuinely local need. Second, <strong>compliance documents gate the work</strong>: a CIDB grade (1-9) caps the public tenders you can bid, NHBRC registration is criminal-sanction-mandatory for home builders, and an annually renewed COIDA Letter of Good Standing is a de-facto site-access pass. Third, <strong>SARS sets the rhythm</strong>: 15% VAT (compulsory only above R2.3m turnover from April 2026), monthly EMP201 within 7 days of month-end, and a Peppol-based e-invoicing mandate phasing in around 2026-2028. And the market's big structural story: the load-shedding era built a <strong>solar-installation industry</strong> (rooftop PV up ~215% since 2022 to ~7.5 GW, 18,000+ jobs) that now buys trades software like any other vertical.
+        Three things shape vendor selection for SA trades businesses. First, <strong>certificates are tied to registration</strong>: only a registered person under the Electrical Installation Regulations may issue an electrical Certificate of Compliance, and a change of ownership may not be allowed if the CoC is more than two years old; a gas installation needs a certificate of conformity from an authorised person registered with SAQCC Gas, issued in its app since paper certificates stopped being valid on 1 April 2023; and under PIRB's rules only a PIRB Licensed Plumber may issue a plumbing CoC, which is needed for most work above R1,500 and, regardless of cost, for electric, solar and heat pump water heating, with each CoC logged within five days. Job software that records each certificate number against the job helps with all three. Second, <strong>registrations gate the work</strong>: contractors must be cidb-registered to carry out public sector contracts awarded by tender or quotation, and each grade (1-9) sets the contract value you can take on, from R500,000 at Grade 1 to no limit at Grade 9; the NHBRC says building homes without registering with it is an offence; and under the Construction Regulations, 2014, clients and principal contractors must confirm that contractors are registered and in good standing for COIDA (with the Compensation Fund or a licensed compensation insurer) before work starts. Third, <strong>SARS sets the calendar</strong>: 15% VAT, with compulsory registration from R2.3 million of taxable supplies a year from 1 April 2026; the monthly EMP201, paid within seven days after month-end; interim and annual EMP501 reconciliations; and e-invoicing, which is not mandatory yet (SARS's August 2026 consultation paper proposes a phased start from 2030, beginning with large taxpayers).
       </p>
     </section>
 

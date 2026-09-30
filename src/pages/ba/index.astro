@@ -13,16 +13,16 @@ interface BaVendor {
 const vendors = (baData as { vendors: BaVendor[] }).vendors;
 const categories = ['software', 'insurance', 'lead-gen', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'insurance': { label: 'Contractor insurance', description: "Contractor & engineering cover from Bahraini insurers: market leader BKIC (GIG), the consolidating Solidarity, and GIG Takaful. Quote-based." },
-  'lead-gen': { label: 'Lead generation & project intelligence', description: "Construction lead-gen is thin in Bahrain: ProTenders' pan-GCC project intelligence is the one genuine option; local home-services apps are residential, not construction-contractor." },
-  'software': { label: 'Construction & trades software', description: 'From global PM/BIM platforms (Oracle Primavera, Aconex, Autodesk, Bentley) served via Manama resellers, to regional ERPs with a real Bahrain entity (Focus Softnet, PACT), the genuine Bahrain-native option (Diamond/Catalyst), and public-priced accounting (Zoho, Tally) for 10% NBR VAT.' },
-  'certification': { label: 'Licensing & compliance', description: 'The Bahrain bodies every contractor deals with: NBR (10% VAT), CRPEP engineering licensing, Ministry of Works contractor classification, the Tender Board, LMRA & Bahrainisation, Benayat building permits, and Civil Defence fire safety.' },
+  'insurance': { label: 'Contractor insurance', description: `Contractor and engineering cover from Bahrain insurers, all quote-based: BKIC, which trades as GIG Bahrain; its Takaful subsidiary GIG Takaful (Takaful International), which lists Contractors All Risks cover; and Solidarity Bahrain, which acquired Bahrain National Insurance (bni) in 2025. BKIC and Takaful International are one group, so quotes from both are not independent.` },
+  'lead-gen': { label: 'Lead generation & project intelligence', description: `ProTenders, operated by NuServ Ltd, sells construction project intelligence and eTendering across the six GCC states, including Bahrain. A free company profile lists your firm and lets it bid on private tenders; project leads and participant details are in custom-priced paid plans.` },
+  'software': { label: 'Construction & trades software', description: `Global project, scheduling and design platforms: Oracle Primavera P6, Oracle Aconex, Autodesk Forma (formerly Autodesk Construction Cloud, part of Forma since March 2026), Bentley Systems, Procore and PlanRadar. ERPs with a Manama office or partner: Focus Softnet, PACT ERP (through Aramis Enterprise Solutions WLL) and Diamond Software. Accounting software: Zoho Books, Wafeq and TallyPrime. Bentley, PlanRadar, Zoho Books and Wafeq publish prices on their own sites; TallyPrime's Gulf-currency prices could not be read, and the rest are quote-based.` },
+  'certification': { label: 'Licensing & compliance', description: 'The Bahrain bodies and systems behind VAT, licensing, permits and government work: the NBR (VAT at 10%), CRPEP (licences for engineers and engineering offices), Ministry of Works contractor prequalification, the Tender Board (eTendering for the government purchases it oversees), LMRA and Bahrainisation (expatriate work permits), Benayat (building permits) and Civil Defence (fire safety approvals).' },
 };
 const vendorsByCategory: Record<string, BaVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
 const pageTitle = 'Bahrain Construction & Trades Software | WrenchStack';
-const pageDescription = `Independent directory of ${vendors.length} construction & trades vendors for Bahrain: global PM/BIM platforms, Bahrain-native and regional ERPs, and 10%-VAT accounting, plus the NBR, CRPEP, contractor-classification, Tender Board, Benayat and Bahrainisation compliance you must handle.`;
+const pageDescription = `Independent directory of ${vendors.length} construction and trades listings for Bahrain: project and design platforms, ERPs with a Manama office or partner, accounting software, contractor insurers and project leads, plus the NBR, CRPEP, Ministry of Works, Tender Board, LMRA, Benayat and Civil Defence rules for VAT, licensing, permits and government tenders.`;
 const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Bahrain', url: '/ba/' } ];
 ---
 <Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
@@ -34,33 +34,33 @@ const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Bahrain', url: '/ba/'
       </div>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">Bahrain Construction & Trades Software Directory</h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} Bahrain-relevant vendors: global PM/BIM platforms (Oracle Primavera, Aconex, Autodesk, Bentley) served through Manama resellers, regional and Bahrain-native ERPs (Focus Softnet, PACT, Diamond/Catalyst), and public-priced accounting (Zoho, Tally), with the local compliance context (NBR 10% VAT, CRPEP, Ministry of Works classification, Tender Board, LMRA, Benayat) that off-the-shelf software ignores.
+        Independent reviews of {vendors.length} Bahrain-relevant listings: global project, scheduling and design platforms (Oracle Primavera P6, Oracle Aconex, Autodesk Forma, Bentley Systems, Procore, PlanRadar), ERPs with a Manama office or partner (Focus Softnet, PACT ERP, Diamond Software), accounting software (Zoho Books, Wafeq, TallyPrime), contractor insurers and ProTenders project intelligence, plus the Bahrain bodies for VAT, licensing, permits and government tenders (NBR, CRPEP, Ministry of Works, Tender Board, LMRA, Benayat, Civil Defence).
       </p>
     </header>
 
     <section class="mb-10 grid gap-3 grid-cols-2 sm:grid-cols-4">
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">{vendors.length}</div>
-        <div class="mt-1 text-xs text-slate-600">vendors reviewed</div>
+        <div class="mt-1 text-xs text-slate-600">listings reviewed</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">10%</div>
-        <div class="mt-1 text-xs text-slate-600">standard VAT rate (Saudi Arabia: 15%)</div>
+        <div class="mt-1 text-xs text-slate-600">standard VAT rate since 1 January 2022</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-        <div class="text-2xl font-bold text-slate-900">~$3.3B</div>
-        <div class="mt-1 text-xs text-slate-600">construction market (2026)</div>
+        <div class="text-2xl font-bold text-slate-900">BHD 37,500</div>
+        <div class="mt-1 text-xs text-slate-600">annual taxable revenue for mandatory VAT registration (PwC)</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-        <div class="text-2xl font-bold text-slate-900">2030</div>
-        <div class="mt-1 text-xs text-slate-600">Economic Vision</div>
+        <div class="text-2xl font-bold text-slate-900">BHD 195</div>
+        <div class="mt-1 text-xs text-slate-600">LMRA work permit per expatriate a year, plus admin fee</div>
       </div>
     </section>
 
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See Bahrain vendors compared side by side: a clear verdict, pros and cons, Bahrain-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See Bahrain vendors compared side by side: pros and cons, Bahrain-specific notes and pricing, head to head.</p>
       </div>
       <a href="/ba/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare Bahrain vendors →</a>
     </section>
@@ -68,7 +68,7 @@ const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Bahrain', url: '/ba/'
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What's different about choosing software in Bahrain</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Bahrain has the GCC's smallest construction market, and that shapes the software landscape. First, <strong>most platforms are served remotely</strong>: global PM/BIM tools reach Bahrain through Manama resellers or out of Dubai, so local implementation support is the thing to verify, and the genuinely Bahrain-native options (like Diamond's Catalyst) are few but valuable. Second, <strong>VAT is 10%</strong> (raised from 5% in 2022; Saudi Arabia's rate is 15%), so accounting software must be set to Bahrain's rate rather than another GCC country's default. Third, <strong>there is no e-invoicing mandate yet</strong>, unlike Saudi Arabia, where ZATCA e-invoicing is already live, or the UAE, where the mandate starts with large businesses (revenue of AED 50m or more) on 1 January 2027, so "e-invoicing certified" isn't a buying requirement here today, though it's worth a forward look. And public-sector work is gated by <strong>Ministry of Works contractor classification</strong> plus <strong>Tender Board</strong> registration, while <strong>CRPEP</strong> licensing controls who can practise engineering and file permits through <strong>Benayat</strong>.
+        Four points to check when choosing software and planning work in Bahrain. First, <strong>who supports the product locally</strong>: no Bahrain office or reseller was confirmed for Autodesk, Bentley, Procore or PlanRadar (Procore lists a UAE site and a Dubai phone number; Bentley's nearest listed offices are in Dubai and Al Khobar), while Focus Softnet and Diamond Software have Manama offices and PACT ERP sells through a Manama partner. Second, <strong>VAT is 10%</strong> (raised from 5% on 1 January 2022), so check that your accounting tool applies Bahrain's rate: Zoho Books has a Bahrain edition with VAT reports, but Wafeq's Bahrain pages do not describe Bahrain VAT returns and Tally's site has no Bahrain VAT page, so ask to see a Bahrain VAT report in a demo. Third, <strong>an e-invoicing mandate was not yet in force</strong> as of PwC's July 2026 review; PwC notes the market expects one similar to Saudi Arabia's, and Gulf Daily News reported an e-invoicing push in July 2026, with no confirmed start date, so choose software that can adapt. Fourth, <strong>public work and permits have separate gates</strong>: the <strong>Tender Board</strong> oversees purchases above BHD 50,000 by government purchasing authorities (above BHD 100,000 for fully government-owned companies) through its eTendering system, the <strong>Ministry of Works</strong> runs its own contractor prequalification by category for its building, roads, sanitary and landscape works, and new buildings and large additions must be filed on <strong>Benayat</strong> through a <strong>CRPEP</strong>-licensed engineering office, while owners can file small additions and demolitions themselves.
       </p>
     </section>
 

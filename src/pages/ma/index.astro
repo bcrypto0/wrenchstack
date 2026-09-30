@@ -13,17 +13,17 @@ interface MaVendor {
 const vendors = (maData as { vendors: MaVendor[] }).vendors;
 const categories = ['software', 'lead-gen', 'payroll', 'insurance', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'software': { label: 'BTP software & DGI-compliant invoicing', description: 'Moroccan-native all-in-ones that also do local accounting (Gestion BTP), the imported devis-facture standards bought through local integrators (EBP, Sage Batigest, Odoo), and the new e-invoicing-ready tools racing to be “conforme DGI” (Hisab, Fawatir AI, Aube).' },
-  'lead-gen': { label: 'Lead generation & tender intelligence', description: 'Two real channels in Morocco: public-tender intelligence for the BTP marchés-publics pipeline (Datao, Aljady), and consumer artisan marketplaces (Sabab, Bricole, Allopro, Bricoul). There is no Western-style B2B contractor marketplace here; we don’t pretend otherwise.' },
-  'payroll': { label: 'Payroll (paie): CNSS / IR / AMO', description: 'The localized Sage 100 standard, the Moroccan-native OJRA with native Damancom EDI, and Humantal, built specifically for BTP crews with GPS pointage and multi-chantier rules.' },
-  'insurance': { label: 'Construction insurance: TRC & décennale', description: 'Mandatory cover under Loi 59-13 (Tous Risques Chantier + responsabilité civile décennale) from Morocco’s major insurers: Wafa, RMA, AtlantaSanad, AXA (BATISSUR) and Allianz. Broker-placed; no instant online quotes.' },
-  'certification': { label: 'Compliance & official bodies', description: 'What a Moroccan contractor must navigate: the DGI e-invoicing mandate and SIMPL portal, the Qualification & Classification passport for public tenders, CNSS registration, the ICE required on every invoice, and the Registre de Commerce.' },
+  'software': { label: 'BTP software & invoicing', description: `Construction and invoicing software sold in Morocco: Gestion BTP (web-based construction management with accounting, per the vendor), EBP Bâtiment Édition Maroc and Sage Batigest Connect (quotes and invoicing for the building trades, with accounting sold as a separate product), Odoo (Morocco accounting localization and a General Contractor package) and Oasis Techno Cloud (an Odoo Community installer with published BTP packs), the Sage and EBP reseller Ciel Informatique, and the online invoicing apps Hisab, Fawatir AI and Aube. None of those three invoicing apps claims DGI accreditation.` },
+  'lead-gen': { label: 'Lead generation & tender intelligence', description: `Two kinds of listing: public-tender monitoring services with published prices (Datao, Aljady), which cover construction works along with other sectors, and consumer directories and apps that connect clients with artisans (Sabab.ma, Bricole, Allopro, Bricoul.ma). Sabab.ma publishes no fees for professionals and Bricole is free for them; Allopro sells paid listing packs and Bricoul.ma sells plans that lift a monthly lead cap and raise ranking. None of the four describes charging per lead.` },
+  'payroll': { label: 'Payroll (paie): CNSS / IR / AMO', description: `Sage 100 Paie & RH (CNSS, CIMR, CNRA and IR declarations, per Sage), OJRA from Casablanca-based NSE (Windows software with built-in Damancom and Simpl-IR modules, per NSE) and Humantal (CNSS, AMO and IR calculations and Damancom filing, per Humantal). None of the three publishes prices or describes construction-specific features.` },
+  'insurance': { label: 'Construction insurance: TRC & décennale', description: `Tous Risques Chantier (TRC) and RC décennale from Moroccan insurers. Wafa Assurance, RMA, AtlantaSanad and Sanlam Maroc (which absorbed Allianz Maroc in July 2026) list both covers; AXA Assurance Maroc lists TR Chantier Batissur but no décennale product. Moroccan press reported in January 2025 that both covers had become mandatory. No insurer here publishes prices: ask for a quote per project.` },
+  'certification': { label: 'Compliance & official bodies', description: `The official systems in this directory: the DGI (identifiant fiscal, SIMPL online filing and the e-invoicing reported to start in phases from late 2026), the Qualification & Classification system whose classes cap the size of public works contracts a firm can bid for, the CNSS and its Damancom portal, the ICE (mandatory on official documents since July 2016) and the Registre de Commerce.` },
 };
 const vendorsByCategory: Record<string, MaVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
 const pageTitle = 'Morocco Construction & Trades Software (BTP) | WrenchStack';
-const pageDescription = `Independent directory of ${vendors.length} vendors for Moroccan building trades (BTP): devis-facture & DGI-compliant software, public-tender lead-gen, CNSS payroll, and mandatory Loi 59-13 construction insurance, plus the e-invoicing mandate, Qualification & Classification and ICE compliance every contractor must handle.`;
+const pageDescription = `Independent directory of ${vendors.length} vendors and official bodies for Moroccan building trades (BTP): construction and invoicing software, public-tender monitoring, artisan directories, payroll with CNSS declarations, and Tous Risques Chantier and RC décennale insurance, plus DGI e-invoicing, Qualification & Classification, CNSS, the ICE and the Registre de Commerce.`;
 const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Morocco', url: '/ma/' } ];
 const enUrl = new URL('/ma/', Astro.site).toString();
 const frUrl = new URL('/ma/fr/', Astro.site).toString();
@@ -40,7 +40,7 @@ const frUrl = new URL('/ma/fr/', Astro.site).toString();
       </div>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">Morocco Construction & Trades Software Directory</h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} Morocco-relevant vendors for the building trades (BTP): Moroccan-native and imported devis-facture software, public-tender intelligence (Datao, Aljady), CNSS payroll (Sage, OJRA, Humantal) and mandatory construction insurance (Wafa, RMA, AXA), all built around the local realities: the incoming DGI e-invoicing mandate, Loi 59-13 décennale cover, the Qualification & Classification passport for public work, and a pipeline lifted by World Cup 2030.
+        Independent reviews of {vendors.length} Morocco-relevant vendors and official bodies for the building trades (BTP): Moroccan and imported construction and invoicing software, public-tender monitoring (Datao, Aljady), artisan directories, payroll (Sage, OJRA, Humantal) and construction insurance (Wafa, RMA, AtlantaSanad, AXA, Allianz Maroc, now Sanlam), set against the local rules: DGI e-invoicing, reported to start in phases from late 2026; the TRC and RC décennale covers that Moroccan press reported as mandatory in January 2025; the Qualification & Classification system for public works; and the ICE on your invoices.
       </p>
     </header>
 
@@ -50,12 +50,12 @@ const frUrl = new URL('/ma/fr/', Astro.site).toString();
         <div class="mt-1 text-xs text-slate-600">vendors reviewed</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-        <div class="text-2xl font-bold text-slate-900">~$41B</div>
-        <div class="mt-1 text-xs text-slate-600">World Cup 2030 pipeline</div>
+        <div class="text-2xl font-bold text-slate-900">Late 2026</div>
+        <div class="mt-1 text-xs text-slate-600">e-invoicing phased start reported</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-        <div class="text-2xl font-bold text-slate-900">120bn MAD</div>
-        <div class="mt-1 text-xs text-slate-600">Al Haouz reconstruction</div>
+        <div class="text-2xl font-bold text-slate-900">July 2016</div>
+        <div class="mt-1 text-xs text-slate-600">ICE mandatory on official documents</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">20%</div>
@@ -65,9 +65,9 @@ const frUrl = new URL('/ma/fr/', Astro.site).toString();
 
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border-2 border-emerald-300 bg-emerald-50 p-5">
       <div>
-        <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">⏰ Compliance guide · Clearance model · 2026, large firms first · exact date pending the decree</p>
+        <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">⏰ Compliance guide · Phased start reported from late 2026 · large companies first · technical rules pending</p>
         <h2 class="mt-1 text-base font-bold text-slate-900">Facturation électronique (DGI e-invoicing) for Moroccan contractors</h2>
-        <p class="mt-1 text-sm text-slate-700">The verified legal basis (Article 145-IX du CGI), the clearance model, who is affected first, and which tools already generate compliant UBL, without inventing a deadline the decree hasn’t fixed.</p>
+        <p class="mt-1 text-sm text-slate-700">The legal basis, the reported timeline, who is affected first and what the invoicing tools in this directory say about the mandate, without inventing a date or format the DGI has not published.</p>
       </div>
       <a href="/ma/guides/facturation-electronique-maroc/" class="shrink-0 rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Read the guide →</a>
     </section>
@@ -75,7 +75,7 @@ const frUrl = new URL('/ma/fr/', Astro.site).toString();
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See Moroccan vendors compared side by side: a clear verdict, pros and cons, Morocco-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See Moroccan vendors compared side by side: a short summary, pros and cons, Morocco-specific notes, and pricing, head to head.</p>
       </div>
       <a href="/ma/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare Moroccan vendors →</a>
     </section>
@@ -83,7 +83,7 @@ const frUrl = new URL('/ma/fr/', Astro.site).toString();
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What’s different about choosing software in Morocco</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Moroccan BTP software selection has structural differences from Europe. First, <strong>mandatory e-invoicing is coming</strong>: the DGI is rolling out a <strong>clearance model</strong> (every invoice validated by the tax platform before it reaches the client, in structured UBL) under Article 145-IX of the CGI, starting in 2026 with large B2B firms; the exact start date is still <em>pending the implementing decree</em>, so don’t trust any source that quotes a firm month. Second, the biggest practical trap: <strong>imported tools don’t do Moroccan accounting or payroll.</strong> EBP and Sage Batigest handle devis and situations de travaux beautifully but not PCGE comptabilité, TVA marocaine or CNSS, so you either pair them with a local tool or pick a Moroccan-native all-in-one (Gestion BTP) or a localized Odoo. Third, <strong>construction insurance is now mandatory</strong>: Loi 59-13 (in force since end-2024) requires Tous Risques Chantier and responsabilité civile décennale, gated on a prior contrôle technique and placed through a broker, not bought online. Fourth, public work is gated by the <strong>Qualification & Classification</strong> certificate, and your <strong>ICE</strong> must appear on every invoice. Pricing is in dirham, B2B runs in French, and the <strong>MOWAKABA</strong> program can subsidise up to 90% (TPE) of the cost of going digital.
+        Four things shape software choices for Moroccan BTP firms. First, <strong>electronic invoicing is coming</strong>: Hespress reported in August 2026 that it will start in phases from the end of 2026, beginning with large companies and suppliers to the public sector, and the DGI had not yet published the technical rules, so be wary of any source that quotes a firm date or format. None of the invoicing apps listed here (Hisab, Fawatir AI, Aube) claims DGI accreditation. Second, <strong>check what each package covers</strong>: EBP Bâtiment and Sage Batigest Connect handle quotes and invoicing for the building trades, with accounting sold as a separate product (EBP Comptabilité Édition Maroc; Sage 100), and ebp.ma lists no payroll product; Odoo ships a Morocco accounting localization; Gestion BTP says it includes accounting, but its tax and payroll features could not be confirmed. Third, <strong>construction insurance</strong>: Moroccan press reported in January 2025 that Tous Risques Chantier and RC décennale had become mandatory, and Wafa says its décennale cover depends on checks by an approved technical-control body, so book the contrôle technique before asking for cover. Fourth, public tenders can ask for a <strong>Qualification & Classification</strong> class, which caps the contract size you can bid for, and a CNSS certificate issued within the last year; and Hespress reported in July 2025 that the tax administration accepts only invoices that carry your <strong>ICE</strong>. Most published prices here are in dirham; Odoo’s were read in USD.
       </p>
     </section>
 
