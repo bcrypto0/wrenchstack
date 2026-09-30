@@ -7,7 +7,7 @@ import MissingFromList from '../../components/MissingFromList.astro';
 const grouped = bankingByFocus();
 
 const pageTitle = `Best Business Banking for Contractors & Trades (2026)`;
-const pageDescription = `Independent comparison of business banking for contractors (Found, Novo, Relay, Bluevine) by focus (self-employed vs business checking vs banking + credit). Real fees, APYs, and the cash-deposit and account-freeze caveats most reviews skip.`;
+const pageDescription = `Compare ${bankingProviders.length} business bank accounts for contractors by focus (self-employed, small-business checking, banking plus credit), from fintechs such as Found, Relay and Mercury to banks with branches such as Chase and U.S. Bank. Published monthly fees, APYs, cash-deposit rules and account terms.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -42,21 +42,21 @@ const itemListSchema = {
         Best Business Banking for Contractors & Trades (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        The right business account separates your money from your taxes, earns interest on reserves, and, for some, comes with a credit line. We compare the fintech banking platforms trades use, by what they're built for, with the caveats most reviews skip: cash deposits and account freezes.
+        A business account keeps job money separate from personal money, and some accounts add tax set-aside, interest on balances or a line of credit. We compare online fintech accounts and big-bank checking by what each is built for, with the fees and limits that matter to trades: monthly fees, cash deposits, wires and account terms.
       </p>
     </header>
 
     <section class="mb-10 rounded-lg border-l-4 border-orange-500 bg-orange-50/40 p-5">
       <p class="text-xs font-bold uppercase tracking-wider text-orange-600">The short answer</p>
       <p class="mt-2 text-slate-800 leading-relaxed">
-        Fintech business accounts like <a href="/banking/mercury/" class="font-semibold text-orange-700 hover:underline">Mercury</a> and <a href="/banking/relay/" class="font-semibold text-orange-700 hover:underline">Relay</a> separate your money from your taxes and earn interest on reserves, but two honest caveats decide this category: most fintechs <strong>don't handle cash deposits</strong> well (if your trade still takes cash, keep a traditional bank too), and they can <strong>freeze accounts</strong> for risk review, so never run your <em>only</em> operating account on one. Pick by what you actually need (multiple sub-accounts for job costing, a built-in credit line, or the highest yield) and always keep a backup account and a cash buffer. No vendor pays for placement.
+        Start with how you get paid. If your trade takes cash, check each account's cash rules first: <a href="/banking/mercury/" class="font-semibold text-orange-700 hover:underline">Mercury</a> and Novo take <strong>no cash deposits</strong>, the other fintechs here take cash through retailers or ATMs with limits or fees, and Chase, Bank of America and U.S. Bank take cash at branches with a free amount each statement cycle. If you are paid by card, ACH or check, pick by the feature you need: tax set-aside (Found, Lili), separate accounts for Profit First (<a href="/banking/relay/" class="font-semibold text-orange-700 hover:underline">Relay</a>), interest on balances (Bluevine checking, Relay and Lili savings, paid Found plans) or a line of credit (Bluevine). Mercury's partner-bank deposit agreement allows <strong>freezes and holds</strong>, and Lili's account agreement allows closure for any reason, so keep a backup account and a cash buffer. No vendor pays for placement.
       </p>
     </section>
 
     <section class="mb-10 rounded-lg border-2 border-amber-200 bg-amber-50 p-6">
       <h2 class="mb-2 text-base font-bold text-amber-900">Two things to know before you switch</h2>
       <p class="text-sm text-amber-900 leading-relaxed">
-        <strong>1. Cash deposits:</strong> these are fintechs (FDIC-insured via partner banks), and most do <em>not</em> handle cash deposits well. If your trade still takes cash, you'll likely need a traditional bank too. <strong>2. Account freezes:</strong> fintech-banking platforms periodically freeze accounts for risk review (Bluevine's pattern is especially well-documented). Funds stay FDIC-insured, but never run your <em>only</em> operating account on one of these; keep a backup and a cash buffer.
+        <strong>1. Cash deposits:</strong> Found, Novo, Relay, Mercury, Lili and Bluevine are fintechs whose banking services come from partner banks with FDIC coverage. Mercury and Novo do <em>not</em> accept cash, and the others cap cash deposits or charge for them. If your trade takes a lot of cash, look at a bank with branches (Chase, Bank of America, U.S. Bank) or keep a second account. <strong>2. Account terms:</strong> Mercury's partner-bank deposit agreement allows freezes and holds during investigations and closure at any time, and Lili's account agreement says Lili may close an account for any reason, with or without notice. Relay's partner bank, Thread Bank, agreed to an FDIC consent order in May 2024. Keep a backup account and a cash buffer rather than running your <em>only</em> operating account through one provider.
       </p>
     </section>
 
@@ -90,7 +90,7 @@ const itemListSchema = {
 
                 {p.reputation_flag && (
                   <div class="mb-3 rounded-md border-l-4 border-rose-500 bg-rose-50 px-4 py-3 text-sm text-rose-900">
-                    <p class="font-bold uppercase tracking-wider text-xs text-rose-700 mb-1">⚠ Account-freeze warning</p>
+                    <p class="font-bold uppercase tracking-wider text-xs text-rose-700 mb-1">⚠ Reputation warning</p>
                     <p class="leading-relaxed">{p.reputation_flag.split('.')[0]}.</p>
                   </div>
                 )}
@@ -132,7 +132,7 @@ const itemListSchema = {
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Where to start</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        Solo/1099 operator who dreads taxes? <strong>Found</strong> (auto tax set-aside + bookkeeping). Want disciplined cash management (Profit First)? <strong>Relay</strong> (up to 20 accounts). Want the simplest free checking? <strong>Novo</strong>. Want real APY plus a credit line? <strong>Bluevine</strong>, but keep a backup given its freeze pattern. And if you take meaningful cash, pair any of these with a traditional bank.
+        Solo or 1099 operator: <strong>Found</strong> (tax estimates and set-aside, bookkeeping and 1099 filing, with a free plan) or <strong>Lili</strong> (automatic tax set-aside from the $15/mo Pro plan, cash deposits at retailers). Profit First cash management: <strong>Relay</strong> (up to 20 checking accounts, 50 on Scale, with auto-transfer rules). No-monthly-fee checking with invoicing: <strong>Novo</strong> (no cash deposits). Interest on checking plus a line of credit: <strong>Bluevine</strong> (1.3% APY on Standard in months you meet the activity requirement; lines of $1,000-$250,000 for LLCs and corporations), which Valley National Bancorp agreed in September 2026 to acquire, with closing expected in early 2027. Online-only with large FDIC coverage: <strong>Mercury</strong> (up to $5M through its sweep, no cash deposits). Regular cash deposits: a bank with branches, such as <strong>Chase</strong> (no fee for cash at Chase ATMs; $15/mo unless waived), <strong>U.S. Bank</strong> (no monthly fee; 25 cash units free per cycle) or <strong>Bank of America</strong> (Fundamentals has no monthly fee for the first 12 statement cycles).
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/banking/relay/" class="rounded-md bg-emerald-500 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-600">See Relay →</a>

@@ -54,7 +54,7 @@ for (const p of platformsForVertical) {
 }
 
 const pageTitle = `Best Lead-Gen Platforms for ${vertical.name} Contractors (2026)`;
-const pageDescription = `Independent reviews of lead-gen platforms for ${vertical.name.toLowerCase()} contractors: Google LSA, Service Direct, Thumbtack, and others ranked honestly with reputation flags and affiliate disclosure.`;
+const pageDescription = `Independent reviews of lead-gen platforms for ${vertical.name.toLowerCase()} contractors, including Google Local Services Ads and Service Direct: how each one charges, whether leads are shared or exclusive, and reputation warnings with their sources.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -63,53 +63,53 @@ const breadcrumbs = [
 ];
 
 const tierMeta = {
-  S: { label: 'Recommended', color: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
-  A: { label: 'Workable with discipline', color: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
-  F: { label: 'Not recommended', color: 'bg-rose-100 text-rose-900 ring-rose-300', cardBorder: 'border-rose-300' },
+  S: { label: 'Tier S: exclusive or call-based, no warning', color: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
+  A: { label: 'Tier A: no warning, check the terms', color: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
+  F: { label: 'Tier F: listed with a reputation warning', color: 'bg-rose-100 text-rose-900 ring-rose-300', cardBorder: 'border-rose-300' },
 };
 
 // Trade-specific intro framing
 function tradeIntro(slug: string): string {
   switch (slug) {
     case 'hvac':
-      return 'HVAC is one of the highest-competition trades for lead-gen, and one where the choice of platform makes a meaningful difference in cost-per-acquired-customer. Emergency-service intent (no AC in July, no heat in January) makes exclusive-lead platforms (Google LSA, Service Direct) structurally favored over shared-lead bid wars.';
+      return 'HVAC contractors can pay per exclusive lead on Google Local Services Ads, buy exclusive calls from Service Direct or eLocal, buy leads on marketplaces such as Thumbtack, Networx and Homeyou, or run self-serve ads on Nextdoor, Meta or Yelp. Service Direct publishes a vendor range of $65-$325 per heating and air conditioning call, at a price you set; many other sources here do not publish prices. Google lists HVAC among the US home service categories moving from Local Services Ads into Google Ads from August 2026.';
     case 'plumbing':
-      return 'Plumbing leads bifurcate sharply between emergency-service (urgent, high-intent, willing to pay) and remodel-project (shopping, comparing, slow). Different lead sources fit each. Exclusive-lead platforms work for emergency; marketplace platforms can work for remodel-side.';
+      return 'Plumbing contractors can pay per exclusive lead on Google Local Services Ads, buy exclusive calls from Service Direct or eLocal, or buy leads on marketplaces such as Thumbtack, Networx and Homeyou. Service Direct publishes a vendor range of $60-$255 per plumbing call, at a price you set; Google and eLocal do not publish prices. Google lists plumbing among the US home service categories moving from Local Services Ads into Google Ads from August 2026.';
     case 'electrical':
-      return 'Electrical contractors face high regulatory scrutiny and licensing barriers, which is actually an advantage on platforms like Google LSA that verify licensing. The verification gauntlet that disqualifies low-quality competitors becomes your moat.';
+      return 'Google Local Services Ads screens US home service businesses before their ads run: Google lists background checks, state business and owner licenses, insurance (depending on category and location) and a verified Google Business Profile, says screening takes 3-4 weeks on average, and shows a Google Verified badge on businesses that pass. For exclusive calls, Service Direct publishes a vendor range of $55-$175 per electrician call at a price you set, and eLocal sells exclusive live calls without published prices. Houzz Pro, Thumbtack and Networx also list electrical work.';
     case 'roofing':
-      return 'Roofing has its own dedicated lead-gen ecosystem: 33 Mile Radius for restoration and insurance-claim work, AccuLynx and Roofr for direct contractor relationships, plus the same generalist platforms (LSA, Service Direct) that work for other trades. Storm-event seasonality matters more here than in any other trade.';
+      return 'Roofers can buy exclusive calls from Service Direct (a vendor-published range of $85-$550 per roofing call, at a price you set), 33 Mile Radius (a flat rate per lead that varies by service area, quoted by sales and billed weekly) or eLocal, pay per exclusive lead on Google Local Services Ads, or buy leads from Modernize, a QuinStreet brand for replacement and remodeling work. 33 Mile Radius, part of EverConnect, which Ignite Visibility bought from EverCommerce in October 2025, says its partners average about 2-5 leads a month and that volume varies with season, service, area and weather.';
     case 'general_contractor':
-      return 'General contractors and remodelers span an unusually wide range, from $5K bathroom refresh to $500K custom-home builds. The right lead-gen platform depends heavily on your project-size sweet spot. Higher-end design-build benefits from Houzz Pro; quick remodels benefit from LSA and Thumbtack.';
+      return 'Remodelers and design-build firms can use Houzz Pro, which combines project-management software with a Houzz profile (free plan; Design $99/mo and Pro $199/mo; Advertising Package from $499/mo), or lead sources such as Modernize, a QuinStreet brand for replacement and remodeling work, and Pro Referral, the Home Depot referral service with points-based leads and no cash lead fee (joining requires a $41.99 background check). Google Local Services Ads, Service Direct, 33 Mile Radius and eLocal also list general contracting.';
     case 'landscaping':
-      return 'Landscaping leads split between recurring-maintenance (high lifetime value, slow conversion) and one-off install projects (faster decision, finite revenue). Exclusive-lead platforms favor the install work; marketplace platforms can work for maintenance contracts where review quality matters more than urgency.';
+      return 'Lawn-care businesses have two marketplaces built for them. On GreenPal you bid your own price on each lawn and pay a 5% fee on each successful customer payment, plus card processing. LawnStarter sets each job price, keeps ownership of the customer and bars providers from soliciting or accepting business from those customers during the agreement and for a year after it ends (see its reputation warning). Google Local Services Ads, Service Direct, Thumbtack and Nextdoor also list landscaping.';
     case 'cleaning':
-      return 'Residential cleaning is one of the most price-sensitive trades in lead-gen: customers shop hard on per-visit rates. Shared-lead platforms suffer here because the bid-comparison dynamics push prices down. Exclusive-lead platforms (LSA) and recurring-customer-focused strategies work better.';
+      return 'Cleaning businesses can pay per exclusive lead on Google Local Services Ads after passing Google screening, or set their own lead price and a weekly budget on Thumbtack. Thumbtack says some customers contact more than one pro for the same job, so respond quickly and track cost per booked job. Service Direct, Networx, Homeyou and Porch also list cleaning, as do self-serve ads on Nextdoor and Meta.';
     case 'pest_control':
-      return 'Pest control benefits from recurring-service contracts: once you convert a lead to a quarterly-treatment customer, lifetime value is significant. Exclusive-lead platforms justify higher per-lead spend because the customer relationship lasts. Shared-lead platforms struggle with the price-comparison dynamics.';
+      return 'Pest control businesses can buy exclusive calls from Service Direct, which publishes a vendor range of $40-$195 per pest control call at a price you set, or pay per exclusive lead on Google Local Services Ads. Google lists pest control among the US home service categories moving from Local Services Ads into Google Ads from August 2026. Thumbtack and Porch also list pest control, as do self-serve ads on Nextdoor, Meta and Yelp.';
     default:
-      return `Lead-gen for ${vertical.name.toLowerCase()} contractors with platform-by-platform recommendations and reputation context.`;
+      return `Lead-gen platforms that list ${vertical.name.toLowerCase()} work, with how each one charges and any reputation warning.`;
   }
 }
 
 const faqs = [
   {
-    q: `Which lead-gen platform is best for ${vertical.name.toLowerCase()} contractors?`,
+    q: `Which lead-gen platforms are in Tier S for ${vertical.name.toLowerCase()} work?`,
     a: byTier.S.length > 0
-      ? `Based on contractor experience, lead model, and reputation, ${byTier.S[0].name} is the top-tier recommendation for ${vertical.name.toLowerCase()} work. ${byTier.S[0].best_for}.${byTier.S.length > 1 ? ` ${byTier.S[1].name} is the next-best option.` : ''} For most shops, a combination of 2-3 channels works better than relying on one.`
-      : `For ${vertical.name.toLowerCase()} contractors, we generally recommend a combination of Google LSA (when available in your area), Service Direct, and Google Business Profile / organic SEO. Avoid the FTC-action platforms (HomeAdvisor, Angi) and Bark.`,
+      ? `For ${vertical.name.toLowerCase()} work, Tier S lists ${byTier.S.map((p) => p.name).join(', ')}. Tier S means no reputation warning, an exclusive, pay-per-call or listing model, and a pass on our other rating inputs; it is not a ranking of lead quality. These services charge in different ways, so compare the pricing and billing rules in each review, and track cost per booked job for every source you use.`
+      : `No Tier S platform lists ${vertical.name.toLowerCase()} work. Compare the pricing and lead-sharing terms of the platforms above, and track cost per booked job for every source you use.`,
   },
   {
-    q: `What does a typical lead cost for ${vertical.name.toLowerCase()} work?`,
-    a: `Cost-per-lead varies dramatically by platform, geography, and seasonality. Exclusive-lead platforms (Google LSA, Service Direct) tend to cost $25-$150 per lead but convert at 30-50%. Shared-lead platforms tend to cost $10-$80 per lead but convert at 8-15%. The right comparison is cost-per-acquired-customer, not per-lead, and exclusive-lead platforms usually win that math.`,
+    q: `What does a lead cost for ${vertical.name.toLowerCase()} work?`,
+    a: `Most lead sources we review publish no per-lead or per-call rate card, including Google Local Services Ads, Thumbtack, 33 Mile Radius, eLocal and Porch. Service Direct publishes vendor ranges per call by trade, from $15-$75 for locksmiths to $500-$2,250 for water damage restoration, and the Networx help center puts leads at about $10-$100+ on its shared plan and $15-$120+ on its exclusive plan. Compare cost per booked job, not cost per lead, and check what each source counts as a billable lead.`,
   },
   {
     q: `Should I use HomeAdvisor or Angi for ${vertical.name.toLowerCase()} leads?`,
-    a: `We do not recommend HomeAdvisor or Angi for any contractor profile. Both have documented FTC actions, class-action history, and overwhelmingly negative contractor sentiment. Google LSA, Service Direct, and 33 Mile Radius offer structurally better experiences with comparable or better lead quality. See our full reviews for the documented track record.`,
+    a: `Both carry a reputation warning. The FTC consent order against HomeAdvisor, finalized in April 2023, bars the deceptive lead-marketing claims the FTC alleged and requires HomeAdvisor to pay up to $7.2 million. Angi, a sister company under Angi Inc., settled with the Vermont Attorney General in October 2025 over its "Angi Certified Pro" term and agreed to pay the state $100,000. Our reviews list neither as a first choice for any trade. If you use one, cap a monthly lead budget and track cost per booked job; the full reviews have the details.`,
   },
   {
-    q: `How long until lead-gen platforms pay back?`,
-    a: `Most exclusive-lead platforms (Google LSA, Service Direct) start delivering positive ROI within the first month for ${vertical.name.toLowerCase()} shops with clean operations and responsive dispatch. Shared-lead platforms take 60-90 days to evaluate fairly; short-term data is too noisy. Always layer call-tracking (CallRail) so you can attribute results to specific channels.`,
+    q: `How do I tell whether a lead source is working for ${vertical.name.toLowerCase()} work?`,
+    a: `Track calls, forms and booked jobs by source so you can compare cost per booked job. Call tracking such as CallRail (from $50/mo billed yearly) tracks and attributes calls, texts and forms from your other channels. Check each source's billing and credit rules as well: Google Local Services Ads can charge for missed calls you follow up on, eLocal counts unanswered and voicemail calls as valid, Bark refunds credits only for invalid contact details reported within 7 days, and Networx gives 14 days to request a credit.`,
   },
 ];
 
@@ -175,7 +175,7 @@ const faqSchema = {
                 )}
 
                 <p class="mb-3 text-sm text-slate-700 leading-relaxed">
-                  <strong class="text-slate-900">Best for {vertical.name.toLowerCase()}:</strong> {p.best_for}
+                  <strong class="text-slate-900">Best for:</strong> {p.best_for}
                 </p>
 
                 <div class="flex flex-wrap gap-2">

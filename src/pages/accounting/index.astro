@@ -7,7 +7,7 @@ import MissingFromList from '../../components/MissingFromList.astro';
 const grouped = accountingByPosition();
 
 const pageTitle = `Best Accounting Software for Contractors & Trades (2026)`;
-const pageDescription = `Independent comparison of accounting software for trades (QuickBooks Online, Xero, FreshBooks, Wave) by positioning (full accounting vs invoicing-first vs free). Real pricing, honest trade-offs, and which one your field-service software actually syncs to.`;
+const pageDescription = `Independent comparison of ${accountingSoftware.length} accounting and bill-pay tools for trades contractors, including QuickBooks Online, Xero, FreshBooks, Wave, Zoho Books and Sage 50, grouped by positioning: full accounting, invoicing-first, free, mid-market and bill pay. Published plan prices, plan limits and trade-offs for each.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -42,21 +42,21 @@ const itemListSchema = {
         Best Accounting Software for Contractors & Trades (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Your accounting software is where your books live, and what your field-service tool syncs to. We compare the options trades actually use, organized by how much accounting you really need. Real pricing, honest trade-offs, affiliate-transparent.
+        Your accounting software is where your books live, and often what your field-service tool syncs to. We compare {accountingSoftware.length} options grouped by how much accounting they do: full double-entry books, invoicing-first, free, mid-market platforms with accounting built in, and bill pay that syncs to your books. Each review lists published prices, plan limits and an affiliate disclosure.
       </p>
     </header>
 
     <section class="mb-10 rounded-lg border-l-4 border-orange-500 bg-orange-50/40 p-5">
       <p class="text-xs font-bold uppercase tracking-wider text-orange-600">The short answer</p>
       <p class="mt-2 text-slate-800 leading-relaxed">
-        For most trades businesses in 2026, <a href="/accounting/quickbooks-online/" class="font-semibold text-orange-700 hover:underline">QuickBooks Online</a> is the default pick: it has the deepest field-service-software integration, so your scheduling tool and your accountant both speak it. Choose <a href="/accounting/xero/" class="font-semibold text-orange-700 hover:underline">Xero</a> for unlimited users and cleaner pricing, <a href="/accounting/freshbooks/" class="font-semibold text-orange-700 hover:underline">FreshBooks</a> if you're solo and mainly need great invoicing, or <a href="/accounting/wave/" class="font-semibold text-orange-700 hover:underline">Wave</a> (free) when you're brand-new. Confirm what your FSM actually syncs to before deciding; that matters more than a few dollars of monthly price. No vendor pays for placement.
+        No one tool fits every shop; match it to what your books need to do. <a href="/accounting/quickbooks-online/" class="font-semibold text-orange-700 hover:underline">QuickBooks Online</a> has a Free plan and paid plans from $20 to $340 a month at regular prices, with job costing and inventory from Plus ($140/mo), and many field-service tools sync to it. <a href="/accounting/xero/" class="font-semibold text-orange-700 hover:underline">Xero</a> charges no per-user license fees; its US plans are $27, $59 and $97 a month from October 1, 2026. <a href="/accounting/freshbooks/" class="font-semibold text-orange-700 hover:underline">FreshBooks</a> is built around invoicing, with plans priced by how many clients you bill (Lite, $23/mo, covers up to 5). <a href="/accounting/wave/" class="font-semibold text-orange-700 hover:underline">Wave</a> has a free Starter plan with unlimited invoices and double-entry books. Whichever you pick, confirm that your field-service software syncs with it. No vendor pays for placement.
       </p>
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">The headline filter: how much accounting do you need?</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        <strong>Full double-entry accounting</strong> (QuickBooks Online, Xero) is the standard once you have employees, inventory, or an accountant, and it's what nearly every FSM integrates with. <strong>Invoicing-first</strong> (FreshBooks) is ideal for solo and small service businesses that prioritize billing over deep books. <strong>Free</strong> (Wave) fits brand-new or very small operations watching every dollar. The biggest practical factor for trades: <strong>QuickBooks has the deepest field-service integration</strong>, so check what your scheduling tool syncs to before you choose.
+        <strong>Full double-entry accounting</strong> (QuickBooks Online, Xero, Zoho Books, Sage 50, Patriot Accounting and QuickBooks Desktop Enterprise) covers bank reconciliation, invoicing, bills and financial reports. Job costing or project tracking starts at QuickBooks Online Plus, Xero Established and Zoho Books Professional, and is part of Sage 50 and QuickBooks Enterprise; Patriot Accounting has no job costing. <strong>Invoicing-first</strong> (FreshBooks) centers on quotes, invoices and getting paid, with plans priced by the number of clients you bill. <strong>Free</strong> (Wave) keeps double-entry books and unlimited invoices at $0 and charges for card and bank payments, payroll and its Pro plan. <strong>Mid-market</strong> (Striven) builds accounting into a per-user platform with job costing and technician scheduling. <strong>Bill pay</strong> (Melio) pays subs and suppliers and syncs to QuickBooks or Xero; it does not replace accounting software. Field-service sync varies by tool and plan, so check what your scheduling software supports before you choose.
       </p>
     </section>
 
@@ -131,7 +131,7 @@ const itemListSchema = {
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Where to start</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        Most trades shops default to <strong>QuickBooks Online</strong> because their FSM and accountant both speak it. Want unlimited users and cleaner pricing? <strong>Xero</strong>. Solo operator who mainly needs great invoicing? <strong>FreshBooks</strong>. Brand-new and watching every dollar? <strong>Wave</strong> (free). Before deciding, confirm what your field-service software actually syncs to; that integration matters more than a few dollars of monthly price.
+        Start with what your books need to do. <strong>Job costing in the cloud:</strong> QuickBooks Online Plus ($140/mo list), which many field-service tools sync to; or, on Windows with up to 40 users, QuickBooks Desktop Enterprise (from $2,210 a year). <strong>Several people in the books:</strong> Xero, with no per-user license fees, or Patriot Accounting ($20/mo, unlimited users). <strong>Solo, billing a few clients:</strong> FreshBooks (Lite $23/mo for up to 5 billable clients). <strong>New and watching every dollar:</strong> Wave's free Starter plan, or Zoho Books' free plan while revenue stays under $50K a year. <strong>Job costing by phase and cost code:</strong> Sage 50 Premium (from $182.50/mo on a one-year commitment). <strong>Paying subs and suppliers:</strong> Melio, which syncs bill payments to QuickBooks or Xero; read its BBB warning first. Before deciding, confirm what your field-service software syncs to.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/accounting/quickbooks-online/" class="rounded-md bg-sky-500 px-5 py-3 text-sm font-semibold text-white hover:bg-sky-600">See QuickBooks Online →</a>

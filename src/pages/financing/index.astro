@@ -7,7 +7,7 @@ import MissingFromList from '../../components/MissingFromList.astro';
 const grouped = financingByModel();
 
 const pageTitle = `Best Contractor Financing for Big-Ticket Jobs (2026)`;
-const pageDescription = `Independent comparison of consumer financing for contractors (Wisetack, GreenSky, Hearth, Acorn Finance) by model (embedded point-of-sale vs lender marketplace). Real fees, APRs, and how to close more big-ticket HVAC, roofing, and remodel jobs.`;
+const pageDescription = `Independent comparison of ${financingProviders.length} consumer-financing options for contractors, including Wisetack, Sunbit, GreenSky, Hearth, Acorn Finance, Synchrony and Regions, grouped by model: embedded point-of-sale, lender marketplaces, direct lenders and promotional credit cards. Merchant fees, customer APRs and loan sizes where each provider publishes them.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -42,21 +42,21 @@ const itemListSchema = {
         Best Contractor Financing for Big-Ticket Jobs (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        On a $9,000 repair, "that's about $180/month" closes jobs that a lump sum loses. We compare the consumer-financing options contractors actually use to offer monthly payments, organized by how they work, what they cost you, and the honest trade-offs (including the deferred-interest fine print).
+        Consumer financing lets a customer pay for a repair or project in monthly installments. We compare {financingProviders.length} options contractors can offer, grouped by how they work, with what each costs you, what your customer pays and who receives the loan funds, plus the promotional terms (including deferred interest) to explain up front.
       </p>
     </header>
 
     <section class="mb-10 rounded-lg border-l-4 border-orange-500 bg-orange-50/40 p-5">
       <p class="text-xs font-bold uppercase tracking-wider text-orange-600">The short answer</p>
       <p class="mt-2 text-slate-800 leading-relaxed">
-        To offer monthly payments on big-ticket jobs, the choice is the <strong>financing model</strong>. <a href="/financing/wisetack/" class="font-semibold text-orange-700 hover:underline">Wisetack</a> and <a href="/financing/greensky/" class="font-semibold text-orange-700 hover:underline">GreenSky</a> embed point-of-sale financing inside your own checkout: you absorb a merchant fee and the customer applies in seconds. <a href="/financing/hearth/" class="font-semibold text-orange-700 hover:underline">Hearth</a> and <a href="/financing/acorn-finance/" class="font-semibold text-orange-700 hover:underline">Acorn Finance</a> are lender marketplaces that send customers a link to compare prequalified offers, and you typically get paid upfront. Pick by job size and how much fee you'll absorb, and be straight with customers about deferred-interest terms, not just the headline "0%." No vendor pays for placement.
+        The first choice is the <strong>financing model</strong>, and with it who pays the fee and who receives the loan funds. <a href="/financing/wisetack/" class="font-semibold text-orange-700 hover:underline">Wisetack</a> publishes a flat 3.9% fee per financed job ($500-$65,000) and runs inside field-service apps such as Housecall Pro and Jobber. <a href="/financing/sunbit/" class="font-semibold text-orange-700 hover:underline">Sunbit</a> covers smaller tickets ($50-$20,000) and pays the business up front; its one published fee is 6% + 30 cents per charge through Stripe. <a href="/financing/greensky/" class="font-semibold text-orange-700 hover:underline">GreenSky</a> charges a transaction fee that it sets and does not publish; read its regulatory record before enrolling. <a href="/financing/hearth/" class="font-semibold text-orange-700 hover:underline">Hearth</a> charges an annual subscription instead of a per-loan dealer fee, and <a href="/financing/acorn-finance/" class="font-semibold text-orange-700 hover:underline">Acorn Finance</a> says it charges contractors no fees; with both, the loan funds go to the customer, who then pays you. Explain deferred-interest terms to every customer, not just the headline "0%." No vendor pays for placement.
       </p>
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">The headline filter: financing model</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        <strong>Embedded point-of-sale</strong> financing (Wisetack, GreenSky) lets you offer payments inside your own checkout: you pay a merchant or dealer fee, the customer applies in seconds. <strong>Lender marketplaces</strong> (Hearth, Acorn Finance) send customers a link to compare prequalified offers from many lenders, and you typically get paid upfront. The right pick depends on job size, how much fee you'll absorb, and whether you want financing embedded in your FSM or a free comparison link. For any model, be straight with customers about deferred-interest terms, not just the headline "0%."
+        <strong>Embedded point-of-sale</strong> financing (Wisetack, GreenSky, Sunbit) is offered with your quote, invoice or checkout; you pay a fee on each financed sale, and the lender or platform pays you. <strong>Lender marketplaces and platforms</strong> (Hearth, Acorn Finance, PowerPay) connect the customer with partner lenders: Hearth and Acorn send the loan funds to the customer, who pays you, while PowerPay says the provider is paid directly. <strong>Direct lenders</strong> (Service Finance, Foundation Finance, Regions) make home-improvement installment loans themselves; none of the three publishes a full dealer-fee schedule. <strong>Promotional credit cards</strong> (Synchrony) give the customer a revolving credit line with deferred-interest or fixed-APR promotions, and the merchant fee depends on the promotion. For any model, explain deferred-interest terms to customers, not just the headline "0%."
       </p>
     </section>
 
@@ -86,7 +86,7 @@ const itemListSchema = {
 
                 {p.reputation_flag && (
                   <div class="mb-3 rounded-md border-l-4 border-rose-500 bg-rose-50 px-4 py-3 text-sm text-rose-900">
-                    <p class="font-bold uppercase tracking-wider text-xs text-rose-700 mb-1">⚠ Reputation / consumer-cost warning</p>
+                    <p class="font-bold uppercase tracking-wider text-xs text-rose-700 mb-1">⚠ Heads up</p>
                     <p class="leading-relaxed">{p.reputation_flag.split('.')[0]}.</p>
                   </div>
                 )}
@@ -133,7 +133,7 @@ const itemListSchema = {
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Where to start</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        Service-ticket shop that wants financing wired into your FSM? <strong>Wisetack</strong> (flat 3.9%, embedded in Housecall Pro, Jobber and Contractor+). Want a free option with no cost to you? <strong>Acorn Finance</strong> (free marketplace, paid upfront). Financing large $50K–$100K projects? <strong>GreenSky</strong> has the capacity; just price in the dealer fee and disclose deferred-interest terms. Want bundled sales tools and will use them? <strong>Hearth</strong>'s subscription can fit.
+        Start with job size and how you want to be paid. <strong>Service and repair tickets:</strong> Wisetack (3.9% per financed job, $500-$65,000, inside Housecall Pro, Jobber, FieldPulse, JobNimbus and Contractor Plus) or Sunbit ($50-$20,000, business paid up front). <strong>No fee to you:</strong> Acorn Finance, which says it charges contractors no setup, platform, monthly or dealer fees; the customer receives the loan and pays you. <strong>Large projects:</strong> Foundation Finance (contracts up to $100,000 over 12-240 months) or, for remodelers with 5+ years in business and $5,000+ average projects, Regions. <strong>Bundled sales tools:</strong> Hearth, whose annual subscription replaces per-loan dealer fees. <strong>Manufacturer dealer programs:</strong> Synchrony, where some manufacturers rebate the merchant fee. Before enrolling with GreenSky, read its regulatory record and get its transaction fee in writing.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/financing/wisetack/" class="rounded-md bg-amber-500 px-5 py-3 text-sm font-semibold text-white hover:bg-amber-600">See Wisetack →</a>

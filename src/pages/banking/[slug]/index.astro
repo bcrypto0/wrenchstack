@@ -16,7 +16,7 @@ const focusLabel = BANKING_FOCUS_META[provider.banking_focus].label;
 const siblings = bankingProviders.filter((p) => p.slug !== provider.slug).slice(0, 6);
 
 const pageTitle = `${provider.name} Review (2026): Fees, APY & Pros & Cons for Contractors`;
-const pageDescription = `${provider.name} business banking review for trades. ${asSentence(provider.tagline)} Real fees, APY, and the cash-deposit and freeze caveats. Updated ${new Date().getFullYear()}.`;
+const pageDescription = `${provider.name} business banking review for trades. ${asSentence(provider.tagline)} Published fees, APY, cash-deposit rules and account terms. Updated ${new Date().getFullYear()}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -29,14 +29,6 @@ const productSchema = {
   '@type': 'FinancialProduct',
   name: provider.name,
   description: provider.tagline,
-  ...(provider.ratings.trustpilot !== null && {
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: provider.ratings.trustpilot.toFixed(1),
-      bestRating: '5',
-      reviewCount: 100,
-    },
-  }),
 };
 
 const faqSchema = {
@@ -80,7 +72,7 @@ const faqSchema = {
       <section class="mb-10 rounded-lg border-2 border-rose-300 bg-rose-50 p-6">
         <div class="mb-2 flex items-center gap-2">
           <span class="text-xl">⚠</span>
-          <h2 class="text-lg font-bold text-rose-900">Account-freeze warning</h2>
+          <h2 class="text-lg font-bold text-rose-900">Reputation warning</h2>
         </div>
         <p class="text-sm text-rose-900 leading-relaxed">{provider.reputation_flag}</p>
       </section>

@@ -997,7 +997,9 @@ export type PricingModel =
   | 'pay-per-call'
   | 'pay-per-click'
   | 'subscription'
-  | 'marketplace-bid';
+  | 'marketplace-bid'
+  | 'daily-budget'
+  | 'pay-per-impression';
 
 export interface LeadGenRatings {
   trustpilot: number | null;
@@ -1022,7 +1024,7 @@ export interface LeadGenPlatform {
   exclusivity: string;
   verticals: string[];
   geographic_coverage: string;
-  founded: number;
+  founded: number | null;
   headquartered: string;
   long_description: string;
   how_it_works: string;
@@ -1099,7 +1101,7 @@ export interface InsuranceProvider {
   verticals: string[];
   geographic_coverage: string;
   states_note: string;
-  founded: number;
+  founded: number | null;
   headquartered: string;
   long_description: string;
   how_it_works: string;
@@ -1173,7 +1175,7 @@ export interface PayrollService {
   free_trial_days: number;
   verticals_supported: string[];
   geographic_coverage: string;
-  founded: number;
+  founded: number | null;
   headquartered: string;
   long_description: string;
   how_it_works: string;
@@ -1253,7 +1255,7 @@ export interface MarketingAgency {
   minimum_contract_months: number | null;
   verticals_specialty: string[];
   geographic_coverage: string;
-  founded: number;
+  founded: number | null;
   headquartered: string;
   long_description: string;
   how_it_works: string;
@@ -1348,8 +1350,8 @@ export function getAiTool(slug: string): AiTool | undefined {
 }
 
 export const AI_CATEGORY_META: Record<AiToolCategory, { label: string; blurb: string }> = {
-  'ai-receptionist': { label: 'AI Receptionists & Call Answering', blurb: 'AI voice agents that answer inbound calls 24/7, book jobs, and stop missed-call revenue leakage: the highest-ROI AI category for trades, since service businesses miss a large share of inbound calls.' },
-  'ai-estimating': { label: 'AI Estimating & Measurement', blurb: 'AI that measures from photos or satellite imagery and generates priced quotes in minutes.' },
+  'ai-receptionist': { label: 'AI Receptionists & Call Answering', blurb: 'AI voice agents that answer inbound calls around the clock, take messages and book jobs, so calls you miss on a job site still reach someone.' },
+  'ai-estimating': { label: 'AI Estimating & Measurement', blurb: 'AI that measures roofs and buildings from phone photos or aerial imagery and feeds the measurements into estimates.' },
   'ai-scheduling': { label: 'AI Scheduling & Dispatch', blurb: 'AI that books appointments against live availability and optimizes crew routes.' },
   'ai-marketing': { label: 'AI Marketing & Reviews', blurb: 'AI for review collection, before/after imagery, and marketing content.' },
   'ai-all-in-one': { label: 'AI All-in-One Assistants', blurb: 'Broad AI assistants spanning calls, follow-up, and back-office tasks.' },
@@ -1384,7 +1386,7 @@ export interface PaymentProcessor {
   pricing_model: PaymentPricingModel;
   pricing_summary: string;
   /** A number (dollars) for published flat fees, or descriptive text. */
-  monthly_fee: string | number;
+  monthly_fee: string | number | null;
   verticals_supported: string[];
   founded: number | null;
   headquartered: string;
@@ -1412,15 +1414,16 @@ export function getPaymentProcessor(slug: string): PaymentProcessor | undefined 
 }
 
 export const PAYMENT_MODEL_META: Record<PaymentPricingModel, { label: string; blurb: string }> = {
-  'flat-rate': { label: 'Flat-Rate Processors', blurb: 'Simple, predictable per-transaction rates (for example 2.6% + 10 cents). Easiest to understand and start with; best for lower-volume shops where simplicity beats squeezing out basis points.' },
-  'interchange-plus': { label: 'Interchange-Plus Processors', blurb: 'You pay the interchange cost set by the card networks plus a transparent fixed markup. Usually the cheapest and most transparent model, especially for higher-volume businesses.' },
-  'subscription': { label: 'Subscription / Membership Pricing', blurb: 'A flat monthly fee plus interchange and a small per-transaction fee, with no percentage markup on processing. Saves money once monthly volume is high enough to amortize the subscription.' },
-  'tiered': { label: 'Tiered Pricing', blurb: 'Rates bucketed into qualified, mid, and non-qualified tiers, generally the least transparent model; included for completeness.' },
+  'flat-rate': { label: 'Flat-Rate Processors', blurb: 'One published rate per payment type, often a percentage plus a fixed fee (Square Free charges 2.6% + 15 cents in person). Easy to read on a statement; the markup is built into every rate, so it costs more as card volume grows.' },
+  'interchange-plus': { label: 'Interchange-Plus Processors', blurb: 'You pay the interchange cost set by the card networks plus a separate processor markup. Statements are more detailed than with a flat rate, and your total cost depends on the mix of cards your customers use.' },
+  'subscription': { label: 'Subscription / Membership Pricing', blurb: 'A monthly fee (a subscription, gateway fee or software plan) on top of per-transaction costs. Stax says it passes interchange through at cost with no percentage markup; Authorize.Net and Clover also charge per-transaction processing fees. Compare the monthly fee with your card volume, including slow months.' },
+  'tiered': { label: 'Tiered Pricing', blurb: 'Rates grouped into qualified, mid-qualified and non-qualified buckets. Ask which transactions fall into each bucket and get the rate for each in writing before you sign.' },
   'custom-quote': { label: 'Custom-Quote Processors', blurb: 'No public rate card: pricing is set in a sales quote. Get the full fee schedule, contract term and any early-termination fee in writing before you sign.' },
 };
 
 /** Display text for a processor's monthly fee (numbers become "$14.95"; text keeps its first clause). */
-export function formatMonthlyFee(fee: string | number): string {
+export function formatMonthlyFee(fee: string | number | null): string {
+  if (fee === null || fee === undefined || fee === '') return 'Not listed';
   if (typeof fee === 'number') return `$${fee}`;
   return fee.split(';')[0].trim();
 }
@@ -1482,10 +1485,10 @@ export function getFinancingProvider(slug: string): FinancingProvider | undefine
 }
 
 export const FINANCING_MODEL_META: Record<FinancingModel, { label: string; blurb: string }> = {
-  'embedded-pos': { label: 'Embedded Point-of-Sale Financing', blurb: 'Offer monthly payments inside your own checkout or invoice. The contractor pays a merchant or dealer fee; the customer applies in seconds with a soft credit check. Best for closing big-ticket jobs at the moment of decision.' },
-  'marketplace': { label: 'Financing Marketplaces', blurb: 'Send customers a link to compare prequalified offers from many lenders with a soft credit check. Often free (or subscription-based) for the contractor, and you typically get paid upfront.' },
+  'embedded-pos': { label: 'Embedded Point-of-Sale Financing', blurb: 'Pay-over-time plans offered at the point of sale, from your software, quote, invoice or checkout. The business pays a fee on each financed sale, which not every provider publishes, and the customer repays over time.' },
+  'marketplace': { label: 'Financing Marketplaces', blurb: 'Platforms that connect your customer with partner lenders instead of lending themselves. Hearth and Acorn Finance show customers offers from multiple lenders, and the loan funds go to the customer, who then pays you; PowerPay pays the provider directly. Contractor costs differ: Acorn says it charges contractors no fees, Hearth charges an annual subscription, and PowerPay does not publish its contractor fees.' },
   'lender': { label: 'Direct Lenders', blurb: 'Lenders that fund home-improvement loans directly.' },
-  'card': { label: 'Promotional Credit Cards', blurb: 'Private-label or 0% promotional cards for home-improvement purchases.' },
+  'card': { label: 'Promotional Credit Cards', blurb: 'Revolving credit with promotional financing plans for home projects, such as deferred-interest offers. The contractor pays a merchant fee that depends on the promotion.' },
 };
 
 export function financingByModel(): Array<{ model: FinancingModel; providers: FinancingProvider[] }> {
@@ -1544,9 +1547,9 @@ export function getAccountingSoftware(slug: string): AccountingSoftware | undefi
 }
 
 export const ACCOUNTING_POSITION_META: Record<AccountingPositioning, { label: string; blurb: string }> = {
-  'full-accounting': { label: 'Full Double-Entry Accounting', blurb: 'Complete accounting (bank reconciliation, A/R and A/P, reporting) that scales with the business. The standard once you have employees, inventory, or an accountant. Every major FSM integrates with these.' },
-  'invoicing-first': { label: 'Invoicing-First Accounting', blurb: 'Built around invoicing, time tracking, and getting paid, with lighter bookkeeping. Great for solo and small service businesses that prioritize billing over deep accounting.' },
-  'free': { label: 'Free Accounting', blurb: 'Core accounting and invoicing at no monthly cost, monetized through payments and payroll add-ons. Best for very small or new businesses watching every dollar.' },
+  'full-accounting': { label: 'Full Double-Entry Accounting', blurb: 'Complete double-entry accounting (bank reconciliation, receivables and payables, reporting) for businesses with employees, inventory or an outside accountant. Check that your field service software syncs with the one you choose.' },
+  'invoicing-first': { label: 'Invoicing-First Accounting', blurb: 'Built around invoicing, time tracking and getting paid, with lighter bookkeeping, for solo and small service businesses that care most about billing.' },
+  'free': { label: 'Free Accounting', blurb: 'Core accounting and invoicing with no monthly fee on the base plan; the vendor earns from payments, payroll and paid add-ons. Suits very small or new businesses.' },
   'enterprise': { label: 'Mid-Market / Enterprise Accounting', blurb: 'Heavier accounting for larger or multi-entity operations.' },
   'bill-pay': { label: 'Bill Pay / Accounts Payable', blurb: 'Pays your vendors, subs, and suppliers (ACH, check, or card) and syncs to your books, an accounts-payable layer that sits alongside accounting rather than replacing it.' },
 };
@@ -1607,9 +1610,9 @@ export function getBankingProvider(slug: string): BankingProvider | undefined {
 }
 
 export const BANKING_FOCUS_META: Record<BankingFocus, { label: string; blurb: string }> = {
-  'self-employed': { label: 'Self-Employed & Solo Banking', blurb: 'Banking built for 1099 and solo operators: automatic tax set-aside, bookkeeping, and contractor payments in one app.' },
-  'business-checking': { label: 'Small-Business Checking', blurb: 'No-fee business checking for growing operations, with a strong app, integrations, and (with Relay) multi-account cash management for methods like Profit First.' },
-  'credit-and-lending': { label: 'Banking + Credit & Lending', blurb: 'Business checking paired with revolving credit lines and higher-yield savings, for shops that want banking and working capital in one place.' },
+  'self-employed': { label: 'Self-Employed & Solo Banking', blurb: 'Banking apps aimed at solo and 1099 operators that pair checking with tax set-aside and bookkeeping tools. Check which plan includes each feature: some need a paid monthly plan.' },
+  'business-checking': { label: 'Small-Business Checking', blurb: 'Business checking with a $0 monthly fee on the base plan, from fintechs that bank through partner banks (Novo, Relay, Mercury) and a national bank with branches (U.S. Bank). Relay is built around multiple accounts for methods like Profit First. Wire, cash-deposit and transaction fees differ, so compare them with how you get paid.' },
+  'credit-and-lending': { label: 'Banking + Credit & Lending', blurb: 'Business checking from providers that also offer business credit: Bluevine pairs interest-bearing checking with lines of credit from $1,000 to $250,000, issued by Celtic Bank, and Chase and Bank of America are big banks with branches and business lending whose checking pays no interest.' },
 };
 
 export function bankingByFocus(): Array<{ focus: BankingFocus; providers: BankingProvider[] }> {

@@ -9,7 +9,7 @@ import {
 } from '../../lib/data';
 
 const pageTitle = `Best Lead-Gen Platforms for Trades Contractors (2026)`;
-const pageDescription = `Independent reviews of 13 lead-generation platforms for HVAC, plumbing, electrical, roofing, and other residential trades, including Google LSA, Service Direct, Thumbtack, Angi, Bark, and more. Honest reputation flags, real affiliate disclosure, exclusive-vs-shared comparison.`;
+const pageDescription = `Independent reviews of ${leadGenPlatforms.length} lead-generation platforms for HVAC, plumbing, electrical, roofing, and other residential trades, including Google Local Services Ads, Service Direct, eLocal, Thumbtack, Angi and Bark. How each one charges, whether leads are shared or exclusive, reputation warnings with their sources, and affiliate disclosure.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -25,20 +25,20 @@ for (const p of leadGenPlatforms) {
 
 const tierMeta = {
   S: {
-    label: 'Tier S: strongest contractor experience',
-    description: 'Exclusive leads or pay-per-call models with working dispute systems and positive contractor sentiment.',
+    label: 'Tier S: exclusive or call-based, no warning',
+    description: 'No reputation warning, a lead model of exclusive leads, pay-per-call or a listing or tool you run yourself, and a pass on our other rating inputs. Not every entry here sells leads: CallRail tracks calls from your other sources. These services charge in different ways, so compare the pricing line on each card.',
     badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300',
     cardBorder: 'border-emerald-300',
   },
   A: {
-    label: 'Tier A: workable with discipline',
-    description: 'Shared-lead or marketplace models. Can work for the right contractor profile but require selectivity, cost discipline, and realistic expectations.',
+    label: 'Tier A: no warning, check the terms',
+    description: 'No reputation warning, but outside the Tier S rule: shared-lead and bid marketplaces, commission and fee-based job platforms, self-serve ad platforms, and listing services that do not pass our other rating inputs. Several do not publish prices or say how many pros receive each lead, so confirm both before you spend.',
     badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300',
     cardBorder: 'border-blue-300',
   },
   F: {
-    label: 'Tier F: not recommended (with reasons)',
-    description: 'Platforms with documented FTC actions, predatory practices, or structural contractor-hostile design. Listed for completeness with explicit warnings: we cannot recommend them.',
+    label: 'Tier F: listed with a reputation warning',
+    description: 'Entries that carry a reputation warning, shown on each card: an FTC order (HomeAdvisor), a state settlement (Angi), a class-action settlement (Yelp), a BBB rating or complaint count (Bark, Networx, BuildZoom, LawnStarter), or provider terms that restrict you (LawnStarter). Read the warning and the full review before you spend.',
     badgeColor: 'bg-rose-100 text-rose-900 ring-rose-300',
     cardBorder: 'border-rose-300',
   },
@@ -74,21 +74,21 @@ const itemListSchema = {
         Best Lead-Gen Platforms for Trades Contractors (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {leadGenPlatforms.length} lead-generation platforms used by HVAC, plumbing, electrical, roofing, and other residential trades. We flag platforms with FTC actions and documented predatory practices honestly, and we recommend the contractor-friendly alternatives even when there's no affiliate commission.
+        Independent reviews of {leadGenPlatforms.length} lead-generation platforms used by HVAC, plumbing, electrical, roofing, and other residential trades. They include pay-per-lead and pay-per-call services, shared-lead and bid marketplaces, self-serve ad platforms, and call tracking. Each review states how the platform charges and whether leads are shared, and entries with an FTC order, a settlement, a BBB rating or complaint count, or restrictive provider terms carry a reputation warning that cites its source.
       </p>
     </header>
 
     <section class="mb-10 rounded-lg border-l-4 border-orange-500 bg-orange-50/40 p-5">
       <p class="text-xs font-bold uppercase tracking-wider text-orange-600">The short answer</p>
       <p class="mt-2 text-slate-800 leading-relaxed">
-        The factor that decides everything is <strong>shared vs exclusive</strong> leads. For most residential service trades, exclusive-lead platforms (<a href="/lead-gen/google-local-services-ads/" class="font-semibold text-orange-700 hover:underline">Google Local Services Ads</a>, <a href="/lead-gen/service-direct/" class="font-semibold text-orange-700 hover:underline">Service Direct</a>, and <a href="/lead-gen/33-mile-radius/" class="font-semibold text-orange-700 hover:underline">33 Mile Radius</a>) deliver a better cost-per-acquired-customer (30–50% conversion) than cheaper shared-lead marketplaces (5–15%, because customers price-shop across 3–5 bids). We list FTC-flagged and contractor-hostile platforms honestly, with the reasons. No vendor pays for placement.
+        The first thing to check on any lead source is whether leads are <strong>shared or exclusive</strong>, and what counts as a billable lead. <a href="/lead-gen/google-local-services-ads/" class="font-semibold text-orange-700 hover:underline">Google Local Services Ads</a> charges per exclusive lead, and <a href="/lead-gen/service-direct/" class="font-semibold text-orange-700 hover:underline">Service Direct</a>, <a href="/lead-gen/33-mile-radius/" class="font-semibold text-orange-700 hover:underline">33 Mile Radius</a> and <a href="/lead-gen/elocal/" class="font-semibold text-orange-700 hover:underline">eLocal</a> sell exclusive calls. On shared marketplaces such as Thumbtack and Bark, and on the Networx Pay Per Lead plan, more than one pro can reach the same customer. Exclusive does not mean cheaper: several of these services publish no prices, and some bill for missed or voicemail calls, so track cost per booked job by source. No vendor pays for placement.
       </p>
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
-      <h2 class="mb-3 text-base font-bold text-slate-900">The single most important filter: shared vs exclusive leads</h2>
+      <h2 class="mb-3 text-base font-bold text-slate-900">Shared vs exclusive leads</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Almost every disagreement contractors have about lead-gen platforms boils down to one factor: <strong>shared</strong> (3-5 contractors quote the same customer, customer picks one) vs <strong>exclusive</strong> (each lead goes to one contractor only). Shared-lead platforms have lower per-lead pricing but 5-15% conversion rates because customers price-shop across the bids. Exclusive-lead platforms cost more per lead but convert at 30-50% because there's no quote-bid competition. For most residential service trades, exclusive-lead platforms (Google LSA, Service Direct, 33 Mile Radius) deliver better cost-per-acquired-customer than shared-lead alternatives.
+        <strong>Shared</strong> means more than one business can reach the same customer: Bark's terms say up to five professionals can contact a customer on a general request, a Networx Pay Per Lead goes to up to four contractors, and Thumbtack says some customers contact more than one pro for the same job. <strong>Exclusive</strong> means one business gets the contact: Google Local Services Ads customers call, message or book you directly through your ad, and Service Direct and 33 Mile Radius route each call to one contractor. Some services sell both: eLocal says its live calls are exclusive while form leads can be shared with up to four other businesses, and Networx sells a higher-priced Exclusive Leads plan. Porch, Modernize and Homeyou do not publish how many pros receive each lead, so ask before you buy.
       </p>
     </section>
 
@@ -182,11 +182,11 @@ const itemListSchema = {
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Where to start</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        For most residential service trades, the highest-ROI lead-gen stack is: <strong>Google LSA</strong> (exclusive, Google-verified, no contract) + <strong>Service Direct</strong> (exclusive pay-per-call, working dispute process) + <strong>CallRail</strong> (call tracking to measure which channels actually work). Add <strong>33 Mile Radius</strong> if you do roofing or restoration. Avoid HomeAdvisor, Angi, and Bark.
+        One way to start for a residential service trade: <strong>Google Local Services Ads</strong> (exclusive, pay per lead, with a Google Verified badge after screening that Google says averages 3-4 weeks; accounts are moving into Google Ads in phases from August 2026), <strong>Service Direct</strong> (exclusive calls at a price you set, with no setup fee or term contract) and <strong>CallRail</strong> (call tracking from $50/mo billed yearly, to see which sources produce calls). Restoration and roofing contractors can also ask <strong>33 Mile Radius</strong> for a quote (exclusive calls, billed weekly, no monthly fee or long-term contract). Before you spend with HomeAdvisor, Angi, Bark or any other entry with a warning, read the warning.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/lead-gen/google-local-services-ads/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">
-          Start with Google LSA →
+          Read the Google LSA review →
         </a>
         <a href="/tools/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">
           Software directory
@@ -201,13 +201,13 @@ const itemListSchema = {
           <strong class="text-slate-900">No paid placements.</strong> Vendors cannot purchase tier positioning, featured listings, or warning removals.
         </li>
         <li>
-          <strong class="text-slate-900">FTC and class-action history is documented.</strong> When platforms have public regulatory or legal track records (HomeAdvisor's $7.2M FTC settlement, Angi's Vermont Attorney General settlement), we cite them with the warning context.
+          <strong class="text-slate-900">Regulatory and legal history is cited.</strong> When a platform has a public regulatory or legal record (the FTC consent order requiring HomeAdvisor to pay up to $7.2 million, Angi's October 2025 settlement with the Vermont Attorney General, Yelp's $15 million California class-action settlement), its warning cites it with dates.
         </li>
         <li>
-          <strong class="text-slate-900">Affiliate disclosure is per-platform.</strong> Where we earn commission on a recommendation (Service Direct, 33 Mile Radius, Houzz Pro, CallRail), it's disclosed. Where we don't (Google LSA, Thumbtack), we recommend anyway when the platform fits.
+          <strong class="text-slate-900">Affiliate disclosure is per platform.</strong> Each card shows whether the vendor runs an affiliate program. As of September 2026, no Visit button on this page uses an affiliate link; each goes to the vendor's own site. Affiliate status is not an input to the tiers.
         </li>
         <li>
-          <strong class="text-slate-900">Reputation flags are honest.</strong> The 'we cannot recommend' designations (HomeAdvisor, Angi, Bark) reflect documented patterns. Vendor pressure to soften flags isn't a factor; our methodology is published.
+          <strong class="text-slate-900">Reputation warnings cite their sources.</strong> Each warning names the regulator, court, BBB record or vendor terms it rests on, with the date checked where it quotes a live count. Vendors cannot pay to remove or soften a warning; our methodology is published.
         </li>
       </ul>
     </section>

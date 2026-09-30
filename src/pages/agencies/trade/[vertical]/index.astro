@@ -41,13 +41,13 @@ const tierMeta = {
 function tradeIntro(slug: string): string {
   switch (slug) {
     case 'hvac':
-      return 'HVAC has one of the highest competition + highest CPC dynamics in residential trades marketing. Peak summer + peak winter create seasonal demand spikes; emergency-service intent drives intent-stage searches. The right agency understands this dynamic and adjusts campaign pacing accordingly.';
+      return 'HVAC demand rises in summer and winter, and many searches are urgent no-heat or no-cool calls. Ask any agency how it paces ad spend through the seasons and how after-hours calls are handled.';
     case 'plumbing':
-      return 'Plumbing marketing splits between emergency-service capture (intent-stage, willing-to-pay-now) and remodel-project capture (shopping, comparing, slow decision). The right agency segments PPC + content for both customer types rather than treating plumbing as a single audience.';
+      return 'Plumbing work splits between emergency calls, where the customer wants someone now, and planned remodel jobs, where the customer compares quotes. Ask any agency how it plans campaigns and content for both.';
     case 'roofing':
-      return 'Roofing marketing is uniquely seasonal (storm events drive demand spikes), insurance-claim-heavy (restoration work), and locality-sensitive (storm-recovery markets matter more than competitive density). The right agency understands the storm-event + insurance-restoration dynamics that drive roofing revenue.';
+      return 'Roofing demand follows the seasons and storms, and much restoration work runs through insurance claims. Ask any agency how it handles storm-driven demand and what insurance-restoration campaigns it has run.';
     default:
-      return `Marketing agency recommendations for ${vertical.name.toLowerCase()} contractors.`;
+      return `Marketing agencies that serve ${vertical.name.toLowerCase()} contractors, with prices and contract terms where the agency publishes them.`;
   }
 }
 
@@ -55,16 +55,16 @@ const faqs = [
   {
     q: `Which marketing agency is best for ${vertical.name.toLowerCase()} contractors?`,
     a: byTier.S.length > 0
-      ? `Based on trade expertise + reputation, ${byTier.S[0].name} is the top recommendation for ${vertical.name.toLowerCase()} marketing. ${byTier.S[0].best_for}.${byTier.S.length > 1 ? ` ${byTier.S[1].name} is a strong alternative.` : ''} For established shops, the trade specialist usually delivers higher ROI than generalist alternatives.`
-      : `Most ${vertical.name.toLowerCase()} contractors should consider trade-specific specialists first, then home-services generalists (Adapt Digital Solutions, Lemonade Stand) if a trade-specific option doesn't fit.`,
+      ? `${byTier.S[0].name} is listed first: it has no reputation warning and scores highest on our rating inputs among agencies serving ${vertical.name.toLowerCase()} contractors. Best for: ${byTier.S[0].best_for}.${byTier.S.length > 1 ? ` ${byTier.S[1].name} is another Tier S option.` : ''} Compare published prices and minimum contracts before you choose.`
+      : `Start with the agencies below that list ${vertical.name.toLowerCase()} among their specialties, then broader home-services agencies such as Adapt Digital Solutions or Lemonade Stand. Compare published prices and minimum contracts before you choose.`,
   },
   {
     q: `What does a typical marketing retainer cost for ${vertical.name.toLowerCase()}?`,
-    a: 'Most trade-specific specialists run $1,500-$8,000/mo retainer ranges. Home-services generalists run similar pricing. Enterprise agencies (such as Scorpion) run $5,000-$25,000/mo. Cost-to-acquired-customer math typically lands at $200-$600 per closed job for shops in the recommended-agency tier, far better than DIY marketing for most operators.',
+    a: 'Few agencies publish prices. Among those in this directory that do: Footbridge Media is $249/mo; Hook Agency starts at $2,800/mo for local SEO and $2,000/mo for PPC; Plumbing & HVAC SEO is $2,495/mo for its core program plus a $5,000 setup fee; Builder Funnel runs $3,500-$7,500/mo; and Comrade lists full-service packages at $4,000-$7,000/mo. The rest quote after a call, so get the monthly fee, setup fee and minimum term in writing.',
   },
   {
-    q: `Should I avoid Townsquare Interactive and Marketing 360?`,
-    a: 'Yes for both. Townsquare Interactive has a documented complaint pattern: its BBB profile lists 43 complaints in three years, repeatedly describing charges after customers asked to cancel. Marketing 360 has documented lock-in contracts and ROI underperformance complaints. Both lock customers into 6-12 month minimum contracts. Better alternatives exist at comparable or moderately higher pricing.',
+    q: `What should I know about Townsquare Interactive and Marketing 360?`,
+    a: `Read their terms before you sign. Townsquare Interactive's Terms of Service do not let a client terminate during the commitment period set in its order, and make the fees for the rest of that period due if the agreement ends early. Marketing 360's terms say websites built on its platform must be hosted by Marketing 360 and cannot be moved to another host, and the agreement renews automatically. Both carry reputation warnings here; each review has the details.`,
   },
 ];
 

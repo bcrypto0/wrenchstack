@@ -16,7 +16,7 @@ const catLabel = AI_CATEGORY_META[tool.ai_category].label;
 const siblings = aiTools.filter((t) => t.slug !== tool.slug).slice(0, 6);
 
 const pageTitle = `${tool.name} Review (2026): Pricing, Features, Pros & Cons`;
-const pageDescription = `${tool.name} review for trades contractors. ${asSentence(tool.tagline)} ${tool.reputation_flag ? 'Includes documented reputation context. ' : ''}Independent, affiliate-transparent. Updated ${new Date().getFullYear()}.`;
+const pageDescription = `${tool.name} review for trades contractors. ${asSentence(tool.tagline)} ${tool.reputation_flag ? 'Includes a documented reputation note. ' : ''}Affiliate status disclosed. Updated ${new Date().getFullYear()}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -32,14 +32,6 @@ const softwareSchema = {
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web',
   offers: tool.starting_price_usd !== null ? { '@type': 'Offer', price: tool.starting_price_usd, priceCurrency: 'USD' } : undefined,
-  ...(tool.ratings.g2 !== null && {
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: tool.ratings.g2.toFixed(1),
-      bestRating: '5',
-      reviewCount: 50,
-    },
-  }),
 };
 
 const faqSchema = {
@@ -107,7 +99,7 @@ const faqSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700 leading-relaxed">
-        <strong class="text-slate-900">{tool.name}</strong> is best for {asSentence(tool.best_for)} Pricing: {asSentence(tool.pricing_summary)} {asSentence(tool.weaknesses)}
+        Who <strong class="text-slate-900">{tool.name}</strong> fits: {asSentence(tool.best_for)} Pricing: {asSentence(tool.pricing_summary)} Drawbacks: {asSentence(tool.weaknesses)}
       </p>
     </section>
 

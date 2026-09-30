@@ -72,8 +72,8 @@ const faqSchema = {
       </div>
 
       <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
-        <span>Founded {agency.founded}</span>
-        <span>HQ {agency.headquartered}</span>
+        {agency.founded != null && <span>Founded {agency.founded}</span>}
+        {agency.headquartered && <span>HQ {agency.headquartered}</span>}
         <span>{agency.minimum_contract_months === null ? 'Minimum term not published' : `${agency.minimum_contract_months}-month minimum`}</span>
         <span>Verified: {agency.verified_date}</span>
       </div>

@@ -6,17 +6,17 @@ const SIZE_BUCKETS: Record<string, { bucket: EmployeeBucket; label: string; intr
   '1-5-employees': {
     bucket: '1-5',
     label: '1-5 employees',
-    intro: 'For the smallest trades shops, payroll software cost discipline + clean tax-filing automation matter more than feature breadth. The recommended picks at this size are price-conscious modern SaaS (Patriot for lowest cost, Gusto for best ecosystem) plus Hourly.io for shops where integrated workers comp + payroll makes sense.',
+    intro: 'For trades shops with 1-5 employees, compare the monthly base fee, the per-person fee and whether tax filing is included. Every service on this page publishes its prices: Patriot from $17/mo plus $4 per worker (you file taxes) or $37/mo plus $5 per worker with tax filing in one state; Square Payroll at $35/mo plus $6 per person paid, or $6 per contractor with no base fee and no tax filings for 1099-only crews; Gusto Simple and OnPay at $49/mo plus $6 per person; and Hourly.io from $80/mo plus $12 per active user, with pay-as-you-go workers\' comp in the same app.',
   },
   '6-20-employees': {
     bucket: '6-20',
     label: '6-20 employees',
-    intro: 'This is the SMB payroll sweet spot. Most trades shops in this range benefit from modern SMB payroll (Gusto Plus, OnPay) with full feature breadth: tax filing, benefits administration, time tracking integration. Avoid legacy options (ADP, Paychex) at this size unless you have compliance complexity that specifically requires them.',
+    intro: 'At 6-20 employees, per-person fees add up, so compare the total monthly cost as well as multi-state payroll, time tracking and job costing. Gusto Plus ($80/mo plus $12 per person) adds multi-state payroll and time tracking to Gusto\'s one-state Simple plan. OnPay stays on one plan at $49/mo plus $6 per person. Patriot Full Service is $37/mo plus $5 per worker, plus $12/mo for each extra state. QuickBooks Payroll, now sold as QuickBooks Workforce, runs inside QuickBooks Online from $50/mo plus $7 per employee. Hourly.io pairs payroll with pay-as-you-go workers\' comp and includes GPS time tracking and job costing on every plan.',
   },
   '20-plus-employees': {
     bucket: '20+',
     label: '20+ employees',
-    intro: 'At 20+ employees, payroll considerations shift: multi-state compliance, complex benefits administration, and HR workflow integration become real factors. Gusto Plus or Premium remains a strong default; Rippling earns consideration if HR + IT consolidation is needed; ADP/Paychex become credible if compliance complexity (multi-state, prevailing-wage, union) requires their depth.',
+    intro: 'At 20 or more employees, check whether a service covers multi-state payroll, HR tools and benefits as well as payroll. Gusto Plus ($80/mo plus $12 per person) adds multi-state payroll, and Gusto Premium is $180/mo plus $22 per person. OnPay keeps one plan at $49/mo plus $6 per person, with HR tools as a $15/mo plus $2 per worker add-on; our editorial range for OnPay is 1-25 employees. Rippling (HR, IT and finance on one platform), ADP Run (four packages for 1-49 employees) and Paychex Flex (payroll and HR with add-on insurance, 401(k) and HR services) are sold by quote or through a sales rep. For certified, union or prevailing-wage payroll, see the construction payroll services on the main payroll page.',
   },
 };
 
@@ -38,7 +38,7 @@ const byTier: Record<'S' | 'A' | 'B', PayrollService[]> = { S: [], A: [], B: [] 
 for (const s of picks) byTier[payrollTier(s)].push(s);
 
 const pageTitle = `Best Payroll for ${sizeInfo.label} Trades Shops (2026)`;
-const pageDescription = `Independent payroll recommendations for trades contractors with ${sizeInfo.label}. Modern SMB picks (Gusto, OnPay, Patriot, Hourly.io) with affiliate disclosure and honest legacy-provider caveats.`;
+const pageDescription = `Independent payroll comparison for trades contractors with ${sizeInfo.label}: published prices where vendors list them, what each plan covers, and an affiliate disclosure on every review.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -49,31 +49,31 @@ const breadcrumbs = [
 const tierMeta = {
   S: { label: 'Recommended', color: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
   A: { label: 'Context-specific fit', color: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
-  B: { label: 'Legacy / structural concerns', color: 'bg-amber-100 text-amber-900 ring-amber-300', cardBorder: 'border-amber-300' },
+  B: { label: 'Legacy, PEO or reputation warning', color: 'bg-amber-100 text-amber-900 ring-amber-300', cardBorder: 'border-amber-300' },
 };
 
 const faqs = [
   {
-    q: `What's the best payroll for a ${sizeInfo.label} trades shop?`,
+    q: `Which payroll service fits a ${sizeInfo.label} trades shop?`,
     a: byTier.S.length > 0
-      ? `Based on price + product fit, ${byTier.S[0].name} is the top recommendation for ${sizeInfo.label} trades. ${asSentence(byTier.S[0].best_for)}${byTier.S.length > 1 ? ` ${byTier.S[1].name} is a strong alternative.` : ''}`
-      : 'Use Gusto as the default starting point. Get a quote and compare against OnPay if you want to verify pricing.',
+      ? `It depends on what you need besides payroll, such as tax filing in more than one state, workers' comp, time tracking or job costing. ${byTier.S[0].name} is in the recommended group on this page. Who it suits, from our review: ${asSentence(byTier.S[0].best_for)}${byTier.S.length > 1 ? ` ${byTier.S[1].name} is also in the recommended group.` : ''} Compare published prices before you choose.`
+      : 'It depends on what you need besides payroll. Compare the published prices and plan limits of the services on this page, and get quotes from any that sell by quote.',
   },
   {
-    q: `What does payroll typically cost for ${sizeInfo.label}?`,
+    q: `What does payroll cost for ${sizeInfo.label}?`,
     a: sizeInfo.bucket === '1-5'
-      ? 'For 1-5 employee shops, full-service modern payroll runs about $42-$79/month total (base + per-employee). Patriot Full Service is cheapest at $42-$62/mo; Gusto Simple and OnPay land at $55-$79/mo. ADP/Paychex are quote-only but typically come in higher.'
+      ? 'For 1-5 people at published list prices, before add-ons, extra states and promotions: Square Payroll $41-$65/mo ($35 plus $6 per person paid), Patriot Full Service $42-$62/mo ($37 plus $5 per worker, one state), Gusto Simple and OnPay $55-$79/mo ($49 plus $6 per person) and Hourly.io $92-$140/mo ($80 plus $12 per active user). Patriot Basic is $21-$37/mo ($17 plus $4 per worker) if you file payroll taxes yourself.'
       : sizeInfo.bucket === '6-20'
-      ? 'For 6-20 employee shops, modern payroll runs about $90-$320/month total. Gusto Plus at $80 + $12/employee scales to $164-$320/mo for 7-20 employees. OnPay at $49 + $6/employee runs $91-$169/mo. Legacy ADP/Paychex usually 30-50% more.'
-      : 'For 20+ employee shops, payroll runs $300-$800+/month depending on feature tier. Gusto Plus stays competitive ($80 + $12×N). Rippling per-employee pricing climbs faster. ADP/Paychex pricing is opaque but tend toward higher end.',
+      ? 'For 6-20 people at published list prices, before add-ons, extra states and promotions: Patriot Full Service $67-$137/mo ($37 plus $5 per worker, one state), Gusto Simple (one state) and OnPay $85-$169/mo ($49 plus $6 per person), QuickBooks Workforce Payroll $92-$190/mo ($50 plus $7 per employee), and Gusto Plus and Hourly.io $152-$320/mo ($80 plus $12 per person or active user).'
+      : 'At 20 people, published list prices before add-ons and promotions are OnPay $169/mo ($49 plus $6 per person), Gusto Plus $320/mo ($80 plus $12 per person) and Gusto Premium $620/mo ($180 plus $22 per person), with the per-person fee added for each extra person. Rippling and ADP Run publish no prices, and this listing does not quote a Paychex Flex price, so get quotes to compare them. ADP\'s stated range for RUN is 1-49 employees.',
   },
   {
     q: `Do I really need payroll software at this size?`,
-    a: 'Yes. Once you have any W-2 employees, the tax-filing complexity (quarterly 941, year-end W-2 issuance, multi-state withholdings) creates risk + time cost that almost always exceeds the $40-$70/mo payroll software cost. Hand-filing or check-writing for employees is a false economy.',
+    a: 'With W-2 employees, someone has to withhold, deposit and file payroll taxes and issue W-2s at year end. Full-service plans do the filing for you: Patriot Full Service is $37/mo plus $5 per worker in one state, and Gusto Simple and OnPay are $49/mo plus $6 per person. Patriot Basic ($17/mo plus $4 per worker) runs payroll but leaves tax deposits and filings to you.',
   },
   {
     q: `What about my 1099 subcontractors?`,
-    a: 'Most modern payroll (Gusto, OnPay, Patriot) handle 1099 contractors cleanly alongside W-2 employees in the same workflow. Year-end 1099-NEC issuance is automatic. For 1099-only shops (no W-2 employees), Square Payroll has the cheapest contractor-only tier ($6/contractor, no base fee).',
+    a: 'Several services here pay W-2 employees and 1099 contractors from the same account: Gusto lists W-2 and 1099 payments, and OnPay includes year-end W-2 and 1099 forms in its price. For 1099-only crews, Square Payroll\'s contractor-only plan is $6 per contractor paid with no base fee but no tax filings or multistate payroll, and Gusto\'s Contractor Only plan is $35/mo plus $6 per contractor.',
   },
 ];
 

@@ -7,7 +7,7 @@ import MissingFromList from '../../components/MissingFromList.astro';
 const grouped = paymentsByModel();
 
 const pageTitle = `Best Payment Processing for Contractors & Trades (2026)`;
-const pageDescription = `Independent comparison of payment processors for trades businesses (Square, Stripe, Helcim, Stax) by pricing model (flat-rate vs interchange-plus vs subscription). Real rates, honest trade-offs, and how to stop overpaying on card fees.`;
+const pageDescription = `Compare ${paymentProcessors.length} payment processors for trades businesses by pricing model (flat-rate, interchange-plus, subscription and custom quote), including Square, Stripe, Helcim and Stax. Published rates, monthly fees and ACH costs where the vendor lists them.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -42,21 +42,21 @@ const itemListSchema = {
         Best Payment Processing for Contractors & Trades (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Every contractor takes payments, and most overpay on card fees without realizing it. We compare the processors trades actually use, organized by the one thing that decides your cost: the <strong>pricing model</strong>. Real rates, honest trade-offs, affiliate-transparent.
+        Every contractor takes payments. We compare processors that trades use, grouped by <strong>pricing model</strong>: the model sets how the processor charges its markup, and your card volume, average ticket and customers' card mix decide what you pay under it. Rates below are the vendors' published rates where they list them, and each review carries an affiliate disclosure.
       </p>
     </header>
 
     <section class="mb-10 rounded-lg border-l-4 border-orange-500 bg-orange-50/40 p-5">
       <p class="text-xs font-bold uppercase tracking-wider text-orange-600">The short answer</p>
       <p class="mt-2 text-slate-800 leading-relaxed">
-        Your card cost is decided by the <strong>pricing model</strong>, not the brand. At low volume, flat-rate processors <a href="/payments/square/" class="font-semibold text-orange-700 hover:underline">Square</a> and <a href="/payments/stripe/" class="font-semibold text-orange-700 hover:underline">Stripe</a> are simplest. As you grow, interchange-plus <a href="/payments/helcim/" class="font-semibold text-orange-700 hover:underline">Helcim</a> is the most transparent and usually cheapest, with no monthly fee. At high volume, subscription pricing like <a href="/payments/stax/" class="font-semibold text-orange-700 hover:underline">Stax</a> drops the percentage markup entirely once the monthly fee is amortized. For big-ticket trades, steering large invoices to ACH beats every card model. No vendor pays for placement.
+        Pick the <strong>pricing model</strong> first, then the processor. Flat-rate <a href="/payments/square/" class="font-semibold text-orange-700 hover:underline">Square</a> and <a href="/payments/stripe/" class="font-semibold text-orange-700 hover:underline">Stripe</a> publish one rate per payment type and have a $0 monthly plan; the markup is built into each rate, so it costs more as card volume grows. Interchange-plus <a href="/payments/helcim/" class="font-semibold text-orange-700 hover:underline">Helcim</a> passes interchange through at cost and adds a published margin that steps down automatically with volume, with no monthly fee. <a href="/payments/stax/" class="font-semibold text-orange-700 hover:underline">Stax</a> charges a monthly subscription (from $99, per its documentation) and says it adds no percentage markup, so it depends on card volume high enough to cover the fee. On large invoices, compare ACH fees too: Stripe charges 0.8% capped at $5, and Helcim 0.5% + 25 cents capped at $6 on transactions under $25,000. No vendor pays for placement.
       </p>
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">The headline filter: pricing model</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Payment cost is decided by the pricing model, not the brand. <strong>Flat-rate</strong> (Square, Stripe) is simplest and best at low volume. <strong>Interchange-plus</strong> (Helcim) is the most transparent and usually cheapest as you grow, with no monthly fee. <strong>Subscription/membership</strong> (Stax) drops the percentage markup entirely and wins at high volume once the monthly fee is amortized. The right pick depends on your monthly card volume and average ticket, and for big-ticket trades, steering large invoices to <strong>ACH</strong> beats every card model.
+        Payment cost depends on the pricing model plus your volume, ticket size and card mix. <strong>Flat-rate</strong> (Square, Stripe, QuickBooks Payments, PayPal) charges a published rate per payment type, often a percentage plus a fixed fee: simple to read, with the markup built into the rate. <strong>Interchange-plus</strong> (Helcim, Dharma Merchant Services) shows the card networks' interchange cost and the processor's markup separately; statements are more detailed and the total depends on your customers' card mix. <strong>Subscription/membership</strong> (Stax, Clover, Authorize.Net) adds a monthly fee: Stax says it charges no percentage markup, Authorize.Net's $25 gateway fee comes with 2.9% + 30 cents per transaction on its All-in-One plan, and this listing quotes no Clover prices, so get its software, hardware and processing costs in writing. <strong>Custom quote</strong> (pmtbox, formerly National Processing) publishes no rate card. For big-ticket jobs, compare each processor's <strong>ACH</strong> fee with its card rate.
       </p>
     </section>
 
@@ -136,7 +136,7 @@ const itemListSchema = {
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Where to start</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        Low volume or want the simplest setup? <strong>Square</strong> or <strong>Stripe</strong> (flat-rate, no monthly fee). Processing real volume and want the lowest transparent cost with no monthly fee? <strong>Helcim</strong> (interchange-plus). High-volume, big-ticket shop that can amortize a subscription? <strong>Stax</strong>. And for large invoices on any processor, push customers to <strong>ACH</strong>: it beats card fees by a wide margin on big-ticket jobs.
+        Taking cards on site with no monthly fee: <strong>Square</strong> (Free plan, 2.6% + 15 cents in person) or <strong>PayPal</strong> (2.29% + 9 cents card-present, with Tap to Pay). Billing online or by invoice: <strong>Stripe</strong> (2.9% + 30 cents for online cards, ACH Direct Debit 0.8% capped at $5) or, if your books are in QuickBooks, <strong>QuickBooks Payments</strong> (payments auto-match to invoices; 2.99% for invoiced cards, 1% for ACH). Steady card volume and a published margin with no monthly fee: <strong>Helcim</strong> (interchange plus 0.40% + 8 cents in person at its entry tier, lower as volume grows). High card volume and larger tickets: <strong>Stax</strong> (from $99/mo per its documentation, no percentage markup), after you get the full fee schedule in writing. On any large invoice, compare your processor's <strong>ACH</strong> fee with its card rate.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/payments/helcim/" class="rounded-md bg-teal-500 px-5 py-3 text-sm font-semibold text-white hover:bg-teal-600">See Helcim →</a>

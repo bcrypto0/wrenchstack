@@ -16,7 +16,7 @@ const positionLabel = ACCOUNTING_POSITION_META[software.positioning].label;
 const siblings = accountingSoftware.filter((a) => a.slug !== software.slug).slice(0, 6);
 
 const pageTitle = `${software.name} Review (2026): Pricing, Pros & Cons for Contractors`;
-const pageDescription = `${software.name} accounting review for trades. ${asSentence(software.tagline)} Real pricing, FSM integration notes, and honest trade-offs. Updated ${new Date().getFullYear()}.`;
+const pageDescription = `${software.name} review for trades contractors. ${asSentence(software.tagline)} Published pricing, plan limits, integrations and trade-offs. Updated ${new Date().getFullYear()}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -32,14 +32,6 @@ const softwareSchema = {
   applicationCategory: 'FinanceApplication',
   operatingSystem: 'Web',
   offers: software.starting_price_usd !== null ? { '@type': 'Offer', price: software.starting_price_usd, priceCurrency: 'USD' } : undefined,
-  ...(software.ratings.capterra !== null && {
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: software.ratings.capterra.toFixed(1),
-      bestRating: '5',
-      reviewCount: 300,
-    },
-  }),
 };
 
 const faqSchema = {
@@ -108,7 +100,7 @@ const faqSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700 leading-relaxed">
-        <strong class="text-slate-900">{software.name}</strong> is best for {asSentence(software.best_for)} {asSentence(software.weaknesses)}
+        Who <strong class="text-slate-900">{software.name}</strong> fits: {asSentence(software.best_for)} Trade-offs: {asSentence(software.weaknesses)}
       </p>
     </section>
 

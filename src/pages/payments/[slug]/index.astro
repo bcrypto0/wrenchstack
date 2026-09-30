@@ -16,7 +16,7 @@ const modelLabel = PAYMENT_MODEL_META[processor.pricing_model].label;
 const siblings = paymentProcessors.filter((p) => p.slug !== processor.slug).slice(0, 6);
 
 const pageTitle = `${processor.name} Review (2026): Rates, Pros & Cons for Contractors`;
-const pageDescription = `${processor.name} payment processing review for trades. ${asSentence(processor.tagline)} ${processor.reputation_flag ? 'Includes documented reputation context. ' : ''}Real rates, honest trade-offs. Updated ${new Date().getFullYear()}.`;
+const pageDescription = `${processor.name} payment processing review for trades. ${asSentence(processor.tagline)} ${processor.reputation_flag ? 'Includes a reputation warning. ' : ''}Published rates and fees where available, plus pros and cons. Updated ${new Date().getFullYear()}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -29,14 +29,6 @@ const productSchema = {
   '@type': 'FinancialProduct',
   name: processor.name,
   description: processor.tagline,
-  ...(processor.ratings.capterra !== null && {
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: processor.ratings.capterra.toFixed(1),
-      bestRating: '5',
-      reviewCount: 40,
-    },
-  }),
 };
 
 const faqSchema = {

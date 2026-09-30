@@ -82,8 +82,8 @@ const faqSchema = {
       </div>
 
       <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
-        <span>Founded {provider.founded}</span>
-        <span>HQ {provider.headquartered}</span>
+        {provider.founded != null && <span>Founded {provider.founded}</span>}
+        {provider.headquartered && <span>HQ {provider.headquartered}</span>}
         <span>Quote speed: {provider.quote_speed}</span>
         <span>Verified: {provider.verified_date}</span>
       </div>

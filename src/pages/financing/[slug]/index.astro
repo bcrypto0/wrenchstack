@@ -16,7 +16,7 @@ const modelLabel = FINANCING_MODEL_META[provider.financing_model].label;
 const siblings = financingProviders.filter((p) => p.slug !== provider.slug).slice(0, 6);
 
 const pageTitle = `${provider.name} Review (2026): Fees, Rates & Pros & Cons for Contractors`;
-const pageDescription = `${provider.name} contractor financing review. ${asSentence(provider.tagline)} ${provider.reputation_flag ? 'Includes documented consumer-cost context. ' : ''}Real fees, APRs, and honest trade-offs. Updated ${new Date().getFullYear()}.`;
+const pageDescription = `${provider.name} contractor financing review. ${asSentence(provider.tagline)} ${provider.reputation_flag ? 'Includes a reputation warning. ' : ''}Contractor fees, customer APRs and loan sizes where published. Updated ${new Date().getFullYear()}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -29,14 +29,6 @@ const productSchema = {
   '@type': 'FinancialProduct',
   name: provider.name,
   description: provider.tagline,
-  ...(provider.ratings.trustpilot !== null && {
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: provider.ratings.trustpilot.toFixed(1),
-      bestRating: '5',
-      reviewCount: 50,
-    },
-  }),
 };
 
 const faqSchema = {
@@ -80,7 +72,7 @@ const faqSchema = {
       <section class="mb-10 rounded-lg border-2 border-rose-300 bg-rose-50 p-6">
         <div class="mb-2 flex items-center gap-2">
           <span class="text-xl">⚠</span>
-          <h2 class="text-lg font-bold text-rose-900">Consumer-cost / reputation warning</h2>
+          <h2 class="text-lg font-bold text-rose-900">Heads up</h2>
         </div>
         <p class="text-sm text-rose-900 leading-relaxed">{provider.reputation_flag}</p>
       </section>
@@ -104,7 +96,7 @@ const faqSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700 leading-relaxed">
-        <strong class="text-slate-900">{provider.name}</strong> is best for {asSentence(provider.best_for)} {asSentence(provider.weaknesses)}
+        Who <strong class="text-slate-900">{provider.name}</strong> fits: {asSentence(provider.best_for)} Trade-offs: {asSentence(provider.weaknesses)}
       </p>
     </section>
 

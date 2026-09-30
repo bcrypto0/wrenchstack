@@ -5,7 +5,7 @@ import { insuranceProviders, insuranceTier, type InsuranceProvider } from '../..
 import MissingFromList from '../../components/MissingFromList.astro';
 
 const pageTitle = `Best Business Insurance for Trades Contractors (2026)`;
-const pageDescription = `Independent reviews of ${insuranceProviders.length} business-insurance providers for HVAC, plumbing, electrical, roofing, and other trades: NEXT, Hiscox, Simply Business, CoverWallet, Acuity, Erie, and more. Honest reputation flags + real affiliate disclosure.`;
+const pageDescription = `Independent reviews of ${insuranceProviders.length} business-insurance providers for HVAC, plumbing, electrical, roofing and other trades: online insurers and marketplaces such as ERGO NEXT, Simply Business, Insureon and Hiscox, and carriers sold through independent agents such as Acuity, Erie and Travelers. Reputation warnings cite a documented record, and every review shows the provider's affiliate status.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -20,20 +20,20 @@ for (const p of insuranceProviders) {
 
 const tierMeta = {
   S: {
-    label: 'Tier S: strongest recommendations',
-    description: 'Carriers and brokers with the best contractor experience: competitive pricing, strong claims, and either documented affiliate programs (NEXT, Hiscox via CJ, Simply Business, CoverWallet) or such strong reputation we recommend them anyway (Acuity, Erie).',
+    label: 'Tier S: recommended',
+    description: 'Providers with no reputation warning that meet our Tier S rule, in two groups. Providers classed as direct digital, where you apply and buy online, that also clear the review-score cut: ERGO NEXT, Simply Business, Insureon, Huckleberry, Thimble, Cerity (workers\' comp only) and Embroker, which is in by rule although trade contractors are not among the industries it names. And policyholder-owned mutual carriers sold through local independent agents that meet the rating inputs in the same rule: Acuity and Erie. An affiliate program is not part of the rule; Acuity and Erie have none.',
     badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300',
     cardBorder: 'border-emerald-300',
   },
   A: {
     label: 'Tier A: workable depending on profile',
-    description: 'Solid carriers that work for specific contractor profiles (mid-market, multi-line, professional liability, large-coverage limits). Not the standout for typical SMB trades but credible options.',
+    description: 'Providers with no reputation warning that fall outside the Tier S rule. Most sell through independent agents or brokers, or both online and through agents: carriers such as The Hartford, Travelers, Liberty Mutual, Nationwide, Chubb and CNA; specialty and construction insurers such as Markel and Zurich; carriers with workers\' comp roots or emphasis such as Berkshire Hathaway GUARD and AmTrust; Hiscox, which sells online and through brokers; biBERK, which sells online direct; and CoverWallet, whose site now redirects to Aon Affinity, where you request a quote through a form or an advisor. Fit depends on your trade, size, state and whether you want to work with an agent.',
     badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300',
     cardBorder: 'border-blue-300',
   },
   F: {
     label: 'Tier F: listed with reputation warnings',
-    description: 'Providers with documented reputation concerns (Pie audit pattern, Hiscox 2025 renewal trend). Listed for completeness with explicit warnings; proceed with the documented caveats in mind.',
+    description: 'Providers with a reputation warning based on a documented record: a BBB F rating and a 2024 Florida fine for late data filings (Pie Insurance), a class action over an agent\'s telemarketing calls that Farmers agreed to settle while denying the claims, and an undecided Los Angeles County lawsuit over its handling of 2025 wildfire claims (State Farm). Read the warning on each card before you buy.',
     badgeColor: 'bg-rose-100 text-rose-900 ring-rose-300',
     cardBorder: 'border-rose-300',
   },
@@ -67,21 +67,21 @@ const itemListSchema = {
         Best Business Insurance for Trades Contractors (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {insuranceProviders.length} business-insurance providers used by HVAC, plumbing, electrical, roofing, and other residential trades. We flag documented reputation issues honestly (Pie audit pattern, Hiscox 2025 trend) and recommend cult-favorite mutuals (Acuity, Erie) even when there's no affiliate commission.
+        Independent reviews of {insuranceProviders.length} business-insurance providers for HVAC, plumbing, electrical, roofing and other trades: online insurers and marketplaces, carriers sold through independent agents, and specialty construction insurers. Reputation warnings cite a documented record, such as a BBB rating, a regulatory fine, a settlement or a lawsuit. Affiliate programs are not part of the tier rule: Acuity and Erie have none and are in Tier S.
       </p>
     </header>
 
     <section class="mb-10 rounded-lg border-l-4 border-orange-500 bg-orange-50/40 p-5">
       <p class="text-xs font-bold uppercase tracking-wider text-orange-600">The short answer</p>
       <p class="mt-2 text-slate-800 leading-relaxed">
-        Most trades contractors are best served by getting two quotes. Start with a fast digital baseline from <a href="/insurance/next-insurance/" class="font-semibold text-orange-700 hover:underline">NEXT</a> (quote-and-bind online in 10–15 minutes), then have a local independent agent shop the cult-favorite mutuals <a href="/insurance/acuity/" class="font-semibold text-orange-700 hover:underline">Acuity</a> and <a href="/insurance/erie-insurance/" class="font-semibold text-orange-700 hover:underline">Erie</a> (often cheaper for clean-claim accounts, but agent-only and 1–3 days to bind). We flag documented reputation issues honestly and recommend the mutuals even though they pay us no commission. No vendor pays for placement.
+        Compare quotes from more than one route. Online, <a href="/insurance/next-insurance/" class="font-semibold text-orange-700 hover:underline">ERGO NEXT</a> (owned by Munich Re's ERGO) sells general liability, a BOP, workers' comp and professional liability, and marketplaces such as Simply Business and Insureon show quotes from several carriers from one application. Through a local independent agent you can also get quotes from carriers sold only through agents, such as <a href="/insurance/acuity/" class="font-semibold text-orange-700 hover:underline">Acuity</a> (more than 30 states) and <a href="/insurance/erie-insurance/" class="font-semibold text-orange-700 hover:underline">Erie</a> (12 states and Washington, DC). Acuity and Erie have no affiliate program, so we earn nothing from them. No vendor pays for placement.
       </p>
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">The headline filter: agent vs direct</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        The biggest structural choice in contractor insurance: <strong>direct-digital carriers</strong> (NEXT, Hiscox, Simply Business, CoverWallet: quote-and-bind online in 10-15 min, no agent calls) vs <strong>agent-only mutuals</strong> (Acuity, Erie: work with a local independent agent, takes 1-3 days, often cheaper for clean-claim accounts). Most SMB contractors are best served by trying both: get a digital quote from NEXT to establish a baseline, then have a local agent shop Acuity / Erie / regional carriers to see if they can beat it.
+        A structural choice in contractor insurance is how you buy. <strong>Online providers</strong> let you apply, get a price and buy on their site: ERGO NEXT and biBERK sell their own policies, Cerity sells workers' comp, and marketplaces such as Simply Business, Insureon and Huckleberry show quotes from several carriers. Some carriers sell both online and through agents, including The Hartford, Hiscox, Liberty Mutual and Progressive Commercial. <strong>Agent-sold carriers</strong> such as Acuity, Erie, Travelers, Nationwide and Selective are quoted through a local independent agent, and turnaround depends on the agent. An online quote plus an agent quote gives you two prices to compare. CoverWallet's site now redirects to Aon Affinity, where you request a quote through a form or an advisor instead of buying instantly online.
       </p>
     </section>
 
@@ -161,10 +161,10 @@ const itemListSchema = {
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Where to start</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        For most SMB residential trades, the highest-confidence insurance stack is: <strong>NEXT</strong> (digital baseline quote, 10-minute bind, $25/quote affiliate) + a quick <strong>Simply Business or CoverWallet</strong> comparison to confirm pricing + an <strong>Acuity or Erie</strong> agent quote (if in footprint) to see if a mutual carrier can beat the digital options. Avoid Pie for workers comp; treat Hiscox renewals with caution after the 2025 trend.
+        One way to shop: get an online quote from <strong>ERGO NEXT</strong>, which sells general liability, a BOP, workers' comp and professional liability online; compare it with a marketplace such as <strong>Simply Business or Insureon</strong>, which show quotes from several carriers from one application; and, if you are in their states, ask a local independent agent for an <strong>Acuity or Erie</strong> quote. If your trucks and vans are central to the work, Progressive publishes 2025 new-customer figures for contractor commercial auto (median $203/month per vehicle for liability and physical damage). Before buying workers' comp from Pie, read its BBB record and ask how its year-end premium audit works.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
-        <a href="/insurance/next-insurance/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Start with NEXT →</a>
+        <a href="/insurance/next-insurance/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">ERGO NEXT review →</a>
         <a href="/lead-gen/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Lead-gen platforms</a>
         <a href="/tools/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Software directory</a>
       </div>
