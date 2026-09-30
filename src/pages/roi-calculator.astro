@@ -9,19 +9,19 @@ const breadcrumbs = [
 const roiFaqs = [
   {
     q: 'How realistic are the ROI numbers shown?',
-    a: 'The numbers shown are mid-case estimates using industry-standard assumptions: 15-25% admin-time reduction (documented across FSM deployments), 8-12% revenue uplift from better dispatching and quote-to-close conversion (also industry-standard), and conservative software-cost estimates. Your actual ROI depends on team adoption, integration depth (especially QuickBooks), and how disciplined you are about converting recovered admin time into billable work.',
+    a: `They come from a simple model with three fixed assumptions: software removes 60% of the admin hours you enter, half of that recovered time becomes billable work, and revenue rises 8% from fitting more jobs into the week and quoting faster. These are our planning assumptions, not measured results for your trade. Your real return depends on whether your team uses the software, how well it connects to your accounting, and whether recovered time turns into paid work.`,
   },
   {
     q: 'Why does the calculator assume 60% admin-time reduction?',
-    a: 'Independent FSM-deployment surveys (BizPilot, FSM Reports) consistently find 50-70% admin-time reduction post-deployment for shops moving from spreadsheet/paper workflows to modern FSM software. We use 60% as a conservative mid-case. Heavy QuickBooks-integrated shops sometimes see 75%+ reduction; shops without strong office processes see less.',
+    a: `It is a planning assumption, not a measured industry figure. Shops moving from paper or spreadsheets usually have the most admin time to save; shops already on software have less. If you expect a smaller saving, enter fewer admin hours.`,
   },
   {
     q: 'Why does the calculator assume only 50% of recovered admin time converts to billable work?',
-    a: 'Pure time-recovery math (60% admin saved → all of it converts to billable) overstates real-world ROI. In practice, recovered admin time gets split between: more billable work (50%), better planning and customer follow-up (30%), and slower-paced or higher-quality work (20%). The 50% conversion figure matches what shops actually report seeing in cash terms.',
+    a: `Counting every recovered hour as paid work would overstate the return: some of that time goes to planning, follow-up and training instead. The model assumes half of it becomes billable. That split is our assumption, so adjust your expectations if your crews are already fully booked.`,
   },
   {
     q: 'What about the 8% revenue uplift assumption?',
-    a: 'Better dispatching captures 8-12% more jobs (less drive time, more daily appointments). Faster quoting closes 15-25% more high-ticket deals at the moment of decision. We use 8% combined as a conservative mid-case; actual numbers vary by trade (HVAC consumer financing pushes this higher; pure scheduled-recurring services like pest control see less of this lift since revenue is contract-bound, not capacity-bound).',
+    a: `It stands for extra jobs from tighter scheduling and less drive time, plus quotes sent while the customer is still deciding. We have no measured figure for your trade. If your schedule is already full, or most of your revenue comes from fixed recurring contracts, the real uplift may be close to zero.`,
   },
   {
     q: 'Should I trust this for a software-purchase decision?',
@@ -53,7 +53,7 @@ const roiFaqSchema = {
         Field service software ROI calculator
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        Plug in 4 numbers about your business. Get a realistic estimate of monthly software cost, annual ROI, and payback period. Based on industry-standard 15–25% efficiency gains documented across HVAC, plumbing, electrical, and roofing operations.
+        Plug in 4 numbers about your business. Get a rough estimate of monthly software cost, annual return and payback period, based on three planning assumptions listed below the calculator.
       </p>
     </header>
 
@@ -68,13 +68,13 @@ const roiFaqSchema = {
 
         <div>
           <label class="block text-sm font-semibold text-slate-900">Average revenue per technician per year (USD)</label>
-          <p class="mb-2 text-xs text-slate-500">Rough estimate. Typical HVAC tech: $250k–$400k. Plumber: $200k–$350k. Solo contractor: $100k–$250k.</p>
+          <p class="mb-2 text-xs text-slate-500">Rough estimate. Typical HVAC tech: $250k-$400k. Plumber: $200k-$350k. Solo contractor: $100k-$250k.</p>
           <input id="revenue" type="number" min="0" step="10000" value="250000" class="block w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-lg font-semibold text-slate-900 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200" />
         </div>
 
         <div>
           <label class="block text-sm font-semibold text-slate-900">Hours per week wasted on admin / scheduling chaos</label>
-          <p class="mb-2 text-xs text-slate-500">Per technician. Industry research averages 6–10 hrs/week for shops without FSM software.</p>
+          <p class="mb-2 text-xs text-slate-500">Per technician. Industry research averages 6-10 hrs/week for shops without FSM software.</p>
           <input id="admin_hours" type="number" min="0" max="40" value="8" class="block w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-lg font-semibold text-slate-900 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200" />
         </div>
 
@@ -93,7 +93,7 @@ const roiFaqSchema = {
 
     <div id="results" class="mt-10 hidden">
       <h2 class="text-2xl font-bold text-slate-900">Your estimated ROI</h2>
-      <p class="mt-1 text-sm text-slate-500">Based on industry-standard 15–25% admin-time reduction and 8–12% revenue-per-tech increase documented across field service operations.</p>
+      <p class="mt-1 text-sm text-slate-500">Based on the model assumptions listed below: 60% of admin hours recovered, half of that billable, and an 8% revenue increase.</p>
 
       <div class="mt-6 grid gap-4 md:grid-cols-3">
         <div class="rounded-lg border border-slate-200 bg-white p-5">
@@ -147,19 +147,19 @@ const roiFaqSchema = {
       </p>
       <ul>
         <li>
-          <strong>Time savings (admin reduction).</strong> Most contractors waste 6–10 hours/week per tech on scheduling chaos, paper invoicing, hunting for paperwork, and double-data-entry. FSM software typically cuts this by 50–70%. At $100/hr billed rate, that's $13,000–$30,000/year per tech recaptured.
+          <strong>Time savings (admin reduction).</strong> Scheduling, paper invoicing, chasing paperwork and entering the same data twice take admin time every week. The calculator assumes software removes 60% of the admin hours you enter and that half of that time becomes billable work.
         </li>
         <li>
-          <strong>Revenue uplift (capacity + close-rate).</strong> Better dispatching = 8–12% more jobs completed per week. Faster quoting = 15–25% higher quote-to-job conversion. For a $250k/year tech, that's another $20k–$30k/year.
+          <strong>Revenue uplift (capacity + close-rate).</strong> Tighter scheduling can fit more jobs into a week, and faster quoting can win more of the jobs you bid. The calculator assumes an 8% revenue increase from both together; if your schedule is already full, expect less.
         </li>
       </ul>
       <p>
-        Combined, mid-case ROI on FSM software at small shops (3–15 techs) typically runs 8×–25× the software cost in year one, assuming actual adoption by the team.
+        Treat the result as a rough planning figure: it assumes your team actually uses the software every day.
       </p>
 
       <h2>How accurate are these numbers</h2>
       <p>
-        The numbers shown are <strong>mid-case estimates</strong> using industry-standard assumptions across all platforms in our directory. Your actual ROI depends on team adoption, integration depth with your existing tools (especially QuickBooks), and how disciplined you are about turning admin-time savings into billable work.
+        The numbers shown are <strong>estimates from fixed planning assumptions</strong>, not measured results. Your actual ROI depends on team adoption, integration depth with your existing tools (especially QuickBooks), and how disciplined you are about turning admin-time savings into billable work.
       </p>
 
       <h2>Assumptions</h2>
@@ -167,7 +167,7 @@ const roiFaqSchema = {
         <li>Mid-tier FSM software cost: ~$150/tech/month (per-user pricing) or ~$300/month flat (per-company pricing) for shops under 10 techs</li>
         <li>Admin time recovered by software: 60% of current admin hours</li>
         <li>Recovered admin time converted to billable work: 50% (the other half goes to better planning, training, customer follow-up)</li>
-        <li>Revenue uplift from capacity + close-rate gains: 8% annually (conservative mid-case)</li>
+        <li>Revenue uplift from capacity and close-rate gains: 8% a year (a planning assumption)</li>
       </ul>
     </section>
   </article>

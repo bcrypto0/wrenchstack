@@ -141,6 +141,16 @@ const counts = {
     </div>
 
     <div class="not-prose mb-8 rounded-lg border border-slate-200 bg-slate-50 p-5 text-sm text-slate-700">
+      <h2 class="text-base font-bold text-slate-900 mb-2 mt-0">Changelog: non-software categories (2026-09-30)</h2>
+      <ul class="list-disc pl-5 space-y-1 m-0">
+        <li><strong>Every entry re-verified.</strong> Accounting, payroll, insurance, lead generation, financing, banking, payments, marketing agencies and AI tools were checked against primary sources (vendor pages, filings, regulator and court documents), and prices were re-checked wherever the vendor publishes them.</li>
+        <li><strong>No third-party review scores for these vendors.</strong> G2, Capterra, Trustpilot, Google, BBB and A.M. Best scores and forum sentiment are no longer shown in these categories: we could not verify them, and several were out of date. Each review page links to the vendor's BBB and Trustpilot pages instead. Software tool pages still show G2 and Capterra ratings, attributed to their source.</li>
+        <li><strong>Tiers use verified facts only.</strong> Lead generation: Recommended means no reputation warning and each lead or call goes to one business. Payroll: Tier S is online or specialty payroll with a published starting price and no warning; Tier B is legacy payroll, PEOs or a warning. Marketing agencies: Tier S is no warning plus published prices for the core service. Insurance: no Tier S; providers are listed with or without a warning, because nothing we could verify ranks insurers on quality.</li>
+        <li><strong>Warnings need a readable source.</strong> A reputation warning must trace to a regulator order, court record, BBB profile or the vendor's own terms. Warnings that rested only on forum posts or on complaint text we could not read were removed.</li>
+      </ul>
+    </div>
+
+    <div class="not-prose mb-8 rounded-lg border border-slate-200 bg-slate-50 p-5 text-sm text-slate-700">
       <h2 class="text-base font-bold text-slate-900 mb-2 mt-0">Changelog: v1.2 (2026-09-01)</h2>
       <ul class="list-disc pl-5 space-y-1 m-0">
         <li><strong>Removed the "Feature depth" factor.</strong> It scored a count of listed features, capped at 10. Our feature vocabulary is not controlled: 234 distinct labels across 125 tools, 118 of which appear exactly once, including outright duplicates (<em>reporting</em> and <em>reports</em>; <em>routing</em>, <em>route optimization</em> and <em>route planning</em>; <em>customer portal</em> and <em>client portal</em>) and even vendor product names entered as features. A tool whose entry split quoting into four labels scored four times one that wrote it once, which is a difference in how we took notes rather than in the software. It was also inflatable by simply submitting a longer list.</li>
@@ -163,7 +173,7 @@ const counts = {
     <h2>What the WrenchStack Fit Score™ measures</h2>
 
     <p>
-      Every vendor in our directory carries a WrenchStack Fit Score™ on a 0–10 scale. The score is calculated from four weighted factors and is the primary input to where a vendor ranks on category pages, vertical landing pages, and buyer guides. The same formula applies to every vendor, regardless of affiliate relationship, sponsorship status, or commercial alignment.
+      Every vendor in our directory carries a WrenchStack Fit Score™ on a 0-10 scale. The score is calculated from four weighted factors and is the primary input to where a vendor ranks on category pages, vertical landing pages, and buyer guides. The same formula applies to every vendor, regardless of affiliate relationship, sponsorship status, or commercial alignment.
     </p>
 
     <h2>The WrenchStack Fit Score™ formula</h2>
@@ -180,12 +190,12 @@ const counts = {
         <tr>
           <td><strong>Vertical fit</strong></td>
           <td>40%</td>
-          <td>How well the tool is built for the specific trade being searched (HVAC, plumbing, roofing, etc.). Scored 1–10 per vertical based on feature coverage, customer base, and the tool's own positioning.</td>
+          <td>How well the tool is built for the specific trade being searched (HVAC, plumbing, roofing, etc.). Scored 1-10 per vertical based on feature coverage, customer base, and the tool's own positioning.</td>
         </tr>
         <tr>
           <td><strong>Aggregated user ratings</strong></td>
           <td>30%</td>
-          <td>Averaged G2 + Capterra ratings, normalized to a 0–10 scale. When no listing exists on either platform, this factor is excluded and the remaining weights renormalize (v1.1); we never invent a rating.</td>
+          <td>Averaged G2 + Capterra ratings, normalized to a 0-10 scale. When no listing exists on either platform, this factor is excluded and the remaining weights renormalize (v1.1); we never invent a rating.</td>
         </tr>
         <tr>
           <td><strong>Pricing transparency</strong></td>
@@ -202,7 +212,7 @@ const counts = {
 
     <p>
       The final score is the weighted sum, rounded to one decimal place. Vendors scoring 9.0+ get
-      a dark-green badge; 8.0–8.9 light green; 7.0–7.9 orange; 6.0–6.9 light orange; below 6 gray.
+      a dark-green badge; 8.0-8.9 light green; 7.0-7.9 orange; 6.0-6.9 light orange; below 6 gray.
     </p>
 
     <h2>Our evaluation timeline</h2>
@@ -213,12 +223,12 @@ const counts = {
 
     <ol>
       <li><strong>Discovery (week 1)</strong>: vendor identified through editorial research, vendor self-submission, contractor request, or category sweep. Initial fit assessment against category definition.</li>
-      <li><strong>Data collection (week 1–2)</strong>: pricing tiers verified directly from vendor pricing page with date stamp; feature list compiled from vendor documentation, product demos, and user-review aggregation (G2, Capterra, Reddit, BBB); integration directory cross-referenced.</li>
-      <li><strong>Reputation analysis (week 2)</strong>: sentiment review across Reddit/BBB/Trustpilot/forum threads; FTC and class-action history check; documented complaint pattern identification.</li>
-      <li><strong>Scoring (week 2–3)</strong>: WrenchStack Fit Score™ computed using published weights; reputation_flag attached if structural concerns warrant warning to readers.</li>
-      <li><strong>Editorial draft (week 3)</strong>: long-form review written (1,200–2,500 words typical), structured pros/cons, FAQs, best-fit framing.</li>
+      <li><strong>Data collection (week 1-2)</strong>: pricing tiers verified directly from vendor pricing page with date stamp; feature list compiled from vendor documentation and product pages; G2 and Capterra ratings recorded for software tools; integration directory cross-referenced.</li>
+      <li><strong>Reputation check (week 2)</strong>: regulator actions (FTC, CFPB, SEC, state attorneys general), court records, BBB profiles and the vendor's own terms. We do not use forum or social-media sentiment, and a warning we cannot trace to a readable source is removed.</li>
+      <li><strong>Scoring (week 2-3)</strong>: WrenchStack Fit Score™ computed using published weights; reputation_flag attached if structural concerns warrant warning to readers.</li>
+      <li><strong>Editorial draft (week 3)</strong>: long-form review written (1,200-2,500 words typical), structured pros/cons, FAQs, best-fit framing.</li>
       <li><strong>Publication (week 4)</strong>: review goes live with verified_date stamp. Vendor profile becomes part of the directory.</li>
-      <li><strong>Quarterly refresh</strong>: pricing re-verified; ratings re-pulled; reputation_flag re-evaluated.</li>
+      <li><strong>Monthly refresh</strong>: pricing re-verified; software ratings re-pulled; reputation warnings re-checked against their sources.</li>
     </ol>
 
     <h2>Our independence statement</h2>
@@ -422,9 +432,8 @@ const counts = {
 
     <p>
       Each pricing tier shows a <strong>verified date</strong>. We re-check pricing on the monthly cycle by
-      visiting each vendor's public pricing page; for custom-quoted enterprise platforms, we cite
-      user-reported ranges from public sources (Reddit threads, G2 reviews, vendor RFP responses
-      shared publicly). Numbers older than 90 days get flagged with an amber freshness pill;
+      visiting each vendor's public pricing page. When a vendor publishes no prices, the page says so;
+      we do not estimate prices from forum posts or other secondhand reports. Numbers older than 90 days get flagged with an amber freshness pill;
       older than 180 days get a red pill and are queued for re-verification before they show on
       ranked pages.
     </p>

@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../../layouts/Layout.astro';
-import { asSentence, payrollServices, payrollTier, payrollPicksForBucket, type PayrollService, type EmployeeBucket } from '../../../../lib/data';
+import { payrollServices, payrollTier, payrollPicksForBucket, type PayrollService, type EmployeeBucket } from '../../../../lib/data';
 
 const SIZE_BUCKETS: Record<string, { bucket: EmployeeBucket; label: string; intro: string }> = {
   '1-5-employees': {
@@ -37,6 +37,11 @@ const picks = payrollPicksForBucket(sizeInfo.bucket);
 const byTier: Record<'S' | 'A' | 'B', PayrollService[]> = { S: [], A: [], B: [] };
 for (const s of picks) byTier[payrollTier(s)].push(s);
 
+const listNames = (items: PayrollService[]) => {
+  const names = items.map((s) => s.name);
+  return names.length <= 1 ? names.join('') : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+};
+
 const pageTitle = `Best Payroll for ${sizeInfo.label} Trades Shops (2026)`;
 const pageDescription = `Independent payroll comparison for trades contractors with ${sizeInfo.label}: published prices where vendors list them, what each plan covers, and an affiliate disclosure on every review.`;
 
@@ -47,16 +52,16 @@ const breadcrumbs = [
 ];
 
 const tierMeta = {
-  S: { label: 'Recommended', color: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
-  A: { label: 'Context-specific fit', color: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
-  B: { label: 'Legacy, PEO or reputation warning', color: 'bg-amber-100 text-amber-900 ring-amber-300', cardBorder: 'border-amber-300' },
+  S: { label: 'Online or specialty payroll with a published price, no warning', color: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
+  A: { label: 'No warning: built-in payroll, HR suite or no published US price', color: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
+  B: { label: 'Legacy payroll, PEO or reputation warning', color: 'bg-amber-100 text-amber-900 ring-amber-300', cardBorder: 'border-amber-300' },
 };
 
 const faqs = [
   {
     q: `Which payroll service fits a ${sizeInfo.label} trades shop?`,
     a: byTier.S.length > 0
-      ? `It depends on what you need besides payroll, such as tax filing in more than one state, workers' comp, time tracking or job costing. ${byTier.S[0].name} is in the recommended group on this page. Who it suits, from our review: ${asSentence(byTier.S[0].best_for)}${byTier.S.length > 1 ? ` ${byTier.S[1].name} is also in the recommended group.` : ''} Compare published prices before you choose.`
+      ? `It depends on what you need besides payroll, such as tax filing in more than one state, workers' comp, time tracking or job costing. On this page, ${listNames(byTier.S)} ${byTier.S.length === 1 ? 'is' : 'are'} online or specialty payroll with a published starting price and no reputation warning, so you can compare costs before a sales call. We do not rank them against each other: compare published prices and plan limits before you choose.`
       : 'It depends on what you need besides payroll. Compare the published prices and plan limits of the services on this page, and get quotes from any that sell by quote.',
   },
   {

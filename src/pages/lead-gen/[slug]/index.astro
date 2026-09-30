@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import SourceReviews from '../../../components/SourceReviews.astro';
 import { asSentence,
   leadGenPlatforms,
   getLeadGenPlatform,
@@ -84,7 +85,7 @@ const faqSchema = {
   <article class="mx-auto max-w-4xl px-4 py-12">
     <header class="mb-8">
       <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
-        Lead-gen platform · {tier === 'S' ? 'Exclusive or call-based, no warning' : tier === 'A' ? 'No reputation warning' : 'Listed with a reputation warning'}
+        Lead-gen platform · {tier === 'S' ? 'Exclusive leads or calls, no warning' : tier === 'A' ? 'No reputation warning' : 'Listed with a reputation warning'}
       </p>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
         {platform.name} Review
@@ -144,7 +145,7 @@ const faqSchema = {
         <span class="text-slate-300">·</span>
         <a href="#pricing" class="text-orange-600 hover:underline">Pricing</a>
         <span class="text-slate-300">·</span>
-        <a href="#ratings" class="text-orange-600 hover:underline">Ratings</a>
+        <a href="#ratings" class="text-orange-600 hover:underline">Reviews</a>
         <span class="text-slate-300">·</span>
         <a href="#faqs" class="text-orange-600 hover:underline">FAQs</a>
         <span class="text-slate-300">·</span>
@@ -223,25 +224,7 @@ const faqSchema = {
       </div>
     </section>
 
-    <section id="ratings" class="mb-10 scroll-mt-8">
-      <h2 class="mb-3 text-2xl font-bold text-slate-900">External ratings & sentiment</h2>
-      <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <div class="rounded-lg border border-slate-200 bg-white p-4">
-          <p class="text-xs uppercase tracking-wider text-slate-500">Trustpilot</p>
-          <p class="mt-1 text-2xl font-bold text-slate-900">
-            {platform.ratings.trustpilot !== null ? `${platform.ratings.trustpilot.toFixed(1)} / 5` : 'n/a'}
-          </p>
-        </div>
-        <div class="rounded-lg border border-slate-200 bg-white p-4">
-          <p class="text-xs uppercase tracking-wider text-slate-500">BBB</p>
-          <p class="mt-1 text-base font-semibold text-slate-900">{platform.ratings.bbb ?? 'n/a'}</p>
-        </div>
-        <div class="rounded-lg border border-slate-200 bg-white p-4">
-          <p class="text-xs uppercase tracking-wider text-slate-500">Reddit sentiment</p>
-          <p class="mt-1 text-sm font-semibold text-slate-900">{platform.ratings.reddit_sentiment}</p>
-        </div>
-      </div>
-    </section>
+    <SourceReviews name={platform.name} url={platform.vendor_url} />
 
     <section class="mb-10">
       <h2 class="mb-3 text-2xl font-bold text-slate-900">Best for</h2>

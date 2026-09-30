@@ -31,9 +31,10 @@ const { verticalSlug } = Astro.props;
 const vertical = getVertical(verticalSlug)!;
 
 const providersForVertical = insuranceProviders.filter((p) => p.verticals.includes(verticalSlug));
-const byTier: Record<'S' | 'A' | 'F', InsuranceProvider[]> = { S: [], A: [], F: [] };
+// Two tiers only (2026-09-30): F = reputation warning, A = no warning.
+const byTier: Record<'A' | 'F', InsuranceProvider[]> = { A: [], F: [] };
 for (const p of providersForVertical) {
-  byTier[insuranceTier(p)].push(p);
+  byTier[insuranceTier(p) === 'F' ? 'F' : 'A'].push(p);
 }
 
 const pageTitle = `Best Insurance for ${vertical.name} Contractors (2026)`;
@@ -46,8 +47,7 @@ const breadcrumbs = [
 ];
 
 const tierMeta = {
-  S: { label: 'Recommended', color: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
-  A: { label: 'Workable depending on profile', color: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
+  A: { label: 'No reputation warning', color: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
   F: { label: 'Reputation warning applies', color: 'bg-rose-100 text-rose-900 ring-rose-300', cardBorder: 'border-rose-300' },
 };
 
@@ -70,16 +70,14 @@ function tradeIntro(slug: string): string {
     case 'pest_control':
       return 'Pest control involves applying pesticides at customers\' properties, so ask whether each general liability quote covers pesticide and chemical-related claims, and whether professional liability is available for your work.';
     default:
-      return `Insurance recommendations for ${vertical.name.toLowerCase()} contractors.`;
+      return `Business-insurance providers for ${vertical.name.toLowerCase()} contractors.`;
   }
 }
 
 const faqs = [
   {
     q: `Which insurance provider is best for ${vertical.name.toLowerCase()} contractors?`,
-    a: byTier.S.length > 0
-      ? `${byTier.S[0].name} is listed first on this page: it has no reputation warning and is in Tier S. Best for: ${byTier.S[0].best_for}.${byTier.S.length > 1 ? ` Other Tier S options include ${byTier.S.slice(1, 3).map(p => p.name).join(' and ')}.` : ''} No single provider fits every shop: compare an online quote with a quote from a local independent agent, who can price carriers that are sold only through agents.`
-      : `Start with the providers below that cover ${vertical.name.toLowerCase()} contractors, and compare an online quote with a quote from a local independent agent. Read the reputation warning on any flagged card before you buy.`,
+    a: `We do not rank insurers for ${vertical.name.toLowerCase()} work: nothing we could verify ranks them on quality, and your premium depends on your trade class, state, payroll, vehicles, claims history and coverage limits. Get quotes from several of the ${providersForVertical.length} providers listed on this page, including an online quote and a quote from a local independent agent, who can price carriers sold only through agents. Read any reputation warning on a provider's card before you buy.`,
   },
   {
     q: `What does typical insurance cost for ${vertical.name.toLowerCase()} contractors?`,
@@ -120,7 +118,7 @@ const faqSchema = {
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">{tradeIntro(verticalSlug)}</p>
     </header>
 
-    {(['S', 'A', 'F'] as const).map((tier) => {
+    {(['A', 'F'] as const).map((tier) => {
       const providers = byTier[tier];
       if (providers.length === 0) return null;
       const meta = tierMeta[tier];

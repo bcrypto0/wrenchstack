@@ -25,20 +25,20 @@ for (const p of leadGenPlatforms) {
 
 const tierMeta = {
   S: {
-    label: 'Tier S: exclusive or call-based, no warning',
-    description: 'No reputation warning, a lead model of exclusive leads, pay-per-call or a listing or tool you run yourself, and a pass on our other rating inputs. Not every entry here sells leads: CallRail tracks calls from your other sources. These services charge in different ways, so compare the pricing line on each card.',
+    label: 'Tier S: exclusive leads or calls, no warning',
+    description: `No reputation warning, and each lead or call goes to one business: exclusive leads (Google Local Services Ads) or pay-per-call (Service Direct, 33 Mile Radius and eLocal, whose live calls are exclusive while its form leads can be shared). A lead that is yours alone is the advantage this tier marks; it is not a ranking of lead quality or cost. Several of these services publish no prices and some bill for missed or voicemail calls, so compare the pricing line on each card.`,
     badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300',
     cardBorder: 'border-emerald-300',
   },
   A: {
     label: 'Tier A: no warning, check the terms',
-    description: 'No reputation warning, but outside the Tier S rule: shared-lead and bid marketplaces, commission and fee-based job platforms, self-serve ad platforms, and listing services that do not pass our other rating inputs. Several do not publish prices or say how many pros receive each lead, so confirm both before you spend.',
+    description: `No reputation warning, but the lead model is not exclusive leads or pay-per-call: shared-lead and bid marketplaces, commission and fee-based job platforms, self-serve ad platforms, listing services and call tracking (CallRail tracks calls from your other sources). Several do not publish prices or say how many pros receive each lead, so confirm both before you spend.`,
     badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300',
     cardBorder: 'border-blue-300',
   },
   F: {
     label: 'Tier F: listed with a reputation warning',
-    description: 'Entries that carry a reputation warning, shown on each card: an FTC order (HomeAdvisor), a state settlement (Angi), a class-action settlement (Yelp), a BBB rating or complaint count (Bark, Networx, BuildZoom, LawnStarter), or provider terms that restrict you (LawnStarter). Read the warning and the full review before you spend.',
+    description: 'Entries that carry a reputation warning, shown on each card: an FTC order (HomeAdvisor), a state settlement (Angi), a class-action settlement (Yelp), a BBB complaint count (Bark, Networx, BuildZoom, LawnStarter), or provider terms that restrict you (LawnStarter). Read the warning and the full review before you spend.',
     badgeColor: 'bg-rose-100 text-rose-900 ring-rose-300',
     cardBorder: 'border-rose-300',
   },
@@ -74,7 +74,7 @@ const itemListSchema = {
         Best Lead-Gen Platforms for Trades Contractors (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {leadGenPlatforms.length} lead-generation platforms used by HVAC, plumbing, electrical, roofing, and other residential trades. They include pay-per-lead and pay-per-call services, shared-lead and bid marketplaces, self-serve ad platforms, and call tracking. Each review states how the platform charges and whether leads are shared, and entries with an FTC order, a settlement, a BBB rating or complaint count, or restrictive provider terms carry a reputation warning that cites its source.
+        Independent reviews of {leadGenPlatforms.length} lead-generation platforms used by HVAC, plumbing, electrical, roofing, and other residential trades. They include pay-per-lead and pay-per-call services, shared-lead and bid marketplaces, self-serve ad platforms, and call tracking. Each review states how the platform charges and whether leads are shared, and entries with an FTC order, a settlement, a BBB complaint count, or restrictive provider terms carry a reputation warning that cites its source.
       </p>
     </header>
 
@@ -141,10 +141,8 @@ const itemListSchema = {
                     <dd class="font-semibold text-slate-900">{p.exclusivity.split(': ')[0].trim()}</dd>
                   </div>
                   <div>
-                    <dt class="text-slate-500 uppercase tracking-wider">Trustpilot</dt>
-                    <dd class="font-semibold text-slate-900">
-                      {p.ratings.trustpilot !== null ? `${p.ratings.trustpilot.toFixed(1)} / 5` : 'n/a'}
-                    </dd>
+                    <dt class="text-slate-500 uppercase tracking-wider">Headquartered</dt>
+                    <dd class="font-semibold text-slate-900">{p.headquartered}</dd>
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Affiliate program</dt>

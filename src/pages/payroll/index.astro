@@ -17,8 +17,8 @@ const byTier: Record<'S' | 'A' | 'B', PayrollService[]> = { S: [], A: [], B: [] 
 for (const s of payrollServices) byTier[payrollTier(s)].push(s);
 
 const tierMeta = {
-  S: { label: 'Tier S: recommended for SMB trades', description: 'Online payroll and trades-specialty payroll with no reputation warning that also meet the review-score cut in our tier rule. OnPay sells one plan at $49/mo plus $6 per person with optional pay-as-you-go workers\' comp; Patriot starts at $17/mo plus $4 per worker if you file taxes yourself; Hourly.io pairs payroll with pay-as-you-go workers\' comp, GPS time tracking and job costing; Fingercheck adds GPS job-code time tracking and certified payroll reports.', badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
-  A: { label: 'Tier A: context-specific fit', description: 'No reputation warning, not legacy payroll or a PEO, and outside the Tier S rule. That covers payroll built into another product (QuickBooks Payroll, Square Payroll), HR platforms with payroll such as Rippling, Homebase and Paycor, and online or construction payroll such as Gusto, Roll by ADP, SurePayroll and Miter. Which one fits depends on the software you already use and the work you do.', badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
+  S: { label: 'Tier S: online or specialty payroll with a published price, no warning', description: `Online payroll services and trades-specialty payroll with no reputation warning whose vendors publish a starting price, so you can compare costs before a sales call: Gusto from $49/mo plus $6 per person, OnPay at $49/mo plus $6 per person on one plan, Patriot from $17/mo plus $4 per worker if you file taxes yourself, SurePayroll at $29/mo plus $7 per worker, Roll by ADP at $39/mo plus $5 per worker, Auris (formerly Heartland Payroll) with bundles from $89/mo, Hourly.io from $80/mo plus $12 per active user with pay-as-you-go workers' comp, and Fingercheck from $79/mo plus $10 per employee with certified payroll reports. The tier does not rank them against each other.`, badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
+  A: { label: 'Tier A: no warning; built-in payroll, HR suite or no published US price', description: `No reputation warning, not legacy payroll or a PEO, and outside the Tier S rule. That covers payroll built into other software (QuickBooks Payroll, Square Payroll), HR and team-management platforms with payroll (Rippling, Homebase, Paycor, Paylocity, Arcoro), construction payroll sold by quote (eBacon, Payroll4Construction, Miter), and Wagepoint, which serves Canada only and whose pricing page does not label the currency. Which one fits depends on the software you already use and the work you do.`, badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
   B: { label: 'Tier B: legacy, PEO or reputation warning', description: 'Legacy payroll (ADP Run, priced by quote, and Paychex Flex), PEOs that co-employ your staff to bundle payroll, benefits and workers\' comp (Justworks, TriNet), and services with a reputation warning (Wave Payroll, Paycom). Read the warning on each flagged card before you sign up.', badgeColor: 'bg-amber-100 text-amber-900 ring-amber-300', cardBorder: 'border-amber-300' },
 };
 
@@ -105,10 +105,6 @@ const itemListSchema = {
 
                 <dl class="mb-3 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
                   <div>
-                    <dt class="text-slate-500 uppercase tracking-wider">G2 / Capterra</dt>
-                    <dd class="font-semibold text-slate-900">{s.ratings.g2 !== null && s.ratings.capterra !== null ? `${s.ratings.g2.toFixed(1)} / ${s.ratings.capterra.toFixed(1)}` : 'n/a'}</dd>
-                  </div>
-                  <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Best team size</dt>
                     <dd class="font-semibold text-slate-900">{s.best_team_size.split('(')[0].trim()}</dd>
                   </div>
@@ -119,6 +115,10 @@ const itemListSchema = {
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Affiliate</dt>
                     <dd class="font-semibold text-slate-900">{s.affiliate_program === 'none' || s.affiliate_program === 'unknown' ? 'None' : s.affiliate_program}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Verified</dt>
+                    <dd class="font-semibold text-slate-900">{s.verified_date}</dd>
                   </div>
                 </dl>
 

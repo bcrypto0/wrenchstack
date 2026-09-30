@@ -299,18 +299,18 @@ function implementationTimeline(): { headline: string; detail: string } {
   }
   if (isEnterprise) {
     return {
-      headline: '3–6 months is typical at this price level',
+      headline: '3-6 months is typical at this price level',
       detail: `Platforms at this price level usually involve deeper data migration (customer history, recurring service agreements, custom pricebooks), staff training on advanced workflows, and often integration work. ${tool.name} does not publish an implementation timeline, so ask for the onboarding plan and the go-live date in writing, and don't sign a contract that locks you into a go-live date you can't realistically hit.`,
     };
   }
   if (isMidTier) {
     return {
-      headline: '4–8 weeks is typical at this price level',
+      headline: '4-8 weeks is typical at this price level',
       detail: `Mid-tier platforms typically have a self-serve setup wizard for the basics, and some sell optional paid onboarding, so check ${tool.name}'s price for it before you budget. Plan to spend the first 2 weeks importing customer data and configuring basic workflows, then 2-4 weeks running parallel (old system + new system) before cutting over fully. Field tech training is usually the longest-tail item; budget extra time for adoption resistance.`,
     };
   }
   return {
-    headline: '1–3 weeks for a small team',
+    headline: '1-3 weeks for a small team',
     detail: hasSetupFee
       ? `${tool.name} charges a one-time setup or onboarding fee (see the pricing note), so ask what it covers and how long it takes before you sign. Most tools in this price band can be running real jobs within a few weeks once customers are imported and services and pricing are configured. The bigger time sink is usually adapting your existing workflow rather than the software setup itself.`
       : `Most tools in this price band are built for self-service setup. You can typically be running real jobs through the system within a week: import customers (or build from scratch), configure your services and pricing, and start scheduling. The bigger time sink is usually adapting your existing workflow rather than the software setup itself.`,

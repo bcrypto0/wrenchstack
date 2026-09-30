@@ -17,8 +17,8 @@ const byTier: Record<'S' | 'A' | 'F', MarketingAgency[]> = { S: [], A: [], F: []
 for (const a of marketingAgencies) byTier[agencyTier(a)].push(a);
 
 const tierMeta = {
-  S: { label: 'Tier S: strongest recommendations', description: 'Agencies with no reputation warning that score highest on our rating inputs. Most focus on home-service or single-trade contractors. Read each review for published prices and contract terms.', badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
-  A: { label: 'Tier A: context-specific fit', description: 'Agencies with no reputation warning that fit specific contractor profiles: remodelers and custom builders (Builder Funnel), larger multi-industry accounts (Scorpion), broad home-services work (Lemonade Stand), or pay-per-call leads instead of a retainer (Service Direct).', badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
+  S: { label: 'Tier S: price published, no warning', description: `Agencies with no reputation warning whose own site publishes the price of their core service, so you can compare cost before a sales call. That is the whole rule; it is not a ranking of quality or results. Read each review for the minimum term and what the price covers.`, badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
+  A: { label: 'Tier A: no reputation warning', description: `Agencies with no reputation warning that do not meet the Tier S rule: most quote the core service after a call instead of publishing a price, and Service Direct sells pay-per-call leads at a price you set instead of a retainer. Get the fee, any setup fee and the minimum term in writing before you sign.`, badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
   F: { label: 'Tier F: listed with reputation warnings', description: 'Agencies with a reputation warning: contract terms that are hard to exit (Townsquare Interactive, Marketing 360) or a pattern of billing and cancellation complaints (SureFire Local). Read the warning on each card before you sign.', badgeColor: 'bg-rose-100 text-rose-900 ring-rose-300', cardBorder: 'border-rose-300' },
 };
 
@@ -104,12 +104,12 @@ const itemListSchema = {
                     <dd class="font-semibold text-slate-900">{a.minimum_contract_months === null ? 'Not published' : `${a.minimum_contract_months}-month${a.minimum_contract_months === 1 ? '' : 's'}`}</dd>
                   </div>
                   <div>
-                    <dt class="text-slate-500 uppercase tracking-wider">Google rating</dt>
-                    <dd class="font-semibold text-slate-900">{a.ratings.google !== null ? `${a.ratings.google.toFixed(1)} / 5` : '-'}</dd>
+                    <dt class="text-slate-500 uppercase tracking-wider">Pricing model</dt>
+                    <dd class="font-semibold text-slate-900">{a.pricing_model.replace(/-/g, ' ')}</dd>
                   </div>
                   <div>
-                    <dt class="text-slate-500 uppercase tracking-wider">Trustpilot</dt>
-                    <dd class="font-semibold text-slate-900">{a.ratings.trustpilot !== null ? `${a.ratings.trustpilot.toFixed(1)} / 5` : '-'}</dd>
+                    <dt class="text-slate-500 uppercase tracking-wider">Headquartered</dt>
+                    <dd class="font-semibold text-slate-900">{a.headquartered}</dd>
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Services</dt>

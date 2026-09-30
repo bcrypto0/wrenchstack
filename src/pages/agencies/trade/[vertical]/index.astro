@@ -33,10 +33,15 @@ const breadcrumbs = [
 ];
 
 const tierMeta = {
-  S: { label: 'Recommended', color: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
-  A: { label: 'Context-specific fit', color: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
-  F: { label: 'Reputation warning applies', color: 'bg-rose-100 text-rose-900 ring-rose-300', cardBorder: 'border-rose-300' },
+  S: { label: 'Tier S: price published, no warning', description: `No reputation warning, and the agency's own site publishes the price of its core service, so you can compare cost before a sales call. This is not a ranking of quality or results.`, color: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
+  A: { label: 'Tier A: no reputation warning', description: `No reputation warning, but outside the Tier S rule: most of these agencies quote the core service after a call instead of publishing a price. Get the fee, any setup fee and the minimum term in writing.`, color: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
+  F: { label: 'Tier F: reputation warning applies', description: `Each of these agencies carries a reputation warning. Read it on the card and in the full review before you sign.`, color: 'bg-rose-100 text-rose-900 ring-rose-300', cardBorder: 'border-rose-300' },
 };
+
+function joinNames(names: string[]): string {
+  if (names.length <= 1) return names.join('');
+  return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+}
 
 function tradeIntro(slug: string): string {
   switch (slug) {
@@ -53,10 +58,10 @@ function tradeIntro(slug: string): string {
 
 const faqs = [
   {
-    q: `Which marketing agency is best for ${vertical.name.toLowerCase()} contractors?`,
+    q: `How do I choose a marketing agency for ${vertical.name.toLowerCase()} contractors?`,
     a: byTier.S.length > 0
-      ? `${byTier.S[0].name} is listed first: it has no reputation warning and scores highest on our rating inputs among agencies serving ${vertical.name.toLowerCase()} contractors. Best for: ${byTier.S[0].best_for}.${byTier.S.length > 1 ? ` ${byTier.S[1].name} is another Tier S option.` : ''} Compare published prices and minimum contracts before you choose.`
-      : `Start with the agencies below that list ${vertical.name.toLowerCase()} among their specialties, then broader home-services agencies such as Adapt Digital Solutions or Lemonade Stand. Compare published prices and minimum contracts before you choose.`,
+      ? `We do not rank agencies on quality. Tier S marks the agencies serving ${vertical.name.toLowerCase()} contractors that carry no reputation warning and publish the price of their core service on their own site: ${joinNames(byTier.S.map((a) => a.name))}. A published price lets you compare cost before a sales call. Whichever agency you consider, compare the price, the minimum contract and who owns your website and ad accounts before you sign.`
+      : `We do not rank agencies on quality. Start with the agencies below that list ${vertical.name.toLowerCase()} among their specialties, then broader home-services agencies such as Adapt Digital Solutions or Lemonade Stand. Compare the price, the minimum contract and who owns your website and ad accounts before you sign.`,
   },
   {
     q: `What does a typical marketing retainer cost for ${vertical.name.toLowerCase()}?`,
@@ -99,9 +104,12 @@ const faqSchema = {
       const meta = tierMeta[tier];
       return (
         <section class="mb-12">
-          <div class="mb-5 flex items-baseline gap-3">
-            <h2 class="text-2xl font-bold text-slate-900">{meta.label}</h2>
-            <span class={`inline-block rounded-full px-2 py-0.5 text-xs font-bold ring-1 ${meta.color}`}>{agencies.length}</span>
+          <div class="mb-5">
+            <div class="flex items-baseline gap-3">
+              <h2 class="text-2xl font-bold text-slate-900">{meta.label}</h2>
+              <span class={`inline-block rounded-full px-2 py-0.5 text-xs font-bold ring-1 ${meta.color}`}>{agencies.length}</span>
+            </div>
+            <p class="mt-2 text-sm text-slate-600 leading-relaxed">{meta.description}</p>
           </div>
 
           <div class="space-y-4">

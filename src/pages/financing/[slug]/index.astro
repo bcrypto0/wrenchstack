@@ -59,7 +59,6 @@ const faqSchema = {
         {provider.founded !== null && <span>Founded {provider.founded}</span>}
         {provider.headquartered && <span>HQ {provider.headquartered}</span>}
         <span>Verified: {provider.verified_date}</span>
-        {provider.ratings.trustpilot !== null && <span>Trustpilot {provider.ratings.trustpilot.toFixed(1)} / 5</span>}
       </div>
 
       <div class="mt-6 flex flex-wrap gap-3">

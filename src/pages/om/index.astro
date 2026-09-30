@@ -22,7 +22,7 @@ const vendorsByCategory: Record<string, OmVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
 
 const pageTitle = 'Oman Construction & Trades Software | WrenchStack';
-const pageDescription = `Independent directory of ${vendors.length} construction & trades vendors for Oman: global PM/BIM platforms, Oman-native and regional ERPs, Fawtara-ready e-invoicing, and 5%-VAT accounting, plus the Tax Authority e-invoicing mandate (2026–2027), OSE, contractor-classification, Omanisation and building-code compliance.`;
+const pageDescription = `Independent directory of ${vendors.length} construction & trades vendors for Oman: global PM/BIM platforms, Oman-native and regional ERPs, Fawtara-ready e-invoicing, and 5%-VAT accounting, plus the Tax Authority e-invoicing mandate (2026-2027), OSE, contractor-classification, Omanisation and building-code compliance.`;
 const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Oman', url: '/om/' } ];
 ---
 <Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
@@ -95,7 +95,7 @@ const breadcrumbs = [ { name: 'Home', url: '/' }, { name: 'Oman', url: '/om/' } 
             {cv.map(v => {
               const isCert = v.category === 'certification';
               const tierColor = v.tier === 'S' ? 'border-emerald-300' : v.tier === 'F' ? 'border-rose-300' : 'border-blue-300';
-              const tierLabel = isCert ? 'Official body / regime' : v.tier === 'S' ? 'Recommended' : v.tier === 'F' ? 'Reputation warning' : 'Workable';
+              const tierLabel = isCert ? 'Official body / regime' : v.tier === 'S' ? 'Published prices' : v.tier === 'F' ? 'Reputation warning' : 'Listed';
               const tierBadge = v.tier === 'S' ? 'bg-emerald-100 text-emerald-900' : v.tier === 'F' ? 'bg-rose-100 text-rose-900' : 'bg-blue-100 text-blue-900';
               return (
                 <article class={`rounded-lg border-2 ${tierColor} bg-white p-5`}>

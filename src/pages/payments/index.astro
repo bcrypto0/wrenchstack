@@ -109,12 +109,12 @@ const itemListSchema = {
                     <dd class="font-semibold text-slate-900">{p.founded ?? '-'}</dd>
                   </div>
                   <div>
-                    <dt class="text-slate-500 uppercase tracking-wider">Capterra</dt>
-                    <dd class="font-semibold text-slate-900">{p.ratings.capterra !== null ? `${p.ratings.capterra.toFixed(1)} / 5` : '-'}</dd>
-                  </div>
-                  <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Best team size</dt>
                     <dd class="font-semibold text-slate-900">{p.best_team_size}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Verified</dt>
+                    <dd class="font-semibold text-slate-900">{p.verified_date}</dd>
                   </div>
                 </dl>
 

@@ -12,22 +12,18 @@ const breadcrumbs = [
   { name: 'Insurance', url: '/insurance/' },
 ];
 
-const tierOrder: Array<'S' | 'A' | 'F'> = ['S', 'A', 'F'];
-const byTier: Record<'S' | 'A' | 'F', InsuranceProvider[]> = { S: [], A: [], F: [] };
+// Tiers use verified facts only (2026-09-30): F = reputation warning, A = no warning.
+// Insurance has only these two groups: nothing we could verify ranks insurers on quality.
+const tierOrder: Array<'A' | 'F'> = ['A', 'F'];
+const byTier: Record<'A' | 'F', InsuranceProvider[]> = { A: [], F: [] };
 for (const p of insuranceProviders) {
-  byTier[insuranceTier(p)].push(p);
+  byTier[insuranceTier(p) === 'F' ? 'F' : 'A'].push(p);
 }
 
 const tierMeta = {
-  S: {
-    label: 'Tier S: recommended',
-    description: 'Providers with no reputation warning that meet our Tier S rule, in two groups. Providers classed as direct digital, where you apply and buy online, that also clear the review-score cut: ERGO NEXT, Simply Business, Insureon, Huckleberry, Thimble, Cerity (workers\' comp only) and Embroker, which is in by rule although trade contractors are not among the industries it names. And policyholder-owned mutual carriers sold through local independent agents that meet the rating inputs in the same rule: Acuity and Erie. An affiliate program is not part of the rule; Acuity and Erie have none.',
-    badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300',
-    cardBorder: 'border-emerald-300',
-  },
   A: {
-    label: 'Tier A: workable depending on profile',
-    description: 'Providers with no reputation warning that fall outside the Tier S rule. Most sell through independent agents or brokers, or both online and through agents: carriers such as The Hartford, Travelers, Liberty Mutual, Nationwide, Chubb and CNA; specialty and construction insurers such as Markel and Zurich; carriers with workers\' comp roots or emphasis such as Berkshire Hathaway GUARD and AmTrust; Hiscox, which sells online and through brokers; biBERK, which sells online direct; and CoverWallet, whose site now redirects to Aon Affinity, where you request a quote through a form or an advisor. Fit depends on your trade, size, state and whether you want to work with an agent.',
+    label: 'Tier A: no reputation warning',
+    description: `Providers with no reputation warning. This is not a quality ranking: nothing we could verify ranks insurers on quality, so every provider without a documented warning is in Tier A. They differ in how you buy. Online insurers and marketplaces: ERGO NEXT, biBERK, Simply Business, Insureon, Huckleberry, Thimble and Cerity (workers' comp only). Online and through agents or brokers: The Hartford, Hiscox, Liberty Mutual, Chubb and Progressive Commercial. Through agents or brokers: Acuity, Erie, Travelers, Nationwide, Selective, CNA, Markel, Zurich, Berkshire Hathaway GUARD and AmTrust, and Coterie, which also sells through partner platforms. Tivly is a free matching service that connects you with an agent. Fit depends on your trade, size, state and whether you want to work with an agent.`,
     badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300',
     cardBorder: 'border-blue-300',
   },
@@ -67,7 +63,7 @@ const itemListSchema = {
         Best Business Insurance for Trades Contractors (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {insuranceProviders.length} business-insurance providers for HVAC, plumbing, electrical, roofing and other trades: online insurers and marketplaces, carriers sold through independent agents, and specialty construction insurers. Reputation warnings cite a documented record, such as a BBB rating, a regulatory fine, a settlement or a lawsuit. Affiliate programs are not part of the tier rule: Acuity and Erie have none and are in Tier S.
+        Independent reviews of {insuranceProviders.length} business-insurance providers for HVAC, plumbing, electrical, roofing and other trades: online insurers and marketplaces, carriers sold through independent agents, and specialty construction insurers. We do not rank insurers: nothing we could verify ranks them on quality, and most providers here quote premiums business by business. Tier F marks a provider with a reputation warning that cites a documented record, such as a BBB rating, a regulatory fine, a settlement or a lawsuit; every other provider is Tier A. Affiliate programs are not part of the tier rule.
       </p>
     </header>
 
@@ -81,7 +77,7 @@ const itemListSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">The headline filter: agent vs direct</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        A structural choice in contractor insurance is how you buy. <strong>Online providers</strong> let you apply, get a price and buy on their site: ERGO NEXT and biBERK sell their own policies, Cerity sells workers' comp, and marketplaces such as Simply Business, Insureon and Huckleberry show quotes from several carriers. Some carriers sell both online and through agents, including The Hartford, Hiscox, Liberty Mutual and Progressive Commercial. <strong>Agent-sold carriers</strong> such as Acuity, Erie, Travelers, Nationwide and Selective are quoted through a local independent agent, and turnaround depends on the agent. An online quote plus an agent quote gives you two prices to compare. CoverWallet's site now redirects to Aon Affinity, where you request a quote through a form or an advisor instead of buying instantly online.
+        A structural choice in contractor insurance is how you buy. <strong>Online providers</strong> let you apply, get a price and buy on their site: ERGO NEXT and biBERK sell their own policies, Cerity sells workers' comp, and marketplaces such as Simply Business, Insureon and Huckleberry show quotes from several carriers. Some carriers sell both online and through agents, including The Hartford, Hiscox, Liberty Mutual and Progressive Commercial. <strong>Agent-sold carriers</strong> such as Acuity, Erie, Travelers, Nationwide and Selective are quoted through a local independent agent, and turnaround depends on the agent. An online quote plus an agent quote gives you two prices to compare.
       </p>
     </section>
 
@@ -134,12 +130,12 @@ const itemListSchema = {
                     <dd class="font-semibold text-slate-900">{p.insurance_lines.length}</dd>
                   </div>
                   <div>
-                    <dt class="text-slate-500 uppercase tracking-wider">Trustpilot</dt>
-                    <dd class="font-semibold text-slate-900">{p.ratings.trustpilot !== null ? `${p.ratings.trustpilot.toFixed(1)} / 5` : '-'}</dd>
+                    <dt class="text-slate-500 uppercase tracking-wider">Founded</dt>
+                    <dd class="font-semibold text-slate-900">{p.founded ?? '-'}</dd>
                   </div>
                   <div>
-                    <dt class="text-slate-500 uppercase tracking-wider">A.M. Best</dt>
-                    <dd class="font-semibold text-slate-900">{p.ratings.am_best ?? '-'}</dd>
+                    <dt class="text-slate-500 uppercase tracking-wider">HQ</dt>
+                    <dd class="font-semibold text-slate-900">{p.headquartered.split('(')[0].trim()}</dd>
                   </div>
                 </dl>
 

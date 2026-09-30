@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import SourceReviews from '../../../components/SourceReviews.astro';
 import { asSentence, marketingAgencies, agencyTier, type MarketingAgency, verticals, verticalToUrl } from '../../../lib/data';
 
 export async function getStaticPaths() {
@@ -29,7 +30,7 @@ const breadcrumbs = [
 ];
 
 const tierMeta = {
-  S: { label: 'Tier S', color: 'bg-emerald-100 text-emerald-900 ring-emerald-300' },
+  S: { label: 'Tier S: price published', color: 'bg-emerald-100 text-emerald-900 ring-emerald-300' },
   A: { label: 'Tier A', color: 'bg-blue-100 text-blue-900 ring-blue-300' },
   F: { label: 'Tier F: reputation warning applies', color: 'bg-rose-100 text-rose-900 ring-rose-300' },
 };
@@ -61,7 +62,7 @@ const faqSchema = {
   <article class="mx-auto max-w-4xl px-4 py-12">
     <header class="mb-8">
       <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
-        Marketing agency · {tier === 'S' ? 'Recommended' : tier === 'A' ? 'Context-specific fit' : 'Reputation warning applies'}
+        Marketing agency · {tier === 'S' ? 'Price published, no warning' : tier === 'A' ? 'No reputation warning' : 'Reputation warning applies'}
       </p>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">{agency.name} Review</h1>
       <p class="mt-3 text-lg italic text-slate-600">{agency.tagline}</p>
@@ -103,7 +104,7 @@ const faqSchema = {
         <span class="text-slate-300">·</span>
         <a href="#services" class="text-orange-600 hover:underline">Services & Pricing</a>
         <span class="text-slate-300">·</span>
-        <a href="#ratings" class="text-orange-600 hover:underline">Ratings</a>
+        <a href="#ratings" class="text-orange-600 hover:underline">Reviews</a>
         <span class="text-slate-300">·</span>
         <a href="#faqs" class="text-orange-600 hover:underline">FAQs</a>
       </div>
@@ -196,27 +197,7 @@ const faqSchema = {
       </div>
     </section>
 
-    <section id="ratings" class="mb-10 scroll-mt-8">
-      <h2 class="mb-3 text-2xl font-bold text-slate-900">External ratings & sentiment</h2>
-      <div class="grid grid-cols-1 gap-3 sm:grid-cols-4">
-        <div class="rounded-lg border border-slate-200 bg-white p-4">
-          <p class="text-xs uppercase tracking-wider text-slate-500">Google</p>
-          <p class="mt-1 text-2xl font-bold text-slate-900">{agency.ratings.google !== null ? `${agency.ratings.google.toFixed(1)} / 5` : '-'}</p>
-        </div>
-        <div class="rounded-lg border border-slate-200 bg-white p-4">
-          <p class="text-xs uppercase tracking-wider text-slate-500">Trustpilot</p>
-          <p class="mt-1 text-2xl font-bold text-slate-900">{agency.ratings.trustpilot !== null ? `${agency.ratings.trustpilot.toFixed(1)} / 5` : '-'}</p>
-        </div>
-        <div class="rounded-lg border border-slate-200 bg-white p-4">
-          <p class="text-xs uppercase tracking-wider text-slate-500">BBB</p>
-          <p class="mt-1 text-base font-semibold text-slate-900">{agency.ratings.bbb ?? '-'}</p>
-        </div>
-        <div class="rounded-lg border border-slate-200 bg-white p-4">
-          <p class="text-xs uppercase tracking-wider text-slate-500">Reddit</p>
-          <p class="mt-1 text-xs font-semibold text-slate-900">{agency.ratings.reddit_sentiment}</p>
-        </div>
-      </div>
-    </section>
+    <SourceReviews name={agency.name} url={agency.vendor_url} />
 
     <section id="faqs" class="mb-10 scroll-mt-8">
       <h2 class="mb-5 text-2xl font-bold text-slate-900">Frequently asked</h2>

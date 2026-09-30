@@ -1,0 +1,33 @@
+---
+// Links to third-party review and complaint sources for a vendor. We do not reproduce
+// review scores for non-software vendors: they change often and could not be verified
+// (policy since 2026-09-30). Readers check the current score at the source.
+interface Props {
+  name: string;
+  url: string;
+  note?: string;
+}
+const { name, url, note } = Astro.props;
+let domain = '';
+try {
+  domain = new URL(url).hostname.replace(/^www\./, '');
+} catch {
+  domain = '';
+}
+const bbb = `https://www.bbb.org/search?find_text=${encodeURIComponent(name)}`;
+const trustpilot = domain ? `https://www.trustpilot.com/review/${domain}` : '';
+---
+
+<section id="ratings" class="mb-10 scroll-mt-8">
+  <h2 class="mb-3 text-2xl font-bold text-slate-900">Reviews and complaints at the source</h2>
+  <p class="mb-4 text-sm text-slate-600 leading-relaxed">
+    We do not copy review scores onto this page: they change often, and we list only facts we could check.
+    Read {name}'s current reviews and complaint record at the source.{note ? ` ${note}` : ''}
+  </p>
+  <div class="flex flex-wrap gap-2">
+    <a href={bbb} rel="nofollow noopener" target="_blank" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50">BBB profile search</a>
+    {trustpilot && (
+      <a href={trustpilot} rel="nofollow noopener" target="_blank" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50">Trustpilot reviews</a>
+    )}
+  </div>
+</section>

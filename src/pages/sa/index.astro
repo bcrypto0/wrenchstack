@@ -91,7 +91,7 @@ const arUrl = new URL('/sa/ar/', Astro.site).toString();
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What's different about choosing software in Saudi Arabia</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Saudi construction software selection has structural differences from the US. First, <strong>ZATCA e-invoicing (Fatoora) is mandatory</strong>: invoicing software must integrate with ZATCA's platform (UUID, cryptographic stamp, QR, real-time clearance), so freeform US tools simply can't comply; you need a Phase-2-certified system. Second, software must be <strong>Arabic / RTL and Saudi-Riyal native</strong>, with 15% VAT handling. Third, <strong>contractor classification (Grades 1–6) and Etimad registration</strong> gate public-sector work, while <strong>Nitaqat Saudization</strong> (via Qiwa) ties your labour mix to your ability to win tenders and renew visas (concepts with no US equivalent). And the demand engine is unique: <strong>Vision 2030 giga-projects</strong> (NEOM, Red Sea, Qiddiya, ROSHN) increasingly mandate BIM and digital workflows down the whole supply chain.
+        Saudi construction software selection has structural differences from the US. First, <strong>ZATCA e-invoicing (Fatoora) is mandatory</strong>: invoicing software must integrate with ZATCA's platform (UUID, cryptographic stamp, QR, real-time clearance), so freeform US tools simply can't comply; you need a Phase-2-certified system. Second, software must be <strong>Arabic / RTL and Saudi-Riyal native</strong>, with 15% VAT handling. Third, <strong>contractor classification (Grades 1-6) and Etimad registration</strong> gate public-sector work, while <strong>Nitaqat Saudization</strong> (via Qiwa) ties your labour mix to your ability to win tenders and renew visas (concepts with no US equivalent). And the demand engine is unique: <strong>Vision 2030 giga-projects</strong> (NEOM, Red Sea, Qiddiya, ROSHN) increasingly mandate BIM and digital workflows down the whole supply chain.
       </p>
     </section>
 
@@ -109,7 +109,7 @@ const arUrl = new URL('/sa/ar/', Astro.site).toString();
             {cv.map(v => {
               const isCert = v.category === 'certification';
               const tierColor = v.tier === 'S' ? 'border-emerald-300' : v.tier === 'F' ? 'border-rose-300' : 'border-blue-300';
-              const tierLabel = isCert ? 'Official body' : v.tier === 'S' ? 'Recommended' : v.tier === 'F' ? 'Reputation warning' : 'Workable';
+              const tierLabel = isCert ? 'Official body' : v.tier === 'S' ? 'Published prices' : v.tier === 'F' ? 'Reputation warning' : 'Listed';
               const tierBadge = v.tier === 'S' ? 'bg-emerald-100 text-emerald-900' : v.tier === 'F' ? 'bg-rose-100 text-rose-900' : 'bg-blue-100 text-blue-900';
               return (
                 <article class={`rounded-lg border-2 ${tierColor} bg-white p-5`}>

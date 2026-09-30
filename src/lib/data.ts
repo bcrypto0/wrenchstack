@@ -1004,7 +1004,7 @@ export type PricingModel =
 export interface LeadGenRatings {
   trustpilot: number | null;
   bbb: string | null;
-  reddit_sentiment: string;
+  reddit_sentiment: string | null;
 }
 
 export interface LeadGenFaq {
@@ -1056,22 +1056,12 @@ export function leadGenPlatformsByModel(model: LeadModel): LeadGenPlatform[] {
   return leadGenPlatforms.filter((p) => p.lead_model === model);
 }
 
-/** Tier classification based on reputation_flag + ratings. */
+/** Tier classification from verified facts only (2026-09-30): third-party ratings and
+ *  forum sentiment are not inputs. F = reputation warning; S = no warning and each lead
+ *  or call goes to one business (exclusive or pay-per-call); A = everything else. */
 export function leadGenTier(p: LeadGenPlatform): 'S' | 'A' | 'F' {
   if (p.reputation_flag) return 'F';
-  const tp = p.ratings.trustpilot;
-  if (tp !== null && tp < 2.5) return 'F';
-  // Tier S: positive sentiment + exclusive/pay-per-call/directory models.
-  // Affiliate status is not an input.
-  if (
-    (p.lead_model === 'exclusive' || p.lead_model === 'pay-per-call' || p.lead_model === 'directory-listing') &&
-    p.ratings.reddit_sentiment.toLowerCase().includes('positive') &&
-    !p.ratings.reddit_sentiment.toLowerCase().includes('mixed') &&
-    !p.ratings.reddit_sentiment.toLowerCase().includes('negative') &&
-    !p.ratings.reddit_sentiment.toLowerCase().includes('not positive')
-  ) {
-    return 'S';
-  }
+  if (p.lead_model === 'exclusive' || p.lead_model === 'pay-per-call') return 'S';
   return 'A';
 }
 
@@ -1084,7 +1074,7 @@ export interface InsuranceRatings {
   trustpilot: number | null;
   bbb: string | null;
   am_best: string | null;
-  reddit_sentiment: string;
+  reddit_sentiment: string | null;
 }
 
 export interface InsuranceProvider {
@@ -1129,25 +1119,11 @@ export function insuranceProvidersForVertical(verticalSlug: string): InsurancePr
   return insuranceProviders.filter((p) => p.verticals.includes(verticalSlug));
 }
 
-/** Tier classification: S (strong reputation or strong recommendation), A (workable),
- *  F (reputation_flag warning required). */
+/** Tier classification from verified facts only (2026-09-30). Nothing we can verify
+ *  ranks insurers on quality (premiums are quoted, ratings are not reproduced), so there
+ *  is no Tier S: F = reputation warning, A = no warning. Affiliate status is never an input. */
 export function insuranceTier(p: InsuranceProvider): 'S' | 'A' | 'F' {
-  if (p.reputation_flag) return 'F';
-  const tp = p.ratings.trustpilot;
-  // Direct-digital with strong Trustpilot → Tier S. Affiliate status is
-  // deliberately NOT an input here (fixed 2026-08-27: an earlier version
-  // required an affiliate program for this path, which contradicted the
-  // methodology; whether we earn from a carrier can never affect its tier).
-  if (
-    p.distribution_model === 'direct-digital' &&
-    tp !== null && tp >= 4.0
-  ) return 'S';
-  // Agent-only mutual carriers with strongly positive sentiment → Tier S
-  if (
-    p.provider_type === 'mutual-carrier' &&
-    p.ratings.reddit_sentiment.toLowerCase().includes('strongly positive')
-  ) return 'S';
-  return 'A';
+  return p.reputation_flag ? 'F' : 'A';
 }
 
 // --- Payroll services (Phase 3 multi-category expansion) ---------------------
@@ -1158,7 +1134,7 @@ export interface PayrollRatings {
   g2: number | null;
   capterra: number | null;
   trustpilot: number | null;
-  reddit_sentiment: string;
+  reddit_sentiment: string | null;
 }
 
 export interface PayrollService {
@@ -1203,13 +1179,11 @@ export function getPayrollService(slug: string): PayrollService | undefined {
 /** Tier classification for payroll services. */
 export function payrollTier(s: PayrollService): 'S' | 'A' | 'B' {
   if (s.reputation_flag) return 'B';
-  // Tier S is rule-based only. (Fixed 2026-08-27: a hardcoded Gusto exception
-  // was removed; Gusto now earns whatever tier the same rules give everyone.)
-  // Modern-saas with strong sentiment → Tier S
-  if (s.service_type === 'modern-saas' && (s.ratings.g2 ?? 0) >= 4.5) return 'S';
-  if (s.service_type === 'specialty' && (s.ratings.g2 ?? 0) >= 4.5) return 'S';
-  // Legacy + PEO → Tier B
+  // Verified facts only (2026-09-30): third-party ratings are not inputs.
+  // Legacy payroll and PEOs -> Tier B; online or specialty payroll with a
+  // published starting price -> Tier S; everything else -> Tier A.
   if (s.service_type === 'legacy-payroll' || s.service_type === 'peo') return 'B';
+  if ((s.service_type === 'modern-saas' || s.service_type === 'specialty') && s.starting_price_usd !== null) return 'S';
   return 'A';
 }
 
@@ -1238,7 +1212,7 @@ export interface AgencyRatings {
   google: number | null;
   trustpilot: number | null;
   bbb: string | null;
-  reddit_sentiment: string;
+  reddit_sentiment: string | null;
 }
 
 export interface MarketingAgency {
@@ -1251,6 +1225,8 @@ export interface MarketingAgency {
   services_offered: string[];
   pricing_model: string;
   typical_retainer_usd: string;
+  /** True when the agency's own site publishes the price of its core service (verified 2026-09-30). */
+  pricing_published: boolean;
   /** null when the agency publishes no minimum term. */
   minimum_contract_months: number | null;
   verticals_specialty: string[];
@@ -1286,10 +1262,9 @@ export function agenciesForVertical(verticalSlug: string): MarketingAgency[] {
 /** Tier classification for marketing agencies. */
 export function agencyTier(a: MarketingAgency): 'S' | 'A' | 'F' {
   if (a.reputation_flag) return 'F';
-  // Strong documented reputation → Tier S, one rule for every agency type.
-  // (Fixed 2026-08-27: a hardcoded four-slug S-list was removed; two of the
-  // four did not meet the stated sentiment bar and dropped to A.)
-  if (a.ratings.reddit_sentiment.toLowerCase().includes('strongly positive')) return 'S';
+  // Verified facts only (2026-09-30): Tier S = no warning and the agency's own
+  // site publishes the price of its core service. Ratings are not inputs.
+  if (a.pricing_published) return 'S';
   return 'A';
 }
 
@@ -1310,7 +1285,7 @@ export interface AiToolRatings {
   g2: number | null;
   capterra: number | null;
   trustpilot: number | null;
-  reddit_sentiment: string;
+  reddit_sentiment: string | null;
 }
 
 export interface AiTool {
@@ -1374,7 +1349,7 @@ export interface PaymentRatings {
   g2: number | null;
   capterra: number | null;
   trustpilot: number | null;
-  reddit_sentiment: string;
+  reddit_sentiment: string | null;
 }
 
 export interface PaymentProcessor {
@@ -1444,7 +1419,7 @@ export type FinancingModel = 'embedded-pos' | 'marketplace' | 'lender' | 'card';
 export interface FinancingRatings {
   trustpilot: number | null;
   bbb: string | null;
-  reddit_sentiment: string;
+  reddit_sentiment: string | null;
 }
 
 export interface FinancingProvider {
@@ -1507,7 +1482,7 @@ export interface AccountingRatings {
   g2: number | null;
   capterra: number | null;
   trustpilot: number | null;
-  reddit_sentiment: string;
+  reddit_sentiment: string | null;
 }
 
 export interface AccountingSoftware {
@@ -1570,7 +1545,7 @@ export type BankingFocus = 'self-employed' | 'business-checking' | 'credit-and-l
 export interface BankingRatings {
   trustpilot: number | null;
   bbb: string | null;
-  reddit_sentiment: string;
+  reddit_sentiment: string | null;
 }
 
 export interface BankingProvider {

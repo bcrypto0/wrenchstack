@@ -63,7 +63,7 @@ const breadcrumbs = [
 ];
 
 const tierMeta = {
-  S: { label: 'Tier S: exclusive or call-based, no warning', color: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
+  S: { label: 'Tier S: exclusive leads or calls, no warning', color: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
   A: { label: 'Tier A: no warning, check the terms', color: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
   F: { label: 'Tier F: listed with a reputation warning', color: 'bg-rose-100 text-rose-900 ring-rose-300', cardBorder: 'border-rose-300' },
 };
@@ -96,7 +96,7 @@ const faqs = [
   {
     q: `Which lead-gen platforms are in Tier S for ${vertical.name.toLowerCase()} work?`,
     a: byTier.S.length > 0
-      ? `For ${vertical.name.toLowerCase()} work, Tier S lists ${byTier.S.map((p) => p.name).join(', ')}. Tier S means no reputation warning, an exclusive, pay-per-call or listing model, and a pass on our other rating inputs; it is not a ranking of lead quality. These services charge in different ways, so compare the pricing and billing rules in each review, and track cost per booked job for every source you use.`
+      ? `For ${vertical.name.toLowerCase()} work, Tier S lists ${byTier.S.map((p) => p.name).join(', ')}. Tier S means no reputation warning and a lead model in which each lead or call goes to one business (exclusive leads or pay-per-call); it is not a ranking of lead quality or cost.${byTier.S.some((p) => p.slug === 'elocal') ? ` eLocal's live calls are exclusive, but its form leads can be shared.` : ''} These services charge in different ways, so compare the pricing and billing rules in each review, and track cost per booked job for every source you use.`
       : `No Tier S platform lists ${vertical.name.toLowerCase()} work. Compare the pricing and lead-sharing terms of the platforms above, and track cost per booked job for every source you use.`,
   },
   {

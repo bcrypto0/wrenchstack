@@ -63,7 +63,6 @@ const faqSchema = {
         {software.founded !== null && <span>Founded {software.founded}</span>}
         {software.headquartered && <span>HQ {software.headquartered}</span>}
         <span>Verified: {software.verified_date}</span>
-        {software.ratings.capterra !== null && <span>Capterra {software.ratings.capterra.toFixed(1)} / 5</span>}
       </div>
 
       <div class="mt-6 flex flex-wrap gap-3">

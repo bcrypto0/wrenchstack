@@ -96,10 +96,6 @@ const itemListSchema = {
 
                 <dl class="mb-3 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
                   <div>
-                    <dt class="text-slate-500 uppercase tracking-wider">G2 / Capterra</dt>
-                    <dd class="font-semibold text-slate-900">{a.ratings.g2 !== null || a.ratings.capterra !== null ? `${a.ratings.g2 !== null ? a.ratings.g2.toFixed(1) : '-'} / ${a.ratings.capterra !== null ? a.ratings.capterra.toFixed(1) : '-'}` : '-'}</dd>
-                  </div>
-                  <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Founded</dt>
                     <dd class="font-semibold text-slate-900">{a.founded ?? '-'}</dd>
                   </div>
@@ -110,6 +106,10 @@ const itemListSchema = {
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Best team size</dt>
                     <dd class="font-semibold text-slate-900">{a.best_team_size}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-slate-500 uppercase tracking-wider">Verified</dt>
+                    <dd class="font-semibold text-slate-900">{a.verified_date}</dd>
                   </div>
                 </dl>
 

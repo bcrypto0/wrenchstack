@@ -26,11 +26,11 @@ const fsmTools = [
 ];
 
 const faqs = [
-  { q: 'Does Making Tax Digital for Income Tax apply to tradespeople?', a: 'Yes, squarely. MTD for Income Tax applies to sole traders and landlords registered for Self Assessment, and most UK tradespeople operate as sole traders. Since 6 April 2026 it is mandatory if your qualifying income for the 2024–25 tax year was over £50,000. The threshold drops to £30,000 from April 2027 (based on 2025–26 income) and £20,000 from April 2028 (based on 2026–27 income), pulling in progressively smaller one-person trades businesses.' },
+  { q: 'Does Making Tax Digital for Income Tax apply to tradespeople?', a: 'Yes, squarely. MTD for Income Tax applies to sole traders and landlords registered for Self Assessment, and most UK tradespeople operate as sole traders. Since 6 April 2026 it is mandatory if your qualifying income for the 2024-25 tax year was over £50,000. The threshold drops to £30,000 from April 2027 (based on 2025-26 income) and £20,000 from April 2028 (based on 2026-27 income), pulling in progressively smaller one-person trades businesses.' },
   { q: 'What actually changes versus the old Self Assessment?', a: 'Three things. You must keep digital records of business income and expenses (paper books and ad-hoc spreadsheets no longer cut it on their own); you must send HMRC quarterly updates through MTD-compatible software instead of one annual return; and you complete a final declaration through software at year end. The once-a-year January scramble becomes a quarterly rhythm that your software largely automates, if your records are digital all year.' },
   { q: 'Is my job-management app (Commusoft, Tradify, ServiceM8…) MTD software?', a: 'Generally no: job-management platforms run your quotes, jobs and invoicing, but the MTD quarterly updates are filed by recognised accounting software. The standard UK trades setup is a job-management tool feeding an MTD-recognised accounting package (most commonly Xero, Sage or QuickBooks) through a native integration. Check HMRC’s official "find compatible software" list before assuming anything files for you.' },
   { q: 'I’m a CIS subcontractor: does MTD change my deductions?', a: 'CIS itself keeps working as it does today: contractors still deduct and report under the Construction Industry Scheme. What changes is how you report your income to HMRC: if your qualifying income is over the threshold, your CIS income and expenses must be kept digitally and reported through quarterly MTD updates, with CIS deductions reflected in your records. Good software handles both together; ask the vendor to show CIS within their MTD workflow.' },
-  { q: 'What is "qualifying income"?', a: 'Broadly, your combined gross self-employment and property income before expenses, not your profit. A sole-trader electrician turning over £55,000 with £20,000 of materials and van costs is over the £50,000 threshold even though profit is far lower. Check your 2024–25 Self Assessment figures against the threshold, and remember the bar drops to £30,000 in April 2027.' },
+  { q: 'What is "qualifying income"?', a: 'Broadly, your combined gross self-employment and property income before expenses, not your profit. A sole-trader electrician turning over £55,000 with £20,000 of materials and van costs is over the £50,000 threshold even though profit is far lower. Check your 2024-25 Self Assessment figures against the threshold, and remember the bar drops to £30,000 in April 2027.' },
   { q: 'What happens if I ignore it?', a: 'HMRC applies a points-based penalty system for late quarterly submissions: each missed deadline earns a point, and points convert into financial penalties. Beyond penalties, non-compliance compounds: four missed quarterlies leave you reconstructing a year of records anyway. Starting with compliant software early is materially cheaper than catching up.' },
 ];
 
@@ -84,22 +84,22 @@ const faqSchema = {
     <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
       <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ The short version</h2>
       <p class="text-slate-800 leading-relaxed">
-        If you’re a <strong>sole trader</strong> (or landlord) and your qualifying income for 2024–25 was over <strong>£50,000</strong>, Making Tax Digital for Income Tax already applies to you, since <strong>6 April 2026</strong>. You must keep <strong>digital records</strong> and send HMRC <strong>quarterly updates through MTD-compatible software</strong>; the annual-only Self Assessment routine is over. The threshold falls to <strong>£30,000 in April 2027</strong> and <strong>£20,000 in April 2028</strong>, so even if you’re out this year, you’re likely in soon. Your job-management app almost certainly does <em>not</em> file MTD; it pairs with recognised accounting software that does.
+        If you’re a <strong>sole trader</strong> (or landlord) and your qualifying income for 2024-25 was over <strong>£50,000</strong>, Making Tax Digital for Income Tax already applies to you, since <strong>6 April 2026</strong>. You must keep <strong>digital records</strong> and send HMRC <strong>quarterly updates through MTD-compatible software</strong>; the annual-only Self Assessment routine is over. The threshold falls to <strong>£30,000 in April 2027</strong> and <strong>£20,000 in April 2028</strong>, so even if you’re out this year, you’re likely in soon. Your job-management app almost certainly does <em>not</em> file MTD; it pairs with recognised accounting software that does.
       </p>
     </section>
 
     <section class="mb-10 grid gap-3 sm:grid-cols-3">
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">£50,000</div>
-        <div class="mt-1 text-xs text-slate-600">mandatory NOW (since 6 Apr 2026, on 2024–25 income)</div>
+        <div class="mt-1 text-xs text-slate-600">mandatory NOW (since 6 Apr 2026, on 2024-25 income)</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">£30,000</div>
-        <div class="mt-1 text-xs text-slate-600">from 6 Apr 2027 (on 2025–26 income)</div>
+        <div class="mt-1 text-xs text-slate-600">from 6 Apr 2027 (on 2025-26 income)</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">£20,000</div>
-        <div class="mt-1 text-xs text-slate-600">from 6 Apr 2028 (on 2026–27 income)</div>
+        <div class="mt-1 text-xs text-slate-600">from 6 Apr 2028 (on 2026-27 income)</div>
       </div>
     </section>
 
@@ -167,7 +167,7 @@ const faqSchema = {
     <section class="mb-10 prose prose-slate max-w-none">
       <h2>Compliance checklist for tradespeople</h2>
       <ol>
-        <li><strong>Check your 2024–25 qualifying income.</strong> Over £50,000 gross? You’re in scope now. Between £30–50k? You’re in from April 2027; set up this year while there’s no pressure.</li>
+        <li><strong>Check your 2024-25 qualifying income.</strong> Over £50,000 gross? You’re in scope now. Between £30-50k? You’re in from April 2027; set up this year while there’s no pressure.</li>
         <li><strong>Pick recognised accounting software</strong> from HMRC’s official list, and confirm your plan/tier includes MTD for Income Tax (not just MTD for VAT).</li>
         <li><strong>Connect your job-management app</strong> so invoices and expenses flow into the digital records automatically; re-keying defeats the point.</li>
         <li><strong>Sort CIS handling</strong> if you subcontract: deductions must reconcile inside the same records.</li>

@@ -252,7 +252,7 @@ const articleSchema = {
       <h2>What software costs by trade</h2>
 
       <p>
-        Median entry pricing is not uniform across trades. Pulling the publicly-priced platforms that serve each trade (those with at least four such tools), <strong>{cheapestTrade?.name}</strong> is the cheapest field to equip, at a median of <strong>${cheapestTrade?.median}/month</strong>, while <strong>{priciestTrade?.name}</strong> sits at the top at <strong>${priciestTrade?.median}/month</strong>. Most field-service trades cluster in the $45–$80 band; the high-end outliers reflect specialized, heavier platforms.
+        Median entry pricing is not uniform across trades. Pulling the publicly-priced platforms that serve each trade (those with at least four such tools), <strong>{cheapestTrade?.name}</strong> is the cheapest field to equip, at a median of <strong>${cheapestTrade?.median}/month</strong>, while <strong>{priciestTrade?.name}</strong> sits at the top at <strong>${priciestTrade?.median}/month</strong>. Most field-service trades cluster in the $45-$80 band; the high-end outliers reflect specialized, heavier platforms.
       </p>
 
       <div class="not-prose my-8 overflow-x-auto">
@@ -270,7 +270,7 @@ const articleSchema = {
               <tr class="border-b border-slate-100">
                 <td class="py-2 pr-4 text-slate-900">{r.name}</td>
                 <td class="py-2 pr-4 font-semibold text-slate-900">${r.median}</td>
-                <td class="py-2 pr-4 text-slate-600">${r.min}–${r.max}</td>
+                <td class="py-2 pr-4 text-slate-600">${r.min}-${r.max}</td>
                 <td class="py-2 text-slate-600">{r.n}</td>
               </tr>
             ))}

@@ -62,7 +62,7 @@ const arUrl = new URL('/kw/ar/', Astro.site).toString();
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What’s different about choosing software in Kuwait</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Like Qatar, Kuwait has <strong>no VAT</strong> (officially ruled out before 2028) and <strong>no e-invoicing mandate</strong>, so "VAT-ready / FTA-compliant" selling points that matter in the UAE and Saudi are irrelevant here. The tax that bites is <strong>15% corporate income tax on foreign-owned entities</strong> (plus a 5% retention on payments to foreign parties), not consumption tax. Public work is gated by a <strong>CAPT classification</strong> (1st–4th category, tied to Kuwaiti ownership and 3+ years of history), labour runs on <strong>Kuwaitization</strong> via PAM (construction sits at the low end, ~1%), fire safety follows the mandatory <strong>KFSD code</strong>, and pricing is in Kuwaiti Dinar, the world’s highest-valued currency. Kuwait’s local software ecosystem is thin, so most options are regional/global with confirmed Kuwait presence, plus a few locally-built ERPs.
+        Like Qatar, Kuwait has <strong>no VAT</strong> (officially ruled out before 2028) and <strong>no e-invoicing mandate</strong>, so "VAT-ready / FTA-compliant" selling points that matter in the UAE and Saudi are irrelevant here. The tax that bites is <strong>15% corporate income tax on foreign-owned entities</strong> (plus a 5% retention on payments to foreign parties), not consumption tax. Public work is gated by a <strong>CAPT classification</strong> (1st-4th category, tied to Kuwaiti ownership and 3+ years of history), labour runs on <strong>Kuwaitization</strong> via PAM (construction sits at the low end, ~1%), fire safety follows the mandatory <strong>KFSD code</strong>, and pricing is in Kuwaiti Dinar, the world’s highest-valued currency. Kuwait’s local software ecosystem is thin, so most options are regional/global with confirmed Kuwait presence, plus a few locally-built ERPs.
       </p>
     </section>
     {categories.map(c => {
@@ -79,7 +79,7 @@ const arUrl = new URL('/kw/ar/', Astro.site).toString();
             {cv.map(v => {
               const isCert = v.category === 'certification';
               const tierColor = v.tier === 'S' ? 'border-emerald-300' : v.tier === 'F' ? 'border-rose-300' : 'border-blue-300';
-              const tierLabel = isCert ? 'Official body' : v.tier === 'S' ? 'Recommended' : v.tier === 'F' ? 'Reputation warning' : 'Workable';
+              const tierLabel = isCert ? 'Official body' : v.tier === 'S' ? 'Published prices' : v.tier === 'F' ? 'Reputation warning' : 'Listed';
               const tierBadge = v.tier === 'S' ? 'bg-emerald-100 text-emerald-900' : v.tier === 'F' ? 'bg-rose-100 text-rose-900' : 'bg-blue-100 text-blue-900';
               return (
                 <article class={`rounded-lg border-2 ${tierColor} bg-white p-5`}>

@@ -76,7 +76,7 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     name: 'Saudi Arabia',
     flag: '🇸🇦',
     noteField: 'sa_specific_note',
-    intro: 'Saudi construction & trades software selection is shaped by Vision 2030\'s giga-project boom (NEOM, Red Sea, Qiddiya, ROSHN), mandatory ZATCA e-invoicing (Fatoora), Arabic/RTL and Saudi-Riyal requirements, contractor classification (Grades 1–6), Saudi Building Code compliance, and Saudization (Nitaqat) labour rules.',
+    intro: 'Saudi construction & trades software selection is shaped by Vision 2030\'s giga-project boom (NEOM, Red Sea, Qiddiya, ROSHN), mandatory ZATCA e-invoicing (Fatoora), Arabic/RTL and Saudi-Riyal requirements, contractor classification (Grades 1-6), Saudi Building Code compliance, and Saudization (Nitaqat) labour rules.',
     certContext: 'Engineering practice requires Saudi Council of Engineers (SCE) registration; contractors need a MOMRAH classification grade to bid public work; permits run through Balady under the mandatory Saudi Building Code; and accounting/invoicing must integrate with ZATCA\'s Fatoora e-invoicing, so local software has to handle Arabic, SAR and 15% VAT.',
   },
   ae: {
@@ -108,7 +108,7 @@ export const INTL_MARKETS: Record<string, IntlMarket> = {
     name: 'South Africa',
     flag: '🇿🇦',
     noteField: 'za_specific_note',
-    intro: 'South African trades vendor selection is shaped by Certificate-of-Compliance culture (electrical CoCs via DoEL-registered persons, SAQCC Gas, PIRB plumbing CoCs), CIDB contractor grading (1–9) gating public work, NHBRC registration for home builders, SARS compliance (15% VAT, monthly EMP201, e-invoicing phasing in ~2026–28), the COIDA Letter of Good Standing, and the solar-installation boom the load-shedding era created.',
+    intro: 'South African trades vendor selection is shaped by Certificate-of-Compliance culture (electrical CoCs via DoEL-registered persons, SAQCC Gas, PIRB plumbing CoCs), CIDB contractor grading (1-9) gating public work, NHBRC registration for home builders, SARS compliance (15% VAT, monthly EMP201, e-invoicing phasing in ~2026-28), the COIDA Letter of Good Standing, and the solar-installation boom the load-shedding era created.',
     certContext: 'Electrical work legally requires Department of Employment & Labour registration (registered persons issue the mandatory Certificate of Compliance); gas work requires SAQCC Gas registration (unregistered work voids home insurance); PIRB plumbing CoCs are required for geysers and solar water heaters; CIDB grading gates public construction; NHBRC registration is mandatory for home builders; and employers need a current COIDA Letter of Good Standing for site access.',
   },
   ba: {
