@@ -1,11 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, verticals, verticalToUrl, aggregateRating, formatPrice } from '../lib/data';
+import { tools, verticals, verticalToUrl, wrenchStackScore, formatPrice } from '../lib/data';
 
-// Top 6 tools by aggregate rating for the "popular tools" section
+// Top 6 flagship tools by Fit Score, then name, for the "popular tools" section
+// (sorted by G2/Capterra rating until 2026-09-30, when those scores were dropped)
 const popularTools = [...tools]
   .filter((t) => (t as { long_description?: string }).long_description)
-  .sort((a, b) => (aggregateRating(b) ?? 0) - (aggregateRating(a) ?? 0))
+  .sort((a, b) => wrenchStackScore(b) - wrenchStackScore(a) || a.name.localeCompare(b.name))
   .slice(0, 6);
 
 // Curated most-searched comparisons
@@ -86,7 +87,6 @@ const tools_for_section = [
       </h2>
       <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {popularTools.map((t) => {
-          const r = aggregateRating(t);
           return (
             <a
               href={`/tools/${t.slug}/`}
@@ -94,7 +94,6 @@ const tools_for_section = [
             >
               <div class="flex items-baseline justify-between">
                 <div class="font-semibold text-slate-900 group-hover:text-orange-600">{t.name}</div>
-                {r !== null && <span class="text-sm font-medium text-slate-500">{r.toFixed(1)} ★</span>}
               </div>
               <div class="mt-1 text-xs text-slate-500">{formatPrice(t)}</div>
               <div class="mt-1 text-xs italic text-slate-500 line-clamp-1">{t.tagline}</div>

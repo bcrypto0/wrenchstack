@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { awards, getTool, aggregateRating, formatPrice, wrenchStackScore } from '../../../lib/data';
+import { awards, getTool, formatPrice, wrenchStackScore } from '../../../lib/data';
 import ToolLogo from '../../../components/ToolLogo.astro';
 import WrenchScore from '../../../components/WrenchScore.astro';
 
@@ -63,7 +63,9 @@ const itemListSchema = {
     <section class="mb-10 rounded-lg border border-amber-200 bg-amber-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-amber-900">How winners are chosen</h2>
       <p class="text-sm text-amber-900 leading-relaxed">
-        {awards.methodology_summary}
+        {/* Written here rather than read from awards.json's methodology_summary, which
+            still describes the pre-2026-09-30 weights with a G2/Capterra ratings factor. */}
+        Winners are selected on the published WrenchStack Fit Score, plus an editorial judgement on fit for the stated buyer profile. The Fit Score now weights vertical fit (60%), pricing transparency (20%) and integration coverage (20%). When these awards were published on {awards.published_date}, the score also included a factor for third-party review ratings; that factor was removed on 2026-09-30 because we could not verify the ratings, and the winners below have not been re-selected since. No vendor paid for placement. Where WrenchStack has an affiliate relationship with a winner, that is disclosed on the tool's review page, and recommendations are unchanged whether the affiliate is active or not.
       </p>
       <p class="mt-3 text-sm text-amber-800">
         Read the full <a href="/methodology/" class="underline hover:text-amber-700">scoring methodology</a> for rubric weights, data sources, and the per-vendor affiliate-disclosure ledger.
@@ -116,16 +118,10 @@ const itemListSchema = {
 
               <p class="mb-4 text-slate-700 leading-relaxed">{cat.why}</p>
 
-              <dl class="mb-5 grid grid-cols-2 gap-3 text-sm md:grid-cols-4">
+              <dl class="mb-5 grid grid-cols-2 gap-3 text-sm md:grid-cols-3">
                 <div>
                   <dt class="text-xs uppercase tracking-wider text-slate-500">Starting price</dt>
                   <dd class="font-semibold text-slate-900">{formatPrice(cat.winner)}</dd>
-                </div>
-                <div>
-                  <dt class="text-xs uppercase tracking-wider text-slate-500">User rating</dt>
-                  <dd class="font-semibold text-slate-900">
-                    {aggregateRating(cat.winner) !== null ? `${aggregateRating(cat.winner)!.toFixed(1)} / 5` : 'n/a'}
-                  </dd>
                 </div>
                 <div>
                   <dt class="text-xs uppercase tracking-wider text-slate-500">Best team size</dt>
@@ -214,7 +210,7 @@ const itemListSchema = {
           <strong class="text-slate-900">Methodology is published.</strong> The rubric, weights, data sources, and verification cadence live on the <a href="/methodology/" class="underline hover:text-slate-900">methodology page</a>.
         </li>
         <li>
-          <strong class="text-slate-900">Updated annually.</strong> Next refresh: {awards.year + 1}. We re-evaluate every category each year based on current pricing, ratings, and platform changes.
+          <strong class="text-slate-900">Updated annually.</strong> Next refresh: {awards.year + 1}. We re-evaluate every category each year based on current pricing, vertical fit, integrations, and platform changes.
         </li>
       </ul>
     </section>

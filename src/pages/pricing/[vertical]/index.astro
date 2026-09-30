@@ -6,7 +6,7 @@ import {
   toolsForVertical,
   verticalToUrl,
   formatPrice,
-  aggregateRating,
+  wrenchStackScore,
   type Vertical,
   type Tool,
 } from '../../../lib/data';
@@ -44,7 +44,8 @@ const customQuoteOnly = verticalTools.filter((t) => t.pricing.starting_at_usd ==
 const flatRateTools = verticalTools.filter((t) => priceScaling(t) === 'flat' || priceScaling(t) === 'base_plus_seat');
 const perUserTools = verticalTools.filter((t) => priceScaling(t) === 'per_user');
 
-// Best value picks by tier
+// Top pick per price tier: highest Fit Score for this trade, then name. (Until
+// 2026-09-30 this took the highest G2/Capterra rating, which is no longer used.)
 // priceTier compares cost per user (flat plans split across a 5-person team). Until
 // 2026-09-27 these used the starting price alone, so flat company plans of $250+
 // were shown as top-tier picks next to per-user plans.
@@ -54,7 +55,10 @@ const enterpriseTierTools = verticalTools.filter((t) => priceTier(t) === 'enterp
 
 function bestValueIn(set: Tool[]): Tool | null {
   if (set.length === 0) return null;
-  return [...set].sort((a, b) => (aggregateRating(b) ?? 0) - (aggregateRating(a) ?? 0))[0];
+  return [...set].sort((a, b) => {
+    const diff = wrenchStackScore(b, vertical.slug) - wrenchStackScore(a, vertical.slug);
+    return diff !== 0 ? diff : a.name.localeCompare(b.name);
+  })[0];
 }
 const entryBest = bestValueIn(entryTierTools);
 const midBest = bestValueIn(midTierTools);
@@ -198,9 +202,9 @@ const breadcrumbs = [
 
     {(entryBest || midBest || enterpriseBest) && (
       <section class="mb-12">
-        <h2 class="mb-4 text-2xl font-bold text-slate-900">Best value picks by tier</h2>
+        <h2 class="mb-4 text-2xl font-bold text-slate-900">Top pick in each price tier</h2>
         <p class="mb-6 text-slate-600">
-          Highest-rated tool in each price tier. Tiers compare cost per user per month, with a flat company plan split across a 5-person team, so a $300/mo flat plan counts as $60 per user.
+          The tool with the highest <a href="/methodology/" class="underline hover:text-slate-900">Fit Score</a> for {verticalLower} work in each price tier. Tiers compare cost per user per month, with a flat company plan split across a 5-person team, so a $300/mo flat plan counts as $60 per user.
         </p>
         <div class="grid gap-4 md:grid-cols-3">
           {entryBest && (
@@ -210,7 +214,7 @@ const breadcrumbs = [
                 <a href={`/tools/${entryBest.slug}/`} class="hover:text-orange-600">{entryBest.name}</a>
               </h3>
               <div class="mt-1 text-sm text-slate-700">
-                {formatPrice(entryBest)} · {aggregateRating(entryBest)?.toFixed(1) ?? '-'} / 5
+                {formatPrice(entryBest)} · Fit Score {wrenchStackScore(entryBest, vertical.slug).toFixed(1)}/10
               </div>
               <p class="mt-2 text-xs text-slate-600">{entryBest.best_for}</p>
             </div>
@@ -222,7 +226,7 @@ const breadcrumbs = [
                 <a href={`/tools/${midBest.slug}/`} class="hover:text-orange-600">{midBest.name}</a>
               </h3>
               <div class="mt-1 text-sm text-slate-700">
-                {formatPrice(midBest)} · {aggregateRating(midBest)?.toFixed(1) ?? '-'} / 5
+                {formatPrice(midBest)} · Fit Score {wrenchStackScore(midBest, vertical.slug).toFixed(1)}/10
               </div>
               <p class="mt-2 text-xs text-slate-600">{midBest.best_for}</p>
             </div>
@@ -234,7 +238,7 @@ const breadcrumbs = [
                 <a href={`/tools/${enterpriseBest.slug}/`} class="hover:text-orange-600">{enterpriseBest.name}</a>
               </h3>
               <div class="mt-1 text-sm text-slate-700">
-                {formatPrice(enterpriseBest)} · {aggregateRating(enterpriseBest)?.toFixed(1) ?? '-'} / 5
+                {formatPrice(enterpriseBest)} · Fit Score {wrenchStackScore(enterpriseBest, vertical.slug).toFixed(1)}/10
               </div>
               <p class="mt-2 text-xs text-slate-600">{enterpriseBest.best_for}</p>
             </div>

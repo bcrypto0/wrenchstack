@@ -22,7 +22,7 @@ export const GET: APIRoute = () => {
     dataset: {
       name: 'WrenchStack Trades Software Pricing Dataset 2026',
       description:
-        'Entry pricing, tier structure, verticals served, and verification dates for US field-service software platforms serving trades and construction businesses. Every price was checked against the vendor\'s own pricing page on the pricing_verified_date recorded per platform. quote_only means the vendor publishes no price at all. pricing_model says what starting_price_usd_month actually measures: per_user is a per-seat monthly rate, flat is a fixed monthly platform fee (which may include seats), flat_plus_seat is a flat base plus per-seat overage. Do not average across models.',
+        'Entry pricing, tier structure, verticals served, and verification dates for US field-service software platforms serving trades and construction businesses. Every price was checked against the vendor\'s own pricing page on the pricing_verified_date recorded per platform. quote_only means the vendor publishes no price at all. pricing_model says what starting_price_usd_month actually measures: per_user is a per-seat monthly rate, flat is a fixed monthly platform fee (which may include seats), flat_plus_seat is a flat base plus per-seat overage. Do not average across models. The g2_rating and capterra_rating fields were removed on 2026-09-30 because those third-party review scores could not be verified; read current reviews on G2 and Capterra directly.',
       license: 'CC-BY-4.0',
       license_url: 'https://creativecommons.org/licenses/by/4.0/',
       attribution: 'WrenchStack (https://wrenchstack.com)',
@@ -68,8 +68,6 @@ export const GET: APIRoute = () => {
       best_team_size: t.best_team_size ?? null,
       founded: t.founded ?? null,
       headquartered: t.headquartered ?? null,
-      g2_rating: t.g2_rating ?? null,
-      capterra_rating: t.capterra_rating ?? null,
     })),
   };
 

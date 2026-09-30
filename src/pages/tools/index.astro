@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { tools, verticals, aggregateRating, formatPrice, verticalToUrl, priceTier, teamSizeBucket, freshnessTier, winsForTool, type Tool } from '../../lib/data';
+import { tools, verticals, rankToolsForVertical, wrenchStackScore, formatPrice, verticalToUrl, priceTier, teamSizeBucket, freshnessTier, winsForTool, type Tool } from '../../lib/data';
 import FreshnessBadge from '../../components/FreshnessBadge.astro';
 import ToolLogo from '../../components/ToolLogo.astro';
 import MissingFromList from '../../components/MissingFromList.astro';
@@ -30,22 +30,22 @@ function toolFilterAttrs(t: Tool): Record<string, string> {
 }
 
 // Flagship tools = those with deep custom content (long_description). 15 tools as of 2026-05-26.
+// Listed alphabetically. (Until 2026-09-30 these lists sorted by G2/Capterra rating,
+// which is no longer used; the per-trade lists now follow the Fit Score ranking.)
 const flagshipTools = tools
   .filter((t) => !!(t as Tool & { long_description?: string }).long_description)
-  .sort((a, b) => (aggregateRating(b) ?? 0) - (aggregateRating(a) ?? 0));
+  .sort((a, b) => a.name.localeCompare(b.name));
 
 // All tools alphabetical
 const allAlphabetical = [...tools].sort((a, b) => a.name.localeCompare(b.name));
 
-// All tools sorted by aggregate rating (for the by-rating section)
-const allByRating = [...tools].sort((a, b) => (aggregateRating(b) ?? 0) - (aggregateRating(a) ?? 0));
+// All tools by context-free Fit Score, then name (for the ItemList schema)
+const allByScore = [...tools].sort((a, b) => wrenchStackScore(b) - wrenchStackScore(a) || a.name.localeCompare(b.name));
 
 // Tools grouped by vertical (for "Browse by trade")
 const toolsByVertical = verticals.map((v) => ({
   vertical: v,
-  tools: tools
-    .filter((t) => t.verticals.includes(v.slug))
-    .sort((a, b) => (aggregateRating(b) ?? 0) - (aggregateRating(a) ?? 0)),
+  tools: rankToolsForVertical(v.slug),
 }));
 
 const breadcrumbs = [
@@ -58,7 +58,7 @@ const itemListSchema = {
   '@type': 'ItemList',
   name: 'Trades software tools',
   numberOfItems: tools.length,
-  itemListElement: allByRating.slice(0, 25).map((t, i) => ({
+  itemListElement: allByScore.slice(0, 25).map((t, i) => ({
     '@type': 'ListItem',
     position: i + 1,
     item: {
@@ -73,7 +73,7 @@ const itemListSchema = {
 
 <Layout
   title={`All ${tools.length} trades software tools: compare every platform`}
-  description={`Browse every field service and trades software platform in our directory. ${tools.length} tools across ${verticals.length} trades, ranked by pricing, features, and user ratings. Includes ${flagshipTools.length} flagship reviews with deep editorial coverage.`}
+  description={`Browse every field service and trades software platform in our directory. ${tools.length} tools across ${verticals.length} trades, with verified pricing, features, and integrations. Includes ${flagshipTools.length} flagship reviews with deep editorial coverage.`}
   breadcrumbs={breadcrumbs}
 >
   <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
@@ -84,7 +84,7 @@ const itemListSchema = {
         All {tools.length} trades software tools
       </h1>
       <p class="mt-4 max-w-3xl text-lg text-slate-600">
-        Every field service and trades software platform we track, sorted by user ratings, organized by trade, and featuring deep editorial reviews of the {flagshipTools.length} most-searched tools.
+        Every field service and trades software platform we track, organized by trade and ranked by Fit Score within each, with deep editorial reviews of the {flagshipTools.length} most-searched tools.
       </p>
       <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500">
         <span><span class="font-bold text-slate-900">{tools.length}</span> tools tracked</span>
@@ -181,7 +181,6 @@ const itemListSchema = {
       </p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {flagshipTools.map((t) => {
-          const r = aggregateRating(t);
           const won = winsForTool(t.slug).length > 0;
           return (
             <a
@@ -195,9 +194,6 @@ const itemListSchema = {
                     <h3 class="truncate text-lg font-semibold text-slate-900 group-hover:text-orange-600">
                       {t.name}
                     </h3>
-                    {r !== null && (
-                      <span class="shrink-0 text-sm font-semibold text-slate-700">{r.toFixed(1)}</span>
-                    )}
                   </div>
                 </div>
               </div>
@@ -222,7 +218,7 @@ const itemListSchema = {
     <section id="by-trade" class="mb-16 scroll-mt-8">
       <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Browse by trade</h2>
       <p class="mb-6 text-slate-600">
-        Tools grouped by the trades they serve. Most platforms cover multiple trades; they'll appear in each relevant section. Sorted by user rating within each trade.
+        Tools grouped by the trades they serve. Most platforms cover multiple trades; they'll appear in each relevant section. Sorted by vertical fit, then Fit Score, within each trade.
       </p>
       <div class="space-y-10">
         {toolsByVertical.map(({ vertical, tools: verticalTools }) => (
@@ -237,7 +233,6 @@ const itemListSchema = {
             </div>
             <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {verticalTools.slice(0, 9).map((t) => {
-                const r = aggregateRating(t);
                 return (
                   <a
                     href={`/tools/${t.slug}/`}
@@ -248,9 +243,6 @@ const itemListSchema = {
                       <div class="min-w-0 flex-1">
                         <div class="flex items-baseline justify-between gap-1">
                           <div class="truncate font-semibold text-slate-900 group-hover:text-orange-600">{t.name}</div>
-                          {r !== null && (
-                            <span class="shrink-0 text-xs font-medium text-slate-500">{r.toFixed(1)}</span>
-                          )}
                         </div>
                         <div class="text-xs text-slate-500">{formatPrice(t)}</div>
                       </div>
@@ -278,7 +270,6 @@ const itemListSchema = {
       </p>
       <div id="filtered-grid" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {allAlphabetical.map((t) => {
-          const r = aggregateRating(t);
           const attrs = toolFilterAttrs(t);
           return (
             <a
@@ -291,9 +282,6 @@ const itemListSchema = {
                 <div class="min-w-0 flex-1">
                   <div class="flex items-baseline justify-between gap-1">
                     <div class="truncate font-semibold text-slate-900 group-hover:text-orange-600">{t.name}</div>
-                    {r !== null && (
-                      <span class="shrink-0 text-xs font-medium text-slate-500">{r.toFixed(1)}</span>
-                    )}
                   </div>
                   <div class="text-xs text-slate-500">{formatPrice(t)}</div>
                 </div>

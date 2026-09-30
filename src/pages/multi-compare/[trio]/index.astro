@@ -3,7 +3,6 @@ import Layout from '../../../layouts/Layout.astro';
 import triosData from '../../../data/trios.json';
 import { asSentence,
   getTool,
-  aggregateRating,
   formatPrice,
   wrenchStackScore,
   verticals,
@@ -50,11 +49,6 @@ const cheapest = trioTools.reduce((lowest, t) => {
   return lowest;
 }, null as Tool | null);
 
-const highestRated = trioTools.reduce((top, t) => {
-  const r = aggregateRating(t) ?? 0;
-  const topR = aggregateRating(top) ?? 0;
-  return r > topR ? t : top;
-}, trioTools[0]);
 
 const sharedFeatures = a.key_features.filter(f => b.key_features.includes(f) && c.key_features.includes(f));
 const sharedIntegrations = a.integrations.filter(i => b.integrations.includes(i) && c.integrations.includes(i));
@@ -85,6 +79,27 @@ function verticalWinner(verticalSlug: string): { winner: Tool | null; scores: { 
   return { winner, scores };
 }
 
+// Shared trades where each tool has the single highest fit score. Since 2026-09-30 the
+// decision matrix and verdict use this, published price and integrations; the
+// G2/Capterra ratings they used to cite were never verified.
+const fitWins = new Map<string, { name: string; fit: number; next: number }[]>(
+  trioTools.map((t) => [t.slug, [] as { name: string; fit: number; next: number }[]]),
+);
+for (const v of sharedVerticals) {
+  const { winner: vw, scores } = verticalWinner(v.slug);
+  if (vw) fitWins.get(vw.slug)!.push({ name: v.name, fit: scores[0].fit, next: scores[1].fit });
+}
+// The tool that leads in the most shared trades; null when no single tool does.
+const fitRanking = [...trioTools].sort((x, y) => fitWins.get(y.slug)!.length - fitWins.get(x.slug)!.length);
+const fitLeader =
+  fitWins.get(fitRanking[0].slug)!.length > fitWins.get(fitRanking[1].slug)!.length ? fitRanking[0] : null;
+const fitLeaderWins = fitLeader ? fitWins.get(fitLeader.slug)!.length : 0;
+
+function joinOr(names: string[]): string {
+  if (names.length <= 1) return names.join('');
+  return `${names.slice(0, -1).join(', ')} or ${names[names.length - 1]}`;
+}
+
 // Implementation timeline per tool, typical for its price tier. Same wording as the
 // two-way compare pages; until 2026-09-27 this used the raw starting price and
 // asserted a dedicated PM that no vendor publishes.
@@ -112,13 +127,16 @@ function getDecisionReasonsFor(t: Tool): string[] {
     reasons.push(`**Budget is the constraint**: ${t.name} has the lowest starting price among these three (${formatPrice(t)})`);
   }
 
-  // Highest rated
-  if (highestRated.slug === t.slug && aggregateRating(t) !== null) {
-    const r = aggregateRating(t)!;
-    const minOther = Math.min(...others.map(o => aggregateRating(o) ?? 0));
-    if (r - minOther >= 0.2) {
-      reasons.push(`**Post-purchase satisfaction matters**: ${t.name} has the highest user rating in this trio (${r.toFixed(1)} / 5)`);
-    }
+  // Highest vertical fit in one or more shared trades
+  const wins = fitWins.get(t.slug) ?? [];
+  if (wins.length > 0) {
+    reasons.push(`**You work in ${joinOr(wins.slice(0, 3).map((w) => w.name))}**: ${t.name} has the highest vertical-fit score of the three there (${wins[0].name}: ${wins[0].fit}/10 vs ${wins[0].next}/10 for the next)`);
+  }
+
+  // Published price when another option is quote-only
+  const quoteOnlyOthers = others.filter(o => o.pricing.starting_at_usd === null);
+  if (t.pricing.starting_at_usd !== null && quoteOnlyOthers.length > 0) {
+    reasons.push(`**You want to budget without a sales call**: ${t.name} publishes its price (${formatPrice(t)}); ${quoteOnlyOthers.map(o => o.name).join(' and ')} ${quoteOnlyOthers.length === 1 ? 'quotes' : 'quote'} only`);
   }
 
   // QuickBooks
@@ -156,7 +174,7 @@ const decisionMatrix = trioTools.map(t => ({ tool: t, reasons: getDecisionReason
 const faqs = [
   {
     q: `Which is best: ${a.name}, ${b.name}, or ${c.name}?`,
-    a: `Based on our WrenchStack Score, ${winner.name} ranks highest of the three for ${category.toLowerCase()}. But "best" depends on your specific buyer profile. See the decision matrix above for situation-specific guidance, the per-vertical winner table below if you serve a specific trade, or the cheapest/highest-rated quick callouts at the top.`,
+    a: `Based on our WrenchStack Score, ${winner.name} ranks highest of the three for ${category.toLowerCase()}. But "best" depends on your specific buyer profile. See the decision matrix above for situation-specific guidance, the per-vertical winner table below if you serve a specific trade, or the price and trade-fit callouts in the quick verdict at the top.`,
   },
   {
     q: `What's the cheapest of the three?`,
@@ -227,7 +245,6 @@ const breadcrumbs = [
     <section class="mb-12 grid gap-4 md:grid-cols-3">
       {trioTools.map((t) => {
         const score = wrenchStackScore(t);
-        const r = aggregateRating(t);
         return (
           <div class="rounded-lg border border-slate-200 bg-white p-5">
             <div class="mb-3 flex items-center gap-3">
@@ -247,10 +264,6 @@ const breadcrumbs = [
               <div class="flex justify-between">
                 <dt class="text-slate-500">Starting price</dt>
                 <dd class="font-semibold text-slate-900">{formatPrice(t)}</dd>
-              </div>
-              <div class="flex justify-between">
-                <dt class="text-slate-500">User rating</dt>
-                <dd class="font-semibold text-slate-900">{r !== null ? `${r.toFixed(1)} / 5` : 'n/a'}</dd>
               </div>
               <div class="flex justify-between">
                 <dt class="text-slate-500">Best team size</dt>
@@ -286,11 +299,11 @@ const breadcrumbs = [
         <p>
           <strong class="text-slate-900">{c.name}:</strong> {asSentence(c.best_for)}
         </p>
-        {cheapest && (
-          <p class="mt-3 text-sm text-slate-600">
-            <strong>{cheapest.name}</strong> has the lowest entry price ({formatPrice(cheapest)}). <strong>{highestRated.name}</strong> has the highest user rating ({aggregateRating(highestRated)?.toFixed(1) ?? '-'} / 5). <strong>{winner.name}</strong> ranks highest on our combined WrenchStack Score.
-          </p>
-        )}
+        <p class="mt-3 text-sm text-slate-600">
+          {cheapest && (<><strong>{cheapest.name}</strong> has the lowest entry price ({formatPrice(cheapest)}). </>)}
+          {fitLeader && (<>Vertical fit favors <strong>{fitLeader.name}</strong> in {fitLeaderWins} of {sharedVerticals.length} shared {sharedVerticals.length === 1 ? 'trade' : 'trades'}. </>)}
+          <strong>{winner.name}</strong> ranks highest on our combined WrenchStack Score.
+        </p>
       </div>
     </section>
 

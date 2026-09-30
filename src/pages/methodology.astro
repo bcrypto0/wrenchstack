@@ -3,8 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import { tools, verticals, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, aiTools, paymentProcessors, financingProviders, accountingSoftware, bankingProviders } from '../lib/data';
 
 // WrenchStack Fit Score™ methodology version metadata
-const METHODOLOGY_VERSION = '1.1';
-const METHODOLOGY_EFFECTIVE_DATE = '2026-08-27';
+const METHODOLOGY_VERSION = '1.3';
+const METHODOLOGY_EFFECTIVE_DATE = '2026-09-30';
 
 // Quantification: coverage stats across all categories
 const totalVendorsCovered = tools.length + leadGenPlatforms.length + insuranceProviders.length + payrollServices.length + marketingAgencies.length + aiTools.length + paymentProcessors.length + financingProviders.length + accountingSoftware.length + bankingProviders.length;
@@ -103,8 +103,8 @@ const counts = {
 ---
 
 <Layout
-  title="WrenchStack Fit Score™ Methodology v1.2: How we rank trades vendors"
-  description="The WrenchStack Fit Score™ is our published, versioned methodology for evaluating trades vendors across 10 categories: software, payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI. Four weighted factors. Public scoring rubric. Independence statement. Per-vendor affiliate ledger."
+  title="WrenchStack Fit Score™ Methodology v1.3: How we rank trades vendors"
+  description="The WrenchStack Fit Score™ is our published, versioned methodology for evaluating trades vendors across 10 categories: software, payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI. Three weighted factors. Public scoring rubric. Independence statement. Per-vendor affiliate ledger."
   breadcrumbs={breadcrumbs}
 >
   <article class="mx-auto max-w-3xl px-4 py-12 prose prose-slate">
@@ -144,9 +144,19 @@ const counts = {
       <h2 class="text-base font-bold text-slate-900 mb-2 mt-0">Changelog: non-software categories (2026-09-30)</h2>
       <ul class="list-disc pl-5 space-y-1 m-0">
         <li><strong>Every entry re-verified.</strong> Accounting, payroll, insurance, lead generation, financing, banking, payments, marketing agencies and AI tools were checked against primary sources (vendor pages, filings, regulator and court documents), and prices were re-checked wherever the vendor publishes them.</li>
-        <li><strong>No third-party review scores for these vendors.</strong> G2, Capterra, Trustpilot, Google, BBB and A.M. Best scores and forum sentiment are no longer shown in these categories: we could not verify them, and several were out of date. Each review page links to the vendor's BBB and Trustpilot pages instead. Software tool pages still show G2 and Capterra ratings, attributed to their source.</li>
+        <li><strong>No third-party review scores for these vendors.</strong> G2, Capterra, Trustpilot, Google, BBB and A.M. Best scores and forum sentiment are no longer shown in these categories: we could not verify them, and several were out of date. Each review page links to the vendor's BBB and Trustpilot pages instead. Software tool pages stopped showing G2 and Capterra ratings the same day (see v1.3).</li>
         <li><strong>Tiers use verified facts only.</strong> Lead generation: Recommended means no reputation warning and each lead or call goes to one business. Payroll: Tier S is online or specialty payroll with a published starting price and no warning; Tier B is legacy payroll, PEOs or a warning. Marketing agencies: Tier S is no warning plus published prices for the core service. Insurance: no Tier S; providers are listed with or without a warning, because nothing we could verify ranks insurers on quality.</li>
         <li><strong>Warnings need a readable source.</strong> A reputation warning must trace to a regulator order, court record, BBB profile or the vendor's own terms. Warnings that rested only on forum posts or on complaint text we could not read were removed.</li>
+      </ul>
+    </div>
+
+    <div class="not-prose mb-8 rounded-lg border border-slate-200 bg-slate-50 p-5 text-sm text-slate-700">
+      <h2 class="text-base font-bold text-slate-900 mb-2 mt-0">Changelog: v1.3 (2026-09-30)</h2>
+      <ul class="list-disc pl-5 space-y-1 m-0">
+        <li><strong>Removed the user-ratings factor.</strong> The Fit Score gave 30% of its weight to averaged G2 and Capterra ratings. We could not verify those ratings, and the two we checked were wrong. We would rather drop a factor than score tools on numbers we cannot check.</li>
+        <li><strong>Weights are now 60/20/20.</strong> Vertical fit 60%, pricing transparency 20%, integration coverage 20%. Every score was recomputed with the new weights.</li>
+        <li><strong>Tool pages link to G2 and Capterra instead.</strong> Software tool pages no longer show G2 or Capterra numbers, and rankings, comparisons and award text no longer cite them. Each tool page links to G2 and Capterra so readers can check current reviews at the source. Reviews submitted directly to WrenchStack are unchanged.</li>
+        <li><strong>The 2026 awards predate this change.</strong> They were selected while the ratings factor was part of the score and have not been re-selected.</li>
       </ul>
     </div>
 
@@ -173,7 +183,7 @@ const counts = {
     <h2>What the WrenchStack Fit Score™ measures</h2>
 
     <p>
-      Every vendor in our directory carries a WrenchStack Fit Score™ on a 0-10 scale. The score is calculated from four weighted factors and is the primary input to where a vendor ranks on category pages, vertical landing pages, and buyer guides. The same formula applies to every vendor, regardless of affiliate relationship, sponsorship status, or commercial alignment.
+      Every vendor in our directory carries a WrenchStack Fit Score™ on a 0-10 scale. The score is calculated from three weighted factors and is the primary input to where a vendor ranks on category pages, vertical landing pages, and buyer guides. The same formula applies to every vendor, regardless of affiliate relationship, sponsorship status, or commercial alignment.
     </p>
 
     <h2>The WrenchStack Fit Score™ formula</h2>
@@ -189,23 +199,18 @@ const counts = {
       <tbody>
         <tr>
           <td><strong>Vertical fit</strong></td>
-          <td>40%</td>
-          <td>How well the tool is built for the specific trade being searched (HVAC, plumbing, roofing, etc.). Scored 1-10 per vertical based on feature coverage, customer base, and the tool's own positioning.</td>
-        </tr>
-        <tr>
-          <td><strong>Aggregated user ratings</strong></td>
-          <td>30%</td>
-          <td>Averaged G2 + Capterra ratings, normalized to a 0-10 scale. When no listing exists on either platform, this factor is excluded and the remaining weights renormalize (v1.1); we never invent a rating.</td>
+          <td>60%</td>
+          <td>How well the tool is built for the specific trade being searched (HVAC, plumbing, roofing, etc.). Scored 1-10 per vertical based on feature coverage, customer base, and the tool's own positioning. Weight raised from 40% in v1.3.</td>
         </tr>
         <tr>
           <td><strong>Pricing transparency</strong></td>
-          <td>15%</td>
-          <td>Tools with public tier pricing score 10. Tools requiring sales calls for any number score 5. Weight raised from 10% in v1.2.</td>
+          <td>20%</td>
+          <td>Tools with public tier pricing score 10. Tools requiring sales calls for any number score 5. Weight raised from 10% to 15% in v1.2 and to 20% in v1.3.</td>
         </tr>
         <tr>
           <td><strong>Integration coverage</strong></td>
-          <td>15%</td>
-          <td>Count of native integrations with adjacent tools (QuickBooks, Stripe, Zapier, payment processors, marketing platforms). Six or more earns full marks. Weight raised from 10% in v1.2.</td>
+          <td>20%</td>
+          <td>Count of native integrations with adjacent tools (QuickBooks, Stripe, Zapier, payment processors, marketing platforms). Six or more earns full marks. Weight raised from 10% to 15% in v1.2 and to 20% in v1.3.</td>
         </tr>
       </tbody>
     </table>
@@ -223,12 +228,12 @@ const counts = {
 
     <ol>
       <li><strong>Discovery (week 1)</strong>: vendor identified through editorial research, vendor self-submission, contractor request, or category sweep. Initial fit assessment against category definition.</li>
-      <li><strong>Data collection (week 1-2)</strong>: pricing tiers verified directly from vendor pricing page with date stamp; feature list compiled from vendor documentation and product pages; G2 and Capterra ratings recorded for software tools; integration directory cross-referenced.</li>
+      <li><strong>Data collection (week 1-2)</strong>: pricing tiers verified directly from vendor pricing page with date stamp; feature list compiled from vendor documentation and product pages; integration directory cross-referenced.</li>
       <li><strong>Reputation check (week 2)</strong>: regulator actions (FTC, CFPB, SEC, state attorneys general), court records, BBB profiles and the vendor's own terms. We do not use forum or social-media sentiment, and a warning we cannot trace to a readable source is removed.</li>
       <li><strong>Scoring (week 2-3)</strong>: WrenchStack Fit Score™ computed using published weights; reputation_flag attached if structural concerns warrant warning to readers.</li>
       <li><strong>Editorial draft (week 3)</strong>: long-form review written (1,200-2,500 words typical), structured pros/cons, FAQs, best-fit framing.</li>
       <li><strong>Publication (week 4)</strong>: review goes live with verified_date stamp. Vendor profile becomes part of the directory.</li>
-      <li><strong>Monthly refresh</strong>: pricing re-verified; software ratings re-pulled; reputation warnings re-checked against their sources.</li>
+      <li><strong>Monthly refresh</strong>: pricing re-verified; reputation warnings re-checked against their sources.</li>
     </ol>
 
     <h2>Our independence statement</h2>
@@ -266,7 +271,8 @@ const counts = {
     </p>
 
     <p>
-      <strong>User ratings</strong> are pulled fresh from G2 and Capterra at each monthly review.
+      <strong>Third-party review scores</strong> from G2, Capterra and similar sites are not recorded or
+      used in scoring (since v1.3). Tool pages link to those sites so readers can check current reviews there.
     </p>
 
     <h2 id="changelog">Methodology changelog</h2>
@@ -283,7 +289,7 @@ const counts = {
           <span class="font-semibold text-slate-900">Version 1.0</span>
           <span class="text-xs font-medium uppercase tracking-wider text-slate-500">2026-05-29</span>
         </div>
-        <p class="mt-1 text-sm text-slate-600 leading-relaxed">Initial public methodology: the WrenchStack Fit Score™ (five weighted factors as of that date: vertical fit 40%, user ratings 30%, pricing transparency 10%, feature depth 10%, integration coverage 10%; feature depth was removed in v1.2), the documented evaluation timeline, the independence statement, and the per-vendor affiliate ledger.</p>
+        <p class="mt-1 text-sm text-slate-600 leading-relaxed">Initial public methodology: the WrenchStack Fit Score™ (five weighted factors as of that date: vertical fit 40%, user ratings 30%, pricing transparency 10%, feature depth 10%, integration coverage 10%; feature depth was removed in v1.2 and user ratings in v1.3), the documented evaluation timeline, the independence statement, and the per-vendor affiliate ledger.</p>
       </li>
     </ul>
 
@@ -304,7 +310,7 @@ const counts = {
 
     <p>
       Pricing tier data comes from public vendor pricing pages. Feature lists come from vendor
-      documentation, product demos, and aggregated user feedback on G2 and Capterra. Integration
+      documentation and product demos. Integration
       data comes from official vendor integration directories and Zapier marketplace listings.
     </p>
 
@@ -326,8 +332,8 @@ const counts = {
 
     <p class="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm not-prose">
       <strong class="text-emerald-900">Affiliate status doesn't affect ranking.</strong>
-      The WrenchStack Fit Score™ (vertical fit + user ratings + pricing transparency +
-      integrations) is computed the same way for every vendor, whether we have an active affiliate
+      The WrenchStack Fit Score™ (vertical fit + pricing transparency +
+      integration coverage) is computed the same way for every vendor, whether we have an active affiliate
       relationship, a pending application, or no commercial relationship at all.
     </p>
 

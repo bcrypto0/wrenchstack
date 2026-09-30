@@ -3,7 +3,6 @@ import Layout from '../../../layouts/Layout.astro';
 import migrationsData from '../../../data/migrations.json';
 import { asSentence,
   getTool,
-  aggregateRating,
   formatPrice,
   wrenchStackScore,
   type Tool,
@@ -34,8 +33,6 @@ const { fromTool, toTool, intent, reason } = Astro.props;
 
 const fromScore = wrenchStackScore(fromTool);
 const toScore = wrenchStackScore(toTool);
-const fromRating = aggregateRating(fromTool);
-const toRating = aggregateRating(toTool);
 
 const onlyInFromFeatures = fromTool.key_features.filter(f => !toTool.key_features.includes(f));
 const onlyInToFeatures = toTool.key_features.filter(f => !fromTool.key_features.includes(f));
@@ -166,7 +163,6 @@ const faqSchema = {
         <dl class="space-y-1 text-sm">
           <div class="flex justify-between"><dt class="text-slate-500">Price</dt><dd class="font-medium">{formatPrice(fromTool)}</dd></div>
           <div class="flex justify-between"><dt class="text-slate-500">Best for</dt><dd class="font-medium text-right">{fromTool.best_team_size ?? '-'} techs</dd></div>
-          <div class="flex justify-between"><dt class="text-slate-500">Rating</dt><dd class="font-medium">{fromRating !== null ? `${fromRating.toFixed(1)} / 5` : 'n/a'}</dd></div>
         </dl>
       </div>
 
@@ -184,7 +180,6 @@ const faqSchema = {
         <dl class="space-y-1 text-sm">
           <div class="flex justify-between"><dt class="text-slate-500">Price</dt><dd class="font-medium">{formatPrice(toTool)}</dd></div>
           <div class="flex justify-between"><dt class="text-slate-500">Best for</dt><dd class="font-medium text-right">{toTool.best_team_size ?? '-'} techs</dd></div>
-          <div class="flex justify-between"><dt class="text-slate-500">Rating</dt><dd class="font-medium">{toRating !== null ? `${toRating.toFixed(1)} / 5` : 'n/a'}</dd></div>
         </dl>
         <a
           href={toTool.affiliate_url.startsWith('http') ? toTool.affiliate_url : toTool.vendor_url}

@@ -4,7 +4,7 @@ import { EN_MARKET_HREFLANG, intlVendorCount, intlMarketCount } from '../lib/int
 import categories from '../data/categories.json';
 import toolsData from '../data/tools.json';
 import featuresData from '../data/features.json';
-import { tools, toolsForVertical, freshnessStats, directoryVerifiedWithinDays, daysSinceVerified, aggregateRating, formatPrice, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, aiTools, paymentProcessors, financingProviders, accountingSoftware, bankingProviders } from '../lib/data';
+import { tools, toolsForVertical, freshnessStats, directoryVerifiedWithinDays, daysSinceVerified, formatPrice, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, aiTools, paymentProcessors, financingProviders, accountingSoftware, bankingProviders } from '../lib/data';
 import FreshnessBadge from '../components/FreshnessBadge.astro';
 
 const verticals = categories.verticals;
@@ -190,7 +190,6 @@ function featureToUrl(slug: string): string {
       </p>
       <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {recentlyVerified.map((t) => {
-          const r = aggregateRating(t);
           return (
             <a
               href={`/tools/${t.slug}/`}
@@ -198,7 +197,6 @@ function featureToUrl(slug: string): string {
             >
               <div class="flex items-baseline justify-between gap-2">
                 <div class="font-semibold text-slate-900 group-hover:text-orange-600">{t.name}</div>
-                {r !== null && <span class="text-xs font-medium text-slate-500">{r.toFixed(1)} ★</span>}
               </div>
               <div class="mt-1 text-xs text-slate-500">{formatPrice(t)}</div>
               <div class="mt-2 border-t border-slate-100 pt-2">

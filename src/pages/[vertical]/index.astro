@@ -4,7 +4,6 @@ import { asSentence,
   verticals,
   rankToolsForVertical,
   verticalToUrl,
-  aggregateRating,
   formatPrice,
   wrenchStackScore,
   readingTimeMinutes,
@@ -107,7 +106,7 @@ const hasCustomFaqs = (vertical.vertical_faqs?.length ?? 0) > 0;
 const templatedFaqs = [
   {
     q: `What is the best ${verticalLower} software in 2026?`,
-    a: `Based on our analysis of pricing, features, integrations, and aggregated G2/Capterra ratings, the top three options are ${topPicks
+    a: `Based on our analysis of vertical fit, published pricing and integrations, the top three options are ${topPicks
       .slice(0, 3)
       .map((t) => t.name)
       .join(', ')}. The right pick depends on your team size and budget; see the buyer's guide below for size-specific recommendations.`,
@@ -139,7 +138,7 @@ const templatedFaqs = [
 const baseFaqs = hasCustomFaqs ? vertical.vertical_faqs! : templatedFaqs;
 const rankingFaq = {
   q: `What is the best ${verticalLower} software in 2026?`,
-  a: `Ranked by our independent WrenchStack Fit Score (vertical fit, aggregated G2/Capterra ratings, pricing transparency, and integrations), the best ${verticalLower} software in 2026 is: ${ranked
+  a: `Ranked by our independent WrenchStack Fit Score (vertical fit, pricing transparency, and integration coverage), the best ${verticalLower} software in 2026 is: ${ranked
     .slice(0, 8)
     .map((t, i) => `${i + 1}. ${t.name}`)
     .join('; ')}. ${topPicks[0]?.name ?? 'The top pick'} leads overall${topPicks[0] ? ` (${formatPrice(topPicks[0])})` : ''}, but the right choice depends on your team size and budget; see the decision guide on this page for size-specific picks.`,
@@ -198,7 +197,7 @@ const breadcrumbs = [
         Best {vertical.name} Software in 2026
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        A comparison of {ranked.length} platforms for {verticalLower} businesses, ranked by vertical fit, user ratings, pricing transparency, and integration coverage.
+        A comparison of {ranked.length} platforms for {verticalLower} businesses, ranked by vertical fit, pricing transparency, and integration coverage.
       </p>
       <Byline updatedDate={lastVerifiedDate} nextReviewDate={nextReviewDate} readingMinutes={estimatedReadingMin} />
     </header>
@@ -207,7 +206,7 @@ const breadcrumbs = [
       <section class="mb-10 rounded-lg border-l-4 border-orange-500 bg-orange-50/40 p-5">
         <p class="text-xs font-bold uppercase tracking-wider text-orange-600">The short answer</p>
         <p class="mt-2 text-slate-800 leading-relaxed">
-          For most {verticalLower} businesses in 2026, <a href={`/tools/${topPicks[0].slug}/`} class="font-semibold text-orange-700 hover:underline">{topPicks[0].name}</a> is our top pick ({formatPrice(topPicks[0])}{topPicks[0].best_team_size ? `, best for ${topPicks[0].best_team_size} techs` : ''}){topPicks.length > 1 ? (<>, followed by {topPicks.slice(1, 3).map((t, i) => (<>{i > 0 ? ' and ' : ''}<a href={`/tools/${t.slug}/`} class="font-semibold text-orange-700 hover:underline">{t.name}</a></>))}</>) : null}. Picks come from our independent <a href="/methodology/" class="underline hover:text-orange-700">Fit Score</a> (vertical fit, aggregated G2/Capterra ratings, pricing transparency and integrations), and no vendor pays for placement. Full ranking, pricing and trade-offs below.
+          For most {verticalLower} businesses in 2026, <a href={`/tools/${topPicks[0].slug}/`} class="font-semibold text-orange-700 hover:underline">{topPicks[0].name}</a> is our top pick ({formatPrice(topPicks[0])}{topPicks[0].best_team_size ? `, best for ${topPicks[0].best_team_size} techs` : ''}){topPicks.length > 1 ? (<>, followed by {topPicks.slice(1, 3).map((t, i) => (<>{i > 0 ? ' and ' : ''}<a href={`/tools/${t.slug}/`} class="font-semibold text-orange-700 hover:underline">{t.name}</a></>))}</>) : null}. Picks come from our independent <a href="/methodology/" class="underline hover:text-orange-700">Fit Score</a> (vertical fit, pricing transparency and integration coverage), and no vendor pays for placement. Full ranking, pricing and trade-offs below.
         </p>
       </section>
     )}
@@ -268,12 +267,10 @@ const breadcrumbs = [
               <th class="p-3 font-semibold">Score</th>
               <th class="p-3 font-semibold">Starting price</th>
               <th class="p-3 font-semibold">Best for</th>
-              <th class="p-3 font-semibold">User rating</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
             {topPicks.map((t, i) => {
-              const r = aggregateRating(t);
               const score = wrenchStackScore(t, vertical.slug);
               return (
                 <tr class="hover:bg-slate-50">
@@ -295,7 +292,6 @@ const breadcrumbs = [
                   </td>
                   <td class="p-3 text-slate-700">{formatPrice(t)}</td>
                   <td class="p-3 text-slate-600">{t.best_team_size ?? '-'} techs</td>
-                  <td class="p-3 text-slate-700">{r !== null ? `${r.toFixed(1)} / 5` : '-'}</td>
                 </tr>
               );
             })}
@@ -303,7 +299,7 @@ const breadcrumbs = [
         </table>
       </div>
       <p class="mt-2 text-xs text-slate-500">
-        Score combines vertical fit (40%), aggregated G2 + Capterra ratings (30%), pricing transparency (15%), and integration coverage (15%).
+        Score combines vertical fit (60%), pricing transparency (20%), and integration coverage (20%).
         <a href="/methodology/" class="underline hover:text-slate-700">Full methodology →</a>
       </p>
     </section>
@@ -462,7 +458,6 @@ const breadcrumbs = [
       <h2 id="reviews" class="mb-6 scroll-mt-20 text-2xl font-bold text-slate-900">Detailed reviews</h2>
       <div class="space-y-10">
         {topPicks.map((t, i) => {
-          const rating = aggregateRating(t);
           const score = wrenchStackScore(t, vertical.slug);
           return (
             <div class="rounded-lg border border-slate-200 bg-white p-6">
@@ -477,7 +472,6 @@ const breadcrumbs = [
                 <WrenchScore score={score} size="md" />
               </div>
               <div class="mb-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
-                {rating !== null && <span><span class="font-semibold text-slate-700">{rating.toFixed(1)} / 5</span> user rating</span>}
                 {t.founded && <span>Founded {t.founded}</span>}
                 {t.headquartered && <span>{t.headquartered}</span>}
               </div>
@@ -718,8 +712,8 @@ const breadcrumbs = [
     <section class="mb-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Ready to compare side-by-side?</h2>
       <p class="mt-2 text-slate-300">
-        Build a custom comparison of any two tools on this list: pricing, features, integrations,
-        and ratings shown head-to-head.
+        Build a custom comparison of any two tools on this list: pricing, features and
+        integrations shown head-to-head.
       </p>
       <a
         href="/compare/"

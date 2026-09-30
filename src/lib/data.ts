@@ -66,8 +66,6 @@ export interface Tool {
   best_for: string;
   best_team_size?: string;
   weaknesses: string;
-  g2_rating?: number;
-  capterra_rating?: number;
   founded?: number;
   headquartered?: string;
   // --- Phase 2 custom content (optional; per-tool deep content for
@@ -132,12 +130,12 @@ export function getVertical(slug: string): Vertical | undefined {
   return verticals.find((v) => v.slug === slug);
 }
 
-export function aggregateRating(t: Tool): number | null {
-  const ratings: number[] = [];
-  if (t.g2_rating) ratings.push(t.g2_rating);
-  if (t.capterra_rating) ratings.push(t.capterra_rating);
-  if (ratings.length === 0) return null;
-  return ratings.reduce((a, b) => a + b, 0) / ratings.length;
+// Third-party review scores (G2, Capterra) are no longer stored or scored
+// (2026-09-30): they could not be verified and the two that were checked were
+// wrong. Tool pages link readers to the review sites instead. Kept as a stub
+// so any stray caller gets "no rating" rather than a stale number.
+export function aggregateRating(_t: Tool): number | null {
+  return null;
 }
 
 export function verticalFitScore(t: Tool, verticalSlug: string): number {
@@ -149,9 +147,9 @@ export function rankToolsForVertical(verticalSlug: string): Tool[] {
   return matched.sort((a, b) => {
     const fitDiff = verticalFitScore(b, verticalSlug) - verticalFitScore(a, verticalSlug);
     if (fitDiff !== 0) return fitDiff;
-    const rA = aggregateRating(a) ?? 0;
-    const rB = aggregateRating(b) ?? 0;
-    return rB - rA;
+    const scoreDiff = wrenchStackScore(b, verticalSlug) - wrenchStackScore(a, verticalSlug);
+    if (scoreDiff !== 0) return scoreDiff;
+    return a.name.localeCompare(b.name);
   });
 }
 
@@ -179,8 +177,9 @@ export interface ScoreFactor {
 
 // The weighted factors behind the WrenchStack Fit Score, exposed so the
 // breakdown can be surfaced wherever the score appears (single source of truth
-// for both the number and its explanation). 40% vertical fit, 30% aggregate
-// user rating, 15% pricing transparency, 15% integration coverage.
+// for both the number and its explanation). v1.3 (2026-09-30): 60% vertical fit,
+// 20% pricing transparency, 20% integration coverage. The 30% G2/Capterra user-rating
+// factor was removed: the ratings were never verified and checked ones were wrong.
 //
 // v1.2 (2026-09-01): 'Feature depth' REMOVED. It scored min(key_features.length, 10),
 // which counted array entries against an uncontrolled vocabulary: 234 distinct slugs
@@ -204,7 +203,6 @@ export function wrenchStackScoreBreakdown(t: Tool, verticalSlug?: string): Score
   const fitValues = Object.values(t.vertical_fit ?? {});
   const bestFit = fitValues.length ? Math.max(...fitValues) : 5;
   const fit = verticalSlug ? verticalFitScore(t, verticalSlug) : bestFit;
-  const rating = aggregateRating(t);
   const transparency = t.pricing.starting_at_usd !== null ? 10 : 5;
   // Integration coverage scaled to a denominator that is actually reachable. It used to
   // be min(count, 10) while the directory maximum is 7 and the mean is 2.7, so no tool
@@ -212,18 +210,10 @@ export function wrenchStackScoreBreakdown(t: Tool, verticalSlug?: string): Score
   // Six integrations is comprehensive for this category, so six or more earns full marks.
   const integrationScore = Math.min(10, (t.integrations.length / 6) * 10);
   const factors: ScoreFactor[] = [
-    { factor: verticalSlug ? 'Vertical fit' : 'Vertical fit (best trade)', weight: 0.4, raw: fit },
+    { factor: verticalSlug ? 'Vertical fit' : 'Vertical fit (best trade)', weight: 0.6, raw: fit },
+    { factor: 'Pricing transparency', weight: 0.2, raw: transparency },
+    { factor: 'Integration coverage', weight: 0.2, raw: integrationScore },
   ];
-  // When no G2/Capterra listing exists we refuse to invent a rating, so the
-  // factor is EXCLUDED and remaining weights renormalize, instead of silently
-  // scoring the tool as if it had earned 2.5 stars.
-  if (rating !== null) {
-    factors.push({ factor: 'User ratings (G2 + Capterra)', weight: 0.3, raw: rating * 2 });
-  }
-  factors.push(
-    { factor: 'Pricing transparency', weight: 0.15, raw: transparency },
-    { factor: 'Integration coverage', weight: 0.15, raw: integrationScore },
-  );
   const totalWeight = factors.reduce((s, f) => s + f.weight, 0);
   return factors.map((f) => ({ ...f, weight: f.weight / totalWeight }));
 }
@@ -502,12 +492,6 @@ function buildAlternativeRationale(source: Tool, alt: Tool): string {
     }
   }
 
-  // 3. Rating boost
-  const altRating = aggregateRating(alt);
-  if (altRating !== null && altRating >= 4.7) {
-    fragments.push(`top-rated (${altRating.toFixed(1)}/5)`);
-  }
-
   // 4. Free trial advantage
   const altTrial = alt.pricing.free_trial_days ?? 0;
   const srcTrial = source.pricing.free_trial_days ?? 0;
@@ -604,16 +588,13 @@ export function smartAlternatives(t: Tool, n: number = 6): ScoredAlternative[] {
     const bucketDistance = Math.abs(sourceBucketIdx - candBucketIdx);
     const bucketScore = Math.max(0, 10 - bucketDistance * 3);
 
-    // 4. Rating (max 10)
-    const rating = aggregateRating(c) ?? 3.5;
-    const ratingScore = rating * 2;
-
-    // Composite: 40% vertical fit + 30% tier + 15% team size + 15% rating
+    // Composite: vertical fit, price tier and team size. A 15% third-party
+    // rating term was removed 2026-09-30 (ratings are no longer stored); it
+    // had become a constant, so candidate order is unchanged.
     let score =
       vfNormalized * 0.4 +
       tierScore * 0.3 +
-      bucketScore * 0.15 +
-      ratingScore * 0.15;
+      bucketScore * 0.15;
 
     // Type-match bonus / penalty: same category wins ties; specialty tools
     // penalized when source is a definite type.

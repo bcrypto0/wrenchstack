@@ -7,7 +7,6 @@ import { asSentence,
   getVertical,
   verticalToUrl,
   formatPrice,
-  aggregateRating,
   wrenchStackScore,
 } from '../../../../lib/data';
 import ToolLogo from '../../../../components/ToolLogo.astro';
@@ -89,7 +88,7 @@ function stateMarketContext(): string {
 const faqs = [
   {
     q: `What's the best ${vertical.name.toLowerCase()} software for ${state.name} contractors?`,
-    a: `Based on user ratings, vertical fit, and pricing transparency, ${featuredTool.name} ranks at the top for ${vertical.name.toLowerCase()} contractors in ${state.name}. ${asSentence(featuredTool.tagline)} None of the field service platforms in our directory have ${state.name}-specific limitations; they all work nationwide. The "best" choice comes down to your team size, vertical specialization, and budget. See the ranked list above or take our matching quiz.`,
+    a: `Based on our Fit Score (vertical fit, pricing transparency and integration coverage), ${featuredTool.name} ranks at the top for ${vertical.name.toLowerCase()} contractors in ${state.name}. ${asSentence(featuredTool.tagline)} None of the field service platforms in our directory have ${state.name}-specific limitations; they all work nationwide. The "best" choice comes down to your team size, vertical specialization, and budget. See the ranked list above or take our matching quiz.`,
   },
   {
     q: `Do I need ${vertical.name.toLowerCase()} software that's specific to ${state.name}?`,
@@ -101,7 +100,7 @@ const faqs = [
   },
   {
     q: `Which platforms are most popular with ${state.name} contractors?`,
-    a: `Nationwide platforms like ${topTools[0].name}, ${topTools[1]?.name ?? 'Jobber'}, and ${topTools[2]?.name ?? 'Housecall Pro'} have broad adoption across all 50 states including ${state.name}. State-specific market share data isn't published by vendors, but Capterra and G2 review distribution suggests these platforms dominate in ${state.name} the same way they do nationally.`,
+    a: `Platforms like ${topTools[0].name}, ${topTools[1]?.name ?? 'Jobber'}, and ${topTools[2]?.name ?? 'Housecall Pro'} are sold nationwide, including in ${state.name}. Vendors do not publish state-level market share, so there is no reliable public data on which platform is most used in ${state.name} specifically.`,
   },
   {
     q: `Can I switch ${vertical.name.toLowerCase()} software easily in ${state.name}?`,
@@ -135,7 +134,7 @@ const noindex = !isStatePageIndexable(state.slug, verticalToUrl(verticalSlug));
         Best {vertical.name} Software for {state.name} Contractors (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        {stateMarketContext()} Below: the top platforms used by {vertical.name.toLowerCase()} contractors in {state.abbr}, ranked by vertical fit and user ratings, with {state.name}-specific licensing context.
+        {stateMarketContext()} Below: the top platforms used by {vertical.name.toLowerCase()} contractors in {state.abbr}, ranked by vertical fit, pricing transparency and integration coverage, with {state.name}-specific licensing context.
       </p>
     </header>
 
@@ -151,7 +150,6 @@ const noindex = !isStatePageIndexable(state.slug, verticalToUrl(verticalSlug));
       <h2 class="mb-5 text-2xl font-bold text-slate-900">Top {vertical.name.toLowerCase()} platforms for {state.name}</h2>
       <div class="space-y-4">
         {topTools.map((tool, i) => {
-          const rating = aggregateRating(tool);
           return (
             <div class="rounded-lg border border-slate-200 bg-white p-5">
               <div class="mb-3 flex items-start gap-4">
@@ -174,14 +172,10 @@ const noindex = !isStatePageIndexable(state.slug, verticalToUrl(verticalSlug));
                 <strong class="text-slate-900">Best for:</strong> {tool.best_for}
               </p>
 
-              <dl class="grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
+              <dl class="grid grid-cols-2 gap-2 text-xs sm:grid-cols-3">
                 <div>
                   <dt class="text-slate-500">Starting price</dt>
                   <dd class="font-semibold text-slate-900">{formatPrice(tool)}</dd>
-                </div>
-                <div>
-                  <dt class="text-slate-500">User rating</dt>
-                  <dd class="font-semibold text-slate-900">{rating !== null ? `${rating.toFixed(1)} / 5` : 'n/a'}</dd>
                 </div>
                 <div>
                   <dt class="text-slate-500">Best team size</dt>

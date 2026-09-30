@@ -6,7 +6,6 @@ import path from 'node:path';
 import { asSentence,
   tools,
   toolsForVertical,
-  aggregateRating,
   formatPrice,
   verticalToUrl,
   verticals,
@@ -37,6 +36,7 @@ import ReviewSubmissionForm from '../../../components/ReviewSubmissionForm.astro
 import AffiliateDisclosure from '../../../components/AffiliateDisclosure.astro';
 import { awardsForTool, awards, userRatingForTool, reviewsForTool } from '../../../lib/data';
 import MissingFromList from '../../../components/MissingFromList.astro';
+import SourceReviews from '../../../components/SourceReviews.astro';
 
 export async function getStaticPaths() {
   return tools.map((t) => ({
@@ -50,7 +50,6 @@ interface Props {
 }
 
 const { tool } = Astro.props;
-const rating = aggregateRating(tool);
 const toolScore = wrenchStackScore(tool);
 const scoreBreakdown = wrenchStackScoreBreakdown(tool);
 // Self-hosted homepage screenshot (generated via _gen_screenshots.mjs). Build-
@@ -204,13 +203,6 @@ function getPros(): string[] {
     );
   } else if (isFree) {
     pros.push(`**Free tier available**: you can evaluate the core workflow with zero financial risk.`);
-  }
-
-  // Strong user ratings
-  if (rating !== null && rating >= 4.4) {
-    pros.push(
-      `**${rating.toFixed(1)} / 5 aggregate user rating** (averaged across G2 + Capterra): strong indicator of post-purchase satisfaction.`,
-    );
   }
 
   // Zapier
@@ -403,8 +395,8 @@ const productSchema = {
   // Only emit aggregateRating from REAL first-party reviews. Emitting a
   // fabricated reviewCount (e.g. a baseline of 50 with zero real reviews) is a
   // Google structured-data violation. reviews.json is currently empty, so no
-  // aggregateRating is emitted until genuine reviews exist. The G2/Capterra
-  // ratings still display on-page, attributed to their third-party source.
+  // aggregateRating is emitted until genuine reviews exist. Third-party review
+  // scores are not shown (2026-09-30); the page links to the review sites instead.
   ...(userRating && {
     aggregateRating: {
       '@type': 'AggregateRating',
@@ -508,13 +500,7 @@ const breadcrumbs = [
       </div>
 
       <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-600">
-        {rating !== null && (
-          <span class="flex items-center gap-1">
-            <span class="font-bold text-slate-900">{rating.toFixed(1)} / 5</span>
-            <span class="text-slate-500">(avg G2 + Capterra)</span>
-          </span>
-        )}
-        {tool.founded && <span>Founded {tool.founded}</span>}
+        {tool.founded &&<span>Founded {tool.founded}</span>}
         {tool.headquartered && <span>HQ {tool.headquartered}</span>}
         <span>Best team size: {tool.best_team_size ?? 'n/a'}</span>
       </div>
@@ -676,10 +662,11 @@ const breadcrumbs = [
         <strong class="text-slate-900">{tool.name}</strong> is best for {asSentence(tool.best_for)}
         Pricing {hasPublicPricing ? `starts at $${startingPrice}/mo` : 'is custom-quoted (sales call required)'}.
         {strongVerticals.length > 0 && ` Strongest fit: ${strongVerticals.slice(0, 3).join(', ')}.`}
-        {rating !== null && ` ${rating.toFixed(1)} / 5 aggregate user rating.`}
         {hasFreeTrial && ` ${tool.pricing.free_trial_days}-day free trial available.`}
       </p>
     </section>
+
+    <SourceReviews name={tool.name} url={tool.vendor_url} kind="software" />
 
     {hasLongDesc && (
       <section class="mb-10 prose prose-slate max-w-none">
@@ -900,11 +887,10 @@ const breadcrumbs = [
       <section id="alternatives" class="mb-10 scroll-mt-8">
         <h2 class="mb-2 text-2xl font-bold text-slate-900">Top alternatives to {tool.name}</h2>
         <p class="mb-5 text-sm text-slate-500">
-          Matched by vertical fit, price tier, and team size, not just rating.
+          Matched by vertical fit, price tier, and team size.
         </p>
         <div class="grid gap-4 sm:grid-cols-2">
           {smartAlts.map(({ tool: c, reason }) => {
-            const rating = aggregateRating(c);
             return (
               <a
                 href={`/tools/${c.slug}/`}
@@ -912,9 +898,6 @@ const breadcrumbs = [
               >
                 <div class="flex items-start justify-between gap-3">
                   <div class="font-semibold text-slate-900 group-hover:text-orange-600">{c.name}</div>
-                  {rating !== null && (
-                    <span class="shrink-0 text-xs font-medium text-slate-500">{rating.toFixed(1)} ★</span>
-                  )}
                 </div>
                 <div class="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs text-slate-500">
                   <span>{formatPrice(c)}</span>

@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, aggregateRating, formatPrice, priceTier, teamSizeBucket, freshnessTier, freshnessLabel } from '../lib/data';
+import { tools, formatPrice, priceTier, teamSizeBucket, freshnessTier, freshnessLabel } from '../lib/data';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -31,7 +31,6 @@ const builderTools = tools.map((t) => ({
   freshnessLabel: freshnessLabel(t),
   bestTeamSize: t.best_team_size ?? '-',
   teamBucket: teamSizeBucket(t),
-  rating: aggregateRating(t),
   verticals: t.verticals,
   keyFeatures: t.key_features,
   integrations: t.integrations,
@@ -51,7 +50,7 @@ const builderTools = tools.map((t) => ({
 
 <Layout
   title="Build your own comparison: pick any 2-5 trades software tools"
-  description="Interactive side-by-side comparison builder. Pick any 2-5 trades software platforms from our directory and see them compared instantly across pricing, features, integrations, ratings, and freshness."
+  description="Interactive side-by-side comparison builder. Pick any 2-5 trades software platforms from our directory and see them compared instantly across pricing, features, integrations, and freshness."
   breadcrumbs={breadcrumbs}
 >
   <article class="mx-auto max-w-6xl px-4 py-12">
@@ -63,7 +62,7 @@ const builderTools = tools.map((t) => ({
         Build your own side-by-side comparison
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        Pick any 2-5 trades software platforms from our directory. We'll show them compared instantly (pricing, features, integrations, ratings, freshness) without you having to find a pre-built comparison page that happens to include your exact tools.
+        Pick any 2-5 trades software platforms from our directory. We'll show them compared instantly (pricing, features, integrations, freshness) without you having to find a pre-built comparison page that happens to include your exact tools.
       </p>
     </header>
 
@@ -124,7 +123,7 @@ const builderTools = tools.map((t) => ({
 
       <h2>What the comparison includes</h2>
       <ul>
-        <li><strong>Headline metrics</strong>: Starting price (per-user or flat-rate detected), aggregate rating (G2 + Capterra average), best team size, founded year, headquarters.</li>
+        <li><strong>Headline metrics</strong>: Starting price (per-user or flat-rate detected), best team size, free trial, founded year, headquarters.</li>
         <li><strong>Freshness badge</strong>: When we last verified the pricing tier against the vendor's public page. Green if under 90 days; amber if 91-180; red if older.</li>
         <li><strong>Integration check</strong>: Does the tool integrate with QuickBooks, Stripe, Xero, Zapier, Google Local Services Ads? Y/N per integration.</li>
         <li><strong>Feature counts</strong>: Number of key features and integrations shipped, with samples listed.</li>
@@ -201,7 +200,7 @@ const builderTools = tools.map((t) => ({
               class="block w-full px-3 py-2 text-left text-sm transition hover:bg-orange-50 focus:bg-orange-50 focus:outline-none"
             >
               <div class="font-medium text-slate-900">${escHtml(t.name)}</div>
-              <div class="text-xs text-slate-500">${escHtml(t.formattedPrice)} · ${escHtml(t.bestTeamSize)} techs · ${t.rating ? t.rating.toFixed(1) + '★' : ''}</div>
+              <div class="text-xs text-slate-500">${escHtml(t.formattedPrice)} · ${escHtml(t.bestTeamSize)} techs</div>
             </button>
           `,
           )
@@ -264,10 +263,6 @@ const builderTools = tools.map((t) => ({
           {
             label: 'Starting price',
             cells: cols.map((t) => `<strong>${escHtml(t.formattedPrice)}</strong>${t.pricingNote ? `<div class="mt-1 text-xs text-slate-500">${escHtml(t.pricingNote.slice(0, 80))}${t.pricingNote.length > 80 ? '…' : ''}</div>` : ''}`),
-          },
-          {
-            label: 'Aggregate rating',
-            cells: cols.map((t) => t.rating !== null ? `<strong>${t.rating.toFixed(1)} / 5</strong><div class="mt-1 text-xs text-slate-500">G2 + Capterra avg</div>` : '<span class="text-slate-400">-</span>'),
           },
           {
             label: 'Best team size',

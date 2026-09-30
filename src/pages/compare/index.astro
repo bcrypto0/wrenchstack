@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { tools, verticals, aggregateRating, verticalToUrl, type Tool } from '../../lib/data';
+import { tools, verticals, verticalFitScore, verticalToUrl, type Tool } from '../../lib/data';
 import { isComparisonIndexable } from '../../lib/compare-index.mjs';
 
 interface Pair {
@@ -50,14 +50,17 @@ const featuredPairs = featuredSlugPairs
   .filter((p): p is Pair => p !== null);
 
 // Comparisons grouped by vertical. Each pair appears in every shared-vertical section.
+// Ordered by the two tools' combined fit for that trade, then alphabetically. (Until
+// 2026-09-30 this sorted by summed G2/Capterra ratings, which are no longer used.)
 const pairsByVertical = verticals.map((v) => ({
   vertical: v,
   pairs: pairs
     .filter((p) => p.a.verticals.includes(v.slug) && p.b.verticals.includes(v.slug))
     .sort((p, q) => {
-      const scoreP = (aggregateRating(p.a) ?? 0) + (aggregateRating(p.b) ?? 0);
-      const scoreQ = (aggregateRating(q.a) ?? 0) + (aggregateRating(q.b) ?? 0);
-      return scoreQ - scoreP;
+      const fitP = verticalFitScore(p.a, v.slug) + verticalFitScore(p.b, v.slug);
+      const fitQ = verticalFitScore(q.a, v.slug) + verticalFitScore(q.b, v.slug);
+      if (fitQ !== fitP) return fitQ - fitP;
+      return `${p.a.name} vs ${p.b.name}`.localeCompare(`${q.a.name} vs ${q.b.name}`);
     }),
 })).filter((g) => g.pairs.length > 0);
 
@@ -115,7 +118,7 @@ const breadcrumbs = [
             Don't see your specific matchup? Build a custom 2-5 tool comparison.
           </h2>
           <p class="mt-2 text-sm text-slate-700">
-            The pre-built pages cover most-searched pairings. The interactive builder lets you pick any combination from all {tools.length} tools: pricing, freshness, integrations, ratings side-by-side, instantly.
+            The pre-built pages cover most-searched pairings. The interactive builder lets you pick any combination from all {tools.length} tools: pricing, freshness and integrations side-by-side, instantly.
           </p>
         </div>
         <a
@@ -134,8 +137,6 @@ const breadcrumbs = [
       </p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {featuredPairs.map(({ a, b }) => {
-          const rA = aggregateRating(a);
-          const rB = aggregateRating(b);
           return (
             <a
               href={`/compare/${a.slug}-vs-${b.slug}/`}
@@ -145,9 +146,7 @@ const breadcrumbs = [
                 {a.name} vs {b.name}
               </h3>
               <p class="mt-1 text-xs text-slate-500">
-                {rA !== null && rB !== null
-                  ? `${rA.toFixed(1)} vs ${rB.toFixed(1)} user rating`
-                  : 'Decision matrix · pricing · pros and cons'}
+                Decision matrix · pricing · pros and cons
               </p>
             </a>
           );
@@ -158,7 +157,7 @@ const breadcrumbs = [
     <section id="by-trade" class="mb-16 scroll-mt-8">
       <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Browse by trade</h2>
       <p class="mb-6 text-slate-600">
-        Top-rated comparisons within each trade: the head-to-head matchups most relevant when both tools serve the same vertical.
+        Comparisons within each trade, ordered by how well both tools fit it: the head-to-head matchups most relevant when both tools serve the same vertical.
       </p>
       <div class="space-y-10">
         {pairsByVertical.map(({ vertical, pairs: verticalPairs }) => (

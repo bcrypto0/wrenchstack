@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { getTool, aggregateRating, wrenchStackScore } from '../../../lib/data';
+import { getTool, wrenchStackScore } from '../../../lib/data';
 import MissingFromList from '../../../components/MissingFromList.astro';
 
 // The definitive, hand-written version of the most-searched residential FSM
@@ -18,8 +18,6 @@ const JOBBER_RECHECKED = '2026-09-10';
 
 const jScore = wrenchStackScore(jobber);
 const hScore = wrenchStackScore(hcp);
-const jRating = aggregateRating(jobber)?.toFixed(1);
-const hRating = aggregateRating(hcp)?.toFixed(1);
 
 // Housecall Pro's published structure (verified 2026-08-27):
 // annual-billed monthly equivalents. Basic $59 (1 user only), Essentials $149
@@ -123,7 +121,6 @@ const breadcrumbs = [
         </thead>
         <tbody>
           <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">WrenchStack Fit Score</td><td class="py-2 pr-4 font-semibold">{jScore}</td><td class="py-2 font-semibold">{hScore}</td></tr>
-          <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">G2 + Capterra average</td><td class="py-2 pr-4">{jRating} (G2 {jobber.g2_rating} / Capterra {jobber.capterra_rating})</td><td class="py-2">{hRating} (G2 {hcp.g2_rating} / Capterra {hcp.capterra_rating})</td></tr>
           <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Entry price (annual-billed)</td><td class="py-2 pr-4">$29/mo (Core, 1 user)</td><td class="py-2">$59/mo (Basic, 1 user)</td></tr>
           <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Pricing model</td><td class="py-2 pr-4">4 plans, priced by team size</td><td class="py-2">3 bundles with included seats + per-seat overage</td></tr>
           <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Best team size</td><td class="py-2 pr-4">{jobber.best_team_size}</td><td class="py-2">{hcp.best_team_size}</td></tr>

@@ -4,7 +4,6 @@ import featuresData from '../../../data/features.json';
 import {
   tools,
   verticals,
-  aggregateRating,
   formatPrice,
   verticalToUrl,
   readingTimeMinutes,
@@ -47,18 +46,13 @@ const { featureSlug } = Astro.props;
 const features = (featuresData as { features: Record<string, FeatureData> }).features;
 const feature = features[featureSlug];
 
-// Find all tools that have this feature in their key_features array.
+// Find all tools that have this feature in their key_features array, listed
+// alphabetically. (Until 2026-09-30 this sorted by G2/Capterra rating, and a second
+// "high-rated tools without this feature" list was built from the same ratings;
+// both were dropped when third-party review scores were removed.)
 const toolsWithFeature: Tool[] = tools
   .filter((t) => t.key_features.includes(featureSlug))
-  .sort((a, b) => (aggregateRating(b) ?? 0) - (aggregateRating(a) ?? 0));
-
-// Notable tools WITHOUT this feature (to surface comparison context).
-// Only show 5 high-rating tools that lack it.
-const toolsWithoutFeature: Tool[] = tools
-  .filter((t) => !t.key_features.includes(featureSlug))
-  .filter((t) => (aggregateRating(t) ?? 0) >= 4.4)
-  .sort((a, b) => (aggregateRating(b) ?? 0) - (aggregateRating(a) ?? 0))
-  .slice(0, 5);
+  .sort((a, b) => a.name.localeCompare(b.name));
 
 // Related features for cross-linking.
 const relatedFeatures = feature.related_features
@@ -156,20 +150,17 @@ const breadcrumbs = [
               <tr>
                 <th class="p-3 font-semibold">Tool</th>
                 <th class="p-3 font-semibold">Starting price</th>
-                <th class="p-3 font-semibold">User rating</th>
                 <th class="p-3 font-semibold">Best for</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
               {toolsWithFeature.map((t) => {
-                const r = aggregateRating(t);
                 return (
                   <tr class="hover:bg-slate-50">
                     <td class="p-3">
                       <a href={`/tools/${t.slug}/`} class="font-semibold text-slate-900 hover:text-orange-600">{t.name}</a>
                     </td>
                     <td class="p-3 text-slate-700">{formatPrice(t)}</td>
-                    <td class="p-3 text-slate-700">{r !== null ? `${r.toFixed(1)} / 5` : '-'}</td>
                     <td class="p-3 text-slate-600 text-xs">{t.best_for}</td>
                   </tr>
                 );
@@ -179,34 +170,6 @@ const breadcrumbs = [
         </div>
       )}
     </section>
-
-    {toolsWithoutFeature.length > 0 && (
-      <section class="mb-12">
-        <h2 class="mb-4 text-2xl font-bold text-slate-900">
-          High-rated tools that don't have {feature.name.toLowerCase()}
-        </h2>
-        <p class="mb-4 text-sm text-slate-600">
-          These platforms have strong user ratings but don't list {feature.name.toLowerCase()} as a core feature. If you need this capability, consider alternatives above, or evaluate whether you actually need it for your operation.
-        </p>
-        <div class="grid gap-3 sm:grid-cols-2">
-          {toolsWithoutFeature.map((t) => {
-            const r = aggregateRating(t);
-            return (
-              <a
-                href={`/tools/${t.slug}/`}
-                class="group rounded-lg border border-slate-200 bg-white p-4 hover:border-slate-400"
-              >
-                <div class="font-semibold text-slate-900 group-hover:text-orange-600">{t.name}</div>
-                <div class="mt-1 text-xs text-slate-500">
-                  {r !== null ? `${r.toFixed(1)} / 5 rating` : '-'} · {formatPrice(t)}
-                </div>
-                <div class="mt-2 text-xs text-slate-500">{t.tagline}</div>
-              </a>
-            );
-          })}
-        </div>
-      </section>
-    )}
 
     {relatedFeatures.length > 0 && (
       <section class="mb-12">

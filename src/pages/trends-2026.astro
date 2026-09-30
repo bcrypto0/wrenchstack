@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, verticals, medianUsd as sharedMedianUsd, perUserMedian, flatFeeMedian, perUserTools, flatFeeTools, priceTier, REFERENCE_TEAM_SIZE, teamSizeBucket, freshnessTier, aggregateRating, accountingSoftware, paymentProcessors, bankingProviders, financingProviders, insuranceProviders, leadGenPlatforms, payrollServices, marketingAgencies, aiTools } from '../lib/data';
+import { tools, verticals, medianUsd as sharedMedianUsd, perUserMedian, flatFeeMedian, perUserTools, flatFeeTools, priceTier, REFERENCE_TEAM_SIZE, teamSizeBucket, freshnessTier, accountingSoftware, paymentProcessors, bankingProviders, financingProviders, insuranceProviders, leadGenPlatforms, payrollServices, marketingAgencies, aiTools } from '../lib/data';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -83,11 +83,8 @@ const isNonUsHQ = (hq: string) => hq.split(/[,/]/).some((seg) => NON_US_COUNTRIE
 const usHQ = tools.filter((t) => t.headquartered && !isNonUsHQ(t.headquartered)).length;
 const intlHQ = tools.filter((t) => t.headquartered && isNonUsHQ(t.headquartered)).length;
 
-// Rating distribution
-const ratings = tools.map((t) => aggregateRating(t)).filter((r): r is number => r !== null);
-const avgRating = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(2);
-const above47 = ratings.filter((r) => r >= 4.7).length;
-const below43 = ratings.filter((r) => r < 4.3).length;
+// (A G2/Capterra rating-distribution section was removed 2026-09-30: those
+// third-party scores could not be verified and are no longer stored.)
 
 // Per-company vs per-user pricing
 function detectsPerCompany(t: typeof tools[number]): boolean {
@@ -409,12 +406,6 @@ const articleSchema = {
         Of the <strong>{usHQ + intlHQ} platforms</strong> with a headquarters on record, <strong>{usHQ}</strong> are in the United States and <strong>{intlHQ}</strong> are elsewhere ({tools.length - usHQ - intlHQ} of the {tools.length} list no headquarters). The international group includes Tradify (Auckland, NZ), Simpro (Brisbane, AU), BigChange (UK), Powered Now (UK), Praxedo (Paris, France), Vonigo (Vancouver, Canada), Joist (Toronto, Canada). The international cohort has grown notably in 2024-2026 as European and Australian platforms expand US presence: Simpro, BigChange, Praxedo, and Powered Now all have growing US customer bases despite international roots.
       </p>
 
-      <h2>User satisfaction: the rating distribution</h2>
-
-      <p>
-        Average aggregate rating (G2 + Capterra combined) across the directory is <strong>{avgRating}/5</strong>. <strong>{above47} platforms</strong> rate 4.7 or higher; the top quartile concentrates around modern cloud platforms (MaintainX, Limble, JobTread, ZenMaid, Skimmer, Sera Systems, GorillaDesk, Tradify, FieldPulse, CompanyCam). <strong>{below43} platforms</strong> rate below 4.3, typically legacy enterprise platforms with mixed reviews around UI quality and onboarding experience.
-      </p>
-
       <h2>Beyond FSM: the full contractor software stack</h2>
 
       <p>
@@ -506,7 +497,7 @@ const articleSchema = {
       <h2>Methodology</h2>
 
       <p>
-        All data was sourced from public vendor pricing pages, integration directories, G2 review aggregates, and Capterra review aggregates. For platforms using custom-quoted pricing, user-reported pricing ranges were used (sourced from Reddit threads, G2 review text, vendor RFP responses shared publicly). Verification dates on individual tool pages document when each pricing tier was last verified against the vendor's public page.
+        All data was sourced from public vendor pricing pages and integration directories. For platforms using custom-quoted pricing, user-reported pricing ranges were used (sourced from Reddit threads, G2 review text, vendor RFP responses shared publicly). Verification dates on individual tool pages document when each pricing tier was last verified against the vendor's public page.
       </p>
 
       <p>
@@ -521,7 +512,7 @@ const articleSchema = {
 
       <ul>
         <li>
-          <a href="/data/trades-software-pricing-2026.csv"><strong>CSV</strong></a> ({tools.length} rows): slug, name, vendor URL, verticals, quote-only flag, entry price, tier names and prices, free-trial days, verification date, team-size fit, founding year, HQ, G2/Capterra ratings where listings exist, and the pricing model (per user, flat, flat plus seats, free tier, quote only), which you need before comparing entry prices across platforms.
+          <a href="/data/trades-software-pricing-2026.csv"><strong>CSV</strong></a> ({tools.length} rows): slug, name, vendor URL, verticals, quote-only flag, entry price, tier names and prices, free-trial days, verification date, team-size fit, founding year, HQ, and the pricing model (per user, flat, flat plus seats, free tier, quote only), which you need before comparing entry prices across platforms.
         </li>
         <li>
           <a href="/data/trades-software-pricing-2026.json"><strong>JSON</strong></a>: the same rows plus dataset metadata and the summary statistics computed exactly as this page computes them, so the dataset and the report can never disagree.
