@@ -19,6 +19,9 @@ import { asSentence,
   priceScaling,
   perUserEquivalentUsd,
   REFERENCE_TEAM_SIZE,
+  hasFreeTier,
+  quoteOnlyCount,
+  isQuoteOnly as isQuoteOnlyTool,
   type Tool,
 } from '../../../lib/data';
 
@@ -68,32 +71,93 @@ const isFree = startingPrice === 0;
 // Split 2026-09-01. These were one flag and they are not one thing: an unpublished price
 // is not evidence of an expensive one. Conflating them made this page assert an enterprise
 // rollout and $1M+ revenue requirements for products that may cost $40/month.
-const isQuoteOnly = tool.pricing.pricing_model === 'quote_only';
+const isQuoteOnly = isQuoteOnlyTool(tool);
 // Published prices that are not a monthly plan (one-time license, per project): not quote-only.
 const nonMonthlyPricing = !hasPublicPricing && !isQuoteOnly;
 // Tiers come from priceTier, which compares cost per user: until 2026-09-27 this page
 // used the starting price alone, so a $297/mo flat company plan was called
 // "enterprise" next to per-user plans a 5-person team pays more for.
 const tier = priceTier(tool);
-const isEnterprise = tier === 'enterprise';
 const isMidTier = tier === 'mid';
 const isEntryTier = tier === 'entry';
 const scaling = priceScaling(tool);
 const perUserEq = perUserEquivalentUsd(tool);
-const isCompanyPlan = scaling === 'flat' || scaling === 'base_plus_seat';
-// "$297/mo for the company" vs "$29/user/mo", for prose that quotes the entry price.
+// "$297/mo for the company", "$29/mo base, plus seats" or "$47/user/mo", for prose that
+// quotes the entry price. A base-plus-seat plan was "for the company" until 2026-10-01,
+// which hid the per-seat charge on top.
+// FastEST is recorded as per_user in tools.json, but its pricing note prices each
+// application installed on one PC or tablet ("$250/user/mo" and a per-tech widget
+// estimate were false). Worded from the note until the data's pricing_model is
+// corrected (2026-10-01); the scaling guard turns this off once it is.
+const PER_INSTALL_SLUGS = new Set(['fastest']);
+const perInstall = scaling === 'per_user' && PER_INSTALL_SLUGS.has(tool.slug);
 const priceText = startingPrice === null
   ? ''
-  : isCompanyPlan
+  : perInstall
+  ? `$${startingPrice}/mo per application install`
+  : scaling === 'flat'
   ? `$${startingPrice}/mo for the company`
+  : scaling === 'base_plus_seat'
+  ? `$${startingPrice}/mo base, plus seats`
   : scaling === 'per_user'
   ? `$${startingPrice}/user/mo`
   : `$${startingPrice}/mo`;
-const hasSetupFee = /(setup|set-up|onboarding|implementation) fee/i.test(tool.pricing.pricing_note ?? '');
+// Tier prices as the vendor lists them: per user a year for annual_per_user (Bluebeam
+// Revu), per user a month for per_user, a month otherwise (see the schema note in
+// pages/data/trades-software-pricing-2026.json.ts). Until 2026-10-01 the pricing table
+// printed every tier as "$X/mo", so Bluebeam's $260 a year read as $260 a month.
+const tierUnit = tool.pricing.pricing_model === 'annual_per_user'
+  ? '/user/yr'
+  : tool.pricing.pricing_model === 'per_user'
+  ? '/user/mo'
+  : '/mo';
+const tierPrices: (number | null)[] = tool.pricing.tiers.map((_, i) => tool.pricing.tier_prices_usd?.[i] ?? null);
+const paidTierPrices = tierPrices.filter((p): p is number => typeof p === 'number' && p > 0);
+const lowTierPrice = paidTierPrices.length > 0 ? Math.min(...paidTierPrices) : null;
+const highTierPrice = paidTierPrices.length > 0 ? Math.max(...paidTierPrices) : null;
+const unpricedTierCount = tierPrices.filter((p) => p === null).length;
+// A tier with no recorded price is a custom quote only for a quote-only tool. For the
+// others it can be a quote, a project package or a band shown in a price selector
+// (Workyard, Fastest, Bodhi, Encircle), so the table points to the pricing note; until
+// 2026-10-01 it printed "Custom quote" for all of them.
+const tierPriceCell = (price: number | null): string =>
+  price === null ? (isQuoteOnly ? 'Custom quote' : 'See pricing note') : price === 0 ? 'Free' : `$${price}${tierUnit}`;
+// Notes column: the lowest and highest tier prices in the table. It said "Entry tier" for
+// the first row and "Top tier" for the last, and the last is not always the dearest; then
+// "Lowest/Highest published tier price" until 2026-10-01, but some pricing notes publish
+// higher prices than the table holds (Jobber $529, Housecall Pro $329 monthly).
+const tierPriceNote = (price: number | null): string =>
+  price === null || price === 0 || lowTierPrice === highTierPrice
+    ? ''
+    : price === lowTierPrice
+    ? 'Lowest price in this table'
+    : price === highTierPrice
+    ? 'Highest price in this table'
+    : '';
+// A clause naming a setup, onboarding or implementation fee, unless it says "no" fee:
+// the old single regex also matched "no setup fees" (8 of the 17 notes it hit).
+const hasSetupFee = (tool.pricing.pricing_note ?? '')
+  .split(/[.;]/)
+  .some((c) => /(setup|set-up|onboarding|implementation)[^.;]*fee/i.test(c) && !/\bno\b/i.test(c));
 const hasFreeTrial = (tool.pricing.free_trial_days ?? 0) > 0;
 const hasQuickBooks = tool.integrations.some((i) => i.includes('quickbooks'));
 const hasStripe = tool.integrations.some((i) => i.includes('stripe'));
 const hasZapier = tool.integrations.some((i) => i.includes('zapier'));
+// QuickBooks editions named in the integrations data, so copy can say which one a
+// tool connects to instead of asserting what the sync covers (2026-10-01).
+const qbEditions = [
+  tool.integrations.includes('quickbooks_online') ? 'Online' : null,
+  tool.integrations.includes('quickbooks_desktop') ? 'Desktop' : null,
+  tool.integrations.includes('quickbooks_enterprise') ? 'Enterprise' : null,
+].filter((e): e is string => !!e);
+const qbText = qbEditions.length > 0
+  ? `QuickBooks ${qbEditions.length > 1 ? `${qbEditions.slice(0, -1).join(', ')} and ${qbEditions[qbEditions.length - 1]}` : qbEditions[0]}`
+  : 'QuickBooks';
+// "No credit card" only where the pricing note records it. Until 2026-10-01 the
+// closing call to action said it for every tool with a trial or a free tier.
+const noCardNoted = /no credit card/i.test(tool.pricing.pricing_note ?? '');
+const freeTierCount = tools.filter(hasFreeTier).length;
+const currentYear = new Date().getFullYear();
 
 // Top verticals where this tool fits best (≥8/10)
 const strongVerticals = Object.entries(tool.vertical_fit ?? {})
@@ -107,6 +171,12 @@ const strongVerticals = Object.entries(tool.vertical_fit ?? {})
 // alternatives to FSM platforms on every page.
 const smartAlts = smartAlternatives(tool, 6);
 const topCompetitor: Tool | undefined = smartAlts[0]?.tool;
+// What the matcher compares on (smartAlternatives in lib/data.ts: a tool-type check,
+// then trade overlap, price tier and team size). Tools with no trades (the CMMS tools)
+// are matched with each other by tool type, so "shared trades" would be false for them.
+const matchBasis = tool.verticals.length > 0
+  ? 'tool type, shared trades, price tier and team size'
+  : 'tool type, price tier and team size';
 
 // "Also worth comparing": the matcher's top alternative, chosen without regard to
 // whether we earn on it. Until 2026-09-27 this picked the best match that had an
@@ -118,22 +188,26 @@ const verticalsForThisTool = tool.verticals
   .filter((v): v is NonNullable<typeof v> => v !== undefined);
 
 // --- PRICING ANALYSIS NARRATIVE ---
+// Rewritten 2026-10-01: the free-tier text claimed free tiers were "uncommon" and that
+// buyers should "upgrade once you cross 2-3 users", the band text said what tools at
+// each price "usually" include, and tools without a recorded trial were told there was
+// "no public free trial" (several pricing notes say there is one). None of it came
+// from the data; counts are now computed and the rest removed.
 function pricingAnalysis(): string {
   const tierCount = tool.pricing.tiers.length;
-  const topPrice = tool.pricing.tier_prices_usd?.[tierCount - 1];
+  const trialNote = hasFreeTrial ? ` ${tool.pricing.free_trial_days}-day free trial.` : '';
 
   if (nonMonthlyPricing) {
     return `${tool.name} publishes its prices, but not as a monthly plan: see the pricing note for its one-time or per-project prices, and compare the total over the period you expect to use it.`;
   }
   if (!hasPublicPricing) {
-    return `${tool.name} does not publish a list price we can compare, so you need a quote first. Quote-only is not the same as expensive or enterprise: vendors quote by team size, customer count, company size or usage. Get the quote in writing and confirm what's included (number of users, integrations, onboarding, support tier) before signing.`;
+    return `${tool.name} does not publish a price, so you need a quote before you can compare it (${quoteOnlyCount()} of the ${tools.length} tools we list are quote-only). A missing price is not evidence of a high one. Get the quote in writing and confirm what it includes (number of users, integrations, onboarding, support) before you sign.`;
   }
 
   if (isFree) {
-    return `${tool.name} offers a genuinely free tier, uncommon in this category. The free tier typically covers the basics (quoting, invoicing, sometimes scheduling) but lacks the multi-user team management, automation, and reporting depth that paid tiers add. Use it to evaluate the UX before committing, but plan to upgrade once you cross 2-3 users or need recurring service tracking.`;
+    return `${tool.name} has a free tier (${freeTierCount} of the ${tools.length} tools we list have one). The pricing note above lists what the free plan includes and its limits; check them against your team size and job volume before you plan around it.${trialNote}`;
   }
 
-  const tierLadder = tool.pricing.tiers.join(' → ');
   const band = isEntryTier
     ? 'entry price band (under $100 per user per month)'
     : isMidTier
@@ -141,45 +215,76 @@ function pricingAnalysis(): string {
     : 'top price band ($250 or more per user per month)';
   const perUserNote = perUserEq === null
     ? ''
+    : perInstall
+    ? `That is a price for one application installed on one PC or tablet; see the pricing note for additional applications, purchase prices and network licensing. `
     : scaling === 'flat'
     ? `That is a price for the company, not per user: spread across a ${REFERENCE_TEAM_SIZE}-person team it works out to about $${Math.round(perUserEq)} per user. `
     : scaling === 'base_plus_seat'
     ? `That is a base price for the account, with seats added on top (see the pricing note): spread across a ${REFERENCE_TEAM_SIZE}-person team the base alone works out to about $${Math.round(perUserEq)} per user. `
     : scaling === 'per_user'
-    ? `That is a per-user price, so the bill grows as you add seats; check the pricing note for seat minimums and plan limits. `
+    ? `That is a per-seat price, so the bill grows as you add seats; check the pricing note for what counts as a seat, seat minimums and plan limits. `
     : `We have not confirmed how that price scales with team size, so check before you compare it. `;
 
-  return `${tool.name} starts at $${startingPrice}/mo on the ${tool.pricing.tiers[0]} tier${
-    tierCount > 1 && topPrice && typeof topPrice === 'number' && topPrice > 0 && topPrice !== startingPrice
-      ? ` and scales to $${topPrice}/mo on ${tool.pricing.tiers[tierCount - 1]}`
-      : ''
-  }. ${perUserNote}The ${tierLadder} ladder places it in our ${band}. ${
-    isEntryTier
-      ? `Tools in this band usually cover the core workflow. Check the tier list before you buy: features like dispatch optimization, automated reminders and recurring-service contracts are often kept for higher plans.`
-      : isMidTier
-      ? `At this price, expect the core workflow plus automation and reporting. Check which features ${tool.name} keeps for its higher tiers.`
-      : `At this price you are paying for depth: reporting, custom workflows and integration work. Confirm each one in the demo, since vendors package them differently.`
-  }${hasFreeTrial ? ` ${tool.pricing.free_trial_days}-day free trial available.` : ` No public free trial, so plan on a demo to evaluate it.`}`;
+  // Until 2026-10-01 this said "starts at $X/mo on the <first tier> tier and scales to
+  // $Y/mo on <last tier>". The first listed tier is not always the starting price
+  // (MeasureSquare's $45 is its $540 annual price divided by 12; Bluebeam lists yearly
+  // prices), and the last listed tier is not always the dearest (MeasureSquare, The
+  // Customer Factor). The tier is now named only when its price is the starting price,
+  // and the range runs from the lowest to the highest tier price in the table. It said
+  // "Its published tier prices run from", but several pricing notes publish higher prices
+  // (Jobber: $529, and $499 month to month, against $399 in the table).
+  // Prices are compared to within 50 cents, not by rounding the tier price: rounding
+  // made QuoteIQ's $29.99 start "below" its $29.99 Essentials tier (also MrTask, DRS).
+  const firstTierPrice = tierPrices[0];
+  const firstTierIsStart = typeof firstTierPrice === 'number'
+    && tool.pricing.pricing_model !== 'annual_per_user'
+    && startingPrice !== null
+    && Math.abs(firstTierPrice - startingPrice) < 0.5;
+  const range = lowTierPrice !== null && highTierPrice !== null && lowTierPrice !== highTierPrice
+    ? ` The tier prices in the table above run from $${lowTierPrice} to $${highTierPrice}${tierUnit}; the pricing note gives the billing terms and any other published prices.`
+    : '';
+  // MeasureSquare's starting price is an annual price divided by 12, below every
+  // month-to-month tier price in its table.
+  const belowTiers = lowTierPrice !== null && tierUnit !== '/user/yr' && startingPrice !== null && startingPrice < lowTierPrice - 0.5
+    ? ' The starting price is below the tier prices in the table; see the pricing note for how each is billed.'
+    : '';
+  const unpriced = tierCount > 1 && unpricedTierCount === tierCount
+    ? ` None of its ${tierCount} tiers has a price in our table; see the pricing note.`
+    : tierCount > 1 && unpricedTierCount > 0
+    ? ` ${unpricedTierCount} of its ${tierCount} tiers ${unpricedTierCount === 1 ? 'has' : 'have'} no price in our table; see the pricing note.`
+    : '';
+
+  // "Check which features X keeps for its higher tiers" was removed 2026-10-01: it
+  // printed for every multi-tier tool, including CorkCRM, Pool Founder and Estimate
+  // Rocket, whose notes say every plan has the same features.
+  // The band counts FastEST's per-install price as per user (priceTier), so it says so.
+  const bandSentence = perInstall
+    ? `We place it in our ${band} by counting one install as one user.`
+    : `Its starting price places it in our ${band}.`;
+  return `${tool.name} starts at ${priceText}${firstTierIsStart ? ` (${tool.pricing.tiers[0]} tier)` : ''}. ${perUserNote}${bandSentence}${range}${belowTiers}${unpriced}${trialNote}`;
 }
 
-// --- PROS (DETAILED, TEMPLATED FROM EXISTING DATA) ---
+// --- PROS, CONS AND FAQS: FALLBACKS ---
+// Used only for a tool with no pros_detail / cons_detail / tool_faqs in tools.json
+// (all 126 had them on 2026-10-01). Rewritten that day to state only what the data
+// holds: the old text invented sync depth, "5,000+ apps", bankruptcy risk by founding
+// year, "no credit card", "purpose-built" and named replacement tools.
 function getPros(): string[] {
   const pros: string[] = [];
 
-  // Vertical fit pros
+  // Trade fit
   if (strongVerticals.length > 0) {
     pros.push(
-      `**Strong vertical fit for ${strongVerticals.slice(0, 3).join(', ')}${
+      `**Trade fit of 8/10 or higher for ${strongVerticals.slice(0, 3).join(', ')}${
         strongVerticals.length > 3 ? ` and ${strongVerticals.length - 3} more` : ''
-      }**: ${tool.name} is purpose-built for these trades, not a generic FSM repurposed.`,
+      }**: see those trade pages to compare it with the other tools there.`,
     );
   }
 
   // Pricing transparency
   // "Every tier price is published" only when it is: until 2026-09-27 this claimed it for
   // any tool with a starting price, including ones whose top tier is quote-only.
-  const tierPrices = tool.pricing.tier_prices_usd ?? [];
-  const allTiersPriced = tierPrices.length === tool.pricing.tiers.length && tierPrices.every((p) => typeof p === 'number');
+  const allTiersPriced = tierPrices.length > 0 && tierPrices.every((p) => typeof p === 'number');
   if (hasPublicPricing) {
     pros.push(
       allTiersPriced
@@ -191,48 +296,25 @@ function getPros(): string[] {
   // QuickBooks integration
   if (hasQuickBooks) {
     pros.push(
-      `**Native QuickBooks integration**: bidirectional sync for customers, invoices, and payments. Critical for keeping the books reconciled without manual exports.`,
+      `**${qbText} integration**: listed in its integrations. Check what it syncs (customers, invoices, payments) before you rely on it.`,
     );
   }
 
-  // Stripe/payments
+  // Stripe
   if (hasStripe) {
-    pros.push(
-      `**Built-in payments via Stripe**: collect deposits, invoices, and recurring billing in-app without juggling a separate payment processor.`,
-    );
+    pros.push(`**Stripe integration**: listed in its integrations.`);
   }
 
   // Free trial
   if (hasFreeTrial) {
-    pros.push(
-      `**${tool.pricing.free_trial_days}-day free trial**: long enough to actually run a few jobs through the system before committing.`,
-    );
+    pros.push(`**${tool.pricing.free_trial_days}-day free trial**: run real jobs through it before you pay.`);
   } else if (isFree) {
-    pros.push(`**Free tier available**: you can evaluate the core workflow with zero financial risk.`);
+    pros.push(`**Free tier**: try the core workflow before you pay; the pricing note lists its limits.`);
   }
 
   // Zapier
   if (hasZapier) {
-    pros.push(
-      `**Zapier integration**: connect ${tool.name} to 5,000+ apps without custom development. Useful for stitching together marketing, accounting, and ops tools you already use.`,
-    );
-  }
-
-  // Feature breadth
-  if (tool.key_features.length >= 7) {
-    pros.push(
-      `**Broad feature coverage**: ${tool.key_features.length} core capabilities including ${tool.key_features
-        .slice(0, 4)
-        .map((f) => f.replace(/_/g, ' '))
-        .join(', ')}.`,
-    );
-  }
-
-  // Founded maturity
-  if (tool.founded && tool.founded <= 2018) {
-    pros.push(
-      `**${2026 - tool.founded}-year track record**: dates from ${tool.founded}. Less risk of bankruptcy, missing features, or unstable APIs vs a 2-year-old startup.`,
-    );
+    pros.push(`**Zapier integration**: connect ${tool.name} to other apps through Zapier without custom development.`);
   }
 
   return pros.slice(0, 7);
@@ -242,11 +324,12 @@ function getPros(): string[] {
 function getCons(): string[] {
   const cons: string[] = [];
 
-  // Parse existing weaknesses string into bullets (split on ';' or '.')
+  // Parse existing weaknesses string into bullets: split on ';' or on a full stop that
+  // ends a sentence. Splitting on every '.' cut "$149.99" and "U.S." in two (2026-10-01).
   if (tool.weaknesses) {
     const parsed = tool.weaknesses
-      .split(/[;.]\s*/)
-      .map((s) => s.trim())
+      .split(/;\s*|\.\s+(?=[A-Z])/)
+      .map((s) => s.trim().replace(/\.$/, ''))
       .filter((s) => s.length > 5);
     parsed.forEach((w) => {
       // Capitalize first letter
@@ -254,65 +337,47 @@ function getCons(): string[] {
     });
   }
 
-  // No public pricing
+  // No published price
   if (isQuoteOnly) {
-    cons.push(
-      `**No public pricing**: every quote requires a sales call. Hard to comparison-shop without committing time to a demo.`,
-    );
+    cons.push(`**No published price**: you need a quote before you can compare its cost.`);
   }
 
-  // No free trial
-  if (!hasFreeTrial && !isFree) {
-    cons.push(`**No free trial**: must commit to a paid plan or schedule a demo to evaluate.`);
+  // No free trial: only when the data records zero days (a missing value is unknown,
+  // and several pricing notes describe a trial with no stated length).
+  if (tool.pricing.free_trial_days === 0 && !isFree) {
+    cons.push(`**No free trial listed**: see the pricing note for how to evaluate it.`);
   }
 
   // Missing QuickBooks
   if (!hasQuickBooks) {
     cons.push(
-      `**No native QuickBooks integration**: accounting sync requires Zapier or manual exports, which adds friction for QuickBooks-heavy shops.`,
+      `**No QuickBooks integration listed**: ask ${tool.name} how invoices and payments reach your accounting software before you buy.`,
     );
   }
 
-  // Lower vertical fit warning
+  // Lower trade fit
   const weakVerticals = Object.entries(tool.vertical_fit ?? {})
     .filter(([_, score]) => score < 7 && score > 0)
     .map(([slug]) => verticals.find((v) => v.slug === slug)?.name)
     .filter((n): n is string => !!n);
   if (weakVerticals.length > 0) {
     cons.push(
-      `**Weaker fit for ${weakVerticals.slice(0, 3).join(', ')}**: possible but not the strongest option in those verticals. Check vertical-specific alternatives if you're in those trades.`,
+      `**Trade fit under 7/10 for ${weakVerticals.slice(0, 3).join(', ')}**: compare it with the other tools on those trade pages.`,
     );
   }
 
   return cons.slice(0, 7);
 }
 
-// --- IMPLEMENTATION TIMELINE ---
-function implementationTimeline(): { headline: string; detail: string } {
-  if (isQuoteOnly) {
-    return {
-      headline: 'Not published',
-      detail: `${tool.name} does not publish a price, and it does not publish an implementation timeline either. That is not the same as being an enterprise rollout: plenty of quote-only products onboard in days. Ask for the onboarding plan and the go-live date in writing during the sales call, and treat any timeline given verbally as an estimate rather than a commitment.`,
-    };
-  }
-  if (isEnterprise) {
-    return {
-      headline: '3-6 months is typical at this price level',
-      detail: `Platforms at this price level usually involve deeper data migration (customer history, recurring service agreements, custom pricebooks), staff training on advanced workflows, and often integration work. ${tool.name} does not publish an implementation timeline, so ask for the onboarding plan and the go-live date in writing, and don't sign a contract that locks you into a go-live date you can't realistically hit.`,
-    };
-  }
-  if (isMidTier) {
-    return {
-      headline: '4-8 weeks is typical at this price level',
-      detail: `Mid-tier platforms typically have a self-serve setup wizard for the basics, and some sell optional paid onboarding, so check ${tool.name}'s price for it before you budget. Plan to spend the first 2 weeks importing customer data and configuring basic workflows, then 2-4 weeks running parallel (old system + new system) before cutting over fully. Field tech training is usually the longest-tail item; budget extra time for adoption resistance.`,
-    };
-  }
-  return {
-    headline: '1-3 weeks for a small team',
-    detail: hasSetupFee
-      ? `${tool.name} charges a one-time setup or onboarding fee (see the pricing note), so ask what it covers and how long it takes before you sign. Most tools in this price band can be running real jobs within a few weeks once customers are imported and services and pricing are configured. The bigger time sink is usually adapting your existing workflow rather than the software setup itself.`
-      : `Most tools in this price band are built for self-service setup. You can typically be running real jobs through the system within a week: import customers (or build from scratch), configure your services and pricing, and start scheduling. The bigger time sink is usually adapting your existing workflow rather than the software setup itself.`,
-  };
+// --- IMPLEMENTATION: FALLBACK ---
+// Used only when the tool has no implementation_notes. Until 2026-10-01 this function
+// also set the section headline on every tool page from the price band alone ("1-3
+// weeks for a small team", "4-8 weeks is typical", "3-6 months is typical"), with
+// invented week-by-week plans. Those durations were never measured; removed.
+function implementationFallback(): string {
+  return `We have not recorded an implementation plan for ${tool.name}. Ask for the onboarding steps and a go-live date in writing before you sign, and ${
+    hasSetupFee ? 'ask what the setup or onboarding fee in the pricing note covers' : 'ask whether onboarding costs extra'
+  }.`;
 }
 
 // --- FAQs (TEMPLATED PER TOOL) ---
@@ -322,49 +387,46 @@ function getFaqs(): { q: string; a: string }[] {
   // 1. Worth the money
   faqs.push({
     q: `Is ${tool.name} worth the money?`,
-    a: `${tool.name} is worth it if you fit the target profile: ${asSentence(tool.best_for)} ${
+    a: `That depends on whether you fit its target profile: ${asSentence(tool.best_for)} ${
       isQuoteOnly
-        ? `${tool.name} does not publish a price, so the ROI maths cannot be done from public information. Get a written quote for your seat count before comparing it against anything here.`
+        ? `${tool.name} does not publish a price, so get a written quote for your seat count before you compare it with anything here.`
         : nonMonthlyPricing
         ? `${tool.name} publishes one-time or per-project prices rather than a monthly plan (see the pricing note), so compare its total cost over the period you expect to use it.`
         : isFree
-        ? `The free tier lets you test that with real jobs before you pay anything; check which features the paid tiers add before your team grows into them.`
-        : isEnterprise
-        ? `At ${priceText}, the maths works only for a team large enough to use the depth you are paying for, so price it for your seat count and compare it with the alternatives below.`
-        : `At ${priceText}, weigh the price against the admin time it saves on scheduling, invoicing and follow-up, and run a real week of jobs through it in a trial or demo before you commit.`
-    } If you're outside the target profile, alternatives below are likely a better fit.`,
+        ? `The free tier lets you try it with real jobs before you pay; check which features the paid tiers add.`
+        : `At ${priceText}, weigh the price against the admin time it saves you, and run real jobs through it in a trial or demo before you commit.`
+    } The alternatives below are matched on ${matchBasis}.`,
   });
 
   // 2. QuickBooks integration
   faqs.push({
     q: `Does ${tool.name} integrate with QuickBooks?`,
     a: hasQuickBooks
-      ? `Yes, ${tool.name} integrates natively with QuickBooks. The sync covers customers, invoices, and payments. Always confirm whether you need QuickBooks Online or Desktop support before signing; they're not interchangeable across all FSM tools.`
-      : `No, ${tool.name} does not have a native QuickBooks integration. You can typically bridge via Zapier (manual setup) or export/import CSVs (manual ongoing), but this adds friction for QuickBooks-heavy shops. If deep QuickBooks integration is critical, consider FieldEdge or Knowify instead.`,
+      ? `Yes: our data lists a ${qbText} integration for ${tool.name}. Confirm which QuickBooks edition you use and what syncs before you sign.`
+      : `Our data lists no QuickBooks integration for ${tool.name}. Ask ${tool.name} how invoices and payments reach your accounting software before you buy.`,
   });
 
   // 3. Free trial
   faqs.push({
     q: `Does ${tool.name} offer a free trial?`,
     a: hasFreeTrial
-      ? `Yes, ${tool.name} offers a ${tool.pricing.free_trial_days}-day free trial. No credit card is typically required to start. Use the trial to actually run a few jobs end-to-end (schedule → dispatch → invoice → payment) rather than just clicking around the UI.`
+      ? `Yes, a ${tool.pricing.free_trial_days}-day free trial${noCardNoted ? ' (the pricing note records that no credit card is needed)' : ''}. Use it to run a few real jobs from scheduling to payment.`
       : isFree
-      ? `${tool.name} offers a free tier you can use indefinitely. The free tier covers core workflows but lacks the multi-user team features, automation, and reporting depth that paid tiers add.`
-      : `No, ${tool.name} does not offer a free trial. You'll need to schedule a demo with their sales team to evaluate. Ask for a sandbox or guided walkthrough with your real data to get a meaningful sense of fit.`,
+      ? `${tool.name} has a free tier; the pricing note above lists its limits.`
+      : `We have not recorded a free trial for ${tool.name}. See the pricing note, or ask ${tool.name} for a demo with your own data.`,
   });
 
-  // 4. Implementation time
-  const timeline = implementationTimeline();
+  // 4. Implementation
   faqs.push({
-    q: `How long does ${tool.name} implementation take?`,
-    a: `${asSentence(timeline.headline)} ${timeline.detail.split('.').slice(0, 2).join('.')}.`,
+    q: `What does implementing ${tool.name} involve?`,
+    a: implementationFallback(),
   });
 
   // 5. Alternative
   if (topCompetitor) {
     faqs.push({
-      q: `What's the best alternative to ${tool.name}?`,
-      a: `The closest alternative in the same trades is ${topCompetitor.name} (${formatPrice(topCompetitor)}). ${asSentence(topCompetitor.best_for)} See our full ${tool.name} vs ${topCompetitor.name} comparison for a side-by-side breakdown.`,
+      q: `What is the closest alternative to ${tool.name}?`,
+      a: `Our matcher's closest alternative is ${topCompetitor.name} (${formatPrice(topCompetitor)}), matched on ${matchBasis}. ${asSentence(topCompetitor.best_for)} See the ${tool.name} vs ${topCompetitor.name} comparison for a side-by-side view.`,
     });
   }
 
@@ -382,14 +444,36 @@ const hasLongDesc = !!tool.long_description;
 const prosList = hasCustomPros ? [] : getPros();
 const consList = hasCustomCons ? [] : getCons();
 const faqsList = hasCustomFaqs ? tool.tool_faqs! : getFaqs();
-const timeline = implementationTimeline();
+const implementationText = hasCustomImpl ? tool.implementation_notes : implementationFallback();
+
+// Reading time from this page's own content (2026-10-01). It was a fixed
+// readingTimeMinutes(1600) on every tool page, whatever the page held. The words each
+// page draws from the data are counted here. FIXED_WORDS is the fixed text, counted with
+// a script on 2026-10-01 (markup and expressions stripped): 115 words in this template
+// and 294 in the shared components it renders (SourceReviews 29, AffiliateDisclosure 31,
+// UserReviews 5, ReviewSubmissionForm 193, MissingFromList 25, Byline 11). Recount them
+// when that text changes.
+const FIXED_WORDS = 115 + 294;
+const wc = (s?: string | null) => (s ?? '').split(/\s+/).filter(Boolean).length;
+const slugWords = (list: string[]) => list.reduce((n, s) => n + s.split('_').filter(Boolean).length, 0);
+const pageWords = FIXED_WORDS
+  + [tool.tagline, tool.long_description, tool.pricing.pricing_note, pricingAnalysis(), tool.best_for, tool.weaknesses, implementationText]
+    .reduce((n, s) => n + wc(s), 0)
+  + tool.pricing.tiers.reduce((n, t, i) => n + wc(t) + wc(tierPriceCell(tierPrices[i])) + wc(tierPriceNote(tierPrices[i])), 0)
+  + slugWords(tool.key_features) + slugWords(tool.integrations)
+  + verticalsForThisTool.reduce((n, v) => n + wc(v.name) + 1, 0)
+  + (hasCustomPros ? tool.pros_detail!.reduce((n, p) => n + wc(p.title) + wc(p.explanation), 0) : prosList.reduce((n, p) => n + wc(p), 0))
+  + (hasCustomCons ? tool.cons_detail!.reduce((n, c) => n + wc(c.title) + wc(c.explanation), 0) : consList.reduce((n, c) => n + wc(c), 0))
+  + faqsList.reduce((n, f) => n + wc(f.q) + wc(f.a), 0)
+  + smartAlts.reduce((n, a) => n + wc(a.tool.name) + wc(a.reason) + wc(a.tool.tagline) + wc(formatPrice(a.tool)), 0);
 
 const productSchema = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
   name: tool.name,
   applicationCategory: 'BusinessApplication',
-  operatingSystem: 'Web, iOS, Android',
+  // operatingSystem ('Web, iOS, Android') removed 2026-10-01: it was asserted for every
+  // tool, and the data does not record which platforms each one runs on.
   // Only emit a valid Offer when there's a real public price (incl. $0 free).
   // Custom-quoted tools have no price, so we omit offers rather than ship an
   // empty/invalid Offer (which Google flags as an incomplete Product snippet).
@@ -449,8 +533,11 @@ const faqSchema = {
   })),
 };
 
-const pageTitle = `${tool.name} Review (2026): Pricing, Features, Pros & Cons`;
-const pageDescription = `${tool.name} review: pricing tiers, key features, pros and cons, integrations, and honest weaknesses. ${asSentence(tool.tagline)} Updated ${new Date().getFullYear()}.`;
+// The year shown is the year the pricing was last verified, not the build year: a
+// build-year stamp would call an entry current that nobody has rechecked.
+const reviewYear = (tool.pricing.verified_date ?? '').slice(0, 4) || String(currentYear);
+const pageTitle = `${tool.name} Review (${reviewYear}): Pricing, Features, Pros & Cons`;
+const pageDescription = `${tool.name} review: pricing tiers, key features, pros and cons, integrations and weaknesses. ${asSentence(tool.tagline)} Pricing verified ${tool.pricing.verified_date ?? reviewYear}.`;
 
 // (Removed the standalone Review schema: it recast the third-party G2/Capterra
 // aggregate as WrenchStack's own review rating, and its embedded SoftwareApplication
@@ -494,7 +581,7 @@ const breadcrumbs = [
       <div class="mb-4 block sm:hidden">
         <WrenchScore score={wrenchStackScore(tool)} size="lg" />
       </div>
-      <Byline updatedDate={tool.pricing.verified_date} readingMinutes={readingTimeMinutes(1600)} />
+      <Byline updatedDate={tool.pricing.verified_date} readingMinutes={readingTimeMinutes(pageWords)} />
 
       <div class="mt-4 flex flex-wrap items-center gap-2">
         <FreshnessBadge tool={tool} variant="full" showDate={true} />
@@ -569,7 +656,9 @@ const breadcrumbs = [
             <div class="min-w-0 flex-1">
               <div class="text-xs font-semibold uppercase tracking-wider text-orange-700">Also worth comparing</div>
               <p class="mt-1 text-sm leading-relaxed text-slate-700">
-                Considering {tool.name}? <a href={`/tools/${comparePick.tool.slug}/`} class="font-semibold text-slate-900 hover:text-orange-700">{comparePick.tool.name}</a> ({formatPrice(comparePick.tool)}) is a comparable option in the same trades.
+                Considering {tool.name}? <a href={`/tools/${comparePick.tool.slug}/`} class="font-semibold text-slate-900 hover:text-orange-700">{comparePick.tool.name}</a> ({formatPrice(comparePick.tool)}) {tool.verticals.length > 0
+                  ? `shares ${comparePick.tool.verticals.filter((v) => tool.verticals.includes(v)).length} of ${tool.name}'s ${tool.verticals.length} ${tool.verticals.length === 1 ? 'trade' : 'trades'}.`
+                  : `is another maintenance (CMMS) tool.`}
               </p>
               <p class="mt-1 text-xs italic text-slate-500">{comparePick.tool.tagline}</p>
               <div class="mt-3 flex flex-wrap gap-2">
@@ -668,8 +757,8 @@ const breadcrumbs = [
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700">
         <strong class="text-slate-900">{tool.name}</strong> is best for {asSentence(tool.best_for)}
-        Pricing {hasPublicPricing ? `starts at $${startingPrice}/mo` : isQuoteOnly ? 'is custom-quoted (sales call required)' : 'is published as one-time or per-project prices (see the pricing note)'}.
-        {strongVerticals.length > 0 && ` Strongest fit: ${strongVerticals.slice(0, 3).join(', ')}.`}
+        Pricing {isFree ? 'starts with a free tier' : hasPublicPricing ? `starts at ${priceText}` : isQuoteOnly ? 'is quote-only (no published price)' : 'is published as one-time or per-project prices (see the pricing note)'}.
+        {strongVerticals.length > 0 && ` Trade fit of 8/10 or higher: ${strongVerticals.slice(0, 3).join(', ')}${strongVerticals.length > 3 ? ` and ${strongVerticals.length - 3} more` : ''}.`}
         {hasFreeTrial && ` ${tool.pricing.free_trial_days}-day free trial available.`}
       </p>
     </section>
@@ -696,14 +785,12 @@ const breadcrumbs = [
           </thead>
           <tbody class="divide-y divide-slate-100">
             {tool.pricing.tiers.map((tier, i) => {
-              const price = tool.pricing.tier_prices_usd?.[i];
+              const price = tierPrices[i];
               return (
                 <tr>
                   <td class="p-3 font-semibold text-slate-900">{tier}</td>
-                  <td class="p-3 text-slate-700">
-                    {price === null || price === undefined ? 'Custom quote' : price === 0 ? 'Free' : `$${price}/mo`}
-                  </td>
-                  <td class="p-3 text-slate-500">{i === 0 ? 'Entry tier' : i === tool.pricing.tiers.length - 1 ? 'Top tier' : ''}</td>
+                  <td class="p-3 text-slate-700">{tierPriceCell(price)}</td>
+                  <td class="p-3 text-slate-500">{tierPriceNote(price)}</td>
                 </tr>
               );
             })}
@@ -717,8 +804,7 @@ const breadcrumbs = [
         {pricingAnalysis()}
       </p>
       <p class="mt-2 text-xs text-slate-500">
-        Pricing verified {tool.pricing.verified_date}. Vendors change pricing without notice;
-        verify with {tool.name} before purchasing.
+        Pricing verified {tool.pricing.verified_date}. Prices can change, so confirm them with {tool.name} before purchasing.
       </p>
 
       <div
@@ -726,7 +812,7 @@ const breadcrumbs = [
         data-pricing-widget
         data-starting-price={tool.pricing.starting_at_usd ?? ''}
         data-pricing-note={tool.pricing.pricing_note ?? ''}
-        data-pricing-model={tool.pricing.pricing_model ?? ''}
+        data-pricing-model={perInstall ? 'per_install' : (tool.pricing.pricing_model ?? '')}
         data-tool-name={tool.name}
       >
         <div class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-700">
@@ -755,7 +841,7 @@ const breadcrumbs = [
         </div>
         <p class="mt-3 text-xs text-slate-600" id="pw-note">
           {hasPublicPricing
-            ? `Estimate uses the published starting tier and detects per-user vs per-company pricing automatically. For an exact quote at your team size and feature requirements, request a quote from ${tool.name}.`
+            ? `Estimate uses the published starting tier and whether that price is per user or per company. For an exact price at your team size and feature requirements, ask ${tool.name}.`
             : `${tool.name} has no published monthly price we can model at your team size, so we do not estimate one: any figure here would be a guess. ${isQuoteOnly ? `Ask ${tool.name} for a quote.` : 'See the pricing note for its published prices.'}`}
         </p>
         <div class="mt-3 flex flex-wrap gap-2 text-xs">
@@ -763,7 +849,7 @@ const breadcrumbs = [
             href={`/cost-of-switch/?to=${tool.slug}`}
             class="font-medium text-orange-700 hover:underline"
           >
-            Switching from another tool? Calculate the full 12-month cost →
+            Switching from another tool? Estimate the 12-month cost of switching →
           </a>
         </div>
       </div>
@@ -839,10 +925,9 @@ const breadcrumbs = [
     </section>
 
     <section id="implementation" class="mb-10 scroll-mt-8">
-      <h2 class="mb-4 text-2xl font-bold text-slate-900">Implementation timeline</h2>
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">Implementation</h2>
       <div class="rounded-lg border border-slate-200 bg-white p-6">
-        <p class="mb-2 text-lg font-semibold text-slate-900">{timeline.headline}</p>
-        <p class="text-slate-700 leading-relaxed" set:html={linkifyTools(hasCustomImpl ? tool.implementation_notes : timeline.detail, tool.slug)} />
+        <p class="text-slate-700 leading-relaxed" set:html={linkifyTools(implementationText, tool.slug)} />
       </div>
     </section>
 
@@ -865,7 +950,7 @@ const breadcrumbs = [
       {verticalsForThisTool.length === 0 && (
         <p class="text-sm text-slate-600 leading-relaxed">
           {toolType(tool) === 'cmms'
-            ? `${tool.name} is maintenance software (CMMS) for teams that look after their own equipment and buildings, not for contractors who bill customers, so it is not ranked on our trade pages. Compare it with other CMMS tools in the alternatives below.`
+            ? `${tool.name} is maintenance software (CMMS), and its own site names none of the contractor trades we cover, so it is not ranked on our trade pages. The alternatives below compare it with other CMMS tools.`
             : `${tool.name}'s own site does not name any of the trades we cover, so it is not ranked on our trade pages.`}
         </p>
       )}
@@ -875,7 +960,7 @@ const breadcrumbs = [
             href={`/${verticalToUrl(v.slug)}/`}
             class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 hover:border-orange-500 hover:text-orange-600"
           >
-            Best for {v.name} →
+            {v.name} software →
           </a>
         ))}
       </div>
@@ -900,9 +985,9 @@ const breadcrumbs = [
 
     {smartAlts.length > 0 && (
       <section id="alternatives" class="mb-10 scroll-mt-8">
-        <h2 class="mb-2 text-2xl font-bold text-slate-900">Top alternatives to {tool.name}</h2>
+        <h2 class="mb-2 text-2xl font-bold text-slate-900">Alternatives to {tool.name}</h2>
         <p class="mb-5 text-sm text-slate-500">
-          Matched by vertical fit, price tier, and team size.
+          Matched on {matchBasis}.
         </p>
         <div class="grid gap-4 sm:grid-cols-2">
           {smartAlts.map(({ tool: c, reason }) => {
@@ -949,11 +1034,17 @@ const breadcrumbs = [
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Ready to try {tool.name}?</h2>
       <p class="mt-2 text-slate-300">
-        {hasFreeTrial
-          ? `${tool.pricing.free_trial_days}-day free trial. No credit card required to start.`
-          : isFree
-          ? 'Free tier available. No credit card required.'
-          : 'Get a custom quote. Pricing is not public.'}
+        {[
+          isFree
+            ? 'Free tier available.'
+            : hasPublicPricing
+            ? `Pricing starts at ${priceText}.`
+            : isQuoteOnly
+            ? `No published price: ask ${tool.name} for a quote.`
+            : 'Prices are one-time or per project: see the pricing note above.',
+          hasFreeTrial ? `${tool.pricing.free_trial_days}-day free trial.` : '',
+          (hasFreeTrial || isFree) && noCardNoted ? 'The pricing note records that no credit card is needed.' : '',
+        ].filter(Boolean).join(' ')}
       </p>
       <a
         href={tool.affiliate_url.startsWith('http') ? tool.affiliate_url : tool.vendor_url}
@@ -1062,6 +1153,9 @@ const breadcrumbs = [
       const isPerUser = pricingModel === 'per_user' || pricingModel === 'annual_per_user';
       const isFlat = pricingModel === 'flat';
       const isBasePlusSeat = pricingModel === 'flat_plus_seat';
+      // FastEST (see PER_INSTALL_SLUGS): priced per application install, not per tech,
+      // so the estimate is not multiplied (it multiplied $250 by the techs until 2026-10-01).
+      const isPerInstall = pricingModel === 'per_install';
 
       function format(n: number): string {
         return '$' + Math.round(n).toLocaleString('en-US');
@@ -1070,27 +1164,34 @@ const breadcrumbs = [
       function update() {
         const techs = parseInt(techsInput!.value, 10) || 1;
         if (isCustomQuoted) {
+          // No monthly price is either quote-only or a one-time / per-project price
+          // (Trash Flow, Pylon), which until 2026-10-01 also showed "Quote only".
+          const label = pricingModel === 'quote_only' ? 'Quote only' : 'See pricing note';
           techsInput!.disabled = true;
-          monthlyEl!.textContent = 'Quote only';
-          annualEl!.textContent = 'Quote only';
+          monthlyEl!.textContent = label;
+          annualEl!.textContent = label;
           return;
         }
         if (isFree) {
           monthlyEl!.textContent = 'Free';
           annualEl!.textContent = 'Free';
-          noteEl!.innerHTML = `${toolName} has a free tier, usable indefinitely for solo or 1-2 person operations. Paid tiers unlock advanced features once your team grows. For an exact quote at your size and feature mix, request pricing from ${toolName}.`;
+          // Was "usable indefinitely for solo or 1-2 person operations": invented (free
+          // plans here cap seats, jobs, projects or clients differently). 2026-10-01.
+          noteEl!.innerHTML = `${toolName} has a free tier. The pricing note above lists what it includes and its limits; paid tiers are priced there too.`;
           return;
         }
         const monthly = isPerUser ? startingPrice * techs : startingPrice;
         const annual = monthly * 12;
         monthlyEl!.textContent = format(monthly);
         annualEl!.textContent = format(annual);
-        if (isFlat) {
+        if (isPerInstall) {
+          noteEl!.innerHTML = `${toolName}'s lease price is $${startingPrice}/mo for <strong>one application installed on one PC or tablet</strong>, so this estimate doesn't multiply it by the number of techs. See the pricing note above for additional applications, purchase prices and network licensing.`;
+        } else if (isFlat) {
           noteEl!.innerHTML = `${toolName} charges a <strong>flat monthly price per plan</strong>, so this estimate doesn't scale with team size. Plans can cap users or usage, so check which plan fits your team in the pricing note above.`;
         } else if (isBasePlusSeat) {
           noteEl!.innerHTML = `${toolName} charges a <strong>base price that includes some users</strong>, plus a fee for each extra seat. This estimate shows the base price only; see the pricing note above for seat costs.`;
         } else if (isPerUser) {
-          noteEl!.innerHTML = `${toolName} uses <strong>per-user</strong> pricing at $${startingPrice}/user/mo on the entry tier. Cost scales linearly with team size. Higher tiers add features at higher per-user rates.`;
+          noteEl!.innerHTML = `${toolName} uses <strong>per-user</strong> pricing at $${startingPrice}/user/mo on the entry tier, so this estimate multiplies it by the number of techs. See the pricing note above for seat minimums and higher tiers.`;
         } else {
           noteEl!.innerHTML = `${toolName}'s published entry price is $${startingPrice}/mo. How it scales with team size isn't clear from the vendor's page, so this estimate doesn't multiply it; check the pricing note above.`;
         }

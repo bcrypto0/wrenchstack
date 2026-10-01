@@ -53,8 +53,45 @@ for (const p of platformsForVertical) {
   byTier[leadGenTier(p)].push(p);
 }
 
-const pageTitle = `Best Lead-Gen Platforms for ${vertical.name} Contractors (2026)`;
-const pageDescription = `Independent reviews of lead-gen platforms for ${vertical.name.toLowerCase()} contractors, including Google Local Services Ads and Service Direct: how each one charges, whether leads are shared or exclusive, and reputation warnings with their sources.`;
+// Computed from each entry's pricing line (2026-10-01), replacing "many" and "most":
+// an entry publishes no rate card when its pricing line says prices or a rate card are not
+// published, or when it takes a commission without publishing the percentage (LawnStarter
+// keeps "a small portion" of the price; GreenPal publishes 5% and stays out).
+const publishesNoRateCard = (p: LeadGenPlatform) =>
+  /not published|no rate card|does not publish|does not list dollar prices/i.test(p.typical_cost) ||
+  (p.pricing_model === 'commission' && !/\d+(\.\d+)?%/.test(p.typical_cost));
+const shortName = (p: LeadGenPlatform) => p.name.replace(/\s*\(.*\)$/, '');
+const joinWith = (xs: string[], last: string) => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} ${last} ${xs[xs.length - 1]}` : xs[0] ?? '');
+const listJoin = (xs: string[]) => joinWith(xs, 'and');
+const plural = (n: number, one: string, many: string) => (n === 1 ? one : many);
+// Self-serve ad platforms (Yelp Ads, Nextdoor, Meta Lead Ads) bill against a budget you set
+// with no set price per lead. Until 2026-10-01 they sat outside the "publish no rate card"
+// count, so "N of M publish no rate card" implied the rest publish one (Yelp publishes no
+// click prices). The count now leaves them out and names them separately.
+const budgetAds = (p: LeadGenPlatform) => ['pay-per-click', 'daily-budget', 'pay-per-impression'].includes(p.pricing_model);
+const noRateCardHere = platformsForVertical.filter((p) => publishesNoRateCard(p) && !budgetAds(p));
+const budgetAdsHere = platformsForVertical.filter(budgetAds);
+const listedHere = (slug: string) => platformsForVertical.some((p) => p.slug === slug);
+// Exclusive sources for this trade, computed from Tier S (2026-10-01), replacing hard-coded
+// "Service Direct or eLocal" and "Google and eLocal do not publish prices", which left out
+// 33 Mile Radius.
+const callSellers = byTier.S.filter((p) => p.lead_model === 'pay-per-call').map(shortName);
+const exclusiveNoPrice = byTier.S.filter(publishesNoRateCard).map(shortName);
+const callSellersPhrase = joinWith(callSellers, 'or');
+const exclusiveNoPriceLine = exclusiveNoPrice.length
+  ? `${listJoin(exclusiveNoPrice)} ${plural(exclusiveNoPrice.length, 'does', 'do')} not publish prices`
+  : '';
+
+// Trade wording for running text (2026-10-01): keeps "HVAC" in capitals and avoids
+// "general contractors contractors". The <title> and H1 keep vertical.name (owner decision).
+const tradeLower = vertical.name === vertical.name.toUpperCase() ? vertical.name : vertical.name.toLowerCase();
+const tradePros = /contractors$/i.test(vertical.name) ? tradeLower : `${tradeLower} contractors`;
+const tradeWork = verticalSlug === 'general_contractor' ? 'general contracting' : tradeLower;
+
+// Trade names like "General Contractors" already end in the noun; do not double it.
+const tradeTitle = /contractors$/i.test(vertical.name) ? vertical.name : `${vertical.name} Contractors`;
+const pageTitle = `Best Lead-Gen Platforms for ${tradeTitle} (2026)`;
+const pageDescription = `Independent reviews of lead-gen platforms for ${tradePros}, including Google Local Services Ads and Service Direct: how each one charges, whether leads are shared or exclusive, and reputation warnings with their sources.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -72,43 +109,43 @@ const tierMeta = {
 function tradeIntro(slug: string): string {
   switch (slug) {
     case 'hvac':
-      return 'HVAC contractors can pay per exclusive lead on Google Local Services Ads, buy exclusive calls from Service Direct or eLocal, buy leads on marketplaces such as Thumbtack, Networx and Homeyou, or run self-serve ads on Nextdoor, Meta or Yelp. Service Direct publishes a vendor range of $65-$325 per heating and air conditioning call, at a price you set; many other sources here do not publish prices. Google lists HVAC among the US home service categories moving from Local Services Ads into Google Ads from August 2026.';
+      return `HVAC contractors can pay per exclusive lead on Google Local Services Ads, buy exclusive calls from ${callSellersPhrase}, buy leads on marketplaces such as Thumbtack, Networx and Homeyou, or run self-serve ads on Nextdoor, Meta or Yelp. Service Direct publishes a vendor range of $65-$325 per heating and air conditioning call, at a price you set${exclusiveNoPriceLine ? `; ${exclusiveNoPriceLine}` : ''}. Google lists HVAC among the US home service categories moving from Local Services Ads into Google Ads from August 2026.`;
     case 'plumbing':
-      return 'Plumbing contractors can pay per exclusive lead on Google Local Services Ads, buy exclusive calls from Service Direct or eLocal, or buy leads on marketplaces such as Thumbtack, Networx and Homeyou. Service Direct publishes a vendor range of $60-$255 per plumbing call, at a price you set; Google and eLocal do not publish prices. Google lists plumbing among the US home service categories moving from Local Services Ads into Google Ads from August 2026.';
+      return `Plumbing contractors can pay per exclusive lead on Google Local Services Ads, buy exclusive calls from ${callSellersPhrase}, or buy leads on marketplaces such as Thumbtack, Networx and Homeyou. Service Direct publishes a vendor range of $60-$255 per plumbing call, at a price you set${exclusiveNoPriceLine ? `; ${exclusiveNoPriceLine}` : ''}. Google lists plumbing among the US home service categories moving from Local Services Ads into Google Ads from August 2026.`;
     case 'electrical':
-      return 'Google Local Services Ads screens US home service businesses before their ads run: Google lists background checks, state business and owner licenses, insurance (depending on category and location) and a verified Google Business Profile, says screening takes 3-4 weeks on average, and shows a Google Verified badge on businesses that pass. For exclusive calls, Service Direct publishes a vendor range of $55-$175 per electrician call at a price you set, and eLocal sells exclusive live calls without published prices. Houzz Pro, Thumbtack and Networx also list electrical work.';
+      return `Google Local Services Ads screens US home service businesses before their ads run: Google lists background checks, state business and owner licenses, insurance (depending on category and location) and a verified Google Business Profile, says screening takes 3-4 weeks on average, and shows a Google Verified badge on businesses that pass. ${listJoin(callSellers)} ${plural(callSellers.length, 'sells', 'sell')} exclusive calls; Service Direct publishes a vendor range of $55-$175 per electrician call at a price you set${exclusiveNoPriceLine ? `, and ${exclusiveNoPriceLine}` : ''}. Houzz Pro, Thumbtack and Networx also list electrical work.`;
     case 'roofing':
       return 'Roofers can buy exclusive calls from Service Direct (a vendor-published range of $85-$550 per roofing call, at a price you set), 33 Mile Radius (a flat rate per lead that varies by service area, quoted by sales and billed weekly) or eLocal, pay per exclusive lead on Google Local Services Ads, or buy leads from Modernize, a QuinStreet brand for replacement and remodeling work. 33 Mile Radius, part of EverConnect, which Ignite Visibility bought from EverCommerce in October 2025, says its partners average about 2-5 leads a month and that volume varies with season, service, area and weather.';
     case 'general_contractor':
       return 'Remodelers and design-build firms can use Houzz Pro, which combines project-management software with a Houzz profile (free plan; Design $99/mo and Pro $199/mo; Advertising Package from $499/mo), or lead sources such as Modernize, a QuinStreet brand for replacement and remodeling work, and Pro Referral, the Home Depot referral service with points-based leads and no cash lead fee (joining requires a $41.99 background check). Google Local Services Ads, Service Direct, 33 Mile Radius and eLocal also list general contracting.';
     case 'landscaping':
-      return 'Lawn-care businesses have two marketplaces built for them. On GreenPal you bid your own price on each lawn and pay a 5% fee on each successful customer payment, plus card processing. LawnStarter sets each job price, keeps ownership of the customer and bars providers from soliciting or accepting business from those customers during the agreement and for a year after it ends (see its reputation warning). Google Local Services Ads, Service Direct, Thumbtack and Nextdoor also list landscaping.';
+      return 'Two of the platforms on this page are lawn-care marketplaces. On GreenPal you bid your own price on each lawn and pay a 5% fee on each successful customer payment, plus card processing. LawnStarter sets each job price, keeps ownership of the customer and bars providers from soliciting or accepting business from those customers during the agreement and for a year after it ends (see its reputation warning). Google Local Services Ads, Service Direct, Thumbtack and Nextdoor also list landscaping.';
     case 'cleaning':
-      return 'Cleaning businesses can pay per exclusive lead on Google Local Services Ads after passing Google screening, or set their own lead price and a weekly budget on Thumbtack. Thumbtack says some customers contact more than one pro for the same job, so respond quickly and track cost per booked job. Service Direct, Networx, Homeyou and Porch also list cleaning, as do self-serve ads on Nextdoor and Meta.';
+      return 'Cleaning businesses can pay per exclusive lead on Google Local Services Ads after passing Google\'s screening (businesses that pass show a Google Verified badge), or set their own lead price and a weekly budget on Thumbtack. Thumbtack says some customers contact more than one pro for the same job, so respond quickly and track cost per booked job. Service Direct, Networx, Homeyou and Porch also list cleaning, as do self-serve ads on Nextdoor and Meta.';
     case 'pest_control':
-      return 'Pest control businesses can buy exclusive calls from Service Direct, which publishes a vendor range of $40-$195 per pest control call at a price you set, or pay per exclusive lead on Google Local Services Ads. Google lists pest control among the US home service categories moving from Local Services Ads into Google Ads from August 2026. Thumbtack and Porch also list pest control, as do self-serve ads on Nextdoor, Meta and Yelp.';
+      return `Pest control businesses can buy exclusive calls from ${callSellersPhrase}, or pay per exclusive lead on Google Local Services Ads. Service Direct publishes a vendor range of $40-$195 per pest control call at a price you set${exclusiveNoPriceLine ? `; ${exclusiveNoPriceLine}` : ''}. Google lists pest control among the US home service categories moving from Local Services Ads into Google Ads from August 2026. Thumbtack and Porch also list pest control, as do self-serve ads on Nextdoor, Meta and Yelp.`;
     default:
-      return `Lead-gen platforms that list ${vertical.name.toLowerCase()} work, with how each one charges and any reputation warning.`;
+      return `Lead-gen platforms that list ${tradeWork} work, with how each one charges and any reputation warning.`;
   }
 }
 
 const faqs = [
   {
-    q: `Which lead-gen platforms are in Tier S for ${vertical.name.toLowerCase()} work?`,
+    q: `Which lead-gen platforms are in Tier S for ${tradeWork} work?`,
     a: byTier.S.length > 0
-      ? `For ${vertical.name.toLowerCase()} work, Tier S lists ${byTier.S.map((p) => p.name).join(', ')}. Tier S means no reputation warning and a lead model in which each lead or call goes to one business (exclusive leads or pay-per-call); it is not a ranking of lead quality or cost.${byTier.S.some((p) => p.slug === 'elocal') ? ` eLocal's live calls are exclusive, but its form leads can be shared.` : ''} These services charge in different ways, so compare the pricing and billing rules in each review, and track cost per booked job for every source you use.`
-      : `No Tier S platform lists ${vertical.name.toLowerCase()} work. Compare the pricing and lead-sharing terms of the platforms above, and track cost per booked job for every source you use.`,
+      ? `For ${tradeWork} work, Tier S lists ${byTier.S.map((p) => p.name).join(', ')}. Tier S means no reputation warning and a lead model in which each lead or call goes to one business (exclusive leads or pay-per-call); it is not a ranking of lead quality or cost.${byTier.S.some((p) => p.slug === 'elocal') ? ` eLocal's live calls are exclusive, but its form leads can be shared.` : ''} These services charge in different ways, so compare the pricing and billing rules in each review, and track cost per booked job for every source you use.`
+      : `No Tier S platform lists ${tradeWork} work. Compare the pricing and lead-sharing terms of the platforms above, and track cost per booked job for every source you use.`,
   },
   {
-    q: `What does a lead cost for ${vertical.name.toLowerCase()} work?`,
-    a: `Most lead sources we review publish no per-lead or per-call rate card, including Google Local Services Ads, Thumbtack, 33 Mile Radius, eLocal and Porch. Service Direct publishes vendor ranges per call by trade, from $15-$75 for locksmiths to $500-$2,250 for water damage restoration, and the Networx help center puts leads at about $10-$100+ on its shared plan and $15-$120+ on its exclusive plan. Compare cost per booked job, not cost per lead, and check what each source counts as a billable lead.`,
+    q: `What does a lead cost for ${tradeWork} work?`,
+    a: `Of the ${platformsForVertical.length} platforms on this page, ${noRateCardHere.length} ${plural(noRateCardHere.length, 'publishes', 'publish')} no rate card${noRateCardHere.length ? `: ${listJoin(noRateCardHere.map(shortName))}` : ''}.${budgetAdsHere.length ? ` ${listJoin(budgetAdsHere.map(shortName))} ${plural(budgetAdsHere.length, 'sells', 'sell')} ads against a budget you set, with no set price per lead.` : ''}${listedHere('service-direct') ? ' Service Direct publishes vendor ranges per call by trade, from $15-$75 for locksmiths to $500-$2,250 for water damage restoration.' : ''}${listedHere('networx') ? ' The Networx help center puts leads at about $10-$100+ on its shared plan and $15-$120+ on its exclusive plan.' : ''} Compare cost per booked job, not cost per lead, and check what each source counts as a billable lead.`,
   },
   {
-    q: `Should I use HomeAdvisor or Angi for ${vertical.name.toLowerCase()} leads?`,
-    a: `Both carry a reputation warning. The FTC consent order against HomeAdvisor, finalized in April 2023, bars the deceptive lead-marketing claims the FTC alleged and requires HomeAdvisor to pay up to $7.2 million. Angi, a sister company under Angi Inc., settled with the Vermont Attorney General in October 2025 over its "Angi Certified Pro" term and agreed to pay the state $100,000. Our reviews list neither as a first choice for any trade. If you use one, cap a monthly lead budget and track cost per booked job; the full reviews have the details.`,
+    q: `Should I use HomeAdvisor or Angi for ${tradeWork} leads?`,
+    a: `Both carry a reputation warning. The FTC consent order against HomeAdvisor, finalized in April 2023, bars the deceptive lead-marketing claims the FTC alleged and requires HomeAdvisor to pay up to $7.2 million. Angi, a brand of the same parent company, Angi Inc., settled with the Vermont Attorney General in October 2025 over its "Angi Certified Pro" term and agreed to pay the state $100,000. If you use one, cap a monthly lead budget and track cost per booked job; the full reviews have the details.`,
   },
   {
-    q: `How do I tell whether a lead source is working for ${vertical.name.toLowerCase()} work?`,
+    q: `How do I tell whether a lead source is working for ${tradeWork} work?`,
     a: `Track calls, forms and booked jobs by source so you can compare cost per booked job. Call tracking such as CallRail (from $50/mo billed yearly) tracks and attributes calls, texts and forms from your other channels. Check each source's billing and credit rules as well: Google Local Services Ads can charge for missed calls you follow up on, eLocal counts unanswered and voicemail calls as valid, Bark refunds credits only for invalid contact details reported within 7 days, and Networx gives 14 days to request a credit.`,
   },
 ];
@@ -133,7 +170,7 @@ const faqSchema = {
         Lead-gen · {vertical.name}
       </p>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
-        Best Lead-Gen Platforms for {vertical.name} Contractors (2026)
+        Best Lead-Gen Platforms for {tradeTitle} (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
         {tradeIntro(verticalSlug)}
@@ -202,7 +239,7 @@ const faqSchema = {
     })}
 
     <section class="mb-10">
-      <h2 class="mb-5 text-2xl font-bold text-slate-900">Frequently asked for {vertical.name.toLowerCase()} contractors</h2>
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Frequently asked for {tradePros}</h2>
       <div class="space-y-3">
         {faqs.map((f) => (
           <details class="rounded-lg border border-slate-200 bg-white p-4">
@@ -214,7 +251,7 @@ const faqSchema = {
     </section>
 
     <section class="rounded-lg bg-slate-900 p-8 text-white">
-      <h2 class="text-2xl font-bold">More for {vertical.name.toLowerCase()} contractors</h2>
+      <h2 class="text-2xl font-bold">More for {tradePros}</h2>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href={`/${verticalToUrl(verticalSlug)}/`} class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">
           {vertical.name} software directory →

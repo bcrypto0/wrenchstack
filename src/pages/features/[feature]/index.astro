@@ -46,13 +46,41 @@ const { featureSlug } = Astro.props;
 const features = (featuresData as { features: Record<string, FeatureData> }).features;
 const feature = features[featureSlug];
 
-// Find all tools that have this feature in their key_features array, listed
-// alphabetically. (Until 2026-09-30 this sorted by G2/Capterra rating, and a second
-// "high-rated tools without this feature" list was built from the same ratings;
-// both were dropped when third-party review scores were removed.)
+// Tools whose key_features name this feature, listed alphabetically. (Until 2026-09-30
+// this sorted by G2/Capterra rating, and a second "high-rated tools without this
+// feature" list was built from the same ratings; both were dropped when third-party
+// review scores were removed.)
+// QuickBooks also counts the integrations field (2026-10-01): only 9 tools name
+// "quickbooks_integration" as a key feature while 97 list a QuickBooks integration, and
+// this page said "9 of 126". Key-feature names are not standardised (lib/data.ts notes
+// 234 distinct slugs, with duplicates), so the copy says "list", not "have".
+// Other key-feature names for the same feature, counted too (2026-10-01): this page said
+// "0 of 126" for AI Receptionist while Workiz lists "ai_phone_agent", and 0 for Automated
+// Marketing while 7 tools list "marketing_automation". Keep in step with FEATURE_ALIASES
+// in pages/features/index.astro. BuildOps' "ai_voice_agent" is left out: its entry
+// describes OpsAI turning technician voice notes into field notes, not answering calls.
+const FEATURE_ALIASES: Record<string, { slug: string; label: string }[]> = {
+  ai_receptionist: [{ slug: 'ai_phone_agent', label: 'AI phone agent' }],
+  automated_marketing: [{ slug: 'marketing_automation', label: 'marketing automation' }],
+  customer_portal: [{ slug: 'client_portal', label: 'client portal' }],
+  phone_system: [{ slug: 'voip_phone', label: 'VoIP phone' }],
+};
+const aliases = FEATURE_ALIASES[featureSlug] ?? [];
+// The feature name mid-sentence: lower case, keeping AI, GPS, SMS, VoIP and QuickBooks
+// (toLowerCase printed "ai receptionist (ai phone agent)" and "quickbooks integration").
+const featureLower = feature.name.replace(/[A-Za-z]+/g, (w) => (/[A-Z]/.test(w.slice(1)) ? w : w.toLowerCase()));
+const aliasText = aliases.length > 0 ? ` (or ${aliases.map((a) => a.label).join(' or ')})` : '';
+const isQuickBooksFeature = featureSlug === 'quickbooks_integration';
+const listsFeature = (t: Tool): boolean =>
+  t.key_features.includes(featureSlug)
+  || aliases.some((a) => t.key_features.includes(a.slug))
+  || (isQuickBooksFeature && t.integrations.some((i) => i.includes('quickbooks')));
 const toolsWithFeature: Tool[] = tools
-  .filter((t) => t.key_features.includes(featureSlug))
+  .filter(listsFeature)
   .sort((a, b) => a.name.localeCompare(b.name));
+const matchRule = isQuickBooksFeature
+  ? 'name it among their key features or list a QuickBooks integration'
+  : `name it${aliasText} among their key features`;
 
 // Related features for cross-linking.
 const relatedFeatures = feature.related_features
@@ -74,8 +102,34 @@ const faqSchema = {
   })),
 };
 
-const pageTitle = `${feature.name} in trades software (2026): which tools have it`;
-const pageDescription = `${feature.definition} Compare ${toolsWithFeature.length} trades software platforms with ${feature.name.toLowerCase()} features.`;
+// Year of the most recent price check in the directory, not a hard-coded "2026".
+const dataYear = tools.map((t) => t.pricing.verified_date ?? '').sort().reverse()[0]?.slice(0, 4) || String(new Date().getFullYear());
+const pageTitle = `${feature.name} in trades software (${dataYear}): which tools list it`;
+// One tool: "1 of the 126 tools we list names it among its key features" (four features
+// have one tool since 2026-10-01).
+const matchRuleOne = isQuickBooksFeature
+  ? 'names it among its key features or lists a QuickBooks integration'
+  : `names it${aliasText} among its key features`;
+const pageDescription = `${feature.definition} ${toolsWithFeature.length} of the ${tools.length} tools we list ${toolsWithFeature.length === 1 ? matchRuleOne : matchRule}; compare ${toolsWithFeature.length === 1 ? 'its starting price' : 'their starting prices'}.`;
+
+// Shown above the tools table. Key-feature names vary across entries (estimates 11 tools,
+// quotes 5, estimates_quotes 22; route_optimization 19, route_planning 5, routing 3), so
+// an unlisted tool may still offer the feature.
+const countNote = `Tools that ${matchRule} in our data. Key-feature names are not standardised across tools, so a tool can offer ${featureLower} without being listed here; check its review.`;
+
+// Reading time from this page's own content (2026-10-01). It was a fixed
+// readingTimeMinutes(1200) on every feature page. FIXED_WORDS is this template's fixed
+// text, counted with a script on 2026-10-01 (markup and expressions stripped).
+const FIXED_WORDS = 48;
+const wc = (s?: string | null) => (s ?? '').split(/\s+/).filter(Boolean).length;
+const pageWords = FIXED_WORDS
+  + [feature.definition, feature.definition, feature.description, feature.why_matters, feature.buying_tips]
+    .reduce((n, s) => n + wc(s), 0)
+  + feature.faqs.reduce((n, f) => n + wc(f.q) + wc(f.a), 0)
+  + toolsWithFeature.reduce((n, t) => n + wc(t.name) + wc(formatPrice(t)) + wc(t.best_for), 0)
+  + relatedFeatures.reduce((n, r) => n + wc(r.data.name) + wc(r.data.definition), 0)
+  + bestForVerticals.reduce((n, v) => n + wc(v.name), 0)
+  + wc(countNote);
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -104,7 +158,7 @@ const breadcrumbs = [
       <p class="mt-4 text-lg text-slate-600">
         {feature.definition}
       </p>
-      <Byline readingMinutes={readingTimeMinutes(1200)} />
+      <Byline readingMinutes={readingTimeMinutes(pageWords)} />
     </header>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
@@ -114,34 +168,30 @@ const breadcrumbs = [
           <strong>What it is:</strong> {feature.definition}
         </li>
         <li>
-          <strong>Tools with this feature:</strong> {toolsWithFeature.length} of {tools.length} in our directory
+          <strong>Tools that list it:</strong> {`${toolsWithFeature.length} of the ${tools.length} in our directory`}
         </li>
-        {bestForVerticals.length > 0 && (
-          <li>
-            <strong>Matters most for:</strong> {bestForVerticals.map((v) => v.name).join(', ')}
-          </li>
-        )}
       </ul>
     </section>
 
     <section class="mb-12 prose prose-slate max-w-none">
-      <h2>What is {feature.name.toLowerCase()} in trades software?</h2>
+      <h2>What is {featureLower} in trades software?</h2>
       <p>{feature.description}</p>
 
-      <h2>Why {feature.name.toLowerCase()} matters</h2>
+      <h2>Why {featureLower} matters</h2>
       <p>{feature.why_matters}</p>
 
-      <h2>How to evaluate {feature.name.toLowerCase()} when buying</h2>
+      <h2>How to evaluate {featureLower} when buying</h2>
       <p>{feature.buying_tips}</p>
     </section>
 
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">
-        Tools with {feature.name.toLowerCase()} ({toolsWithFeature.length})
+        {`Tools that list ${featureLower} (${toolsWithFeature.length})`}
       </h2>
+      {toolsWithFeature.length > 0 && <p class="mb-4 text-sm text-slate-600">{countNote}</p>}
       {toolsWithFeature.length === 0 ? (
         <div class="rounded-lg border border-slate-200 bg-white p-6 text-slate-600">
-          No tools in our directory list this feature in their key features. This may indicate a niche feature or one that's typically marketed differently; check individual tool reviews for details.
+          {`No tool in our directory names ${featureLower}${aliasText} among its key features. Key-feature names are not standardised across tools, so check individual tool reviews.`}
         </div>
       ) : (
         <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
@@ -190,7 +240,9 @@ const breadcrumbs = [
 
     {bestForVerticals.length > 0 && (
       <section class="mb-12">
-        <h2 class="mb-4 text-2xl font-bold text-slate-900">Trades where {feature.name.toLowerCase()} matters most</h2>
+        {/* Was "Trades where X matters most": features.json best_for_verticals is an
+            unsourced editorial list, so the links stay and the claim goes (2026-10-01). */}
+        <h2 class="mb-4 text-2xl font-bold text-slate-900">Related trade pages</h2>
         <div class="flex flex-wrap gap-2">
           {bestForVerticals.map((v) => (
             <a
@@ -219,7 +271,7 @@ const breadcrumbs = [
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Browse more features</h2>
       <p class="mt-2 text-slate-300">
-        See the full list of trades software features and which tools have them.
+        See the full list of trades software features and which tools list them.
       </p>
       <a
         href="/features/"

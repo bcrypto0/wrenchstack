@@ -49,23 +49,23 @@ const rivalPhrase = rivals.length > 1 ? `${rivals[0]} and ${rivals[1]}` : rivals
 
   {isCompetitorMode ? (
     <p class="mt-2 text-sm leading-relaxed text-slate-700">
-      We review {rivalPhrase} against {rivals.length > 1 ? 'their' : 'its'} own published pricing
-      and terms, and we publish the cons next to the pros. If you build a competing product and
-      it is not covered here, send it to us and it gets the same treatment.
+      We check {rivalPhrase} against {rivals.length > 1 ? 'their own websites' : 'its own website'} and
+      list the cons next to the pros. If you build a competing product that is not listed here, you can
+      submit it for editorial review. An evaluation can end with or without a listing.
     </p>
   ) : (
     <p class="mt-2 text-sm leading-relaxed text-slate-700">
       {count
-        ? `We track ${count} ${listName} today, and we know that is not all of them.`
+        ? `We list ${count} ${listName} today, and we know that is not all of them.`
         : `We know our ${listName} coverage is not complete.`}
-      {' '}If you build one and it is not here, send it to us and we will review it against your
-      own published pricing and terms.
+      {' '}If you build one and it is not here, you can submit it for editorial review. An
+      evaluation can end with or without a listing.
     </p>
   )}
 
   <p class="mt-2 text-sm leading-relaxed text-slate-700">
-    Listings are free. No vendor can pay for placement, for a score, or to have a documented
-    con removed.{' '}
+    Listings are free. We do not accept payment for inclusion, for placement, for a score, or to
+    remove a documented con.{' '}
     {isCompetitorMode
       ? 'Read this page first and decide whether you want that.'
       : 'We publish the cons next to the pros, so read an existing review before you decide you want one.'}

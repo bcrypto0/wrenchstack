@@ -1,13 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, verticals, getLogoUrl } from '../lib/data';
+import { tools, verticals, getLogoUrl, formatPrice, priceScaling } from '../lib/data';
 
 const toolsForQuiz = tools.map(t => ({
   slug: t.slug,
   name: t.name,
   tagline: t.tagline,
   starting_at_usd: t.pricing.starting_at_usd,
-  pricing_label: t.pricing.starting_at_usd === null ? 'Custom' : t.pricing.starting_at_usd === 0 ? 'Free' : `$${t.pricing.starting_at_usd}/mo`,
+  // formatPrice tells quote-only tools apart from the two that publish one-time or
+  // per-project prices; until 2026-10-01 both showed "Custom". A per-user price is
+  // labelled as one, as on the pricing pages, so it does not read as a company price.
+  pricing_label: priceScaling(t) === 'per_user' ? `From $${t.pricing.starting_at_usd}/user/mo` : formatPrice(t),
   verticals: t.verticals,
   vertical_fit: t.vertical_fit ?? {},
   best_team_size: t.best_team_size ?? '',
@@ -28,23 +31,27 @@ const breadcrumbs = [
 const quizFaqs = [
   {
     q: 'How does the matching quiz work?',
-    a: `The quiz uses your answers (trade, team size, budget, priority, integration need) to score every tool in our database against your profile. Each tool gets a weighted score based on vertical fit (most important), team-size match, budget fit, feature priority match, and integration match. The 3 highest-scoring tools are your matches. All scoring runs in your browser; no data is sent to us or any third party.`,
+    a: `The quiz scores every tool listed for your trade against your answers. Points come from the tool's fit for your trade (its 1-10 trade fit, times 4), team-size match (3 to 10 points, times 2), budget fit (up to 10, explained below), the features behind your priority that the tool lists (2 points each) and the integration you picked (up to 9). Trade fit carries the most weight. The 3 highest totals are your matches. Scoring runs in your browser and your answers are not sent to us; the logos in the results load from Google's favicon service.`,
   },
   {
     q: 'Are the matches affiliate-influenced?',
-    a: 'No. The scoring formula is the same for every tool regardless of whether we have an affiliate partnership with them. Tools we earn nothing from rank above tools we have partnerships with whenever the buyer profile fits better. See our methodology page for the full scoring rationale.',
+    a: 'No. The formula is the same for every tool and has no input for affiliate partnerships, so a tool we earn nothing from ranks above a partner whenever it scores higher on your answers. The weights are listed in the first answer above.',
   },
   {
     q: 'What if none of the 3 matches feel right?',
-    a: `Take the quiz again with different answers (especially budget or priority; those are the strongest filters). Or browse the full ${tools.length}-tool directory by vertical. Or compare any two tools side-by-side via the comparison directory.`,
+    a: `Take the quiz again with different answers (after trade fit, team size and budget carry the most weight). Or browse your trade's page, which ranks every tool listed for that trade. Or compare any two tools side-by-side via the comparison directory.`,
   },
   {
     q: 'Why only 5 questions?',
-    a: 'Most software-selection guidance treats this as a 20-question process. In practice, 5 questions (trade / team size / budget / top priority / key integration) capture 80%+ of the signal needed to surface 3 strong matches. The remaining 20% gets resolved by reading the full reviews of the matches.',
+    a: 'The five answers (trade, team size, budget, top priority, key integration) match the fields our data records for each tool, so they are what the quiz can score. What the data does not record, such as how your team takes to an app, needs the full reviews and a demo or trial where the vendor offers one.',
   },
   {
     q: 'How accurate is the team-size match?',
-    a: 'We score team-size based on each tool\'s stated "best team size" range. Perfect match scores highest; tools whose range overlaps yours partially still score reasonably. Tools whose range is far from yours (e.g., enterprise platform for a solo operator) score low so they rarely surface as top matches.',
+    a: 'Each answer stands for one team size (solo 1, 2-5 people 4, 6-15 people 10, 16-50 people 30, 50+ people 75). A tool scores 10 when that number falls inside its stated best team size, 7 when it falls within half the low end to one and a half times the high end, 3 otherwise, and 5 when the tool states no range. The result is doubled, so team size can move a tool by up to 14 points.',
+  },
+  {
+    q: 'How is budget fit scored?',
+    a: 'Your budget is compared with the tool\'s published starting price, not with a price for your whole team: for a per-user plan that is the price of one user, so check the tool\'s pricing at your team size. For the answers below $1,000, a tool scores 8 when its starting price (a free plan counts as $0) is within your budget and 0 when it is above; a tool with no monthly price scores 3 on the $400-$1,000 answer and 0 below that. On the $1,000+ answer, a tool with no monthly price scores 10, a starting price of $400 or more scores 8, and a lower one 4.',
   },
 ];
 
@@ -61,19 +68,19 @@ const quizFaqSchema = {
 
 <Layout
   title="Find your trades software match: interactive quiz"
-  description="Answer 5 questions and get a ranked list of the 3 field service platforms that best fit your business. Free, takes 60 seconds."
+  description="Answer 5 questions and get the 3 field service platforms that score highest for your trade, team size, budget and priorities. Free, and it runs in your browser."
   breadcrumbs={breadcrumbs}
 >
   <script type="application/ld+json" set:html={JSON.stringify(quizFaqSchema)} />
   <article class="mx-auto max-w-3xl px-4 py-12">
     <header class="mb-10 text-center">
-      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">5 questions · 60 seconds · free</p>
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">5 questions · free · runs in your browser</p>
       <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
         Find your software match
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        Answer 5 quick questions about your business; we'll rank the 3 platforms
-        that fit best from our database of {tools.length} tools.
+        Answer 5 quick questions about your business; we'll show the 3 platforms
+        that score highest on your answers, from the tools in our directory listed for your trade.
       </p>
     </header>
 
@@ -100,7 +107,7 @@ const quizFaqSchema = {
     </div>
 
     <p class="mt-6 text-center text-xs text-slate-500">
-      No email required. No data collected. The whole thing runs in your browser.
+      No email required. Your answers are scored in your browser and are not sent to us. The site's analytics are described in our <a href="/privacy/" class="underline hover:text-slate-700">privacy policy</a>.
     </p>
 
     <section class="mt-16">
@@ -162,7 +169,7 @@ const quizFaqSchema = {
       {
         id: 'budget',
         title: "What's your monthly software budget?",
-        subtitle: 'Per company, all-in. We use this to filter what fits.',
+        subtitle: 'Per company, all-in. We use this to score price fit.',
         type: 'single',
         options: [
           { value: 'min', label: 'Under $50/mo' },
@@ -379,7 +386,7 @@ const quizFaqSchema = {
           <strong>Your profile:</strong> ${verticalName}, ${answers.team_size} team, ${answers.budget} budget, prioritizing ${answers.priority.replace(/_/g, ' ')}, ${answers.integration === 'none' ? 'no integration preference' : answers.integration + ' integration'}.
         </div>
         <div class="space-y-4">
-          ${results.length > 0 ? items : '<p class="text-slate-600">No matches found for that combination. Try retaking with a different vertical or budget.</p>'}
+          ${results.length > 0 ? items : '<p class="text-slate-600">No tools in our directory are listed for that trade. Try retaking with a different trade.</p>'}
         </div>
         <div class="mt-8 rounded-lg bg-slate-50 p-5 text-sm text-slate-600">
           <strong class="text-slate-900">Want more options?</strong>

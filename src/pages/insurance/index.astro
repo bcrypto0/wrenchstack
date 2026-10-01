@@ -20,16 +20,50 @@ for (const p of insuranceProviders) {
   byTier[insuranceTier(p) === 'F' ? 'F' : 'A'].push(p);
 }
 
+// Computed from the data (2026-10-01), replacing "most providers": a provider quotes per
+// business when its premium line says the premium is quoted.
+const quotedCount = insuranceProviders.filter((p) => /quoted/i.test(p.typical_premium_range)).length;
+const quotedPhrase = quotedCount === insuranceProviders.length
+  ? `all ${insuranceProviders.length} providers here quote`
+  : `${quotedCount} of the ${insuranceProviders.length} providers here quote`;
+const affiliateLinkedCount = insuranceProviders.filter((p) => p.affiliate_url.startsWith('http')).length;
+
+// Tier A buying routes computed from distribution_model (2026-10-01), replacing hard-coded
+// name lists. Brokers with a hybrid model are matching services (Tivly), named on their own;
+// a provider whose only line is workers' comp is marked as such; an agent-sold provider whose
+// tagline names partner platforms is noted.
+const insShort = (p: InsuranceProvider) => p.name.replace(/\s*\(.*\)$/, '').replace(/ (Insurance|Financial)$/, '');
+const insJoin = (xs: string[]) => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : xs[0] ?? '');
+const wcOnly = (p: InsuranceProvider) => p.insurance_lines.length === 1 && p.insurance_lines[0] === 'workers_comp';
+const aOnline = byTier.A.filter((p) => p.distribution_model === 'direct-digital')
+  .map((p) => (wcOnly(p) ? `${insShort(p)} (workers' comp only)` : insShort(p)));
+const aHybrid = byTier.A.filter((p) => p.distribution_model === 'hybrid' && p.provider_type !== 'broker').map(insShort);
+const aMatchingAll = byTier.A.filter((p) => p.distribution_model === 'hybrid' && p.provider_type === 'broker');
+const aMatching = aMatchingAll.map(insShort);
+// Restored 2026-10-01: Tivly's premium line says "Tivly says its matching service is free".
+const aMatchingFree = aMatchingAll.length > 0 && aMatchingAll.every((p) => /matching service is free/i.test(p.typical_premium_range));
+const aAgentAll = byTier.A.filter((p) => p.distribution_model === 'agent-only');
+const aAgentPartner = aAgentAll.filter((p) => /partner platforms/i.test(p.tagline)).map(insShort);
+const aAgent = aAgentAll.filter((p) => !/partner platforms/i.test(p.tagline)).map(insShort);
+const routeLines = [
+  aOnline.length ? `Online insurers and marketplaces: ${insJoin(aOnline)}.` : '',
+  aHybrid.length ? `Online and through agents or brokers: ${insJoin(aHybrid)}.` : '',
+  aAgent.length || aAgentPartner.length
+    ? `Through agents or brokers: ${insJoin(aAgent)}${aAgentPartner.length ? `${aAgent.length ? ', and ' : ''}${insJoin(aAgentPartner)}, which also ${aAgentPartner.length === 1 ? 'sells' : 'sell'} through partner platforms` : ''}.`
+    : '',
+  aMatching.length ? `${insJoin(aMatching)} ${aMatching.length === 1 ? 'is a matching service' : 'are matching services'} that ${aMatching.length === 1 ? 'connects' : 'connect'} you with an agent${aMatchingFree ? ` and ${aMatching.length === 1 ? 'says its service is' : 'say their service is'} free` : ''}.` : '',
+].filter(Boolean).join(' ');
+
 const tierMeta = {
   A: {
     label: 'Tier A: no reputation warning',
-    description: `Providers with no reputation warning. This is not a quality ranking: nothing we could verify ranks insurers on quality, so every provider without a documented warning is in Tier A. They differ in how you buy. Online insurers and marketplaces: ERGO NEXT, biBERK, Simply Business, Insureon, Huckleberry, Thimble and Cerity (workers' comp only). Online and through agents or brokers: The Hartford, Hiscox, Liberty Mutual, Chubb and Progressive Commercial. Through agents or brokers: Acuity, Erie, Travelers, Nationwide, Selective, CNA, Markel, Zurich, Berkshire Hathaway GUARD and AmTrust, and Coterie, which also sells through partner platforms. Tivly is a free matching service that connects you with an agent. Fit depends on your trade, size, state and whether you want to work with an agent.`,
+    description: `Providers with no reputation warning. This is not a quality ranking: nothing we could verify ranks insurers on quality, so every provider without a documented warning is in Tier A. They differ in how you buy. ${routeLines} Fit depends on your trade, size, state and whether you want to work with an agent.`,
     badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300',
     cardBorder: 'border-blue-300',
   },
   F: {
     label: 'Tier F: listed with reputation warnings',
-    description: 'Providers with a reputation warning based on a documented record: a BBB F rating and a 2024 Florida fine for late data filings (Pie Insurance), a class action over an agent\'s telemarketing calls that Farmers agreed to settle while denying the claims, and an undecided Los Angeles County lawsuit over its handling of 2025 wildfire claims (State Farm). Read the warning on each card before you buy.',
+    description: 'Providers with a reputation warning based on a documented record: a BBB record and a May 2024 Florida fine for filing required data late (Pie Insurance), a class action over an agent\'s telemarketing calls that Farmers agreed to settle while denying the claims, and an undecided Los Angeles County lawsuit over its handling of 2025 wildfire claims (State Farm). Read the warning on each card before you buy.',
     badgeColor: 'bg-rose-100 text-rose-900 ring-rose-300',
     cardBorder: 'border-rose-300',
   },
@@ -63,14 +97,14 @@ const itemListSchema = {
         Best Business Insurance for Trades Contractors (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {insuranceProviders.length} business-insurance providers for HVAC, plumbing, electrical, roofing and other trades: online insurers and marketplaces, carriers sold through independent agents, and specialty construction insurers. We do not rank insurers: nothing we could verify ranks them on quality, and most providers here quote premiums business by business. Tier F marks a provider with a reputation warning that cites a documented record, such as a BBB rating, a regulatory fine, a settlement or a lawsuit; every other provider is Tier A. Affiliate programs are not part of the tier rule.
+        Independent reviews of {insuranceProviders.length} business-insurance providers for HVAC, plumbing, electrical, roofing and other trades: online insurers and marketplaces, carriers sold through independent agents, and specialty construction insurers. We do not rank insurers: nothing we could verify ranks them on quality, and {quotedPhrase} premiums business by business. Tier F marks a provider with a reputation warning that cites a documented record, such as a BBB record, a regulatory fine, a settlement or a lawsuit; every other provider is Tier A. Affiliate programs are not part of the tier rule.
       </p>
     </header>
 
     <section class="mb-10 rounded-lg border-l-4 border-orange-500 bg-orange-50/40 p-5">
       <p class="text-xs font-bold uppercase tracking-wider text-orange-600">The short answer</p>
       <p class="mt-2 text-slate-800 leading-relaxed">
-        Compare quotes from more than one route. Online, <a href="/insurance/next-insurance/" class="font-semibold text-orange-700 hover:underline">ERGO NEXT</a> (owned by Munich Re's ERGO) sells general liability, a BOP, workers' comp and professional liability, and marketplaces such as Simply Business and Insureon show quotes from several carriers from one application. Through a local independent agent you can also get quotes from carriers sold only through agents, such as <a href="/insurance/acuity/" class="font-semibold text-orange-700 hover:underline">Acuity</a> (more than 30 states) and <a href="/insurance/erie-insurance/" class="font-semibold text-orange-700 hover:underline">Erie</a> (12 states and Washington, DC). Acuity and Erie have no affiliate program, so we earn nothing from them. No vendor pays for placement.
+        Compare quotes from more than one route. Online, <a href="/insurance/next-insurance/" class="font-semibold text-orange-700 hover:underline">ERGO NEXT</a> (owned by Munich Re's ERGO) sells general liability, a BOP, workers' comp and professional liability, and marketplaces such as Simply Business and Insureon show quotes from several carriers from one application. Through a local independent agent you can also get quotes from carriers sold only through agents, such as <a href="/insurance/acuity/" class="font-semibold text-orange-700 hover:underline">Acuity</a> (more than 30 states) and <a href="/insurance/erie-insurance/" class="font-semibold text-orange-700 hover:underline">Erie</a> (12 states and Washington, DC). Acuity and Erie have no affiliate program{affiliateLinkedCount === 0 ? ", and no Visit button on this page uses an affiliate link; each goes to the provider's own site" : ''}. No vendor pays for placement.
       </p>
     </section>
 

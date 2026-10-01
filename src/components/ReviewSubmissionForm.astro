@@ -1,5 +1,5 @@
 ---
-import type { Tool } from '../lib/data';
+import { verticals, type Tool } from '../lib/data';
 
 interface Props {
   tool: Tool;
@@ -23,7 +23,7 @@ const WEB3FORMS_ACCESS_KEY =
   <div class="rounded-lg border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-white p-6">
     <h2 class="mb-2 text-2xl font-bold text-slate-900">Write a review of {tool.name}</h2>
     <p class="mb-6 text-sm text-slate-600 leading-relaxed">
-      We hand-moderate every review and verify the reviewer when possible. Your review appears within 1-3 business days of submission (we email you if we need to verify). Reviews help other contractors make better decisions.
+      Every review is moderated by hand before it is published, and a review can be declined. If you leave an email address, we may use it to confirm that you use {tool.name}.
     </p>
 
     <form
@@ -108,19 +108,7 @@ const WEB3FORMS_ACCESS_KEY =
             class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
           >
             <option value="">Select one</option>
-            <option value="HVAC">HVAC</option>
-            <option value="Plumbing">Plumbing</option>
-            <option value="Electrical">Electrical</option>
-            <option value="Roofing">Roofing</option>
-            <option value="General Contractor">General Contractor</option>
-            <option value="Landscaping">Landscaping</option>
-            <option value="Cleaning">Cleaning</option>
-            <option value="Pest Control">Pest Control</option>
-            <option value="Pool Service">Pool Service</option>
-            <option value="Locksmith">Locksmith</option>
-            <option value="Garage Door">Garage Door</option>
-            <option value="Appliance Repair">Appliance Repair</option>
-            <option value="Handyman">Handyman</option>
+            {verticals.map((v) => <option value={v.name}>{v.name}</option>)}
             <option value="Other">Other</option>
           </select>
         </div>
@@ -176,7 +164,7 @@ const WEB3FORMS_ACCESS_KEY =
 
       <div>
         <label for={`email-${tool.slug}`} class="block text-sm font-semibold text-slate-900">
-          Your email (verification only, never published)
+          Your email (optional, not published)
         </label>
         <input
           type="email"
@@ -186,13 +174,13 @@ const WEB3FORMS_ACCESS_KEY =
           class="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
         />
         <p class="mt-1 text-xs text-slate-500">
-          Optional but recommended. Using your company email helps us mark you as a verified buyer.
+          Used only to contact you about this review.
         </p>
       </div>
 
       <div>
         <label for={`name-${tool.slug}`} class="block text-sm font-semibold text-slate-900">
-          Your name or company (optional, shown publicly if provided)
+          Your name or company (optional, not shown on the review)
         </label>
         <input
           type="text"
@@ -212,12 +200,12 @@ const WEB3FORMS_ACCESS_KEY =
           Submit review →
         </button>
         <p class="text-xs text-slate-500">
-          We moderate within 1-3 business days. By submitting you confirm this is your honest experience.
+          By submitting you confirm this is your honest experience.
         </p>
       </div>
 
       <div id={`review-status-${tool.slug}`} class="hidden rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
-        Thanks, your review was submitted. We'll moderate it and publish within 1-3 business days. If we need to verify, we'll email you at the address above.
+        Thanks, your review was submitted. It is moderated by hand before anything is published.
       </div>
     </form>
 

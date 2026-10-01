@@ -3,26 +3,27 @@ import Layout from '../../../../layouts/Layout.astro';
 
 const tools = [
   { name: 'Daftra', status: 'Vendor says fully integrated with ETA (e-signature, GS1 codes, Egyptian VAT)', fit: 'Accounting / e-invoice SMEs', note: 'From $20/mo billed yearly (USD)', href: '/eg/daftra/' },
-  { name: 'AccFlex', status: 'Vendor says ETA-approved; construction edition with مستخلصات', fit: 'SMEs incl. contractors', note: 'Not confirmed (quote form)', href: '/eg/accflex-erp/' },
+  { name: 'AccFlex', status: 'Vendor says ETA-approved; construction edition with مستخلصات', fit: 'SMEs incl. contractors', note: 'Small-business edition from the equivalent of US$29; larger edition quoted', href: '/eg/accflex-erp/' },
   { name: 'DoubleClick ERP', status: 'Vendor says it sends مستخلصات (payment certificates) and invoices to the ETA directly', fit: 'Contractors (engineering → finance)', note: 'Quote-based', href: '/eg/doubleclick-erp/' },
   { name: 'Voko ERP', status: 'Separate ETA e-invoice module + مستخلصات in its contracting module', fit: 'Contractors', note: 'Quote-based', href: '/eg/voko-erp/' },
+  { name: 'Namasoft (NamaERP)', status: 'Vendor says it covers ETA e-invoices (HSM signing, GS1/EGS codes) and e-receipts', fit: 'Contractors and property firms (tenders, BOQs, payment certificates, retention)', note: 'Quote-based', href: '/eg/namasoft/' },
   { name: 'Edara', status: 'Egyptian e-invoicing in the Ultimate plan; vendor says it guides customers through ETA integration', fit: 'Trading and distribution SMEs', note: 'From $29/mo + $5/user billed yearly (USD); Ultimate $79 + $12/user', href: '/eg/edara-erp/' },
-  { name: 'Odoo', status: 'Native ETA localization (API, GS1, USB e-sign), via partners', fit: 'Full ERP if you want one system', note: 'SaaS + implementation', href: '/eg/odoo/' },
+  { name: 'Odoo', status: 'Egyptian localization with an ETA e-invoicing module (API, GS1/EGS codes, USB-token signing), via partners', fit: 'Full ERP if you want one system', note: 'SaaS + implementation', href: '/eg/odoo/' },
   { name: 'OrchidaTax', status: 'ETA middleware/connector for SAP/Oracle/Dynamics/Odoo', fit: 'Keep your ERP, add compliance', note: 'Quote-based', href: '/eg/orchidatax/' },
   { name: 'QuickBooks', status: 'No ETA e-invoicing described by Intuit; needs a third-party connector (OrchidaTax lists QuickBooks)', fit: 'Firms already on QuickBooks', note: 'Connector priced separately', href: '/eg/quickbooks/' },
 ];
 
 const faqs = [
-  { q: 'Is ETA e-invoicing mandatory yet, and for whom?', a: `Yes, for the taxpayers named in ETA's phased decisions. ETA made e-invoicing mandatory in phases (phase 5 began on 15 December 2021, and phase 8 ran from September to December 2022), and its online inquiry tool shows whether a particular business is covered, so check your status there. B2C transactions are covered by the parallel e-receipt system. The VAT registration threshold has been under review since late 2025, so none is stated here.` },
-  { q: 'What is the "clearance" model?', a: 'Egypt uses a real-time clearance (Continuous Transaction Control) model: each document is transmitted to the ETA and validated BEFORE it is issued to the recipient. The ETA checks the structure, tax math, e-seal and product codes, then assigns a UUID; rejected documents return error codes. B2C e-receipts carry a QR code for verification. This is stricter than post-audit reporting: the tax authority sees and approves each document in real time.' },
-  { q: 'What happens if I don\'t comply?', a: 'Two consequences. (1) Non-compliant firms can be barred from dealing with government bodies and public tenders, and face import/export restrictions. (2) Penalties under Law 206/2020 (Article 71) range from EGP 20,000 to EGP 100,000 for failures to register or issue e-documents, with a tiered late-reporting escalation. Records must be kept at least 5 years.' },
-  { q: 'What format and what\'s the legal basis?', a: 'Documents are structured JSON or XML (not PDF) per the ETA schema, with a UUID, a cryptographic hash, and a mandatory electronic signature via an approved certificate (HSM or USB token). Products are coded using GS1 (GTIN/GPC) or national EGS codes. The legal basis is the Unified Tax Procedures Law No. 206 of 2020 (Article 71 sets the fines), its Executive Regulations (Decree No. 286 of 2021), and the VAT Law No. 67 of 2016, administered by the Egyptian Tax Authority (ETA) under the Ministry of Finance.' },
-  { q: 'Does my accounting software need to be ETA-native?', a: `If your business is covered by ETA's decisions, your software must reach the ETA somehow. Daftra, Edara (Ultimate plan), AccFlex, Namasoft and Voko say they submit to the ETA, DoubleClick says it sends مستخلصات and invoices directly, and Odoo has an Egyptian e-invoicing module. Intuit's global pages do not describe ETA e-invoicing for QuickBooks, so it needs a connector such as OrchidaTax, which lists QuickBooks among its integrations; Wafeq's Egypt pages make no ETA claim, so confirm with Wafeq. The right question for any vendor: "Do you clear documents through the ETA directly, or which connector do I need?"` },
+  { q: 'Is ETA e-invoicing mandatory yet, and for whom?', a: `Yes, for the taxpayers named in ETA's phased decisions. ETA made e-invoicing mandatory in phases: its inquiry page dates the obligation for phase 5 from 15 December 2021, phase 6 from 15 February 2022, phase 7 from 15 June 2022 and phase 8 in four sub-phases from 15 September to 15 December 2022. Its online inquiry tools show whether a particular business must use e-invoicing or e-receipts, so check your status there. ETA also runs a separate e-receipt system. The VAT registration threshold has been under review since late 2025, so none is stated here.` },
+  { q: 'How are documents signed and checked?', a: 'ETA requires e-invoices to be electronically signed and sent through integration with its system, through your own software or one of the service providers it lists. The vendors in our directory describe the details: Daftra uses a signature certificate from Egypt Trust, Odoo signs with a USB token from the ETA or Egypt Trust, Namasoft describes HSM signing, and Odoo, Voko and Namasoft map products to GS1 or EGS codes. DoubleClick says it checks documents before sending and records the authority\'s validation afterwards. Ask your vendor to show the full submission working before you buy.' },
+  { q: 'What happens if I don\'t comply?', a: 'ETA\'s pages read for this guide list its mandatory-implementation decisions but not the penalty amounts, so confirm the current penalties with ETA or your tax advisor. In the meantime, check your status with ETA\'s inquiry tool and make sure your software can sign e-invoices and send them through integration with ETA\'s system.' },
+  { q: 'What format and what\'s the legal basis?', a: 'ETA\'s e-invoicing pages give guidance on electronic signature, integration with the e-invoicing system and item coding; vendors in our directory describe GS1 or EGS item codes and signing with an HSM or a USB token. VAT is levied under VAT Law No. 67 of 2016, amended in 2025 and 2026 (including Law 149/2026), and the Egyptian Tax Authority runs the e-invoicing and e-receipt systems.' },
+  { q: 'Does my accounting software need to be ETA-native?', a: `If your business is covered by ETA's decisions, your software must reach the ETA somehow. Daftra, Edara (Ultimate plan), AccFlex, Namasoft and Voko say they submit to the ETA, DoubleClick says it sends مستخلصات and invoices directly, and Odoo has an Egyptian e-invoicing module. Intuit's global pages do not describe ETA e-invoicing for QuickBooks, so it needs a connector such as OrchidaTax, which lists QuickBooks among its integrations; Wafeq's Egypt pages make no ETA claim, so confirm with Wafeq. The right question for any vendor: "Do you submit documents to the ETA directly, or which connector do I need?"` },
   { q: 'What\'s the wider Egyptian tax context, and the FX angle?', a: 'The general VAT rate is 14%. For contractors, ETA lists Ministerial Decision 418/2025 on the tax basis for construction contracts, and October 2025 press reports describe 14% VAT being applied to contracting works, including existing contracts. Law 6/2025 gives tax incentives and simpler rules to projects with annual turnover up to EGP 20 million. On currency: Daftra, Edara, Odoo and PlanRadar list prices in USD, so their EGP cost moves with the exchange rate; Wafeq publishes EGP prices for Egypt.' },
 ];
 
 const pageTitle = 'ETA E-Invoicing in Egypt: 2026 Guide for Contractors';
-const pageDescription = `Egypt's ETA e-invoicing explained for the building trades: the legal basis, the real-time clearance model, who must comply under ETA's phased decisions, VAT on contracting works, and which tools say they submit to the ETA (incl. مستخلصات). Independent guide, updated September 2026.`;
+const pageDescription = `Egypt's ETA e-invoicing explained for the building trades: who must comply under ETA's phased decisions, how e-invoices are signed and sent, VAT on contracting works, and which tools say they submit to the ETA (incl. مستخلصات). Independent guide, updated October 2026.`;
 
 const guideUrl = new URL('/eg/guides/eta-e-invoicing/', Astro.site).toString();
 const arUrl = new URL('/eg/ar/guides/eta-e-invoicing/', Astro.site).toString();
@@ -34,7 +35,7 @@ const breadcrumbs = [
 
 const articleSchema = {
   '@context': 'https://schema.org', '@type': 'Article', headline: pageTitle, description: pageDescription,
-  datePublished: '2026-06-20', dateModified: '2026-09-30', inLanguage: 'en',
+  datePublished: '2026-06-20', dateModified: '2026-10-01', inLanguage: 'en',
   author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
   publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
   mainEntityOfPage: guideUrl,
@@ -59,15 +60,15 @@ const faqSchema = {
         ETA E-Invoicing in Egypt
       </h1>
       <p class="mt-3 text-lg text-slate-600 leading-relaxed">
-        What Egypt's national e-invoicing means for the building trades: it is mandatory for the taxpayers named in ETA's phased decisions. The clearance model, who must comply, the consequences, and which tools say they submit to the ETA (including مستخلصات).
+        What Egypt's national e-invoicing means for the building trades: it is mandatory for the taxpayers named in ETA's phased decisions. Who must comply, how e-invoices are signed and sent, and which tools say they submit to the ETA (including مستخلصات).
       </p>
-      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published June 2026, updated September 2026 · Not tax advice; confirm your situation with the ETA (eta.gov.eg) or your accountant.</p>
+      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published June 2026, updated 1 October 2026 · Not tax advice; confirm your situation with the ETA (eta.gov.eg) or your accountant.</p>
     </header>
 
     <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
       <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ The short version</h2>
       <p class="text-slate-800 leading-relaxed">
-        Egypt's <strong>ETA e-invoicing</strong> is <strong>mandatory in phases</strong>: it applies to the taxpayers named in ETA's phased decisions (phase 5 began on 15 December 2021; phase 8 ran from September to December 2022), and ETA's online inquiry tool shows whether your business is covered. It uses a real-time <strong>clearance</strong> model: each document validated by the Tax Authority <em>before</em> issuance (JSON/XML, UUID, mandatory e-signature). Fines under Law 206/2020 run <strong>EGP 20,000-100,000</strong>. The task: check your status, then make sure your tool clears to the ETA, directly or via a connector.
+        Egypt's <strong>ETA e-invoicing</strong> is <strong>mandatory in phases</strong>: it applies to the taxpayers named in ETA's phased decisions (ETA's inquiry page dates the obligation for phase 5 from 15 December 2021 and for phase 8 in four sub-phases from 15 September to 15 December 2022), and ETA's online inquiry tool shows whether your business is covered. ETA requires e-invoices to be <strong>electronically signed</strong> and sent through integration with its system, through your own software or one of the service providers it lists. The task: check your status, then make sure your tool signs and submits to the ETA, directly or via a connector.
       </p>
     </section>
 
@@ -81,29 +82,26 @@ const faqSchema = {
         <div class="mt-1 text-xs text-slate-600">general VAT rate</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-        <div class="text-2xl font-bold text-slate-900">Clearance</div>
-        <div class="mt-1 text-xs text-slate-600">validated before issue · UUID + e-sign</div>
+        <div class="text-2xl font-bold text-slate-900">E-signature</div>
+        <div class="mt-1 text-xs text-slate-600">e-invoices signed and sent through integration with ETA's system</div>
       </div>
     </section>
 
     <section class="mb-10 prose prose-slate max-w-none">
       <h2>The timeline</h2>
       <ul>
-        <li><strong>15 Nov 2020:</strong> pilot: 134 large companies.</li>
-        <li><strong>Feb-May 2021:</strong> waves extending to the Large Taxpayers Center.</li>
-        <li><strong>1 Jul 2021:</strong> mandatory for sales to government / public sector (B2G).</li>
-        <li><strong>15 Dec 2021:</strong> e-invoicing phase 5 began for the taxpayers named in ETA's decision.</li>
-        <li><strong>Sep-Dec 2022:</strong> e-invoicing phase 8.</li>
-        <li><strong>2022 → Jan 2025:</strong> the parallel B2C e-receipt system rolled out in successive taxpayer waves.</li>
+        <li><strong>15 Dec 2021:</strong> e-invoicing obligation begins for phase 5, the taxpayers named in ETA's decision.</li>
+        <li><strong>15 Feb 2022:</strong> phase 6 begins.</li>
+        <li><strong>15 Jun 2022:</strong> phase 7 begins.</li>
+        <li><strong>15 Sep-15 Dec 2022:</strong> phase 8, in four sub-phases starting on the 15th of each month.</li>
         <li><strong>2025-2026:</strong> VAT and tax procedure laws amended again (including Law 149/2026); ETA lists Ministerial Decision 418/2025 on the tax basis for construction contracts; the VAT registration threshold has been under review since late 2025.</li>
       </ul>
 
       <h2>What the system requires</h2>
       <ul>
-        <li><strong>Clearance, not reporting.</strong> Each document is transmitted to the ETA and validated <em>before</em> it is issued; without clearance and the assigned UUID, it isn't valid.</li>
-        <li><strong>Structured format + e-signature.</strong> JSON or XML per the ETA schema, with a UUID, a cryptographic hash, and a mandatory electronic signature (HSM or USB token).</li>
-        <li><strong>Product coding.</strong> GS1 (GTIN/GPC) or national EGS codes; B2C e-receipts carry a QR code.</li>
-        <li><strong>Integration path.</strong> ETA API + SDK for larger firms, or a free web portal/desktop app for small ones, plus connectors (such as OrchidaTax) for tools without an ETA module. ETA publishes a list of service providers.</li>
+        <li><strong>Electronic signature.</strong> ETA requires e-invoices to be electronically signed; vendors in our directory describe an Egypt Trust certificate (Daftra), a USB token from the ETA or Egypt Trust (Odoo) or HSM signing (Namasoft).</li>
+        <li><strong>Product coding.</strong> Odoo, Voko and Namasoft describe mapping products to GS1 or EGS codes, and ETA's e-invoicing pages give guidance on item coding.</li>
+        <li><strong>Integration path.</strong> Integration with ETA's system through your own software or one of the service providers ETA lists, or a connector (such as OrchidaTax) for tools without an ETA module.</li>
         <li><strong>Check your scope.</strong> The mandate covers the taxpayers named in ETA's phased decisions; ETA's inquiry tool shows whether a business must use e-invoicing or e-receipts.</li>
       </ul>
 
@@ -114,9 +112,9 @@ const faqSchema = {
 
       <h2>The wider Egyptian tax context</h2>
       <ul>
-        <li><strong>VAT:</strong> standard <strong>14%</strong> (5% reduced in some cases; exports zero-rated).</li>
+        <li><strong>VAT:</strong> general rate <strong>14%</strong>, per press reports on the 2025 and 2026 amendments.</li>
         <li><strong>Small projects:</strong> Law 6/2025 gives tax incentives and simpler rules to projects with annual turnover up to EGP 20 million.</li>
-        <li><strong>The FX angle:</strong> the EGP is volatile and un-pegged, so USD-billed tools carry real currency risk for an EGP business.</li>
+        <li><strong>The FX angle:</strong> tools priced in USD cost an EGP business more or less as the exchange rate moves.</li>
       </ul>
 
       <h2>Which tools are ETA-integrated?</h2>
@@ -131,7 +129,7 @@ const faqSchema = {
           <tr>
             <th class="p-3 font-semibold">Tool</th>
             <th class="p-3 font-semibold">ETA status</th>
-            <th class="p-3 font-semibold">Best fit</th>
+            <th class="p-3 font-semibold">Fit</th>
             <th class="p-3 font-semibold">Pricing</th>
           </tr>
         </thead>
@@ -152,7 +150,7 @@ const faqSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-2 text-lg font-bold text-slate-900">The one question to ask any vendor</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Don't assume a good accounting tool clears to the ETA. And if you're a contractor, ask about مستخلصات too. Ask: <strong>"Do you clear documents through the ETA directly, do you handle مستخلصات, and do you price in EGP or USD?"</strong> A vague answer is your signal. If you're on QuickBooks, plan for a connector such as OrchidaTax, which lists QuickBooks among its integrations.
+        Don't assume a good accounting tool submits to the ETA. And if you're a contractor, ask about مستخلصات too. Ask: <strong>"Do you submit documents to the ETA directly, do you handle مستخلصات, and do you price in EGP or USD?"</strong> A vague answer is your signal. If you're on QuickBooks, plan for a connector such as OrchidaTax, which lists QuickBooks among its integrations.
       </p>
     </section>
 
@@ -169,12 +167,12 @@ const faqSchema = {
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
-      <strong class="text-slate-700">Sources &amp; verification:</strong> First verified June 2026 from PwC, Sovos, VATupdate, EDICOM, SNI and Comarch, cross-checked against the ETA; mandate phases, VAT and contracting-tax points re-checked against ETA's Arabic website in September 2026. Legal basis: Unified Tax Procedures Law No. 206 of 2020 (Art. 71), Executive Regulations Decree No. 286 of 2021, VAT Law No. 67 of 2016, amended again in 2025 and 2026 (including Law 149/2026). Real-time clearance/CTC, JSON/XML + UUID + mandatory e-signature and the penalty range EGP 20,000-100,000 come from the June sources. The e-invoicing phase dates, Ministerial Decision 418/2025 and Law 6/2025 are from ETA's site; the general 14% VAT rate and its application to contracting works are from 2025-2026 press reports. The VAT registration threshold has been under review since late 2025, so none is stated here. The exact 2026 penalty-tier amounts are not stated here as they could not be confirmed against the current Arabic decree. General information, not tax advice. Spotted an error? <a href="/contact/" class="underline">Tell us</a> and we'll correct it.
+      <strong class="text-slate-700">Sources &amp; verification:</strong> Phase dates from ETA's Arabic e-invoicing inquiry page (re-read 1 October 2026); the e-signature and integration requirement, the service-provider list, Ministerial Decision 418/2025, Law 6/2025 and the VAT law list (VAT Law No. 67 of 2016, Law 149/2026) from ETA's Arabic website, checked September 2026; the general 14% VAT rate and its application to contracting works from 2025-2026 press reports; vendor descriptions as each vendor publishes them, checked September 2026. Claims in the June 2026 version that rested on secondary sources (a real-time clearance model, JSON/XML and UUID details, penalty amounts and earlier rollout dates) were removed on 1 October 2026 because they could not be confirmed on ETA's own pages. The VAT registration threshold has been under review since late 2025, so none is stated here. General information, not tax advice. Spotted an error? <a href="/contact/" class="underline">Tell us</a>.
     </section>
 
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Compare Egyptian trades software & services</h2>
-      <p class="mt-2 text-slate-300 leading-relaxed">Independent reviews of ETA-ready Egyptian software, tender access, social-insurance payroll and Contractors All Risks insurance, with no pay-to-play.</p>
+      <p class="mt-2 text-slate-300 leading-relaxed">Independent reviews of Egyptian accounting and construction software, tender access, social-insurance payroll and Contractors All Risks insurance, with no pay-to-play.</p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/eg/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">🇪🇬 Egypt directory →</a>
         <a href="/eg/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Compare vendors</a>

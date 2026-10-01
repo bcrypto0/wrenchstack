@@ -13,13 +13,16 @@ interface QaVendor {
 const vendors = (qaData as { vendors: QaVendor[] }).vendors;
 const categories = ['software', 'insurance', 'lead-gen', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'insurance': { label: 'Contractor insurance', description: `Contractors All Risk, Erection All Risk and plant cover from three Qatari insurers: QIC, Beema (Damaan Islamic Insurance, a takaful insurer) and QGIRCO. QIC states A- ratings from AM Best and S&P; QGIRCO states an AM Best rating of B++. All three are quote-based, with no public premiums.` },
+  'insurance': { label: 'Contractor insurance', description: `Contractors All Risk, Erection All Risk and plant cover from Qatari insurers: QIC, Beema (Damaan Islamic Insurance, a takaful insurer) and QGIRCO. Each is quote-based, with no public premiums.` },
   'lead-gen': { label: 'Lead generation & project intelligence', description: `Regional construction project databases that include Qatar: ProTenders, with a free company profile and a Qatar project section behind sign-up, and BNC Network, which says it covers 72 countries across the Middle East, Africa and South Asia but showed no Qatari projects on its readable pages. Neither publishes prices for its project data. The Monaqasat government tender portal is listed under licensing and compliance.` },
   'software': { label: 'Construction & trades software', description: `Project platforms (Oracle Aconex; Oracle Primavera P6, with Ashghal named by Oracle as a Primavera customer; Autodesk Forma (formerly Autodesk Construction Cloud); Procore, served from Dubai), PlanRadar for site inspections and snagging, ERPs that list Qatar contacts (Focus Softnet with a Doha office, PACT ERP with a Doha phone number), SkyStruct from a Doha-based company, and Insight CAFM for labour-camp and staff-accommodation management.` },
   'certification': { label: 'Licensing & compliance', description: `Monaqasat classification for government tenders, the General Tax Authority (no VAT so far) and the draft e-invoicing law approved in May 2026, Qatarization (Law No. 12 of 2024), Ministry of Municipality building permits, the QCS 2014 construction specifications with the Interim Advice Notes Ashghal applies to its own projects, and Kahramaa's authorized contractor lists.` },
 };
 const vendorsByCategory: Record<string, QaVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
+const softwareCount = vendorsByCategory['software'].length;
+// Tier S = the vendor's own site publishes prices, so the rest publish none.
+const softwareNoPriceCount = vendorsByCategory['software'].filter(v => v.tier !== 'S').length;
 
 const pageTitle = 'Qatar Construction & Trades Software | WrenchStack';
 const pageDescription = `Independent directory of ${vendors.length} construction and trades listings for Qatar: project management, BIM and ERP software, contractor insurers and project databases, plus Monaqasat classification, QCS 2014, Qatarization and the tax position (no VAT so far, draft e-invoicing law).`;
@@ -39,7 +42,7 @@ const arUrl = new URL('/qa/ar/', Astro.site).toString();
       </div>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">Qatar Construction & Trades Software Directory</h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} Qatar-relevant listings: project platforms (Oracle Aconex and Primavera P6, Autodesk Forma, Procore), PlanRadar for site inspections, ERPs that list Qatar contacts (Focus Softnet, PACT ERP), SkyStruct from a Doha-based company, Insight CAFM for worker accommodation, three Qatari insurers and two regional project databases, alongside the local rules: Monaqasat classification, the Qatar Construction Specifications (QCS 2014), Qatarization and a tax system with <em>no VAT</em> so far.
+        Independent reviews of {vendors.length} Qatar-relevant listings: project platforms (Oracle Aconex and Primavera P6, Autodesk Forma, Procore), PlanRadar for site inspections, ERPs that list Qatar contacts (Focus Softnet, PACT ERP), SkyStruct from a Doha-based company, Insight CAFM for worker accommodation, {vendorsByCategory['insurance'].length} Qatari insurers and {vendorsByCategory['lead-gen'].length} regional project databases, alongside the local rules: Monaqasat classification, the Qatar Construction Specifications (QCS 2014), Qatarization and a tax system with <em>no VAT</em> so far.
       </p>
     </header>
     <section class="mb-10 grid gap-3 grid-cols-2 sm:grid-cols-4">
@@ -62,7 +65,7 @@ const arUrl = new URL('/qa/ar/', Astro.site).toString();
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What’s different about choosing software in Qatar</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Qatar has <strong>no VAT</strong> so far: PwC expects a 5% VAT under the GCC framework with no date set, and The New Arab reported on 25 September 2026 that it is still under consideration. E-invoicing is further along: EY reports that the Council of Ministers approved a <strong>draft e-invoicing law</strong> on 6 May 2026, to be run by the General Tax Authority, and no official go-live date had been announced by 30 September 2026, so choose invoicing software that can be updated when the rules are issued. Private-sector hiring falls under <strong>Qatarization</strong> (Law No. 12 of 2024), whose rules differ from Saudi Nitaqat and UAE Emiratisation. Government tenders require <strong>Monaqasat classification</strong>, building work follows <strong>QCS 2014</strong> (plus the Interim Advice Notes Ashghal applies on its own projects), and <strong>Kahramaa</strong> publishes lists of authorized electrical, water and solar PV contractors. Most software listed here is quote-based; PlanRadar publishes per-user prices in USD, EUR, GBP and AUD, not QAR.
+        Qatar has <strong>no VAT</strong> so far: PwC expects a 5% VAT under the GCC framework with no date set, and The New Arab reported on 25 September 2026 that it is still under consideration. E-invoicing is further along: EY reports that the Council of Ministers approved a <strong>draft e-invoicing law</strong> on 6 May 2026, to be run by the General Tax Authority, and no official go-live date had been announced by 30 September 2026, so choose invoicing software that can be updated when the rules are issued. Private-sector hiring falls under <strong>Qatarization</strong> (Law No. 12 of 2024), whose rules differ from Saudi Nitaqat and UAE Emiratisation. Government tenders require <strong>Monaqasat classification</strong>, building work follows <strong>QCS 2014</strong> (plus the Interim Advice Notes Ashghal applies on its own projects), and <strong>Kahramaa</strong> publishes lists of authorized electrical, water and solar PV contractors. {softwareNoPriceCount} of the {softwareCount} software listings here publish no prices; PlanRadar publishes per-user prices in USD, EUR, GBP and AUD, not QAR.
       </p>
     </section>
     {categories.map(c => {
@@ -124,7 +127,7 @@ const arUrl = new URL('/qa/ar/', Astro.site).toString();
     })}
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Are you a Qatar software vendor?</h2>
-      <p class="mt-2 text-slate-300 leading-relaxed">If you build construction, ERP, accounting or field-service software for the Qatar/Gulf market and want to be reviewed or featured, get in touch through our <a href="/for-vendors/" class="underline">vendor program</a>.</p>
+      <p class="mt-2 text-slate-300 leading-relaxed">If you build construction, ERP, accounting or field-service software for the Qatar/Gulf market and want to be reviewed or listed, get in touch through our <a href="/for-vendors/" class="underline">vendor program</a>.</p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/for-vendors/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Work with us →</a>
         <a href="/sa/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">🇸🇦 Saudi directory</a>

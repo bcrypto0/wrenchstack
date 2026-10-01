@@ -1,31 +1,61 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { tools, perUserTools, perUserMedian, flatFeeTools } from '../lib/data';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'ROI Calculator', url: '/roi-calculator/' },
 ];
 
+// Default software cost per technician: the median published starting price of the
+// tools in the directory priced per user (2026-10-01). It replaced a hard-coded cost
+// ladder ($150 a month up to 3 techs, then $100, $80 and $60 per tech) that matched no
+// data and contradicted this page's own assumptions list ($150 per tech or $300 flat).
+const perUserPriced = perUserTools().filter((t) => (t.pricing.starting_at_usd ?? 0) > 0);
+const defaultRatePerTech = perUserMedian();
+// Counted among tools with a paid monthly starting price (2026-10-01): "of the 126 tools"
+// understated, because free-tier tools whose paid plans are per company are not in
+// flatFeeTools. Of the paid ones, the rest are per user.
+const paidCount = tools.filter((t) => (t.pricing.starting_at_usd ?? 0) > 0).length;
+const perCompanyCount = flatFeeTools().filter((t) => (t.pricing.starting_at_usd ?? 0) > 0).length;
+
+// Each tool's stated best team size as [low, high] (high null = no upper bound), so the
+// result can count how many tools in the directory say they suit the team size entered.
+const teamRanges = tools
+  .map((t) => {
+    const s = t.best_team_size ?? '';
+    const plus = s.match(/^\s*(\d+)\s*\+\s*$/);
+    if (plus) return [Number(plus[1]), null];
+    const m = s.match(/(\d+)-(\d+)/);
+    return m ? [Number(m[1]), Number(m[2])] : null;
+  })
+  .filter((r) => r !== null);
+const totalTools = tools.length;
+
 const roiFaqs = [
   {
     q: 'How realistic are the ROI numbers shown?',
-    a: `They come from a simple model with three fixed assumptions: software removes 60% of the admin hours you enter, half of that recovered time becomes billable work, and revenue rises 8% from fitting more jobs into the week and quoting faster. These are our planning assumptions, not measured results for your trade. Your real return depends on whether your team uses the software, how well it connects to your accounting, and whether recovered time turns into paid work.`,
+    a: `They come from a simple model with three fixed assumptions: software removes 60% of the admin hours you enter, half of that recovered time becomes billable work, and revenue rises 8% from fitting more jobs into the week and quoting faster. These are our planning assumptions, not measured results for your trade. The software cost is the per-technician price you enter. Your real return depends on whether your team uses the software, how well it connects to your accounting, and whether recovered time turns into paid work.`,
   },
   {
     q: 'Why does the calculator assume 60% admin-time reduction?',
-    a: `It is a planning assumption, not a measured industry figure. Shops moving from paper or spreadsheets usually have the most admin time to save; shops already on software have less. If you expect a smaller saving, enter fewer admin hours.`,
+    a: `It is a planning assumption, not a measured industry figure. A shop moving from paper or spreadsheets may have more admin time to save than one already using software. If you expect a smaller saving, enter fewer admin hours.`,
   },
   {
     q: 'Why does the calculator assume only 50% of recovered admin time converts to billable work?',
-    a: `Counting every recovered hour as paid work would overstate the return: some of that time goes to planning, follow-up and training instead. The model assumes half of it becomes billable. That split is our assumption, so adjust your expectations if your crews are already fully booked.`,
+    a: `Counting every recovered hour as paid work assumes each one can be filled with billable work. The model assumes half of it becomes billable and the rest goes to planning, follow-up and training. That split is our assumption, so adjust your expectations if your crews are already fully booked.`,
   },
   {
     q: 'What about the 8% revenue uplift assumption?',
     a: `It stands for extra jobs from tighter scheduling and less drive time, plus quotes sent while the customer is still deciding. We have no measured figure for your trade. If your schedule is already full, or most of your revenue comes from fixed recurring contracts, the real uplift may be close to zero.`,
   },
   {
+    q: 'Where does the default software cost come from?',
+    a: `It is $${defaultRatePerTech} per technician a month: the median published starting price of the ${perUserPriced.length} tools in our directory with a monthly per-user price. Starting prices are entry plans, and ${perCompanyCount} of the ${paidCount} tools with a paid monthly starting price charge it per company instead (some plus a fee for each extra user), so replace it with the per-technician cost from your quote or the vendor's pricing page.`,
+  },
+  {
     q: 'Should I trust this for a software-purchase decision?',
-    a: 'For directional ROI sizing, yes. For a precise business-case spreadsheet, layer in your specific software vendor quote (use this as the cost input), your specific team adoption assumptions, and your specific revenue mix (service vs install vs recurring contracts). The calculator gives you a defensible starting estimate; a real business case requires shop-specific refinement.',
+    a: 'Use it for a first, rough sizing. For a business case, use your vendor quote as the cost, your own expectations for how fast the team adopts the tool, and your own revenue mix (service, installs, recurring contracts). The calculator gives a starting estimate from the assumptions stated on this page, not a forecast.',
   },
 ];
 
@@ -41,47 +71,56 @@ const roiFaqSchema = {
 ---
 
 <Layout
-  title="Field service software ROI calculator: see your savings"
-  description="Calculate the realistic ROI of investing in field service management software for your trades business. Free, instant, takes 30 seconds."
+  title="Field service software ROI calculator: estimate your payback"
+  description="Estimate the return on field service management software for your trades business from five numbers, using planning assumptions stated on the page. Free, and it runs in your browser."
   breadcrumbs={breadcrumbs}
 >
   <script type="application/ld+json" set:html={JSON.stringify(roiFaqSchema)} />
   <article class="mx-auto max-w-3xl px-4 py-12">
     <header class="mb-10">
-      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">Free · 30 seconds · no email required</p>
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">Free · runs in your browser · no email required</p>
       <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
         Field service software ROI calculator
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        Plug in 4 numbers about your business. Get a rough estimate of monthly software cost, annual return and payback period, based on three planning assumptions listed below the calculator.
+        Enter 5 numbers about your business. Get a rough estimate of monthly software cost, annual return and payback period, based on three planning assumptions listed below the calculator.
       </p>
     </header>
 
     <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-10">
+      <p class="mb-6 text-xs text-slate-500">The starting values for team size, revenue, admin hours and billed rate are examples, not averages; replace them with your own figures. The software cost starts at a median from our data, explained under that field.</p>
       <div class="space-y-6">
 
         <div>
-          <label class="block text-sm font-semibold text-slate-900">Number of technicians</label>
+          <label for="techs" class="block text-sm font-semibold text-slate-900">Number of technicians</label>
           <p class="mb-2 text-xs text-slate-500">Including yourself if you do field work.</p>
           <input id="techs" type="number" min="1" max="500" value="5" class="block w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-lg font-semibold text-slate-900 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200" />
         </div>
 
         <div>
-          <label class="block text-sm font-semibold text-slate-900">Average revenue per technician per year (USD)</label>
-          <p class="mb-2 text-xs text-slate-500">Rough estimate. Typical HVAC tech: $250k-$400k. Plumber: $200k-$350k. Solo contractor: $100k-$250k.</p>
+          <label for="revenue" class="block text-sm font-semibold text-slate-900">Average revenue per technician per year (USD)</label>
+          <p class="mb-2 text-xs text-slate-500">Your own figure: last year's revenue divided by the number of technicians.</p>
           <input id="revenue" type="number" min="0" step="10000" value="250000" class="block w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-lg font-semibold text-slate-900 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200" />
         </div>
 
         <div>
-          <label class="block text-sm font-semibold text-slate-900">Hours per week wasted on admin / scheduling chaos</label>
-          <p class="mb-2 text-xs text-slate-500">Per technician. Industry research averages 6-10 hrs/week for shops without FSM software.</p>
+          <label for="admin_hours" class="block text-sm font-semibold text-slate-900">Hours per week spent on admin and scheduling</label>
+          <p class="mb-2 text-xs text-slate-500">Per technician, your own estimate: paperwork, scheduling calls, invoicing and re-entering data.</p>
           <input id="admin_hours" type="number" min="0" max="40" value="8" class="block w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-lg font-semibold text-slate-900 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200" />
         </div>
 
         <div>
-          <label class="block text-sm font-semibold text-slate-900">Average billed rate per tech-hour (USD)</label>
+          <label for="hourly_rate" class="block text-sm font-semibold text-slate-900">Average billed rate per tech-hour (USD)</label>
           <p class="mb-2 text-xs text-slate-500">What you charge customers per billable hour.</p>
           <input id="hourly_rate" type="number" min="0" step="5" value="100" class="block w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-lg font-semibold text-slate-900 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200" />
+        </div>
+
+        <div>
+          <label for="rate_per_tech" class="block text-sm font-semibold text-slate-900">Software cost per technician per month (USD)</label>
+          <p class="mb-2 text-xs text-slate-500">
+            Default ${defaultRatePerTech}: the median published starting price of the {perUserPriced.length} tools in our directory with a monthly per-user price. For a per-company plan, divide its monthly price by your number of technicians. Use your quote if you have one.
+          </p>
+          <input id="rate_per_tech" type="number" min="0" step="1" value={defaultRatePerTech} class="block w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-lg font-semibold text-slate-900 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200" />
         </div>
 
       </div>
@@ -97,12 +136,12 @@ const roiFaqSchema = {
 
       <div class="mt-6 grid gap-4 md:grid-cols-3">
         <div class="rounded-lg border border-slate-200 bg-white p-5">
-          <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Software cost (mid-tier)</div>
+          <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Software cost</div>
           <div id="cost-monthly" class="mt-2 text-2xl font-bold text-slate-900"></div>
           <div id="cost-annual" class="text-sm text-slate-600"></div>
         </div>
         <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-5">
-          <div class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Annual benefit (mid-case)</div>
+          <div class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Annual benefit (assumed)</div>
           <div id="annual-benefit" class="mt-2 text-2xl font-bold text-emerald-900"></div>
           <div id="benefit-breakdown" class="text-sm text-emerald-900"></div>
         </div>
@@ -122,8 +161,8 @@ const roiFaqSchema = {
         <h3 class="text-xl font-bold">Recommended next step</h3>
         <p class="mt-2 text-slate-300" id="recommendation"></p>
         <div class="mt-4 flex flex-wrap gap-3">
-          <a id="rec-cta" href="/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">See ranked picks →</a>
-          <a href="/quiz/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Take the matching quiz</a>
+          <a href="/quiz/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Take the matching quiz →</a>
+          <a href="/best-software-for/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Browse buyer guides</a>
         </div>
       </div>
     </div>
@@ -143,112 +182,103 @@ const roiFaqSchema = {
     <section class="mt-12 prose prose-slate max-w-none">
       <h2>How the numbers work</h2>
       <p>
-        Field service software has two distinct ROI levers:
+        The calculator counts two ways field service software can pay back:
       </p>
       <ul>
         <li>
-          <strong>Time savings (admin reduction).</strong> Scheduling, paper invoicing, chasing paperwork and entering the same data twice take admin time every week. The calculator assumes software removes 60% of the admin hours you enter and that half of that time becomes billable work.
+          <strong>Time savings (admin reduction).</strong> You enter the hours each technician spends on admin a week (scheduling, invoicing, paperwork, re-entering data). The calculator assumes software removes 60% of those hours and that half of that time becomes billable work.
         </li>
         <li>
           <strong>Revenue uplift (capacity + close-rate).</strong> Tighter scheduling can fit more jobs into a week, and faster quoting can win more of the jobs you bid. The calculator assumes an 8% revenue increase from both together; if your schedule is already full, expect less.
         </li>
       </ul>
       <p>
-        Treat the result as a rough planning figure: it assumes your team actually uses the software every day.
+        Treat the result as a rough planning figure: the model counts the time and revenue gains in full, so it assumes your team uses the software for the work you entered.
       </p>
 
       <h2>How accurate are these numbers</h2>
       <p>
-        The numbers shown are <strong>estimates from fixed planning assumptions</strong>, not measured results. Your actual ROI depends on team adoption, integration depth with your existing tools (especially QuickBooks), and how disciplined you are about turning admin-time savings into billable work.
+        The numbers shown are <strong>estimates from fixed planning assumptions</strong>, not measured results. Your actual ROI depends on team adoption, how well the software connects to the tools you already use (such as your accounting software), and how disciplined you are about turning admin-time savings into billable work.
       </p>
 
       <h2>Assumptions</h2>
       <ul>
-        <li>Mid-tier FSM software cost: ~$150/tech/month (per-user pricing) or ~$300/month flat (per-company pricing) for shops under 10 techs</li>
-        <li>Admin time recovered by software: 60% of current admin hours</li>
-        <li>Recovered admin time converted to billable work: 50% (the other half goes to better planning, training, customer follow-up)</li>
+        <li>Software cost: the per-technician monthly price you enter × your number of technicians (default ${defaultRatePerTech}, the median published starting price of the {perUserPriced.length} tools in our directory with a monthly per-user price)</li>
+        <li>Admin time recovered by software: 60% of current admin hours (a planning assumption)</li>
+        <li>Recovered admin time converted to billable work: 50% (the other half goes to better planning, training, customer follow-up; a planning assumption)</li>
         <li>Revenue uplift from capacity and close-rate gains: 8% a year (a planning assumption)</li>
       </ul>
     </section>
   </article>
 
-  <script is:inline>
+  <script is:inline define:vars={{ teamRanges, totalTools }}>
     function calc() {
       const techs = parseFloat(document.getElementById('techs').value) || 1;
       const revenuePerTech = parseFloat(document.getElementById('revenue').value) || 0;
       const adminHours = parseFloat(document.getElementById('admin_hours').value) || 0;
       const hourlyRate = parseFloat(document.getElementById('hourly_rate').value) || 0;
+      const ratePerTech = Math.max(0, parseFloat(document.getElementById('rate_per_tech').value) || 0);
 
-      // Software cost: scale with team size; mid-tier
-      let monthlyCost;
-      if (techs <= 3) monthlyCost = 150;
-      else if (techs <= 10) monthlyCost = 100 * techs;
-      else if (techs <= 30) monthlyCost = 80 * techs;
-      else monthlyCost = 60 * techs; // enterprise tier discount
+      // Software cost: the per-technician price entered, times team size.
+      const monthlyCost = ratePerTech * techs;
       const annualCost = monthlyCost * 12;
 
       // Admin-time savings
-      const recoveredHoursPerYear = adminHours * 0.6 * 52 * techs; // 60% recovery
-      const billableHoursRecovered = recoveredHoursPerYear * 0.5; // 50% convert to billable
+      const recoveredHoursPerYear = adminHours * 0.6 * 52 * techs; // 60% recovery (assumption)
+      const billableHoursRecovered = recoveredHoursPerYear * 0.5; // 50% convert to billable (assumption)
       const adminSavings = billableHoursRecovered * hourlyRate;
 
       // Revenue uplift
       const totalRevenue = revenuePerTech * techs;
-      const revenueLift = totalRevenue * 0.08; // 8% mid-case
+      const revenueLift = totalRevenue * 0.08; // 8% (assumption)
 
       const totalBenefit = adminSavings + revenueLift;
       const netBenefit = totalBenefit - annualCost;
-      const paybackMonths = annualCost === 0 ? 0 : (annualCost / totalBenefit) * 12;
-      const roiX = totalBenefit / annualCost;
 
       const fmt = n => n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 
       document.getElementById('cost-monthly').textContent = fmt(monthlyCost) + '/mo';
-      document.getElementById('cost-annual').textContent = fmt(annualCost) + '/year';
+      document.getElementById('cost-annual').textContent = fmt(annualCost) + '/year (' + fmt(ratePerTech) + ' per tech per month)';
 
       document.getElementById('annual-benefit').textContent = fmt(totalBenefit);
       document.getElementById('benefit-breakdown').textContent = `${fmt(adminSavings)} time + ${fmt(revenueLift)} growth`;
 
-      document.getElementById('payback').textContent = paybackMonths < 1 ? '< 1 month' : paybackMonths < 12 ? `${paybackMonths.toFixed(1)} months` : `${(paybackMonths/12).toFixed(1)} years`;
-      document.getElementById('payback-note').textContent = `~${roiX.toFixed(1)}× ROI in year one`;
+      let paybackText;
+      let paybackNote;
+      if (annualCost === 0) {
+        paybackText = 'n/a';
+        paybackNote = 'No software cost entered';
+      } else if (totalBenefit <= 0) {
+        paybackText = 'No payback';
+        paybackNote = 'No benefit on these inputs';
+      } else {
+        const paybackMonths = (annualCost / totalBenefit) * 12;
+        paybackText = paybackMonths < 1 ? '< 1 month' : paybackMonths < 12 ? `${paybackMonths.toFixed(1)} months` : `${(paybackMonths / 12).toFixed(1)} years`;
+        paybackNote = `Benefit is ~${(totalBenefit / annualCost).toFixed(1)}× the software cost in year one, on these assumptions`;
+      }
+      document.getElementById('payback').textContent = paybackText;
+      document.getElementById('payback-note').textContent = paybackNote;
 
       document.getElementById('calc-breakdown').innerHTML = `
-        <li>📊 Software cost: <strong>${fmt(monthlyCost)}/mo</strong> × 12 = <strong>${fmt(annualCost)}/year</strong></li>
-        <li>⏱️ Hours recovered: <strong>${recoveredHoursPerYear.toLocaleString()} hrs/year</strong> across ${techs} tech${techs === 1 ? '' : 's'} (60% of current admin hours)</li>
-        <li>💰 Billable time recovered: <strong>${billableHoursRecovered.toLocaleString()} hrs/year</strong> × ${fmt(hourlyRate)}/hr = <strong>${fmt(adminSavings)}</strong></li>
-        <li>📈 Revenue uplift (8% capacity gain): <strong>${fmt(revenueLift)}/year</strong></li>
-        <li>✅ Net benefit (after software cost): <strong>${fmt(netBenefit)}/year</strong></li>
+        <li>Software cost: <strong>${fmt(ratePerTech)}</strong> × ${techs} tech${techs === 1 ? '' : 's'} = <strong>${fmt(monthlyCost)}/mo</strong> × 12 = <strong>${fmt(annualCost)}/year</strong></li>
+        <li>Hours recovered (assumed 60% of your admin hours): <strong>${recoveredHoursPerYear.toLocaleString()} hrs/year</strong> across ${techs} tech${techs === 1 ? '' : 's'}</li>
+        <li>Billable time recovered (assumed half of that): <strong>${billableHoursRecovered.toLocaleString()} hrs/year</strong> × ${fmt(hourlyRate)}/hr = <strong>${fmt(adminSavings)}</strong></li>
+        <li>Revenue uplift (assumed 8%): <strong>${fmt(revenueLift)}/year</strong></li>
+        <li>Net benefit (after software cost): <strong>${fmt(netBenefit)}/year</strong></li>
       `;
 
-      // Recommendation: links to flagship reviews + buyer guides
-      let rec, recLink, recLabel;
-      if (techs <= 3) {
-        rec = `For a ${techs}-tech operation, you want low-cost software that doesn't overcomplicate things. Jobber Core, Joist, ServiceM8 (iPhone-first), and Markate are typically the best fit at this size. See our solo-contractor buyer guide for ranked picks.`;
-        recLink = '/best-software-for/solo-hvac-contractor/';
-        recLabel = 'See solo-contractor guide →';
-      } else if (techs <= 15) {
-        rec = `For a ${techs}-tech team, look at Housecall Pro Essentials, Jobber Connect, Service Fusion (unlimited users on every plan), or FieldEdge (built around its QuickBooks integration). The right pick depends on whether consumer financing, multi-vertical fit, or QB integration matters most.`;
-        recLink = '/best-software-for/small-plumbing-team/';
-        recLabel = 'See small-team guide →';
-      } else if (techs <= 50) {
-        rec = `Your team size warrants a mid-tier or enterprise platform. ServiceTitan (residential service leader), FieldEdge (mid-tier HVAC/plumbing/electrical), or BuildOps (commercial MEP) are typical picks. None of them publishes a price, so get written quotes that include setup fees and a go-live plan.`;
-        recLink = '/best-software-for/growing-electrical-contractor/';
-        recLabel = 'See growing-team guide →';
-      } else {
-        rec = `For ${techs}+ techs, you're in enterprise territory. ServiceTitan dominates residential trades at this scale; BuildOps for commercial MEP; Procore for commercial GC work. None of them publishes a price, so plan for a sales process and get implementation fees and the go-live plan in writing.`;
-        recLink = '/tools/servicetitan/';
-        recLabel = 'See ServiceTitan review →';
-      }
-      document.getElementById('recommendation').textContent = rec;
-      document.getElementById('rec-cta').href = recLink;
-      document.getElementById('rec-cta').textContent = recLabel;
+      // Next step: no tool names here, because the calculator does not ask for a trade
+      // and rankings differ by trade. Counted from each tool's stated best team size.
+      const fits = teamRanges.filter(([lo, hi]) => techs >= lo && (hi === null || techs <= hi)).length;
+      document.getElementById('recommendation').textContent =
+        `${fits} of the ${totalTools} tools in our directory list a best team size that includes ${techs} tech${techs === 1 ? '' : 's'}. Which of them fits depends on your trade: the matching quiz ranks tools for your trade, team size and budget, and the buyer guides cover specific situations. Ask the vendors you shortlist for a written quote at your team size and use it as the software cost above.`;
 
       document.getElementById('results').classList.remove('hidden');
       document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     document.getElementById('calc-btn').addEventListener('click', calc);
-    ['techs', 'revenue', 'admin_hours', 'hourly_rate'].forEach(id => {
+    ['techs', 'revenue', 'admin_hours', 'hourly_rate', 'rate_per_tech'].forEach(id => {
       document.getElementById(id).addEventListener('keypress', e => { if (e.key === 'Enter') calc(); });
     });
   </script>

@@ -7,11 +7,10 @@ interface State {
   name: string;
   abbr: string;
   region: string;
-  population: number;
-  licensing_note: string;
 }
 
 const states = (statesData as { states: State[] }).states;
+const stateCount = states.length;
 
 // Group by region for nicer browsing
 const REGION_ORDER = ['Northeast', 'Mid-Atlantic', 'Southeast', 'South', 'Midwest', 'Southwest', 'West'];
@@ -20,8 +19,12 @@ for (const s of states) {
   (byRegion[s.region] ||= []).push(s);
 }
 
-const pageTitle = `Trades Software by State: All 50 States`;
-const pageDescription = `Field service and trades software recommendations broken down by state. Covers HVAC, plumbing, electrical, roofing, and general contracting in all 50 US states with state-specific licensing context.`;
+const pageTitle = `Trades Software by State: All ${stateCount} States`;
+// The state pages used to promise "state-specific licensing context" and "market
+// characteristics". The licensing notes were never verified (removed 2026-10-01) and we
+// hold no state-level data, so the copy now says what the pages are: the national
+// ranking for each trade, linked by state.
+const pageDescription = `Field service and trades software for HVAC, plumbing, electrical, roofing and general contractors, linked by state for all ${stateCount} US states. Each state page shows our national ranking for each trade.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -39,7 +42,7 @@ const breadcrumbs = [
         Trades Software by State
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Field service software recommendations for HVAC, plumbing, electrical, roofing, and general contractors in all 50 US states. All platforms work nationwide; the per-state pages add licensing context, market characteristics, and state-specific framing.
+        Field service software for HVAC, plumbing, electrical, roofing and general contractors, linked by state for all {stateCount} US states. We hold no state-level data, so each state page shows our national ranking for each trade.
       </p>
     </header>
 
@@ -63,16 +66,13 @@ const breadcrumbs = [
     </div>
 
     <section class="mt-16 rounded-lg bg-slate-50 p-6">
-      <h2 class="mb-3 text-base font-bold text-slate-900">How state pages help you decide</h2>
+      <h2 class="mb-3 text-base font-bold text-slate-900">What the state pages show</h2>
       <ul class="space-y-2 text-sm text-slate-700 leading-relaxed">
         <li>
-          <strong class="text-slate-900">Licensing context.</strong> Every state has its own licensing rules for HVAC, plumbing, electrical, roofing, and GC. State pages summarize the relevant rules so you can confirm your software fits.
+          <strong class="text-slate-900">The same ranking in every state.</strong> Each trade is ranked by fit for the trade, then by our <a href="/methodology/" class="underline hover:text-slate-900">Fit Score</a> (vertical fit, pricing transparency and integration coverage), then by name. We have no data on which tools contractors use in a given state, or on state-level prices, so nothing is ranked by state.
         </li>
         <li>
-          <strong class="text-slate-900">Market sizing.</strong> The shop sizes and tool budgets that make sense in California aren't the same as Wyoming. State pages frame recommendations around your local market reality.
-        </li>
-        <li>
-          <strong class="text-slate-900">Nationwide platforms.</strong> All field service software in our directory works in all 50 states. The per-state pages don't restrict the tool list; they curate and frame it.
+          <strong class="text-slate-900">No licensing summaries.</strong> We have not verified each state's contractor licensing rules, so the state pages do not summarize them. Check the current requirements for your trade with your state's licensing agencies and with the city or county where you work.
         </li>
         <li>
           <strong class="text-slate-900">Looking for software not by location?</strong> Try our <a href="/quiz/" class="underline hover:text-slate-900">matching quiz</a> or browse <a href="/tools/" class="underline hover:text-slate-900">all tools</a>.

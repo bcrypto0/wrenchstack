@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { INTL_CATEGORY_LABELS, intlNote, intlTierMeta, type IntlVendor, type IntlMarket } from '../lib/intl';
-import { asSentence, intlOutboundUrl } from '../lib/data';
+import { INTL_CATEGORY_LABELS, INTL_MARKETS, intlNote, intlTierMeta, intlVendorIndex, type IntlVendor, type IntlMarket } from '../lib/intl';
+import { asSentence, intlOutboundUrl, getTool, getLeadGenPlatform, getInsuranceProvider } from '../lib/data';
 
 interface Props {
   vendor: IntlVendor;
@@ -24,7 +24,38 @@ const related = [...sameCategory, ...otherCategory].slice(0, 6);
 const pageTitle = vendor.category === 'certification'
   ? `${vendor.name}: ${categoryLabel} in ${market.name} (2026)`
   : `${vendor.name} ${market.name} Review (2026): ${categoryLabel}`;
-const pageDescription = `${vendor.name} for ${market.name} trades: ${asSentence(vendor.tagline)} Market position, ${market.name}-specific compliance notes, pros and cons, and typical pricing. Independent WrenchStack review.`;
+const pageDescription = `${vendor.name} for ${market.name} trades: ${asSentence(vendor.tagline)} Market position, ${note ? `${market.name}-specific notes, ` : ''}pros and cons, and typical pricing. Independent WrenchStack review.`;
+
+// The cross-market link points at a US page (/tools/, /lead-gen/, /insurance/) or, for
+// a few vendors, at another market's page (an Irish entry links to /uk/). It is not
+// always the same company: HomeStars (Canada) links to the page of its parent, Angi.
+// The button and FAQ used to call every target "US market context" and the FAQ said
+// the vendor itself operates outside the market; they now name the linked page
+// (2026-10-01). The "Cross-market vendor" header badge was removed the same day, as on
+// the country hubs (51af381): 94 of the 119 flagged vendors have no linked page, and
+// for HomeStars (a Canada-focused marketplace) the label was false.
+const crossMarketCode = vendor.cross_market_link?.match(/^\/([a-z]{2})\//)?.[1];
+const crossMarketName = crossMarketCode && INTL_MARKETS[crossMarketCode] ? INTL_MARKETS[crossMarketCode].name : 'US';
+function linkedPageName(link: string | null): string | undefined {
+  const m = link?.match(/^\/([a-z-]+)\/([^/]+)\/$/);
+  if (!m) return undefined;
+  const [, section, slug] = m;
+  if (section === 'tools') return getTool(slug)?.name;
+  if (section === 'lead-gen') return getLeadGenPlatform(slug)?.name;
+  if (section === 'insurance') return getInsuranceProvider(slug)?.name;
+  if (INTL_MARKETS[section]) {
+    return intlVendorIndex().find((v) => v.url.endsWith(`/${section}/${slug}/`))?.name.replace(/ \([A-Z]{2}\)$/, '');
+  }
+  return undefined;
+}
+const crossMarketPage = linkedPageName(vendor.cross_market_link);
+const crossMarketLabel = crossMarketPage
+  ? `${crossMarketPage} review (${crossMarketName})`
+  : `Full review (${crossMarketName} market context)`;
+
+// The affiliate strip shows only when the Visit link is a tracked link (intlOutboundUrl
+// routes some cross-market vendors to a US tool's affiliate URL).
+const hasTrackedLink = intlOutboundUrl(vendor) !== vendor.vendor_url;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -54,10 +85,12 @@ const faqs: { q: string; a: string }[] = [
 if (vendor.tier === 'F' && vendor.reputation_flag) {
   faqs.push({ q: `Is ${vendor.name} reputable?`, a: `We flag a caution: ${vendor.reputation_flag} Weigh this against the pros before relying on it.` });
 } else if (vendor.tier === 'S') {
-  faqs.push({ q: `Is ${vendor.name} recommended?`, a: `Yes, it is a Tier S (Recommended) pick in our ${market.name} directory for ${categoryLabel.toLowerCase()}, based on market fit and reputation. Still compare it against the alternatives for your specific trade and region.` });
+  // Tier S means the check found the vendor's own site publishing its prices
+  // (intl tier rule, 2026-09-30); it is not a recommendation or a quality rank.
+  faqs.push({ q: `Does ${vendor.name} publish its prices?`, a: `Yes. ${vendor.name} is Tier S in our ${market.name} directory, which means our check found its prices published on its own website (see the typical pricing above). The tier is not a quality ranking, so compare it against the alternatives for your trade and region.` });
 }
-if (vendor.is_cross_market && vendor.cross_market_link) {
-  faqs.push({ q: `Does ${vendor.name} operate outside ${market.name}?`, a: `Yes, ${vendor.name} is a cross-market vendor with presence beyond ${market.name}. See our full review in US-market context for deeper editorial detail, then weigh the ${market.name}-specific notes above.` });
+if (vendor.is_cross_market && vendor.cross_market_link && crossMarketPage) {
+  faqs.push({ q: `Does WrenchStack have a related page outside ${market.name}?`, a: `Yes: our ${crossMarketName} review of ${crossMarketPage}, linked at the top of this page. Weigh it against the ${market.name} details on this one.` });
 }
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -66,7 +99,7 @@ const faqSchema = {
 };
 ---
 
-<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} affiliate>
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} affiliate={hasTrackedLink}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <article class="mx-auto max-w-4xl px-4 py-12">
@@ -80,13 +113,12 @@ const faqSchema = {
 
       <div class="mt-5 flex flex-wrap items-center gap-2">
         <span class={`rounded-full px-3 py-1 text-xs font-bold ${tier.badge}`}>Tier {vendor.tier} · {tier.label}</span>
-        {vendor.is_cross_market && <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Cross-market vendor</span>}
       </div>
 
       <div class="mt-6 flex flex-wrap gap-3">
         <a href={intlOutboundUrl(vendor)} rel="sponsored nofollow noopener" target="_blank" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Visit {vendor.name} →</a>
         {vendor.cross_market_link && (
-          <a href={vendor.cross_market_link} class="rounded-md border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50">Full review (US market context)</a>
+          <a href={vendor.cross_market_link} class="rounded-md border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50">{crossMarketLabel}</a>
         )}
         <a href={`/${market.code}/`} class="rounded-md border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50">All {market.name} vendors</a>
       </div>

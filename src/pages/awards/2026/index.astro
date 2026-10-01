@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { awards, getTool, formatPrice, wrenchStackScore } from '../../../lib/data';
+import { awards, tools, getTool, formatPrice, wrenchStackScore } from '../../../lib/data';
 import ToolLogo from '../../../components/ToolLogo.astro';
 import WrenchScore from '../../../components/WrenchScore.astro';
 
@@ -21,6 +21,15 @@ const categoriesWithTools = awards.categories.map((cat) => {
     .filter((t): t is NonNullable<typeof t> => !!t);
   return { ...cat, winner, honorableMentions };
 });
+
+// Winners we hold an active affiliate link for, computed from tools.json so the
+// disclosure follows the ledger (2026-10-01). It used to name ServiceTitan only,
+// although Workiz and Service Fusion also carry tracked links.
+const nameList = (names: string[]) =>
+  names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names.join('');
+const affiliateWinners = [...new Set(categoriesWithTools.map((c) => c.winner).filter((t): t is NonNullable<typeof t> => !!t))]
+  .filter((t) => t.affiliate_url.startsWith('http'))
+  .map((t) => t.name);
 
 // Schema.org ItemList for the awards
 const itemListSchema = {
@@ -53,26 +62,31 @@ const itemListSchema = {
         WrenchStack Awards {awards.year}
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        The best trades software in {categoriesWithTools.length} categories, selected by WrenchStack editorial. No vendor paid for placement. No "shortlist" badges sold. The full methodology is published below.
+        Winners in {categoriesWithTools.length} categories of trades software, selected by WrenchStack editorial. No vendor paid for placement, and we do not sell "shortlist" badges. How the winners were chosen is set out below; the scoring method is on the methodology page.
       </p>
       <p class="mt-2 text-sm text-slate-500">
-        Published {awards.published_date} · Updates annually
+        Published {awards.published_date}
       </p>
     </header>
 
     <section class="mb-10 rounded-lg border border-amber-200 bg-amber-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-amber-900">How winners are chosen</h2>
       <p class="text-sm text-amber-900 leading-relaxed">
-        {/* Written here rather than read from awards.json's methodology_summary, which
-            still describes the pre-2026-09-30 weights with a G2/Capterra ratings factor. */}
-        Winners are selected on the published WrenchStack Fit Score, plus an editorial judgement on fit for the stated buyer profile. The Fit Score now weights vertical fit (60%), pricing transparency (20%) and integration coverage (20%). When these awards were published on {awards.published_date}, the score also included a factor for third-party review ratings; that factor was removed on 2026-09-30 because we could not verify the ratings, and the winners below have not been re-selected since. No vendor paid for placement. Where WrenchStack has an affiliate relationship with a winner, that is disclosed on the tool's review page, and recommendations are unchanged whether the affiliate is active or not.
+        {/* Written here so the dates and weights sit next to the winners; awards.json's
+            methodology_summary says the same thing (both corrected 2026-10-01). */}
+        The winners were selected on {awards.published_date} by editorial judgement of fit for each category's buyer profile, informed by the WrenchStack Fit Score. The Fit Score now weights vertical fit (60%), pricing transparency (20%) and integration coverage (20%). When the winners were selected, the score had five factors with different weights, including third-party review ratings and feature depth (see the methodology changelog). Feature depth was removed on 2026-09-01 and the ratings factor on 2026-09-30 (we could not verify the ratings), and the winners below have not been re-selected since. No vendor paid for placement. Each tool's review page carries a general affiliate disclosure, and the affiliate ledger on the methodology page records our affiliate status with every tool. Recommendations are unchanged whether the affiliate is active or not. Prices in the award texts come from each winner's tool entry, and the date that entry's pricing was last verified is shown with each winner; a third-party estimate is labelled as one we have not verified.
       </p>
       <p class="mt-3 text-sm text-amber-800">
         Read the full <a href="/methodology/" class="underline hover:text-amber-700">scoring methodology</a> for rubric weights, data sources, and the per-vendor affiliate-disclosure ledger.
       </p>
       <p class="mt-3 text-sm text-amber-800">
-        <strong>Ownership disclosure:</strong> FieldRoutes (Best for Pest Control) and Aspire (Best for Landscaping) are owned by ServiceTitan (Best Enterprise FSM). We earn referral fees through ServiceTitan's public referral program, as the ledger shows. We have no affiliate link to FieldRoutes or Aspire, and affiliate status plays no part in the awards.
+        <strong>Ownership disclosure:</strong> FieldRoutes (Best for Pest Control) and Aspire (Best for Landscaping) are owned by ServiceTitan (Best Enterprise FSM). We may earn a commission on signups through our ServiceTitan referral link, as the ledger shows. We have no affiliate link to FieldRoutes or Aspire, and affiliate status plays no part in the awards.
       </p>
+      {affiliateWinners.length > 0 && (
+        <p class="mt-3 text-sm text-amber-800">
+          <strong>Winners with an active affiliate link:</strong> {nameList(affiliateWinners)}.
+        </p>
+      )}
     </section>
 
     <nav class="mb-10 rounded-lg bg-slate-50 p-4">
@@ -118,7 +132,9 @@ const itemListSchema = {
 
               <p class="mb-4 text-slate-700 leading-relaxed">{cat.why}</p>
 
-              <dl class="mb-5 grid grid-cols-2 gap-3 text-sm md:grid-cols-3">
+              {/* Free trial prints only where the tool entry records one; a missing or
+                  zero value prints nothing rather than a guessed "No" (2026-10-01). */}
+              <dl class="mb-5 grid grid-cols-2 gap-3 text-sm md:grid-cols-4">
                 <div>
                   <dt class="text-xs uppercase tracking-wider text-slate-500">Starting price</dt>
                   <dd class="font-semibold text-slate-900">{formatPrice(cat.winner)}</dd>
@@ -127,11 +143,15 @@ const itemListSchema = {
                   <dt class="text-xs uppercase tracking-wider text-slate-500">Best team size</dt>
                   <dd class="font-semibold text-slate-900">{cat.winner.best_team_size ?? 'n/a'}</dd>
                 </div>
+                {cat.winner.pricing.free_trial_days && cat.winner.pricing.free_trial_days > 0 ? (
+                  <div>
+                    <dt class="text-xs uppercase tracking-wider text-slate-500">Free trial</dt>
+                    <dd class="font-semibold text-slate-900">{cat.winner.pricing.free_trial_days} days</dd>
+                  </div>
+                ) : null}
                 <div>
-                  <dt class="text-xs uppercase tracking-wider text-slate-500">Free trial</dt>
-                  <dd class="font-semibold text-slate-900">
-                    {cat.winner.pricing.free_trial_days && cat.winner.pricing.free_trial_days > 0 ? `${cat.winner.pricing.free_trial_days} days` : 'No'}
-                  </dd>
+                  <dt class="text-xs uppercase tracking-wider text-slate-500">Pricing verified</dt>
+                  <dd class="font-semibold text-slate-900">{cat.winner.pricing.verified_date}</dd>
                 </div>
               </dl>
 
@@ -182,7 +202,7 @@ const itemListSchema = {
     <section class="mt-16 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Not finding your category?</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        We add categories each year as new verticals reach the editorial threshold. Take the matching quiz for a personalized recommendation based on your trade, team size, and budget, or browse our full directory of {awards.year === 2026 ? '59' : 'all'} tools.
+        Take the matching quiz for a recommendation based on your trade, team size and budget, or browse all {tools.length} tools in our directory.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/quiz/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">
@@ -201,16 +221,13 @@ const itemListSchema = {
       <h2 class="mb-3 text-base font-bold text-slate-900">Editorial independence disclosure</h2>
       <ul class="space-y-2 text-sm text-slate-700 leading-relaxed">
         <li>
-          <strong class="text-slate-900">No paid placements.</strong> Vendors cannot purchase award positions, "shortlist" badges, or featured listings.
+          <strong class="text-slate-900">No paid placements.</strong> No vendor paid for an award position, and we do not sell "shortlist" badges or featured listings.
         </li>
         <li>
-          <strong class="text-slate-900">Affiliate relationships disclosed.</strong> Where WrenchStack earns affiliate commission on a winner, it's disclosed on that tool's review page and in our public per-vendor <a href="/methodology/#affiliate-ledger" class="underline hover:text-slate-900">affiliate ledger</a>. Recommendations are unchanged whether the affiliate is active or pending.
+          <strong class="text-slate-900">Affiliate relationships disclosed.</strong> Each tool's review page carries a general affiliate disclosure, and our public per-vendor <a href="/methodology/#affiliate-ledger" class="underline hover:text-slate-900">affiliate ledger</a> records our status with every tool{affiliateWinners.length > 0 ? '; the winners with an active affiliate link are named above' : ''}. Recommendations are unchanged whether the affiliate is active or pending.
         </li>
         <li>
           <strong class="text-slate-900">Methodology is published.</strong> The rubric, weights, data sources, and verification cadence live on the <a href="/methodology/" class="underline hover:text-slate-900">methodology page</a>.
-        </li>
-        <li>
-          <strong class="text-slate-900">Updated annually.</strong> Next refresh: {awards.year + 1}. We re-evaluate every category each year based on current pricing, vertical fit, integrations, and platform changes.
         </li>
       </ul>
     </section>

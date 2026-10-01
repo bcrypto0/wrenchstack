@@ -1,71 +1,157 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { getTool, wrenchStackScore } from '../../../lib/data';
+import { getTool, wrenchStackScore, verticals, verticalToUrl, isQuoteOnly, type Tool } from '../../../lib/data';
 import MissingFromList from '../../../components/MissingFromList.astro';
 
-// The definitive, hand-written version of the most-searched residential FSM
-// comparison. This static route overrides the generic [pair] template (which
-// excludes this slug in getStaticPaths). Every price on this page was
-// re-verified against both vendors' live pricing pages on
-// 2026-08-27; the seat-cost tables are computed from those published numbers
-// at build time. 2026-09-10: the monthly verification run re-checked Jobber's
-// plan ladder; the 2026-08-27 report that Plus had been retired was wrong.
+// The hand-written version of this comparison. This static route overrides the
+// generic [pair] template (which excludes this slug in getStaticPaths).
+//
+// Rewritten 2026-10-01 against tools.json. The previous copy was written from an
+// August check and contradicted the current entries: it priced Housecall Pro's extra
+// users at $100 (Essentials) and $75 (MAX) where the entry records $35 on Max only;
+// it said Housecall Pro does not serve landscaping (it does, fit 7) and scored it
+// 10/10 for HVAC and plumbing (both tools are 9); it gave Jobber QuickBooks Desktop
+// and two-way sync (Jobber syncs one way to QuickBooks Online only; Housecall Pro is
+// the one with Desktop); it presented Wisetack financing and the Google Local
+// Services Ads integration as Housecall Pro advantages (both tools have them); and it
+// carried superlatives, an invented migration timeline and invented add-on prices.
+//
+// Every price below is read from the two tools.json entries at build time. The plan
+// sizes, monthly-billing prices and extra-user fees exist only in the pricing notes,
+// so they are parsed from those notes; if a note is reworded and a figure can no
+// longer be read, the build stops here rather than publish a stale table.
 
 const jobber = getTool('jobber')!;
 const hcp = getTool('housecall-pro')!;
-const VERIFIED = '2026-08-27';
-const JOBBER_RECHECKED = '2026-09-10';
+
+function need(m: RegExpMatchArray | null, what: string): RegExpMatchArray {
+  if (!m) throw new Error(`housecall-pro-vs-jobber: cannot read ${what} from tools.json; re-check this page against the entry.`);
+  return m;
+}
+const jNote = jobber.pricing.pricing_note ?? '';
+const hNote = hcp.pricing.pricing_note ?? '';
+const jMonthly = need(jNote.match(/billing starts at \$(\d+) \/ \$(\d+) \/ \$(\d+) \/ \$(\d+)/), "Jobber's month-to-month prices").slice(1).map(Number);
+// Jobber's month-to-month prices are not its only monthly-billed prices: a 1-year
+// commitment billed monthly sits between them and the annual rates, and our data does not
+// record its figures. The copy below says so; stop the build if the note changes.
+need(jNote.match(/'1 year commitment' option \(12-month minimum term, billed monthly\) is priced between the two/), "Jobber's 1-year commitment option");
+const jExtraUser = Number(need(jNote.match(/Additional users \$(\d+)\/mo each/), "Jobber's extra-user price")[1]);
+const hPlans = need(
+  hNote.match(/Basic \$(\d+) \((\d+) user\), Essentials \$(\d+) \((\d+) users included\), Max \$(\d+) \((\d+) users included, additional users \$(\d+)\/mo each\)/),
+  "Housecall Pro's plan sizes",
+).slice(1).map(Number);
+const hMonthly = need(hNote.match(/Monthly billing runs \$(\d+) \/ \$(\d+) \/ \$(\d+)/), "Housecall Pro's monthly-billing prices").slice(1).map(Number);
+const hCardRate = need((hcp.long_description ?? '').match(/card processing from ([\d.]+)%/), "Housecall Pro's card rate")[1];
+const hFinancing = need(
+  hcp.pros_detail?.map((p) => p.explanation).join(' ').match(/flat ([\d.]+)% fee on the financed amount and jobs from \$([\d,]*\d) to \$([\d,]*\d)/) ?? null,
+  "Housecall Pro's Wisetack fee and job range",
+);
+const jFinancingExcludes = need(
+  jobber.cons_detail?.map((p) => p.explanation).join(' ').match(/requires a US business and excludes ([^.]+?), so those shops/) ?? null,
+  "the businesses Jobber's financing excludes",
+)[1];
+const jTrialPlan = need(jNote.match(/free trial of the (\w+) plan/), "Jobber's trial plan")[1];
+const jSource = need(jNote.match(/Verified against (\S+) (\d{4}-\d\d-\d\d)/), "Jobber's pricing source");
+const hSource = need(hNote.match(/Verified against (\S+) (\d{4}-\d\d-\d\d)/), "Housecall Pro's pricing source");
+
+const jAnnual = jobber.pricing.tier_prices_usd ?? [];
+const jPlanNames = jobber.pricing.tiers;
+if (jAnnual.length !== 4 || jMonthly.length !== 4 || jPlanNames.length !== 4) {
+  throw new Error('housecall-pro-vs-jobber: Jobber no longer has four plans in tools.json; re-check this page.');
+}
+const hAnnual = hcp.pricing.tier_prices_usd ?? [];
+const hPlanNames = hcp.pricing.tiers;
+const hIncluded = [hPlans[1], hPlans[3], hPlans[5]];
+const hExtraUserMax = hPlans[6];
+if (hAnnual.length !== 3 || hAnnual[0] !== hPlans[0] || hAnnual[1] !== hPlans[2] || hAnnual[2] !== hPlans[4]) {
+  throw new Error("housecall-pro-vs-jobber: Housecall Pro's tier prices and pricing note disagree in tools.json; re-check this page.");
+}
+const J_VERIFIED = jobber.pricing.verified_date;
+const H_VERIFIED = hcp.pricing.verified_date;
 
 const jScore = wrenchStackScore(jobber);
 const hScore = wrenchStackScore(hcp);
+const trialText = (t: Tool, note: string) =>
+  (t.pricing.free_trial_days ?? 0) > 0 ? `${t.pricing.free_trial_days} days${/no card/i.test(note) ? ', no card' : ''}` : 'None listed';
+const sameTrial = trialText(jobber, jNote) === trialText(hcp, hNote);
 
-// Housecall Pro's published structure (verified 2026-08-27):
-// annual-billed monthly equivalents. Basic $59 (1 user only), Essentials $149
-// (5 users included, +$100/extra), MAX $299 (8 users included, +$75/extra).
-function hcpCheapest(techs: number): { plan: string; monthly: number } {
+// Cheapest Housecall Pro plan that includes `users` users, at annual billing. Our data
+// records an extra-user price only for Max, so Basic and Essentials are used only up
+// to the users they include.
+function hcpCheapest(users: number): { plan: string; monthly: number } {
   const options: { plan: string; monthly: number }[] = [];
-  if (techs <= 1) options.push({ plan: 'Basic', monthly: 59 });
-  options.push({ plan: 'Essentials', monthly: 149 + Math.max(0, techs - 5) * 100 });
-  options.push({ plan: 'MAX', monthly: 299 + Math.max(0, techs - 8) * 75 });
+  if (users <= hIncluded[0]) options.push({ plan: hPlanNames[0], monthly: hAnnual[0] as number });
+  if (users <= hIncluded[1]) options.push({ plan: hPlanNames[1], monthly: hAnnual[1] as number });
+  options.push({ plan: hPlanNames[2], monthly: (hAnnual[2] as number) + Math.max(0, users - hIncluded[2]) * hExtraUserMax });
   return options.sort((x, y) => x.monthly - y.monthly)[0];
 }
-const teamSizes = [1, 2, 3, 5, 6, 7, 8, 10, 12];
-const hcpTable = teamSizes.map((n) => ({ n, ...hcpCheapest(n) }));
+const teamSizes = [1, 2, hIncluded[1], hIncluded[1] + 1, hIncluded[2], 10, 15, 20];
+const hcpTable = [...new Set(teamSizes)].sort((x, y) => x - y).map((n) => ({ n, ...hcpCheapest(n) }));
+const sixUsers = hcpCheapest(6);
 
-const sharedVerticals: { slug: string; name: string }[] = [
-  { slug: 'hvac', name: 'HVAC' },
-  { slug: 'plumbing', name: 'Plumbing' },
-  { slug: 'electrical', name: 'Electrical' },
-  { slug: 'cleaning', name: 'Cleaning' },
-  { slug: 'handyman', name: 'Handyman' },
-  { slug: 'pressure_washing', name: 'Pressure washing' },
-  { slug: 'waste_removal', name: 'Waste removal' },
-];
+// Card volume at which Housecall Pro's lowest published card rate costs as much as the
+// Essentials plan.
+const breakEvenVolume = Math.round((hAnnual[1] as number) / (Number(hCardRate) / 100) / 10) * 10;
+
+// Fit by trade, every trade both tools serve.
+const vName = (slug: string) => verticals.find((v) => v.slug === slug)?.name ?? slug.replace(/_/g, ' ');
+const fitRows = jobber.verticals
+  .filter((v) => hcp.verticals.includes(v))
+  .map((v) => ({ slug: v, name: vName(v), j: jobber.vertical_fit?.[v] ?? 5, h: hcp.vertical_fit?.[v] ?? 5 }));
+const jHigher = fitRows.filter((r) => r.j > r.h);
+const hHigher = fitRows.filter((r) => r.h > r.j);
+const fitTies = fitRows.length - jHigher.length - hHigher.length;
+const fitList = (rows: typeof fitRows, first: 'j' | 'h') =>
+  rows.map((r) => `${r.name} (${first === 'j' ? r.j : r.h} vs ${first === 'j' ? r.h : r.j})`).join(', ');
+const fitFor = (slug: string) => fitRows.find((r) => r.slug === slug);
+
+// Integrations listed for one entry only.
+const label = (s: string) =>
+  ({ quickbooks_online: 'QuickBooks Online', quickbooks_desktop: 'QuickBooks Desktop', google_calendar: 'Google Calendar', google_local_services: 'Google Local Services Ads', companycam: 'CompanyCam', callrail: 'CallRail' } as Record<string, string>)[s] ??
+  s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+const jOnlyInt = jobber.integrations.filter((i) => !hcp.integrations.includes(i)).map(label);
+const hOnlyInt = hcp.integrations.filter((i) => !jobber.integrations.includes(i)).map(label);
+const bothInt = jobber.integrations.filter((i) => hcp.integrations.includes(i)).map(label);
+
+// Tools whose entries list inventory, for the "look elsewhere" note.
+const inventoryTools = ['servicetitan', 'buildops']
+  .map((s) => getTool(s))
+  .filter((t): t is Tool => !!t && t.key_features.includes('inventory'));
+const workiz = getTool('workiz');
+const workizPhone = !!workiz && workiz.key_features.includes('phone_system');
+
+const usd = (n: number) => `$${n.toLocaleString('en-US')}`;
+const hvac = fitFor('hvac');
+const plumbing = fitFor('plumbing');
+const hvacPlumbingSentence =
+  hvac && plumbing && hvac.j === hvac.h && plumbing.j === plumbing.h
+    ? `Our fit scores do not separate them there: both score ${hvac.j}/10 for HVAC and ${plumbing.j}/10 for plumbing.`
+    : `Our fit scores: HVAC ${hvac?.j}/10 for Jobber and ${hvac?.h}/10 for Housecall Pro; plumbing ${plumbing?.j}/10 and ${plumbing?.h}/10.`;
 
 const faqs = [
   {
     q: 'Is Jobber or Housecall Pro cheaper?',
-    a: `For a solo operator, Jobber: Core is $29/month billed annually against Housecall Pro Basic at $59. For a 5-person team the gap narrows or flips depending on which Jobber plan the team needs, because Housecall Pro's Essentials covers 5 users at a flat $149 while Jobber prices every plan by user count. From 6 techs up, model both carefully: Housecall Pro adds $100 per extra user on Essentials ($75 on MAX), and Jobber's team pricing is only visible through its own calculator. Neither is simply "the cheap one" past solo scale.`,
+    a: `At the entry level, Jobber: ${jPlanNames[0]} starts at ${usd(jAnnual[0] as number)} a month billed annually (at the smallest team size), against ${usd(hAnnual[0] as number)} for Housecall Pro ${hPlanNames[0]} (${hIncluded[0]} user). Past that it depends on your team size and the features you need. Housecall Pro includes ${hIncluded[1]} users on ${hPlanNames[1]} (${usd(hAnnual[1] as number)}) and ${hIncluded[2]} on ${hPlanNames[2]} (${usd(hAnnual[2] as number)}, then ${usd(hExtraUserMax)} a month per extra user); Jobber prices every plan by team size and charges ${usd(jExtraUser)} a month per extra user. Price your own team on both pricing pages.`,
   },
   {
-    q: 'Which is better for HVAC or plumbing specifically?',
-    a: `Housecall Pro, by a nose. We score it 10/10 for both HVAC and plumbing against Jobber's 9/10, on the strength of built-in consumer financing (big-ticket replacements close measurably better with monthly-payment offers on the tablet) and native payment processing. Jobber wins on mobile UX and multi-trade breadth, so a shop that also runs landscaping or lawn-care crews should read that trade-off carefully: Jobber covers landscaping at 10/10 and Housecall Pro does not target it.`,
+    q: 'Which is better for HVAC or plumbing?',
+    a: `${hvacPlumbingSentence} The differences are elsewhere: QuickBooks (Housecall Pro syncs with QuickBooks Online from ${hPlanNames[1]} and with QuickBooks Desktop one way; Jobber syncs one way to QuickBooks Online only), recurring work (Housecall Pro's ${hPlanNames[2]} plan adds recurring service plans; Jobber supports recurring jobs and visits but has no dedicated membership-plan module), and how each price grows with your team.`,
   },
   {
-    q: 'What did Jobber’s 2026 pricing change actually do?',
-    a: `Jobber prices all four plans (Core, Connect, Grow and Plus) by team size. At each plan's smallest team the annual-billed rates are $29/$99/$149/$399 a month ($49/$139/$199/$499 billed monthly), and extra users cost $29/month each. The practical effect: entry costs look lower, but growing headcount raises the bill continuously instead of at tier jumps, and the only way to see your team's number is Jobber's own calculator. Correction: our 2026-08-27 check reported that the Plus plan had been retired; Jobber still sells it (re-checked 2026-09-10). The other figures were verified against the live pricing page on ${'2026-08-27'}.`,
+    q: "How does Jobber's team-size pricing work?",
+    a: `Jobber prices all four plans (${jPlanNames.join(', ')}) by team size. At each plan's smallest team the annual-billed rates are ${jAnnual.map((p) => usd(p as number)).join(' / ')} a month (${jMonthly.map(usd).join(' / ')} month to month), and extra users cost ${usd(jExtraUser)} a month each. Our data records only those smallest-team prices, so price your own team size on Jobber's pricing page. Correction: our 2026-08-27 check reported that the Plus plan had been retired; Jobber still sells it (re-checked 2026-09-10).`,
   },
   {
-    q: 'What does Housecall Pro really cost for a 6-person shop?',
-    a: `$249/month billed annually: Essentials at $149 covers 5 users, and the sixth costs $100. At 7 techs the math flips to MAX ($299 covering 8) being cheaper than Essentials plus two extra seats ($349). This bundle arithmetic is the single most misunderstood thing about Housecall Pro pricing, and the marketing "from $59/mo" figure is a 1-user Basic plan most real crews outgrow immediately.`,
+    q: 'What does Housecall Pro cost for a 6-person shop?',
+    a: `${usd(sixUsers.monthly)} a month billed annually on ${sixUsers.plan}, which includes ${hIncluded[hPlanNames.indexOf(sixUsers.plan)]} users.${hIncluded[1] < 6 && sixUsers.plan !== hPlanNames[1] ? ` ${hPlanNames[1]} (${usd(hAnnual[1] as number)}) includes ${hIncluded[1]} users, and our data records no extra-user price for it, so ask Housecall Pro whether a sixth user can be added to ${hPlanNames[1]} and at what price.` : ''}`,
   },
   {
-    q: 'Can I switch from Housecall Pro to Jobber (or back) without losing my data?',
-    a: `Customer records, and open estimates and invoices, move cleanly via CSV export/import in either direction. Historical job records, recurring service agreements, and saved pricebooks rarely transfer intact; most shops keep read-only access to the old system for a season as an archive. Budget two to four weeks of running both in parallel, and do the cutover in your slow season, not July.`,
+    q: 'Can I switch from Housecall Pro to Jobber (or back)?',
+    a: 'Both import customers from a CSV file. Our data does not record which other records either one imports or exports. Ask both vendors which records move (customers, jobs, invoices, recurring work, price books), in which file format, and whether they help with the import, and ask whether customers\' saved cards can move to the new payment processor or must be collected again.',
   },
   {
     q: 'Do these prices include payment processing?',
-    a: `No, and this is where the real monthly cost hides on both. Housecall Pro processes cards through its own built-in system (with an extra fee for instant payouts); Jobber pairs with Stripe-based Jobber Payments. On $50,000/month of card volume, processing fees on either platform will exceed the software subscription itself. Compare effective processing rates for your card mix before the subscription price decides anything.`,
+    a: `Not for Housecall Pro: its in-app card processing starts at ${hCardRate}% a transaction, with instant payouts available. Our Jobber entry does not record Jobber's processing rates, so ask Jobber. Compare the effective rate for your card mix on both before the subscription price decides it.`,
   },
 ];
 
@@ -79,6 +165,9 @@ const faqSchema = {
   })),
 };
 
+// Year of the older of the two price checks, as on the template-built pages.
+const titleYear = [J_VERIFIED, H_VERIFIED].filter(Boolean).sort()[0]?.slice(0, 4) ?? String(new Date().getFullYear());
+
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Compare', url: '/compare/' },
@@ -87,8 +176,8 @@ const breadcrumbs = [
 ---
 
 <Layout
-  title="Jobber vs Housecall Pro (2026): Prices Verified, Seat Math Done"
-  description={`The most-searched FSM comparison, with both vendors' prices verified ${VERIFIED}: Jobber's new team-size pricing ($29+ annual) vs Housecall Pro's seat bundles ($59 to $449+ real-world). Who wins by trade, by team size, and by total cost.`}
+  title={`Jobber vs Housecall Pro (${titleYear}): Prices, Seat Costs and Fit by Trade`}
+  description={`Jobber vs Housecall Pro from our data: Jobber starts at ${usd(jAnnual[0] as number)} a month billed annually, Housecall Pro at ${usd(hAnnual[0] as number)} for 1 user. Housecall Pro's cost by team size, QuickBooks support and fit by trade. Prices checked ${J_VERIFIED} (Jobber) and ${H_VERIFIED} (Housecall Pro).`}
   breadcrumbs={breadcrumbs}
   canonical="https://wrenchstack.com/compare/housecall-pro-vs-jobber/"
 >
@@ -96,17 +185,21 @@ const breadcrumbs = [
   <article class="mx-auto max-w-3xl px-4 py-12 prose prose-slate">
     <div class="not-prose mb-8">
       <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-orange-600">Head to head</p>
-      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl m-0">Jobber vs Housecall Pro (2026)</h1>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl m-0">Jobber vs Housecall Pro ({titleYear})</h1>
       <p class="mt-3 text-lg text-slate-600">
-        The most-searched comparison in residential field service, and the one where both vendors' pricing changed under everyone's published reviews. Every price below was checked against both live pricing pages on {VERIFIED}, and Jobber's plan ladder was re-checked on {JOBBER_RECHECKED}.
+        Both sell scheduling, quoting, invoicing, payments and Wisetack consumer financing to home service businesses, and both publish their prices. This page sets out where our data on them differs. Jobber's prices were checked against its pricing page on {J_VERIFIED}, and Housecall Pro's on {H_VERIFIED}.
       </p>
     </div>
 
     <div class="not-prose my-8 rounded-lg border-2 border-orange-200 bg-orange-50 p-6">
-      <h2 class="text-lg font-bold text-slate-900 mb-2 mt-0">The verdict in four sentences</h2>
-      <p class="text-slate-700 text-sm m-0">
-        <strong>Housecall Pro</strong> is the pick for HVAC and plumbing shops that sell big-ticket replacements: built-in consumer financing and native payments close expensive jobs, and its flat 5-user Essentials bundle is genuinely good value for a small crew. <strong>Jobber</strong> is the pick for multi-trade and outdoor businesses (it covers landscaping, which Housecall Pro does not), for solo operators (its $29 entry beats $59), and for anyone who weights field-tech adoption: its mobile app is the best in the category. Past 6 techs, neither is simply cheaper; the seat math below decides it. If you are choosing between them for a 2-to-8-person residential service crew, you are choosing between financing power and usability, not between good and bad.
-      </p>
+      <h2 class="text-lg font-bold text-slate-900 mb-2 mt-0">The short version</h2>
+      <ul class="m-0 list-disc space-y-2 pl-5 text-sm text-slate-700">
+        <li><strong>Entry price:</strong> Jobber {jPlanNames[0]} is {usd(jAnnual[0] as number)} a month billed annually at the smallest team size; Housecall Pro {hPlanNames[0]} is {usd(hAnnual[0] as number)} for {hIncluded[0]} user. Billed monthly: {usd(hMonthly[0])} for Housecall Pro; {usd(jMonthly[0])} for Jobber month to month with no commitment, or less on Jobber's 1-year commitment billed monthly, which is priced between its annual and month-to-month rates.</li>
+        <li><strong>As your team grows:</strong> Jobber prices every plan by team size and charges {usd(jExtraUser)} a month per extra user. Housecall Pro's plans include {hIncluded[0]}, {hIncluded[1]} and {hIncluded[2]} users, and {hPlanNames[2]} adds users at {usd(hExtraUserMax)} a month each, so its cost at a given team size can be worked out (table below).</li>
+        <li><strong>QuickBooks:</strong> Jobber syncs one way, to QuickBooks Online only. Housecall Pro syncs with QuickBooks Online from {hPlanNames[1]} up and with QuickBooks Desktop one way.</li>
+        <li><strong>Fit by trade:</strong> the same score in {fitTies} of {fitRows.length} shared trades{jHigher.length ? `; Jobber higher for ${fitList(jHigher, 'j')}` : ''}{hHigher.length ? `; Housecall Pro higher for ${fitList(hHigher, 'h')}` : ''}.</li>
+        <li><strong>Both:</strong> {sameTrial ? `a free trial (${trialText(jobber, jNote)})` : 'a free trial'}, Wisetack financing on quotes in the US, and integrations with {bothInt.join(', ')}.</li>
+      </ul>
     </div>
 
     <h2>At a glance</h2>
@@ -121,46 +214,49 @@ const breadcrumbs = [
         </thead>
         <tbody>
           <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">WrenchStack Fit Score</td><td class="py-2 pr-4 font-semibold">{jScore}</td><td class="py-2 font-semibold">{hScore}</td></tr>
-          <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Entry price (annual-billed)</td><td class="py-2 pr-4">$29/mo (Core, 1 user)</td><td class="py-2">$59/mo (Basic, 1 user)</td></tr>
-          <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Pricing model</td><td class="py-2 pr-4">4 plans, priced by team size</td><td class="py-2">3 bundles with included seats + per-seat overage</td></tr>
-          <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Best team size</td><td class="py-2 pr-4">{jobber.best_team_size}</td><td class="py-2">{hcp.best_team_size}</td></tr>
+          <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Entry price (billed annually)</td><td class="py-2 pr-4">{usd(jAnnual[0] as number)}/mo ({jPlanNames[0]}, smallest team)</td><td class="py-2">{usd(hAnnual[0] as number)}/mo ({hPlanNames[0]}, {hIncluded[0]} user)</td></tr>
+          <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Entry price (billed monthly)</td><td class="py-2 pr-4">{usd(jMonthly[0])}/mo with no commitment; less on a 1-year commitment billed monthly (figure not in our data)</td><td class="py-2">{usd(hMonthly[0])}/mo</td></tr>
+          <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Pricing model</td><td class="py-2 pr-4">{jPlanNames.length} plans priced by team size; extra users {usd(jExtraUser)}/mo each</td><td class="py-2">{hPlanNames.length} plans with {hIncluded.join(', ')} users included; extra users {usd(hExtraUserMax)}/mo on {hPlanNames[2]}</td></tr>
+          <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">QuickBooks</td><td class="py-2 pr-4">Online only, one-way sync</td><td class="py-2">Online (from {hPlanNames[1]}); Desktop, one way</td></tr>
+          <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Card processing</td><td class="py-2 pr-4">Not recorded in our data</td><td class="py-2">From {hCardRate}% a transaction</td></tr>
+          <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Best team size (our data)</td><td class="py-2 pr-4">{jobber.best_team_size}</td><td class="py-2">{hcp.best_team_size}</td></tr>
           <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Founded / HQ</td><td class="py-2 pr-4">{jobber.founded}, {jobber.headquartered}</td><td class="py-2">{hcp.founded}, {hcp.headquartered}</td></tr>
-          <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Free trial</td><td class="py-2 pr-4">14 days, no card</td><td class="py-2">14 days, no card</td></tr>
+          <tr class="border-b border-slate-100"><td class="py-2 pr-4 text-slate-500">Free trial</td><td class="py-2 pr-4">{trialText(jobber, jNote)}</td><td class="py-2">{trialText(hcp, hNote)}</td></tr>
         </tbody>
       </table>
     </div>
 
-    <h2>Pricing, as verified {VERIFIED}</h2>
+    <h2>Pricing</h2>
 
+    <h3>Jobber: four plans, priced by team size</h3>
     <p>
-      Both vendors restructured pricing in 2026, and most comparison pages on the internet still describe ladders that no longer exist. Here is what each actually sells today.
-    </p>
-
-    <h3>Jobber: four plans, priced by your team size</h3>
-    <p>
-      Jobber prices Core, Connect, Grow, and Plus by team size. The published figures are each plan's smallest-team rates; adding techs raises the price on every plan (extra users are $29/month each), and the only way to see your team's number is Jobber's own calculator. The August 2026 promotion ended on 2026-08-31.
+      Jobber prices {jPlanNames.join(', ')} by team size. The figures below are each plan's price at its smallest team size; the price rises as you add users on the pricing page's team-size selector, and extra users cost {usd(jExtraUser)} a month each. Checked against {jSource[1]} on {J_VERIFIED}.
     </p>
     <p class="text-sm text-slate-500">
-      Correction, {JOBBER_RECHECKED}: our {VERIFIED} check reported that Jobber had retired the $399 Plus plan. It had not; Plus is still sold, and the table below now includes it.
+      Correction, 2026-09-10: our 2026-08-27 check reported that Jobber had retired the Plus plan. It had not; Plus is still sold, and the table below includes it.
     </p>
     <div class="not-prose overflow-x-auto">
       <table class="w-full text-sm">
         <thead>
           <tr class="border-b border-slate-300 text-left text-xs uppercase tracking-wide text-slate-500">
-            <th class="py-2 pr-4">Plan (smallest team)</th><th class="py-2 pr-4">Billed annually</th><th class="py-2">Billed monthly</th>
+            <th class="py-2 pr-4">Plan (smallest team)</th><th class="py-2 pr-4">Billed annually</th><th class="py-2">Month to month (no commitment)</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b border-slate-100"><td class="py-2 pr-4 font-medium">Core</td><td class="py-2 pr-4">$29/mo</td><td class="py-2">$49/mo</td></tr>
-          <tr class="border-b border-slate-100"><td class="py-2 pr-4 font-medium">Connect</td><td class="py-2 pr-4">$99/mo</td><td class="py-2">$139/mo</td></tr>
-          <tr class="border-b border-slate-100"><td class="py-2 pr-4 font-medium">Grow</td><td class="py-2 pr-4">$149/mo</td><td class="py-2">$199/mo</td></tr>
-          <tr class="border-b border-slate-100"><td class="py-2 pr-4 font-medium">Plus</td><td class="py-2 pr-4">$399/mo</td><td class="py-2">$499/mo</td></tr>
+          {jPlanNames.map((name, i) => (
+            <tr class="border-b border-slate-100"><td class="py-2 pr-4 font-medium">{name}</td><td class="py-2 pr-4">{usd(jAnnual[i] as number)}/mo</td><td class="py-2">{usd(jMonthly[i])}/mo</td></tr>
+          ))}
         </tbody>
       </table>
-      <p class="mt-2 text-xs text-slate-500">Paid add-ons at verification: Marketing Suite $99/mo, AI Receptionist $29/mo, Sales Pipeline $49/mo. Franchise and multi-location pricing is custom.</p>
     </div>
+    <p class="text-sm text-slate-500">
+      Jobber also sells a 1-year commitment billed monthly, priced between the annual and month-to-month rates; our data does not record those prices.
+    </p>
 
-    <h3>Housecall Pro: three bundles with seats included</h3>
+    <h3>Housecall Pro: three plans with users included</h3>
+    <p>
+      Checked against {hSource[1]} on {H_VERIFIED}.
+    </p>
     <div class="not-prose overflow-x-auto">
       <table class="w-full text-sm">
         <thead>
@@ -169,22 +265,22 @@ const breadcrumbs = [
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b border-slate-100"><td class="py-2 pr-4 font-medium">Basic</td><td class="py-2 pr-4">$59/mo</td><td class="py-2 pr-4">$79/mo</td><td class="py-2 pr-4">1</td><td class="py-2">n/a</td></tr>
-          <tr class="border-b border-slate-100"><td class="py-2 pr-4 font-medium">Essentials</td><td class="py-2 pr-4">$149/mo</td><td class="py-2 pr-4">$189/mo</td><td class="py-2 pr-4">5</td><td class="py-2">$100/mo</td></tr>
-          <tr class="border-b border-slate-100"><td class="py-2 pr-4 font-medium">MAX</td><td class="py-2 pr-4">$299/mo</td><td class="py-2 pr-4">$329/mo</td><td class="py-2 pr-4">8</td><td class="py-2">$75/mo</td></tr>
+          {hPlanNames.map((name, i) => (
+            <tr class="border-b border-slate-100"><td class="py-2 pr-4 font-medium">{name}</td><td class="py-2 pr-4">{usd(hAnnual[i] as number)}/mo</td><td class="py-2 pr-4">{usd(hMonthly[i])}/mo</td><td class="py-2 pr-4">{hIncluded[i]}</td><td class="py-2">{i === 2 ? `${usd(hExtraUserMax)}/mo` : 'Not listed'}</td></tr>
+          ))}
         </tbody>
       </table>
     </div>
 
-    <h3>The seat math nobody does for you</h3>
+    <h3>Housecall Pro's cost by team size</h3>
     <p>
-      Housecall Pro's bundles make its real cost fully computable from published numbers, so we computed it. This table shows the cheapest legitimate Housecall Pro configuration at each team size (annual billing). Note where the plan flips: at 7 techs, MAX becomes cheaper than Essentials plus overage seats.
+      Housecall Pro publishes how many users each plan includes, so its annual-billed cost at a team size can be worked out: the cheapest plan that includes your headcount. Our data records an extra-user price only for {hPlanNames[2]}, so the table uses {hPlanNames[0]} and {hPlanNames[1]} only up to the users they include. It does not account for features: QuickBooks Online sync starts on {hPlanNames[1]}, so a one-person shop that needs it pays {usd(hAnnual[1] as number)}, not {usd(hAnnual[0] as number)}.
     </p>
     <div class="not-prose overflow-x-auto">
       <table class="w-full text-sm">
         <thead>
           <tr class="border-b border-slate-300 text-left text-xs uppercase tracking-wide text-slate-500">
-            <th class="py-2 pr-4">Team size</th><th class="py-2 pr-4">Cheapest Housecall Pro config</th><th class="py-2">Cost (annual-billed)</th>
+            <th class="py-2 pr-4">Team size</th><th class="py-2 pr-4">Cheapest Housecall Pro plan</th><th class="py-2">Cost (billed annually)</th>
           </tr>
         </thead>
         <tbody>
@@ -192,43 +288,50 @@ const breadcrumbs = [
             <tr class="border-b border-slate-100">
               <td class="py-2 pr-4">{r.n} {r.n === 1 ? 'user' : 'users'}</td>
               <td class="py-2 pr-4">{r.plan}</td>
-              <td class="py-2 tabular-nums">${r.monthly}/mo</td>
+              <td class="py-2 tabular-nums">{usd(r.monthly)}/mo</td>
             </tr>
           ))}
         </tbody>
       </table>
       <p class="mt-2 text-xs text-slate-500">
-        Computed at build time from the bundle prices and per-seat fees published on housecallpro.com/pricing, verified {VERIFIED}. Jobber's equivalent table cannot be computed honestly: its team pricing is not published beyond each plan's smallest-team rate, which is itself worth knowing when a vendor's price transparency matters to you.
+        Computed at build time from the plan prices, users included and extra-user fee in our Housecall Pro entry. There is no Jobber column: Jobber's pricing page shows the price for each team size through a selector, and our data records only each plan's smallest-team price and the {usd(jExtraUser)} extra-user fee.
       </p>
     </div>
 
     <p>
-      The processing-fee footnote both vendors would rather stay a footnote: card processing is where the real money moves on both platforms. Housecall Pro processes payments natively (instant payouts cost extra); Jobber pairs with Stripe-based Jobber Payments. At meaningful card volume the processing line exceeds the subscription line on either platform, so compare effective rates for your card mix before letting a $30 subscription difference decide a multi-thousand-dollar-a-year choice.
+      Housecall Pro's subscription price does not include card processing: its in-app processing starts at {hCardRate}% a transaction, so at that rate about {usd(breakEvenVolume)} of card payments a month costs as much in fees as the {hPlanNames[1]} plan ({usd(hAnnual[1] as number)}). Our Jobber entry does not record Jobber's processing rates; ask Jobber, and compare both at your own card volume.
     </p>
 
-    <h2>Where Jobber wins</h2>
+    <h2>Where Jobber comes out ahead in our data</h2>
     <ul>
-      <li><strong>Field-tech adoption.</strong> The best mobile app UX in the category; techs use it without resistance, which means less training and fewer unlogged jobs. If your last software rollout died in the truck, this is the argument that matters.</li>
-      <li><strong>Multi-trade and outdoor businesses.</strong> Jobber scores 9 to 10 across eight trades including a 10/10 for landscaping, a trade Housecall Pro does not target. Mixed HVAC-plus-lawn operations have exactly one good answer here.</li>
-      <li><strong>Solo and starting out.</strong> $29/month annual-billed entry against $59, with fully self-serve purchase: public prices, no sales call, run real jobs through the 14-day trial.</li>
-      <li><strong>QuickBooks depth.</strong> Native two-way sync covering both QuickBooks Online and Desktop; Housecall Pro syncs Online only.</li>
-      <li><strong>Automation plumbing.</strong> A modern API plus Zapier reach into 5,000+ apps for stitching lead sources, marketing, and accounting together without custom development.</li>
+      <li><strong>Entry price.</strong> {usd(jAnnual[0] as number)} a month billed annually at the smallest team size, against {usd(hAnnual[0] as number)} for one user on Housecall Pro.</li>
+      {jHigher.length > 0 && <li><strong>Fit score.</strong> Higher for {fitList(jHigher, 'j')}.</li>}
+      {jOnlyInt.length > 0 && <li><strong>Integrations listed for Jobber only:</strong> {jOnlyInt.join(', ')}.</li>}
     </ul>
 
-    <h2>Where Housecall Pro wins</h2>
+    <h2>Where Housecall Pro comes out ahead in our data</h2>
     <ul>
-      <li><strong>Closing big tickets.</strong> Built-in consumer financing through Wisetack puts monthly-payment offers on the tablet during the kitchen-table conversation. For $5,000+ HVAC replacements and repipes, this is the single most commercially important feature difference on this page.</li>
-      <li><strong>Payments without bolt-ons.</strong> Card processing is native, with instant-payout options; no separate processor account to reconcile.</li>
-      <li><strong>Review generation.</strong> The strongest automated review-request system in the category, with real local-SEO impact for shops that live on Google Maps rankings.</li>
-      <li><strong>Google Local Services Ads.</strong> Native integration that attributes booked jobs back to specific ads; most competitors handle LSA manually.</li>
-      <li><strong>Flat-price small crews.</strong> Essentials covering 5 users at $149 annual-billed is a genuinely strong bundle for the 3-to-5-tech shop, cheaper than most rivals' per-seat math at that size.</li>
+      <li><strong>QuickBooks Desktop.</strong> Housecall Pro syncs with QuickBooks Desktop (US Windows versions, one way, from Housecall Pro to QuickBooks). Jobber does not sync with QuickBooks Desktop; its QuickBooks Online sync runs one way, and Desktop users are limited to a manual CSV import.</li>
+      {hHigher.length > 0 && <li><strong>Fit score.</strong> Higher for {fitList(hHigher, 'h')}.</li>}
+      {hOnlyInt.length > 0 && <li><strong>Integrations listed for Housecall Pro only:</strong> {hOnlyInt.join(', ')}.</li>}
     </ul>
 
-    <h2>When to pick neither</h2>
+    <h2>What both offer</h2>
     <ul>
-      <li><strong>You run 20+ techs, multiple locations, or commercial service contracts.</strong> Both platforms thin out at enterprise scale: reporting, permissions, and multi-location management are where ServiceTitan and BuildOps earn their quote-only prices.</li>
-      <li><strong>Dispatch-heavy on-demand work with heavy phone volume.</strong> Neither has a built-in phone system; Workiz ships native VoIP with call masking and recording.</li>
-      <li><strong>You carry serious parts inventory.</strong> Neither treats inventory as a first-class feature. Shops with real warehouse counts should look at platforms where inventory is native rather than integrated.</li>
+      <li><strong>Free trial.</strong> {sameTrial ? `${trialText(jobber, jNote)} on both` : `Jobber ${trialText(jobber, jNote)}; Housecall Pro ${trialText(hcp, hNote)}`} (Jobber's trial runs on its {jTrialPlan} plan).</li>
+      <li><strong>Consumer financing through Wisetack</strong> on quotes, for US businesses. Our Jobber entry records that financing through Jobber excludes {jFinancingExcludes}; our Housecall Pro entry records a flat {hFinancing[1]}% fee on the financed amount for jobs from ${hFinancing[2]} to ${hFinancing[3]}, per Housecall Pro's help center. Check eligibility with either vendor.</li>
+      <li><strong>Google Local Services Ads.</strong> Both list a booking integration.</li>
+      <li><strong>Online booking</strong> on every plan.</li>
+    </ul>
+    <p>
+      Recorded for Housecall Pro only: review management and live phone and chat support on every plan, per its pricing page. Our Jobber entry records neither; check Jobber's plan page.
+    </p>
+
+    <h2>When to look at other tools</h2>
+    <ul>
+      <li><strong>Commercial or large multi-location work.</strong> Our Housecall Pro entry calls it residential-first and points commercial contractors that need project tracking, progress billing or AIA billing to platforms built for commercial work, such as <a href="/tools/buildops/">BuildOps</a>. Our Jobber entry says it is built for small and mid-size crews rather than large multi-location operations.</li>
+      <li><strong>A dispatcher phone system.</strong> Jobber's AI Receptionist answers calls and texts, but Jobber does not sell a phone system with call routing and recording. Our Housecall Pro entry lists a CallRail integration and no phone system.{workizPhone && <>{' '}<a href="/tools/workiz/">Workiz</a>'s entry lists a built-in phone system with call masking.</>}</li>
+      <li><strong>Parts inventory.</strong> No Jobber plan advertises inventory management, and our Housecall Pro entry does not list it.{inventoryTools.length > 0 && <>{' '}{inventoryTools.map((t, i) => <>{i > 0 ? ' and ' : ''}<a href={`/tools/${t.slug}/`}>{t.name}</a></>)}{' '}{inventoryTools.length === 1 ? 'lists' : 'list'} inventory among {inventoryTools.length === 1 ? 'its' : 'their'} features{inventoryTools.every(isQuoteOnly) ? (inventoryTools.length === 1 ? ' (quote-only)' : ' (both quote-only)') : ''}.</>}</li>
     </ul>
 
     <h2>Fit by trade</h2>
@@ -240,26 +343,21 @@ const breadcrumbs = [
           </tr>
         </thead>
         <tbody>
-          {sharedVerticals.map((v) => (
+          {fitRows.map((r) => (
             <tr class="border-b border-slate-100">
-              <td class="py-2 pr-4">{v.name}</td>
-              <td class="py-2 pr-4 tabular-nums">{jobber.vertical_fit?.[v.slug] ?? '-'}/10</td>
-              <td class="py-2 tabular-nums">{hcp.vertical_fit?.[v.slug] ?? '-'}/10</td>
+              <td class="py-2 pr-4"><a href={`/${verticalToUrl(r.slug)}/`} class="hover:text-orange-600">{r.name}</a></td>
+              <td class={`py-2 pr-4 tabular-nums ${r.j > r.h ? 'font-semibold text-slate-900' : ''}`}>{r.j}/10</td>
+              <td class={`py-2 tabular-nums ${r.h > r.j ? 'font-semibold text-slate-900' : ''}`}>{r.h}/10</td>
             </tr>
           ))}
-          <tr class="border-b border-slate-100">
-            <td class="py-2 pr-4">Landscaping</td>
-            <td class="py-2 pr-4 tabular-nums">{jobber.vertical_fit?.['landscaping']}/10</td>
-            <td class="py-2 text-slate-400">not targeted</td>
-          </tr>
         </tbody>
       </table>
-      <p class="mt-2 text-xs text-slate-500">Fit scores combine feature coverage, customer-base concentration, and each vendor's own positioning per trade. See <a href="/methodology/" class="underline">methodology</a>.</p>
+      <p class="mt-2 text-xs text-slate-500">Vertical-fit scores (1-10) rate how well each tool is built for the trade, checked against the trades the vendor's own pages say it serves. See <a href="/methodology/" class="underline">methodology</a>.</p>
     </div>
 
     <h2>Switching between them</h2>
     <p>
-      This is one of the most common migrations in the category, in both directions, and it is routine but not free. Customers, open estimates, and invoices move via CSV cleanly. Job history, recurring service agreements, and pricebooks rarely land intact; the standard playbook is to keep read-only access to the old system for a season and rebuild recurring schedules by hand in the new one. Run both in parallel for two to four weeks, cut over in your slow season, and re-collect card-on-file authorizations early, because stored payment methods do not transfer between processors.
+      Both import customers from a CSV file. Our data does not record which other records either one imports or exports. Before you switch, ask both vendors which records move (customers, jobs, invoices, recurring work, price books), in which file format, and whether they help with the import, and ask whether customers' saved cards can move to the new payment processor or must be collected again.
     </p>
 
     <h2>Frequently asked questions</h2>
@@ -272,9 +370,9 @@ const breadcrumbs = [
 
     <div class="not-prose mt-10 rounded-lg bg-slate-50 p-5 text-sm text-slate-600">
       <p class="m-0">
-        <strong>How this page was made:</strong> prices were checked against
-        <a href="https://www.getjobber.com/pricing/" rel="noopener nofollow" class="underline">getjobber.com/pricing</a> and
-        <a href="https://www.housecallpro.com/pricing/" rel="noopener nofollow" class="underline">housecallpro.com/pricing</a> on {VERIFIED} (Jobber's plan ladder re-checked {JOBBER_RECHECKED}); the seat-cost table is computed from those published numbers at build time, and scores come from the same data as every listing (see the <a href="/verification-log/" class="underline">verification log</a>). Neither vendor paid for placement or saw this page before publication, and no AI-crawled "verified facts" appear here. Full reviews: <a href="/tools/jobber/" class="underline">Jobber</a> · <a href="/tools/housecall-pro/" class="underline">Housecall Pro</a>.
+        <strong>How this page was made:</strong> prices come from our entries, checked against
+        <a href="https://www.getjobber.com/pricing/" rel="noopener nofollow" class="underline">getjobber.com/pricing</a> on {J_VERIFIED} and
+        <a href="https://www.housecallpro.com/pricing/" rel="noopener nofollow" class="underline">housecallpro.com/pricing</a> on {H_VERIFIED}. The tables are computed from those entries at build time, and scores come from the same data as every listing (see the <a href="/verification-log/" class="underline">verification log</a>). Neither vendor paid for placement. Full reviews: <a href="/tools/jobber/" class="underline">Jobber</a> · <a href="/tools/housecall-pro/" class="underline">Housecall Pro</a>.
       </p>
     </div>
     <MissingFromList competitors={["Housecall Pro", "Jobber"]} />

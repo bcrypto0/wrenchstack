@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, priceTier, type Tool } from '../lib/data';
+import { tools, priceTier, isQuoteOnly, getTool } from '../lib/data';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -17,32 +17,56 @@ const calculatorTools = tools.map((t) => ({
   pricingNote: t.pricing.pricing_note ?? '',
   pricingModel: t.pricing.pricing_model ?? '',
   bestTeamSize: t.best_team_size ?? '',
+  // Quote-only = isQuoteOnly. Two tools with no monthly starting price (one-time or
+  // per-project prices) are not quote-only and get their own message.
+  quoteOnly: isQuoteOnly(t),
 }));
+
+const listJoin = (names: string[]) =>
+  names.length <= 1 ? (names[0] ?? '') : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+
+// Named examples in the pricing-model FAQ are checked against pricing_model at build
+// (2026-10-01): Service Fusion's note says unlimited users at every tier; Jobber, Housecall
+// Pro and JobTread include a set number of users per plan. A tool whose model changes
+// drops out of the sentence instead of being misdescribed.
+const flatExamples = ['servicefusion']
+  .map((s) => getTool(s))
+  .filter((t): t is NonNullable<typeof t> => !!t && t.pricing.pricing_model === 'flat')
+  .map((t) => t.name);
+const seatExamples = ['jobber', 'housecall-pro', 'jobtread']
+  .map((s) => getTool(s))
+  .filter((t): t is NonNullable<typeof t> => !!t && t.pricing.pricing_model === 'flat_plus_seat')
+  .map((t) => t.name);
+const flatModelAnswer = [
+  `Flat-rate plans charge one price per company${flatExamples.length ? ` (${listJoin(flatExamples)}, for example, lists unlimited users on every plan)` : ''}, so the calculator does not multiply them by team size.`,
+  `Base-plus-seat plans include a set number of users and cost more as you add users${seatExamples.length ? ` (${listJoin(seatExamples)}, for example)` : ''}; the calculator shows them at the base price, with a note.`,
+  "The calculator reads each tool's pricing model (per user, flat, or base plus seats) from our data and multiplies only per-user prices by team size. If a vendor has changed its pricing since we last checked it, the math will be wrong; enter your real monthly cost in the override fields.",
+].join(' ');
 
 const faqs = [
   {
     q: 'Does the calculator include an implementation fee?',
-    a: 'The calculator does not assume an implementation fee. Vendors differ too much: some include onboarding in the subscription, some charge for guided setup, and quote-only vendors set the fee in the quote. Enter the fee from your quote; until you do, the totals and break-even exclude it and say so. Tools with no published list price also need the monthly figure from your quote.',
+    a: 'The calculator does not assume an implementation fee. Vendors differ too much: some include onboarding in the subscription, some charge for guided setup, and quote-only vendors set the fee in the quote. Enter the fee from your quote; until you do, the totals and break-even exclude it and say so. A tool that publishes no monthly price also needs a monthly figure from you: your current bill or the cost you were quoted.',
   },
   {
     q: 'Why include a parallel-run month?',
-    a: 'Most field service shops run both the old and new systems in parallel for 2-4 weeks during cutover. The calculator assumes one full month of dual subscription. Skipping this is possible but operationally risky: invoices and jobs can fall through the cracks during a hard cutover.',
+    a: 'Running both systems for a while lets you check jobs, customers and invoices in the new tool before you cancel the old one. The calculator assumes one month of your current subscription on top of the new one; that is our assumption, not a measured figure. If you plan a same-day cutover, subtract one month of your current bill from the total.',
   },
   {
     q: 'What does "training cost" actually include?',
-    a: 'It includes the wage cost of techs and office staff during product training. We assume 8 hours per tech at a $50/hour fully-burdened rate, plus 60 hours of office-staff transition work at $35/hour. This is what real shops report; it is not the same as "implementation fee" which is the vendor charging you.',
+    a: 'It is the wage cost of techs and office staff while they learn the new tool. The calculator assumes 8 hours per tech at $50 an hour (wages plus employer costs), plus 60 hours of office-staff transition work at $35 an hour. These are our planning assumptions, not survey results; scale the result up or down if your hours or wages differ. It is separate from the implementation fee, which is what the vendor charges you.',
   },
   {
     q: 'How accurate is the break-even calculation?',
-    a: 'It is a directional estimate, not a P&L line. The calculator divides total switching cost by monthly savings (or shows "never" if the new tool costs more). Real break-even depends on adoption pace, integration delays, and whether you actually convert recovered admin time into billable work. For comparing two specific switch options, the math is solid; for a precise business case, use a real spreadsheet.',
+    a: 'It is a rough estimate, not a P&L line. The calculator divides the total switching cost by the monthly savings (or shows "never on price alone" if the new tool costs the same or more). Real break-even depends on how fast your team adopts the tool, integration delays, and whether recovered admin time turns into billable work. Because it applies the same assumptions to every pair of tools, it is more useful for comparing two switch options than for a precise business case; for that, use your own spreadsheet with your quotes.',
   },
   {
     q: 'What if the new tool costs more per month?',
-    a: 'You are paying a premium for features, support, or scale. The calculator will show negative monthly savings and break-even "never on price alone", meaning the switch only pays back through revenue uplift, not cost savings. Most upgrades to a larger platform fall in this category: the case rests on revenue, not savings. Pair this calculator with the ROI calculator to see the revenue side.',
+    a: 'The calculator shows a monthly premium instead of savings, and break-even "never on price alone": the switch has to pay back through something other than the subscription price, such as features you need, time saved or more jobs. Pair this calculator with the ROI calculator to estimate that side from its stated assumptions.',
   },
   {
-    q: 'Why does flat-rate pricing show "1 user" math?',
-    a: 'Some tools (Service Fusion, for example) charge one price with unlimited users, and others (Jobber, Housecall Pro, JobTread) include a set number of users and charge for each one beyond that. The calculator reads the pricing model of each tool (per user, flat, or base plus seats) from our data and uses the published price as-is for flat plans. If a vendor changed to per-user since we last verified, the math will be wrong; override the monthly cost field with your real quote.',
+    q: 'Why is a flat-rate plan not multiplied by team size?',
+    a: flatModelAnswer,
   },
 ];
 
@@ -59,7 +83,7 @@ const faqSchema = {
 
 <Layout
   title="Cost of switch calculator: what does switching field service software actually cost?"
-  description="Switching between trades software platforms is a 4-12 week project with real costs beyond just the new subscription. Plug in your current tool, target tool, and team size to see the 12-month total cost of switching."
+  description="Switching field service software can cost more than the new subscription. Pick your current tool, target tool and team size to estimate the 12-month cost of switching, with every assumption stated."
   breadcrumbs={breadcrumbs}
 >
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
@@ -73,7 +97,7 @@ const faqSchema = {
         Cost of switching field service software
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        Switching between trades software platforms is a 4-12 week project with real costs beyond just the new subscription: implementation fees, training time, parallel-run dual subscriptions, and lost productivity during transition. Plug in your current tool, target tool, and team size; see the realistic 12-month total cost.
+        Switching field service software can cost more than the new subscription: an implementation fee if the vendor charges one, staff time to learn the new tool, and any overlap month of paying for both tools while you check the new one. Pick your current tool, target tool and team size to estimate the 12-month total. Prices come from each vendor's published starting price; training time and the overlap month are our stated assumptions, listed below.
       </p>
     </header>
 
@@ -136,7 +160,7 @@ const faqSchema = {
               min="0"
               class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
             />
-            <p class="mt-1 text-xs text-slate-500">Override if your actual bill differs from published pricing. Required if your current tool has no published list price.</p>
+            <p class="mt-1 text-xs text-slate-500">Override if your actual bill differs from published pricing. Required if your current tool publishes no monthly price.</p>
           </div>
           <div>
             <label for="target-cost" class="mb-2 block text-sm font-semibold text-slate-900">
@@ -149,7 +173,7 @@ const faqSchema = {
               min="0"
               class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
             />
-            <p class="mt-1 text-xs text-slate-500">Required if the new tool has no published list price; enter the quote you were given.</p>
+            <p class="mt-1 text-xs text-slate-500">Required if the new tool publishes no monthly price; enter the monthly cost you were quoted.</p>
           </div>
           <div>
             <label for="impl-fee" class="mb-2 block text-sm font-semibold text-slate-900">
@@ -186,10 +210,10 @@ const faqSchema = {
       <ul>
         <li><strong>New subscription cost</strong> for the target tool, scaled by team size if per-user; plans with a base price plus seat fees are shown at the base price, with a note.</li>
         <li><strong>Implementation fee</strong>: what the vendor charges to set up your account. Enter it from your quote; the calculator does not guess one, and totals exclude it until you do.</li>
-        <li><strong>Training cost</strong>: wages of techs and office staff during product training. Default assumption: 8 hours per tech at $50/hour fully-burdened, plus 60 office-staff hours at $35/hour.</li>
-        <li><strong>Parallel-run cost</strong>: one extra month of paying both subscriptions during cutover. Most shops run both for 2-4 weeks; skipping this is operationally risky.</li>
+        <li><strong>Training cost</strong>: wages of techs and office staff while they learn the new tool. Assumption: 8 hours per tech at $50 an hour (wages plus employer costs), plus 60 office-staff hours at $35 an hour. These are planning assumptions, not measured figures.</li>
+        <li><strong>Parallel-run cost</strong>: one extra month of your current subscription while both systems run, so you can check the new one before cancelling. One month is our assumption.</li>
         <li><strong>Net monthly savings</strong> (or premium): the recurring difference between old and new subscription, post-cutover.</li>
-        <li><strong>Break-even month</strong>: when monthly savings cover the total switching cost. Shows "never on price alone" if the new tool is more expensive.</li>
+        <li><strong>Break-even month</strong>: when monthly savings cover the total switching cost. Shows "never on price alone" if the new tool costs the same or more.</li>
       </ul>
 
       <h2>What the calculator does not include</h2>
@@ -198,11 +222,11 @@ const faqSchema = {
         <li><strong>Revenue uplift</strong> from better dispatching, faster quoting, or improved customer experience. Use the <a href="/roi-calculator/">ROI calculator</a> for the revenue side.</li>
         <li><strong>Integration migration costs</strong> if you need to rebuild custom integrations.</li>
         <li><strong>Data migration consulting</strong> if you're hiring help to move from one system to another.</li>
-        <li><strong>Productivity lost</strong> during adoption: staff are slower for 2-4 weeks while learning the new system.</li>
+        <li><strong>Productivity lost</strong> while staff learn the new system.</li>
       </ul>
 
       <p>
-        For most shops, the cost-of-switch math is the conservative case. The revenue uplift (in the ROI calculator) is usually the bigger number, but it's also the less certain one, because it depends on team adoption and execution.
+        The subscription figures here come from published prices; the ROI calculator's revenue figures rest on planning assumptions, so treat them as the less certain of the two.
       </p>
     </section>
 
@@ -221,10 +245,10 @@ const faqSchema = {
     <section class="mt-12 rounded-lg bg-slate-50 p-6 text-sm text-slate-600">
       <p>
         Need to evaluate the new tool's fit first? Take the
-        <a href="/quiz/" class="text-orange-600 hover:underline">60-second matching quiz</a>
+        <a href="/quiz/" class="text-orange-600 hover:underline">5-question matching quiz</a>
         for ranked picks, or run the
         <a href="/roi-calculator/" class="text-orange-600 hover:underline">ROI calculator</a>
-        to estimate revenue uplift.
+        to estimate revenue uplift from its stated assumptions.
       </p>
     </section>
   </article>
@@ -273,7 +297,7 @@ const faqSchema = {
 
     function monthlyCostOf(t, techs) {
       if (t.startingPrice === null || t.startingPrice === undefined) {
-        // No published price: the user has to supply a quote; we never invent one.
+        // No published monthly price: the user has to supply one; we do not invent it.
         return null;
       }
       if (t.startingPrice === 0) return 0;
@@ -311,11 +335,12 @@ const faqSchema = {
       const toMonthly = !isNaN(toEntered) && toEntered >= 0 ? toEntered : monthlyCostOf(toTool, techs);
       if (fromMonthly === null || toMonthly === null) {
         const missing = [];
-        if (fromMonthly === null) missing.push(fromTool.name + ' has no published list price. Enter your current monthly bill.');
-        if (toMonthly === null) missing.push(toTool.name + ' has no published list price. Enter the monthly quote you were given.');
+        const noPrice = (t) => t.quoteOnly ? t.name + ' publishes no price.' : t.name + ' publishes no monthly plan (see its pricing note for one-time or per-project prices).';
+        if (fromMonthly === null) missing.push(noPrice(fromTool) + ' Enter your current monthly bill.');
+        if (toMonthly === null) missing.push(noPrice(toTool) + ' Enter the monthly cost you were quoted.');
         outputDiv.classList.remove('hidden');
         promptDiv.classList.add('hidden');
-        outputDiv.innerHTML = '<div class="rounded-md border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">' + missing.join(' ') + ' We do not estimate prices a vendor does not publish for your team size.</div>';
+        outputDiv.innerHTML = '<div class="rounded-md border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">' + missing.join(' ') + ' We do not estimate a monthly price the vendor does not publish.</div>';
         return;
       }
 
@@ -339,13 +364,18 @@ const faqSchema = {
       const seatNote = seatTools.length
         ? `<p class="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">${seatTools.map((t) => t.name).join(' and ')} ${seatTools.length === 1 ? 'charges' : 'charge'} a base price that includes some users, plus a fee for each extra seat. This estimate uses the base price only, so the real monthly cost is higher for larger teams; check the pricing note on the tool page.</p>`
         : '';
+      // A $0 starting price is the free plan, which has its own user, job or feature limits.
+      const freeTools = [...new Set([...(!isNaN(toEntered) && toEntered >= 0 ? [] : [toTool]), ...(!isNaN(fromEntered) && fromEntered >= 0 ? [] : [fromTool])])].filter((t) => t.startingPrice === 0);
+      const freeNote = freeTools.length
+        ? `<p class="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">${freeTools.map((t) => t.name).join(' and ')} ${freeTools.length === 1 ? 'is' : 'are'} costed at $0, the free plan. Check the free plan's limits in the pricing note on the tool page; if your team needs a paid plan, enter its monthly price above.</p>`
+        : '';
 
       let breakEvenLabel;
       if (monthlySavings <= 0) {
         breakEvenLabel = 'Never on price alone: new tool costs the same or more';
       } else {
         const months = Math.ceil(totalSwitchingCost / monthlySavings);
-        if (months > 60) breakEvenLabel = months + ' months (>5 years, likely not worth on cost alone)';
+        if (months > 60) breakEvenLabel = months + ' months (over 5 years)';
         else breakEvenLabel = months + ' month' + (months === 1 ? '' : 's');
       }
       if (monthlySavings > 0) breakEvenLabel += exclNote;
@@ -353,17 +383,17 @@ const faqSchema = {
       let recommendation;
       let recommendationStyle;
       if (monthlySavings > 0 && totalSwitchingCost / monthlySavings <= 18) {
-        recommendation = 'Switching pays back within 18 months on pure cost savings: favorable.';
+        recommendation = 'On these inputs, switching pays back within 18 months from subscription savings alone.';
         recommendationStyle = 'border-emerald-200 bg-emerald-50 text-emerald-900';
       } else if (monthlySavings > 0) {
-        recommendation = 'Switching saves money long-term but break-even takes over 18 months. Consider revenue-uplift case (ROI calculator) before committing.';
+        recommendation = 'On these inputs, switching saves money each month, but break-even takes over 18 months. Weigh the other reasons for switching (the ROI calculator estimates the revenue side) before committing.';
         recommendationStyle = 'border-amber-200 bg-amber-50 text-amber-900';
       } else if (monthlySavings === 0) {
-        recommendation = 'No monthly savings: new tool costs the same. Only switch if features or fit are materially better. Use the ROI calculator to size revenue uplift.';
+        recommendation = 'No monthly savings: the new tool costs the same. The case for switching rests on features or fit; the ROI calculator estimates the revenue side.';
         recommendationStyle = 'border-amber-200 bg-amber-50 text-amber-900';
       } else {
         const premium = -monthlySavings;
-        recommendation = 'New tool costs ' + formatCurrency(premium) + '/mo more. Switching only makes sense if revenue uplift offsets the premium. Check the ROI calculator.';
+        recommendation = 'The new tool costs ' + formatCurrency(premium) + '/mo more. The switch pays back only if something else, such as revenue or time saved, covers the premium; the ROI calculator estimates the revenue side.';
         recommendationStyle = 'border-rose-200 bg-rose-50 text-rose-900';
       }
 
@@ -376,6 +406,7 @@ const faqSchema = {
         <h2 class="mb-4 text-2xl font-bold text-slate-900">Your switching cost: ${fromTool.name} → ${toTool.name}</h2>
         <p class="mb-6 text-sm text-slate-500">At ${techs} tech${techs === 1 ? '' : 's'}.</p>
         ${seatNote}
+        ${freeNote}
 
         <div class="grid gap-4 sm:grid-cols-2">
           <div class="rounded-lg border border-slate-200 bg-white p-4">
@@ -403,11 +434,11 @@ const faqSchema = {
               <td class="py-2 text-right font-medium text-slate-900">${implKnown ? formatCurrency(targetImplFee) : 'Not entered'}</td>
             </tr>
             <tr>
-              <td class="py-2 text-slate-700">Training cost (${techs} techs × ${TRAINING_HOURS_PER_TECH}h + ${OFFICE_HOURS}h office)</td>
+              <td class="py-2 text-slate-700">Training cost (assumed: ${techs} tech${techs === 1 ? '' : 's'} × ${TRAINING_HOURS_PER_TECH}h at $${TECH_RATE_PER_HOUR}/h + ${OFFICE_HOURS}h office at $${OFFICE_RATE_PER_HOUR}/h)</td>
               <td class="py-2 text-right font-medium text-slate-900">${formatCurrency(trainingCost)}</td>
             </tr>
             <tr>
-              <td class="py-2 text-slate-700">Parallel-run (1 month of ${fromTool.name})</td>
+              <td class="py-2 text-slate-700">Parallel run (assumed: 1 month of ${fromTool.name})</td>
               <td class="py-2 text-right font-medium text-slate-900">${formatCurrency(parallelRunCost)}</td>
             </tr>
             <tr class="font-bold">

@@ -6,37 +6,36 @@ interface AuVendor {
   slug: string; name: string; category: string;
 }
 const vendors = (auData as { vendors: AuVendor[] }).vendors;
+const bySlug = new Map(vendors.map((v) => [v.slug, v]));
 
-// Payroll platforms in our AU directory: the layer payday super actually lives in.
-// Statuses phrased honestly: all majors have committed to payday-super support;
-// the buyer's job is confirming rollout for their specific plan.
+// Payroll platforms in our AU directory: payday super is paid from the payroll layer.
+// Each row restates what the vendor's own pages say, from the entries re-verified
+// on 30 September 2026; the buyer's job is confirming it for their plan.
 const payrollPlatforms = [
-  { slug: 'xero-payroll-au', name: 'Xero Payroll (AU)', fit: 'Payroll included in Xero’s Australian accounting plans (2, 5 or 10 people by plan); STP Phase 2 reporting each payday', note: 'Xero says super is calculated and paid in each pay run at no extra cost; check your plan covers your headcount' },
-  { slug: 'myob', name: 'MYOB', fit: 'Accounting and payroll for AU and NZ businesses since 1991; Single Touch Payroll reporting; standalone Payroll Only plan for up to 4 employees', note: 'MYOB has a Pay Super setting for the Payday Super changes; confirm it is switched on for your product' },
-  { slug: 'keypay-employment-hero', name: 'Employment Hero Payroll (KeyPay)', fit: 'Pay rates update automatically for modern awards (per Employment Hero); STP Phase 2; minimum of 10 Users', note: 'Confirm HeroClear super clearing is set up on your plan' },
-  { slug: 'deputy', name: 'Deputy', fit: 'Rostering, timesheets and award interpretation, with Deputy Payroll as a paid add-on designed for STP Phase 2 (per Deputy)', note: 'Confirm how super is paid on each payday with the Payroll add-on on your plan' },
-  { slug: 'reckon', name: 'Reckon', fit: 'Standalone payroll app, Payroll Essentials $16 a month for up to 4 employees; STP Phase 2', note: 'Reckon says its payroll is Payday Super compliant with built-in SuperStream; confirm on your plan' },
-];
+  { slug: 'xero-payroll-au', fit: 'Payroll included in Xero’s Australian accounting plans (2, 5 or 10 people by plan); STP Phase 2 reporting each payday', note: 'Xero says super is calculated and paid in each pay run at no extra cost; check your plan covers your headcount' },
+  { slug: 'myob', fit: 'Accounting and payroll for AU and NZ businesses since 1991; Single Touch Payroll reporting; standalone Payroll Only plan for up to 4 employees', note: 'MYOB has a Pay Super setting for the Payday Super changes; confirm it is switched on for your product' },
+  { slug: 'keypay-employment-hero', fit: 'Pay rates update automatically for modern awards (per Employment Hero); STP Phase 2; minimum of 10 Users', note: 'Confirm HeroClear super clearing is set up on your plan' },
+  { slug: 'deputy', fit: 'Rostering, timesheets and award interpretation, with Deputy Payroll as a paid add-on designed for STP Phase 2 (per Deputy)', note: 'Confirm how super is paid on each payday with the Payroll add-on on your plan' },
+  { slug: 'reckon', fit: 'Standalone payroll app, Payroll Essentials $16 a month for up to 4 employees; STP Phase 2', note: 'Reckon says its payroll is Payday Super compliant with built-in SuperStream; confirm on your plan' },
+]
+  .filter((r) => bySlug.has(r.slug))
+  .map((r) => ({ ...r, name: bySlug.get(r.slug)?.name ?? r.slug }));
 
-const fsmTools = [
-  { slug: 'aroflo', name: 'AroFlo' },
-  { slug: 'simpro-au', name: 'Simpro' },
-  { slug: 'servicem8-au', name: 'ServiceM8' },
-  { slug: 'tradify-au', name: 'Tradify' },
-  { slug: 'fergus-au', name: 'Fergus' },
-];
+const fsmTools = ['aroflo', 'simpro-au', 'servicem8-au', 'tradify-au', 'fergus-au']
+  .filter((slug) => bySlug.has(slug))
+  .map((slug) => ({ slug, name: bySlug.get(slug)?.name ?? slug }));
 
 const faqs = [
-  { q: 'Is payday super actually law, or still a proposal?', a: 'It’s law, and it is now in effect. The payday superannuation legislation passed Parliament and the new rules commenced on 1 July 2026. Since that date, employers pay super at the same time as salary and wages (whether your team is paid weekly, fortnightly or monthly) instead of batching it quarterly.' },
-  { q: 'What exactly changed from the old quarterly system?', a: 'Under the old rules you could hold super and pay it within 28 days of each quarter’s end. Since 1 July 2026, every pay run triggers a super contribution, and the money must actually arrive in each employee’s fund within 7 business days of payday. The change was softened from 7 calendar days to 7 business days in the final legislation, but it still turns super from a quarterly batch job into part of every single pay cycle.' },
-  { q: 'What happens if contributions arrive late?', a: 'The updated super guarantee charge is significantly harsher than the old regime: penalties can reach 60% of the shortfall, with daily interest accruing until the super is received. Through the transitional first year (1 July 2026 to 30 June 2027), the ATO is applying a risk-based, facilitative approach to minor errors that are corrected promptly, but it has confirmed there is no blanket amnesty for definitive shortfalls. Treat it as relief if something goes wrong, not something to plan around.' },
-  { q: 'Does my job-management software (AroFlo, Simpro, Tradify…) handle payday super?', a: 'No, job-management platforms run quotes, scheduling, job costing and invoicing. Super is paid by your payroll layer (Xero, MYOB, Employment Hero and similar), which calculates the super guarantee on each pay run and pushes contributions through SuperStream rails to each fund. The standard AU trades stack is a job platform feeding payroll through an integration; payday-super readiness is a payroll question.' },
-  { q: 'I paid super through the ATO’s free clearing house (SBSCH). What happens now?', a: 'The ATO closed the Small Business Superannuation Clearing House on 1 July 2026 as part of the payday-super reform, and it is no longer available. If you used it for quarterly payments, that workflow now has to move into your payroll software (or another clearing service), which handles per-pay-run contributions. If you have not switched yet, do it before your next pay run; the ATO publishes guidance on moving off the SBSCH.' },
-  { q: 'What should a trades business do now that payday super has started?', a: 'Four things: confirm your payroll platform’s payday-super support is switched on (and that your plan tier includes it); model the cash-flow change (super now leaves your account with every pay run instead of sitting in the float until quarter end, which weekly-paying trades businesses feel most); clean up employee super-fund details and stapled-fund checks so contributions don’t bounce; and watch your pay runs closely to confirm contributions are reaching funds inside the 7-business-day window.' },
+  { q: 'Is payday super law, or still a proposal?', a: 'It is law. Treasury announced on 4 November 2025 that the legislation had passed Parliament, and the new rules started on 1 July 2026. Employers now pay super at the same time as salary and wages, whether staff are paid weekly, fortnightly or monthly, instead of quarterly.' },
+  { q: 'What changed from the old quarterly system?', a: 'Super guarantee contributions used to be due quarterly. Since 1 July 2026 every payday triggers a contribution, and it must be received by the employee’s fund within 7 business days of payday, per Treasury. Treasury’s September 2024 factsheet had proposed 7 calendar days; the law as passed uses 7 business days.' },
+  { q: 'What happens if contributions arrive late?', a: 'The employer becomes liable for the super guarantee charge. Treasury’s payday super factsheet (September 2024) describes its parts: the shortfall, notional earnings (daily interest at the general interest charge rate) and an administrative uplift of up to 60% of the shortfall, reduced for employers who voluntarily disclose. For the first year, Treasury said in November 2025 that the ATO was consulting on its compliance approach for the 12 months after the start, treating low-risk and high-risk employers differently; check the ATO’s current guidance rather than planning around it.' },
+  { q: 'Does my job-management software (AroFlo, Simpro, Tradify…) handle payday super?', a: 'Our entries for AroFlo, Simpro, ServiceM8, Tradify and Fergus describe no payroll or super payments, so super is paid from your payroll software (such as Xero, MYOB or Employment Hero), which our entries say calculates or pays super with each pay run. Payday super readiness is a payroll question; the job app matters for getting timesheets to payroll on time.' },
+  { q: 'I paid super through the ATO’s free clearing house (SBSCH). What now?', a: 'Treasury’s payday super factsheet said the ATO’s Small Business Superannuation Clearing House would be retired from 1 July 2026. If you used it for quarterly payments, that step now moves into your payroll software or another clearing service that pays super with each pay run; check the ATO’s site for its transition guidance.' },
+  { q: 'What should a trades business check now that payday super has started?', a: 'Four things: confirm your payroll platform’s payday super support is switched on and included in your plan; work out the cash-flow change, since super now leaves your account with every pay run instead of quarterly; check employee super-fund details, including stapled-fund checks for new hires, so contributions are not delayed; and watch your pay runs to confirm contributions reach funds within 7 business days.' },
 ];
 
 const pageTitle = 'Payday Super Is Now in Effect (1 July 2026): Is Your Payroll Software Ready? (AU Trades Guide)';
-const pageDescription = 'Payday super is now in effect: since 1 July 2026, super must be paid with every pay run and reach the employee’s fund within 7 business days (penalties up to 60% of the shortfall). What it means for Australian trades businesses, the cash-flow shift, and what to confirm with Xero, MYOB or Employment Hero. Updated September 2026.';
+const pageDescription = 'Payday super is now in effect: since 1 July 2026, super must be paid with every pay run and received by the employee’s fund within 7 business days of payday. What it means for Australian trades businesses, the super guarantee charge, the cash-flow shift, and what to confirm with Xero, MYOB or Employment Hero. Updated October 2026.';
 
 const guideUrl = new URL('/au/guides/payday-super-payroll-software/', Astro.site).toString();
 
@@ -52,7 +51,7 @@ const articleSchema = {
   headline: pageTitle,
   description: pageDescription,
   datePublished: '2026-06-11',
-  dateModified: '2026-09-30',
+  dateModified: '2026-10-01',
   inLanguage: 'en-AU',
   author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
   publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
@@ -77,15 +76,15 @@ const faqSchema = {
         Payday Super Is Now in Effect: Is Your Payroll Ready?
       </h1>
       <p class="mt-3 text-lg text-slate-600 leading-relaxed">
-        The quarterly super batch is over: since 1 July 2026, super goes out with every pay run and must reach each employee’s fund within 7 business days. What that means for Australian trades businesses: cash flow, clearing houses, and what to confirm with your payroll vendor.
+        The quarterly super batch is over: since 1 July 2026, super goes out with every pay run and must be received by each employee’s fund within 7 business days of payday. What that means for Australian trades businesses: cash flow, clearing houses, and what to confirm with your payroll vendor.
       </p>
-      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published June 2026 · Updated 30 September 2026 · General information, not financial advice; confirm your obligations with the ATO or your adviser.</p>
+      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published June 2026 · Updated 1 October 2026 · General information, not financial advice; confirm your obligations with the ATO or your adviser.</p>
     </header>
 
     <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
       <h2 class="mb-2 text-lg font-bold text-slate-900">✅ The short version</h2>
       <p class="text-slate-800 leading-relaxed">
-        Payday super <strong>passed Parliament</strong> and has been <strong>in effect since 1 July 2026</strong>. Every pay run (weekly, fortnightly or monthly) must now include super, and the contribution must <strong>arrive in the employee’s fund within 7 business days of payday</strong>. Miss it and the updated super guarantee charge can cost up to <strong>60% of the shortfall</strong> plus daily interest (a transitional ATO facilitative-compliance year runs to 30 June 2027, but it’s case-by-case with no blanket amnesty; don’t plan around it). Your job-management app doesn’t do this; <strong>your payroll software does</strong>, and confirming its payday-super support is switched on for your plan is the single most useful thing to check now.
+        Payday super <strong>passed Parliament</strong> (Treasury, November 2025) and has been <strong>in effect since 1 July 2026</strong>. Every pay run (weekly, fortnightly or monthly) must now include super, and the contribution must be <strong>received by the employee’s fund within 7 business days of payday</strong>. Late contributions bring the <strong>super guarantee charge</strong>, which Treasury’s factsheet says includes daily interest and an administrative uplift of up to 60% of the shortfall. Our entries for the job-management apps in our AU directory describe no payroll, so this sits with <strong>your payroll software</strong>: confirm its payday super support is switched on for your plan.
       </p>
     </section>
 
@@ -100,33 +99,33 @@ const faqSchema = {
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">up to 60%</div>
-        <div class="mt-1 text-xs text-slate-600">of the shortfall in penalties, plus daily interest</div>
+        <div class="mt-1 text-xs text-slate-600">administrative uplift on the shortfall, plus daily interest (Treasury factsheet)</div>
       </div>
     </section>
 
     <section class="mb-10 prose prose-slate max-w-none">
-      <h2>What actually changes</h2>
+      <h2>What changes</h2>
       <p>
-        Since the super guarantee began, employers had paid super <strong>quarterly</strong>: contributions were due within 28 days of each quarter’s end, and the quarterly float quietly helped many a small business’s cash flow. Since <strong>1 July 2026</strong> that model is gone:
+        Before <strong>1 July 2026</strong>, super guarantee contributions were due <strong>quarterly</strong>. Since then:
       </p>
       <ul>
-        <li><strong>Super rides with every pay run.</strong> Pay wages weekly, and super moves weekly too.</li>
-        <li><strong>Received, not just sent:</strong> the contribution must <em>arrive</em> in the employee’s fund within <strong>7 business days</strong> of payday; processing time through SuperStream rails counts against you.</li>
-        <li><strong>Harsher penalties:</strong> the redesigned super guarantee charge scales to <strong>60% of the shortfall</strong>, with daily interest until the fund receives the money.</li>
-        <li><strong>A one-year soft landing (in progress):</strong> the ATO is applying a risk-based, facilitative approach through 30 June 2027 for genuine mistakes fixed promptly: relief if something breaks, not a strategy, and no blanket amnesty for definitive shortfalls.</li>
+        <li><strong>Super goes with every pay run.</strong> Pay wages weekly, and super goes weekly too.</li>
+        <li><strong>Received, not just sent:</strong> the contribution must <em>arrive</em> in the employee’s fund within <strong>7 business days</strong> of payday; Treasury says the window covers the time payments take to move through the payment system, including clearing houses.</li>
+        <li><strong>The super guarantee charge:</strong> the shortfall, daily interest and an administrative uplift of up to <strong>60% of the shortfall</strong>, reduced for employers who voluntarily disclose (Treasury factsheet, September 2024).</li>
+        <li><strong>The first year:</strong> Treasury said in November 2025 that the ATO was consulting on its compliance approach for the 12 months after the start; check the ATO’s current guidance rather than planning around it.</li>
       </ul>
 
-      <h2>Why trades businesses feel this most</h2>
+      <h2>What it means if you pay weekly</h2>
       <ul>
-        <li><strong>Weekly pay cycles:</strong> trades crews are commonly paid weekly; that’s 52 super events a year instead of 4. Manual processes that survived quarterly batching will not survive weekly.</li>
-        <li><strong>The cash-flow float disappears:</strong> the super you used to hold until quarter end now leaves with every run. On a 5-person crew, that’s a permanent working-capital shift worth modelling now if you have not already.</li>
-        <li><strong>Casuals and turnover:</strong> high staff churn means more super-fund detail errors and stapled-fund lookups, and a bounced contribution now risks the 7-day clock, not a quarterly buffer.</li>
-        <li><strong>Clearing-house habits:</strong> the ATO closed its free Small Business Superannuation Clearing House on 1 July 2026 as part of the transition. If your quarterly routine ran through it, the replacement is payroll software paying super per run.</li>
+        <li><strong>More payments:</strong> a business that pays wages weekly now makes 52 super payments a year instead of 4 quarterly ones.</li>
+        <li><strong>Cash flow:</strong> super you used to hold until the quarterly due date now leaves with every pay run, so check the working-capital effect.</li>
+        <li><strong>New starters:</strong> wrong or missing super-fund details can hold up a contribution while the 7-business-day window runs.</li>
+        <li><strong>Clearing house:</strong> Treasury said the ATO’s free Small Business Superannuation Clearing House would be retired from 1 July 2026. If your quarterly routine ran through it, payroll software can pay super with each pay run.</li>
       </ul>
 
       <h2>The payroll platforms in our AU directory</h2>
       <p>
-        Payday super lives in the <strong>payroll layer</strong>. From our <a href="/au/">Australian trades directory</a>, these are the payroll platforms. MYOB, Employment Hero, Xero and Reckon each describe Payday Super support on their payroll pages, and Deputy’s payroll page covers the change, so the buyer’s job is confirming it’s switched on for <em>your</em> plan:
+        Payday super is paid from the <strong>payroll layer</strong>. From our <a href="/au/">Australian trades directory</a>, these are the payroll platforms. MYOB, Employment Hero, Xero and Reckon each describe Payday Super support on their payroll pages, and Deputy’s payroll page covers the change, so the buyer’s job is confirming it’s switched on for <em>your</em> plan:
       </p>
     </section>
 
@@ -149,25 +148,25 @@ const faqSchema = {
           ))}
         </tbody>
       </table>
-      <p class="mt-3 text-xs text-slate-500">Source: WrenchStack AU directory, re-checked September 2026. Confirm the specifics for your plan with the vendor.</p>
+      <p class="mt-3 text-xs text-slate-500">Source: WrenchStack AU directory entries, re-checked against vendor pages on 30 September 2026. Confirm the specifics for your plan with the vendor.</p>
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-2 text-lg font-bold text-slate-900">Your job-management app doesn’t pay super</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        {fsmTools.map((v, i) => (<><a href={`/au/${v.slug}/`} class="font-medium text-orange-700 hover:underline">{v.name}</a>{i < fsmTools.length - 1 ? ', ' : ''}</>))} run your quotes, scheduling, job costing and invoicing; none of them calculate or remit super. The standard AU trades stack pairs one of these with a payroll platform (Xero, MYOB, Employment Hero) through an integration, with timesheets flowing from the job app into payroll. Payday-super readiness is a question for the payroll side of that stack, but the timesheet flow matters more than ever, because late timesheets now mean late pay runs <em>and</em> late super.
+        {fsmTools.map((v, i) => (<><a href={`/au/${v.slug}/`} class="font-medium text-orange-700 hover:underline">{v.name}</a>{i < fsmTools.length - 1 ? ', ' : ''}</>))} run quotes, scheduling and invoicing, and our entries for them describe no payroll or super payments. Super is paid from payroll software such as Xero, MYOB or Employment Hero. The job app still matters for payday super: late timesheets mean late pay runs, and late pay runs now mean late super.
       </p>
     </section>
 
     <section class="mb-10 prose prose-slate max-w-none">
-      <h2>Payday-super checklist for trades employers</h2>
+      <h2>Payday super checklist for trades employers</h2>
       <ol>
-        <li><strong>Confirm your payroll platform’s payday-super support is switched on</strong>, and that your specific plan/tier includes it.</li>
-        <li><strong>Model the cash-flow shift.</strong> Take last quarter’s super bill, divide it across your actual pay cycles, and check the working-capital impact; weekly payers feel it most.</li>
-        <li><strong>Clean employee super data now:</strong> fund details, member numbers, stapled-fund checks for recent hires. Bounced contributions burn the 7-day window.</li>
-        <li><strong>Replace the ATO clearing house</strong> if SBSCH was your route: it closed on 1 July 2026, so your payroll software now handles per-run payments.</li>
-        <li><strong>Tighten the timesheet pipeline</strong> from your job-management app: late timesheets now cascade into super penalties, not just payroll grumbles.</li>
-        <li><strong>Watch your live pay runs closely.</strong> Track cycles end-to-end to confirm contributions actually reach funds within 7 business days.</li>
+        <li><strong>Confirm your payroll platform’s payday super support is switched on</strong>, and that your plan includes it.</li>
+        <li><strong>Model the cash-flow shift.</strong> Take last quarter’s super bill, spread it across your actual pay cycles, and check the working-capital effect.</li>
+        <li><strong>Check employee super data:</strong> fund details, member numbers and stapled-fund checks for new hires.</li>
+        <li><strong>Replace the ATO clearing house</strong> if SBSCH was your route: Treasury said it would be retired from 1 July 2026, so pay super through your payroll software or another clearing service.</li>
+        <li><strong>Tighten the timesheet pipeline</strong> from your job-management app: late timesheets now mean late super, not only late wages.</li>
+        <li><strong>Watch your pay runs.</strong> Track each cycle to confirm contributions reach funds within 7 business days.</li>
       </ol>
     </section>
 
@@ -184,12 +183,12 @@ const faqSchema = {
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
-      <strong class="text-slate-700">Sources &amp; verification:</strong> Verified June 2026, re-verified July 2026 from the <a href="https://www.fairwork.gov.au/newsroom/news/payday-super-new-rules-starting-1-july-2026" rel="nofollow noopener" target="_blank">Fair Work Ombudsman</a> and the <a href="https://www.ato.gov.au/businesses-and-organisations/super-for-employers/about-payday-super" rel="nofollow noopener" target="_blank">ATO's payday super guidance</a> (legislation passed; in effect since 1 July 2026; 7 business days; penalties up to 60% of shortfall; transitional facilitative-compliance year to 30 June 2027); SBSCH closure on 1 July 2026 per the ATO's clearing-house pages, checked September 2026 · vendor positions from each vendor's published material, re-checked September 2026. General information, not financial or tax advice. Spotted an error? <a href="/contact/" class="underline">Tell us</a> and we'll correct it.
+      <strong class="text-slate-700">Sources &amp; verification:</strong> Checked on 1 October 2026: Treasury’s <a href="https://ministers.treasury.gov.au/ministers/daniel-mulino-2025/media-releases/new-legislation-passes-ensure-super-paid-time" rel="nofollow noopener" target="_blank">media release of 4 November 2025</a> (legislation passed; start on 1 July 2026; contributions received within 7 business days of payday; ATO consulting on its first-year compliance approach) and Treasury’s <a href="https://treasury.gov.au/sites/default/files/2024-09/p2024-581438-payday-super-factsheet.pdf" rel="nofollow noopener" target="_blank">payday super factsheet</a> of 17 September 2024 (super guarantee charge components, administrative uplift of up to 60% of the shortfall, SBSCH retirement from 1 July 2026). The <a href="https://www.ato.gov.au/businesses-and-organisations/super-for-employers/about-payday-super" rel="nofollow noopener" target="_blank">ATO’s payday super guidance</a> could not be read by our checker on 1 October 2026. Vendor positions from each vendor’s published material, re-checked 30 September 2026. General information, not financial or tax advice. Spotted an error? <a href="/contact/" class="underline">Tell us</a>.
     </section>
 
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Compare the Australian options side by side</h2>
-      <p class="mt-2 text-slate-300 leading-relaxed">Independent reviews of {vendors.length} Australian trades vendors: software, payroll, insurance and lead-gen, with no pay-to-play.</p>
+      <p class="mt-2 text-slate-300 leading-relaxed">Independent reviews of {vendors.length} Australian entries: software, payroll, insurance, lead generation and state regulators, with no pay-to-play.</p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/au/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">🇦🇺 Australian directory →</a>
         <a href="/au/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Compare vendors</a>

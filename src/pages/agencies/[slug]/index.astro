@@ -21,7 +21,18 @@ const agencyVerticals = agency.verticals_specialty
 const siblings = marketingAgencies.filter((a) => a.slug !== agency.slug).slice(0, 6);
 
 const pageTitle = `${agency.name} Review (2026): Services, Pricing, Pros & Cons`;
-const pageDescription = `${agency.name} digital marketing agency review for trades contractors. ${asSentence(agency.tagline)} ${agency.reputation_flag ? 'Includes documented reputation context. ' : ''}Updated ${new Date().getFullYear()}.`;
+const pageDescription = `${agency.name} digital marketing agency review for trades contractors. ${asSentence(agency.tagline)} ${agency.reputation_flag ? 'Includes documented reputation context. ' : ''}Verified ${agency.verified_date}.`;
+
+// Computed from the link this page actually uses (affiliate_url falls back to vendor_url),
+// not from the unverified affiliate notes in the data.
+const affiliateDisclosure = agency.affiliate_url.startsWith('http')
+  ? `The link to ${agency.name} on this page is an affiliate link: we may earn a commission if you sign up through it.`
+  : `The link to ${agency.name} on this page goes to its own site and is not an affiliate link.`;
+
+const minTerm = agency.minimum_contract_months;
+const minTermHeader = minTerm === null ? 'Minimum term not published' : minTerm === 0 ? 'No minimum term' : `${minTerm}-month minimum`;
+const minTermVerdict = minTerm === null ? 'No minimum term is published.' : minTerm === 0 ? 'No minimum term.' : `Minimum: ${minTerm}-month commitment.`;
+const minTermCell = minTerm === null ? 'Not published' : minTerm === 0 ? 'None' : `${minTerm} month${minTerm === 1 ? '' : 's'}`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -75,7 +86,7 @@ const faqSchema = {
       <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
         {agency.founded != null && <span>Founded {agency.founded}</span>}
         {agency.headquartered && <span>HQ {agency.headquartered}</span>}
-        <span>{agency.minimum_contract_months === null ? 'Minimum term not published' : `${agency.minimum_contract_months}-month minimum`}</span>
+        <span>{minTermHeader}</span>
         <span>Verified: {agency.verified_date}</span>
       </div>
 
@@ -113,7 +124,7 @@ const faqSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700 leading-relaxed">
-        <strong class="text-slate-900">{agency.name}</strong> is best for {asSentence(agency.best_for)} Pricing: {asSentence(agency.typical_retainer_usd)} {agency.minimum_contract_months === null ? 'No minimum term is published.' : `Minimum: ${agency.minimum_contract_months}-month commitment.`} {asSentence(agency.weaknesses)}
+        <strong class="text-slate-900">{agency.name}</strong> is best for {asSentence(agency.best_for)} Pricing: {asSentence(agency.typical_retainer_usd)} {minTermVerdict} {asSentence(agency.weaknesses)}
       </p>
     </section>
 
@@ -168,12 +179,12 @@ const faqSchema = {
             </dd>
           </div>
           <div>
-            <dt class="text-xs uppercase tracking-wider text-slate-500">Typical retainer</dt>
+            <dt class="text-xs uppercase tracking-wider text-slate-500">Pricing</dt>
             <dd class="mt-1 font-semibold text-slate-900">{agency.typical_retainer_usd}</dd>
           </div>
           <div>
             <dt class="text-xs uppercase tracking-wider text-slate-500">Minimum contract</dt>
-            <dd class="mt-1 font-semibold text-slate-900">{agency.minimum_contract_months === null ? 'Not published' : `${agency.minimum_contract_months}-month${agency.minimum_contract_months === 1 ? '' : 's'}`}</dd>
+            <dd class="mt-1 font-semibold text-slate-900">{minTermCell}</dd>
           </div>
           <div>
             <dt class="text-xs uppercase tracking-wider text-slate-500">Pricing model</dt>
@@ -191,7 +202,7 @@ const faqSchema = {
           )}
           <div class="sm:col-span-2">
             <dt class="text-xs uppercase tracking-wider text-slate-500">Affiliate disclosure</dt>
-            <dd class="mt-1 text-sm text-slate-700">{asSentence(agency.affiliate_payout_note)}</dd>
+            <dd class="mt-1 text-sm text-slate-700">{affiliateDisclosure}</dd>
           </div>
         </dl>
       </div>

@@ -1,29 +1,67 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { tools, verticals, toolsForVertical, verticalToUrl } from '../../lib/data';
+import {
+  tools,
+  verticals,
+  toolsForVertical,
+  verticalToUrl,
+  getTool,
+  isQuoteOnly,
+  hasFreeTier,
+  medianUsd,
+  pricedEntryValues,
+  perUserMedian,
+  flatFeeMedian,
+} from '../../lib/data';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Pricing', url: '/pricing/' },
 ];
 
-// Quick stats
+// Quick stats. Quote-only = isQuoteOnly (pricing_model 'quote_only'). Until 2026-10-01
+// this page counted every tool with no monthly starting price as quote-only, which
+// included the two that publish one-time or per-project prices (51 instead of 49).
 const totalTools = tools.length;
-const freeTierTools = tools.filter(t => t.pricing.starting_at_usd === 0);
-const customQuotedTools = tools.filter(t => t.pricing.starting_at_usd === null);
-const paidTools = tools.filter(t => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0);
-const cheapestPaid = [...paidTools]
-  .sort((a, b) => (a.pricing.starting_at_usd ?? 999) - (b.pricing.starting_at_usd ?? 999))[0];
-const paidUnder50 = paidTools.filter(t => (t.pricing.starting_at_usd ?? 0) < 50).length;
-const paidStarts = paidTools.map(t => t.pricing.starting_at_usd as number).sort((a, b) => a - b);
-const medianPaidStartRaw = paidStarts.length === 0
-  ? null
-  : paidStarts.length % 2 === 1
-    ? paidStarts[(paidStarts.length - 1) / 2]
-    : (paidStarts[paidStarts.length / 2 - 1] + paidStarts[paidStarts.length / 2]) / 2;
-const medianPaidStart = medianPaidStartRaw === null
-  ? null
-  : Number.isInteger(medianPaidStartRaw) ? String(medianPaidStartRaw) : medianPaidStartRaw.toFixed(2);
+const freeTierTools = tools.filter(hasFreeTier);
+const quoteOnlyTools = tools.filter(isQuoteOnly);
+const otherPricedTools = tools.filter((t) => t.pricing.starting_at_usd === null && !isQuoteOnly(t));
+const paidTools = tools.filter((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0);
+const monthlyPricedCount = freeTierTools.length + paidTools.length;
+const lowestPaidPrice = paidTools.length ? Math.min(...paidTools.map((t) => t.pricing.starting_at_usd as number)) : null;
+const lowestPaidTools = paidTools.filter((t) => t.pricing.starting_at_usd === lowestPaidPrice);
+const lowestIsPerUser = lowestPaidTools.length > 0 && lowestPaidTools.every((t) => t.pricing.pricing_model === 'per_user' || t.pricing.pricing_model === 'annual_per_user');
+const paidUnder50 = paidTools.filter((t) => (t.pricing.starting_at_usd ?? 0) < 50).length;
+// Shared helpers, so this page and /trends-2026/ quote the same medians.
+const medianPaidStart = paidTools.length ? medianUsd(pricedEntryValues()) : null;
+const perUserMedianUsd = perUserMedian();
+const flatMedianUsd = flatFeeMedian();
+
+const listJoin = (names: string[]) =>
+  names.length <= 1 ? (names[0] ?? '') : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+
+// Named examples are checked against the data at build, so a vendor that starts
+// publishing prices drops out of this sentence instead of being misdescribed.
+const quoteOnlyExamples = ['servicetitan', 'buildops', 'procore']
+  .map((s) => getTool(s))
+  .filter((t): t is NonNullable<typeof t> => !!t && isQuoteOnly(t))
+  .map((t) => t.name);
+
+// Quote-only tools whose pricing note quotes a labelled third-party estimate (allowed
+// by the methodology when labelled; the estimate is not stored as the price). FieldPulse's
+// note says "Third-party reports", so the test covers both wordings (2026-10-01).
+const estimateNoteTools = quoteOnlyTools.filter((t) => /third-party (estimate|report)/i.test(t.pricing.pricing_note ?? ''));
+
+// Verified dates are YYYY-MM-DD; format in UTC so a build in a US timezone does not
+// print the 1st of a month as the previous month.
+const verifiedDates = tools.map((t) => t.pricing.verified_date).filter(Boolean).sort();
+const dayLabel = (d: string) =>
+  new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+const verifiedRange = verifiedDates.length
+  ? (verifiedDates[0] === verifiedDates[verifiedDates.length - 1]
+      ? dayLabel(verifiedDates[0])
+      : `${dayLabel(verifiedDates[0])} to ${dayLabel(verifiedDates[verifiedDates.length - 1])}`)
+  : null;
 
 const itemListSchema = {
   '@context': 'https://schema.org',
@@ -37,11 +75,15 @@ const itemListSchema = {
     url: `https://wrenchstack.com/pricing/${verticalToUrl(v.slug)}/`,
   })),
 };
+
+// Three CMMS tools carry no trade (their own sites name none), so the count of tools
+// and the count of trades are stated separately rather than as "N tools across 21 trades".
+const pageDescription = `Starting prices for ${totalTools} field service and trades software tools, with a pricing page for each of ${verticals.length} trades, from each vendor's own site: ${monthlyPricedCount} publish a monthly price and ${quoteOnlyTools.length} quote each account. Per-trade tables, team-size scenarios and costs beyond the subscription.`;
 ---
 
 <Layout
-  title="Trades software pricing: every tool, every tier, verified quarterly"
-  description={`Real pricing for ${totalTools}+ field service and trades software platforms across ${verticals.length} verticals. Best-value picks by tier, pricing scenarios by team size, hidden cost callouts. Every tier verified.`}
+  title={`Trades software pricing: starting prices for ${totalTools} tools`}
+  description={pageDescription}
   breadcrumbs={breadcrumbs}
 >
   <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
@@ -52,23 +94,27 @@ const itemListSchema = {
         Trades software pricing
       </h1>
       <p class="mt-4 max-w-3xl text-lg text-slate-600">
-        Real pricing for {totalTools}+ field service software platforms across {verticals.length} verticals. Every tier verified independently from vendor pricing pages. Sorted cheapest first with hidden-cost callouts and team-size pricing scenarios.
+        Starting prices for the {totalTools} field service software tools in our directory, with a pricing page for each of {verticals.length} trades. Each price was checked against the vendor's own site on the date shown next to it. Each trade page sorts its tools by starting price, lowest first, and adds team-size scenarios and the costs to ask about beyond the subscription.
       </p>
       <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500">
-        <span><span class="font-bold text-slate-900">{totalTools}+</span> tools priced</span>
+        <span><span class="font-bold text-slate-900">{monthlyPricedCount}</span> of {totalTools} publish a monthly price</span>
         <span class="text-slate-300">·</span>
         <span><span class="font-bold text-slate-900">{freeTierTools.length}</span> with free tiers</span>
         <span class="text-slate-300">·</span>
-        <span><span class="font-bold text-slate-900">{customQuotedTools.length}</span> quote-only (no published price)</span>
-        <span class="text-slate-300">·</span>
-        <span>Verified quarterly</span>
+        <span><span class="font-bold text-slate-900">{quoteOnlyTools.length}</span> quote-only (no published price)</span>
+        {verifiedRange && (
+          <>
+            <span class="text-slate-300">·</span>
+            <span>Prices checked {verifiedRange}</span>
+          </>
+        )}
       </div>
     </header>
 
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-bold tracking-tight text-slate-900">Pricing by trade</h2>
       <p class="mb-6 text-slate-600">
-        Each vertical pricing page includes: full pricing table sorted cheapest first, best-value picks by tier (entry/mid/top tier), estimated cost at 3/10/25 techs per tool, hidden cost callouts, and 8 FAQs.
+        Each trade's pricing page includes a price table sorted by starting price, the top Fit Score pick in each price tier, estimated monthly cost at 3, 10 and 25 techs, the costs to ask about beyond the subscription, and the tiers our data records for each tool.
       </p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {verticals.map((v) => {
@@ -95,49 +141,49 @@ const itemListSchema = {
           <div class="text-xs font-bold uppercase tracking-wider text-emerald-700">Free tier</div>
           <div class="mt-2 text-lg font-semibold text-slate-900">{freeTierTools.length} tools</div>
           <p class="mt-1 text-sm text-slate-600">
-            {freeTierTools.slice(0, 4).map(t => t.name).join(', ')}{freeTierTools.length > 4 ? ` and ${freeTierTools.length - 4} more` : ''}. Free tiers typically cover solo operators or 1-2 person teams; full features require paid tiers.
+            {freeTierTools.slice(0, 4).map(t => t.name).join(', ')}{freeTierTools.length > 4 ? ` and ${freeTierTools.length - 4} more` : ''}. Free plans differ: some cap users, jobs, projects or features; each tool page's pricing note gives what our data records about its free plan.
           </p>
         </div>
         <div>
-          <div class="text-xs font-bold uppercase tracking-wider text-blue-700">Cheapest paid</div>
-          <div class="mt-2 text-lg font-semibold text-slate-900">{cheapestPaid?.name ?? 'n/a'}</div>
+          <div class="text-xs font-bold uppercase tracking-wider text-blue-700">Lowest paid starting price</div>
+          <div class="mt-2 text-lg font-semibold text-slate-900">{lowestPaidTools.length ? listJoin(lowestPaidTools.map((t) => t.name)) : 'n/a'}</div>
           <p class="mt-1 text-sm text-slate-600">
-            From ${cheapestPaid?.pricing.starting_at_usd}/month. {paidUnder50} of the {paidTools.length} tools with a published paid price start under $50/month{medianPaidStart !== null ? `; the median starting price is $${medianPaidStart}/month` : ''} (some plans are per user, others a flat company price).
+            {lowestPaidPrice !== null ? `From $${lowestPaidPrice}${lowestIsPerUser ? ' per user' : ''} a month. ` : ''}{paidUnder50} of the {paidTools.length} tools with a published paid starting price start under $50/month{medianPaidStart !== null ? `; the median starting price is $${medianPaidStart}/month blended across pricing models (per-user median $${perUserMedianUsd} per user a month, flat-fee median $${flatMedianUsd} a month)` : ''}. Some plans are priced per user and others per company, so compare at your team size.
           </p>
         </div>
         <div>
           <div class="text-xs font-bold uppercase tracking-wider text-orange-700">Quote-only (no published price)</div>
-          <div class="mt-2 text-lg font-semibold text-slate-900">{customQuotedTools.length} tools</div>
+          <div class="mt-2 text-lg font-semibold text-slate-900">{quoteOnlyTools.length} tools</div>
           <p class="mt-1 text-sm text-slate-600">
-            Including ServiceTitan, BuildOps, and Procore. No published price, so a sales call is required for a quote; ask for implementation fees in the same quote.
+            {quoteOnlyExamples.length ? `Including ${listJoin(quoteOnlyExamples)}. ` : ''}They publish no price, so the cost is whatever the vendor quotes you; ask for setup or implementation fees in the same written quote.{otherPricedTools.length ? ` A further ${otherPricedTools.length} (${listJoin(otherPricedTools.map((t) => t.name))}) publish prices that are not a monthly plan, such as one-time licenses or per-project fees.` : ''}
           </p>
         </div>
       </div>
     </section>
 
     <section class="mb-12 prose prose-slate max-w-none">
-      <h2>What you'll find on each vertical pricing page</h2>
+      <h2>What you'll find on each trade's pricing page</h2>
       <p>
-        Every vertical pricing page (HVAC, plumbing, electrical, etc.) includes the same depth of analysis:
+        Every trade's pricing page (HVAC, plumbing, electrical and the rest) has the same sections:
       </p>
       <ul>
-        <li><strong>Quick price comparison table</strong>: every tool serving the vertical, sorted cheapest first, with pricing model + free trial + verification date.</li>
-        <li><strong>Top pick by tier</strong>: the tool with the highest Fit Score for that trade in each price bracket, compared per user per month with flat company plans split across a 5-person team (entry under $100, mid $100-$249, top tier $250+ or quote-only).</li>
-        <li><strong>Pricing scenarios by team size</strong>: estimated monthly cost at 3, 10, and 25 techs per tool. Per-user platforms scale linearly; flat-rate platforms barely change.</li>
-        <li><strong>Hidden costs callout</strong>: payment processing fees (2.59-2.99% + $0.30), implementation fees, add-on integrations ($20-$200/mo each).</li>
-        <li><strong>Per-tool pricing breakdown</strong>: all tiers for each platform, with custom-quote tools marked as quote-only.</li>
-        <li><strong>8 FAQs</strong>: average cost, cheapest options, per-user vs flat-rate analysis, pricing verification, hidden costs, scaling math, negotiability.</li>
+        <li><strong>Quick price comparison table</strong>: every tool listed for the trade, sorted by starting price (lowest first, quote-only last), with the vendor's pricing note, free trial length and the date the price was checked.</li>
+        <li><strong>Top pick by tier</strong>: the tool with the highest Fit Score for that trade in each price bracket, compared per user per month with flat company plans split across a 5-person team (entry under $100, mid $100-$249, top tier $250+ or quote-only). Ties are named. Tools with a free tier, and tools with no monthly plan, are not placed in a tier.</li>
+        <li><strong>Pricing scenarios by team size</strong>: estimated monthly cost at 3, 10 and 25 techs for up to 10 tools with a published monthly price. Per-user prices are multiplied by team size (or by the vendor's minimum where the pricing note sets one), using the next plan's price where the note limits the entry plan to one user; flat, base-plus-seat and free plans are shown at their entry price, because their user limits and seat fees vary by vendor.</li>
+        <li><strong>Costs beyond the subscription</strong>: card processing fees, setup or implementation fees and paid add-ons, with the tools on that page whose pricing notes mention each.</li>
+        <li><strong>Per-tool pricing breakdown</strong>: the tiers our data records for each tool, with the published price where there is one; quote-only tools are marked as custom quote.</li>
+        <li><strong>FAQs</strong>: what the trade's software costs, the lowest published prices, per-user against flat pricing, how prices are checked, costs beyond the subscription, scaling with team size, and negotiating.</li>
       </ul>
 
       <h2>How we verify pricing</h2>
       <p>
-        Every pricing tier on every vertical page carries a <strong>verified_date</strong>. We re-check pricing quarterly by visiting each vendor's public pricing page; for custom-quoted platforms, we mark the price as quote-only rather than cite third-party estimates. Pricing older than 90 days gets flagged for re-verification. See the <a href="/methodology/">methodology page</a> for full details.
+        Each tool's price carries the date it was last checked against the vendor's own website{verifiedRange ? ` (currently ${verifiedRange})` : ''}. When a vendor publishes no price, the tool is marked quote-only.{estimateNoteTools.length ? ` The pricing ${estimateNoteTools.length === 1 ? 'note' : 'notes'} for ${listJoin(estimateNoteTools.map((t) => t.name))} also ${estimateNoteTools.length === 1 ? 'quotes a third-party estimate, labelled as one' : 'quote third-party estimates, labelled as such'}; an estimate is not used as a tool's price.` : ''} See the <a href="/methodology/">methodology page</a> for how and how often prices are re-checked.
       </p>
     </section>
 
     <section class="mt-12 rounded-lg bg-slate-50 p-6 text-sm text-slate-600">
       <p>
-        Want personalized pricing recommendations? Take the <a href="/quiz/" class="text-orange-600 hover:underline">60-second matching quiz</a> for 3 ranked picks at your team size and budget. Or run the <a href="/roi-calculator/" class="text-orange-600 hover:underline">ROI calculator</a> to estimate payback period at your specific situation.
+        Want picks for your situation? Take the <a href="/quiz/" class="text-orange-600 hover:underline">5-question matching quiz</a> for 3 ranked picks at your trade, team size and budget. Or run the <a href="/roi-calculator/" class="text-orange-600 hover:underline">ROI calculator</a> to estimate a payback period from your own numbers and its stated assumptions.
       </p>
     </section>
   </section>

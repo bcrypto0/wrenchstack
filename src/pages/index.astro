@@ -1,10 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { EN_MARKET_HREFLANG, intlVendorCount, intlMarketCount } from '../lib/intl';
+import { EN_MARKET_HREFLANG, intlVendorOnlyCount, intlCertificationCount, intlMarketCount } from '../lib/intl';
 import categories from '../data/categories.json';
 import toolsData from '../data/tools.json';
 import featuresData from '../data/features.json';
-import { tools, toolsForVertical, freshnessStats, directoryVerifiedWithinDays, daysSinceVerified, formatPrice, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, aiTools, paymentProcessors, financingProviders, accountingSoftware, bankingProviders } from '../lib/data';
+import { tools, toolsForVertical, freshnessStats, directoryVerifiedWithinDays, daysSinceVerified, formatPrice, getTool, awards, usVendorLists, totalReputationFlags, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, aiTools, paymentProcessors, financingProviders, accountingSoftware, bankingProviders } from '../lib/data';
 import FreshnessBadge from '../components/FreshnessBadge.astro';
 
 const verticals = categories.verticals;
@@ -19,7 +19,27 @@ const agencyCount = marketingAgencies.length;
 const adjacentCount = leadGenCount + insuranceCount + payrollCount + agencyCount +
   aiTools.length + paymentProcessors.length + financingProviders.length +
   accountingSoftware.length + bankingProviders.length;
-const totalVendorCount = toolCount + adjacentCount + intlVendorCount;
+// International 'certification' entries (licensing bodies, tax offices, regulators,
+// codes) are not vendors, so "vendors tracked" leaves them out (2026-10-01).
+const totalVendorCount = toolCount + adjacentCount + intlVendorOnlyCount;
+// Computed (2026-10-01): the stats row hard-coded "10 US categories", the awards
+// card "18 categories" and the feature link "All 20 features".
+const usCategoryCount = usVendorLists().length;
+const flagCount = totalReputationFlags();
+const awardCount = awards.categories.length;
+const awardsPublished = new Date(awards.published_date + 'T00:00:00Z').toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  timeZone: 'UTC',
+});
+// The hero's 30-day count is computed at build time, so it is anchored to the build
+// date (2026-10-01): "in the last 30 days" was true only on the day of the deploy.
+const buildDateLabel = new Date().toLocaleDateString('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
 
 // Compute most-recent pricing-verified date across all tools (for the "Last refreshed" indicator).
 const lastVerifiedDate = tools
@@ -50,18 +70,26 @@ const verticalsWithCounts = verticals.map((v) => ({
   toolCount: toolsForVertical(v.slug).length,
 }));
 
-// Featured head-to-head comparisons: the highest-search-volume pairings in the trades software space.
+// Featured head-to-head comparisons: hand-picked pairs of well-known tools.
 // Each pair must share at least one vertical so the comparison page exists.
+// The line under each label is computed from the tools data (2026-10-01): the
+// hand-written lines claimed search volume ("most-searched") and positions
+// ("residential leader", "enterprise reporting") that no data supported.
 const featuredComparisons = [
-  { a: 'jobber', b: 'housecall-pro', label: 'Jobber vs Housecall Pro', context: 'The most-searched residential FSM comparison' },
-  { a: 'jobber', b: 'servicetitan', label: 'Jobber vs ServiceTitan', context: 'Entry-tier vs enterprise: when to upgrade' },
-  { a: 'housecall-pro', b: 'servicetitan', label: 'Housecall Pro vs ServiceTitan', context: 'Mid-market vs enterprise residential' },
-  { a: 'fieldedge', b: 'servicetitan', label: 'FieldEdge vs ServiceTitan', context: 'QuickBooks Desktop depth vs enterprise reporting' },
-  { a: 'buildops', b: 'servicetitan', label: 'BuildOps vs ServiceTitan', context: 'Commercial mechanical vs residential leader' },
-  { a: 'buildertrend', b: 'procore', label: 'Buildertrend vs Procore', context: 'Residential builders vs commercial GCs' },
-  { a: 'acculynx', b: 'jobnimbus', label: 'AccuLynx vs JobNimbus', context: 'Storm-restoration roofing head-to-head' },
-  { a: 'workiz', b: 'jobber', label: 'Workiz vs Jobber', context: 'On-demand specialty vs broad multi-vertical' },
-];
+  { a: 'jobber', b: 'housecall-pro', label: 'Jobber vs Housecall Pro' },
+  { a: 'jobber', b: 'servicetitan', label: 'Jobber vs ServiceTitan' },
+  { a: 'housecall-pro', b: 'servicetitan', label: 'Housecall Pro vs ServiceTitan' },
+  { a: 'fieldedge', b: 'servicetitan', label: 'FieldEdge vs ServiceTitan' },
+  { a: 'buildops', b: 'servicetitan', label: 'BuildOps vs ServiceTitan' },
+  { a: 'buildertrend', b: 'procore', label: 'Buildertrend vs Procore' },
+  { a: 'acculynx', b: 'jobnimbus', label: 'AccuLynx vs JobNimbus' },
+  { a: 'workiz', b: 'jobber', label: 'Workiz vs Jobber' },
+].map((c) => {
+  const ta = getTool(c.a);
+  const tb = getTool(c.b);
+  const context = ta && tb ? `${ta.name}: ${formatPrice(ta)} · ${tb.name}: ${formatPrice(tb)}` : '';
+  return { ...c, context };
+});
 
 // Helper to build comparison URL; slugs must be sorted alphabetically (template convention)
 function comparisonUrl(a: string, b: string): string {
@@ -71,6 +99,7 @@ function comparisonUrl(a: string, b: string): string {
 
 // Featured features: surface the new features axis with highest-value entries
 const features = (featuresData as { features: Record<string, { name: string; definition: string }> }).features;
+const featureCount = Object.keys(features).length;
 const featuredFeatures = [
   'quickbooks_integration',
   'ai_dispatcher',
@@ -87,23 +116,23 @@ function featureToUrl(slug: string): string {
 
 <Layout
   title="WrenchStack | The trades vendor directory: software, lead-gen, insurance, payroll, marketing"
-  description={`Independent reviews of ${totalVendorCount} vendors: ${toolCount} field-service platforms, ${adjacentCount} adjacent US vendors (insurance, payroll, lead-gen, payments, financing, banking, accounting, agencies, AI), and ${intlVendorCount} listings across ${intlMarketCount} international markets. Honest reputation flags. Real pricing. No lead-gen sales calls.`}
+  description={`Independent reviews of ${totalVendorCount} vendors: ${toolCount} field-service platforms, ${adjacentCount} adjacent US vendors (insurance, payroll, lead-gen, payments, financing, banking, accounting, agencies, AI), and ${intlVendorOnlyCount} vendors across ${intlMarketCount} international markets. Sourced reputation flags. Dated prices from vendor pages. No lead-gen sales calls.`}
   alternateUrls={EN_MARKET_HREFLANG}
 >
   <section class="bg-gradient-to-b from-white to-slate-50">
     <div class="mx-auto max-w-6xl px-4 py-20 md:py-28">
       <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-6xl">
-        Everything contractors buy,<br />
+        The software and services contractors buy,<br />
         reviewed honestly.
       </h1>
       <p class="mt-6 max-w-3xl text-lg text-slate-600 md:text-xl">
-        The independent directory covering what trades contractors actually spend on: {toolCount} field-service platforms, {adjacentCount} adjacent US vendors (lead-gen, insurance, payroll, payments, financing, banking, accounting, agencies, AI tools), and {intlVendorCount} listings across {intlMarketCount} international markets. With reputation flags on the vendors that earn them.
+        An independent directory of the vendors trades contractors buy from: {toolCount} field-service platforms, {adjacentCount} adjacent US vendors (lead-gen, insurance, payroll, payments, financing, banking, accounting, agencies, AI tools), and {intlVendorOnlyCount} vendors (plus {intlCertificationCount} licensing, tax and regulatory entries) across {intlMarketCount} international markets. {flagCount} US vendors carry a reputation warning that cites its source.
       </p>
 
       <div class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-slate-600">
         <span><span class="font-bold text-slate-900">{totalVendorCount}</span> vendors tracked</span>
         <span class="text-slate-300">·</span>
-        <span><span class="font-bold text-slate-900">10</span> US categories</span>
+        <span><span class="font-bold text-slate-900">{usCategoryCount}</span> US categories</span>
         <span class="text-slate-300">·</span>
         <span><span class="font-bold text-slate-900">{verticals.length}</span> trades</span>
         <span class="text-slate-300">·</span>
@@ -111,11 +140,11 @@ function featureToUrl(slug: string): string {
         <span class="text-slate-300">·</span>
         <a href="/verification-log/" class="inline-flex items-center gap-1.5 hover:text-slate-900">
           <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 ring-2 ring-emerald-200"></span>
-          <span class="font-bold text-slate-900">{directoryVerifiedWithinDays(30)}</span> verifications in the last 30 days
+          <span class="font-bold text-slate-900">{directoryVerifiedWithinDays(30)}</span> entries verified in the 30 days to {buildDateLabel}
         </a>
       </div>
       <p class="mt-5 max-w-2xl text-sm text-slate-500 leading-relaxed">
-        Independent and reader-funded. We earn affiliate commissions when you sign up with some vendors, but <strong class="font-semibold text-slate-700">vendors can't pay for a higher score or to be featured</strong>, and we flag the ones with documented bad track records. <a href="/methodology/" class="underline hover:text-slate-700">How we rate</a> · <a href="/disclosure/" class="underline hover:text-slate-700">how we make money</a>.
+        Independent. We may earn an affiliate commission when you sign up with some software vendors through our links, but <strong class="font-semibold text-slate-700">vendors can't pay for a higher score or to be featured</strong>, and a reputation warning goes on a vendor only when a regulator order, court record, BBB profile or the vendor's own terms supports it. <a href="/methodology/" class="underline hover:text-slate-700">How we rate</a> · <a href="/disclosure/" class="underline hover:text-slate-700">how we make money</a>.
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
         <a
@@ -144,10 +173,10 @@ function featureToUrl(slug: string): string {
     <div class="mx-auto max-w-6xl px-4 py-16">
       <div class="mb-8 flex flex-wrap items-baseline justify-between gap-2">
         <h2 class="text-2xl font-bold tracking-tight text-slate-900">Pick your category</h2>
-        <a href="/methodology/" class="text-sm font-medium text-orange-600 hover:underline">Why these 5 →</a>
+        <a href="/methodology/" class="text-sm font-medium text-orange-600 hover:underline">How we rate →</a>
       </div>
       <p class="mb-8 max-w-3xl text-slate-600">
-        These five absorb the majority of a trades shop's vendor spending, and we cover ten US categories in total, independently, so you're not stuck with five directories run by five different lead-gen companies.
+        Five of the {usCategoryCount} US categories we cover. The others: <a href="/payments/" class="underline hover:text-slate-900">payments</a>, <a href="/financing/" class="underline hover:text-slate-900">financing</a>, <a href="/banking/" class="underline hover:text-slate-900">banking</a>, <a href="/accounting/" class="underline hover:text-slate-900">accounting</a> and <a href="/ai-tools/" class="underline hover:text-slate-900">AI tools</a>.
       </p>
       <div class="grid gap-4 md:grid-cols-3 lg:grid-cols-5">
         <a href="/tools/" class="group rounded-lg border-2 border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm">
@@ -158,22 +187,22 @@ function featureToUrl(slug: string): string {
         <a href="/lead-gen/" class="group rounded-lg border-2 border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm">
           <div class="text-xs font-bold uppercase tracking-wider text-orange-600">Lead-gen</div>
           <div class="mt-2 text-2xl font-bold text-slate-900 group-hover:text-orange-600">{leadGenCount} platforms</div>
-          <p class="mt-2 text-sm text-slate-600 leading-snug">Google LSA, Service Direct, Thumbtack, and honest warnings on Bark, HomeAdvisor, Angi.</p>
+          <p class="mt-2 text-sm text-slate-600 leading-snug">Google LSA, Service Direct, Thumbtack, and sourced warnings on Bark, HomeAdvisor and Angi.</p>
         </a>
         <a href="/insurance/" class="group rounded-lg border-2 border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm">
           <div class="text-xs font-bold uppercase tracking-wider text-orange-600">Insurance</div>
           <div class="mt-2 text-2xl font-bold text-slate-900 group-hover:text-orange-600">{insuranceCount} providers</div>
-          <p class="mt-2 text-sm text-slate-600 leading-snug">NEXT, Hiscox, Simply Business, Acuity, Erie: direct carriers + brokers + mutuals.</p>
+          <p class="mt-2 text-sm text-slate-600 leading-snug">ERGO NEXT, Hiscox, Simply Business, Acuity, Erie: direct carriers, brokers and mutuals.</p>
         </a>
         <a href="/payroll/" class="group rounded-lg border-2 border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm">
           <div class="text-xs font-bold uppercase tracking-wider text-orange-600">Payroll</div>
           <div class="mt-2 text-2xl font-bold text-slate-900 group-hover:text-orange-600">{payrollCount} services</div>
-          <p class="mt-2 text-sm text-slate-600 leading-snug">Gusto, OnPay, Patriot, Hourly.io: modern SMB payroll plus honest ADP/Paychex coverage.</p>
+          <p class="mt-2 text-sm text-slate-600 leading-snug">Online payroll (Gusto, OnPay, Patriot), Hourly.io, and legacy payroll such as ADP Run and Paychex Flex.</p>
         </a>
         <a href="/agencies/" class="group rounded-lg border-2 border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm">
           <div class="text-xs font-bold uppercase tracking-wider text-orange-600">Agencies</div>
           <div class="mt-2 text-2xl font-bold text-slate-900 group-hover:text-orange-600">{agencyCount} agencies</div>
-          <p class="mt-2 text-sm text-slate-600 leading-snug">Hook Agency, Plumbing & HVAC SEO, with honest warnings on Townsquare.</p>
+          <p class="mt-2 text-sm text-slate-600 leading-snug">Hook Agency, Plumbing & HVAC SEO, and sourced contract warnings on Townsquare Interactive and Marketing 360.</p>
         </a>
       </div>
     </div>
@@ -186,7 +215,7 @@ function featureToUrl(slug: string): string {
         <a href="/methodology/" class="text-sm font-medium text-orange-600 hover:underline">How we verify →</a>
       </div>
       <p class="mb-6 text-slate-600">
-        We re-check pricing quarterly. These are the tools we've verified most recently. Every price you see has a date stamp underneath. Capterra's ServiceTitan profile, by comparison, is dated August 2025.
+        Each software tool's price carries the date we last verified it. These are the tools verified most recently, with the date stamp underneath. Capterra's ServiceTitan profile, by comparison, is dated August 2025.
       </p>
       <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {recentlyVerified.map((t) => {
@@ -212,7 +241,7 @@ function featureToUrl(slug: string): string {
   <section class="mx-auto max-w-6xl px-4 py-16">
     <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Pick your trade</h2>
     <p class="mb-8 text-slate-600">
-      Each vertical has its own ranked picks, pricing comparisons, and feature matrices.
+      Each trade page ranks the platforms that serve that trade, with prices, key features and links to head-to-head comparisons.
     </p>
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {verticalsWithCounts.map((v) => (
@@ -236,9 +265,9 @@ function featureToUrl(slug: string): string {
 
   <section class="bg-slate-50">
     <div class="mx-auto max-w-6xl px-4 py-16">
-      <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Popular head-to-head comparisons</h2>
+      <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Head-to-head comparisons</h2>
       <p class="mb-8 text-slate-600">
-        The most-searched matchups in the trades software space: decision matrix, pricing side-by-side, pros and cons.
+        Selected pairs that share at least one trade, with their prices side by side.
       </p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {featuredComparisons.map((c) => (
@@ -257,7 +286,7 @@ function featureToUrl(slug: string): string {
       </div>
       <div class="mt-6 text-center">
         <a href="/compare/" class="text-sm font-semibold text-orange-600 hover:underline">
-          See all 1,100+ comparisons →
+          More comparisons →
         </a>
       </div>
     </div>
@@ -285,7 +314,7 @@ function featureToUrl(slug: string): string {
     </div>
     <div class="mt-6 text-center">
       <a href="/features/" class="text-sm font-semibold text-orange-600 hover:underline">
-        All 20 features →
+        All {featureCount} features →
       </a>
     </div>
   </section>
@@ -300,39 +329,33 @@ function featureToUrl(slug: string): string {
       </p>
       <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <div class="rounded-lg border border-rose-200 bg-rose-50 p-5">
-          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-rose-700">⚠ We flag the bad actors</div>
+          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-rose-700">⚠ Reputation warnings, with sources</div>
           <p class="text-sm text-rose-900 leading-relaxed">
             HomeAdvisor's <strong>FTC order of up to $7.2M</strong>. Angi's Vermont Attorney General settlement. GreenSky's CFPB consent order. Townsquare Interactive's and Marketing 360's contract terms. BBB records for Bark, BuildZoom and Pie Insurance. We name them and cite the source.
           </p>
         </div>
         <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-5">
-          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-emerald-700">✓ We recommend the unaffiliated</div>
+          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-emerald-700">✓ We list the unaffiliated</div>
           <p class="text-sm text-emerald-900 leading-relaxed">
-            <strong>Acuity Insurance</strong> has no affiliate program; we recommend it anyway because it's the best fit for many contractors. <strong>Google LSA</strong> too. <strong>Erie Insurance</strong> too. Recommending the right vendor regardless of commission is the entire credibility flywheel.
+            We have no affiliate arrangement with <strong>Acuity Insurance</strong>, <strong>Erie Insurance</strong> or <strong>Google Local Services Ads</strong>, so we earn nothing from them, and they are listed on the same terms as every other vendor. Commission does not decide what we list or how we rank it.
           </p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-slate-50 p-5">
           <div class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-700">📋 Verified, transparent, dated</div>
           <p class="text-sm text-slate-700 leading-relaxed">
-            Every pricing tier verified directly from vendor pages with a date stamp. Every affiliate relationship disclosed in our <a href="/methodology/" class="underline hover:text-slate-900">per-vendor ledger</a>. The <a href="/methodology/">WrenchStack Score</a> formula is published: same rubric for every tool.
+            Each software tool's price shows the date we last verified it. Every software tool's affiliate status is in our <a href="/methodology/#affiliate-ledger" class="underline hover:text-slate-900">per-vendor ledger</a>, and reviews in the other categories state it on the page. The <a href="/methodology/">WrenchStack Fit Score</a> formula is published and applied the same way to every software tool.
           </p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-5">
-          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-700">🛠 Built for how contractors actually buy</div>
+          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-700">🛠 Decision tools</div>
           <p class="text-sm text-slate-700 leading-relaxed">
-            Filter by trade, team size, integration need, not generic SaaS taxonomy. <a href="/quiz/" class="text-orange-600 hover:underline">Matching quiz</a>, <a href="/roi-calculator/" class="text-orange-600 hover:underline">ROI calculator</a>, <a href="/cost-of-switch/" class="text-orange-600 hover:underline">cost-of-switch math</a>: tools that make the decision real.
+            Filter the <a href="/tools/" class="text-orange-600 hover:underline">software directory</a> by trade, price, team size and QuickBooks or Stripe support. Or use the <a href="/quiz/" class="text-orange-600 hover:underline">matching quiz</a>, the <a href="/roi-calculator/" class="text-orange-600 hover:underline">ROI calculator</a> and the <a href="/cost-of-switch/" class="text-orange-600 hover:underline">cost-of-switch calculator</a>.
           </p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-5">
           <div class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-700">🏆 WrenchStack Awards 2026</div>
           <p class="text-sm text-slate-700 leading-relaxed">
-            Editorial designations across 18 categories. <a href="/awards/2026/" class="text-orange-600 hover:underline">No vendor paid for placement</a>: same methodology as everything else. Updated annually.
-          </p>
-        </div>
-        <div class="rounded-lg border border-slate-200 bg-white p-5">
-          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-700">📍 State-level coverage</div>
-          <p class="text-sm text-slate-700 leading-relaxed">
-            <a href="/state/" class="text-orange-600 hover:underline">All 50 states</a> × top 5 trades with licensing context. Software, insurance, and lead-gen recommendations framed for your specific market.
+            Editorial designations across {awardCount} categories, published {awardsPublished}, when the Fit Score still included third-party review ratings; the winners have not been re-selected since. <a href="/awards/2026/" class="text-orange-600 hover:underline">No vendor paid for placement</a>.
           </p>
         </div>
       </div>
@@ -345,8 +368,8 @@ function featureToUrl(slug: string): string {
         Not sure where to start?
       </h2>
       <p class="mt-4 text-lg text-slate-300">
-        Answer 5 quick questions about your trade, team size, and what you need.
-        Get ranked picks in 60 seconds, or browse by category below.
+        Answer 5 questions about your trade, team size, budget, top priority and key integration,
+        and get ranked picks. Or browse by category below.
       </p>
       <a
         href="/quiz/"

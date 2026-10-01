@@ -5,6 +5,9 @@ import {
   formatPrice,
   wrenchStackScore,
   verticals,
+  toolsForVertical,
+  priceScaling,
+  isQuoteOnly,
   type Tool,
 } from '../../../lib/data';
 
@@ -24,6 +27,14 @@ interface Props {
 
 const { tool } = Astro.props;
 
+// The primary trade is the one this tool fits best (ties keep the data order; the sort
+// is stable). Until 2026-10-01 it was verticals[0], which after the 2026-09-30 trade
+// re-check is HVAC for many specialists: FieldRoutes (Pest Control 10) was ranked and
+// framed on HVAC (6), on 45 of the 123 pages.
+const primaryVertical = [...tool.verticals].sort(
+  (a, b) => (tool.vertical_fit?.[b] ?? 0) - (tool.vertical_fit?.[a] ?? 0),
+)[0];
+
 // All alternatives that share at least one vertical with this tool, ordered by
 // shared trades, then fit for this tool's primary trade, then Fit Score, then name.
 // (Until 2026-09-30 the tie-break was the G2/Capterra rating, which is no longer used.)
@@ -34,7 +45,7 @@ const allAlternatives: Tool[] = tools
     const overlapA = a.verticals.filter((v) => tool.verticals.includes(v)).length;
     const overlapB = b.verticals.filter((v) => tool.verticals.includes(v)).length;
     if (overlapB !== overlapA) return overlapB - overlapA;
-    const pv = tool.verticals[0];
+    const pv = primaryVertical;
     const fitDiff = (b.vertical_fit?.[pv] ?? 0) - (a.vertical_fit?.[pv] ?? 0);
     if (fitDiff !== 0) return fitDiff;
     const scoreDiff = wrenchStackScore(b) - wrenchStackScore(a);
@@ -44,11 +55,34 @@ const allAlternatives: Tool[] = tools
 
 const alternatives = allAlternatives.slice(0, 8);
 
-const primaryVertical = tool.verticals[0];
 const primaryVerticalLabel = verticals.find((v) => v.slug === primaryVertical)?.name ?? primaryVertical;
 
 // --- Slice alternatives by switching motivation ---
 const toolPrice = tool.pricing.starting_at_usd;
+
+// A starting price with its basis, so a per-user price is not read as a company price
+// when two are compared (2026-10-01). "Cheaper" used to compare the bare numbers.
+// FastEST is recorded as per_user in tools.json, but its pricing note prices each
+// application installed on one PC or tablet; labelled from the note until the data's
+// pricing_model is corrected (2026-10-01). The guard turns off once it is.
+const PER_INSTALL_SLUGS = new Set(['fastest']);
+const priceLabel = (t: Tool): string => {
+  const s = priceScaling(t);
+  const base = formatPrice(t);
+  return s === 'per_user' && PER_INSTALL_SLUGS.has(t.slug) ? `${base} per application install`
+    : s === 'per_user' ? `${base} per user`
+    : s === 'flat' ? `${base} for the company`
+    : s === 'base_plus_seat' ? `${base} base, plus seats`
+    : base;
+};
+
+// "A, B and C" (and "and N more" past three), for answers that name tied tools.
+const namesList = (list: Tool[]): string => {
+  const shown = list.slice(0, 3).map((t) => t.name);
+  const extra = list.length - shown.length;
+  if (extra > 0) return `${shown.join(', ')} and ${extra} more`;
+  return shown.length <= 1 ? (shown[0] ?? '') : `${shown.slice(0, -1).join(', ')} and ${shown[shown.length - 1]}`;
+};
 
 // Cheaper alternatives (only if tool has a price)
 const cheaperAlternatives = toolPrice !== null && toolPrice > 0
@@ -63,75 +97,101 @@ const freeAlternatives = tool.pricing.starting_at_usd !== 0
   ? allAlternatives.filter((t) => t.pricing.starting_at_usd === 0).slice(0, 4)
   : [];
 
-// Strong vertical-fit alternatives for the primary vertical
-const verticalFitAlternatives = allAlternatives
-  .filter((t) => (t.vertical_fit?.[primaryVertical] ?? 0) >= 8)
-  .sort((a, b) => (b.vertical_fit?.[primaryVertical] ?? 0) - (a.vertical_fit?.[primaryVertical] ?? 0))
-  .slice(0, 4);
-
-// QuickBooks integration alternatives (relevant for many buyers regardless of source)
-const qbAlternatives = allAlternatives
-  .filter((t) => t.integrations.some((i) => i.includes('quickbooks')))
-  .filter((t) => !(tool.integrations.some((i) => i.includes('quickbooks'))) || t.integrations.some((i) => i.includes('quickbooks_desktop')))
-  .slice(0, 4);
-
-// Parse weaknesses into bullet list
-const weaknessBullets = tool.weaknesses
-  ? tool.weaknesses.split(/[;.]\s*/).map((s) => s.trim()).filter((s) => s.length > 5)
-  : [];
-
-const fitScore = tool.vertical_fit?.[primaryVertical] ?? 5;
-const fitLine =
-  fitScore >= 9
-    ? `${tool.name} scores ${fitScore}/10 on our ${primaryVerticalLabel} fit assessment: one of the top picks in the category.`
-    : `${tool.name} is a solid mid-tier choice for ${primaryVerticalLabel} but ranks below the top picks; see the alternatives below for higher-scoring options.`;
-
-const cheapestAlt = alternatives.length > 0
-  ? alternatives.slice().sort((a, b) => (a.pricing.starting_at_usd ?? 999) - (b.pricing.starting_at_usd ?? 999))[0]
-  : null;
-
 // Fit for the primary trade, counted only where the alternative serves that trade.
 const primaryFit = (t: Tool): number | null =>
   t.verticals.includes(primaryVertical) && typeof t.vertical_fit?.[primaryVertical] === 'number'
     ? (t.vertical_fit?.[primaryVertical] as number)
     : null;
-const bestFitAlt = alternatives
-  .filter((t) => primaryFit(t) !== null)
-  .sort((a, b) => (primaryFit(b) as number) - (primaryFit(a) as number))[0] ?? null;
+
+const fitScore = tool.vertical_fit?.[primaryVertical] ?? 5;
+
+// Alternatives with a higher fit for the primary trade than this tool. Until 2026-10-01
+// this section took every alternative at 8/10 or more and headed it "Stronger fit",
+// which listed 8/10 tools as stronger than a 10/10 one.
+const verticalFitAlternatives = allAlternatives
+  .filter((t) => (primaryFit(t) ?? 0) > fitScore)
+  .sort((a, b) => (primaryFit(b) as number) - (primaryFit(a) as number))
+  .slice(0, 4);
+
+// QuickBooks: alternatives that list a QuickBooks integration. When this tool lists one
+// already, only those that list QuickBooks Desktop are shown, and the copy says so.
+const toolHasQb = tool.integrations.some((i) => i.includes('quickbooks'));
+const qbAlternatives = allAlternatives
+  .filter((t) => t.integrations.some((i) => i.includes('quickbooks')))
+  .filter((t) => !toolHasQb || t.integrations.some((i) => i.includes('quickbooks_desktop')))
+  .slice(0, 4);
+
+// Parse weaknesses into a bullet list: split on ';' or on a full stop that ends a
+// sentence. Until 2026-10-01 this split on every '.', so QuoteIQ's "$149.99 a month"
+// showed as "$149" and "99 a month)", and Broadlume's "2.79% to 2.99%" fell apart
+// (7 entries, including "U.S." and "corejobtrack.com").
+const weaknessBullets = tool.weaknesses
+  ? tool.weaknesses
+      .split(/;\s*|\.\s+(?=[A-Z])/)
+      .map((s) => s.trim().replace(/\.$/, ''))
+      .filter((s) => s.length > 5)
+  : [];
+
+// Where this tool stands for its primary trade, computed (2026-10-01). It said "one of
+// the top picks" at 9/10 or more and "a solid mid-tier choice ... below the top picks"
+// otherwise, including for tools no other tool outscores.
+const tradeTools = toolsForVertical(primaryVertical);
+const higherFitCount = tradeTools.filter((t) => (t.vertical_fit?.[primaryVertical] ?? 0) > fitScore).length;
+const fitLine = `${tool.name} scores ${fitScore}/10 on our ${primaryVerticalLabel} fit assessment. ${
+  higherFitCount === 0
+    ? `No ${primaryVerticalLabel} tool we list scores higher.`
+    : `${higherFitCount} of the ${tradeTools.length} ${primaryVerticalLabel} tools we list score higher.`
+}`;
+
+// The highest primary-trade fit and the lowest published starting price across every
+// alternative, ties named. They were taken from the first eight only, and quote-only
+// tools sorted as $999, so a quote-only tool could be called the lowest-priced.
+const fitRanked = allAlternatives.filter((t) => primaryFit(t) !== null);
+const topAltFit = fitRanked.length > 0 ? Math.max(...fitRanked.map((t) => primaryFit(t) as number)) : null;
+const topFitAlts = topAltFit === null ? [] : fitRanked.filter((t) => primaryFit(t) === topAltFit);
+const pricedAlts = allAlternatives.filter((t) => t.pricing.starting_at_usd !== null);
+const lowestAltPrice = pricedAlts.length > 0 ? Math.min(...pricedAlts.map((t) => t.pricing.starting_at_usd as number)) : null;
+const lowestPriceAlts = lowestAltPrice === null ? [] : pricedAlts.filter((t) => t.pricing.starting_at_usd === lowestAltPrice);
 
 const faqs = [
   {
     q: `What is the best alternative to ${tool.name}?`,
-    a: alternatives.length > 0 && cheapestAlt
-      ? `Depends on your reason for switching. ${bestFitAlt ? `${bestFitAlt.name} has the highest ${primaryVerticalLabel} fit score among ${tool.name} alternatives in our directory (${primaryFit(bestFitAlt)}/10). ` : ''}If price is the driver, ${cheapestAlt.name} starts lowest (${formatPrice(cheapestAlt)} vs ${formatPrice(tool)}). The sections above cover other reasons to switch.`
-      : 'No direct alternatives in our database yet. Check the /tools/ directory for the full list.',
+    a: allAlternatives.length > 0
+      ? `It depends on why you are switching. ${
+          topFitAlts.length > 0
+            ? `On ${primaryVerticalLabel} fit, ${namesList(topFitAlts)} ${topFitAlts.length === 1 ? 'has' : 'share'} the highest score among the ${fitRanked.length} alternatives that serve ${primaryVerticalLabel} (${topAltFit}/10; ${tool.name}: ${fitScore}/10). `
+            : ''
+        }${
+          lowestPriceAlts.length > 0
+            ? `On price, ${namesList(lowestPriceAlts)} ${lowestPriceAlts.length === 1 ? 'has' : 'share'} the lowest published starting price (${priceLabel(lowestPriceAlts[0])}; ${tool.name}: ${priceLabel(tool)}); starting prices can be per user or per company, so compare them at your team size. `
+            : ''
+        }The sections above cover other reasons to switch.`
+      : `No tool we list shares a trade with ${tool.name}. See the /tools/ directory for the full list.`,
   },
   {
-    q: `Why do people switch from ${tool.name}?`,
+    q: `Why switch from ${tool.name}?`,
     a: weaknessBullets.length > 0
-      ? `The most common drivers we see: ${weaknessBullets.slice(0, 3).join('; ')}. If any of those match your gripe, the alternatives below address them.`
-      : `Common reasons include cost, integration limitations, or vertical-specific feature gaps. The alternatives below cover the main switching motivations.`,
+      ? `Our review records these weaknesses: ${weaknessBullets.join('; ')}. We do not survey people who switch, so we cannot say which reasons are most common. Check the alternatives above against the weaknesses that matter to you.`
+      : `We have not recorded weaknesses for ${tool.name}, and we do not survey people who switch. Compare the alternatives above on price, trade fit and features.`,
   },
   {
-    q: `Is ${tool.name} the best option for ${primaryVerticalLabel.toLowerCase()} businesses?`,
-    a: `${fitLine} See our ${primaryVerticalLabel} ranking page for the full vertical comparison.`,
+    q: `How does ${tool.name} score for ${primaryVerticalLabel} businesses?`,
+    a: `${fitLine} See our ${primaryVerticalLabel} page for the full comparison.`,
   },
   {
     q: `What should I look for when switching from ${tool.name}?`,
-    a: `Audit four things before committing: (1) data export support: can you take your customer list, job history, and recurring contracts with you? (2) integration parity: will your QuickBooks, Stripe, or Zapier setup still work? (3) pricing changes at your team size: per-user vs per-company structures change the math significantly past 5-8 users; (4) implementation cost and timeline: ask each vendor for its setup fee and go-live plan in writing, and plan for a parallel-run period.`,
+    a: `Check four things before you commit: (1) data export: can you take your customer list, job history and recurring contracts with you? (2) integrations: will your QuickBooks, Stripe or Zapier setup still work? (3) price at your team size: a per-user price grows with every seat and a company price does not, so price both at your seat count; (4) setup cost and go-live plan: ask each vendor for its setup fee and go-live plan in writing, and plan for a period when both systems run.`,
   },
   {
     q: `How do I migrate customer data from ${tool.name} to another platform?`,
-    a: `${tool.name} typically supports CSV export of customer records, invoices, and active jobs through admin settings. Historical job data (completed work orders, photo attachments, custom fields) often doesn't migrate cleanly; most shops leave historical data in ${tool.name} as archival reference rather than attempting full migration. Recurring service agreements and membership plans usually need to be manually rebuilt in the new platform.`,
+    a: `We have not verified what ${tool.name} lets you export. Before you cancel, ask ${tool.name} which records you can export (customers, invoices, jobs, photos, custom fields) and in what format, and ask the new vendor which of those it can import. Check job history, photos, custom fields and recurring service agreements in particular, and decide whether you need to keep read access to ${tool.name} for old records.`,
   },
   {
-    q: `When should I NOT switch from ${tool.name}?`,
-    a: `If you're under 6 months into using ${tool.name}, switching costs typically exceed the savings unless the platform is actively failing you. Wait until your team has fully adopted it. Also, if your office staff has built custom workflows, integrations, or automations on top of ${tool.name}, those won't transfer; quantify the rebuild cost before committing to migration.`,
+    q: `When should I not switch from ${tool.name}?`,
+    a: `When the gain does not cover the cost of the move. Price the switch itself (exporting and importing data, retraining the team, any months of paying for both) against what the new tool saves you. Check whether custom workflows, integrations or automations built on ${tool.name} can be moved; if not, add the cost of rebuilding them.`,
   },
-  {
-    q: `How long does it take to migrate from ${tool.name} to a new platform?`,
-    a: `For mid-tier alternatives (Jobber, Housecall Pro), plan 4-8 weeks total: 1-2 weeks data import + configuration, 2-3 weeks parallel run, 1-2 weeks full cutover and team adoption. For enterprise alternatives (ServiceTitan, BuildOps, Procore), plan 3-6 months because of deeper data migration, custom pricebook setup, and integration work.`,
-  },
+  // "How long does it take to migrate?" removed 2026-10-01: it gave 4-8 weeks for named
+  // mid-tier tools and 3-6 months for named enterprise tools, figures nobody measured.
 ];
 
 const faqSchema = {
@@ -145,7 +205,8 @@ const faqSchema = {
 };
 
 const pageTitle = `${tool.name} Alternatives (2026): ${alternatives.length} Best Options Ranked`;
-const pageDescription = `The best alternatives to ${tool.name} in 2026, ranked by shared trades and vertical fit. Pricing comparison, switching motivation analysis, migration guidance.`;
+// Title left as it is: "Best ..." page titles await an owner decision (2026-10-01).
+const pageDescription = `The first ${alternatives.length} of the ${allAlternatives.length} tools that share a trade with ${tool.name}, ranked by shared trades, ${primaryVerticalLabel} fit and Fit Score, with starting prices, key features and a migration checklist.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -174,12 +235,12 @@ const breadcrumbs = [
         {tool.name} Alternatives
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        {alternatives.length} alternatives to {tool.name}, ranked by the trades they share with it, then by {primaryVerticalLabel} fit and Fit Score. Each option includes pricing comparison, switching motivation analysis, and migration considerations.
+        {`${allAlternatives.length} ${allAlternatives.length === 1 ? 'tool we list shares' : 'tools we list share'} at least one trade with ${tool.name}. ${allAlternatives.length > alternatives.length ? `These are the first ${alternatives.length}` : 'All are listed here'}`}, ranked by the number of trades they share with it, then by {primaryVerticalLabel} fit and Fit Score. Each one shows its starting price, the key features only one of the two lists, and when to pick it.
       </p>
     </header>
 
     <section class="mb-10 rounded-lg border border-slate-200 bg-slate-50 p-6">
-      <h2 class="mb-3 text-lg font-bold text-slate-900">Why people switch from {tool.name}</h2>
+      <h2 class="mb-3 text-lg font-bold text-slate-900">Weaknesses we recorded for {tool.name}</h2>
       {weaknessBullets.length > 0 ? (
         <ul class="space-y-1 text-slate-700">
           {weaknessBullets.map((w) => (
@@ -191,11 +252,11 @@ const breadcrumbs = [
         </ul>
       ) : (
         <p class="text-slate-700">
-          Common reasons include cost (cheaper alternatives below), integration limitations (especially QuickBooks Desktop), or vertical-specific feature gaps.
+          We have not recorded weaknesses for {tool.name}.
         </p>
       )}
       <p class="mt-4 text-sm text-slate-600">
-        If any of those match your situation, the alternatives below address them.
+        Check each alternative below against the weaknesses that matter to you.
       </p>
     </section>
 
@@ -213,7 +274,7 @@ const breadcrumbs = [
           <tbody class="divide-y divide-slate-100">
             <tr class="bg-orange-50">
               <td class="p-3 font-bold text-slate-900">{tool.name} <span class="ml-1 text-xs font-normal text-orange-600">(this tool)</span></td>
-              <td class="p-3 text-slate-700">{formatPrice(tool)}</td>
+              <td class="p-3 text-slate-700">{priceLabel(tool)}</td>
               <td class="p-3 text-slate-600 text-xs">{tool.best_for}</td>
             </tr>
             {alternatives.map((alt) => {
@@ -222,7 +283,7 @@ const breadcrumbs = [
                   <td class="p-3 font-semibold text-slate-900">
                     <a href={`/tools/${alt.slug}/`} class="hover:text-orange-600">{alt.name}</a>
                   </td>
-                  <td class="p-3 text-slate-700">{formatPrice(alt)}</td>
+                  <td class="p-3 text-slate-700">{priceLabel(alt)}</td>
                   <td class="p-3 text-slate-600 text-xs">{alt.best_for}</td>
                 </tr>
               );
@@ -233,22 +294,26 @@ const breadcrumbs = [
     </section>
 
     <section class="mb-12 space-y-8">
-      <h2 class="text-2xl font-bold text-slate-900">Top {alternatives.length} alternatives ranked</h2>
+      <h2 class="text-2xl font-bold text-slate-900">{alternatives.length} alternatives, ranked</h2>
       {alternatives.map((alt, i) => {
         const overlap = alt.verticals.filter((v) => tool.verticals.includes(v));
         const altPrice = alt.pricing.starting_at_usd;
         const isCheaper = altPrice !== null && toolPrice !== null && altPrice < toolPrice;
-        const publishesWhereToolQuotes = altPrice !== null && toolPrice === null;
+        // isQuoteOnly, not a null price: Trash Flow and Pylon publish one-time or
+        // per-project prices, so "instead of a quote" would be false for them.
+        const publishesWhereToolQuotes = altPrice !== null && isQuoteOnly(tool);
         const altFit = primaryFit(alt);
         const isBetterFit = altFit !== null && altFit > fitScore;
+        // Differences between the two key-feature lists. These lists are not complete
+        // (and use varied names for one feature), so the labels say "lists", not "has":
+        // until 2026-10-01 they read "Has, but X doesn't" and "X has it, Y doesn't".
         const altOnlyFeatures = alt.key_features.filter((f) => !tool.key_features.includes(f));
         const toolOnlyFeatures = tool.key_features.filter((f) => !alt.key_features.includes(f));
         const pickReasons: string[] = [];
-        if (isCheaper) pickReasons.push(`you need a lower entry price (${formatPrice(alt)} vs ${formatPrice(tool)})`);
-        if (publishesWhereToolQuotes) pickReasons.push(`you want a published price (${formatPrice(alt)}) instead of a quote`);
-        if (isBetterFit) pickReasons.push(`you work in ${primaryVerticalLabel}: ${alt.name} has the higher fit score there (${altFit}/10 vs ${fitScore}/10)`);
-        if (pickReasons.length === 0 && altOnlyFeatures.length > 0) pickReasons.push(`you need ${altOnlyFeatures[0].replace(/_/g, ' ')}: ${alt.name} has it, ${tool.name} doesn't`);
-        if (pickReasons.length === 0) pickReasons.push(`the target profile matches: ${alt.best_for}`);
+        if (isCheaper) pickReasons.push(`you want a lower starting price (${priceLabel(alt)} against ${priceLabel(tool)}; compare them at your team size)`);
+        if (publishesWhereToolQuotes) pickReasons.push(`you want a published price (${priceLabel(alt)}) instead of a quote`);
+        if (isBetterFit) pickReasons.push(`you work in ${primaryVerticalLabel}: ${alt.name} has the higher fit score there (${altFit}/10 against ${fitScore}/10)`);
+        if (pickReasons.length === 0) pickReasons.push(`its target profile matches yours: ${alt.best_for}`);
 
         return (
           <div class="rounded-lg border border-slate-200 bg-white p-6">
@@ -266,7 +331,7 @@ const breadcrumbs = [
             <dl class="grid gap-3 text-sm md:grid-cols-2">
               <div>
                 <dt class="font-semibold text-slate-900">Starting price</dt>
-                <dd class="text-slate-700">{formatPrice(alt)}{isCheaper && <span class="ml-2 rounded bg-emerald-100 px-1.5 py-0.5 text-xs font-medium text-emerald-700">Cheaper than {tool.name}</span>}</dd>
+                <dd class="text-slate-700">{priceLabel(alt)}{isCheaper && <span class="ml-2 rounded bg-emerald-100 px-1.5 py-0.5 text-xs font-medium text-emerald-700">Lower starting price than {tool.name}</span>}</dd>
               </div>
               <div>
                 <dt class="font-semibold text-slate-900">Best for</dt>
@@ -274,13 +339,13 @@ const breadcrumbs = [
               </div>
               {altOnlyFeatures.length > 0 && (
                 <div>
-                  <dt class="font-semibold text-slate-900">Has, but {tool.name} doesn't</dt>
+                  <dt class="font-semibold text-slate-900">In {alt.name}'s key features, not {tool.name}'s</dt>
                   <dd class="text-slate-700">{altOnlyFeatures.slice(0, 4).map((f) => f.replace(/_/g, ' ')).join(' · ')}</dd>
                 </div>
               )}
               {toolOnlyFeatures.length > 0 && (
                 <div>
-                  <dt class="font-semibold text-slate-900">{tool.name} has, but {alt.name} doesn't</dt>
+                  <dt class="font-semibold text-slate-900">In {tool.name}'s key features, not {alt.name}'s</dt>
                   <dd class="text-slate-700">{toolOnlyFeatures.slice(0, 4).map((f) => f.replace(/_/g, ' ')).join(' · ')}</dd>
                 </div>
               )}
@@ -317,9 +382,9 @@ const breadcrumbs = [
         <div class="space-y-6">
           {cheaperAlternatives.length > 0 && (
             <div class="rounded-lg border border-slate-200 bg-white p-5">
-              <h3 class="mb-3 font-bold text-slate-900">Cheaper than {tool.name}</h3>
+              <h3 class="mb-3 font-bold text-slate-900">Lower starting price than {tool.name}</h3>
               <p class="mb-3 text-sm text-slate-600">
-                {tool.name} starts at {formatPrice(tool)}. These alternatives have lower entry-tier pricing for budget-constrained operations.
+                These alternatives publish a lower starting price than {tool.name} ({priceLabel(tool)}). A starting price can be per user or per company, so compare them at your team size.
               </p>
               <div class="flex flex-wrap gap-2">
                 {cheaperAlternatives.map((a) => (
@@ -327,7 +392,7 @@ const breadcrumbs = [
                     href={`/tools/${a.slug}/`}
                     class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-sm hover:border-orange-400 hover:text-orange-600"
                   >
-                    {a.name} ({formatPrice(a)})
+                    {a.name} ({priceLabel(a)})
                   </a>
                 ))}
               </div>
@@ -337,7 +402,7 @@ const breadcrumbs = [
             <div class="rounded-lg border border-slate-200 bg-white p-5">
               <h3 class="mb-3 font-bold text-slate-900">Free-tier alternatives</h3>
               <p class="mb-3 text-sm text-slate-600">
-                These platforms offer free tiers that work for solo operators or very small teams. Good for testing the workflow before committing to paid software.
+                These alternatives have a free tier. Free plans differ in what they include and how many users, jobs or projects they allow, so check each one's pricing note.
               </p>
               <div class="flex flex-wrap gap-2">
                 {freeAlternatives.map((a) => (
@@ -353,9 +418,9 @@ const breadcrumbs = [
           )}
           {verticalFitAlternatives.length > 0 && (
             <div class="rounded-lg border border-slate-200 bg-white p-5">
-              <h3 class="mb-3 font-bold text-slate-900">Stronger {primaryVerticalLabel} fit</h3>
+              <h3 class="mb-3 font-bold text-slate-900">Higher {primaryVerticalLabel} fit score</h3>
               <p class="mb-3 text-sm text-slate-600">
-                These alternatives score 8+/10 on our {primaryVerticalLabel} vertical-fit assessment. Worth considering if {tool.name} feels generic for your trade.
+                These alternatives score higher than {tool.name} ({fitScore}/10) on our {primaryVerticalLabel} fit assessment.
               </p>
               <div class="flex flex-wrap gap-2">
                 {verticalFitAlternatives.map((a) => (
@@ -363,7 +428,7 @@ const breadcrumbs = [
                     href={`/tools/${a.slug}/`}
                     class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-sm hover:border-orange-400 hover:text-orange-600"
                   >
-                    {a.name} ({a.vertical_fit?.[primaryVertical] ?? '-'}/10)
+                    {a.name} ({primaryFit(a)}/10)
                   </a>
                 ))}
               </div>
@@ -371,9 +436,9 @@ const breadcrumbs = [
           )}
           {qbAlternatives.length > 0 && (
             <div class="rounded-lg border border-slate-200 bg-white p-5">
-              <h3 class="mb-3 font-bold text-slate-900">With QuickBooks integration</h3>
+              <h3 class="mb-3 font-bold text-slate-900">{toolHasQb ? 'With QuickBooks Desktop integration' : 'With QuickBooks integration'}</h3>
               <p class="mb-3 text-sm text-slate-600">
-                These alternatives integrate with QuickBooks natively, critical for QB-heavy shops where deep accounting sync matters more than other features.
+                {toolHasQb ? `These alternatives list a QuickBooks Desktop integration (${tool.name} lists QuickBooks too).` : `${tool.name} lists no QuickBooks integration; these alternatives list one.`} Check which QuickBooks edition each supports and what it syncs.
               </p>
               <div class="flex flex-wrap gap-2">
                 {qbAlternatives.map((a) => (
@@ -394,13 +459,13 @@ const breadcrumbs = [
     <section class="mb-12 rounded-lg border border-slate-200 bg-slate-50 p-6">
       <h2 class="mb-3 text-xl font-bold text-slate-900">Migration considerations when leaving {tool.name}</h2>
       <p class="mb-4 text-slate-700">
-        Switching field service software is significant operational change. Before committing to migration, audit these four areas:
+        Before you commit to a move, check these four areas:
       </p>
       <ul class="space-y-3 text-slate-700">
-        <li><strong class="text-slate-900">Data export support</strong>: {tool.name} typically allows CSV export of customer records, invoices, and active jobs. Historical job data (completed work orders, attached photos, custom fields) often doesn't migrate cleanly. Most shops leave historical data in {tool.name} as archival reference.</li>
-        <li><strong class="text-slate-900">Integration parity</strong>: confirm your QuickBooks setup will work on the new platform with the same sync depth. Other integrations (Stripe, Zapier, Google Local Services, custom APIs) need to be re-evaluated for parity.</li>
-        <li><strong class="text-slate-900">Pricing math at your team size</strong>: per-user vs per-company pricing structures change the math significantly past 5-8 users. Run the actual cost comparison at your team size, not just entry-tier price.</li>
-        <li><strong class="text-slate-900">Implementation cost and timeline</strong>: mid-tier alternatives typically take 4-8 weeks to fully operate; enterprise alternatives 3-6 months. Some charge migration or setup fees, so ask for them in writing. Factor in the parallel-run period when both systems are active.</li>
+        <li><strong class="text-slate-900">Data export</strong>: we have not verified what {tool.name} lets you export. Ask which records come out (customers, invoices, jobs, photos, custom fields) and in what format, and ask the new vendor which of them it can import. Decide whether you need to keep read access to {tool.name} for old records.</li>
+        <li><strong class="text-slate-900">Integrations</strong>: confirm your QuickBooks setup works on the new platform and syncs what you need. Check every other integration you use (payments, Zapier, Google Local Services, custom APIs) the same way.</li>
+        <li><strong class="text-slate-900">Price at your team size</strong>: a per-user price grows with every seat and a company price does not, so compare the total at your seat count, not just the entry-tier price.</li>
+        <li><strong class="text-slate-900">Setup cost and go-live plan</strong>: ask each vendor whether it charges a setup, onboarding or migration fee and for its go-live plan, both in writing. Budget for the time when both systems run.</li>
       </ul>
     </section>
 
@@ -419,7 +484,7 @@ const breadcrumbs = [
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-xl font-bold">Or go deeper</h2>
       <p class="mt-2 text-slate-300">
-        Read the full {tool.name} review for pricing tiers, detailed pros and cons, implementation timeline, and tool-specific FAQs.
+        Read the full {tool.name} review for pricing tiers, detailed pros and cons, implementation notes and tool-specific FAQs.
       </p>
       <a
         href={`/tools/${tool.slug}/`}

@@ -37,8 +37,36 @@ for (const p of providersForVertical) {
   byTier[insuranceTier(p) === 'F' ? 'F' : 'A'].push(p);
 }
 
-const pageTitle = `Best Insurance for ${vertical.name} Contractors (2026)`;
-const pageDescription = `Independent reviews of ${providersForVertical.length} business-insurance providers for ${vertical.name.toLowerCase()} contractors: online insurers and marketplaces, carriers sold through independent agents, and reputation warnings where a documented record calls for one.`;
+// Computed from the data (2026-10-01), replacing "most providers", "often" and hard-coded lists.
+const shortName = (p: InsuranceProvider) => p.name.replace(/\s*\(.*\)$/, '').replace(/ (Insurance|Financial)$/, '');
+const listJoin = (xs: string[]) => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : xs[0] ?? '');
+const withLine = (line: string) => providersForVertical.filter((p) => p.insurance_lines.includes(line)).map(shortName);
+const builderRiskNames = withLine('builders_risk');
+const suretyNames = withLine('surety_bonds');
+const gcLines = [
+  builderRiskNames.length ? `${listJoin(builderRiskNames)} ${builderRiskNames.length === 1 ? 'lists' : 'list'} builder's risk` : '',
+  suretyNames.length ? `${listJoin(suretyNames)} ${suretyNames.length === 1 ? 'lists' : 'list'} surety bonds` : '',
+].filter(Boolean).join(', and ');
+const quotedHere = providersForVertical.filter((p) => /quoted/i.test(p.typical_premium_range)).length;
+const quotedLine = quotedHere === providersForVertical.length
+  ? `All ${providersForVertical.length} providers on this page quote premiums business by business`
+  : `${quotedHere} of the ${providersForVertical.length} providers on this page quote premiums business by business`;
+const progressiveHere = providersForVertical.some((p) => p.slug === 'progressive-commercial');
+const insureonHere = providersForVertical.some((p) => p.slug === 'insureon');
+const thimbleHere = providersForVertical.some((p) => p.slug === 'thimble');
+
+// Trade wording for running text (2026-10-01): keeps "HVAC" in capitals and avoids
+// "general contractors contractors". The <title> and H1 keep their wording (owner
+// decision); the "Which insurance provider is best for ..." question keeps its wording
+// but uses tradePros, since it rendered "general contractors contractors".
+const tradeLower = vertical.name === vertical.name.toUpperCase() ? vertical.name : vertical.name.toLowerCase();
+const tradePros = /contractors$/i.test(vertical.name) ? tradeLower : `${tradeLower} contractors`;
+const tradeWork = verticalSlug === 'general_contractor' ? 'general contracting' : tradeLower;
+
+// Trade names like "General Contractors" already end in the noun; do not double it.
+const tradeTitle = /contractors$/i.test(vertical.name) ? vertical.name : `${vertical.name} Contractors`;
+const pageTitle = `Best Insurance for ${tradeTitle} (2026)`;
+const pageDescription = `Independent reviews of ${providersForVertical.length} business-insurance providers for ${tradePros}: online insurers and marketplaces, carriers sold through independent agents, and reputation warnings where a documented record calls for one.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -58,38 +86,38 @@ function tradeIntro(slug: string): string {
     case 'plumbing':
       return 'Plumbing work can cause water damage in a customer\'s home or building, so check how each general liability quote handles property damage and completed operations (claims that arise after a job is finished). Price workers\' comp if you have employees and commercial auto if you drive a work vehicle.';
     case 'electrical':
-      return 'Electrical work can lead to injury and property-damage claims, so general liability and workers\' comp (if you have employees) are the core lines to price. Licensing rules vary by state; make sure each policy lists your licensed class of work accurately.';
+      return 'Electrical work can lead to injury and property-damage claims, so general liability and workers\' comp (if you have employees) are the core lines to price. Make sure each policy lists your licensed class of work accurately.';
     case 'roofing':
-      return 'Roofing means work at height and in the weather, and not every provider in this directory covers it; the providers below list roofing among their trades. Confirm that each one writes roofing for the lines you need in your state before you rely on a quote.';
+      return `Roofing means work at height and in the weather. ${providersForVertical.length} of the ${insuranceProviders.length} providers in this directory list roofing among their trades, and they are the ones below. Confirm that each one writes roofing for the lines you need in your state before you rely on a quote.`;
     case 'general_contractor':
-      return 'GCs often need more lines than a single trade: general liability with completed operations, builder\'s risk for projects in progress, professional liability for design-build work, commercial auto, umbrella, and workers\' comp. Among the providers below, CNA and Zurich list builder\'s risk, and Erie, Nationwide, Markel and Zurich list surety bonds.';
+      return `A general contractor can need more lines than a single trade: general liability with completed operations, builder's risk for projects in progress, professional liability for design-build work, commercial auto, umbrella, and workers' comp.${gcLines ? ` Among the providers below, ${gcLines}.` : ''}`;
     case 'landscaping':
-      return 'Landscaping work is often seasonal, and workers\' comp is priced on payroll, so ask how each carrier\'s premium audit handles payroll that changes through the year. Thimble sells liability coverage by the job, month or year for crews with irregular or seasonal work.';
+      return `If your landscaping work is seasonal, ask how each carrier's premium audit handles payroll that changes through the year, since workers' comp is priced on payroll.${thimbleHere ? ' Thimble sells liability coverage by the job, month or year.' : ''}`;
     case 'cleaning':
       return 'Cleaning crews work inside customers\' homes and businesses and use cleaning chemicals, so check how each general liability quote covers damage to the property you are working on.';
     case 'pest_control':
       return 'Pest control involves applying pesticides at customers\' properties, so ask whether each general liability quote covers pesticide and chemical-related claims, and whether professional liability is available for your work.';
     default:
-      return `Business-insurance providers for ${vertical.name.toLowerCase()} contractors.`;
+      return `Business-insurance providers for ${tradePros}.`;
   }
 }
 
 const faqs = [
   {
-    q: `Which insurance provider is best for ${vertical.name.toLowerCase()} contractors?`,
-    a: `We do not rank insurers for ${vertical.name.toLowerCase()} work: nothing we could verify ranks them on quality, and your premium depends on your trade class, state, payroll, vehicles, claims history and coverage limits. Get quotes from several of the ${providersForVertical.length} providers listed on this page, including an online quote and a quote from a local independent agent, who can price carriers sold only through agents. Read any reputation warning on a provider's card before you buy.`,
+    q: `Which insurance provider is best for ${tradePros}?`,
+    a: `We do not rank insurers for ${tradeWork} work: nothing we could verify ranks them on quality, and your premium depends on your trade class, state, payroll, vehicles, claims history and coverage limits. Get quotes from several of the ${providersForVertical.length} providers listed on this page, including an online quote and a quote from a local independent agent, who can price carriers sold only through agents. Read any reputation warning on a provider's card before you buy.`,
   },
   {
-    q: `What does typical insurance cost for ${vertical.name.toLowerCase()} contractors?`,
-    a: `Most providers here quote per business and do not publish premiums; your price depends on your trade class, state, payroll, vehicles, claims history and coverage limits. One published reference point: Progressive's 2025 figures for new customers show a median of $203/month (average $260) per vehicle for contractor commercial auto liability and physical damage, and a BOP median of $80/month (average $127). The only way to know your own cost is to get quotes.`,
+    q: `What does insurance cost for ${tradePros}?`,
+    a: `${quotedLine}, and your price depends on your trade class, state, payroll, vehicles, claims history and coverage limits.${progressiveHere ? " One published reference point: Progressive's 2025 figures for new customers show a median of $203/month (average $260) per vehicle for contractor commercial auto liability and physical damage, and a BOP median of $80/month (average $127)." : ''}${insureonHere ? " Insureon's site also shows average costs for contractor policies." : ''} To know your own cost, get quotes.`,
   },
   {
     q: `Should I use a digital carrier or an agent?`,
-    a: `Both have a place. Online providers such as ERGO NEXT and marketplaces such as Simply Business let you quote and buy online; Simply Business says you can compare quotes and buy within 10 minutes. A local independent agent can quote carriers that sell only through agents, which you cannot buy online directly. Each provider card on this page shows whether a provider is direct digital, agent only or hybrid (online and through agents). Getting both kinds of quote gives you two prices to compare.`,
+    a: `Both have a place. Online providers such as ERGO NEXT and marketplaces such as Simply Business let you quote and buy online; Simply Business says that for many policies you can compare quotes and buy within 10 minutes. A local independent agent can quote carriers that sell only through agents, which you cannot buy online directly. Each provider card on this page shows whether a provider is direct digital, agent only or hybrid (online and through agents). Getting both kinds of quote gives you two prices to compare.`,
   },
   {
     q: `What insurance lines do I actually need?`,
-    a: `It depends on your crew, vehicles and contracts. The core lines for ${vertical.name.toLowerCase()} contractors are general liability, workers' comp if you have employees (state rules apply), and commercial auto if you drive a work vehicle. Tools and equipment coverage is for gear you carry between jobs, professional liability covers design or consulting work, and an umbrella adds liability limits above your other policies. Ask your agent or provider which lines your state and your contracts require.`,
+    a: `It depends on your crew, vehicles and contracts. The core lines for ${tradePros} are general liability, workers' comp if you have employees (state rules apply), and commercial auto if you drive a work vehicle. Tools and equipment coverage is for gear you carry between jobs, professional liability covers design or consulting work, and an umbrella adds liability limits above your other policies. Ask your agent or provider which lines your state and your contracts require.`,
   },
 ];
 
@@ -113,7 +141,7 @@ const faqSchema = {
         Insurance · {vertical.name}
       </p>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
-        Best Insurance for {vertical.name} Contractors (2026)
+        Best Insurance for {tradeTitle} (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">{tradeIntro(verticalSlug)}</p>
     </header>
@@ -168,7 +196,7 @@ const faqSchema = {
     })}
 
     <section class="mb-10">
-      <h2 class="mb-5 text-2xl font-bold text-slate-900">Frequently asked for {vertical.name.toLowerCase()} contractors</h2>
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Frequently asked for {tradePros}</h2>
       <div class="space-y-3">
         {faqs.map((f) => (
           <details class="rounded-lg border border-slate-200 bg-white p-4">
@@ -180,10 +208,10 @@ const faqSchema = {
     </section>
 
     <section class="rounded-lg bg-slate-900 p-8 text-white">
-      <h2 class="text-2xl font-bold">More for {vertical.name.toLowerCase()} contractors</h2>
+      <h2 class="text-2xl font-bold">More for {tradePros}</h2>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href={`/${verticalToUrl(verticalSlug)}/`} class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">{vertical.name} software directory →</a>
-        <a href={`/lead-gen/trade/${verticalToUrl(verticalSlug)}/`} class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Lead-gen for {vertical.name.toLowerCase()}</a>
+        <a href={`/lead-gen/trade/${verticalToUrl(verticalSlug)}/`} class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Lead-gen for {tradeLower}</a>
         <a href="/insurance/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">All insurance providers</a>
       </div>
     </section>

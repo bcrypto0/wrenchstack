@@ -21,13 +21,17 @@ interface IeVendor {
 }
 
 const vendors = (ieData as { vendors: IeVendor[] }).vendors;
+const payrollCount = vendors.filter(v => v.category === 'payroll').length;
+const payrollPublished = vendors.filter(v => v.category === 'payroll' && v.tier === 'S').length;
+const payrollPricesText = payrollPublished === payrollCount ? `All ${payrollCount} publish prices.` : `${payrollPublished} of the ${payrollCount} publish prices.`;
+const insuranceCount = vendors.filter(v => v.category === 'insurance').length;
 
 const categories = ['software', 'lead-gen', 'insurance', 'payroll', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
   'software': { label: 'Field service software', description: `Job-management software sold to Irish trades. Tradify has an Irish site with euro prices per user, and ServiceM8 prices in euro on its EU site by jobs per month; Joblogic and Eworks Manager sell from the UK with sterling headline prices; Simpro is sold by quote. Tradify, ServiceM8 and Joblogic do not list payroll, so employers need separate Irish payroll software.` },
   'lead-gen': { label: 'Lead-generation platforms', description: `Sites that bring homeowner jobs to Irish trades, each charging differently: MyBuilder.ie (published Pro subscription), Tradesmen.ie (prepaid credits per lead plus a registration fee), Onlinetradesmen.ie (paid membership; prices not confirmed), Bark (credits spent per response; see its reputation warning) and Tradesman.ie, whose model could not be confirmed.` },
   'insurance': { label: 'Business insurance', description: `Liability cover for Irish trades, all priced by quote: insurers FBD Insurance and AXA Ireland, brokers Arachas and Chill Insurance, and KennCo Underwriting, whose construction liability policy is sold only through brokers. Confirm public and employers' liability limits and exclusions on your quote.` },
-  'payroll': { label: 'Payroll software', description: `Irish payroll software from five vendors that each say they file payroll submissions to Revenue and handle My Future Fund auto-enrolment (on BrightPay, in the cloud version): BrightPay, whose desktop edition is supported until 31 December 2026; Thesaurus Payroll Manager and Collsoft, Windows desktop software licensed per tax year; and Parolla and Sage Payroll, cloud services billed monthly. All five publish prices.` },
+  'payroll': { label: 'Payroll software', description: `Irish payroll software from ${payrollCount} vendors that each say they file payroll submissions to Revenue and handle My Future Fund auto-enrolment (on BrightPay, in the cloud version): BrightPay, whose desktop edition is supported until 31 December 2026; Thesaurus Payroll Manager and Collsoft, Windows desktop software licensed per tax year; and Parolla and Sage Payroll, cloud services billed monthly. ${payrollPricesText}` },
   'certification': { label: 'Registers and compliance', description: `Registers and tax rules Irish trades deal with: the RGI register, required for domestic and, since 1 September 2026, non-domestic gas works; Safe Electric registration for electrical contractors (both run for the CRU by Safe Energy Ireland); Relevant Contracts Tax on construction subcontracts; the SEAI Registered Contractor List for Better Energy Homes grant work; and CIRI, the statutory builders' register, where registration is not yet mandatory and applications open during 2027.` },
 };
 
@@ -79,7 +83,7 @@ const breadcrumbs = [
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What's different about IE trades vendor selection</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        A few Irish rules shape the choice. <strong>Gas and electrical work need registration</strong>: since 1 September 2026 it is illegal for anyone who is not a Registered Gas Installer to carry out domestic or non-domestic gas works, and the CRU says registration with Safe Electric is the law for electrical contractors and prosecutes unregistered ones. <strong>Payroll runs through Revenue</strong>: the payroll products listed here say they file payroll submissions to Revenue and handle My Future Fund auto-enrolment, and BrightPay Desktop is supported only until 31 December 2026. <strong>Subcontract payments can carry tax</strong>: under Relevant Contracts Tax, principal contractors in construction deduct 0%, 20% or 35% from subcontractor payments, depending on the subcontractor's tax compliance record. <strong>Insurance is quoted</strong>: all five insurance entries are priced by quote, and Safe Electric requires registered electrical contractors to hold public and products liability cover of at least €6.5 million and, if they employ staff, employers' liability of at least €13 million.
+        A few Irish rules shape the choice. <strong>Gas and electrical work need registration</strong>: since 1 September 2026 it is illegal for anyone who is not a Registered Gas Installer to carry out domestic or non-domestic gas works, and the CRU says registration with Safe Electric is the law for electrical contractors and prosecutes unregistered ones. <strong>Payroll runs through Revenue</strong>: the payroll products listed here say they file payroll submissions to Revenue and handle My Future Fund auto-enrolment, and BrightPay Desktop is supported only until 31 December 2026. <strong>Subcontract payments can carry tax</strong>: under Relevant Contracts Tax, principal contractors in construction deduct 0%, 20% or 35% from subcontractor payments, depending on the subcontractor's tax compliance record. <strong>Insurance is quoted</strong>: all {insuranceCount} insurance entries are priced by quote, and Safe Electric requires registered electrical contractors to hold public and products liability cover of at least €6.5 million and, if they employ staff, employers' liability of at least €13 million.
       </p>
     </section>
 
@@ -161,9 +165,9 @@ const breadcrumbs = [
     })}
 
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
-      <h2 class="text-2xl font-bold">IE research is an active expansion</h2>
+      <h2 class="text-2xl font-bold">Missing an IE vendor?</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        {vendors.length} IE vendors covered. Want an Irish vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
+        {vendors.length} IE entries listed today. Want an Irish vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Back to US directory →</a>

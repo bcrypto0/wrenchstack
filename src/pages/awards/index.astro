@@ -1,14 +1,24 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { awards } from '../../lib/data';
+import { awards, getTool } from '../../lib/data';
 
 const pageTitle = `WrenchStack Awards: Best Trades Software`;
-const pageDescription = `WrenchStack's editorial awards for the best trades software, updated annually. No vendor pays for placement.`;
+const pageDescription = `WrenchStack's ${awards.year} editorial awards for trades software, with winners in ${awards.categories.length} categories. No vendor paid for placement.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Awards', url: '/awards/' },
 ];
+
+// Computed from awards.json and tools.json so the counts and the affiliate list
+// follow the data (2026-10-01).
+const withMentions = awards.categories.filter((c) => c.honorable_mentions.length > 0).length;
+const nameList = (names: string[]) =>
+  names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names.join('');
+const affiliateWinners = [...new Set(awards.categories.map((c) => c.winner_slug))]
+  .map((slug) => getTool(slug))
+  .filter((t): t is NonNullable<typeof t> => !!t && t.affiliate_url.startsWith('http'))
+  .map((t) => t.name);
 ---
 
 <Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
@@ -21,7 +31,7 @@ const breadcrumbs = [
         WrenchStack Awards
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Each year we publish editorial awards for the best trades software in categories where buyers have clear competing options. No vendor pays for placement. No "shortlist" badges sold.
+        WrenchStack's editorial awards name a winner in each category of trades software, with honorable mentions in {withMentions} of the {awards.categories.length} categories. No vendor paid for placement, and we do not sell "shortlist" badges.
       </p>
     </header>
 
@@ -50,16 +60,13 @@ const breadcrumbs = [
       <h2 class="mb-3 text-lg font-bold text-slate-900">How awards work at WrenchStack</h2>
       <ul class="space-y-2 text-sm text-slate-700 leading-relaxed">
         <li>
-          <strong class="text-slate-900">Editorial selection.</strong> Winners are chosen on a published rubric (vertical fit, pricing transparency, integration coverage). No vendor can purchase a position.
+          <strong class="text-slate-900">Editorial selection.</strong> The {awards.year} winners were chosen on {awards.published_date} by editorial judgement of fit for each category's buyer profile, informed by the WrenchStack Fit Score as it stood then, which had five factors, including third-party review ratings and feature depth. Feature depth was removed on 2026-09-01 and the ratings factor on 2026-09-30 (we could not verify the ratings), and the winners have not been re-selected since. No vendor paid for a position.
         </li>
         <li>
-          <strong class="text-slate-900">Annual refresh.</strong> Every category is re-evaluated each year. Last year's winner doesn't auto-renew.
+          <strong class="text-slate-900">Affiliate disclosure.</strong> Each tool's review page carries an affiliate disclosure, and the <a href="/methodology/#affiliate-ledger" class="underline hover:text-slate-900">affiliate ledger</a> on the methodology page lists our affiliate status with every tool.{affiliateWinners.length > 0 ? ` Winners we have an active affiliate link for: ${nameList(affiliateWinners)}.` : ''}
         </li>
         <li>
-          <strong class="text-slate-900">Transparent affiliate disclosure.</strong> If we earn affiliate commission on a winner, it's flagged on the tool's review page and in our public <a href="/methodology/#affiliate-ledger" class="underline hover:text-slate-900">affiliate ledger</a>.
-        </li>
-        <li>
-          <strong class="text-slate-900">Methodology is public.</strong> See the <a href="/methodology/" class="underline hover:text-slate-900">methodology page</a> for the rubric, data sources, and weights.
+          <strong class="text-slate-900">Methodology is public.</strong> See the <a href="/methodology/" class="underline hover:text-slate-900">methodology page</a> for the Fit Score factors, weights and data sources.
         </li>
       </ul>
     </section>

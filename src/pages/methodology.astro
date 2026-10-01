@@ -143,7 +143,7 @@ const counts = {
     <div class="not-prose mb-8 rounded-lg border border-slate-200 bg-slate-50 p-5 text-sm text-slate-700">
       <h2 class="text-base font-bold text-slate-900 mb-2 mt-0">Changelog: non-software categories (2026-09-30)</h2>
       <ul class="list-disc pl-5 space-y-1 m-0">
-        <li><strong>Every entry re-verified.</strong> Accounting, payroll, insurance, lead generation, financing, banking, payments, marketing agencies and AI tools were checked against primary sources (vendor pages, filings, regulator and court documents), and prices were re-checked wherever the vendor publishes them.</li>
+        <li><strong>Entries re-verified.</strong> Accounting, payroll, insurance, lead generation, financing, banking, payments, marketing agencies and AI tools were checked against primary sources (vendor pages, filings, regulator and court documents), and prices were re-checked on the vendor's own pricing page wherever it could be read. The pricing pages of Patriot Accounting, Thumbtack, OnPay and Auris (formerly Heartland Payroll) could not be read, so those entries keep their earlier verified date.</li>
         <li><strong>No third-party review scores for these vendors.</strong> G2, Capterra, Trustpilot, Google, BBB and A.M. Best scores and forum sentiment are no longer shown in these categories: we could not verify them, and several were out of date. Lead-generation, insurance, payroll and marketing-agency review pages link to the vendor's BBB and Trustpilot pages instead. Software tool pages stopped showing G2 and Capterra ratings the same day (see v1.3).</li>
         <li><strong>Tiers use verified facts only.</strong> Lead generation: Recommended means no reputation warning and each lead or call goes to one business. Payroll: Tier S is online or specialty payroll with a published starting price and no warning; Tier B is legacy payroll, PEOs or a warning. Marketing agencies: Tier S is no warning plus published prices for the core service. Insurance: no Tier S; providers are listed with or without a warning, because nothing we could verify ranks insurers on quality.</li>
         <li><strong>Warnings need a readable source.</strong> A reputation warning must trace to a regulator order, court record, BBB profile or the vendor's own terms. Warnings that rested only on forum posts or on complaint text we could not read were removed.</li>
@@ -228,13 +228,13 @@ const counts = {
     </p>
 
     <ol>
-      <li><strong>Discovery</strong>: vendor identified through editorial research, vendor self-submission, contractor request, or category sweep. Initial fit assessment against category definition.</li>
-      <li><strong>Data collection</strong>: pricing tiers verified directly from vendor pricing page with date stamp; feature list compiled from vendor documentation and product pages; integration directory cross-referenced.</li>
+      <li><strong>Discovery</strong>: vendor identified through editorial research or vendor self-submission. Initial fit assessment against category definition.</li>
+      <li><strong>Data collection</strong>: pricing tiers verified directly from vendor pricing page with date stamp; feature and integration lists compiled from vendor documentation and product pages.</li>
       <li><strong>Reputation check</strong>: regulator actions (FTC, CFPB, SEC, state attorneys general), court records, BBB profiles and the vendor's own terms. We do not use forum or social-media sentiment, and a warning we cannot trace to a readable source is removed.</li>
       <li><strong>Scoring</strong>: for field-service software, the WrenchStack Fit Score™ is computed using published weights; reputation_flag attached if structural concerns warrant warning to readers.</li>
       <li><strong>Editorial draft</strong>: review written with structured pros and cons, FAQs and best-fit framing.</li>
       <li><strong>Publication</strong>: review goes live with verified_date stamp. Vendor profile becomes part of the directory.</li>
-      <li><strong>Monthly refresh</strong>: pricing re-verified; reputation warnings re-checked against their sources.</li>
+      <li><strong>Refresh</strong>: pricing re-verified and reputation warnings re-checked against their sources; each US entry shows the date of its latest check.</li>
     </ol>
 
     <h2>Our independence statement</h2>
@@ -246,7 +246,7 @@ const counts = {
     </div>
 
     <p>
-      We list vendors with no affiliate program on the same terms as everyone else (Acuity Insurance, Erie Insurance and Google Local Services Ads run none). We flag vendors even when they run affiliate or referral programs we could join (Melio, Mercury). This is the editorial position the methodology requires.
+      We list vendors we have no affiliate arrangement with on the same terms as everyone else (Acuity Insurance, Erie Insurance and Google Local Services Ads, for example), and a reputation warning goes on a vendor whatever our commercial relationship with it. This is the editorial position the methodology requires.
     </p>
 
     <h2>What "verified" means here</h2>
@@ -262,13 +262,8 @@ const counts = {
     <h2>How often we update</h2>
 
     <p>
-      <strong>Pricing</strong> is re-checked on a monthly cycle. Each tool entry carries a verified date;
+      <strong>Pricing</strong> carries the date it was last checked: each tool entry carries a verified date, and
       prices older than 90 days show an amber freshness pill and prices older than 180 days a red one.
-    </p>
-
-    <p>
-      <strong>Features and integrations</strong> are re-checked twice yearly, plus on major
-      product updates (we monitor vendor changelogs and release notes).
     </p>
 
     <p>
@@ -310,9 +305,8 @@ const counts = {
     <h2>The data behind rankings</h2>
 
     <p>
-      Pricing tier data comes from public vendor pricing pages. Feature lists come from vendor
-      documentation and product demos. Integration
-      data comes from official vendor integration directories and Zapier marketplace listings.
+      Pricing tier data comes from public vendor pricing pages. Feature lists and integration data
+      come from the vendor's own product pages and documentation.
     </p>
 
     <p>
@@ -438,8 +432,8 @@ const counts = {
     <h2>Where pricing data comes from</h2>
 
     <p>
-      Each pricing tier shows a <strong>verified date</strong>. We re-check pricing on the monthly cycle by
-      visiting each vendor's public pricing page. When a vendor publishes no prices, the page says so;
+      Each pricing tier shows a <strong>verified date</strong>. We re-check pricing by visiting each vendor's
+      public pricing page; where that page cannot be read, the entry keeps its earlier verified date. When a vendor publishes no prices, the page says so;
       we do not estimate prices from forum posts or other secondhand reports. Numbers older than 90 days get an amber freshness pill;
       older than 180 days, a red pill.
     </p>

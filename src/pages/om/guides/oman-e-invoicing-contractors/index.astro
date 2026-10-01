@@ -5,36 +5,38 @@ import omData from '../../../../data/international/om.json';
 interface OmVendor { slug: string; name: string; category: string; }
 const vendors = (omData as { vendors: OmVendor[] }).vendors;
 const softwareCount = vendors.filter(v => v.category === 'software').length;
+const inDirectory = (slug: string) => vendors.some(v => v.slug === slug);
+const nameOf = (slug: string, fallback: string) => vendors.find(v => v.slug === slug)?.name ?? fallback;
 
 // "Getting Fawtara-ready" rows, curated from our own verified Oman vendor data.
-// Honest statuses: the OTA's certified-provider list is the source of truth.
+// Honest statuses: the OTA's accredited-provider list is the source of truth.
 const ready = [
   { slug: 'cleartax-einvoicing', name: 'ClearTax', status: 'Says it is an OTA-accredited service provider; FF News and TechAfrica reported the accreditation in July 2026', fit: 'E-invoicing compliance layer that connects to ERPs such as SAP, Oracle, Dynamics 365, Xero and QuickBooks', note: 'No public prices; you still need accounting software alongside it' },
   { slug: 'wafeq', name: 'Wafeq', status: 'No Fawtara claim on its Oman pages; its documented e-invoicing is for Saudi Arabia (ZATCA)', fit: 'Cloud accounting in Arabic and English with published OMR prices', note: 'Ask Wafeq to confirm Fawtara support; contracts are with a UAE company (Wafeq FZ-LLC)' },
   { slug: 'zoho-books', name: 'Zoho (Books)', status: 'Oman edition creates VAT invoices and VAT reports; its Oman site makes no Fawtara claim yet', fit: 'Cloud accounting with published USD prices and a free plan', note: 'Ask Zoho how it will connect to Fawtara before your phase starts' },
   { slug: 'tallyprime', name: 'TallyPrime', status: 'Muscat dealer says it configures Oman VAT invoicing and returns; no Fawtara claim found', fit: 'Accounting and inventory software, sold in Oman through a Muscat dealer', note: 'Ask the dealer how Tally will connect to Fawtara; OMR prices by quote' },
-];
+].filter((row) => inDirectory(row.slug));
 
 // PM/BIM/document-control tools: NOT invoicing systems, so the mandate doesn't apply.
 const notInvoicing = [
   { slug: 'bentley-systems', name: 'Bentley Systems' },
   { slug: 'oracle-primavera-p6', name: 'Oracle Primavera P6' },
   { slug: 'oracle-aconex', name: 'Oracle Aconex' },
-  { slug: 'autodesk-construction-cloud', name: 'Autodesk Construction Cloud' },
+  { slug: 'autodesk-construction-cloud', name: 'Autodesk Forma' },
   { slug: 'procore', name: 'Procore' },
-];
+].filter((row) => inDirectory(row.slug)).map((row) => ({ slug: row.slug, name: nameOf(row.slug, row.name) }));
 
 const faqs = [
-  { q: 'Is e-invoicing actually mandatory in Oman, and when?', a: 'Yes. The Oman Tax Authority (OTA) is rolling out Fawtara e-invoicing in phases. Its Fawtara FAQ lists 100 large VAT-registered companies from August 2026, all large VAT-registered companies from February 2027 and all remaining VAT-registered taxpayers, including SMEs, from August 2027; the date for government entities has not been announced. ClearTax’s page and August 2026 reports in Oman Observer and Gulf News give different dates, including mandatory phases from April 2027, so confirm your own start date with the OTA.' },
-  { q: 'What does Oman e-invoicing require technically?', a: 'The Oman Tax Authority describes a 5-corner model: OTA-accredited service providers exchange e-invoices and report tax data to the Tax Authority, and every e-invoice must flow through one of them. The Tax Authority calls the system Fawtara. In practice your invoicing software must either be an accredited service provider or connect to one. A tool that handles Saudi Arabia’s ZATCA e-invoicing is not automatically Oman-ready: Wafeq, for example, documents ZATCA e-invoicing, but its Oman pages make no Fawtara claim.' },
-  { q: 'Does the mandate apply to small contractors and tradespeople?', a: 'Yes, by August 2027 under the OTA’s FAQ: Phase 3 covers all remaining VAT-registered taxpayers, including SMEs, not just large ones. If your construction or trades business is registered for Oman’s 5% VAT (mandatory above OMR 38,500 of annual supplies), you are in scope for that phase. Smaller, voluntarily-registered businesses below the mandatory threshold should confirm their position, but anyone above it should plan now.' },
+  { q: 'Is e-invoicing actually mandatory in Oman, and when?', a: 'The Oman Tax Authority (OTA) is rolling out Fawtara e-invoicing in phases. Its Fawtara FAQ says implementation begins in August 2026 for 100 large VAT-registered companies (Phase 1), in February 2027 for all large VAT-registered companies (Phase 2), in August 2027 for all remaining VAT-registered taxpayers (Phase 3, which the FAQ says includes SMEs) and in February of a year still to be announced for government institutions and entities (Phase 4). ClearTax’s page and August 2026 reports in Oman Observer and Gulf News give different dates, including mandatory phases from April 2027, so confirm your own start date with the OTA.' },
+  { q: 'What does Oman e-invoicing require technically?', a: 'The Oman Tax Authority describes a 5-corner model in which e-invoices pass from the supplier through the supplier’s and the buyer’s service providers, and OTA-accredited service providers validate and exchange e-invoices and report tax data to the Tax Authority. The Tax Authority calls the system Fawtara. In practice your invoicing software must either be an accredited service provider or connect to one. A tool that handles Saudi Arabia’s ZATCA e-invoicing is not automatically Oman-ready: Wafeq, for example, documents ZATCA e-invoicing, but its Oman pages make no Fawtara claim.' },
+  { q: 'Does the mandate apply to small contractors and tradespeople?', a: 'Yes, under the OTA’s FAQ: Phase 3, from August 2027, covers all remaining VAT-registered taxpayers, and the FAQ says SMEs fall within it. If your construction or trades business is registered for Oman’s 5% VAT (mandatory above OMR 38,500 of annual supplies), you are in scope by that phase at the latest.' },
   { q: 'Do Primavera, Aconex or Procore need to be "Fawtara-compliant"?', a: 'No, those are scheduling, document-control and project-management platforms, not invoicing systems, so the e-invoicing mandate doesn’t apply to them. The e-invoice comes from your accounting system or ERP, or from an e-invoicing layer such as ClearTax that connects to it. A contractor using one of these PM tools still needs a separate accounting or e-invoicing tool for tax invoices; check what that tool says about Fawtara in the table above.' },
-  { q: 'How does e-invoicing handle construction billing: progress claims and retention?', a: 'These are the flows to test before you buy: a progress claim (interim payment certificate) must still produce a compliant tax invoice against the contract, with correct cumulative quantities and previous-claim deductions; advance payments need compliant advance invoices that offset correctly on later claims; and retention changes when amounts fall due without changing your VAT obligations on issued invoices. A tool can be technically Fawtara-ready yet handle these construction flows poorly; make the vendor demo your real billing scenarios.' },
-  { q: 'What should we do now, ahead of August 2027?', a: 'Confirm your VAT status, then make e-invoicing readiness a buying criterion: ask any accounting/ERP vendor whether they are an OTA-accredited service provider (or connect to one), on what timeline, and at what cost. Leave 2-3 months for onboarding and testing before your phase date. If you’re a large VAT-registered company, the OTA’s FAQ puts you in Phase 1 (August 2026, 100 companies) or Phase 2 (February 2027), so treat it as a current project.' },
+  { q: 'How does e-invoicing handle construction billing: progress claims and retention?', a: 'These are the flows to test before you buy: how the system raises the tax invoice for each certified progress claim (interim payment certificate) against the contract, how it invoices advance payments and offsets them on later claims, and how it tracks retention. Whether a tool handles these flows well is a separate question from whether it connects to Fawtara, so make the vendor demo your real billing scenarios, and confirm the VAT treatment of each with your tax advisor.' },
+  { q: 'What should we do now, ahead of August 2027?', a: 'Confirm your VAT status, then make e-invoicing readiness a buying criterion: ask any accounting/ERP vendor whether they are an OTA-accredited service provider (or connect to one), on what timeline, and at what cost. Leave time to set up and test before your phase date. If you’re a large VAT-registered company, the OTA’s FAQ puts you in Phase 1 (August 2026, 100 companies) or Phase 2 (February 2027), so treat it as a current project.' },
 ];
 
 const pageTitle = 'Oman E-Invoicing (Fawtara) for Construction Companies (2026 Guide)';
-const pageDescription = 'Oman’s Fawtara e-invoicing is phased in: the Tax Authority’s FAQ lists 100 large VAT-registered companies from August 2026 and all remaining VAT-registered businesses from August 2027. What it means for Omani contractors (progress claims, retention) and what accounting software says about Fawtara. Independent, updated September 2026.';
+const pageDescription = 'Oman’s Fawtara e-invoicing is phased in: the Tax Authority’s FAQ says implementation begins in August 2026 for 100 large VAT-registered companies and in August 2027 for all remaining VAT-registered taxpayers. What it means for Omani contractors (progress claims, retention) and what accounting software says about Fawtara. Independent, updated October 2026.';
 
 const guideUrl = new URL('/om/guides/oman-e-invoicing-contractors/', Astro.site).toString();
 const breadcrumbs = [
@@ -45,7 +47,7 @@ const breadcrumbs = [
 
 const articleSchema = {
   '@context': 'https://schema.org', '@type': 'Article', headline: pageTitle, description: pageDescription,
-  datePublished: '2026-06-12', dateModified: '2026-09-30', inLanguage: 'en',
+  datePublished: '2026-06-12', dateModified: '2026-10-01', inLanguage: 'en',
   author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
   publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
   mainEntityOfPage: guideUrl,
@@ -67,26 +69,26 @@ const faqSchema = {
         Oman E-Invoicing (Fawtara) for Construction Companies
       </h1>
       <p class="mt-3 text-lg text-slate-600 leading-relaxed">
-        What Oman’s phased VAT e-invoicing mandate means for contractors: the timeline, how the Fawtara system works, progress-claim and retention realities, and what accounting software says about Fawtara.
+        What Oman’s phased VAT e-invoicing mandate means for contractors: the timeline, how the Fawtara system works, what to test for progress claims and retention, and what accounting software says about Fawtara.
       </p>
-      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published June 2026, updated September 2026 · Not tax advice; confirm your status with the Oman Tax Authority or your advisor.</p>
+      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published June 2026, updated 1 October 2026 · Not tax advice; confirm your status with the Oman Tax Authority or your advisor.</p>
     </header>
 
     <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
       <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ The short version</h2>
       <p class="text-slate-800 leading-relaxed">
-        Oman is introducing <strong>mandatory VAT e-invoicing</strong>, called <strong>Fawtara</strong>, in phases. The Oman Tax Authority’s FAQ lists <strong>100 large VAT-registered companies from August 2026</strong>, all large VAT-registered companies from February 2027 and <strong>all remaining VAT-registered taxpayers, including SMEs, from August 2027</strong>; other sources give different dates, so confirm yours with the Tax Authority. E-invoices must flow through an <strong>OTA-accredited service provider</strong> in a 5-corner model. Project-management tools like Primavera, Aconex or Procore are <em>not</em> in scope; the compliant invoice must come from your accounting/ERP or a dedicated e-invoicing layer. If you’re VAT-registered, Fawtara reaches you by August 2027 at the latest under the FAQ’s timeline, or earlier if you are a large taxpayer.
+        Oman is introducing <strong>mandatory VAT e-invoicing</strong>, called <strong>Fawtara</strong>, in phases. The Oman Tax Authority’s FAQ says implementation begins in <strong>August 2026 for 100 large VAT-registered companies</strong>, in February 2027 for all large VAT-registered companies and in <strong>August 2027 for all remaining VAT-registered taxpayers</strong>, the phase that includes SMEs; other sources give different dates, so confirm yours with the Tax Authority. E-invoices must flow through an <strong>OTA-accredited service provider</strong> in a 5-corner model. Project-management tools like Primavera, Aconex or Procore are <em>not</em> in scope; the compliant invoice must come from your accounting/ERP or a dedicated e-invoicing layer. If you’re VAT-registered, Fawtara reaches you by August 2027 at the latest under the FAQ’s timeline, or earlier if you are a large taxpayer.
       </p>
     </section>
 
     <section class="mb-10 grid gap-3 sm:grid-cols-3">
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">Aug 2026</div>
-        <div class="mt-1 text-xs text-slate-600">Phase 1: 100 large VAT-registered companies</div>
+        <div class="mt-1 text-xs text-slate-600">Phase 1 begins: 100 large VAT-registered companies (OTA FAQ)</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">Aug 2027</div>
-        <div class="mt-1 text-xs text-slate-600">Phase 3: all remaining VAT-registered taxpayers, incl. SMEs</div>
+        <div class="mt-1 text-xs text-slate-600">Phase 3 begins: all remaining VAT-registered taxpayers, incl. SMEs (OTA FAQ)</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">5-corner</div>
@@ -96,20 +98,20 @@ const faqSchema = {
 
     <section class="mb-10 prose prose-slate max-w-none">
       <h2>The phased timeline</h2>
-      <p>The Oman Tax Authority’s Fawtara FAQ lists four phases. Other sources give different dates: ClearTax’s page lists a pilot for the top 100 taxpayers from August 2026, businesses with annual supplies of OMR 5 million or more from April 2027 and the rest from October 2027, and Oman Observer and Gulf News reported in August 2026 that e-invoicing becomes mandatory in phases from April 2027. Check your own start date with the Tax Authority.</p>
+      <p>The Oman Tax Authority’s Fawtara FAQ lists four phases, each with the month its implementation begins. Other sources give different dates: ClearTax’s page lists a pilot for the top 100 taxpayers from August 2026, businesses with annual supplies of OMR 5 million or more from April 2027 and the rest from October 2027, and Oman Observer and Gulf News reported in August 2026 that e-invoicing becomes mandatory in phases from April 2027. Check your own start date with the Tax Authority.</p>
       <ul>
         <li><strong>Phase 1 (August 2026):</strong> 100 large VAT-registered companies.</li>
         <li><strong>Phase 2 (February 2027):</strong> all large VAT-registered companies.</li>
-        <li><strong>Phase 3 (August 2027):</strong> <strong>all remaining VAT-registered taxpayers, including SMEs</strong>; this is the phase that reaches SME contractors and trades.</li>
-        <li><strong>Phase 4 (date not yet announced):</strong> government entities. The Tax Authority has not yet announced when this phase starts.</li>
+        <li><strong>Phase 3 (August 2027):</strong> <strong>all remaining VAT-registered taxpayers</strong>; the FAQ says SMEs fall in this phase, so this is the one that reaches SME contractors and trades.</li>
+        <li><strong>Phase 4 (February, year to be announced):</strong> government institutions and entities.</li>
       </ul>
 
-      <h2>What Phase requirements actually mean</h2>
+      <h2>What the requirements mean in practice</h2>
       <p>
-        The Oman Tax Authority describes a <strong>5-corner model</strong>: OTA-accredited service providers exchange e-invoices and report tax data to the Tax Authority. In practice your invoicing system must:
+        The Oman Tax Authority describes a <strong>5-corner model</strong>: OTA-accredited service providers validate and exchange e-invoices and report tax data to the Tax Authority. In practice your invoicing system must:
       </p>
       <ul>
-        <li>produce <strong>structured e-invoices</strong> that pass validation before they are sent (ClearTax, for example, says it validates invoices against the PINT OM specification);</li>
+        <li>produce e-invoices that pass the service provider’s validation before they are sent (ClearTax, for example, says it validates invoices against the PINT OM specification);</li>
         <li>send them through an <strong>OTA-accredited service provider</strong>, or be one;</li>
         <li>handle Oman’s <strong>5% VAT</strong> correctly (mandatory VAT registration applies above OMR 38,500 of annual supplies; voluntary registration possible from OMR 19,250).</li>
       </ul>
@@ -117,18 +119,18 @@ const faqSchema = {
         A tool that handles <strong>Saudi Arabia’s ZATCA e-invoicing</strong> is not automatically Oman-ready: Wafeq, for example, documents ZATCA e-invoicing, but its Oman pages make no Fawtara claim.
       </p>
 
-      <h2>Why construction billing makes this harder</h2>
-      <p>A café issues simple invoices; a contractor doesn’t. Before you commit to any system, make the vendor demo <em>your</em> flows:</p>
+      <h2>What to test for construction billing</h2>
+      <p>Whether a tool handles construction billing well is a separate question from whether it connects to Fawtara. Before you commit to any system, make the vendor demo <em>your</em> flows:</p>
       <ul>
         <li><strong>Progress claims / interim payment certificates:</strong> can it raise a compliant tax invoice against the contract for each certified claim, with correct cumulative quantities, previous-claim deductions and VAT?</li>
         <li><strong>Advance payments:</strong> can it issue a compliant advance invoice and offset it correctly across later claims?</li>
         <li><strong>Retention:</strong> retention changes when money falls due; the system must keep VAT treatment correct on invoiced amounts while tracking retained balances to final account.</li>
-        <li><strong>Subcontractor chain:</strong> matching incoming subcontractor e-invoices to payment certificates as the network spreads down the supply chain.</li>
+        <li><strong>Subcontractor chain:</strong> matching incoming subcontractor e-invoices to payment certificates.</li>
       </ul>
 
       <h2>What Oman accounting software says about Fawtara</h2>
       <p>
-        From the {softwareCount} construction-software platforms in our <a href="/om/">Oman directory</a>, these are the accounting and e-invoicing tools, with what each one publishes about Fawtara. Among the ERPs, Focus Softnet says its e-invoicing is Oman-ready, though its OTA accreditation was not confirmed in our check; Grey ERP’s site mentions VAT compliance but not Fawtara, and ePROMIS and Onyx Pro ERP make no Fawtara claims. (Always verify a vendor against the Oman Tax Authority’s accredited-provider list before signing.)
+        From the {softwareCount} software listings in our <a href="/om/">Oman directory</a>, these are the accounting and e-invoicing tools, with what each one publishes about Fawtara. Among the ERPs, Focus Softnet says its e-invoicing is Oman-ready, though its OTA accreditation was not confirmed in our check; Grey ERP’s site mentions VAT compliance but not Fawtara, and ePROMIS and Onyx Pro ERP make no Fawtara claims. (Always verify a vendor against the Oman Tax Authority’s accredited-provider list before signing.)
       </p>
     </section>
 
@@ -169,9 +171,9 @@ const faqSchema = {
         <li><strong>Confirm your VAT status.</strong> VAT-registered (mandatory above OMR 38,500 of annual supplies)? Under the OTA’s FAQ you’re in scope by August 2027 at the latest (earlier if you’re a large taxpayer).</li>
         <li><strong>Make e-invoicing a buying criterion.</strong> Ask every accounting/ERP vendor: will you be OTA-accredited (or connect to an accredited service provider), on what timeline, at what cost?</li>
         <li><strong>Demo YOUR billing flows.</strong> Progress claims, advances, retention, subcontractor invoices, all on your real contract structure.</li>
-        <li><strong>Plan onboarding lead time.</strong> Leave 2-3 months to implement and test before your phase date.</li>
-        <li><strong>Run a controlled test.</strong> Issue real compliant e-invoices in a small batch before switching the whole business over.</li>
-        <li><strong>Train the back office</strong> on what now blocks an invoice (missing data, wrong format); fix at source, not at month-end.</li>
+        <li><strong>Plan onboarding lead time.</strong> Leave time to implement and test before your phase date.</li>
+        <li><strong>Run a controlled test.</strong> Issue real e-invoices in a small batch before switching the whole business over.</li>
+        <li><strong>Train the back office</strong> on the data each e-invoice needs; fix errors at source, not at month-end.</li>
       </ol>
     </section>
 
@@ -188,12 +190,12 @@ const faqSchema = {
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
-      <strong class="text-slate-700">Sources &amp; verification:</strong> Phase dates from the Oman Tax Authority’s Fawtara FAQ, as recorded in our Oman directory (checked September 2026); ClearTax’s page and August 2026 reports in Oman Observer and Gulf News give different dates, noted above. The 5-corner model and the role of accredited service providers are as the Tax Authority describes them. Vendor positions from each vendor’s published material, as recorded in our Oman directory, September 2026. General information, not tax advice; confirm your obligations with the Oman Tax Authority or a licensed advisor. Spotted an error? <a href="/contact/" class="underline">Tell us</a> and we’ll correct it.
+      <strong class="text-slate-700">Sources &amp; verification:</strong> Phase dates and the SME phase from the Oman Tax Authority’s Fawtara FAQ, re-read 1 October 2026; ClearTax’s page and August 2026 reports in Oman Observer and Gulf News give different dates, noted above. The 5-corner model and the role of accredited service providers are as the Tax Authority describes them. Vendor positions from each vendor’s published material, as recorded in our Oman directory, September 2026. General information, not tax advice; confirm your obligations with the Oman Tax Authority or a licensed advisor. Spotted an error? <a href="/contact/" class="underline">Tell us</a>.
     </section>
 
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Compare the Oman options side by side</h2>
-      <p class="mt-2 text-slate-300 leading-relaxed">Independent reviews of {vendors.length} Oman construction vendors: pricing, pros and cons, and compliance context, with no pay-to-play.</p>
+      <p class="mt-2 text-slate-300 leading-relaxed">Independent reviews of {vendors.length} Oman construction vendors and official bodies: pricing, pros and cons, and compliance context, with no pay-to-play.</p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/om/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">🇴🇲 Oman directory →</a>
         <a href="/om/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Compare vendors</a>

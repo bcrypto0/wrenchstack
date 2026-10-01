@@ -5,7 +5,7 @@ import { marketingAgencies, agencyTier, type MarketingAgency } from '../../lib/d
 import MissingFromList from '../../components/MissingFromList.astro';
 
 const pageTitle = `Best Marketing Agencies for Trades Contractors (2026)`;
-const pageDescription = `Independent reviews of ${marketingAgencies.length} digital marketing agencies serving HVAC, plumbing, electrical, roofing, and other trades. Single-trade specialists, home-services agencies, published prices where they exist, and reputation warnings where contract terms or complaints call for one.`;
+const pageDescription = `Independent reviews of ${marketingAgencies.length} digital marketing agencies serving HVAC, plumbing, electrical, roofing, and other trades. Trade specialists, home-services agencies, published prices where they exist, and reputation warnings where contract terms or complaints call for one.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -18,8 +18,8 @@ for (const a of marketingAgencies) byTier[agencyTier(a)].push(a);
 
 const tierMeta = {
   S: { label: 'Tier S: price published, no warning', description: `Agencies with no reputation warning whose own site publishes the price of their core service, so you can compare cost before a sales call. That is the whole rule; it is not a ranking of quality or results. Read each review for the minimum term and what the price covers.`, badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
-  A: { label: 'Tier A: no reputation warning', description: `Agencies with no reputation warning that do not meet the Tier S rule: most quote the core service after a call instead of publishing a price, and Service Direct sells pay-per-call leads at a price you set instead of a retainer. Get the fee, any setup fee and the minimum term in writing before you sign.`, badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
-  F: { label: 'Tier F: listed with reputation warnings', description: 'Agencies with a reputation warning: contract terms that are hard to exit (Townsquare Interactive, Marketing 360) or a pattern of billing and cancellation complaints (SureFire Local). Read the warning on each card before you sign.', badgeColor: 'bg-rose-100 text-rose-900 ring-rose-300', cardBorder: 'border-rose-300' },
+  A: { label: 'Tier A: no reputation warning', description: `Agencies with no reputation warning whose own site does not publish the price of their core service, so the price comes in a quote; Service Direct sells pay-per-call leads at a price you set instead of a retainer. Get the fee, any setup fee and the minimum term in writing before you sign.`, badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
+  F: { label: 'Tier F: listed with reputation warnings', description: 'Agencies with a reputation warning: contract terms that are hard to exit (Townsquare Interactive, Marketing 360) or a pattern of billing and cancellation complaints (Surefire Local). Read the warning on each card before you sign.', badgeColor: 'bg-rose-100 text-rose-900 ring-rose-300', cardBorder: 'border-rose-300' },
 };
 
 const itemListSchema = {
@@ -50,14 +50,14 @@ const itemListSchema = {
         Best Marketing Agencies for Trades Contractors (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {marketingAgencies.length} digital marketing agencies serving trades contractors. Single-trade specialists (Plumbing & HVAC SEO, Roofing Webmasters, Builder Funnel), home-services agencies (Hook Agency, RYNO, Adapt Digital), and reputation warnings on Townsquare Interactive and Marketing 360 (contract terms) and SureFire Local (billing and cancellation complaints).
+        Independent reviews of {marketingAgencies.length} digital marketing agencies serving trades contractors. Trade specialists (Plumbing & HVAC SEO for plumbing, HVAC and electrical; Roofing Webmasters and Contractor Dynamics for roofing; Builder Funnel for remodelers and custom home builders), home-services agencies (Hook Agency, RYNO, Adapt Digital), and reputation warnings on Townsquare Interactive and Marketing 360 (contract terms) and Surefire Local (billing and cancellation complaints).
       </p>
     </header>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">The headline filter: trade-specific vs generalist</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Some agencies work with one or two trades: Plumbing & HVAC SEO (plumbing, HVAC and electrical), Roofing Webmasters (roofing only) and Builder Funnel (remodelers and custom home builders). Others serve home services broadly, such as Hook Agency, RYNO Strategic Solutions and Adapt Digital Solutions. A specialist already knows your services and seasons; a broader agency suits shops that run several trades. Either way, ask for the price, the minimum contract and who owns your website and ad accounts before you sign.
+        Some agencies work with one trade or a few: Plumbing & HVAC SEO (plumbing, HVAC and electrical), Roofing Webmasters and Contractor Dynamics (roofing) and Builder Funnel (remodelers and custom home builders). Others serve home services broadly, such as Hook Agency, RYNO Strategic Solutions and Adapt Digital Solutions. Either way, ask for the price, the minimum contract and who owns your website and ad accounts before you sign.
       </p>
     </section>
 
@@ -101,7 +101,7 @@ const itemListSchema = {
                 <dl class="mb-3 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Minimum contract</dt>
-                    <dd class="font-semibold text-slate-900">{a.minimum_contract_months === null ? 'Not published' : `${a.minimum_contract_months}-month${a.minimum_contract_months === 1 ? '' : 's'}`}</dd>
+                    <dd class="font-semibold text-slate-900">{a.minimum_contract_months === null ? 'Not published' : a.minimum_contract_months === 0 ? 'None' : `${a.minimum_contract_months} month${a.minimum_contract_months === 1 ? '' : 's'}`}</dd>
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Pricing model</dt>
@@ -123,7 +123,7 @@ const itemListSchema = {
 
                 <div class="flex flex-wrap gap-2">
                   <a href={`/agencies/${a.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">Read full review →</a>
-                  <a href={a.affiliate_url.startsWith('http') ? a.affiliate_url : a.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md border border-orange-300 bg-white px-4 py-2 text-sm font-semibold text-orange-700 hover:bg-orange-50">Visit {a.name.split(' ')[0]}</a>
+                  <a href={a.affiliate_url.startsWith('http') ? a.affiliate_url : a.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md border border-orange-300 bg-white px-4 py-2 text-sm font-semibold text-orange-700 hover:bg-orange-50">Visit {a.name.replace(/ \(.*\)$/, '')}</a>
                 </div>
               </article>
             ))}
@@ -135,7 +135,7 @@ const itemListSchema = {
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Where to start</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        Start with your trade and budget. <strong>Plumbing, HVAC or electrical:</strong> Plumbing & HVAC SEO publishes its program price. <strong>Roofing:</strong> Roofing Webmasters (roofing only, month to month) or Hook Agency. <strong>Several trades or locations:</strong> RYNO Strategic Solutions (merged with Blue Corona in October 2024) or Adapt Digital Solutions. <strong>Small budget:</strong> Footbridge Media's flat $249/mo program. Read the warnings on Townsquare Interactive, Marketing 360 and SureFire Local before you sign with them.
+        Start with your trade and budget. <strong>Plumbing, HVAC or electrical:</strong> Plumbing & HVAC SEO publishes its program price. <strong>Roofing:</strong> Roofing Webmasters (roofing only, month to month) or Hook Agency. <strong>Several trades:</strong> RYNO Strategic Solutions (Blue Corona merged into it in October 2024) or Adapt Digital Solutions. <strong>Small budget:</strong> Footbridge Media's flat $249/mo program. Read the warnings on Townsquare Interactive, Marketing 360 and Surefire Local before you sign with them.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/payroll/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Payroll services</a>
@@ -146,7 +146,7 @@ const itemListSchema = {
     <section class="mt-10 rounded-lg border border-slate-200 bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">Editorial note on agency monetization</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        We have <strong>no affiliate or referral arrangement</strong> with any agency listed here, so no agency pays for its position or its tier. Every agency is placed by the same rules, and the review pages say where a price or claim comes from.
+        We have <strong>no affiliate or referral arrangement</strong> with any agency listed here, so no agency pays for its position or its tier. Every agency is placed by the same tier rules, described above.
       </p>
     </section>
     <MissingFromList listName="marketing agencies serving trades" count={marketingAgencies.length} />

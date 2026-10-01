@@ -31,7 +31,7 @@ const providerVerticals = provider.verticals
 const siblings = insuranceProviders.filter((p) => p.slug !== provider.slug).slice(0, 6);
 
 const pageTitle = `${provider.name} Review (2026): Coverage, Pricing, Pros & Cons`;
-const pageDescription = `${provider.name} review for trades contractors. ${asSentence(provider.tagline)} ${provider.reputation_flag ? 'Includes documented reputation context. ' : ''}Updated ${new Date().getFullYear()}.`;
+const pageDescription = `${provider.name} review for trades contractors. ${asSentence(provider.tagline)} ${provider.reputation_flag ? 'Includes documented reputation context. ' : ''}Verified ${provider.verified_date}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -44,9 +44,10 @@ const tierMeta = {
   F: { label: 'Tier F: reputation warning applies', color: 'bg-rose-100 text-rose-900 ring-rose-300' },
 };
 
+// Only brokers are insurance agencies; carriers and MGAs were typed InsuranceAgency until 2026-10-01.
 const serviceSchema = {
   '@context': 'https://schema.org',
-  '@type': 'InsuranceAgency',
+  '@type': provider.provider_type === 'broker' ? 'InsuranceAgency' : 'Organization',
   name: provider.name,
   description: provider.tagline,
   url: provider.vendor_url,
@@ -184,7 +185,7 @@ const faqSchema = {
             <dd class="mt-1 text-slate-700">{provider.states_note}</dd>
           </div>
           <div>
-            <dt class="text-xs uppercase tracking-wider text-slate-500">Typical premium range</dt>
+            <dt class="text-xs uppercase tracking-wider text-slate-500">Premiums</dt>
             <dd class="mt-1 text-slate-700">{provider.typical_premium_range}</dd>
           </div>
           <div>

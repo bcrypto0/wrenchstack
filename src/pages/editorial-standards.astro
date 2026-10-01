@@ -2,9 +2,13 @@
 import Layout from '../layouts/Layout.astro';
 import { tools, verticals } from '../lib/data';
 
-const lastUpdated = 'May 29, 2026';
+// Date of the last edit to this page's text (2026-10-01: Fit Score scope, flag
+// standard, corrections wording). It read May 29, 2026 through two later rewrites.
+const lastUpdated = 'October 1, 2026';
 const toolCount = tools.length;
 const verticalCount = verticals.length;
+// Software tools with a tracked affiliate link (same test as the methodology ledger).
+const activeAffiliateCount = tools.filter((t) => t.affiliate_url.startsWith('http')).length;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -14,7 +18,7 @@ const breadcrumbs = [
 
 <Layout
   title="Editorial Standards & How We Research | WrenchStack"
-  description="How WrenchStack researches, verifies, and publishes: our sourcing, fact-checking, independence, reputation-flag, and corrections standards. Vendor-funded, never vendor-influenced."
+  description="How WrenchStack researches, verifies, and publishes: our sourcing, fact-checking, independence, reputation-flag, and corrections standards. Vendors cannot pay for scores, rankings or softer reviews."
   breadcrumbs={breadcrumbs}
 >
   <article class="mx-auto max-w-3xl px-4 py-12 prose prose-slate">
@@ -27,15 +31,15 @@ const breadcrumbs = [
     <p>
       WrenchStack is an independent research publication covering the software and services that trades
       and field-service businesses buy. We are not a vendor, not a lead broker, and not for sale. These
-      are the standards every page on this site is held to. If we ever fall short of them, email
-      <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a> and we'll fix it.
+      are the standards every page on this site is held to. If a page falls short of them, email
+      <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a> with its URL.
     </p>
 
     <div class="not-prose my-6 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-5">
       <p class="m-0 text-sm leading-relaxed text-emerald-900">
         <strong>The one rule everything else serves:</strong> a vendor cannot pay us for a higher score,
         a better ranking, inclusion in a "best of" list, a softer review, or the removal of a reputation
-        warning. We earn affiliate commissions on some sign-ups, and that never changes what we publish.
+        warning. We may earn an affiliate commission on some sign-ups; commissions do not change what we publish.
       </p>
     </div>
 
@@ -45,10 +49,10 @@ const breadcrumbs = [
       we have a commercial relationship with it:
     </p>
     <ol>
-      <li><strong>Identify.</strong> Vendors enter the directory through editorial research, category sweeps, contractor requests, or vendor submissions, never by paying for placement.</li>
-      <li><strong>Collect from primary sources.</strong> Pricing comes from the vendor's own public pricing page; features from official documentation and product demos; integrations from official integration directories.</li>
-      <li><strong>Check reputation at the source.</strong> Reputation warnings come from regulator orders, court records, BBB profiles and vendors' own terms, not from forum sentiment. We do not copy third-party review scores we cannot verify: software tool pages link to G2 and Capterra, and other vendor pages link to BBB and Trustpilot.</li>
-      <li><strong>Score consistently.</strong> Every vendor is rated with the same published <a href="/methodology/">WrenchStack Fit Score™</a> formula and weights.</li>
+      <li><strong>Identify.</strong> Vendors enter the directory through our own research or a vendor's submission, not by paying for placement.</li>
+      <li><strong>Collect from primary sources.</strong> Pricing comes from the vendor's own public pricing page where it has one; where a figure comes from another source, such as HomeAdvisor's membership fee from the FTC, the entry says so; features and integrations from the vendor's own product pages and documentation.</li>
+      <li><strong>Check reputation at the source.</strong> Reputation warnings come from regulator orders, court records, BBB profiles and vendors' own terms, not from forum sentiment. We do not show third-party review scores: software tool pages link to G2 and Capterra, and lead-generation, insurance, payroll and marketing-agency pages link to BBB and Trustpilot.</li>
+      <li><strong>Score consistently.</strong> Every field-service software tool is scored with the same published <a href="/methodology/">WrenchStack Fit Score™</a> formula and weights. Lead generation, insurance, payroll and marketing agencies are grouped into tiers by published rules that use verified facts only; the other categories are listed without a score or tier.</li>
       <li><strong>Write and review.</strong> Each review is drafted, checked against the standards on this page, and published with a verification date.</li>
     </ol>
     <p>
@@ -58,17 +62,17 @@ const breadcrumbs = [
 
     <h2>How we verify</h2>
     <ul>
-      <li><strong>Pricing is dated.</strong> Every US pricing figure carries a <em>verified date</em>, and software tool pages mark a price verified more than 90 days ago with an amber or red freshness marker.</li>
+      <li><strong>Pricing is dated.</strong> Every US vendor entry carries a <em>verified date</em>, and software tool pages mark a price verified more than 90 days ago with an amber or red freshness marker.</li>
       <li><strong>Primary sources win.</strong> When a vendor's claim contradicts its own public page, we publish what the public page says until the page changes.</li>
       <li><strong>No fabricated signals.</strong> We do not invent review counts, ratings, or testimonials. Where we have no first-party reviews for a tool, we say so rather than manufacture them.</li>
-      <li><strong>Custom-quoted pricing is labeled.</strong> For enterprise tools without public pricing, we cite user-reported ranges from public sources and mark them as such, never a number we made up.</li>
+      <li><strong>Quote-only pricing is labeled.</strong> When a software vendor publishes no price, the listing says "Custom quote"; in the other categories the listing says in words that the price is quoted or not published. A pricing note may mention a third-party estimate, labeled as one; it is not used as the listed price or in any price statistic we compute.</li>
     </ul>
 
     <h2>Our sources</h2>
     <p>
-      Primary sources are vendor pricing pages, official product documentation, and integration
-      directories. Third-party sources for reputation include the FTC, CFPB, SEC, state attorneys general,
-      court records and BBB profiles. Tool pages link to G2 and Capterra reviews, but we do not copy
+      Primary sources are vendors' own pricing pages, product pages, documentation and terms.
+      Third-party sources for reputation include the FTC, CFPB, SEC, state attorneys
+      general and insurance regulators, court records and BBB profiles. Tool pages link to G2 and Capterra reviews, but we do not copy
       their scores or use them in rankings. When we attach a
       reputation warning to a vendor, we cite the documented basis for it; if we cannot read the source,
       we do not publish the warning.
@@ -76,29 +80,31 @@ const breadcrumbs = [
 
     <h2>How reputation flags work</h2>
     <p>
-      Some vendors carry a reputation warning. We apply these based on <strong>documented patterns</strong>:
-      FTC settlements or actions, class-action history, high BBB complaint volume, or consistent
-      customer-reported problems (for example, lead-quality complaints or aggressive lock-in contracts).
-      A flag is applied on the evidence alone. We flag vendors we earn commissions from, and we recommend
-      vendors we earn nothing from, when that's where the evidence points.
+      Some vendors carry a reputation warning. Each one must trace to a <strong>source we could read</strong>:
+      a regulator order or settlement (for example, from the FTC, CFPB, SEC or a state attorney general),
+      a court record, the vendor's BBB profile, or the vendor's own terms (for example, a contract that is
+      hard to exit). The warning names its source. A warning that rested only on forum posts, or on
+      complaint text we could not read, is removed. Whether a vendor pays us does not enter into it,
+      and vendors that pay us nothing are listed on the same terms as everyone else.
     </p>
 
     <h2>Independence and how we make money</h2>
     <p>
-      WrenchStack is reader-focused and affiliate-funded: when you sign up with some vendors through our
-      links, we may earn a commission, at no extra cost to you. That funding pays for the research; it
-      does not influence it. The same Fit Score formula, the same reputation standards, and the same
-      editorial scrutiny apply to every vendor, affiliate partner or not. See our
+      When you sign up with some vendors through our links, we may earn a commission: of the {toolCount}
+      software tools, {activeAffiliateCount} have a tracked affiliate link. Commissions do
+      not influence what we publish: the same Fit Score formula (for software), the same tier rules, the
+      same reputation standards and the same editorial scrutiny apply to every vendor, affiliate partner
+      or not. See our
       <a href="/disclosure/">affiliate disclosure</a> and the per-vendor affiliate ledger on the
       <a href="/methodology/#affiliate-ledger">methodology page</a>.
     </p>
 
     <h2>Corrections</h2>
     <p>
-      If we get something wrong (a price, a feature, a claim), we correct it within 48 hours of
-      confirmation, and the correction is noted on the page with a date. We never silently edit a
-      substantive error away. Spotted one? Email
-      <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a> with the page URL and what's wrong.
+      If we get something wrong (a price, a feature, a claim), we correct it once the error is confirmed
+      against a primary source. Spotted one? Email
+      <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a> with the page URL, what's wrong
+      and a primary source if you have one.
     </p>
 
     <h2>Who is accountable</h2>
@@ -111,12 +117,13 @@ const breadcrumbs = [
       <a href="/about/">about WrenchStack</a>.
     </p>
 
-    <h2>Keeping {toolCount}+ tools across {verticalCount} trades current</h2>
+    <h2>Keeping {toolCount} tools across {verticalCount} trades current</h2>
     <p>
       Coverage at this scale only stays useful if it stays fresh. We use data tooling and automation to
-      track pricing and structure information across the directory, and dated verification runs, listed
-      in the <a href="/verification-log/">verification log</a>, to re-verify pricing and re-evaluate
-      reputation flags. The standards on this page
+      track pricing and structure information across the directory, and verification runs to re-verify
+      pricing and re-evaluate reputation flags. Each US entry shows its latest verification date on its
+      own page, and the <a href="/verification-log/">verification log</a> counts US entries by the month
+      they were last verified. The standards on this page
       govern what gets published. The tooling helps us hold the line at scale, it doesn't replace the
       judgment.
     </p>

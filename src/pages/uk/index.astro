@@ -34,6 +34,7 @@ const categoryMeta: Record<string, { label: string; description: string }> = {
 
 const vendorsByCategory: Record<string, UkVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
+const activeCategoryCount = categories.filter(c => vendorsByCategory[c].length > 0).length;
 
 const pageTitle = 'UK Trades Vendor Directory | WrenchStack United Kingdom';
 const pageDescription = `WrenchStack's UK trades vendor directory: ${vendors.length} entries across software, lead generation, insurance, payroll and certification, with notes for UK contractors on Gas Safe registration, competent person schemes, RTI, CIS and VAT.`;
@@ -56,7 +57,7 @@ const breadcrumbs = [
         UK Trades Vendor Directory
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} UK-relevant vendors and schemes across 5 categories, written for UK contractors. Each entry notes the UK points the vendor covers or leaves out: Gas Safe Register, NICEIC and OFTEC schemes, HMRC RTI, CIS, employers' liability and VAT.
+        Independent reviews of {vendors.length} UK-relevant vendors and schemes across {activeCategoryCount} categories, written for UK contractors. Each entry notes the UK points the vendor covers or leaves out: Gas Safe Register, NICEIC and OFTEC schemes, HMRC RTI, CIS, employers' liability and VAT.
       </p>
     </header>
 
@@ -81,7 +82,7 @@ const breadcrumbs = [
       <div>
         <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">⏰ Compliance guide · Live since 6 April 2026</p>
         <h2 class="mt-1 text-base font-bold text-slate-900">Making Tax Digital for Income Tax is live for sole traders</h2>
-        <p class="mt-1 text-sm text-slate-700">Mandatory now over £50k, dropping to £30k in 2027 and £20k in 2028. What sole traders and CIS subbies must change, and which software actually files it.</p>
+        <p class="mt-1 text-sm text-slate-700">Mandatory now over £50k of qualifying income, then over £30k from April 2027 and £20k from April 2028, per GOV.UK. What sole traders and CIS subcontractors must change, and what the software in our UK directory says about it.</p>
       </div>
       <a href="/uk/guides/making-tax-digital-tradespeople/" class="shrink-0 rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Read the guide →</a>
     </section>
@@ -171,7 +172,7 @@ const breadcrumbs = [
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">About UK coverage</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        {vendors.length} UK entries across {categories.length} categories. UK profiles are shorter than our US software reviews and focus on what UK contractors need to know. Want a UK vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
+        {vendors.length} UK entries across {activeCategoryCount} categories. UK profiles are shorter than our US software reviews and focus on what UK contractors need to know. Want a UK vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Back to US directory →</a>

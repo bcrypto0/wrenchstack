@@ -14,7 +14,7 @@ const vendors = (saData as { vendors: SaVendor[] }).vendors;
 
 const categories = ['software', 'insurance', 'lead-gen', 'certification'];
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  'insurance': { label: 'Contractor insurance', description: "Saudi insurers with contractor-related business: Tawuniya, which leads the Insurance Authority's Inherent Defects Insurance pool; Walaa, which leads the co-insurance pool issuing surety bonds for qualified contractors on PIF development-company projects; and GIG Saudi, which sells engineering insurance for construction and installation projects. No published rates were confirmed for any of them, so ask the insurer or a licensed broker for a quote." },
+  'insurance': { label: 'Contractor insurance', description: "Saudi insurers with contractor-related business: Tawuniya, which the Insurance Authority selected to lead its Inherent Defects Insurance pool from June 2025; Walaa, which Reinsurance News reported in December 2024 leads the co-insurance pool issuing surety bonds for qualified contractors on PIF development-company projects; and GIG Saudi, which sells engineering insurance for construction and installation projects. No published rates were confirmed for any of them, so ask the insurer or a licensed broker for a quote." },
   'lead-gen': { label: 'Lead generation & project intelligence', description: "ProTenders' GCC construction project intelligence and eTendering, with a free company-profile tier. Saudi government tenders run separately on Etimad, listed under licensing & compliance." },
   'software': { label: 'Construction & trades software', description: "Project platforms from global vendors (Oracle Aconex, Primavera P6, Autodesk, Procore, PlanRadar, Bentley), construction ERPs sold in Saudi Arabia from Riyadh offices (First Bit, PACT), accounting and ERP systems whose vendors say they support ZATCA e-invoicing (Qoyod, Wafeq, Daftra, Medad, Onyx), and Focus Softnet's facility-management (CAFM) software." },
   'certification': { label: 'Licensing & compliance', description: 'Saudi bodies and rules that contractors deal with: Saudi Council of Engineers accreditation, contractor classification by the Ministry of Municipalities and Housing, Balady permits, the Saudi Building Code, ZATCA e-invoicing, Qiwa and Nitaqat Saudization, Saudi Contractors Authority membership and the Etimad government procurement platform.' },
@@ -74,16 +74,16 @@ const arUrl = new URL('/sa/ar/', Astro.site).toString();
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See Saudi vendors compared side by side: a clear verdict, pros and cons, Saudi-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See Saudi vendors compared side by side: a short verdict, pros and cons, Saudi-specific notes, and pricing, head to head.</p>
       </div>
       <a href="/sa/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare Saudi vendors →</a>
     </section>
 
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border-2 border-emerald-300 bg-emerald-50 p-5">
       <div>
-        <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">✅ Compliance guide · Wave 25 integration from 1 Feb 2027 (per EY)</p>
+        <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">✅ Compliance guide · Wave 25: comply with Phase 2 from 1 Feb 2027 (per EY)</p>
         <h2 class="mt-1 text-base font-bold text-slate-900">ZATCA Phase 2 e-invoicing for construction companies</h2>
-        <p class="mt-1 text-sm text-slate-700">EY reports that ZATCA's Wave 25 covers taxable turnover above SAR 187,500, with integration starting from 1 February 2027; Wave 24 (above SAR 375,000) closed on 30 June 2026. What Fatoora integration requires, how progress claims and retention are handled, and which platforms say they support Phase 2.</p>
+        <p class="mt-1 text-sm text-slate-700">EY reports that ZATCA's Wave 25 covers taxable turnover above SAR 187,500 and that businesses in it should prepare to comply with Phase 2 starting from 1 February 2027; Wave 24 (above SAR 375,000) had its integration window from 1 April to 30 June 2026, also per EY. What Phase 2 asks of your invoicing system, what to test for progress claims and retention, and which platforms say they support Phase 2.</p>
       </div>
       <a href="/sa/guides/zatca-e-invoicing-contractors/" class="shrink-0 rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Read the guide →</a>
     </section>
@@ -176,7 +176,7 @@ const arUrl = new URL('/sa/ar/', Astro.site).toString();
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Are you a Saudi software vendor?</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        {vendors.length} Saudi vendors and official bodies are covered today. If you build construction, ERP, accounting or field-service software for the Saudi/Gulf market and want to be reviewed or featured, get in touch through our <a href="/for-vendors/" class="underline">vendor program</a>.
+        {vendors.length} Saudi vendors and official bodies are covered today. If you build construction, ERP, accounting or field-service software for the Saudi/Gulf market and want to be reviewed or listed, get in touch through our <a href="/for-vendors/" class="underline">vendor program</a>.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/for-vendors/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Work with us →</a>

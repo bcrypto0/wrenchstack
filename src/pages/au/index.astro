@@ -34,6 +34,7 @@ const categoryMeta: Record<string, { label: string; description: string }> = {
 
 const vendorsByCategory: Record<string, AuVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
+const activeCategoryCount = categories.filter(c => vendorsByCategory[c].length > 0).length;
 
 const pageTitle = 'AU Trades Vendor Directory | WrenchStack Australia';
 const pageDescription = `WrenchStack's Australia trades directory: ${vendors.length} entries across job management software, lead generation, insurance, payroll, and state licensing and tax bodies, with published prices where vendors list them, Single Touch Payroll and Payday Super notes, and state licensing rules.`;
@@ -56,7 +57,7 @@ const breadcrumbs = [
         Australia Trades Vendor Directory
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} Australia-relevant vendors and regulators across 5 categories, for Australian contractors: Single Touch Payroll and Payday Super in payroll, how each payroll product handles awards, supplier integrations with wholesalers such as Reece, state licensing (Building Commission NSW, QBCC, the Building and Plumbing Commission in Victoria, and the WA and SA regulators), and how each lead platform charges.
+        Independent reviews of {vendors.length} Australia-relevant vendors and regulators across {activeCategoryCount} categories, for Australian contractors: Single Touch Payroll and Payday Super in payroll, how each payroll product handles awards, supplier integrations with wholesalers such as Reece, state licensing (Building Commission NSW, QBCC, the Building and Plumbing Commission in Victoria, and the WA and SA regulators), and how each lead platform charges.
       </p>
     </header>
 
@@ -81,7 +82,7 @@ const breadcrumbs = [
       <div>
         <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">✅ Compliance guide · In effect since 1 July 2026</p>
         <h2 class="mt-1 text-base font-bold text-slate-900">Payday super is law: the quarterly batch is over</h2>
-        <p class="mt-1 text-sm text-slate-700">Super with every pay run, in the fund within 7 business days, penalties up to 60% of the shortfall. The cash-flow shift and what to confirm with your payroll vendor now.</p>
+        <p class="mt-1 text-sm text-slate-700">Super with every pay run, received by the fund within 7 business days of payday, per Treasury. The cash-flow shift, the super guarantee charge and what to confirm with your payroll vendor.</p>
       </div>
       <a href="/au/guides/payday-super-payroll-software/" class="shrink-0 rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Read the guide →</a>
     </section>
@@ -173,7 +174,7 @@ const breadcrumbs = [
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Missing an AU vendor?</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        {vendors.length} AU entries covered today across {categories.length} categories. Want an AU vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
+        {vendors.length} AU entries covered today across {activeCategoryCount} categories. Want an AU vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Back to US directory →</a>

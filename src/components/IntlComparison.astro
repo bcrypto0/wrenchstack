@@ -12,20 +12,32 @@ interface Props {
 const { market, a, b } = Astro.props;
 
 const categoryLabel = INTL_CATEGORY_LABELS[a.category] ?? a.category;
-const tierRank = { S: 3, A: 2, F: 1 } as const;
-
-// Honest, data-derived verdict.
+// Data-derived verdict. Tier rule (verification/2026-09-30/intl_brief.md): F if and
+// only if the entry has a reputation warning; insurance and certification entries
+// are otherwise always A; software, payroll and lead-gen entries are S when the check
+// found the vendor's own site publishing its prices. Tier A does not prove the
+// opposite (a few A entries quote vendor prices, and some sites blocked the check),
+// so the wording claims prices only for S. The same-tier wording used to say the tier
+// "only reflects whether each publishes its prices", which was wrong for two flagged
+// vendors and for insurers (2026-10-01).
+const fitClause = `The tier is not a quality ranking: weigh the pros, cons, pricing and ${market.name}-specific notes below against your trade and region.`;
+const priceTiered = a.category === 'software' || a.category === 'payroll' || a.category === 'lead-gen';
 let verdict: string;
-if (a.reputation_flag && !b.reputation_flag) {
+if (a.reputation_flag && b.reputation_flag) {
+  verdict = `Both ${a.name} and ${b.name} carry a reputation warning (see below). Read both warnings before you choose either.`;
+} else if (a.reputation_flag && !b.reputation_flag) {
   verdict = `${a.name} carries a reputation warning (see below) and ${b.name} does not. Read the warning before you choose ${a.name}.`;
 } else if (b.reputation_flag && !a.reputation_flag) {
   verdict = `${b.name} carries a reputation warning (see below) and ${a.name} does not. Read the warning before you choose ${b.name}.`;
-} else if (tierRank[a.tier] > tierRank[b.tier]) {
-  verdict = `${a.name} publishes its prices and ${b.name} does not, so you can compare ${a.name}'s cost before talking to sales. That is not a quality ranking: the right pick depends on your trade, region and the ${market.name}-specific notes below.`;
-} else if (tierRank[b.tier] > tierRank[a.tier]) {
-  verdict = `${b.name} publishes its prices and ${a.name} does not, so you can compare ${b.name}'s cost before talking to sales. That is not a quality ranking: the right pick depends on your trade, region and the ${market.name}-specific notes below.`;
+} else if (priceTiered && a.tier !== b.tier) {
+  const [s, other] = a.tier === 'S' ? [a, b] : [b, a];
+  verdict = `${s.name} is Tier S: our check found its prices published on its own website. ${other.name} is Tier A. Compare the typical pricing shown for each below. ${fitClause}`;
+} else if (priceTiered && a.tier === 'S') {
+  verdict = `${a.name} and ${b.name} are both Tier S: our check found each one's prices published on its own website, so you can compare their costs before talking to sales. ${fitClause}`;
+} else if (priceTiered) {
+  verdict = `${a.name} and ${b.name} are both Tier A. Compare the typical pricing shown for each below. ${fitClause}`;
 } else {
-  verdict = `${a.name} and ${b.name} sit in the same tier (Tier ${a.tier}) for ${market.name} ${categoryLabel.toLowerCase()}, which only reflects whether each publishes its prices. The right choice comes down to fit: weigh the pros, cons, pricing, and ${market.name}-specific notes for each against your trade and region.`;
+  verdict = `${a.name} and ${b.name} are both Tier A, which every ${categoryLabel.toLowerCase()} entry without a reputation warning receives, so the tier does not separate them. Weigh the pros, cons, pricing and ${market.name}-specific notes below against your trade and region.`;
 }
 
 const pageTitle = `${a.name} vs ${b.name}: ${categoryLabel} for ${market.name} Trades (2026)`;
@@ -39,12 +51,15 @@ const breadcrumbs = [
 ];
 
 const cols = [a, b];
+// The affiliate strip shows only when a Visit link on this page is a tracked link
+// (intlOutboundUrl routes to a US tool's affiliate URL for some cross-market vendors).
+const hasTrackedLink = cols.some((v) => intlOutboundUrl(v) !== v.vendor_url);
 
 // Gulf head-to-heads are noindexed until the domain has authority (see compare-index.mjs).
 const noindex = GATED_INTL_COMPARE_MARKETS.has(market.code);
 ---
 
-<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} noindex={noindex} affiliate>
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} noindex={noindex} affiliate={hasTrackedLink}>
   <article class="mx-auto max-w-5xl px-4 py-12">
     <header class="mb-8">
       <div class="mb-3 flex items-center gap-2">

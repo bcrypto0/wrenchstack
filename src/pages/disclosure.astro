@@ -1,10 +1,31 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { tools, verticals, rankToolsForVertical, verticalFitScore, wrenchStackScore } from '../lib/data';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Disclosure', url: '/disclosure/' },
 ];
+
+// Computed (2026-10-01). The page claimed "tools we earn $10,000 per signup on"
+// (no program on the ledger pays that) and that unaffiliated tools "regularly" outrank
+// them; both are replaced by counts from the data. "Active" uses the same test as the
+// methodology ledger: a tracked http affiliate_url.
+const isActive = (t: (typeof tools)[number]) => t.affiliate_url.startsWith('http');
+const activeCount = tools.filter(isActive).length;
+// A trade counts when none of the tools tied for first place on its trade page
+// (same trade fit and same Fit Score as the first-ranked tool) has a tracked link.
+const tradesTopUnaffiliated = verticals.filter((v) => {
+  const ranked = rankToolsForVertical(v.slug);
+  if (!ranked.length) return false;
+  const top = ranked[0];
+  const topGroup = ranked.filter(
+    (t) =>
+      verticalFitScore(t, v.slug) === verticalFitScore(top, v.slug) &&
+      wrenchStackScore(t, v.slug) === wrenchStackScore(top, v.slug)
+  );
+  return !topGroup.some(isActive);
+}).length;
 ---
 
 <Layout
@@ -16,26 +37,31 @@ const breadcrumbs = [
     <h1>Affiliate disclosure</h1>
 
     <p>
-      WrenchStack earns commissions when readers sign up to software platforms through tracked
-      links on our pages. The vendor pays the commission from their customer acquisition budget;
-      you pay the same price as buying direct.
+      WrenchStack may earn a commission when readers sign up with a vendor through a tracked link on our
+      pages. Of the {tools.length} software tools in the directory, {activeCount} have a tracked affiliate
+      link; the <a href="/methodology/#affiliate-ledger">per-vendor ledger</a> lists the status of every one.
+      Reviews in the other categories state their affiliate status on the page. The vendor pays the
+      commission; we add no charge of our own.
     </p>
 
     <h2>How affiliate relationships affect rankings</h2>
 
     <p>
-      Rankings on WrenchStack are produced by the <a href="/methodology/">WrenchStack Score</a>,
-      a weighted formula across vertical fit (60%), pricing transparency (20%)
-      and integration coverage (20%). The scoring algorithm has no input field for affiliate commission
-      rate. Tools we earn nothing from can rank above tools we earn $10,000 per signup on, and
-      regularly do.
+      On each trade page, field-service software is ordered by fit for that trade, then by the
+      <a href="/methodology/">WrenchStack Fit Score</a> (vertical fit 60%, pricing transparency 20%,
+      integration coverage 20%), then by name. Neither the ordering nor the score has an input for
+      affiliate status or commission rate. On {tradesTopUnaffiliated} of the {verticals.length} trade
+      pages, none of the tools ranked first has a tracked affiliate link. Lead generation, insurance,
+      payroll and marketing agencies are grouped by published tier rules that use verified facts only.
     </p>
 
-    <h2>FTC compliance</h2>
+    <h2>FTC disclosure</h2>
 
     <p>
-      WrenchStack complies with the FTC's
-      <a href="https://www.ftc.gov/business-guidance/resources/disclosures-101-social-media-influencers">Endorsement Guides</a>.
+      The FTC's
+      <a href="https://www.ftc.gov/business-guidance/resources/disclosures-101-social-media-influencers">Endorsement Guides</a>
+      call for clear disclosure of material connections such as affiliate commissions. This page, the
+      per-vendor ledger and the disclosure on each review are how we disclose ours.
       Affiliate links use <code>rel="sponsored"</code> in the page source. Outbound CTAs use
       <code>nofollow noopener</code> for security and search engine signaling.
     </p>

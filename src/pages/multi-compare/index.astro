@@ -1,73 +1,67 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getTool, type Tool } from '../../lib/data';
+import triosData from '../../data/trios.json';
+import { tools, verticals, getTool, isQuoteOnly, toolType, type Tool } from '../../lib/data';
 
-const TRIO_LISTINGS = [
-  { slugs: ['housecall-pro', 'jobber', 'workiz'], category: 'Residential service businesses' },
-  { slugs: ['housecall-pro', 'jobber', 'servicefusion'], category: 'Small-to-mid residential service shops' },
-  { slugs: ['housecall-pro', 'jobber', 'servicetitan'], category: 'Entry to enterprise residential' },
-  { slugs: ['fieldedge', 'housecall-pro', 'servicetitan'], category: 'QuickBooks-heavy mid-size to enterprise' },
-  { slugs: ['jobber', 'servicefusion', 'workiz'], category: 'Small business per-company pricing' },
-  { slugs: ['fieldpulse', 'housecall-pro', 'jobber'], category: 'Growing service businesses' },
-  { slugs: ['buildops', 'fieldedge', 'servicetitan'], category: 'Enterprise commercial trades' },
-  { slugs: ['buildops', 'servicetitan', 'servicetrade'], category: 'Commercial mechanical contractors' },
-  { slugs: ['fieldedge', 'servicefusion', 'servicetitan'], category: 'Mid-size with QuickBooks needs' },
-  { slugs: ['jobber', 'joist', 'servicem8'], category: 'Solo and 1-2 tech operations' },
-  { slugs: ['jobber', 'joist', 'tradify'], category: 'Solo trade businesses' },
-  { slugs: ['acculynx', 'jobnimbus', 'servicetitan'], category: 'Roofing and restoration contractors' },
-  { slugs: ['acculynx', 'buildertrend', 'jobnimbus'], category: 'Roofing project management' },
-  { slugs: ['buildertrend', 'jobnimbus', 'jobtread'], category: 'Construction project management' },
-  { slugs: ['fieldroutes', 'gorilladesk', 'pestpac'], category: 'Pest control operators' },
-  { slugs: ['fieldroutes', 'gorilladesk', 'servsuite'], category: 'Pest control software platforms' },
-  { slugs: ['aspire', 'realgreen', 'service-autopilot'], category: 'Landscaping and lawn care' },
-  { slugs: ['jobber', 'service-autopilot', 'servicefusion'], category: 'Landscape companies, multiple sizes' },
-  { slugs: ['housecall-pro', 'jobber', 'zenmaid'], category: 'Residential cleaning businesses' },
-  { slugs: ['connecteam', 'jobber', 'zenmaid'], category: 'Cleaning operations and team management' },
-  { slugs: ['fieldedge', 'knowify', 'method-crm'], category: 'QuickBooks-native contractors' },
-  { slugs: ['fieldpulse', 'housecall-pro', 'workiz'], category: 'On-demand service shops' },
-  { slugs: ['jobber', 'servicem8', 'tradify'], category: 'Mobile-first small trade businesses' },
-  { slugs: ['buildops', 'fieldedge', 'simpro'], category: 'Custom-quoted enterprise platforms' },
-  { slugs: ['fieldpulse', 'jobber', 'workiz'], category: 'Multi-trade affordable platforms' },
-  { slugs: ['buildops', 'servicetrade', 'simpro'], category: 'Commercial-only trades platforms' },
-  { slugs: ['servicem8', 'simpro', 'tradify'], category: 'International / non-US trades software' },
-  { slugs: ['housecall-pro', 'vonigo', 'workiz'], category: 'Franchise and multi-location service' },
-  { slugs: ['fieldedge', 'housecall-pro', 'servicetitan'], category: 'HVAC residential service businesses' },
-];
+// Rewritten 2026-10-01. The list now comes from trios.json, the file the trio pages are
+// built from: this page kept its own copy, which had drifted (one trio listed twice, two
+// labels different from the pages'). The trios.json segment labels are no longer shown
+// (several are contradicted by our data, e.g. "non-US" for a trio that includes Simpro,
+// headquartered in Miami); each card states what the data shows instead: the trades all
+// three serve and how many publish a price. Removed: "most-searched", "budget-friendly
+// platforms emphasized", "implementation timeline comparison" (no longer on the pages),
+// the fixed FAQ count, and the hard-coded "1,100+" pair count (now computed).
 
 interface ResolvedTrio {
   tools: Tool[];
-  category: string;
   url: string;
   title: string;
+  shared: string[];
+  published: number;
 }
 
-const resolved: ResolvedTrio[] = TRIO_LISTINGS.map(def => {
-  const sorted = [...def.slugs].sort();
-  const tools = sorted.map(slug => getTool(slug)).filter((t): t is Tool => !!t);
-  if (tools.length !== 3) return null;
-  return {
-    tools,
-    category: def.category,
-    url: `/multi-compare/${sorted.join('-vs-')}/`,
-    title: tools.map(t => t.name).join(' vs '),
-  };
-}).filter((r): r is ResolvedTrio => r !== null);
+const vName = (slug: string) => verticals.find((v) => v.slug === slug)?.name ?? slug.replace(/_/g, ' ');
 
-// Group by buyer-segment (residential, commercial, vertical specialty)
-function classifyTrio(t: ResolvedTrio): 'residential' | 'commercial' | 'vertical-specialty' | 'small-business' {
-  const cat = t.category.toLowerCase();
-  if (cat.includes('commercial') || cat.includes('enterprise')) return 'commercial';
-  if (cat.includes('solo') || cat.includes('small') || cat.includes('1-2')) return 'small-business';
-  if (cat.includes('roofing') || cat.includes('pest') || cat.includes('landscap') || cat.includes('cleaning') || cat.includes('construction')) return 'vertical-specialty';
-  return 'residential';
+const resolved: ResolvedTrio[] = triosData.trios
+  .map((def) => {
+    const sorted = [...def.slugs].sort();
+    const ts = sorted.map((slug) => getTool(slug)).filter((t): t is Tool => !!t);
+    if (ts.length !== 3) return null;
+    const shared = ts[0].verticals.filter((v) => ts[1].verticals.includes(v) && ts[2].verticals.includes(v)).map(vName);
+    return {
+      tools: ts,
+      url: `/multi-compare/${sorted.join('-vs-')}/`,
+      title: ts.map((t) => t.name).join(' vs '),
+      shared,
+      published: ts.filter((t) => !isQuoteOnly(t)).length,
+    };
+  })
+  .filter((r): r is ResolvedTrio => r !== null)
+  .sort((x, y) => x.title.localeCompare(y.title));
+
+// Grouped by how many trades all three tools serve, from the data.
+const specialist = resolved.filter((r) => r.shared.length > 0 && r.shared.length <= 2);
+const broad = resolved.filter((r) => r.shared.length > 2);
+const noShared = resolved.filter((r) => r.shared.length === 0);
+const groups = [
+  { id: 'specialist', title: 'Trios with one or two trades in common', blurb: 'All three tools serve the trade named on each card.', items: specialist },
+  { id: 'broad', title: 'Trios with three or more trades in common', blurb: 'Tools that overlap across several trades.', items: broad },
+  { id: 'none', title: 'Trios with no trade in common', blurb: 'All three tools are in our data, but no single trade is served by all three.', items: noShared },
+].filter((g) => g.items.length > 0);
+
+const sharedLine = (r: ResolvedTrio) =>
+  r.shared.length <= 3 ? `Shared: ${r.shared.join(', ')}` : `Shared: ${r.shared.slice(0, 3).join(', ')} and ${r.shared.length - 3} more`;
+const priceLine = (r: ResolvedTrio) =>
+  r.published === 3 ? 'All three publish prices' : r.published === 0 ? 'None publishes a price' : `${r.published} of 3 publish prices`;
+
+// Two-way comparison pages, counted the way /compare/[pair]/ builds them.
+const isCmms = (t: Tool) => toolType(t) === 'cmms';
+let pairPages = 0;
+for (let i = 0; i < tools.length; i++) {
+  for (let j = i + 1; j < tools.length; j++) {
+    if (tools[i].verticals.some((v) => tools[j].verticals.includes(v)) || (isCmms(tools[i]) && isCmms(tools[j]))) pairPages++;
+  }
 }
-
-const grouped = {
-  residential: resolved.filter(t => classifyTrio(t) === 'residential'),
-  commercial: resolved.filter(t => classifyTrio(t) === 'commercial'),
-  'small-business': resolved.filter(t => classifyTrio(t) === 'small-business'),
-  'vertical-specialty': resolved.filter(t => classifyTrio(t) === 'vertical-specialty'),
-};
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -90,7 +84,7 @@ const itemListSchema = {
 
 <Layout
   title={`3-way trades software comparisons: ${resolved.length} matchups`}
-  description={`${resolved.length} curated 3-way comparisons of trades software. Each comparison includes decision matrix, per-vertical winner table, unique features per tool, implementation timeline comparison, and 7 FAQs.`}
+  description={`${resolved.length} three-way comparisons of trades software, each with a decision matrix, pricing, listed features and integrations, fit by trade and FAQs.`}
   breadcrumbs={breadcrumbs}
 >
   <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
@@ -101,96 +95,35 @@ const itemListSchema = {
         Multi-tool comparisons
       </h1>
       <p class="mt-4 max-w-3xl text-lg text-slate-600">
-        Three platforms head-to-head, for when a 2-way comparison isn't enough. {resolved.length} curated trios covering residential service, commercial trades, small business operations, and vertical specialty platforms.
+        {resolved.length} three-way comparisons, for when a two-way comparison isn't enough.
       </p>
       <p class="mt-3 text-sm text-slate-500">
-        Each comparison includes 3-column decision matrix ("Pick X if…"), per-vertical winner table, unique-features-per-tool breakdown, implementation timeline comparison, and 7 FAQs covering best overall / cheapest / QuickBooks integration / migration / mobile UX / team-size edge cases.
+        Each page compares three tools from our data: a decision matrix ("Pick X if…"), pricing, features and integrations as listed in our entries, fit in each trade all three serve, the weaknesses in each entry, and FAQs.
       </p>
     </header>
 
-    {grouped.residential.length > 0 && (
-      <section class="mb-12">
-        <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Residential service trios</h2>
-        <p class="mb-6 text-slate-600">
-          Residential FSM platforms compared head-to-head-to-head. Most-searched buyer combinations.
-        </p>
+    {groups.map((g) => (
+      <section class="mb-12" id={g.id}>
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">{g.title}</h2>
+        <p class="mb-6 text-slate-600">{g.blurb}</p>
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {grouped.residential.map(r => (
+          {g.items.map((r) => (
             <a
               href={r.url}
               class="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm"
             >
               <div class="font-semibold text-slate-900 group-hover:text-orange-600">{r.title}</div>
-              <div class="mt-1 text-xs text-slate-500">{r.category}</div>
+              {r.shared.length > 0 && <div class="mt-1 text-xs text-slate-500">{sharedLine(r)}</div>}
+              <div class="mt-1 text-xs text-slate-500">{priceLine(r)}</div>
             </a>
           ))}
         </div>
       </section>
-    )}
-
-    {grouped.commercial.length > 0 && (
-      <section class="mb-12">
-        <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Commercial and enterprise trios</h2>
-        <p class="mb-6 text-slate-600">
-          Commercial mechanical, electrical, plumbing, and general contractor platforms.
-        </p>
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {grouped.commercial.map(r => (
-            <a
-              href={r.url}
-              class="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm"
-            >
-              <div class="font-semibold text-slate-900 group-hover:text-orange-600">{r.title}</div>
-              <div class="mt-1 text-xs text-slate-500">{r.category}</div>
-            </a>
-          ))}
-        </div>
-      </section>
-    )}
-
-    {grouped['small-business'].length > 0 && (
-      <section class="mb-12">
-        <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Small business and solo operator trios</h2>
-        <p class="mb-6 text-slate-600">
-          Comparisons for solo contractors and 1-3 person operations. Free-tier and budget-friendly platforms emphasized.
-        </p>
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {grouped['small-business'].map(r => (
-            <a
-              href={r.url}
-              class="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm"
-            >
-              <div class="font-semibold text-slate-900 group-hover:text-orange-600">{r.title}</div>
-              <div class="mt-1 text-xs text-slate-500">{r.category}</div>
-            </a>
-          ))}
-        </div>
-      </section>
-    )}
-
-    {grouped['vertical-specialty'].length > 0 && (
-      <section class="mb-12">
-        <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Vertical specialty trios</h2>
-        <p class="mb-6 text-slate-600">
-          Trade-specific platform comparisons: roofing, pest control, landscaping, cleaning, general construction.
-        </p>
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {grouped['vertical-specialty'].map(r => (
-            <a
-              href={r.url}
-              class="group rounded-lg border border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm"
-            >
-              <div class="font-semibold text-slate-900 group-hover:text-orange-600">{r.title}</div>
-              <div class="mt-1 text-xs text-slate-500">{r.category}</div>
-            </a>
-          ))}
-        </div>
-      </section>
-    )}
+    ))}
 
     <section class="mt-12 rounded-lg bg-slate-50 p-6 text-sm text-slate-600">
       <p>
-        Looking for a 2-way comparison instead? See <a href="/compare/" class="text-orange-600 hover:underline">all 1,100+ head-to-head pairings</a>, take the <a href="/quiz/" class="text-orange-600 hover:underline">matching quiz</a> for personalized picks, or run the <a href="/roi-calculator/" class="text-orange-600 hover:underline">ROI calculator</a> for cost-benefit estimates at your team size.
+        Looking for a 2-way comparison instead? Head-to-head pages exist for {pairPages.toLocaleString('en-US')} pairs: see the <a href="/compare/" class="text-orange-600 hover:underline">comparisons</a> or pick any 2 to 5 tools in the <a href="/compare-builder/" class="text-orange-600 hover:underline">comparison builder</a>. You can also take the <a href="/quiz/" class="text-orange-600 hover:underline">matching quiz</a>.
       </p>
     </section>
   </section>

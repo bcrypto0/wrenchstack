@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { tools, verticals, rankToolsForVertical, wrenchStackScore, formatPrice, verticalToUrl, priceTier, teamSizeBucket, freshnessTier, winsForTool, type Tool } from '../../lib/data';
+import { tools, verticals, rankToolsForVertical, wrenchStackScore, formatPrice, verticalToUrl, priceTier, teamSizeBucket, freshnessTier, winsForTool, isQuoteOnly, REFERENCE_TEAM_SIZE, type Tool } from '../../lib/data';
 import FreshnessBadge from '../../components/FreshnessBadge.astro';
 import ToolLogo from '../../components/ToolLogo.astro';
 import MissingFromList from '../../components/MissingFromList.astro';
@@ -9,7 +9,10 @@ import MissingFromList from '../../components/MissingFromList.astro';
 // We pre-compute these server-side to avoid sending all tool data to JS.
 function toolFilterAttrs(t: Tool): Record<string, string> {
   const verticalSlugs = t.verticals.join(' ');
-  const tier = priceTier(t);
+  // priceTier puts every tool without a monthly starting price in 'quote-only', which
+  // includes Trash Flow and Pylon (one-time and per-project prices, published). They get
+  // their own value so the "Quote-only" chip does not list them (2026-10-01).
+  const tier = priceTier(t) === 'quote-only' && !isQuoteOnly(t) ? 'no-monthly' : priceTier(t);
   const team = teamSizeBucket(t);
   const hasQuickBooks = t.integrations.some((i) => i.includes('quickbooks')) ? '1' : '0';
   const hasStripe = t.integrations.some((i) => i.includes('stripe')) ? '1' : '0';
@@ -29,12 +32,19 @@ function toolFilterAttrs(t: Tool): Record<string, string> {
   };
 }
 
-// Flagship tools = those with deep custom content (long_description). 15 tools as of 2026-05-26.
-// Listed alphabetically. (Until 2026-09-30 these lists sorted by G2/Capterra rating,
-// which is no longer used; the per-trade lists now follow the Fit Score ranking.)
-const flagshipTools = tools
+// Tools with a full review (long_description). This was 15 "flagship" tools in May 2026;
+// every tool has one now (126 of 126 on 2026-10-01), so the copy below no longer calls
+// them flagship or most-searched, and no longer quotes "1,400-1,700 word reviews" (the
+// review texts run 137 to 441 words). Listed alphabetically. (Until 2026-09-30 these
+// lists sorted by G2/Capterra rating, which is no longer used; the per-trade lists now
+// follow the Fit Score ranking.)
+const reviewedTools = tools
   .filter((t) => !!(t as Tool & { long_description?: string }).long_description)
   .sort((a, b) => a.name.localeCompare(b.name));
+
+// Tools listed under more than one trade, for the "Browse by trade" note (it said "Most
+// platforms cover multiple trades" until 2026-10-01).
+const multiTradeCount = tools.filter((t) => t.verticals.length > 1).length;
 
 // All tools alphabetical
 const allAlphabetical = [...tools].sort((a, b) => a.name.localeCompare(b.name));
@@ -73,7 +83,7 @@ const itemListSchema = {
 
 <Layout
   title={`All ${tools.length} trades software tools: compare every platform`}
-  description={`Browse every field service and trades software platform in our directory. ${tools.length} tools across ${verticals.length} trades, with verified pricing, features, and integrations. Includes ${flagshipTools.length} flagship reviews with deep editorial coverage.`}
+  description={`Browse every trades software tool in our directory: ${tools.length} tools covering ${verticals.length} trades, each with its starting price, the date we last checked it, key features, integrations and a full review page.`}
   breadcrumbs={breadcrumbs}
 >
   <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
@@ -84,12 +94,10 @@ const itemListSchema = {
         All {tools.length} trades software tools
       </h1>
       <p class="mt-4 max-w-3xl text-lg text-slate-600">
-        Every field service and trades software platform we track, organized by trade and ranked by Fit Score within each, with deep editorial reviews of the {flagshipTools.length} most-searched tools.
+        Every trades software tool we list, grouped by trade and ordered within each trade by trade fit, then Fit Score, then name. Each tool has a full review page.
       </p>
       <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500">
         <span><span class="font-bold text-slate-900">{tools.length}</span> tools tracked</span>
-        <span class="text-slate-300">·</span>
-        <span><span class="font-bold text-slate-900">{flagshipTools.length}</span> flagship reviews</span>
         <span class="text-slate-300">·</span>
         <span><span class="font-bold text-slate-900">{verticals.length}</span> trades covered</span>
       </div>
@@ -125,7 +133,7 @@ const itemListSchema = {
 
         <div class="grid gap-3 md:grid-cols-2">
           <div>
-            <div class="mb-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Price tier <span class="font-normal normal-case tracking-normal text-slate-400">(per user per month; flat plans split across 5 users)</span></div>
+            <div class="mb-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Price tier <span class="font-normal normal-case tracking-normal text-slate-400">{`(starting price per user per month; flat plans split across ${REFERENCE_TEAM_SIZE} users)`}</span></div>
             <div class="flex flex-wrap gap-1.5" data-filter-group="tier">
               <button type="button" data-filter-value="free" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Free tier</button>
               <button type="button" data-filter-value="entry" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Entry (under $100)</button>
@@ -136,12 +144,17 @@ const itemListSchema = {
           </div>
 
           <div>
-            <div class="mb-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Team size</div>
+            {/* Buckets follow teamSizeBucket(): the top of the team-size range we record for
+                each tool, with an open range such as "10+" counted as large. The chips read
+                "Solo (1-3)" to "Large (50+)" until 2026-10-01, which put "10+" tools under 50+;
+                then "Up to 3/15/50", which the exclusive buckets do not do ("Up to 15" hid
+                tools whose range tops out at 3). Labels now name each bucket's range. */}
+            <div class="mb-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Team size <span class="font-normal normal-case tracking-normal text-slate-400">(top of the range we record for each tool)</span></div>
             <div class="flex flex-wrap gap-1.5" data-filter-group="team">
-              <button type="button" data-filter-value="solo" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Solo (1-3)</button>
-              <button type="button" data-filter-value="small" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Small (3-15)</button>
-              <button type="button" data-filter-value="mid" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Mid (15-50)</button>
-              <button type="button" data-filter-value="large" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Large (50+)</button>
+              <button type="button" data-filter-value="solo" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">1 to 3</button>
+              <button type="button" data-filter-value="small" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">4 to 15</button>
+              <button type="button" data-filter-value="mid" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">16 to 50</button>
+              <button type="button" data-filter-value="large" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Over 50 or open-ended</button>
             </div>
           </div>
         </div>
@@ -152,7 +165,7 @@ const itemListSchema = {
             <button type="button" data-filter-value="qb" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">QuickBooks</button>
             <button type="button" data-filter-value="trial" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Free trial</button>
             <button type="button" data-filter-value="free" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Free tier</button>
-            <button type="button" data-filter-value="stripe" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Stripe payments</button>
+            <button type="button" data-filter-value="stripe" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Stripe</button>
             <button type="button" data-filter-value="fresh" class="filter-chip rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:border-orange-400 hover:text-orange-700">Verified &lt;90 days</button>
           </div>
         </div>
@@ -166,7 +179,7 @@ const itemListSchema = {
     <nav class="mb-12 rounded-lg border border-slate-200 bg-slate-50 p-4">
       <div class="text-sm font-semibold text-slate-700">Jump to:</div>
       <div class="mt-2 flex flex-wrap gap-x-4 gap-y-2 text-sm">
-        <a href="#flagship" class="text-orange-600 hover:underline">Flagship reviews ({flagshipTools.length})</a>
+        <a href="#flagship" class="text-orange-600 hover:underline">Tool reviews ({reviewedTools.length})</a>
         <span class="text-slate-300">·</span>
         <a href="#by-trade" class="text-orange-600 hover:underline">Browse by trade</a>
         <span class="text-slate-300">·</span>
@@ -175,12 +188,12 @@ const itemListSchema = {
     </nav>
 
     <section id="flagship" class="mb-16 scroll-mt-8">
-      <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Flagship reviews</h2>
+      <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Tool reviews</h2>
       <p class="mb-6 text-slate-600">
-        These {flagshipTools.length} tools have our deepest editorial coverage: 1,400-1,700 word reviews with custom narrative, detailed pros/cons, implementation timelines, and tool-specific FAQs. Cover all major trade-software segments.
+        {reviewedTools.length === tools.length ? `All ${tools.length} tools have` : `${reviewedTools.length} of the ${tools.length} tools have`} a review page with pricing tiers, pros and cons, implementation notes and FAQs. Listed alphabetically.
       </p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {flagshipTools.map((t) => {
+        {reviewedTools.map((t) => {
           const won = winsForTool(t.slug).length > 0;
           return (
             <a
@@ -218,7 +231,7 @@ const itemListSchema = {
     <section id="by-trade" class="mb-16 scroll-mt-8">
       <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Browse by trade</h2>
       <p class="mb-6 text-slate-600">
-        Tools grouped by the trades they serve. Most platforms cover multiple trades; they'll appear in each relevant section. Sorted by vertical fit, then Fit Score, within each trade.
+        {`Tools grouped by the trades they serve. ${multiTradeCount} of the ${tools.length} tools serve more than one trade and appear in each of those sections. Within each trade, tools are ordered by trade fit, then Fit Score, then name.`}
       </p>
       <div class="space-y-10">
         {toolsByVertical.map(({ vertical, tools: verticalTools }) => (

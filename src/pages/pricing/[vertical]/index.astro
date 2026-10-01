@@ -1,12 +1,18 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { priceScaling, priceTier } from '../../../lib/data';
 import {
   verticals,
   toolsForVertical,
   verticalToUrl,
   formatPrice,
   wrenchStackScore,
+  getTool,
+  priceScaling,
+  priceTier,
+  isQuoteOnly,
+  hasFreeTier,
+  medianUsd,
+  pricedEntryValues,
   type Vertical,
   type Tool,
 } from '../../../lib/data';
@@ -27,6 +33,7 @@ const verticalLower = vertical.name.toLowerCase();
 
 const verticalTools: Tool[] = toolsForVertical(vertical.slug);
 
+// Lowest starting price first; tools with no monthly starting price last.
 const cheapestFirst = [...verticalTools].sort((a, b) => {
   const pa = a.pricing.starting_at_usd;
   const pb = b.pricing.starting_at_usd;
@@ -36,84 +43,262 @@ const cheapestFirst = [...verticalTools].sort((a, b) => {
   return pa - pb;
 });
 
-const cheapestPublic = cheapestFirst.find((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0);
-const freeTier = cheapestFirst.find((t) => t.pricing.starting_at_usd === 0);
-const customQuoteOnly = verticalTools.filter((t) => t.pricing.pricing_model === 'quote_only');
+const listJoin = (names: string[]) =>
+  names.length <= 1 ? (names[0] ?? '') : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+// Long name lists are cut to the first few, with the rest counted.
+const shortList = (ts: Tool[], max = 5) =>
+  ts.length <= max ? listJoin(ts.map((t) => t.name)) : `${ts.slice(0, max).map((t) => t.name).join(', ')} and ${ts.length - max} more`;
+const count = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 
-// Pricing model classification
-const flatRateTools = verticalTools.filter((t) => priceScaling(t) === 'flat' || priceScaling(t) === 'base_plus_seat');
-const perUserTools = verticalTools.filter((t) => priceScaling(t) === 'per_user');
+// Every figure below is counted from this trade's tools (2026-10-01). The FAQs and
+// callouts used to carry the same invented figures on all 21 pages (a 2.59-2.99% card
+// fee, a 6-8 tech "crossover", $20-$200 add-ons, "verified quarterly", "requesting
+// current quotes") and named tools as per-user that are quote-only or base-plus-seat.
+// Quote-only = isQuoteOnly (pricing_model 'quote_only'); a null starting price is not
+// the test, because two tools publish one-time or per-project prices instead.
+const freeTierTools = verticalTools.filter(hasFreeTier);
+const paidTools = cheapestFirst.filter((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0);
+const quoteOnlyTools = verticalTools.filter(isQuoteOnly);
+const otherPricedTools = verticalTools.filter((t) => t.pricing.starting_at_usd === null && !isQuoteOnly(t));
+const isPerUser = (t: Tool) => priceScaling(t) === 'per_user';
+const lowestPaidPrice = paidTools.length ? (paidTools[0].pricing.starting_at_usd as number) : null;
+const lowestPaidTools = paidTools.filter((t) => t.pricing.starting_at_usd === lowestPaidPrice);
+// How each entry price scales, for naming tools that tie on the lowest price but are
+// priced differently (pest-control: Jobber base-plus-seat and GoCanvas per user at $29).
+const scaleWord = (t: Tool) => {
+  const s = priceScaling(t);
+  return s === 'per_user' ? 'per user' : s === 'flat' ? 'per company' : s === 'base_plus_seat' ? 'base price plus a fee per extra user' : 'see the pricing note';
+};
+const lowestSameScale = lowestPaidTools.every((t) => priceScaling(t) === priceScaling(lowestPaidTools[0]));
+const lowestPaidLabel = lowestPaidPrice !== null
+  ? (lowestSameScale
+      ? `$${lowestPaidPrice} a month${lowestPaidTools.every(isPerUser) ? ' per user' : ''} (${listJoin(lowestPaidTools.map((t) => t.name))})`
+      : `$${lowestPaidPrice} a month (${lowestPaidTools.map((t) => `${t.name}, ${scaleWord(t)}`).join('; ')})`)
+  : null;
+const medianPaid = paidTools.length ? medianUsd(pricedEntryValues(verticalTools)) : null;
+const perUserPaid = paidTools.filter(isPerUser);
+const flatPaid = paidTools.filter((t) => priceScaling(t) === 'flat');
+const seatPaid = paidTools.filter((t) => priceScaling(t) === 'base_plus_seat');
+const unclearPaid = paidTools.filter((t) => priceScaling(t) === 'unclear');
+const quoteOnlyExamples = quoteOnlyTools.slice(0, 3).map((t) => t.name);
+const quoteOnlyExampleClause = quoteOnlyExamples.length ? `, such as ${listJoin(quoteOnlyExamples)}` : '';
 
-// Top pick per price tier: highest Fit Score for this trade, then name. (Until
-// 2026-09-30 this took the highest G2/Capterra rating, which is no longer used.)
-// priceTier compares cost per user (flat plans split across a 5-person team). Until
-// 2026-09-27 these used the starting price alone, so flat company plans of $250+
-// were shown as top-tier picks next to per-user plans.
+// Pricing notes come from the vendors' own pages; these lists only say which notes
+// mention a cost, so they stay true when a note changes.
+const noteMentions = (re: RegExp) => verticalTools.filter((t) => re.test(t.pricing.pricing_note ?? ''));
+const processingTools = noteMentions(/processing|per transaction|transaction fee/i);
+const setupTools = noteMentions(/setup|onboarding|implementation/i);
+const addOnTools = noteMentions(/add-on/i);
+// "Third-party estimates" (ServiceTitan, mHelpDesk) and "Third-party reports" (FieldPulse).
+const estimateTools = quoteOnlyTools.filter((t) => /third-party (estimate|report)/i.test(t.pricing.pricing_note ?? ''));
+
+// Verified dates are YYYY-MM-DD; format in UTC so a build in a US timezone does not
+// print the 1st of a month as the previous month.
+const verifiedDates = verticalTools.map((t) => t.pricing.verified_date).filter(Boolean).sort();
+const dayLabel = (d: string) =>
+  new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+const verifiedRange = verifiedDates.length
+  ? (verifiedDates[0] === verifiedDates[verifiedDates.length - 1]
+      ? dayLabel(verifiedDates[0])
+      : `${dayLabel(verifiedDates[0])} to ${dayLabel(verifiedDates[verifiedDates.length - 1])}`)
+  : null;
+
+// Top pick per price tier: highest Fit Score for this trade. Ties are named rather
+// than broken by name. (Until 2026-09-30 this took the highest G2/Capterra rating,
+// which is no longer used.) priceTier compares cost per user (flat plans split across
+// a 5-person team). Until 2026-09-27 these used the starting price alone, so flat
+// company plans of $250+ were shown as top-tier picks next to per-user plans.
 const entryTierTools = verticalTools.filter((t) => priceTier(t) === 'entry');
 const midTierTools = verticalTools.filter((t) => priceTier(t) === 'mid');
-const enterpriseTierTools = verticalTools.filter((t) => priceTier(t) === 'enterprise' || priceTier(t) === 'quote-only');
+const enterpriseTierTools = verticalTools.filter((t) => priceTier(t) === 'enterprise' || isQuoteOnly(t));
 
-function bestValueIn(set: Tool[]): Tool | null {
+function topIn(set: Tool[]): { best: Tool; tied: Tool[] } | null {
   if (set.length === 0) return null;
-  return [...set].sort((a, b) => {
+  const sorted = [...set].sort((a, b) => {
     const diff = wrenchStackScore(b, vertical.slug) - wrenchStackScore(a, vertical.slug);
     return diff !== 0 ? diff : a.name.localeCompare(b.name);
-  })[0];
+  });
+  const top = wrenchStackScore(sorted[0], vertical.slug);
+  return { best: sorted[0], tied: sorted.slice(1).filter((t) => wrenchStackScore(t, vertical.slug) === top) };
 }
-const entryBest = bestValueIn(entryTierTools);
-const midBest = bestValueIn(midTierTools);
-const enterpriseBest = bestValueIn(enterpriseTierTools);
+const tierPicks = [
+  { pick: topIn(entryTierTools), label: 'Entry tier (under $100/user/mo)', box: 'border-emerald-200 bg-emerald-50', text: 'text-emerald-700' },
+  { pick: topIn(midTierTools), label: 'Mid tier ($100-$249/user/mo)', box: 'border-blue-200 bg-blue-50', text: 'text-blue-700' },
+  { pick: topIn(enterpriseTierTools), label: 'Top tier ($250+/user/mo or quote-only)', box: 'border-orange-200 bg-orange-50', text: 'text-orange-700' },
+].filter((p) => p.pick !== null);
+
+function modelLabel(t: Tool): string {
+  if (isQuoteOnly(t)) return 'Custom quote: request from vendor';
+  const s = priceScaling(t);
+  if (s === 'per_user') return 'Per user';
+  if (s === 'flat') return 'Flat per company';
+  if (s === 'base_plus_seat') return 'Base price plus per-seat fee';
+  if (s === 'free') return 'Free tier, paid plans above it';
+  return 'See the tool page';
+}
+
+function startingLabel(t: Tool): string {
+  const p = t.pricing.starting_at_usd;
+  if (p === 0) return 'Free tier';
+  if (p === null) return isQuoteOnly(t) ? 'Custom' : 'No monthly plan';
+  return `$${p}${isPerUser(t) ? '/user' : ''}/mo`;
+}
+
+function tierPriceLabel(t: Tool, price: number | null | undefined): string {
+  // Trash Flow and Pylon publish one-time or per-project prices in their notes (and
+  // Trash Flow in its tier names), so a missing tier figure is not "Not published".
+  if (price === null || price === undefined) return isQuoteOnly(t) ? 'Custom quote' : t.pricing.starting_at_usd === null ? 'See pricing note' : 'Not published';
+  if (price === 0) return 'Free';
+  // Bluebeam publishes yearly per-user prices; its tier prices are per year.
+  if (t.pricing.pricing_model === 'annual_per_user') return `$${price}/user/yr`;
+  if (t.pricing.pricing_model === 'per_user') return `$${price}/user/mo`;
+  return `$${price}/mo`;
+}
+
+// Minimums stated in a pricing note: a number of users or a yearly spend.
+const noteOf = (t: Tool) => t.pricing.pricing_note ?? '';
+const hasMinimum = (t: Tool) => /\bminimum\b/i.test(noteOf(t)) && !/\bno minimum\b/i.test(noteOf(t));
+function seatMinimum(t: Tool): number | null {
+  const m = noteOf(t).match(/\bminimum (?:of )?(\d+) (?:users?|seats?)\b/i) ?? noteOf(t).match(/\b(\d+)-(?:user|seat) minimum\b/i);
+  return m ? Number(m[1]) : null;
+}
+function annualMinimumUsd(t: Tool): number | null {
+  const m = noteOf(t).match(/\$([\d,]+) minimum annual/i);
+  return m ? Number(m[1].replace(/,/g, '')) : null;
+}
+// An entry plan the pricing note limits to one user (Powered Now: "Business ... (single
+// user only)"). A team of two or more needs the next plan, so its estimate uses the
+// lowest higher tier price; null when the data records none.
+const singleUserEntry = (t: Tool) => /\bsingle[- ]user only\b|\b1 user only\b/i.test(noteOf(t));
+function seatPriceFor(t: Tool, teamSize: number): number | null {
+  const p = t.pricing.starting_at_usd as number;
+  if (teamSize <= 1 || !singleUserEntry(t)) return p;
+  const higher = (t.pricing.tier_prices_usd ?? []).filter((x): x is number => typeof x === 'number' && x > p).sort((a, b) => a - b);
+  return higher.length ? higher[0] : null;
+}
 
 // Pricing scenario at team sizes
 function scenarioCost(t: Tool, teamSize: number): string {
   const p = t.pricing.starting_at_usd;
-  if (p === null) return 'Custom quote';
-  if (p === 0) return 'Free';
+  if (p === null) return isQuoteOnly(t) ? 'Custom quote' : 'See pricing note';
+  // A free plan can carry its own user, job or project limits (ServiceM8's covers 1 user,
+  // Connecteam's 10; OpenSolar states none), so it is an entry price, not a team-size cost.
+  if (p === 0) return 'From $0 (free plan)';
   // Only per-user prices scale with headcount. Flat plans and base-plus-seat
   // bundles carry plan limits and seat fees we do not model, so show the entry
   // price (their tiers are often job or usage bands, not team sizes).
-  if (priceScaling(t) === 'per_user') return `~$${Math.round(p * teamSize)}/mo`;
+  if (isPerUser(t)) {
+    // Apply a minimum the pricing note states, so a small-team cell is not below what
+    // the vendor charges (Praxedo "Minimum 5 users"; Albi "$6,000 minimum annual
+    // subscription"; GoCanvas "3-user minimum"). A minimum this page cannot read is flagged.
+    const seatPrice = seatPriceFor(t, teamSize);
+    if (seatPrice === null) return 'See pricing note';
+    const seats = Math.max(teamSize, seatMinimum(t) ?? 0);
+    const annualMin = annualMinimumUsd(t);
+    const cost = Math.max(seatPrice * seats, annualMin !== null ? annualMin / 12 : 0);
+    const raised = cost > seatPrice * teamSize;
+    const unread = hasMinimum(t) && seatMinimum(t) === null && annualMin === null;
+    const mark = seatPrice > p ? ' (multi-user plan)' : raised ? ' (vendor minimum)' : unread ? ' (minimum applies; see note)' : '';
+    return `~$${Math.round(cost)}/mo${mark}`;
+  }
   return `From $${p}/mo`;
 }
+// The FAQ example multiplies the starting price by team size, so it skips plans with a
+// minimum and entry plans limited to one user.
+const perUserExample = perUserPaid.find((t) => !hasMinimum(t) && !singleUserEntry(t));
+
+const costClause = (ts: Tool[], verb: string) =>
+  ts.length ? `; on this page, the pricing ${ts.length === 1 ? 'note' : 'notes'} for ${shortList(ts)} ${verb}` : '';
+
+// Whether the paid starting prices on this page are all per user, all per company or
+// a mix, so the median is not described as blending models the page does not have
+// (fire-protection: all 5 paid tools are per user).
+const allPerUser = paidTools.length > 0 && perUserPaid.length === paidTools.length;
+const allPerCompany = paidTools.length > 0 && flatPaid.length + seatPaid.length === paidTools.length;
+const mixedModels = perUserPaid.length > 0 && flatPaid.length + seatPaid.length > 0;
+const medianClause = allPerUser
+  ? `median $${medianPaid} per user a month`
+  : allPerCompany
+    ? `median $${medianPaid} a month, all per-company plans`
+    : mixedModels
+      ? `median $${medianPaid} a month, blending per-user and per-company plans`
+      : `median $${medianPaid} a month; see each pricing note for how the price scales`;
+
+// "What it costs" answer, built from the counts above.
+const costParts = [
+  freeTierTools.length ? `${count(freeTierTools.length, 'has', 'have')} a free tier` : null,
+  paidTools.length ? `${count(paidTools.length, 'publishes', 'publish')} a paid monthly starting price (lowest ${lowestPaidLabel}; ${medianClause})` : null,
+  quoteOnlyTools.length ? `${count(quoteOnlyTools.length, 'publishes', 'publish')} no price and ${quoteOnlyTools.length === 1 ? 'quotes' : 'quote'} each account${quoteOnlyExampleClause}` : null,
+  otherPricedTools.length ? `${count(otherPricedTools.length, 'publishes', 'publish')} prices that are not a monthly plan, such as one-time licenses or per-project fees (${listJoin(otherPricedTools.map((t) => t.name))})` : null,
+].filter((p): p is string => p !== null);
+const costAnswer = `Of the ${verticalTools.length} ${verticalLower} ${verticalTools.length === 1 ? 'tool' : 'tools'} on this page, ${listJoin(costParts)}.`;
+
+const modelParts = [
+  perUserPaid.length ? `${count(perUserPaid.length, 'is', 'are')} priced per user` : null,
+  flatPaid.length ? `${count(flatPaid.length, 'charges', 'charge')} a flat price per company` : null,
+  seatPaid.length ? `${count(seatPaid.length, 'charges', 'charge')} a base price that includes some users, plus a fee for each extra user` : null,
+  unclearPaid.length ? `${count(unclearPaid.length, 'is', 'are')} priced another way (see the pricing note)` : null,
+].filter((p): p is string => p !== null);
+
+const annualBillingExamples = ['jobber', 'housecall-pro']
+  .map((s) => getTool(s))
+  .filter((t): t is Tool => !!t && !isQuoteOnly(t))
+  .map((t) => t.name);
 
 const faqs = [
   {
     q: `How much does ${verticalLower} software cost?`,
-    a: `${freeTier ? `Entry-level tools start at free (${freeTier.name}). ` : cheapestPublic ? `Entry-level tools start at $${cheapestPublic.pricing.starting_at_usd}/month (${cheapestPublic.name}). ` : `Most ${verticalLower} platforms are custom-quoted rather than publicly priced, so entry cost depends on your team size and modules. `}Platforms that publish no price, such as ${customQuoteOnly[0]?.name ?? 'ServiceTitan'}, quote each account, so their cost depends on the quote you get.`,
+    a: costAnswer,
   },
   {
     q: `What's the cheapest ${verticalLower} software?`,
-    a: cheapestPublic
-      ? (freeTier
-          ? `${freeTier.name} has a free tier with limited features. ${cheapestPublic.name} (${formatPrice(cheapestPublic)}) is the cheapest paid option with full features.`
-          : `${cheapestPublic.name} at ${formatPrice(cheapestPublic)} is the cheapest paid option with full features. There's no genuinely free option in this category for established businesses.`)
-      : (freeTier
-          ? `${freeTier.name} offers a free tier. Most other ${verticalLower} platforms in this category are custom-quoted rather than publicly priced, so request quotes to compare full-featured options.`
-          : `Most ${verticalLower} platforms in this category are custom-quoted rather than publicly priced; request quotes from the vendors to compare. See the pricing table above for what each publishes.`),
+    a: [
+      freeTierTools.length ? `${shortList(freeTierTools)} ${freeTierTools.length === 1 ? 'has a free tier; check its pricing note for what the free plan includes and any limits.' : 'have free tiers; check each pricing note for what the free plan includes and any limits.'}` : null,
+      lowestPaidLabel ? `The lowest published paid starting price on this page is ${lowestPaidLabel}.` : null,
+      paidTools.length
+        ? (allPerUser
+            ? 'Every paid starting price on this page is per user, so multiply it by the seats you need and check each pricing note for a minimum number of users or an entry plan limited to one user; the scenario table above shows 3, 10 and 25 techs.'
+            : allPerCompany
+              ? `Every paid starting price on this page is a company price${seatPaid.length ? ' (some plans add a fee for each extra user)' : ''}; check each plan's user and job limits against your team size.`
+              : mixedModels
+                ? 'Starting prices mix per-user and per-company plans, so which option costs least depends on your team size; the scenario table above shows 3, 10 and 25 techs.'
+                : 'Check each pricing note for how the starting price changes with your team size; the scenario table above shows 3, 10 and 25 techs.')
+        : null,
+      !freeTierTools.length && !paidTools.length ? `No tool on this page publishes a monthly price, so compare written quotes for the same team size.` : null,
+    ].filter(Boolean).join(' '),
   },
   {
     q: `Per-user pricing vs flat-rate pricing: which is better?`,
-    a: 'Per-user pricing (like Jobber, ServiceTitan, Workiz) starts cheap but scales painfully as you hire. Flat-rate per-company pricing (Service Fusion, RazorSync) starts higher but stays predictable. Rough breakeven: per-user wins below 5 techs, flat-rate wins above 8 techs. Calculate at your projected team size 12 months out, not today.',
+    a: modelParts.length
+      ? `Neither is cheaper in general. Of the ${count(paidTools.length, 'tool', 'tools')} on this page with a paid monthly price, ${listJoin(modelParts)}. Per-user plans rise with each paid seat you add above any minimum the vendor sets; check the pricing note for the minimum and for which users need a seat. A flat plan's starting price is for the company, but its user, job or usage limits, or paid extra licenses, can move you to a bigger plan or a higher charge. Base-plus-seat plans stay the same until you pass the included users. Price each option at the team size you plan to have, using the limits in each tool's pricing note.`
+      : `No tool on this page publishes a paid monthly price, so there is no per-user or flat price to compare; ask each vendor how its quote changes with team size.`,
   },
   {
     q: `Are these prices verified?`,
-    a: `Yes. Every pricing tier on this page has a "verified" date; we re-check pricing quarterly by visiting each vendor's public pricing page and (where applicable) requesting current quotes. Pricing older than 90 days gets flagged. See our methodology page for details.`,
+    a: `Each tool's starting price was checked against the vendor's own website on the date shown in the table${verifiedRange ? ` (on this page, ${verifiedRange})` : ''}. Vendors that publish no price are marked as custom quote. The methodology page explains how and how often prices are re-checked.`,
   },
+  ...(quoteOnlyTools.length || otherPricedTools.length
+    ? [{
+        q: `Why don't some tools show pricing?`,
+        a: [
+          quoteOnlyTools.length ? `${quoteOnlyTools.length} of the ${verticalTools.length} tools on this page publish no price${quoteOnlyExampleClause}, so their cost is whatever the vendor quotes you.` : null,
+          estimateTools.length ? `The pricing ${estimateTools.length === 1 ? 'note' : 'notes'} for ${listJoin(estimateTools.map((t) => t.name))} ${estimateTools.length === 1 ? 'quotes a third-party estimate, labelled as one' : 'quote third-party estimates, labelled as such'}; treat ${estimateTools.length === 1 ? 'it' : 'them'} as a rough guide, not a quote.` : null,
+          quoteOnlyTools.length ? 'Compare written quotes for the same team size and the same modules.' : null,
+          otherPricedTools.length ? `${listJoin(otherPricedTools.map((t) => t.name))} ${otherPricedTools.length === 1 ? 'publishes' : 'publish'} prices that are not a monthly plan, such as one-time licenses or per-project fees; see the pricing note.` : null,
+        ].filter(Boolean).join(' '),
+      }]
+    : []),
   {
-    q: `Why don't some tools show pricing?`,
-    a: `Some vendors, including ServiceTitan, FieldEdge, and BuildOps, publish no prices and quote each account after a sales call. Some of their pricing notes cite ranges that users have reported publicly; treat those as a rough guide, not a quote, and compare written quotes for the same team size.`,
-  },
-  {
-    q: `What hidden costs should I expect beyond the monthly subscription?`,
-    a: `Three usual hidden costs: (1) Payment processing fees: 2.59-2.99% + $0.30 per transaction if you process payments through the platform. For $100K+ annual card volume, switching to standalone Stripe saves 20-50 basis points. (2) Implementation fees: some vendors include onboarding in the subscription, others charge for guided setup, and quote-only vendors set it in the quote, so get it in writing. (3) Add-on integrations: Wisetack consumer financing, FinanceIt, advanced GPS tracking, premium phone systems often added separately at $20-$100/month each.`,
+    q: `What costs should I ask about beyond the monthly subscription?`,
+    a: `Three to get in writing from each vendor: (1) card processing fees, if you take payments through the platform; each vendor or its payment partner sets its own rates${costClause(processingTools, processingTools.length === 1 ? 'mentions payment or processing fees' : 'mention payment or processing fees')}. (2) Setup, onboarding or implementation fees: some vendors include onboarding in the subscription and others charge for it, and quote-only vendors set it in the quote${costClause(setupTools, setupTools.length === 1 ? 'mentions setup, onboarding or implementation' : 'mention setup, onboarding or implementation')}. (3) Paid add-ons and extra users beyond a plan's limit${costClause(addOnTools, addOnTools.length === 1 ? 'mentions add-ons' : 'mention add-ons')}.`,
   },
   {
     q: `How does pricing scale as I grow from 3 to 10 to 25 techs?`,
-    a: `It depends on how each platform charges. Per-user pricing grows with headcount: Jobber's plans are priced by team size and add $29/month per extra user, and ServiceTitan publishes no price, so ask how its quote scales with seats. Flat plans barely move with headcount: Service Fusion includes unlimited users on every plan ($208-$533/month billed annually), and ServiceM8 prices by job volume rather than users (paid plans $29-$349/month). Seat-bundle plans sit in between: Housecall Pro Essentials includes 5 users for $149/month billed annually, then $100/month per extra user. The crossover depends on the specific plans, so model your projected 18-month team size against each vendor's current pricing page.`,
+    a: `It depends on how each platform charges. ${perUserExample ? `Per-user prices grow with headcount: at $${perUserExample.pricing.starting_at_usd} per user a month, ${perUserExample.name} comes to about $${Math.round((perUserExample.pricing.starting_at_usd as number) * 3)} at 3 techs, $${Math.round((perUserExample.pricing.starting_at_usd as number) * 10)} at 10 and $${Math.round((perUserExample.pricing.starting_at_usd as number) * 25)} at 25, if every tech needs a seat. ` : ''}Flat, base-plus-seat and free plans are shown at their entry price in the scenario table, because the user limits, job limits and seat fees that move you to a bigger plan differ by vendor; each tool's pricing note lists them. Model the team size you plan to have against each vendor's current pricing page.`,
   },
   {
     q: `Can I negotiate ${verticalLower} software pricing?`,
-    a: `For quote-only platforms (ServiceTitan, BuildOps, Procore, FieldEdge), the price is set in the sales process, so ask about annual and multi-year terms and get every discount in writing. For published-pricing platforms (Jobber, Housecall Pro), pricing is usually firm; the saving comes from paying annually, so compare each tool's monthly and annual prices on its pricing page.`,
+    a: `${quoteOnlyTools.length ? `Quote-only vendors${quoteOnlyExampleClause} set the price in the quote, so ask about annual and multi-year terms and get every discount in writing. ` : ''}For tools with published prices, check whether the vendor's pricing page shows a lower monthly price for annual billing${annualBillingExamples.length ? `; ${listJoin(annualBillingExamples)}, for example, ${annualBillingExamples.length === 1 ? 'charges' : 'charge'} less per month when you pay yearly` : ''}.`,
   },
 ];
 
@@ -128,7 +313,7 @@ const faqSchema = {
 };
 
 const pageTitle = `${vertical.name} Software Pricing 2026: ${verticalTools.length} Tools Compared`;
-const pageDescription = `Real ${verticalLower} software pricing for ${verticalTools.length} platforms. Every tier verified, no hidden fees, sorted cheapest first. Updated quarterly.`;
+const pageDescription = `Starting prices for ${verticalTools.length} ${verticalLower} software ${verticalTools.length === 1 ? 'platform' : 'platforms'}, from each vendor's own site and dated: ${verticalTools.length - quoteOnlyTools.length} publish prices, ${quoteOnlyTools.length} quote only. Sorted by starting price, with team-size scenarios and costs to ask about.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -154,8 +339,7 @@ const breadcrumbs = [
         {vertical.name} Software Pricing in 2026
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        Real pricing for {verticalTools.length} {verticalLower} software platforms. Every tier verified.
-        Sorted from cheapest to most expensive. No hidden fees, no fake "starting at" gotchas.
+        Starting prices for {verticalTools.length} {verticalLower} software platforms, each checked against the vendor's own site on the date shown{verifiedRange ? ` (${verifiedRange})` : ''}. Sorted by starting price, lowest first. A starting price is the lowest plan price the vendor publishes (a free plan where there is one), so check what that plan includes, whether it assumes annual billing, and how it changes with your team size.
       </p>
     </header>
 
@@ -175,9 +359,6 @@ const breadcrumbs = [
           <tbody class="divide-y divide-slate-100">
             {cheapestFirst.map((t) => {
               const trial = t.pricing.free_trial_days;
-              const isCustom = t.pricing.pricing_model === 'quote_only';
-              const isNonMonthly = t.pricing.starting_at_usd === null && !isCustom;
-              const isFree = t.pricing.starting_at_usd === 0;
               return (
                 <tr class="hover:bg-slate-50">
                   <td class="p-3">
@@ -186,10 +367,10 @@ const breadcrumbs = [
                     </a>
                   </td>
                   <td class="p-3 font-semibold text-slate-900">
-                    {isFree ? 'Free tier' : isCustom ? 'Custom' : isNonMonthly ? 'No monthly plan' : `$${t.pricing.starting_at_usd}/mo`}
+                    {startingLabel(t)}
                   </td>
                   <td class="p-3 text-slate-600 text-xs">
-                    {t.pricing.pricing_note ?? (isCustom ? 'Custom quote: request from vendor' : 'Per-user/month (typical)')}
+                    {t.pricing.pricing_note ?? modelLabel(t)}
                   </td>
                   <td class="p-3 text-slate-600">{trial && trial > 0 ? `${trial} days` : '-'}</td>
                   <td class="p-3 text-slate-500 text-xs">{t.pricing.verified_date}</td>
@@ -201,49 +382,28 @@ const breadcrumbs = [
       </div>
     </section>
 
-    {(entryBest || midBest || enterpriseBest) && (
+    {tierPicks.length > 0 && (
       <section class="mb-12">
         <h2 class="mb-4 text-2xl font-bold text-slate-900">Top pick in each price tier</h2>
         <p class="mb-6 text-slate-600">
-          The tool with the highest <a href="/methodology/" class="underline hover:text-slate-900">Fit Score</a> for {verticalLower} work in each price tier. Tiers compare cost per user per month, with a flat company plan split across a 5-person team, so a $300/mo flat plan counts as $60 per user.
+          The tool with the highest <a href="/methodology/" class="underline hover:text-slate-900">Fit Score</a> for {verticalLower} work in each price tier, with any tools tied on that score named. Tiers compare cost per user per month, with a flat company plan split across a 5-person team, so a $300/mo flat plan counts as $60 per user. Tools with a free tier, and tools with no monthly plan, are not placed in a tier.
         </p>
         <div class="grid gap-4 md:grid-cols-3">
-          {entryBest && (
-            <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-5">
-              <div class="mb-1 text-xs font-bold uppercase tracking-wider text-emerald-700">Entry tier (under $100/user/mo)</div>
+          {tierPicks.map(({ pick, label, box, text }) => (
+            <div class={`rounded-lg border p-5 ${box}`}>
+              <div class={`mb-1 text-xs font-bold uppercase tracking-wider ${text}`}>{label}</div>
               <h3 class="text-lg font-bold text-slate-900">
-                <a href={`/tools/${entryBest.slug}/`} class="hover:text-orange-600">{entryBest.name}</a>
+                <a href={`/tools/${pick!.best.slug}/`} class="hover:text-orange-600">{pick!.best.name}</a>
               </h3>
               <div class="mt-1 text-sm text-slate-700">
-                {formatPrice(entryBest)} · Fit Score {wrenchStackScore(entryBest, vertical.slug).toFixed(1)}/10
+                {(pick!.best.pricing.starting_at_usd ?? 0) > 0 ? `From ${startingLabel(pick!.best)}` : formatPrice(pick!.best)} · Fit Score {wrenchStackScore(pick!.best, vertical.slug).toFixed(1)}/10
               </div>
-              <p class="mt-2 text-xs text-slate-600">{entryBest.best_for}</p>
+              {pick!.tied.length > 0 && (
+                <p class="mt-1 text-xs font-semibold text-slate-700">Tied on Fit Score with {shortList(pick!.tied, 4)}.</p>
+              )}
+              <p class="mt-2 text-xs text-slate-600">{pick!.best.best_for}</p>
             </div>
-          )}
-          {midBest && (
-            <div class="rounded-lg border border-blue-200 bg-blue-50 p-5">
-              <div class="mb-1 text-xs font-bold uppercase tracking-wider text-blue-700">Mid tier ($100-$249/user/mo)</div>
-              <h3 class="text-lg font-bold text-slate-900">
-                <a href={`/tools/${midBest.slug}/`} class="hover:text-orange-600">{midBest.name}</a>
-              </h3>
-              <div class="mt-1 text-sm text-slate-700">
-                {formatPrice(midBest)} · Fit Score {wrenchStackScore(midBest, vertical.slug).toFixed(1)}/10
-              </div>
-              <p class="mt-2 text-xs text-slate-600">{midBest.best_for}</p>
-            </div>
-          )}
-          {enterpriseBest && (
-            <div class="rounded-lg border border-orange-200 bg-orange-50 p-5">
-              <div class="mb-1 text-xs font-bold uppercase tracking-wider text-orange-700">Top tier ($250+/user/mo or quote-only)</div>
-              <h3 class="text-lg font-bold text-slate-900">
-                <a href={`/tools/${enterpriseBest.slug}/`} class="hover:text-orange-600">{enterpriseBest.name}</a>
-              </h3>
-              <div class="mt-1 text-sm text-slate-700">
-                {formatPrice(enterpriseBest)} · Fit Score {wrenchStackScore(enterpriseBest, vertical.slug).toFixed(1)}/10
-              </div>
-              <p class="mt-2 text-xs text-slate-600">{enterpriseBest.best_for}</p>
-            </div>
-          )}
+          ))}
         </div>
       </section>
     )}
@@ -251,7 +411,7 @@ const breadcrumbs = [
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Pricing scenarios by team size</h2>
       <p class="mb-6 text-slate-600">
-        Estimated monthly cost at different team sizes. Per-user platforms scale linearly; flat-rate platforms scale much more slowly. Crossover point is typically 6-8 techs where flat-rate starts winning.
+        Estimated monthly cost at three team sizes for up to 10 tools on this page with a published monthly price, lowest starting price first. Per-user prices are multiplied by team size, or by the vendor's minimum where the pricing note sets one; where the pricing note limits the entry plan to one user, the next plan's price is used for a team. Flat, base-plus-seat and free plans are shown at their entry price, because the limits and seat fees that move you to a bigger plan differ by vendor.
       </p>
       <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
         <table class="w-full text-sm">
@@ -272,7 +432,7 @@ const breadcrumbs = [
                   <td class="p-3">
                     <a href={`/tools/${t.slug}/`} class="font-semibold text-slate-900 hover:text-orange-600">{t.name}</a>
                   </td>
-                  <td class="p-3 text-xs text-slate-600">{scaling === 'per_user' ? 'Per user' : scaling === 'flat' ? 'Flat per plan' : scaling === 'base_plus_seat' ? 'Base + per seat' : 'See pricing note'}</td>
+                  <td class="p-3 text-xs text-slate-600">{scaling === 'per_user' ? 'Per user' : scaling === 'flat' ? 'Flat per plan' : scaling === 'base_plus_seat' ? 'Base + per seat' : scaling === 'free' ? 'Free tier' : 'See pricing note'}</td>
                   <td class="p-3 text-right text-slate-700">{scenarioCost(t, 3)}</td>
                   <td class="p-3 text-right text-slate-700">{scenarioCost(t, 10)}</td>
                   <td class="p-3 text-right text-slate-700">{scenarioCost(t, 25)}</td>
@@ -283,31 +443,31 @@ const breadcrumbs = [
         </table>
       </div>
       <p class="mt-3 text-xs text-slate-500">
-        Estimates based on entry-tier price × team size for per-user platforms; tier-progression assumption for flat-rate platforms. Actual pricing depends on chosen tier, annual vs monthly commitment, and any negotiated discounts.
+        Per-user estimates are the entry price × team size, assuming every tech needs a seat. Where a per-user plan's pricing note sets a minimum number of users or a minimum yearly spend, the estimate uses that minimum and is marked "vendor minimum". Where the pricing note limits the entry plan to one user, the estimate uses the next plan's per-user price and is marked "multi-user plan". Flat and base-plus-seat plans show their entry price only; user limits, job limits and seat fees can move you to a higher plan (see each tool's pricing note). "From $0" is a free plan; where the vendor caps users, jobs or features on it, a team past the cap needs a paid plan (see the pricing note). Actual cost depends on the tier, monthly or annual billing, and any discount in your quote.
       </p>
     </section>
 
     <section class="mb-12 rounded-lg border border-orange-200 bg-orange-50 p-6">
-      <h2 class="mb-3 text-xl font-bold text-slate-900">Hidden costs beyond the monthly subscription</h2>
+      <h2 class="mb-3 text-xl font-bold text-slate-900">Costs beyond the monthly subscription</h2>
       <p class="mb-4 text-slate-700">
-        Three cost components often missing from "starting at $X/mo" marketing copy. Budget for these when comparing platforms:
+        A starting price may not cover these. Ask each vendor for them in writing when comparing platforms:
       </p>
       <ul class="space-y-3 text-slate-700">
         <li>
-          <strong class="text-slate-900">Payment processing fees</strong>: Most FSM platforms charge 2.59-2.99% + $0.30 per credit card transaction (similar to Stripe). For $100K+/year card volume, standalone Stripe or Adyen can save 20-50 basis points. ACH is cheaper ($0.50-$1.00/transaction) but slower.
+          <strong class="text-slate-900">Payment processing fees</strong>: if you take card or bank payments through the platform, each vendor or its payment partner sets its own rates; get them in writing and compare them with the processor you use now.{processingTools.length > 0 && ` On this page, the pricing ${processingTools.length === 1 ? 'note' : 'notes'} for ${shortList(processingTools)} ${processingTools.length === 1 ? 'mentions' : 'mention'} payment or processing fees.`}
         </li>
         <li>
-          <strong class="text-slate-900">Implementation fees</strong>: Some platforms include setup in the subscription and others sell paid setup packages. Quote-only platforms (ServiceTitan, Procore, BuildOps) publish no implementation fee, so ask for it in the same written quote.
+          <strong class="text-slate-900">Setup, onboarding or implementation fees</strong>: some vendors include onboarding in the subscription and others charge for it. Quote-only vendors publish no setup fee, so ask for it in the same written quote.{setupTools.length > 0 && ` Pricing notes on this page that mention setup, onboarding or implementation: ${shortList(setupTools, 8)}.`}
         </li>
         <li>
-          <strong class="text-slate-900">Add-on integrations and features</strong>: Consumer financing (Wisetack, FinanceIt), advanced GPS tracking, premium phone systems, additional users beyond tier limits, custom integrations, typically $20-$200/month each. Stack these carefully.
+          <strong class="text-slate-900">Add-ons and extra users</strong>: some plans sell features such as phone systems, online booking or route optimization separately, and some plans charge for each user beyond a limit.{addOnTools.length > 0 && ` Pricing notes on this page that mention add-ons: ${shortList(addOnTools, 8)}.`}
         </li>
       </ul>
     </section>
 
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Pricing breakdown by tool</h2>
-      <p class="mb-6 text-slate-600">All public pricing tiers for each platform. Custom-quote tools show user-reported ranges in the notes.</p>
+      <p class="mb-6 text-slate-600">The tiers our data records for each tool, with the published price where there is one. Pricing notes summarise the vendor's own site{estimateTools.length > 0 && `; where a note quotes a third-party estimate (${listJoin(estimateTools.map((t) => t.name))}), it says so`}.</p>
       <div class="space-y-8">
         {cheapestFirst.map((t) => (
           <div class="rounded-lg border border-slate-200 bg-white p-6">
@@ -326,20 +486,18 @@ const breadcrumbs = [
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
-                  {t.pricing.tiers.map((tier, i) => {
-                    const price = t.pricing.tier_prices_usd?.[i];
-                    return (
-                      <tr>
-                        <td class="p-2 font-medium text-slate-900">{tier}</td>
-                        <td class="p-2 text-slate-700">
-                          {price === null || price === undefined ? 'Custom quote' : price === 0 ? 'Free' : `$${price}/mo`}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  {t.pricing.tiers.map((tier, i) => (
+                    <tr>
+                      <td class="p-2 font-medium text-slate-900">{tier}</td>
+                      <td class="p-2 text-slate-700">{tierPriceLabel(t, t.pricing.tier_prices_usd?.[i])}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
+            {t.pricing.pricing_model === 'free_tier' && (t.pricing.tier_prices_usd ?? []).some((p) => typeof p === 'number' && p > 0) && (
+              <p class="mt-3 text-xs text-slate-500">Our data does not record whether each paid-tier price above is per user or per company; check the pricing note below and the vendor's pricing page.</p>
+            )}
             {t.pricing.pricing_note && (
               <p class="mt-3 text-xs italic text-slate-500">{t.pricing.pricing_note}</p>
             )}
@@ -379,7 +537,7 @@ const breadcrumbs = [
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Ready to compare further?</h2>
       <p class="mt-2 text-slate-300">
-        See our full ranked picks for {vertical.name} or compare any two tools side-by-side.
+        See the full {vertical.name} ranking by trade fit, or compare any two tools side-by-side.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a

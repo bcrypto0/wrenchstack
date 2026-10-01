@@ -76,7 +76,7 @@ const totalCategories = usVendorLists().length;
 const totalVendors = totalTools + adjacentCats.reduce((s, c) => s + c.items.length, 0);
 
 const pageTitle = 'WrenchStack Index 2026: Trades Vendor Benchmarks';
-const pageDescription = `Data benchmark across all ${totalCategories} US trades-vendor categories and ${intlMarkets} international markets. Software pricing distribution, reputation-flag counts by category, and multi-market coverage. Citable headline stats.`;
+const pageDescription = `Data benchmark across WrenchStack's ${totalCategories} US trades-vendor categories and ${intlMarkets} international markets. Software pricing distribution, reputation-flag counts by category, and multi-market coverage. Citable headline stats.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -87,7 +87,11 @@ const breadcrumbs = [
 // Not a quarter label: every figure recomputes from the data on each build, so
 // the edition is the year and citations carry the data date (2026-10-01).
 const edition = '2026';
-const publishDate = '2026-05-29';
+// Local (UTC+3) dates of the pushes that deployed the page (8e3c56d, pushed
+// 2026-05-28 02:21) and the expansion (b872ea6, pushed 2026-06-19 02:28), per
+// the remote-ref log. The page said 2026-05-29 until 2026-10-01. The research
+// hub (src/pages/research/index.astro, pubDate of this entry) must show the same date.
+const publishDate = '2026-05-28';
 const updatedDate = '2026-06-19';
 ---
 
@@ -100,7 +104,7 @@ const updatedDate = '2026-06-19';
         WrenchStack Index {edition}
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Benchmark of the trades-contractor vendor market. {totalVendors} US vendors analyzed across {totalCategories} categories, plus {intlVendorCount} localized listings across {intlMarkets} international markets. Every stat is reproducible from our public <a href="/methodology/" class="text-orange-600 hover:underline">methodology</a> and derived live from the WrenchStack directory.
+        Benchmarks computed from WrenchStack's directory of vendors for trades contractors: {totalVendors} US vendors across {totalCategories} categories, plus {intlVendorCount} localized listings across {intlMarkets} international markets. Every stat is computed from the WrenchStack directory data when the site is built; the <a href="/methodology/" class="text-orange-600 hover:underline">methodology</a> explains how entries are sourced and verified.
       </p>
       <p class="mt-2 text-sm text-slate-500">Published {publishDate} · Expanded to 10 categories + international {updatedDate} · Figures computed from the directory data as of {dataAsOf}</p>
     </header>
@@ -130,7 +134,7 @@ const updatedDate = '2026-06-19';
         <div class="rounded-lg border-2 border-slate-200 bg-white p-5">
           <div class="text-4xl font-bold text-slate-900">{customQuotedPct}%</div>
           <p class="mt-2 text-sm text-slate-700 leading-relaxed">
-            of trades software platforms publish no price and quote on request ({customQuotedTools} of {totalTools} platforms). The remaining {100 - customQuotedPct}% publish at least one price.
+            of the trades software platforms in WrenchStack's directory publish no price and quote on request ({customQuotedTools} of {totalTools} platforms). The remaining {100 - customQuotedPct}% publish at least one price.
           </p>
         </div>
         <div class="rounded-lg border-2 border-slate-200 bg-white p-5">
@@ -142,7 +146,7 @@ const updatedDate = '2026-06-19';
         <div class="rounded-lg border-2 border-slate-200 bg-white p-5">
           <div class="text-4xl font-bold text-slate-900">{freeTrialPct}%</div>
           <p class="mt-2 text-sm text-slate-700 leading-relaxed">
-            of trades software platforms offer a free trial ({freeTrialTools} of {totalTools} platforms). {trial14or30} of those trials run 14 or 30 days.
+            of the trades software platforms in WrenchStack's directory offer a free trial ({freeTrialTools} of {totalTools} platforms). {trial14or30} of those trials run 14 or 30 days.
           </p>
         </div>
         <div class="rounded-lg border-2 border-slate-200 bg-white p-5">
@@ -160,13 +164,13 @@ const updatedDate = '2026-06-19';
         <div class="rounded-lg border-2 border-slate-200 bg-white p-5">
           <div class="text-4xl font-bold text-slate-900">{quickbooksPct}%</div>
           <p class="mt-2 text-sm text-slate-700 leading-relaxed">
-            of trades software platforms ship a QuickBooks integration ({quickbooksIntegrated} of {totalTools}).
+            of the trades software platforms in WrenchStack's directory list a QuickBooks integration ({quickbooksIntegrated} of {totalTools}).
           </p>
         </div>
         <div class="rounded-lg border-2 border-slate-200 bg-white p-5">
           <div class="text-4xl font-bold text-slate-900">{stripePct}%</div>
           <p class="mt-2 text-sm text-slate-700 leading-relaxed">
-            of trades software platforms integrate Stripe for payment processing ({stripeIntegrated} of {totalTools}).
+            of the trades software platforms in WrenchStack's directory list a Stripe integration ({stripeIntegrated} of {totalTools}).
           </p>
         </div>
       </div>
@@ -218,14 +222,14 @@ const updatedDate = '2026-06-19';
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Methodology notes</h2>
       <p class="text-sm text-slate-700 leading-relaxed mb-3">
-        WrenchStack Index stats are computed live from the public WrenchStack directory using the published <a href="/methodology/" class="text-orange-600 hover:underline">WrenchStack Fit Score™ methodology v1.3</a>. All vendor inclusions reflect the monthly editorial review cycle; pricing tiers are verified directly from vendor pricing pages with date stamps.
+        WrenchStack Index stats are counts, shares and medians computed from the public WrenchStack directory data each time the site is built. None of them uses the Fit Score, which ranks software on the trade pages. Each US entry carries the date it was last checked against primary sources: see the <a href="/methodology/" class="text-orange-600 hover:underline">methodology</a> and the <a href="/verification-log/" class="text-orange-600 hover:underline">verification log</a>.
       </p>
       <ul class="space-y-1 text-sm text-slate-700">
         <li>• <strong>Sample size:</strong> All {totalVendors} US vendors across {totalCategories} categories, plus {intlVendorCount} localized listings across {intlMarkets} international markets, as of {dataAsOf}</li>
         <li>• <strong>Geographic scope:</strong> United States plus {intlMarkets} international markets: UK, Ireland, Canada, Australia, New Zealand, the six Gulf states (Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman), Egypt, Jordan, Morocco, France, Malaysia and South Africa</li>
         <li>• <strong>Refresh cadence:</strong> Figures recompute from the directory data on every site build</li>
-        <li>• <strong>Data freshness:</strong> Individual pricing tiers carry verified_date stamps visible on each vendor page</li>
-        <li>• <strong>Reproducibility:</strong> Every stat is derivable from the public directory + methodology</li>
+        <li>• <strong>Data freshness:</strong> Each US vendor page shows the date its entry was last verified</li>
+        <li>• <strong>Reproducibility:</strong> Every stat is a count, share or median over the directory entries; none is sampled or estimated</li>
       </ul>
     </section>
 

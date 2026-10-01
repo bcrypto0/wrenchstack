@@ -11,9 +11,13 @@ import {
   financingProviders,
   accountingSoftware,
   bankingProviders,
+  quoteOnlyPct,
 } from '../lib/data';
 
-const quoteOnlyPct = Math.round((tools.filter((t) => t.pricing?.starting_at_usd === null).length / tools.length) * 100);
+// Quote-only is pricing_model 'quote_only' (shared helper). This page counted a
+// null starting price, which also took in Trash Flow and Pylon, which publish
+// one-time or per-project prices (fixed 2026-10-01).
+const quoteOnlyShare = quoteOnlyPct();
 
 // Proof-of-life page: every verification date in the directory, aggregated at
 // build time. A "verified" claim only means something if the dates are alive;
@@ -85,8 +89,8 @@ const breadcrumbs = [
 ---
 
 <Layout
-  title="Verification Log: When Every Price Was Last Checked"
-  description={`Live proof of freshness: ${all.length} dated verifications across the WrenchStack directory, ${within90} of them in the last 90 days. Every date on this page comes from the data itself and regenerates on every build.`}
+  title="Verification Log: When Each US Entry Was Last Checked"
+  description={`Live proof of freshness: ${all.length} dated verifications across the WrenchStack US directory, ${within90} of them in the last 90 days. Every date on this page comes from the data itself and regenerates on every build.`}
   breadcrumbs={breadcrumbs}
 >
   <article class="mx-auto max-w-3xl px-4 py-12 prose prose-slate">
@@ -94,7 +98,7 @@ const breadcrumbs = [
       <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-orange-600">Proof of freshness</p>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl m-0">The verification log</h1>
       <p class="mt-3 text-lg text-slate-600">
-        "Verified" only means something if the dates are alive. This page aggregates every verification date in the directory, straight from the data, rebuilt on every deploy. Page generated {buildISO}.
+        "Verified" only means something if the dates are alive. This page aggregates every verification date in the US directory, straight from the data, rebuilt on every deploy. International listings carry no per-entry date and are not counted here. Page generated {buildISO}.
       </p>
     </div>
 
@@ -115,10 +119,10 @@ const breadcrumbs = [
 
     <h2>What a verification is here</h2>
     <p>
-      The <strong>claim was checked against a named primary source on the date shown</strong>, almost always the vendor's own pricing page. Not a third-party listing, not an estimate, not a vendor-supplied form. When a vendor is quote-only, the verification records that no public price existed on that date, which is itself a finding: <a href="/trends-2026/">{quoteOnlyPct}% of the category publishes no price at all</a>.
+      The <strong>entry was checked against primary sources on the date shown</strong>: the vendor's own pages, and filings, regulator, court or BBB records where the entry relies on them. When a field-service software vendor is quote-only, the verification records that no public price existed on that date, which is itself a finding: <a href="/trends-2026/">{quoteOnlyShare}% of the field-service software platforms we list publish no price at all</a>.
     </p>
     <p>
-      The full directory re-verifies on a monthly cycle, and any vendor correction backed by a primary source is applied the same day. The complete rules live on the <a href="/methodology/">methodology page</a>; the warnings this process produces live on the <a href="/reputation-flags/">reputation ledger</a>.
+      Vendors can send a factual correction through the <a href="/for-vendors/">vendor page</a>. The complete rules live on the <a href="/methodology/">methodology page</a>; the warnings this process produces live on the <a href="/reputation-flags/">reputation ledger</a>.
     </p>
 
     <h2>Verification activity by month</h2>

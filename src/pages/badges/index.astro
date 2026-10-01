@@ -32,6 +32,20 @@ const pickWinnerSlugs = new Set(
 // step most people will not take, so the default outcome of this page was a
 // badge pointing at wrenchstack.com/ rather than at the write-up the badge is
 // actually claiming. Picking your product now rewrites the snippet for you.
+//
+// International entries in the 'certification' category are regulators, tax
+// offices, laws and trade bodies, not vendors we rate, so they are not offered
+// the badge and not counted as vendors (2026-10-01: the count read 712, which
+// included 105 of them).
+const intlCertUrls = new Set(
+  Object.entries(import.meta.glob('../../data/international/*.json', { eager: true })).flatMap(([path, m]: [string, any]) => {
+    const code = path.split('/').pop()?.replace('.json', '') ?? '';
+    const list: Array<{ slug?: string; category?: string }> = (m.default ?? m).vendors ?? [];
+    return list
+      .filter((v) => v?.category === 'certification' && v?.slug)
+      .map((v) => `https://wrenchstack.com/${code}/${v.slug}/`);
+  })
+);
 const vendorIndex: Array<{ name: string; url: string }> = [
   ...tools.map((t) => ({ name: t.name, url: `https://wrenchstack.com/tools/${t.slug}/`, pick: pickWinnerSlugs.has(t.slug) })),
   ...leadGenPlatforms.map((v) => ({ name: v.name, url: `https://wrenchstack.com/lead-gen/${v.slug}/` })),
@@ -43,11 +57,11 @@ const vendorIndex: Array<{ name: string; url: string }> = [
   ...financingProviders.map((v) => ({ name: v.name, url: `https://wrenchstack.com/financing/${v.slug}/` })),
   ...accountingSoftware.map((v) => ({ name: v.name, url: `https://wrenchstack.com/accounting/${v.slug}/` })),
   ...bankingProviders.map((v) => ({ name: v.name, url: `https://wrenchstack.com/banking/${v.slug}/` })),
-  ...intlVendorIndex(),
+  ...intlVendorIndex().filter((v) => !intlCertUrls.has(v.url)),
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 const pageTitle = 'Embeddable Badges: Rated on WrenchStack';
-const pageDescription = 'Free embeddable badges for vendors listed or selected on WrenchStack. Independent: no vendor pays to be listed, and displaying a badge never changes a rating. Copy-paste HTML, links back to your independent review.';
+const pageDescription = 'Free embeddable badges for vendors listed or selected on WrenchStack. Independent: no vendor pays to be listed, and displaying a badge does not change a Fit Score or tier. Copy-paste HTML, links back to your independent review.';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -81,8 +95,8 @@ const pickEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noope
     <section class="mb-10 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">The rules (because independence is the whole point)</h2>
       <ul class="space-y-2 text-sm text-slate-700">
-        <li class="flex gap-2"><span class="text-emerald-600">✓</span> <span><strong>Free for any vendor we list.</strong> Listing, rating and badge display carry no charge.</span></li>
-        <li class="flex gap-2"><span class="text-emerald-600">✓</span> <span><strong>Displaying a badge does not change your rating.</strong> Our <a href="/methodology/" class="text-orange-600 hover:underline">Fit Score</a> is computed the same way whether or not you embed anything.</span></li>
+        <li class="flex gap-2"><span class="text-emerald-600">✓</span> <span><strong>Free for any vendor we list.</strong> Listing and badge display carry no charge.</span></li>
+        <li class="flex gap-2"><span class="text-emerald-600">✓</span> <span><strong>Displaying a badge does not change your Fit Score or tier.</strong> Both are worked out under the <a href="/methodology/" class="text-orange-600 hover:underline">methodology</a> the same way whether or not you embed anything.</span></li>
         <li class="flex gap-2"><span class="text-emerald-600">✓</span> <span><strong>Link it to your review.</strong> Point the badge at your own WrenchStack review page (see below) so visitors can read the full, independent write-up.</span></li>
         <li class="flex gap-2"><span class="text-rose-500">✗</span> <span><strong>Use the "2026 Pick" badge only if you're an <a href="/awards/2026/" class="text-orange-600 hover:underline">editorial pick</a>.</strong> The "Rated on WrenchStack" badge is for any listed vendor.</span></li>
       </ul>
@@ -103,7 +117,7 @@ const pickEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noope
         {vendorIndex.map((v) => <option value={v.url} data-pick={v.pick ? 'yes' : 'no'}>{v.name}</option>)}
       </select>
       <p class="mt-3 text-xs text-slate-500">
-        {vendorIndex.length} vendors listed. Missing? <a href="/for-vendors/" class="text-orange-600 hover:underline">Send us your product</a> and we will review it.
+        {vendorIndex.length} vendors listed. Missing? <a href="/for-vendors/" class="text-orange-600 hover:underline">Send us your product</a>.
       </p>
     </section>
 
@@ -147,14 +161,14 @@ const pickEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noope
         edit it by hand, replace <code class="rounded bg-slate-200 px-1 text-xs">https://wrenchstack.com/</code>
         with your own page: US software vendors live at <code class="rounded bg-slate-200 px-1 text-xs">wrenchstack.com/tools/your-name/</code>,
         international vendors at <code class="rounded bg-slate-200 px-1 text-xs">wrenchstack.com/&lt;country&gt;/your-name/</code>.
-        Cannot find yours? <a href="/contact/" class="text-orange-600 hover:underline">Ask us</a> and we will send the exact link.
+        Cannot find yours? <a href="/contact/" class="text-orange-600 hover:underline">Ask us</a> for the exact link.
       </p>
     </section>
 
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Something to correct, or want to be reviewed?</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        We list vendors on the merits, with no paid placement. If your details are out of date, or you'd like us to review your product, start here.
+        No vendor pays to be listed or placed. If your details are out of date, or you'd like us to review your product, start here.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/for-vendors/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Vendor program →</a>
@@ -184,7 +198,7 @@ const pickEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noope
         {
           el: document.getElementById('rated-code'),
           file: 'rated-on-wrenchstack.svg',
-          alt: 'Rated on WrenchStack - independent review',
+          alt: 'Rated on WrenchStack, independent review',
         },
         {
           el: document.getElementById('pick-code'),

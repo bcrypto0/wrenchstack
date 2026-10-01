@@ -8,6 +8,9 @@ interface QaVendor {
   is_cross_market: boolean;
 }
 const vendors = (qaData as { vendors: QaVendor[] }).vendors;
+const software = vendors.filter((v) => v.category === 'software');
+// Tier S = the vendor's own site publishes prices, so the rest publish none.
+const softwareNoPriceCount = software.filter((v) => v.tier !== 'S').length;
 
 // Concise Arabic positioning per vendor (detailed reviews remain in English for now).
 const ar: Record<string, string> = {
@@ -68,7 +71,7 @@ const pageDescription = 'دليل مستقل لبرامج المقاولات و�
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">ما الذي يميّز اختيار البرامج في قطر</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        لا توجد في قطر <strong>ضريبة قيمة مضافة</strong> حتى الآن: تتوقع PwC ضريبة بنسبة ٥٪ ضمن الإطار الخليجي دون موعد محدد، وأفادت The New Arab في ٢٥ سبتمبر ٢٠٢٦ بأنها ما تزال قيد الدراسة. أما <strong>الفوترة الإلكترونية</strong> فقد وافق مجلس الوزراء على مشروع قانونها في ٦ مايو ٢٠٢٦ بحسب EY، على أن تتولاها الهيئة العامة للضرائب، ولم يُعلن موعد رسمي لتطبيقها حتى ٣٠ سبتمبر ٢٠٢٦، لذا اختر برنامج فوترة يمكن تحديثه عند صدور القواعد. ويخضع التوظيف في القطاع الخاص لـ<strong>التقطير (القانون رقم ١٢ لسنة ٢٠٢٤)</strong>، وقواعده تختلف عن نطاقات في السعودية والتوطين في الإمارات. ويُشترط التصنيف في بوابة <strong>مناقصات</strong> للمشاركة في المناقصات الحكومية، وتسري <strong>مواصفات البناء القطرية QCS 2014</strong> على أعمال البناء (مع الملاحظات الإرشادية المؤقتة التي تطبّقها أشغال على مشاريعها)، وتنشر <strong>كهرماء</strong> قوائم مقاولي الكهرباء والمياه والطاقة الشمسية المعتمدين. ومعظم البرامج المدرجة هنا بأسعار حسب الطلب، وتنشر PlanRadar أسعاراً لكل مستخدم بالدولار الأمريكي واليورو والجنيه الإسترليني والدولار الأسترالي، لا بالريال القطري.
+        لا توجد في قطر <strong>ضريبة قيمة مضافة</strong> حتى الآن: تتوقع PwC ضريبة بنسبة ٥٪ ضمن الإطار الخليجي دون موعد محدد، وأفادت The New Arab في ٢٥ سبتمبر ٢٠٢٦ بأنها ما تزال قيد الدراسة. أما <strong>الفوترة الإلكترونية</strong> فقد وافق مجلس الوزراء على مشروع قانونها في ٦ مايو ٢٠٢٦ بحسب EY، على أن تتولاها الهيئة العامة للضرائب، ولم يُعلن موعد رسمي لتطبيقها حتى ٣٠ سبتمبر ٢٠٢٦، لذا اختر برنامج فوترة يمكن تحديثه عند صدور القواعد. ويخضع التوظيف في القطاع الخاص لـ<strong>التقطير (القانون رقم ١٢ لسنة ٢٠٢٤)</strong>، وقواعده تختلف عن نطاقات في السعودية والتوطين في الإمارات. ويُشترط التصنيف في بوابة <strong>مناقصات</strong> للمشاركة في المناقصات الحكومية، وتسري <strong>مواصفات البناء القطرية QCS 2014</strong> على أعمال البناء (مع الملاحظات الإرشادية المؤقتة التي تطبّقها أشغال على مشاريعها)، وتنشر <strong>كهرماء</strong> قوائم مقاولي الكهرباء والمياه والطاقة الشمسية المعتمدين. ولا ينشر {softwareNoPriceCount} من أصل {software.length} من البرامج المدرجة هنا أي أسعار، وتنشر PlanRadar أسعاراً لكل مستخدم بالدولار الأمريكي واليورو والجنيه الإسترليني والدولار الأسترالي، لا بالريال القطري.
       </p>
     </section>
 
@@ -107,7 +110,7 @@ const pageDescription = 'دليل مستقل لبرامج المقاولات و�
     })}
 
     <section class="mb-10 rounded-lg border border-slate-200 bg-white p-5 text-sm text-slate-600">
-      <p>المراجعات التفصيلية لكل إدراج متاحة حالياً <a href="/qa/" class="font-medium text-orange-600 hover:underline">بالإنجليزية</a>.</p>
+      <p>المراجعات التفصيلية لكل إدراج متاحة <a href="/qa/" class="font-medium text-orange-600 hover:underline">بالإنجليزية</a>.</p>
     </section>
 
     <section class="rounded-lg bg-slate-900 p-8 text-white">

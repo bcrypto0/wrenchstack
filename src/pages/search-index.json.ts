@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { tools, verticals, getTool, verticalToUrl, priceTier, freshnessTier, leadGenPlatforms, leadGenTier, insuranceProviders, insuranceTier, payrollServices, payrollTier, marketingAgencies, agencyTier, aiTools, paymentProcessors, financingProviders, accountingSoftware, bankingProviders } from '../lib/data';
+import { tools, verticals, getTool, verticalToUrl, priceTier, freshnessTier, usVendorTotal, leadGenPlatforms, leadGenTier, insuranceProviders, insuranceTier, payrollServices, payrollTier, marketingAgencies, agencyTier, aiTools, paymentProcessors, financingProviders, accountingSoftware, bankingProviders } from '../lib/data';
 import featuresData from '../data/features.json';
 import migrationsData from '../data/migrations.json';
 
@@ -20,7 +20,7 @@ interface MigrationRecord {
 export const GET: APIRoute = () => {
   const items: Array<Record<string, unknown>> = [];
 
-  // Tools (59): richest entries with all searchable text
+  // Tools: richest entries with all searchable text
   for (const t of tools) {
     items.push({
       type: 'tool',
@@ -37,7 +37,7 @@ export const GET: APIRoute = () => {
     });
   }
 
-  // Verticals (13)
+  // Verticals
   for (const v of verticals) {
     items.push({
       type: 'vertical',
@@ -48,7 +48,7 @@ export const GET: APIRoute = () => {
     });
   }
 
-  // Lead-gen platforms (13)
+  // Lead-gen platforms
   for (const p of leadGenPlatforms) {
     items.push({
       type: 'leadgen',
@@ -62,7 +62,7 @@ export const GET: APIRoute = () => {
     });
   }
 
-  // Insurance providers (13)
+  // Insurance providers
   for (const p of insuranceProviders) {
     items.push({
       type: 'insurance',
@@ -76,7 +76,7 @@ export const GET: APIRoute = () => {
     });
   }
 
-  // Payroll services (10)
+  // Payroll services
   for (const s of payrollServices) {
     items.push({
       type: 'payroll',
@@ -90,7 +90,7 @@ export const GET: APIRoute = () => {
     });
   }
 
-  // Marketing agencies (10)
+  // Marketing agencies
   for (const a of marketingAgencies) {
     items.push({
       type: 'agency',
@@ -169,7 +169,7 @@ export const GET: APIRoute = () => {
     });
   }
 
-  // Features (20)
+  // Features
   const features = (featuresData as { features: Record<string, FeatureRecord> }).features;
   for (const [slug, f] of Object.entries(features)) {
     items.push({
@@ -181,7 +181,7 @@ export const GET: APIRoute = () => {
     });
   }
 
-  // Migration guides (15)
+  // Migration guides
   const migrations = (migrationsData as { migrations: MigrationRecord[] }).migrations;
   for (const m of migrations) {
     const fromTool = getTool(m.from);
@@ -197,18 +197,18 @@ export const GET: APIRoute = () => {
 
   // Utility / interactive pages
   const utilityPages = [
-    { name: 'Get Matched Quiz', url: '/quiz/', tagline: 'Find your perfect tool in 60 seconds based on trade and team size' },
-    { name: 'ROI Calculator', url: '/roi-calculator/', tagline: 'Calculate your annual savings and payback period from new field service software' },
-    { name: 'Cost-of-Switch Calculator', url: '/cost-of-switch/', tagline: 'Calculate the real 12-month cost of switching between trades software platforms' },
+    { name: 'Get Matched Quiz', url: '/quiz/', tagline: 'Answer 5 questions (trade, team size, budget, priority, integration) and see 3 matching platforms' },
+    { name: 'ROI Calculator', url: '/roi-calculator/', tagline: 'Rough estimate of software cost, annual return and payback period from your own numbers and three stated assumptions' },
+    { name: 'Cost-of-Switch Calculator', url: '/cost-of-switch/', tagline: 'Estimate the 12-month cost of switching between trades software platforms' },
     { name: 'Glossary', url: '/glossary/', tagline: 'Plain-English definitions for FSM, CMMS, AIA billing, dispatching, and other trades software jargon' },
-    { name: 'Trades Software Market Report 2026', url: '/trends-2026/', tagline: `Data findings from analysis of ${tools.length} platforms: pricing distribution, integration prevalence, founded-year cohorts, vertical density` },
+    { name: 'Trades Software Market Report 2026', url: '/trends-2026/', tagline: `Figures computed from ${tools.length} software platforms and the wider ${usVendorTotal()}-vendor US stack: pricing, integrations, founding years, trade coverage, reputation flags` },
     { name: 'Methodology', url: '/methodology/', tagline: 'How WrenchStack scores and ranks tools: formula, sources, and affiliate disclosure' },
     { name: 'All Tools', url: '/tools/', tagline: `Browse all ${tools.length} trades software tools` },
-    { name: 'Compare Tools', url: '/compare/', tagline: 'Head-to-head pairings of every shared-vertical tool combination' },
+    { name: 'Compare Tools', url: '/compare/', tagline: 'Head-to-head pages for every pair of tools that share a trade, and for pairs of CMMS tools' },
     { name: 'Build Custom Comparison', url: '/compare-builder/', tagline: 'Interactive builder: pick any 2-5 tools and see them compared instantly' },
     { name: 'Pricing Comparison', url: '/pricing/', tagline: 'Pricing tables and per-tool tier breakdowns by trade' },
     { name: 'Buyer Guides', url: '/best-software-for/', tagline: 'Best software for specific trade + team size combinations' },
-    { name: 'Migration Guides', url: '/migrate/', tagline: 'Practical guides for switching between tools' },
+    { name: 'Migration Guides', url: '/migrate/', tagline: 'Guides for switching between tools: published prices, a data export checklist and questions for both vendors' },
     { name: 'Multi-tool Comparisons', url: '/multi-compare/', tagline: 'Three-way tool comparisons for specific buyer segments' },
     { name: 'Features', url: '/features/', tagline: 'Browse tools by specific feature (QuickBooks, GPS tracking, etc.)' },
     { name: 'About WrenchStack', url: '/about/', tagline: 'Who we are and why this directory exists' },

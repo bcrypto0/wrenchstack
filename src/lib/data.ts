@@ -252,6 +252,11 @@ export function readingTimeMinutes(wordCount: number): number {
 // bucket overlap, with rating as a tiebreaker, not the primary signal.
 
 export type ToolType = 'fsm' | 'cmms' | 'construction_pm' | 'estimating' | 'crm' | 'specialty' | 'unknown';
+// The 'quote-only' TIER means "no monthly starting price to place on the price axis".
+// It holds the 49 quote-only tools AND the two that publish only one-time or
+// per-project prices (Trash Flow, Pylon), and /trends-2026/ relies on that count
+// (2026-10-01). Copy that says "quote-only" must test isQuoteOnly(tool), never this
+// tier; nonMonthlyPricingOnly(tool) names the other two.
 // 'quote-only' split out from 'enterprise' on 2026-09-01. They were one bucket, and
 // they are not one thing: 45 of the 54 tools in the old 'enterprise' bucket simply do not
 // publish a price, while 9 genuinely start at $250+. Presenting "we do not know" as
@@ -452,30 +457,46 @@ function buildAlternativeRationale(source: Tool, alt: Tool): string {
   const sourceTierIdx = PRICE_TIER_ORDER.indexOf(sourceTier);
   const altTierIdx = PRICE_TIER_ORDER.indexOf(altTier);
   const altPrice = alt.pricing.starting_at_usd;
+  const sourcePrice = source.pricing.starting_at_usd;
 
   // 1. Pricing relationship
   if (isQuoteOnlyTier(altTier) || isQuoteOnlyTier(sourceTier)) {
-    // One side publishes no price, so any "cheaper" or "upgrade path" claim would be
-    // invented. Say what is actually true instead.
-    if (isQuoteOnlyTier(altTier)) fragments.push('Quote-only pricing, so compare on fit not cost');
+    // One side has no monthly starting price, so any "cheaper" or "upgrade path" claim
+    // would be invented. Say what is actually true instead. Until 2026-10-01 Trash Flow
+    // and Pylon (one-time and per-project prices, both published) were called quote-only.
+    if (isQuoteOnly(alt)) fragments.push('Quote-only pricing, so compare on fit not cost');
+    else if (nonMonthlyPricingOnly(alt)) fragments.push('Publishes one-time or per-project prices, not a monthly plan');
+    else if (altPrice === 0) fragments.push('Has a free tier');
+    else if (altPrice !== null) fragments.push(`Publishes its price: from ${entryPriceLabel(alt)}`);
   } else if (altTier === 'free' && sourceTier !== 'free') {
     fragments.push('Has a free tier');
-  } else if (altTierIdx < sourceTierIdx) {
-    if (altPrice !== null && altPrice > 0) {
-      fragments.push(`Cheaper at $${altPrice}/mo`);
-    } else {
-      fragments.push('Lower-tier alternative');
-    }
-  } else if (altTierIdx > sourceTierIdx) {
-    // Was hardcoded to 'Enterprise-tier upgrade path' for ANY step up, so busybusy (free)
-    // suggesting CompanyCam ($63/mo) claimed an enterprise upgrade. Name the real number.
-    if (altPrice !== null && altPrice > 0) {
-      fragments.push(`Costs more at $${altPrice}/mo`);
-    } else {
-      fragments.push('Higher price tier');
-    }
-  } else if (sourceTier === 'mid' || sourceTier === 'entry') {
-    fragments.push('Similar price point');
+  } else if (altPrice !== null && altPrice > 0 && sourcePrice !== null && sourcePrice > 0 && altTierIdx !== sourceTierIdx) {
+    // Tiers compare cost per user (flat plans split over REFERENCE_TEAM_SIZE), so the tier
+    // order and the raw starting prices can disagree: until 2026-10-01 a $208 flat plan
+    // was called "Cheaper" than a $135-per-user plan. Only say cheaper or dearer when
+    // both measures agree; otherwise state both prices with how each one scales.
+    // (Was hardcoded to 'Enterprise-tier upgrade path' for ANY step up before 2026-09.)
+    if (altTierIdx < sourceTierIdx && altPrice < sourcePrice) fragments.push(`Cheaper at $${altPrice}/mo`);
+    else if (altTierIdx > sourceTierIdx && altPrice > sourcePrice) fragments.push(`Costs more at $${altPrice}/mo`);
+    else fragments.push(`Starts at ${entryPriceLabel(alt)}, against ${entryPriceLabel(source)} for ${source.name}`);
+  } else if (altTierIdx > sourceTierIdx && altPrice !== null && altPrice > 0) {
+    // Source is free, alternative is paid.
+    fragments.push(`Costs more at $${altPrice}/mo`);
+  } else if (altPrice !== null && altPrice > 0 && altPrice === sourcePrice) {
+    // The same figure is the same price only when both are charged the same way: $49 per
+    // user against $49 a month for the company matched only for a one-person team.
+    // An 'unclear' model says nothing about scaling, so it never counts as a match.
+    const sameModel = alt.pricing.pricing_model === source.pricing.pricing_model
+      && priceScaling(alt) !== 'unclear';
+    fragments.push(
+      sameModel
+        ? 'Same starting price'
+        : `Starts at ${entryPriceLabel(alt)}, against ${entryPriceLabel(source)} for ${source.name}`,
+    );
+  } else if (altPrice !== null && altPrice > 0) {
+    // Same price band. "Similar price point" used to cover $10 against $208 (both under
+    // $100 per user once a flat plan is split), so name the price instead.
+    fragments.push(`Starts at ${entryPriceLabel(alt)}`);
   }
 
   // 2. Vertical specialty advantage
@@ -1329,10 +1350,10 @@ export function getAiTool(slug: string): AiTool | undefined {
 }
 
 export const AI_CATEGORY_META: Record<AiToolCategory, { label: string; blurb: string }> = {
-  'ai-receptionist': { label: 'AI Receptionists & Call Answering', blurb: 'AI voice agents that answer inbound calls around the clock, take messages and book jobs, so calls you miss on a job site still reach someone.' },
-  'ai-estimating': { label: 'AI Estimating & Measurement', blurb: 'AI that measures roofs and buildings from phone photos or aerial imagery and feeds the measurements into estimates.' },
-  'ai-scheduling': { label: 'AI Scheduling & Dispatch', blurb: 'AI that books appointments against live availability and optimizes crew routes.' },
-  'ai-marketing': { label: 'AI Marketing & Reviews', blurb: 'AI for review collection, before/after imagery, and marketing content.' },
+  'ai-receptionist': { label: 'AI Receptionists & Call Answering', blurb: 'AI voice agents that answer inbound calls, take messages and book jobs, so calls you miss on a job site still reach someone.' },
+  'ai-estimating': { label: 'AI Estimating & Measurement', blurb: 'Roof and building measurements from phone photos or aerial and satellite imagery, for use in estimates.' },
+  'ai-scheduling': { label: 'AI Scheduling & Dispatch', blurb: 'Route optimization that plans each day of stops for drivers or crews.' },
+  'ai-marketing': { label: 'AI Marketing & Reviews', blurb: 'Review requests and reputation management; some of these tools add AI assistants, customer messaging and payments.' },
   'ai-all-in-one': { label: 'AI All-in-One Assistants', blurb: 'Broad AI assistants spanning calls, follow-up, and back-office tasks.' },
 };
 
@@ -1393,7 +1414,7 @@ export function getPaymentProcessor(slug: string): PaymentProcessor | undefined 
 }
 
 export const PAYMENT_MODEL_META: Record<PaymentPricingModel, { label: string; blurb: string }> = {
-  'flat-rate': { label: 'Flat-Rate Processors', blurb: 'One published rate per payment type, often a percentage plus a fixed fee (Square Free charges 2.6% + 15 cents in person). Easy to read on a statement; the markup is built into every rate, so it costs more as card volume grows.' },
+  'flat-rate': { label: 'Flat-Rate Processors', blurb: 'One published rate per payment type, often a percentage plus a fixed fee (Square Free charges 2.6% + 15 cents in person). Easy to read on a statement; the processor\'s markup is built into each rate rather than shown separately.' },
   'interchange-plus': { label: 'Interchange-Plus Processors', blurb: 'You pay the interchange cost set by the card networks plus a separate processor markup. Statements are more detailed than with a flat rate, and your total cost depends on the mix of cards your customers use.' },
   'subscription': { label: 'Subscription / Membership Pricing', blurb: 'A monthly fee (a subscription, gateway fee or software plan) on top of per-transaction costs. Stax says it passes interchange through at cost with no percentage markup; Authorize.Net and Clover also charge per-transaction processing fees. Compare the monthly fee with your card volume, including slow months.' },
   'tiered': { label: 'Tiered Pricing', blurb: 'Rates grouped into qualified, mid-qualified and non-qualified buckets. Ask which transactions fall into each bucket and get the rate for each in writing before you sign.' },
@@ -1529,7 +1550,10 @@ export const ACCOUNTING_POSITION_META: Record<AccountingPositioning, { label: st
   'full-accounting': { label: 'Full Double-Entry Accounting', blurb: 'Complete double-entry accounting (bank reconciliation, receivables and payables, reporting) for businesses with employees, inventory or an outside accountant. Check that your field service software syncs with the one you choose.' },
   'invoicing-first': { label: 'Invoicing-First Accounting', blurb: 'Built around invoicing, time tracking and getting paid, with lighter bookkeeping, for solo and small service businesses that care most about billing.' },
   'free': { label: 'Free Accounting', blurb: 'Core accounting and invoicing with no monthly fee on the base plan; the vendor earns from payments, payroll and paid add-ons. Suits very small or new businesses.' },
-  'enterprise': { label: 'Mid-Market / Enterprise Accounting', blurb: 'Heavier accounting for larger or multi-entity operations.' },
+  // Was "Mid-Market / Enterprise: heavier accounting for larger or multi-entity
+  // operations" until 2026-10-01; the one entry here (Striven) is an all-in-one platform
+  // for small-to-mid contractors (best team size 5-50) and no entry records multi-entity.
+  'enterprise': { label: 'All-in-One Platforms with Accounting', blurb: 'Accounting built into a per-user business platform, alongside job costing and technician scheduling.' },
   'bill-pay': { label: 'Bill Pay / Accounts Payable', blurb: 'Pays your vendors, subs, and suppliers (ACH, check, or card) and syncs to your books, an accounts-payable layer that sits alongside accounting rather than replacing it.' },
 };
 
@@ -1723,6 +1747,29 @@ export function totalReputationFlags(): number {
  *  prices, with pricing_model 'unclear'. Added 2026-10-01 as the one definition. */
 export function isQuoteOnly(t: Tool): boolean {
   return t.pricing.pricing_model === 'quote_only';
+}
+
+/** Publishes prices, but no monthly starting price: one-time licenses (Trash Flow) or
+ *  per-project fees (Pylon). Not quote-only. Added 2026-10-01. */
+export function nonMonthlyPricingOnly(t: Tool): boolean {
+  return t.pricing.starting_at_usd === null && !isQuoteOnly(t);
+}
+
+/** The entry price with how it scales, for prose: "$47 per user a month",
+ *  "$208 a month for the company", "a free tier". Read from pricing_model, so a
+ *  sentence comparing two entry prices says what each one buys. Added 2026-10-01. */
+export function entryPriceLabel(t: Tool): string {
+  const p = t.pricing.starting_at_usd;
+  if (isQuoteOnly(t)) return 'no published price (quote only)';
+  if (p === null) return 'one-time or per-project prices (no monthly plan)';
+  if (p === 0) return 'a free tier';
+  switch (t.pricing.pricing_model) {
+    case 'per_user': return `$${p} per user a month`;
+    case 'annual_per_user': return `$${p} per user a month, billed annually`;
+    case 'flat': return `$${p} a month for the company`;
+    case 'flat_plus_seat': return `$${p} a month base, more as users are added`;
+    default: return `$${p} a month`;
+  }
 }
 
 /** A tool has a free tier when its starting price is $0, whatever its paid tiers cost. */

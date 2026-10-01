@@ -1,15 +1,13 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import statesData from '../../../data/states.json';
-import { getVertical, verticalToUrl, rankToolsForVertical } from '../../../lib/data';
+import { getVertical, verticals, verticalToUrl, rankToolsForVertical } from '../../../lib/data';
 
 interface State {
   slug: string;
   name: string;
   abbr: string;
   region: string;
-  population: number;
-  licensing_note: string;
 }
 
 const TARGET_VERTICALS = ['hvac', 'plumbing', 'electrical', 'roofing', 'general_contractor'];
@@ -28,60 +26,72 @@ interface Props {
 
 const { state } = Astro.props;
 
+// Keep acronyms (HVAC) in capitals and use the singular trade name, as the trade pages do.
+const tradeLower = (name: string) =>
+  name
+    .split(' ')
+    .map((w) => (/^[A-Z]{2,}$/.test(w) ? w : w.toLowerCase()))
+    .join(' ')
+    .replace(/^general contractors$/, 'general contractor');
+
 const verticalsForState = TARGET_VERTICALS
   .map((slug) => {
     const v = getVertical(slug);
     if (!v) return null;
-    const top = rankToolsForVertical(slug).slice(0, 3);
-    return { vertical: v, slug, topTools: top };
+    const ranked = rankToolsForVertical(slug);
+    return { vertical: v, slug, topTools: ranked.slice(0, 3), total: ranked.length };
   })
   .filter((v): v is NonNullable<typeof v> => !!v);
 
+const tradeNames = verticalsForState.map((v) => tradeLower(v.vertical.name));
+const tradeList = tradeNames.length > 1
+  ? `${tradeNames.slice(0, -1).join(', ')} and ${tradeNames[tradeNames.length - 1]}`
+  : tradeNames.join('');
+// Trades with at least one ranked tool have a national trade page (see [vertical]/index.astro).
+const tradePageCount = verticals.filter((v) => rankToolsForVertical(v.slug).length > 0).length;
+
 const pageTitle = `Best Trades Software for ${state.name} Contractors (2026)`;
-const pageDescription = `Top field service and trades software for ${state.name} contractors: HVAC, plumbing, electrical, roofing, and general contractor platforms. Pricing, trade fit, and ${state.abbr}-specific licensing context.`;
+const pageDescription = `Field service and trades software for ${state.name} contractors in ${verticalsForState.length} trades (${tradeList}), ranked by trade fit and Fit Score. The ranking is the same in every state.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'States', url: '/state/' },
   { name: state.name, url: `/state/${state.slug}/` },
 ];
-
-const popMillions = (state.population / 1_000_000).toFixed(1);
 ---
 
 <Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs} noindex>
   <article class="mx-auto max-w-5xl px-4 py-12">
     <header class="mb-10">
       <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
-        {state.region} · Population {popMillions}M
+        {state.region}
       </p>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
         Best Trades Software for {state.name} Contractors
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Field service software recommendations for {state.name} ({state.abbr}) contractors across {verticalsForState.length} major trades: HVAC, plumbing, electrical, roofing, and general contracting. All platforms work nationwide; the editorial filtering here surfaces what fits {state.name}'s licensing landscape and shop sizes.
+        Field service software for {state.name} ({state.abbr}) contractors in {verticalsForState.length} trades: {tradeList}. Each trade is ranked by fit for the trade, then by our Fit Score, then by name. We hold no state-level data on usage, prices or licensing, so the ranking is the same in every state.
       </p>
     </header>
 
     <section class="mb-10 rounded-lg border border-blue-200 bg-blue-50 p-6">
-      <h2 class="mb-2 text-base font-bold text-blue-900">{state.name} contractor licensing snapshot</h2>
-      <p class="text-sm text-blue-900 leading-relaxed">{state.licensing_note}</p>
-      <p class="mt-3 text-xs text-blue-700">
-        License requirements change; always verify with your state board before signing contracts. We update this snapshot annually.
+      <h2 class="mb-2 text-base font-bold text-blue-900">{state.name} contractor licensing</h2>
+      <p class="text-sm text-blue-900 leading-relaxed">
+        This page does not summarize {state.name}'s licensing rules, because we have not verified them. Check the current requirements for your trade with {state.name}'s licensing agencies and with the city or county where you work before you bid or sign a contract.
       </p>
     </section>
 
     <section class="mb-10">
       <h2 class="mb-5 text-2xl font-bold text-slate-900">Pick your trade</h2>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {verticalsForState.map(({ vertical, slug, topTools }) => (
+        {verticalsForState.map(({ vertical, slug, topTools, total }) => (
           <a
             href={`/state/${state.slug}/${verticalToUrl(slug)}/`}
             class="block rounded-lg border border-slate-200 bg-white p-5 no-underline transition hover:border-orange-300 hover:bg-orange-50"
           >
             <h3 class="mb-2 text-lg font-bold text-slate-900">{vertical.name}</h3>
             <p class="mb-3 text-sm text-slate-600">
-              Top picks for {vertical.name.toLowerCase()} contractors in {state.abbr}:
+              First {topTools.length} of {total} in our {tradeLower(vertical.name)} ranking:
             </p>
             <ul class="space-y-1 text-sm text-slate-700">
               {topTools.map((t) => (
@@ -99,7 +109,7 @@ const popMillions = (state.population / 1_000_000).toFixed(1);
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Not finding your trade?</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        We cover {verticalsForState.length} trades per state. Browse the full directory by trade or take the matching quiz for a personalized recommendation.
+        State pages cover {verticalsForState.length} trades; the directory has pages for {tradePageCount} trades. Browse the full directory by trade or take the matching quiz for a recommendation based on your answers.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/quiz/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">

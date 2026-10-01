@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, verticals, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, usVendorTotal, usVendorLists, totalReputationFlags } from '../lib/data';
+import { tools, verticals, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, usVendorTotal, usVendorLists, totalReputationFlags, awards } from '../lib/data';
 import { intlMarketCount } from '../lib/intl';
 
 const toolCount = tools.length;
@@ -18,6 +18,15 @@ const agencyCount = marketingAgencies.length;
 const totalVendorCount = usVendorTotal();
 const categoryCount = usVendorLists().length;
 const reputationFlagCount = totalReputationFlags();
+// Computed (2026-10-01): "18 editorial designations" and "4,900+ pages" were
+// hard-coded; the page count was stale (the build has about twice that) and is
+// not something a page can count, so it was removed rather than updated.
+const awardCount = awards.categories.length;
+const awardsPublished = new Date(awards.published_date + 'T00:00:00Z').toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  timeZone: 'UTC',
+});
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -51,7 +60,7 @@ const organizationSchema = {
 
 <Layout
   title="About WrenchStack: independent trades vendor research desk"
-  description={`WrenchStack is an independent research desk covering ${totalVendorCount} US trades-contractor vendors across ${categoryCount} categories (software, payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI) plus ${intlMarketCount} international markets. Published methodology, transparent affiliate disclosure, honest reputation flags.`}
+  description={`WrenchStack is an independent research desk covering ${totalVendorCount} US trades-contractor vendors across ${categoryCount} categories (software, payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI) plus ${intlMarketCount} international markets. Published methodology, per-vendor affiliate disclosure, sourced reputation flags.`}
   breadcrumbs={breadcrumbs}
 >
   <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
@@ -82,8 +91,8 @@ const organizationSchema = {
         <div class="mt-1 text-xs text-slate-600">Trade verticals</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-        <div class="text-2xl font-bold text-slate-900">4,900+</div>
-        <div class="mt-1 text-xs text-slate-600">Pages of editorial</div>
+        <div class="text-2xl font-bold text-slate-900">{intlMarketCount}</div>
+        <div class="mt-1 text-xs text-slate-600">International markets</div>
       </div>
     </section>
 
@@ -96,7 +105,7 @@ const organizationSchema = {
       </p>
 
       <p>
-        Our editorial position is uncomplicated: contractors deserve evaluation that's not paid for by the vendors being evaluated. The methodology applies identically to every vendor in the directory, whether we have an active affiliate relationship, a pending application, or no commercial alignment at all. Reputation flags are attached only where a regulator order, court record, BBB profile or the vendor's own terms supports them, regardless of whether a flagged vendor pays us anything.
+        Our editorial position is uncomplicated: contractors deserve evaluation that's not paid for by the vendors being evaluated. The same rules apply to every vendor in a category, whether we have an active affiliate relationship, a pending application, or no commercial alignment at all. Reputation flags are attached only where a regulator order, court record, BBB profile or the vendor's own terms supports them, regardless of whether a flagged vendor pays us anything.
       </p>
 
       <h2>Why this exists</h2>
@@ -140,14 +149,14 @@ const organizationSchema = {
 
       <h2>What makes us structurally different</h2>
 
-      <p>Four operational pillars, on every page, without exception:</p>
+      <p>Four operating rules:</p>
 
       <ol>
         <li>
           <strong>Multi-category coverage under one set of rules.</strong> All {usVendorLists().length} US categories share the same independence rules and reputation-flag standards, and field-service software is also ranked by the WrenchStack Fit Score™. Single-category competitors structurally cannot match the cross-category coverage; multi-category competitors don't exist.
         </li>
         <li>
-          <strong>Verified pricing with visible dates.</strong> Every pricing tier shows a <code>verified_date</code> stamp. Pricing under 90 days old gets a green freshness pill; 91-180 days gets amber; over 180 gets red. The freshness signal is a UI element, not buried metadata.
+          <strong>Verified pricing with visible dates.</strong> Every software tool's pricing shows the date it was last verified. On software pages, a price verified 90 days ago or less gets a green freshness pill; 91-180 days gets amber; over 180 gets red. The freshness signal is a UI element, not buried metadata.
         </li>
         <li>
           <strong>Buyer-side decision tools.</strong> <a href="/quiz/">Matching quiz</a>, <a href="/roi-calculator/">ROI calculator</a>, <a href="/cost-of-switch/">cost-of-switch calculator</a>, per-tool pricing widgets, interactive <a href="/compare-builder/">comparison builder</a>. Tools that make the decision real. Competitor directories don't ship these because their business model depends on form-fills, not self-service.
@@ -161,30 +170,29 @@ const organizationSchema = {
 
       <ul>
         <li><strong>{toolCount} software platforms</strong> across {verticalCount} trade verticals, each with a full review: pros and cons, pricing and FAQs</li>
-        <li><strong>{leadGenCount} lead-gen platforms</strong> with a shared-vs-exclusive filter and {leadGenPlatforms.filter((p) => p.reputation_flag).length} documented reputation warnings</li>
-        <li><strong>{insuranceCount} insurance providers</strong> with agent-vs-direct filter and per-trade buyer guides</li>
+        <li><strong>{leadGenCount} lead-gen platforms</strong>, each showing its lead model (shared, exclusive, pay-per-call, bid marketplace and others), with {leadGenPlatforms.filter((p) => p.reputation_flag).length} documented reputation warnings</li>
+        <li><strong>{insuranceCount} insurance providers</strong>, each showing how it is sold (online, through agents, or both), with per-trade buyer guides</li>
         <li><strong>{payrollCount} payroll services</strong> with company-size guides (1-5, 6-20, 20+ employees)</li>
         <li><strong>{agencyCount} marketing agencies</strong> with trade-specific specialists flagged and documented lock-in contract warnings</li>
         <li><strong>Methodology page</strong> with version number, effective date, scoring rubric, evaluation timeline, and per-vendor affiliate ledger</li>
-        <li><strong>WrenchStack Awards 2026</strong>: 18 editorial designations, no paid placement, methodology-backed</li>
-        <li><strong>State-level coverage</strong> across all 50 US states × top 5 trades with licensing context</li>
-        <li><strong>4,900+ pages</strong> of editorial content covering individual reviews, comparison pages, per-trade buyer guides, state-level pages, and multi-tool comparisons</li>
+        <li><strong>WrenchStack Awards 2026</strong>: {awardCount} editorial designations, published {awardsPublished}, no paid placement; chosen when the Fit Score still included third-party review ratings and not re-selected since (see the methodology changelog)</li>
+        <li><strong>Comparison pages</strong>: head-to-head pages for pairs of tools that share a trade (CMMS tools are compared with each other), three-way comparisons, and a builder for comparing several tools at once</li>
       </ul>
 
       <h2>Geographic coverage</h2>
 
       <p>
-        WrenchStack covers the United States, with state-level pages, plus {intlMarketCount} international markets. The United Kingdom, Canada, Australia, New Zealand and Ireland each have their own vendor directory, per-vendor profiles, head-to-head comparisons and a certification guide reflecting local requirements: Checkatrade and Gas Safe (UK), Hipages (AU), HomeStars and Red Seal (CA), Fergus and the PGDB (NZ), and MyBuilder and RGI (IE).
+        WrenchStack covers the United States plus {intlMarketCount} international markets. Each international market has its own vendor directory, with per-vendor profiles and head-to-head comparisons, covering local software, lead-generation platforms, insurance providers and certification bodies: for example Checkatrade and the Gas Safe Register (UK), Hipages (AU), HomeStars and the Red Seal Program (CA), Fergus and the PGDB (NZ), and MyBuilder.ie and RGI (IE). A separate <a href="/certifications/">certification guide</a> compares the certification and licensing bodies of the UK, Australia, Canada, New Zealand, Ireland and South Africa.
       </p>
 
-      <h2>What we will never do</h2>
+      <h2>What we do not do</h2>
 
       <ul>
         <li>Accept payment for placement in a "best of" list or award category</li>
         <li>Accept payment to raise a vendor's WrenchStack Fit Score™</li>
         <li>Accept payment to omit or soften cons in a vendor review</li>
         <li>Accept payment to remove a reputation_flag warning</li>
-        <li>Hide an affiliate relationship: every software vendor's status is on the <a href="/methodology/#affiliate-ledger">methodology page ledger</a>; lead-gen/insurance/payroll/agency vendors disclose per-page</li>
+        <li>Hide an affiliate relationship: every software vendor's status is on the <a href="/methodology/#affiliate-ledger">methodology page ledger</a>, and reviews in the other {categoryCount - 1} categories state it on the page</li>
         <li>Recommend a vendor we wouldn't recommend if no commission existed</li>
         <li>Gate pricing data behind a sales call</li>
         <li>Publish "experts agree" content with no editorial accountability</li>
@@ -193,7 +201,7 @@ const organizationSchema = {
       <h2>For vendors interested in inclusion</h2>
 
       <p>
-        We accept inbound submissions from vendors who believe they serve trades contractors well and want editorial review. Read the <a href="/methodology/">WrenchStack Fit Score™ methodology</a> first to understand how we evaluate. Then reach out via <a href="mailto:partners@wrenchstack.com">partners@wrenchstack.com</a> with: company name, website, primary trade verticals served, distinguishing characteristics vs comparable vendors, and current customer count (private, used only for context).
+        We accept inbound submissions from vendors who believe they serve trades contractors well and want editorial review. Read the <a href="/methodology/">WrenchStack Fit Score™ methodology</a> first to understand how we evaluate. Then reach out via <a href="mailto:partners@wrenchstack.com">partners@wrenchstack.com</a> with: company name, website, primary trade verticals served, distinguishing characteristics vs comparable vendors, and current customer count.
       </p>
 
       <p>
@@ -209,7 +217,7 @@ const organizationSchema = {
       </ul>
 
       <p class="not-prose mt-8 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-        <strong class="text-slate-900">Editorial integrity</strong> is the only product we ship. The minute readers stop trusting that the cons section is honest, the reputation flags are documented, and the pricing is verified, WrenchStack stops being useful to anyone. Every decision about content, scoring, partnerships, and methodology gets filtered through that test.
+        <strong class="text-slate-900">Editorial integrity</strong> is what makes the directory useful. If readers cannot trust that the cons section is honest, the reputation flags are documented and the pricing is verified, WrenchStack is not useful to anyone. That is the test we apply to content, scoring, partnerships and methodology.
       </p>
 
     </section>

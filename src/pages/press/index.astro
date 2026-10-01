@@ -40,6 +40,17 @@ const medianPrice = medianUsd(prices);
 const perSeatPriced = perUserTools(pricedTools).length;
 const flatPriced = flatFeeTools(pricedTools).length;
 const annualPriced = pricedTools.filter((t) => t.pricing.pricing_model === 'annual_per_user').length;
+// flatFeeTools() also takes in 'flat_plus_seat': a company fee plus a published
+// monthly fee for each user or technician beyond those included (all 18 notes
+// say so on 2026-10-01). Not "charge more as users are added": several 'flat'
+// plans also cost more for more users, through user caps (Kickserv, QuoteIQ,
+// CorkCRM and others) or an annual per-user fee (Solargraf).
+const flatPlusSeatPriced = pricedTools.filter((t) => t.pricing.pricing_model === 'flat_plus_seat').length;
+// Insurance providers whose premium field says the premium is quoted (27 of 27
+// on 2026-10-01). Passive on purpose: the quote comes from the provider, an
+// agent or broker, or a partner insurer (Tivly, Simply Business, Huckleberry),
+// so "providers ... quote each policy" was wrong, as "carrier" was before it.
+const insuranceQuoted = insuranceProviders.filter((p) => /\bquoted\b/i.test(String((p as any).typical_premium_range ?? ''))).length;
 const qbCount = tools.filter((t) => t.integrations.some((i) => /quickbooks/i.test(i))).length;
 const qbPct = Math.round((qbCount / tools.length) * 100);
 
@@ -82,7 +93,7 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
         Press Room
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Resources for journalists, industry analysts and trade-publication editors, including ready-to-cite story leads with verified, reproducible numbers. WrenchStack is independent: no vendor pays for placement or scores, which is exactly why we can publish things vendor-funded listicles can't.
+        Resources for journalists, industry analysts and trade-publication editors, including ready-to-cite story leads with figures computed from the directory data. WrenchStack is independent: no vendor pays for placement or scores.
       </p>
     </header>
 
@@ -90,7 +101,7 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
     <section class="mb-12">
       <h2 class="mb-2 text-2xl font-bold text-slate-900">Story leads for journalists</h2>
       <p class="mb-5 text-sm text-slate-600 leading-relaxed">
-        Four story angles. Every directory figure below is computed from the public data and reproducible from our <a href="/methodology/" class="text-orange-600 hover:underline">methodology</a>. Want a custom cut (by trade, by region)? <a href="mailto:press@wrenchstack.com" class="text-orange-600 hover:underline">Ask the press desk</a>.
+        Four story angles. Every directory figure below is computed from the directory data when the site is built. Want a custom cut (by trade, by region)? <a href="mailto:press@wrenchstack.com" class="text-orange-600 hover:underline">Ask the press desk</a>.
       </p>
 
       <div class="space-y-4">
@@ -101,7 +112,7 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
             <h3 class="text-lg font-bold text-slate-900">The Gulf e-invoicing deadline, covered in English and Arabic</h3>
           </div>
           <p class="text-sm text-slate-700 leading-relaxed">
-            Saudi Arabia's <strong>ZATCA Phase-2 Wave 24, which covered the SAR 375,000-revenue band, closed on 30 June 2026</strong>. WrenchStack compares construction software in <strong>English and Arabic</strong>, with Arabic pages for Saudi Arabia, the UAE, Qatar, Kuwait, Jordan and Egypt, and covers the e-invoicing mandates in Egypt (ETA), Jordan (JoFotara), Malaysia (MyInvois) and Oman (Fawtara).
+            EY reports that Saudi Arabia's <strong>ZATCA Phase 2 Wave 24</strong> covered taxable turnover above SAR 375,000 in 2022, 2023 or 2024, with integration between 1 April and <strong>30 June 2026</strong>, a date that has passed, and that Wave 25, announced in July 2026, covers taxable turnover above SAR 187,500 in any year from 2022 to 2025, with Phase 2 compliance starting from <strong>1 February 2027</strong>. WrenchStack compares construction software in <strong>English and Arabic</strong>, with Arabic pages for Saudi Arabia, the UAE, Qatar, Kuwait, Jordan and Egypt, and covers the e-invoicing mandates in Egypt (ETA), Jordan (JoFotara), Malaysia (MyInvois) and Oman (Fawtara).
           </p>
           <p class="mt-2 text-xs text-slate-600">Read more: <a href="/sa/guides/zatca-e-invoicing-contractors/" class="font-semibold text-orange-600 hover:underline">ZATCA guide</a> · <a href="/software-by-country/" class="font-semibold text-orange-600 hover:underline">all {intlMarkets} markets</a></p>
         </article>
@@ -117,9 +128,9 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
 
         <!-- Hook 2: pricing opacity -->
         <article class="rounded-lg border border-slate-200 bg-white p-5">
-          <h3 class="mb-2 text-lg font-bold text-slate-900">The opacity tax</h3>
+          <h3 class="mb-2 text-lg font-bold text-slate-900">Who publishes a price</h3>
           <p class="text-sm text-slate-700 leading-relaxed">
-            <strong>{customQuotedPct}% of trades-software platforms publish no price at all</strong> ({quoteOnlyCount()} of {tools.length}): you have to ask the vendor for a quote. The median <em>published</em> entry price is <strong>${medianPrice}/month</strong>, and that figure mixes pricing models: {perSeatPriced} platforms charge per seat (median <strong>${perUserMedian()} per user/month</strong>), {flatPriced} charge a flat monthly fee (median <strong>${flatFeeMedian()}/month</strong>) and {annualPriced} {annualPriced === 1 ? 'sells' : 'sell'} annual per-user licences. The blended figure is not a per-seat rate and should not be quoted as one. Contractor insurance is worse: every carrier we track is quote-only; not one publishes a flat rate.
+            <strong>{customQuotedPct}% of the trades-software platforms in our directory publish no price at all</strong> ({quoteOnlyCount()} of {tools.length}): you have to ask the vendor for a quote. The median <em>published</em> paid entry price is <strong>${medianPrice}/month</strong>, and that figure mixes pricing models: {perSeatPriced} platforms charge per seat (median <strong>${perUserMedian()} per user/month</strong>), {flatPriced} charge a fee for the company (median <strong>${flatFeeMedian()}/month</strong>; {flatPlusSeatPriced} of them publish a monthly fee for each user or technician beyond those included) and {annualPriced} {annualPriced === 1 ? 'sells' : 'sell'} annual per-user licences. The blended figure is not a per-seat rate and should not be quoted as one. In insurance, the premium is quoted individually for {insuranceQuoted === insuranceProviders.length ? 'all' : `${insuranceQuoted} of the`} {insuranceProviders.length} providers we list.
           </p>
           <p class="mt-2 text-xs text-slate-600">→ <a href="/trends-2026/" class="font-semibold text-orange-600 hover:underline">Market report</a> · <a href="/pricing/" class="font-semibold text-orange-600 hover:underline">Pricing comparison</a></p>
         </article>
@@ -135,7 +146,7 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
       </div>
 
       <p class="mt-4 rounded-lg bg-slate-50 px-4 py-3 text-xs text-slate-500 leading-relaxed">
-        <strong class="text-slate-700">Standard citation line:</strong> "WrenchStack Trades Software Market Report 2026, WrenchStack Research, data as of {dataAsOfDay}". Free to cite with a link to <a href="/trends-2026/" class="underline">wrenchstack.com/trends-2026</a>. All figures are dated and reproducible from the public methodology.
+        <strong class="text-slate-700">Standard citation line:</strong> "WrenchStack Trades Software Market Report 2026, WrenchStack Research, data as of {dataAsOfDay}". Free to cite with a link to <a href="/trends-2026/" class="underline">wrenchstack.com/trends-2026</a>. The figures are computed from the directory data as of that date.
       </p>
     </section>
 
@@ -189,7 +200,7 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <p class="text-xs uppercase tracking-wider text-slate-500">Independence</p>
-          <p class="mt-1 text-sm text-slate-700">No paid placement · per-vendor affiliate disclosure</p>
+          <p class="mt-1 text-sm text-slate-700">No paid placement · affiliate status disclosed for each US vendor</p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <p class="text-xs uppercase tracking-wider text-slate-500">Verification</p>
@@ -224,27 +235,11 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
           <img src="/logo.png" alt="WrenchStack logo" class="h-11 w-auto" />
         </div>
         <p class="mt-3 text-sm text-slate-700">
-          For high-resolution logo files (SVG, PNG light/dark), email <a href="mailto:press@wrenchstack.com" class="text-orange-600 hover:underline">press@wrenchstack.com</a>.
+          The logo files are PNG: <a href="/logo.png" class="text-orange-600 hover:underline">logo.png</a> (721 × 171) and <a href="/logo-square.png" class="text-orange-600 hover:underline">logo-square.png</a> (1024 × 1024). Use the files as supplied. For another size or format, email <a href="mailto:press@wrenchstack.com" class="text-orange-600 hover:underline">press@wrenchstack.com</a>.
         </p>
 
-        <h3 class="mt-6 mb-3 text-base font-bold text-slate-900">Brand colors</h3>
-        <div class="flex flex-wrap gap-3">
-          <div class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2">
-            <span class="inline-block h-5 w-5 rounded bg-orange-500"></span>
-            <span class="font-mono text-xs">#F97316 (Orange)</span>
-          </div>
-          <div class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2">
-            <span class="inline-block h-5 w-5 rounded bg-slate-900"></span>
-            <span class="font-mono text-xs">#0F172A (Slate)</span>
-          </div>
-          <div class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2">
-            <span class="inline-block h-5 w-5 rounded bg-emerald-500"></span>
-            <span class="font-mono text-xs">#10B981 (Emerald)</span>
-          </div>
-        </div>
-
         <h3 class="mt-6 mb-3 text-base font-bold text-slate-900">Typography</h3>
-        <p class="text-sm text-slate-700">System sans-serif stack (Inter / SF Pro / Segoe UI / Roboto)</p>
+        <p class="text-sm text-slate-700">The device's system sans-serif font (Tailwind's default stack: ui-sans-serif, system-ui, sans-serif)</p>
       </div>
     </section>
 
@@ -264,7 +259,7 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
         </a>
         <a href="/awards/2026/" class="block rounded-lg border border-slate-200 bg-white p-4 no-underline hover:border-orange-300 hover:bg-orange-50">
           <p class="font-semibold text-slate-900">WrenchStack Awards 2026</p>
-          <p class="mt-1 text-sm text-slate-600">Editorial categories of recognition across software, with full methodology and per-category winner rationale.</p>
+          <p class="mt-1 text-sm text-slate-600">Editorial award categories for trades software, with the methodology and the reason for each winner.</p>
         </a>
         <a href="/methodology/" class="block rounded-lg border border-slate-200 bg-white p-4 no-underline hover:border-orange-300 hover:bg-orange-50">
           <p class="font-semibold text-slate-900">WrenchStack Fit Score™ Methodology v1.3</p>
@@ -302,14 +297,14 @@ const citations: Array<{ outlet: string; title: string; date: string; url: strin
         Journalists can request written commentary or a custom data cut on:
       </p>
       <ul class="grid gap-2 sm:grid-cols-2 text-sm text-slate-700">
-        <li class="rounded-md bg-slate-50 px-3 py-2">Gulf &amp; MENA e-invoicing mandates (ZATCA, ETA, JoFotara, MyInvois, Fawtara)</li>
+        <li class="rounded-md bg-slate-50 px-3 py-2">E-invoicing mandates in Saudi Arabia, Oman, Egypt, Jordan and Malaysia (ZATCA, Fawtara, ETA, JoFotara, MyInvois)</li>
         <li class="rounded-md bg-slate-50 px-3 py-2">The reputation-flag ledger: documented warnings by category</li>
         <li class="rounded-md bg-slate-50 px-3 py-2">Trades-software pricing transparency and benchmarks</li>
         <li class="rounded-md bg-slate-50 px-3 py-2">Lead-generation platform warnings, including the FTC's HomeAdvisor order</li>
         <li class="rounded-md bg-slate-50 px-3 py-2">Contractor insurance &amp; financing market structure</li>
         <li class="rounded-md bg-slate-50 px-3 py-2">Contractor banking: account terms and CFPB orders</li>
         <li class="rounded-md bg-slate-50 px-3 py-2">International trades-market differences ({intlMarkets} markets)</li>
-        <li class="rounded-md bg-slate-50 px-3 py-2">Independent-research economics vs. vendor-funded listicles</li>
+        <li class="rounded-md bg-slate-50 px-3 py-2">Affiliate commissions, and why no vendor can pay for placement</li>
       </ul>
     </section>
 

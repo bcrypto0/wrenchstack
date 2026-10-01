@@ -7,9 +7,16 @@ interface UseCase {
   h1: string;
   meta_description: string;
   buyer_profile: string;
+  ranked_picks: string[];
 }
 
 const useCases: UseCase[] = useCasesData.use_cases as UseCase[];
+
+// Picks per guide, counted rather than written as "5" (2026-10-01).
+const pickCounts = useCases.map((uc) => uc.ranked_picks.length);
+const minPicks = Math.min(...pickCounts);
+const maxPicks = Math.max(...pickCounts);
+const picksText = minPicks === maxPicks ? `${minPicks} tools` : `${minPicks} to ${maxPicks} tools`;
 
 // Categorize guides by primary buyer signal (trade-specific vs. team-size-specific vs. integration/specialty)
 function categorizeGuide(slug: string): 'trade' | 'team_size' | 'specialty' {
@@ -44,7 +51,7 @@ const itemListSchema = {
 
 <Layout
   title={`Best software for trades: ${useCases.length} buyer-specific guides`}
-  description={`${useCases.length} buyer-specific software guides for trades and field-service businesses. Each guide ranks 5 tools that actually fit the profile (by team size, vertical, or specific need).`}
+  description={`${useCases.length} buyer-specific software guides for trades and field-service businesses. Each guide lists ${picksText} picked by hand for one buyer profile (a team size, a trade or a specific need), with starting prices and trade fit.`}
   breadcrumbs={breadcrumbs}
 >
   <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
@@ -55,17 +62,17 @@ const itemListSchema = {
         Buyer guides for trades software
       </h1>
       <p class="mt-4 max-w-3xl text-lg text-slate-600">
-        Software picks for specific buyer situations: by team size, vertical, or specific operational need. Each guide ranks 5 tools that actually fit the profile, with the rationale for why and the trade-off analysis between them.
+        {`Software picks for specific buyer situations: a team size, a trade or a specific need. Each guide lists ${picksText} picked by hand for one buyer profile, with each tool's starting price, trade fit, free trial, QuickBooks integration and recorded weaknesses, and a checklist of what to confirm before you buy.`}
       </p>
       <p class="mt-3 text-sm text-slate-500">
-        Not sure which guide fits? Take the <a href="/quiz/" class="text-orange-600 hover:underline">60-second matching quiz</a> for ranked picks tailored to your situation.
+        Not sure which guide fits? Answer the 5 questions in the <a href="/quiz/" class="text-orange-600 hover:underline">matching quiz</a> to see the 3 tools that score highest on your answers.
       </p>
     </header>
 
     <section class="mb-12">
-      <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">By trade + scale</h2>
+      <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">By trade</h2>
       <p class="mb-6 text-slate-600">
-        Guides combining a specific trade (HVAC, plumbing, cleaning, etc.) with operational scale, the most common buyer situation.
+        Guides for one trade and one kind of customer.
       </p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {tradeGuides.map((uc) => (
@@ -86,7 +93,7 @@ const itemListSchema = {
       <section class="mb-12">
         <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">By team size</h2>
         <p class="mb-6 text-slate-600">
-          Guides focused on a specific team-size bracket where the right software changes: solo operators, small teams, growing operations.
+          Guides for one trade at one team size: solo operators, small teams, growing teams.
         </p>
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {teamSizeGuides.map((uc) => (
@@ -108,7 +115,7 @@ const itemListSchema = {
       <section class="mb-12">
         <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">By specialty need</h2>
         <p class="mb-6 text-slate-600">
-          Guides focused on a specific must-have: QuickBooks integration depth, insurance restoration workflow, snow management, etc.
+          Guides built around one requirement: QuickBooks integration, insurance restoration work or snow management.
         </p>
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {specialtyGuides.map((uc) => (
@@ -131,15 +138,15 @@ const itemListSchema = {
       <div class="grid gap-4 sm:grid-cols-3">
         <a href="/quiz/" class="group rounded-lg bg-white p-5 hover:shadow-sm">
           <h3 class="font-semibold text-slate-900 group-hover:text-orange-600">Matching quiz →</h3>
-          <p class="mt-1 text-sm text-slate-600">5 questions, 3 ranked picks in 60 seconds</p>
+          <p class="mt-1 text-sm text-slate-600">5 questions, then the 3 tools that score highest on your answers</p>
         </a>
         <a href="/roi-calculator/" class="group rounded-lg bg-white p-5 hover:shadow-sm">
           <h3 class="font-semibold text-slate-900 group-hover:text-orange-600">ROI calculator →</h3>
-          <p class="mt-1 text-sm text-slate-600">Estimate payback period for your team size</p>
+          <p class="mt-1 text-sm text-slate-600">A rough cost, return and payback estimate from your own numbers</p>
         </a>
         <a href="/features/" class="group rounded-lg bg-white p-5 hover:shadow-sm">
           <h3 class="font-semibold text-slate-900 group-hover:text-orange-600">Browse by feature →</h3>
-          <p class="mt-1 text-sm text-slate-600">Filter by specific capabilities (QB, AI dispatch, financing)</p>
+          <p class="mt-1 text-sm text-slate-600">Tools by the features they list (QuickBooks, AI dispatcher, consumer financing)</p>
         </a>
       </div>
     </section>

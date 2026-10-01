@@ -2,12 +2,16 @@
 import Layout from '../../../../layouts/Layout.astro';
 import { isStatePageIndexable } from '../../../../lib/compare-index.mjs';
 import statesData from '../../../../data/states.json';
-import { asSentence,
+import {
   rankToolsForVertical,
   getVertical,
   verticalToUrl,
   formatPrice,
   wrenchStackScore,
+  verticalFitScore,
+  isQuoteOnly,
+  hasFreeTier,
+  type Tool,
 } from '../../../../lib/data';
 import ToolLogo from '../../../../components/ToolLogo.astro';
 import WrenchScore from '../../../../components/WrenchScore.astro';
@@ -18,11 +22,7 @@ interface State {
   name: string;
   abbr: string;
   region: string;
-  population: number;
-  licensing_note: string;
 }
-
-const states = (statesData as { states: State[] }).states;
 
 // Top verticals where state-level long-tail SEO is most productive.
 // Slugs match the verticals defined in categories.json
@@ -53,13 +53,79 @@ interface Props {
 const { state, verticalSlug } = Astro.props;
 const vertical = getVertical(verticalSlug)!;
 
-// Top tools for this vertical
+// Keep acronyms (HVAC) in capitals and use the singular trade name, as the trade pages do.
+const verticalLower = vertical.name
+  .split(' ')
+  .map((w) => (/^[A-Z]{2,}$/.test(w) ? w : w.toLowerCase()))
+  .join(' ')
+  .replace(/^general contractors$/, 'general contractor');
+
+// The national ranking for this trade. We hold no state-level data, so it is the same
+// ranking as the trade page and every other state's page.
 const allTools = rankToolsForVertical(verticalSlug);
 const topTools = allTools.slice(0, 8);
-const featuredTool = topTools[0];
+
+// Tools tied with #1 on both trade fit and Fit Score; the order among them is
+// alphabetical, so no single one is presented as the top pick (same rule as the trade page).
+const topTied = allTools.length
+  ? allTools.filter((t) => verticalFitScore(t, verticalSlug) === verticalFitScore(allTools[0], verticalSlug)
+      && wrenchStackScore(t, verticalSlug) === wrenchStackScore(allTools[0], verticalSlug))
+  : [];
+const nameList = (names: string[]) =>
+  names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names.join('');
+const topSentence = topTied.length > 1
+  ? `${nameList(topTied.map((t) => t.name))} tie at the top on trade fit and Fit Score (ties are listed alphabetically).`
+  : allTools[0]
+    ? `${allTools[0].name} ranks first (${formatPrice(allTools[0])}).`
+    : '';
+
+// Price facts computed from this trade's tools (2026-10-01). They replace invented
+// spend ranges ("$50-$250/user/month", "0.3-0.8% of revenue"). A starting price is not
+// always a monthly plan: Bluebeam Revu bills yearly only, and Workyard, Jobber and
+// Housecall Pro quote their starting prices with annual billing.
+const paidStarts = allTools
+  .map((t) => t.pricing.starting_at_usd)
+  .filter((p): p is number => p !== null && p > 0)
+  .sort((a, b) => a - b);
+const quoteOnlyN = allTools.filter(isQuoteOnly).length;
+const freeTierN = allTools.filter(hasFreeTier).length;
+const otherPricingN = allTools.filter((t) => t.pricing.starting_at_usd === null && !isQuoteOnly(t)).length;
+const toolsWord = (n: number) => (n === 1 ? 'tool' : 'tools');
+const priceSentence = [
+  paidStarts.length
+    ? `${paidStarts.length} publish a paid starting price, which we show as a monthly figure: from $${paidStarts[0]} to $${paidStarts[paidStarts.length - 1]} a month. Some of those prices are per user and some per company, and some apply only with annual billing, so price your own team size and billing term on each vendor's page.`
+    : '',
+  freeTierN ? `${freeTierN} ${freeTierN === 1 ? 'has' : 'have'} a free tier.` : '',
+  quoteOnlyN ? `${quoteOnlyN} ${quoteOnlyN === 1 ? 'is' : 'are'} quote-only and publish no price.` : '',
+  otherPricingN ? `${otherPricingN} publish one-time or per-project prices instead of a monthly plan.` : '',
+].filter(Boolean).join(' ');
+
+// "How to choose" brackets, filled from this trade's ranking with the trade page's
+// rule: a tool counts in every bracket its stated best team size range overlaps, and
+// tools with no stated team size are left out. They replace fixed picks ("Jobber,
+// Housecall Pro, Workiz dominate here") and an invented 3-6 month implementation.
+const teamRange = (t: Tool): [number, number] | null => {
+  const s = t.best_team_size ?? '';
+  const plus = s.match(/^\s*(\d+)\s*\+\s*$/);
+  if (plus) return [Number(plus[1]), Infinity];
+  const m = s.match(/(\d+)-(\d+)/);
+  return m ? [Number(m[1]), Number(m[2])] : null;
+};
+const sizeBracket = (heading: string, rule: string, lo: number, hi: number) => {
+  const fits = allTools.filter((t) => {
+    const r = teamRange(t);
+    return r !== null && r[0] <= hi && r[1] >= lo;
+  });
+  return { heading, rule, total: fits.length, picks: fits.slice(0, 3) };
+};
+const sizeBrackets = [
+  sizeBracket('Solo or 1-3 techs', 'overlaps 1 to 3 techs', 1, 3),
+  sizeBracket('4-15 techs', 'overlaps 4 to 15 techs', 4, 15),
+  sizeBracket('More than 15 techs', 'goes past 15 techs', 16, Infinity),
+];
 
 const pageTitle = `Best ${vertical.name} Software for ${state.name} Contractors (2026)`;
-const pageDescription = `Top field service software for ${vertical.name.toLowerCase()} contractors in ${state.name}. Pricing, features, and licensing context for ${state.abbr} ${vertical.name.toLowerCase()} businesses. Updated ${new Date().getFullYear()}.`;
+const pageDescription = `${verticalLower.charAt(0).toUpperCase()}${verticalLower.slice(1)} software for ${state.name} contractors, ranked by trade fit and Fit Score, with starting prices and the date each price was verified. The ranking is the same in every state.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -68,43 +134,26 @@ const breadcrumbs = [
   { name: vertical.name, url: `/state/${state.slug}/${verticalToUrl(verticalSlug)}/` },
 ];
 
-// State-specific framing helpers
-function stateMarketContext(): string {
-  const pop = state.population;
-  const popInMillions = (pop / 1_000_000).toFixed(1);
-  const region = state.region;
-  if (pop > 15_000_000) {
-    return `${state.name} is one of the largest contractor markets in the US (${popInMillions}M population). The ${vertical.name.toLowerCase()} sector includes thousands of licensed shops across major metros.`;
-  }
-  if (pop > 5_000_000) {
-    return `${state.name} has a substantial contractor market (${popInMillions}M population) with established ${vertical.name.toLowerCase()} businesses in major cities and growing suburban demand.`;
-  }
-  if (pop > 1_500_000) {
-    return `${state.name} (${popInMillions}M population) has a mid-sized contractor market. ${vertical.name.toLowerCase()} shops range from solo operators in rural areas to multi-truck operations in metro hubs.`;
-  }
-  return `${state.name} (population ${(pop / 1_000).toFixed(0)}K) is a smaller contractor market. ${vertical.name.toLowerCase()} shops here tend to be owner-operated and need software priced for small teams.`;
-}
-
 const faqs = [
   {
-    q: `What's the best ${vertical.name.toLowerCase()} software for ${state.name} contractors?`,
-    a: `Based on our Fit Score (vertical fit, pricing transparency and integration coverage), ${featuredTool.name} ranks at the top for ${vertical.name.toLowerCase()} contractors in ${state.name}. ${asSentence(featuredTool.tagline)} None of the field service platforms in our directory have ${state.name}-specific limitations; they all work nationwide. The "best" choice comes down to your team size, vertical specialization, and budget. See the ranked list above or take our matching quiz.`,
+    q: `What's the best ${verticalLower} software for ${state.name} contractors?`,
+    a: `Our ${verticalLower} ranking is the same in every state, because we hold no state-level data. It is ordered by fit for the trade, then by our Fit Score (vertical fit, pricing transparency and integration coverage), then by name. ${topSentence} The right choice depends on your team size and budget; see the team-size brackets on this page or take our matching quiz.`,
   },
   {
-    q: `Do I need ${vertical.name.toLowerCase()} software that's specific to ${state.name}?`,
-    a: `No. Field service software is nationwide; none of the major platforms restrict by state. However, your software should handle ${state.name}'s licensing context cleanly. ${state.licensing_note} Look for tools that let you record license numbers on quotes/invoices, store certificates of insurance, and track per-tech credentials.`,
+    q: `Do I need ${verticalLower} software that's specific to ${state.name}?`,
+    a: `Our tool data records no state-specific features or restrictions, so we do not rank tools by state. If you need license numbers on quotes and invoices, or want to keep insurance certificates and each tech's credentials on file, check that the tool does it before you buy. We have not verified ${state.name}'s licensing rules; check them with ${state.name}'s licensing agencies and with your city or county.`,
   },
   {
-    q: `How much should a ${vertical.name.toLowerCase()} business in ${state.name} spend on software?`,
-    a: `For a typical 2-10 user ${vertical.name.toLowerCase()} shop, software costs run $50-$250/user/month or $150-$300/month on flat-rate platforms. Most shops underspend on software relative to revenue; a $1M/year ${vertical.name.toLowerCase()} business typically gets meaningful ROI from spending 0.3-0.8% of revenue on field service software (so $3,000-$8,000/year). Use our <a href="/roi-calculator/" class="underline">ROI calculator</a> to model your specific case.`,
+    q: `How much does ${verticalLower} software cost in ${state.name}?`,
+    a: `We record each vendor's published prices, not state-level prices. Of the ${allTools.length} ${verticalLower} ${toolsWord(allTools.length)} in our directory, ${priceSentence} Our <a href="/roi-calculator/" class="underline">ROI calculator</a> works from your own numbers.`,
   },
   {
     q: `Which platforms are most popular with ${state.name} contractors?`,
-    a: `Platforms like ${topTools[0].name}, ${topTools[1]?.name ?? 'Jobber'}, and ${topTools[2]?.name ?? 'Housecall Pro'} are sold nationwide, including in ${state.name}. Vendors do not publish state-level market share, so there is no reliable public data on which platform is most used in ${state.name} specifically.`,
+    a: `We have no data on which platforms ${state.name} contractors use, so this page does not rank by popularity. The order above is our national ranking for ${verticalLower} software.`,
   },
   {
-    q: `Can I switch ${vertical.name.toLowerCase()} software easily in ${state.name}?`,
-    a: `Migration friction is the same regardless of state. Customer records, quotes, and invoices typically export cleanly via CSV. Historical job data, custom workflows, and integration setups often need rebuilding. Plan for 4-12 weeks of parallel operation. Use our <a href="/cost-of-switch/" class="underline">cost-of-switch calculator</a> to model migration cost specifically for your team size.`,
+    q: `Can I switch ${verticalLower} software easily in ${state.name}?`,
+    a: `We have no state-specific information on switching. What moves across depends on each vendor's export and import options, so ask both vendors what they carry over (customer records, job history, recurring agreements) before you commit. Our <a href="/cost-of-switch/" class="underline">cost-of-switch calculator</a> gives a rough estimate from your current tool, target tool and team size.`,
   },
 ];
 
@@ -134,20 +183,19 @@ const noindex = !isStatePageIndexable(state.slug, verticalToUrl(verticalSlug));
         Best {vertical.name} Software for {state.name} Contractors (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        {stateMarketContext()} Below: the top platforms used by {vertical.name.toLowerCase()} contractors in {state.abbr}, ranked by vertical fit, pricing transparency and integration coverage, with {state.name}-specific licensing context.
+        The first {topTools.length} of the {allTools.length} {verticalLower} {toolsWord(allTools.length)} in our directory, ranked by fit for the trade, then by our <a href="/methodology/" class="underline hover:text-slate-900">Fit Score</a> (vertical fit, pricing transparency and integration coverage), then by name. {topSentence} We hold no state-level data on usage, prices or licensing, so this is the same ranking as on our <a href={`/${verticalToUrl(verticalSlug)}/`} class="underline hover:text-slate-900">{verticalLower} software page</a> and every other state's page.
       </p>
     </header>
 
     <section class="mb-10 rounded-lg border border-blue-200 bg-blue-50 p-6">
-      <h2 class="mb-2 text-base font-bold text-blue-900">{state.name} licensing context for {vertical.name.toLowerCase()} contractors</h2>
-      <p class="text-sm text-blue-900 leading-relaxed">{state.licensing_note}</p>
-      <p class="mt-3 text-xs text-blue-700">
-        License rules change. Verify current requirements with your state board before signing contracts that span jurisdictions.
+      <h2 class="mb-2 text-base font-bold text-blue-900">{state.name} licensing for {verticalLower} work</h2>
+      <p class="text-sm text-blue-900 leading-relaxed">
+        This page does not summarize {state.name}'s licensing rules for {verticalLower} work, because we have not verified them. Check the current requirements with {state.name}'s licensing agencies and with the city or county where you work before you bid or sign a contract.
       </p>
     </section>
 
     <section class="mb-12">
-      <h2 class="mb-5 text-2xl font-bold text-slate-900">Top {vertical.name.toLowerCase()} platforms for {state.name}</h2>
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">First {topTools.length} in the {verticalLower} ranking</h2>
       <div class="space-y-4">
         {topTools.map((tool, i) => {
           return (
@@ -212,13 +260,20 @@ const noindex = !isStatePageIndexable(state.slug, verticalToUrl(verticalSlug));
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
-      <h2 class="mb-3 text-xl font-bold text-slate-900">How to choose for your {state.name} {vertical.name.toLowerCase()} business</h2>
+      <h2 class="mb-3 text-xl font-bold text-slate-900">How to choose by team size</h2>
+      <p class="mb-3 text-sm text-slate-700 leading-relaxed">
+        Each tool counts in every bracket that its stated best team size range overlaps. Tools with no stated team size are left out.
+      </p>
       <ul class="space-y-2 text-sm text-slate-700 leading-relaxed">
-        <li><strong class="text-slate-900">Solo operators (1-3 users):</strong> Prioritize free or low-cost tiers, mobile-first UX, and quote-to-invoice speed over advanced dispatching. Joist, Jobber Core, and FieldPulse are common picks.</li>
-        <li><strong class="text-slate-900">Small shops (4-10 users):</strong> The mid-tier sweet spot. Look for QuickBooks integration, recurring service management, and a mobile app techs adopt without resistance. Jobber, Housecall Pro, Workiz dominate here.</li>
-        <li><strong class="text-slate-900">Established shops (10-50 users):</strong> Multi-location, dispatching automation, custom reporting matter more. Service Fusion (flat-rate scales), FieldEdge, and ServiceTitan are typical picks.</li>
-        <li><strong class="text-slate-900">Enterprise ({state.name}-wide or multi-state):</strong> ServiceTitan, BuildOps. Plan 3-6 month implementation and dedicated admin time.</li>
-        <li><strong class="text-slate-900">Licensing:</strong> Whatever you pick, confirm it can store license numbers, COIs, and per-tech credentials. {state.name}'s licensing requirements ({state.licensing_note.split('.')[0]}) means you'll be referencing these documents often.</li>
+        {sizeBrackets.map((b) => (
+          <li>
+            <strong class="text-slate-900">{b.heading}:</strong>{' '}
+            {b.picks.length > 0
+              ? `${b.total} of the ${allTools.length} ${toolsWord(allTools.length)} ${b.total === 1 ? 'lists' : 'list'} a best team size range that ${b.rule}${b.total > b.picks.length ? `; the first ${b.picks.length} in the ranking are` : ':'} ${nameList(b.picks.map((t) => `${t.name} (${formatPrice(t)})`))}.`
+              : `No tool in this ranking lists a best team size range that ${b.rule}.`}
+          </li>
+        ))}
+        <li><strong class="text-slate-900">Licensing:</strong> if you need license numbers on quotes and invoices, or want to keep insurance certificates and each tech's credentials on file, check that the tool does it before you buy.</li>
       </ul>
     </section>
 

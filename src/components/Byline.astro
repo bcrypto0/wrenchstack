@@ -7,6 +7,9 @@ interface Props {
 // "Next review <date>" was removed 2026-10-01: a dated review promise is a forward
 // commitment, which the editorial policy does not make. Dates are YYYY-MM-DD and
 // formatted in UTC, so a build in a US timezone does not print the previous day.
+// Both callers pass a pricing verified_date (the tool's own, or the newest among a
+// trade's tools), not the date the page last changed, so the label says "Latest price
+// check" rather than "Last updated" (2026-10-01).
 const { updatedDate, readingMinutes } = Astro.props;
 const fmt = (d: string) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 ---
@@ -19,7 +22,7 @@ const fmt = (d: string) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-US'
   </div>
   <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
     {updatedDate && (
-      <span>Last updated <time datetime={updatedDate}>{fmt(updatedDate)}</time></span>
+      <span>Latest price check <time datetime={updatedDate}>{fmt(updatedDate)}</time></span>
     )}
     {readingMinutes && (
       <>{updatedDate && <span aria-hidden="true">·</span>}<span>{readingMinutes} min read</span></>

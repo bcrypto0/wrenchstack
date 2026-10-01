@@ -50,14 +50,14 @@ const itemListSchema = {
         Best Payroll Software for Trades Contractors (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {payrollServices.length} payroll services for trades contractors, with prices taken from each vendor's published pricing where it has one. OnPay sells one plan at $49/mo plus $6 per person, Gusto starts at $49/mo plus $6 per person on its one-state Simple plan, and Patriot starts at $17/mo plus $4 per worker if you file taxes yourself. Hourly.io pairs payroll with pay-as-you-go workers' comp, and construction payroll services (Fingercheck, eBacon, Payroll4Construction, Miter) handle certified payroll for prevailing-wage work. ADP Run, Rippling, Paylocity and Paycom sell by quote.
+        Independent reviews of {payrollServices.length} payroll services for trades contractors, with prices taken from each vendor's published pricing where it has one. OnPay sells one plan at $49/mo plus $6 per person, Gusto starts at $49/mo plus $6 per person on its one-state Simple plan, and Patriot starts at $17/mo plus $4 per worker if you file taxes yourself. Hourly.io pairs payroll with pay-as-you-go workers' comp, and Fingercheck, eBacon, Payroll4Construction, Miter and Arcoro describe certified payroll reporting for prevailing-wage work. ADP Run, Rippling, Paylocity and Paycom sell by quote.
       </p>
     </header>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">The headline filter: company size</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Most services here are general small-business payroll, so company size and feature needs matter more than your trade. The exception is construction payroll for certified, union or prevailing-wage work (Fingercheck, eBacon, Payroll4Construction, Miter, Arcoro). Use these <strong>company-size guides</strong> to compare services for your headcount:
+        For certified, union or prevailing-wage work, look at the services that describe certified payroll reporting: Fingercheck, eBacon, Payroll4Construction, Miter and Arcoro. For other payroll, use these <strong>company-size guides</strong> to compare services for your headcount:
       </p>
       <div class="mt-4 grid gap-2 sm:grid-cols-3">
         <a href="/payroll/by-size/1-5-employees/" class="block rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 no-underline hover:border-orange-400 hover:bg-orange-50 hover:text-orange-700">1-5 employees →</a>
@@ -113,8 +113,8 @@ const itemListSchema = {
                     <dd class="font-semibold text-slate-900">{s.free_trial_days > 0 ? `${s.free_trial_days} days` : 'No'}</dd>
                   </div>
                   <div>
-                    <dt class="text-slate-500 uppercase tracking-wider">Affiliate</dt>
-                    <dd class="font-semibold text-slate-900">{s.affiliate_program === 'none' || s.affiliate_program === 'unknown' ? 'None' : s.affiliate_program}</dd>
+                    <dt class="text-slate-500 uppercase tracking-wider">Affiliate link</dt>
+                    <dd class="font-semibold text-slate-900">{s.affiliate_url.startsWith('http') ? 'Yes' : 'No'}</dd>
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Verified</dt>
@@ -140,7 +140,7 @@ const itemListSchema = {
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Where to start</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        Start from what you need payroll to do. For W-2 staff and 1099 subcontractors with automatic tax filing and published prices, compare <strong>Gusto</strong> (from $49/mo plus $6 per person on Simple, which covers one state) with <strong>OnPay</strong> ($49/mo plus $6 per person on its one plan, with year-end W-2 and 1099 forms included). If you can file payroll taxes yourself, <strong>Patriot</strong> Basic is $17/mo plus $4 per worker; its Full Service plan with tax filing in one state is $37/mo plus $5 per worker. For workers' comp premiums tied to each payroll run, <strong>Hourly.io</strong> includes GPS time tracking and job costing on every plan, from $80/mo plus $12 per active user. For certified payroll on prevailing-wage jobs, see Fingercheck, eBacon, Payroll4Construction and Miter.
+        Start from what you need payroll to do. For W-2 staff and 1099 subcontractors with automatic tax filing and published prices, compare <strong>Gusto</strong> (from $49/mo plus $6 per person on Simple, which covers one state) with <strong>OnPay</strong> ($49/mo plus $6 per person on its one plan, with year-end W-2 and 1099 forms included). If you can file payroll taxes yourself, <strong>Patriot</strong> Basic is $17/mo plus $4 per worker; its Full Service plan with tax filing in one state is $37/mo plus $5 per worker. For workers' comp premiums tied to each payroll run, <strong>Hourly.io</strong> includes GPS time tracking and job costing on every plan, from $80/mo plus $12 per active user. For certified payroll on prevailing-wage jobs, see Fingercheck, eBacon, Payroll4Construction, Miter and Arcoro.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/payroll/gusto/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Read the Gusto review →</a>

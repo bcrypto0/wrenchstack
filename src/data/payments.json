@@ -106,7 +106,7 @@
         },
         {
           "q": "Should a contractor use Square or the payments built into their field-service app?",
-          "a": "Many field-service apps offer their own card processing, which keeps payments in the same system as the job. Square makes sense if you want a standalone processor with invoicing, a POS and hardware, or if its rates beat your app's. Compare effective rates and where you want payments to reconcile."
+          "a": "If your field-service app offers its own card processing, that keeps payments in the same system as the job. Square makes sense if you want a standalone processor with invoicing, a POS and hardware, or if its rates beat your app's. Compare effective rates and where you want payments to reconcile."
         },
         {
           "q": "Is Square good for big-ticket jobs?",
@@ -119,7 +119,7 @@
       "name": "Stripe",
       "vendor_url": "https://stripe.com",
       "affiliate_url": "TBD",
-      "tagline": "Flat-rate online payments, cheap ACH and billing tools that many apps build on",
+      "tagline": "Flat-rate online payments, cheap ACH and billing tools that other software builds on",
       "pricing_model": "flat-rate",
       "pricing_summary": "Flat-rate, no setup or monthly fees. Online domestic cards 2.9% + 30¢ (manually entered cards +0.5%, international cards +1.5%, currency conversion +1%); in person with Stripe Terminal 2.7% + 5¢ (Tap to Pay adds 10¢ per authorization); ACH Direct Debit 0.8% capped at $5. Add-ons: Stripe Invoicing 0.4% per paid invoice (Starter) or 0.5% (Plus), Stripe Billing 0.7% of billing volume on pay-as-you-go, Instant Payouts 1.5% (50¢ minimum), $15 per dispute received",
       "monthly_fee": "$0",
@@ -133,8 +133,8 @@
       ],
       "founded": 2010,
       "headquartered": "San Francisco, California and Dublin, Ireland",
-      "long_description": "Stripe is a payments infrastructure company led by its cofounders, Patrick Collison (CEO) and John Collison (President). Stripe says it launched in 2010 and has dual headquarters in San Francisco and Dublin, and its 2025 annual letter says businesses on Stripe generated $1.9 trillion in payment volume that year. Like Square, it charges flat rates with no setup or monthly fees, but most of its tools are built for online payments, recurring billing and software that embeds payments.\n\nMany contractors meet Stripe inside other software: Stripe's customer story on Jobber says the field-service app uses Stripe Connect, Terminal, Instant Payouts, Billing and Invoicing. Used directly, Stripe offers no-code Payment Links you can paste into a text or email or turn into a QR code, invoices sent from the Stripe Dashboard, Stripe Billing for recurring maintenance-plan charges, and a Stripe app built by Xero that lets customers pay Xero invoices by card.\n\nOnline domestic cards cost 2.9% + 30¢, with 0.5% more for manually entered cards and 1.5% more for international cards. In person, Stripe Terminal costs 2.7% + 5¢ per card, readers are $59 (Reader M2) or $299 (S700 and S710), and Tap to Pay on iPhone and Android adds 10¢ per authorization. ACH Direct Debit costs 0.8% capped at $5, which is where Stripe saves the most on large invoices: a $1,000 invoice costs $29.30 by online card and $5 by ACH, before any Invoicing fee.\n\nThe trade-off: Stripe gives you building blocks rather than a ready-made shop system, and add-on fees for Invoicing, Billing and Tap to Pay stack on top of the payment rate. Card fees are a flat percentage, so the savings on big jobs come from ACH, not cards. Stripe's services agreement also lets it hold a reserve and suspend an account it believes carries unacceptable or fraud risk.",
-      "how_it_works": "Most contractors use Stripe through software that has it built in, such as a field-service app or website. You can also use it directly: create no-code Payment Links, send invoices from the Stripe Dashboard with Stripe Invoicing (0.4% per paid invoice on Starter, on top of payment fees), set up recurring charges with Stripe Billing (0.7% of billing volume on pay-as-you-go), and collect ACH Direct Debit at 0.8% capped at $5. For in-person payments, Stripe Terminal costs 2.7% + 5¢ per card, and Tap to Pay on a phone instead of a reader adds 10¢ per authorization. There are no setup or monthly fees, and Instant Payouts to your bank cost 1.5% of the payout (50¢ minimum).",
+      "long_description": "Stripe is a payments infrastructure company led by its cofounders, Patrick Collison (CEO) and John Collison (President). Stripe says it launched in 2010 and has dual headquarters in San Francisco and Dublin, and its 2025 annual letter says businesses on Stripe generated $1.9 trillion in payment volume that year. Like Square, it charges flat rates with no setup or monthly fees, and its products cover online payments, recurring billing and software that embeds payments.\n\nContractors can meet Stripe inside other software: Stripe's customer story on Jobber says the field-service app uses Stripe Connect, Terminal, Instant Payouts, Billing and Invoicing. Used directly, Stripe offers no-code Payment Links you can paste into a text or email or turn into a QR code, invoices sent from the Stripe Dashboard, Stripe Billing for recurring maintenance-plan charges, and a Stripe app built by Xero that lets customers pay Xero invoices by card.\n\nOnline domestic cards cost 2.9% + 30¢, with 0.5% more for manually entered cards and 1.5% more for international cards. In person, Stripe Terminal costs 2.7% + 5¢ per card, readers are $59 (Reader M2) or $299 (S700 and S710), and Tap to Pay on iPhone and Android adds 10¢ per authorization. ACH Direct Debit costs 0.8% capped at $5, which is where Stripe saves the most on large invoices: a $1,000 invoice costs $29.30 by online card and $5 by ACH, before any Invoicing fee.\n\nThe trade-off: Stripe gives you building blocks rather than a ready-made shop system, and add-on fees for Invoicing, Billing and Tap to Pay stack on top of the payment rate. Card fees are a flat percentage, so the savings on big jobs come from ACH, not cards. Stripe's services agreement also lets it hold a reserve and suspend an account it believes carries unacceptable or fraud risk.",
+      "how_it_works": "You can use Stripe through software that has it built in, such as a field-service app or website. You can also use it directly: create no-code Payment Links, send invoices from the Stripe Dashboard with Stripe Invoicing (0.4% per paid invoice on Starter, on top of payment fees), set up recurring charges with Stripe Billing (0.7% of billing volume on pay-as-you-go), and collect ACH Direct Debit at 0.8% capped at $5. For in-person payments, Stripe Terminal costs 2.7% + 5¢ per card, and Tap to Pay on a phone instead of a reader adds 10¢ per authorization. There are no setup or monthly fees, and Instant Payouts to your bank cost 1.5% of the payout (50¢ minimum).",
       "pros_detail": [
         {
           "title": "Cheap ACH on large invoices",
@@ -210,7 +210,7 @@
         },
         {
           "q": "Is Stripe good for contractors?",
-          "a": "It fits contractors who bill online or by invoice, charge recurring maintenance plans, or want low-cost ACH on big jobs. Many contractors already use it indirectly, since some field-service apps, Jobber among them, run their payments on Stripe. If you mostly take cards on site and want a ready-made POS, a POS-first processor may be simpler."
+          "a": "It fits contractors who bill online or by invoice, charge recurring maintenance plans, or want low-cost ACH on big jobs. Some field-service apps, Jobber among them, run their payments on Stripe. If you mostly take cards on site and want a ready-made POS, a POS-first processor may be simpler."
         },
         {
           "q": "Stripe vs Square for a trades business?",
@@ -222,7 +222,7 @@
         },
         {
           "q": "Do I need a developer to use Stripe?",
-          "a": "Not for the basics. Payment Links need no code, invoices can be sent from the Stripe Dashboard, and Stripe offers a no-code option for Terminal. A custom checkout or POS build does take development work, and most contractors use Stripe through a tool that already integrates it."
+          "a": "Not for the basics. Payment Links need no code, invoices can be sent from the Stripe Dashboard, and Stripe offers a no-code option for Terminal. A custom checkout or POS build does take development work, or you can use Stripe through a tool that already integrates it."
         }
       ]
     },
@@ -384,7 +384,7 @@
       "cons_detail": [
         {
           "title": "Only pays off at sufficient volume",
-          "explanation": "At $5,000 a month in card volume, a $99 fee adds about 2% on top of interchange. A low-volume shop is usually better off with a processor that has no monthly fee."
+          "explanation": "At $5,000 a month in card volume, a $99 fee adds about 2% on top of interchange. At lower volume, compare the total with a processor that has no monthly fee."
         },
         {
           "title": "Fixed fee through slow months",
@@ -442,7 +442,7 @@
         },
         {
           "q": "Who should use Stax?",
-          "a": "High-volume, higher-ticket contractors, such as busy multi-crew operations with many large invoices, who process enough to cover the monthly subscription. Solo operators and lower-volume shops usually pay less with a processor that has no monthly fee."
+          "a": "High-volume, higher-ticket contractors, such as busy multi-crew operations with many large invoices, who process enough to cover the monthly subscription. Solo operators and lower-volume shops should compare the total with a processor that has no monthly fee."
         },
         {
           "q": "Is the monthly fee a problem for seasonal trades?",
@@ -930,7 +930,7 @@
       ],
       "founded": 2007,
       "headquartered": "United States (BBB lists San Francisco, California and Montclair, New Jersey addresses)",
-      "long_description": "Dharma Merchant Services is a US card processor that prices on an interchange-plus basis: you pay the interchange cost set by the card networks plus Dharma's markup, so the processor's own charge is shown separately. Dharma publishes rate pages for retail and small businesses, e-commerce and online sellers, and B2B processing, along with worked interchange-plus pricing examples.\n\nBBB's San Francisco profile lists a business start date of March 1, 2007, names Jeffrey Marcous as CEO and lists seven employees; a second BBB profile gives a Montclair, New Jersey address. Neither profile shows complaints closed in the last three years.\n\nInterchange-plus pricing can work out cheaper than a single flat percentage for a business with steady card volume, because the markup is small and visible, but the effective rate changes with the mix of cards your customers use, and any monthly fee weighs more when volume is low.\n\nThe trade-off: we could not read Dharma's website for this update, so its current rates, monthly fees, contract terms and payment tools (mobile app, virtual terminal, invoicing, integrations) are not confirmed here. Ask Dharma for the full fee schedule, contract terms and any closure fee in writing, and confirm it supports the in-person and mobile payments your field work needs.",
+      "long_description": "Dharma Merchant Services is a US card processor that prices on an interchange-plus basis: you pay the interchange cost set by the card networks plus Dharma's markup, so the processor's own charge is shown separately. Dharma publishes rate pages for retail and small businesses, e-commerce and online sellers, and B2B processing, along with worked interchange-plus pricing examples.\n\nBBB's San Francisco profile lists a business start date of March 1, 2007, names Jeffrey Marcous as CEO and lists seven employees; a second BBB profile gives a Montclair, New Jersey address. Neither profile shows complaints closed in the last three years.\n\nInterchange-plus pricing can work out cheaper than a single flat percentage for a business with steady card volume when the markup is small, but the effective rate changes with the mix of cards your customers use, and any monthly fee weighs more when volume is low.\n\nThe trade-off: we could not read Dharma's website for this update, so its current rates, monthly fees, contract terms and payment tools (mobile app, virtual terminal, invoicing, integrations) are not confirmed here. Ask Dharma for the full fee schedule, contract terms and any closure fee in writing, and confirm it supports the in-person and mobile payments your field work needs.",
       "how_it_works": "Apply with Dharma for a merchant account. On each card payment you pay interchange (the card networks' cost) plus Dharma's markup. Before signing, ask Dharma which payment tools come with the account, such as a virtual terminal, mobile app, invoicing or a payment gateway, what each costs, how fast deposits arrive, and what the contract and closure terms are, and get the full fee schedule in writing.",
       "pros_detail": [
         {
@@ -992,7 +992,7 @@
       "faqs": [
         {
           "q": "Is Dharma cheaper than a flat-rate processor?",
-          "a": "It depends on your volume and card mix. Dharma uses interchange-plus pricing, where you pay the card networks' interchange cost plus a markup, while many small-business processors charge one flat percentage. Interchange-plus can work out cheaper with steady volume, but any monthly fee weighs more at low volume. Get Dharma's current fee schedule and compare it with a recent statement from your current processor."
+          "a": "It depends on your volume and card mix. Dharma uses interchange-plus pricing, where you pay the card networks' interchange cost plus a markup, while a flat-rate processor such as Square or Stripe charges a published percentage plus a fixed fee per transaction. Interchange-plus can work out cheaper with steady volume, but any monthly fee weighs more at low volume. Get Dharma's current fee schedule and compare it with a recent statement from your current processor."
         },
         {
           "q": "Does Dharma have a contract or termination fee?",

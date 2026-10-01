@@ -23,16 +23,69 @@ for (const p of leadGenPlatforms) {
   byTier[leadGenTier(p)].push(p);
 }
 
+// Name lists computed from each entry's data (2026-10-01), replacing "several" and "some":
+// no rate card = the pricing line says prices or a rate card are not published, or the
+// platform takes a commission without publishing the percentage (LawnStarter keeps "a small
+// portion"); same rule as the trade pages;
+// missed calls = a con titled "Missed calls can be billed / are billable";
+// sharing unstated = the exclusivity line says the vendor does not say how many pros get a lead.
+const publishesNoRateCard = (p: LeadGenPlatform) =>
+  /not published|no rate card|does not publish|does not list dollar prices/i.test(p.typical_cost) ||
+  (p.pricing_model === 'commission' && !/\d+(\.\d+)?%/.test(p.typical_cost));
+const billsMissedCalls = (p: LeadGenPlatform) =>
+  p.cons_detail.some((c) => /^missed calls (can be|are) bill/i.test(c.title));
+const sharingUnstated = (p: LeadGenPlatform) =>
+  /^not (published|stated)|does not say|does not publish how many/i.test(p.exclusivity);
+const shortName = (p: LeadGenPlatform) => p.name.replace(/\s*\(.*\)$/, '');
+const listJoin = (xs: string[]) => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : xs[0] ?? '');
+const namesWhere = (ps: LeadGenPlatform[], test: (p: LeadGenPlatform) => boolean) => ps.filter(test).map(shortName);
+const plural = (n: number, one: string, many: string) => (n === 1 ? one : many);
+
+function pricingCaution(noRateCard: string[], missed: string[]): string {
+  if (noRateCard.length > 0 && noRateCard.join('|') === missed.join('|')) {
+    return `${listJoin(noRateCard)} ${plural(noRateCard.length, 'publishes', 'publish')} no rate card and can bill for missed or voicemail calls`;
+  }
+  const parts: string[] = [];
+  if (noRateCard.length) parts.push(`${listJoin(noRateCard)} ${plural(noRateCard.length, 'publishes', 'publish')} no rate card`);
+  if (missed.length) parts.push(`${listJoin(missed)} can bill for missed or voicemail calls`);
+  return parts.join(', and ');
+}
+
+const sExclusive = namesWhere(byTier.S, (p) => p.lead_model === 'exclusive');
+const sPayPerCall = namesWhere(byTier.S, (p) => p.lead_model === 'pay-per-call');
+const sModels = [
+  sExclusive.length ? `exclusive leads (${listJoin(sExclusive)})` : '',
+  sPayPerCall.length ? `pay-per-call (${listJoin(sPayPerCall)})` : '',
+].filter(Boolean).join(' or ');
+const sHasElocal = byTier.S.some((p) => p.slug === 'elocal');
+const sCaution = pricingCaution(namesWhere(byTier.S, publishesNoRateCard), namesWhere(byTier.S, billsMissedCalls));
+const aNoRateCard = namesWhere(byTier.A, publishesNoRateCard);
+const aUnstated = namesWhere(byTier.A, sharingUnstated);
+const aCaution = [
+  aNoRateCard.length ? `${listJoin(aNoRateCard)} ${plural(aNoRateCard.length, 'publishes', 'publish')} no rate card` : '',
+  aUnstated.length ? `${listJoin(aUnstated)} ${plural(aUnstated.length, 'does', 'do')} not say how many pros receive each lead` : '',
+].filter(Boolean).join(', and ');
+// Computed across every entry (2026-10-01), replacing a hard-coded three-name list
+// (Porch, Modernize, Homeyou) that left out the other entries whose exclusivity line says the same.
+const unstatedAll = namesWhere(leadGenPlatforms, sharingUnstated);
+const unstatedLine = unstatedAll.length
+  ? ` ${listJoin(unstatedAll)} ${plural(unstatedAll.length, 'does', 'do')} not publish how many pros receive each lead, so ask before you buy.`
+  : '';
+const affiliateLinked = leadGenPlatforms.filter((p) => p.affiliate_url.startsWith('http'));
+const affiliateLine = affiliateLinked.length === 0
+  ? "No Visit button on this page uses an affiliate link; each goes to the vendor's own site."
+  : `The Visit ${plural(affiliateLinked.length, 'button', 'buttons')} for ${listJoin(affiliateLinked.map(shortName))} ${plural(affiliateLinked.length, 'uses an affiliate link', 'use affiliate links')}; every other Visit button goes to the vendor's own site.`;
+
 const tierMeta = {
   S: {
     label: 'Tier S: exclusive leads or calls, no warning',
-    description: `No reputation warning, and each lead or call goes to one business: exclusive leads (Google Local Services Ads) or pay-per-call (Service Direct, 33 Mile Radius and eLocal, whose live calls are exclusive while its form leads can be shared). A lead that is yours alone is the advantage this tier marks; it is not a ranking of lead quality or cost. Several of these services publish no prices and some bill for missed or voicemail calls, so compare the pricing line on each card.`,
+    description: `No reputation warning, and each lead or call goes to one business: ${sModels}.${sHasElocal ? " eLocal's live calls are exclusive, but its form leads can be shared." : ''} A lead that is yours alone is the advantage this tier marks; it is not a ranking of lead quality or cost.${sCaution ? ` ${sCaution}, so compare the pricing line on each card.` : ''}`,
     badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300',
     cardBorder: 'border-emerald-300',
   },
   A: {
     label: 'Tier A: no warning, check the terms',
-    description: `No reputation warning, but the lead model is not exclusive leads or pay-per-call: shared-lead and bid marketplaces, commission and fee-based job platforms, self-serve ad platforms, listing services and call tracking (CallRail tracks calls from your other sources). Several do not publish prices or say how many pros receive each lead, so confirm both before you spend.`,
+    description: `No reputation warning, but the lead model is not exclusive leads or pay-per-call: shared-lead and bid marketplaces, commission and fee-based job platforms, self-serve ad platforms, listing services and call tracking (CallRail tracks calls from your other sources).${aCaution ? ` ${aCaution}, so confirm the price and how many pros get each lead before you spend.` : ''}`,
     badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300',
     cardBorder: 'border-blue-300',
   },
@@ -74,21 +127,21 @@ const itemListSchema = {
         Best Lead-Gen Platforms for Trades Contractors (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {leadGenPlatforms.length} lead-generation platforms used by HVAC, plumbing, electrical, roofing, and other residential trades. They include pay-per-lead and pay-per-call services, shared-lead and bid marketplaces, self-serve ad platforms, and call tracking. Each review states how the platform charges and whether leads are shared, and entries with an FTC order, a settlement, a BBB complaint count, or restrictive provider terms carry a reputation warning that cites its source.
+        Independent reviews of {leadGenPlatforms.length} lead-generation platforms for HVAC, plumbing, electrical, roofing, and other residential trades. They include pay-per-lead and pay-per-call services, shared-lead and bid marketplaces, self-serve ad platforms, and call tracking. Each review states how the platform charges and whether leads are shared, and each reputation warning cites its source: an FTC order, a settlement, a BBB complaint count or restrictive provider terms.
       </p>
     </header>
 
     <section class="mb-10 rounded-lg border-l-4 border-orange-500 bg-orange-50/40 p-5">
       <p class="text-xs font-bold uppercase tracking-wider text-orange-600">The short answer</p>
       <p class="mt-2 text-slate-800 leading-relaxed">
-        The first thing to check on any lead source is whether leads are <strong>shared or exclusive</strong>, and what counts as a billable lead. <a href="/lead-gen/google-local-services-ads/" class="font-semibold text-orange-700 hover:underline">Google Local Services Ads</a> charges per exclusive lead, and <a href="/lead-gen/service-direct/" class="font-semibold text-orange-700 hover:underline">Service Direct</a>, <a href="/lead-gen/33-mile-radius/" class="font-semibold text-orange-700 hover:underline">33 Mile Radius</a> and <a href="/lead-gen/elocal/" class="font-semibold text-orange-700 hover:underline">eLocal</a> sell exclusive calls. On shared marketplaces such as Thumbtack and Bark, and on the Networx Pay Per Lead plan, more than one pro can reach the same customer. Exclusive does not mean cheaper: several of these services publish no prices, and some bill for missed or voicemail calls, so track cost per booked job by source. No vendor pays for placement.
+        The first thing to check on any lead source is whether leads are <strong>shared or exclusive</strong>, and what counts as a billable lead. <a href="/lead-gen/google-local-services-ads/" class="font-semibold text-orange-700 hover:underline">Google Local Services Ads</a> charges per exclusive lead, and <a href="/lead-gen/service-direct/" class="font-semibold text-orange-700 hover:underline">Service Direct</a>, <a href="/lead-gen/33-mile-radius/" class="font-semibold text-orange-700 hover:underline">33 Mile Radius</a> and <a href="/lead-gen/elocal/" class="font-semibold text-orange-700 hover:underline">eLocal</a> sell exclusive calls. On shared marketplaces such as Thumbtack and Bark, and on the Networx Pay Per Lead plan, more than one pro can reach the same customer. Exclusive does not mean cheaper{sCaution ? `: ${sCaution}, so` : ', so'} track cost per booked job by source. No vendor pays for placement.
       </p>
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">Shared vs exclusive leads</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        <strong>Shared</strong> means more than one business can reach the same customer: Bark's terms say up to five professionals can contact a customer on a general request, a Networx Pay Per Lead goes to up to four contractors, and Thumbtack says some customers contact more than one pro for the same job. <strong>Exclusive</strong> means one business gets the contact: Google Local Services Ads customers call, message or book you directly through your ad, and Service Direct and 33 Mile Radius route each call to one contractor. Some services sell both: eLocal says its live calls are exclusive while form leads can be shared with up to four other businesses, and Networx sells a higher-priced Exclusive Leads plan. Porch, Modernize and Homeyou do not publish how many pros receive each lead, so ask before you buy.
+        <strong>Shared</strong> means more than one business can reach the same customer: Bark's terms say up to five professionals can contact a customer on a general request, a Networx Pay Per Lead goes to up to four contractors, and Thumbtack says some customers contact more than one pro for the same job. <strong>Exclusive</strong> means one business gets the contact: Google Local Services Ads customers call, message or book you directly through your ad, and Service Direct and 33 Mile Radius route each call to one contractor. Some services sell both: eLocal says its live calls are exclusive while form leads can be shared with up to four other businesses, and Networx sells a higher-priced Exclusive Leads plan.{unstatedLine}
       </p>
     </section>
 
@@ -202,7 +255,7 @@ const itemListSchema = {
           <strong class="text-slate-900">Regulatory and legal history is cited.</strong> When a platform has a public regulatory or legal record (the FTC consent order requiring HomeAdvisor to pay up to $7.2 million, Angi's October 2025 settlement with the Vermont Attorney General, Yelp's $15 million California class-action settlement), its warning cites it with dates.
         </li>
         <li>
-          <strong class="text-slate-900">Affiliate disclosure is per platform.</strong> Each card shows whether the vendor runs an affiliate program. As of September 2026, no Visit button on this page uses an affiliate link; each goes to the vendor's own site. Affiliate status is not an input to the tiers.
+          <strong class="text-slate-900">Affiliate disclosure is per platform.</strong> Each card shows whether the vendor runs an affiliate program. {affiliateLine} Affiliate status is not an input to the tiers.
         </li>
         <li>
           <strong class="text-slate-900">Reputation warnings cite their sources.</strong> Each warning names the regulator, court, BBB record or vendor terms it rests on, with the date checked where it quotes a live count. Vendors cannot pay to remove or soften a warning; our methodology is published.

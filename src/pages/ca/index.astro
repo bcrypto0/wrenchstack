@@ -34,6 +34,7 @@ const categoryMeta: Record<string, { label: string; description: string }> = {
 
 const vendorsByCategory: Record<string, CaVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
+const activeCategoryCount = categories.filter(c => vendorsByCategory[c].length > 0).length;
 
 const pageTitle = 'CA Trades Vendor Directory | WrenchStack Canada';
 const pageDescription = `WrenchStack's Canada trades directory: ${vendors.length} entries across field service software, lead generation, insurance, payroll, and national and Ontario certification bodies, with published prices where vendors list them, currency notes, Quebec payroll support and provincial rules.`;
@@ -56,7 +57,7 @@ const breadcrumbs = [
         Canada Trades Vendor Directory
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} Canada-relevant vendors and regulators across 5 categories, for Canadian contractors: which software lists prices in US dollars or bills in CAD, GST and PST on invoices, Quebec payroll support, CRA remittances and Records of Employment, the Red Seal Program, and Ontario rules from Skilled Trades Ontario, ESA, TSSA and WSIB.
+        Independent reviews of {vendors.length} Canada-relevant vendors and regulators across {activeCategoryCount} categories, for Canadian contractors: which software lists prices in US dollars or bills in CAD, GST and PST on invoices, Quebec payroll support, CRA remittances and Records of Employment, the Red Seal Program, and Ontario rules from Skilled Trades Ontario, ESA, TSSA and WSIB.
       </p>
     </header>
 
@@ -164,7 +165,7 @@ const breadcrumbs = [
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Missing a CA vendor?</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        {vendors.length} CA entries covered today across {categories.length} categories. Want a CA vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
+        {vendors.length} CA entries covered today across {activeCategoryCount} categories. Want a CA vendor reviewed? Submit them via our <a href="/for-vendors/" class="underline">vendor program</a>.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Back to US directory →</a>

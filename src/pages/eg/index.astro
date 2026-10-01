@@ -15,7 +15,7 @@ const categories = ['software', 'lead-gen', 'insurance', 'payroll', 'certificati
 const categoryMeta: Record<string, { label: string; description: string }> = {
   'software': { label: 'Accounting / invoicing & construction software', description: 'Accounting and ERP systems that say they support Egyptian Tax Authority (ETA) e-invoicing (Daftra, Edara ERP, AccFlex ERP, Odoo); Egyptian construction ERPs whose vendors say they handle payment certificates (مستخلصات) and ETA submission (DoubleClick ERP, Voko ERP, Namasoft); international project tools with no ETA role (Oracle Primavera P6, RIB Candy, Autodesk Forma, PlanRadar); the OrchidaTax connector, which links existing ERPs to the ETA; and two accounting tools whose Egypt-facing pages make no ETA e-invoicing claim (Wafeq, QuickBooks).' },
   'lead-gen': { label: 'Tenders, project intelligence & home services', description: 'The government e-procurement portal (etenders.gov.eg), the paid tender-alert service EgyptTenders, the regional project database BNC Network (its readable pages do not name Egypt), the free supplier directory MadeInEgypt (reputation warning: its own disclaimer says it does not verify every listing), and the home-services app FilKhedma (Cairo, Alexandria and the North Coast).' },
-  'insurance': { label: 'Construction insurance: Contractors All Risks', description: `Engineering cover from five Egyptian insurers: state-owned Misr Insurance, Allianz Egypt, GIG Egypt, Suez Canal Insurance and EGX-listed Mohandes Insurance. All five list contractors' all risks (CAR) and erection all risks (EAR) cover and none publishes rates. Decennial liability appears only on Mohandes's list, so ask the others if your contract requires it.` },
+  'insurance': { label: 'Construction insurance: Contractors All Risks', description: `Engineering cover from Egyptian insurers: state-owned Misr Insurance, Allianz Egypt, GIG Egypt, Suez Canal Insurance and EGX-listed Mohandes Insurance. Each lists contractors' all risks (CAR) and erection all risks (EAR) cover and none publishes rates. Decennial liability appears only on Mohandes's list, so ask the others if your contract requires it.` },
   'payroll': { label: 'Payroll: social insurance & income tax', description: 'ZenHR, which says its Egypt payroll handles income tax, social insurance and the Martyrs Tax (no Egypt office listed); Menaitech (MenaPAY), with a New Cairo office and a free payroll plan for up to 30 employees; PaySpace, now sold as Deel Local Payroll, with Egypt on its 49-country list; and EgyBell, an Egyptian firm that runs payroll as an outsourced service. Employers pay social insurance contributions on each insured worker under Law 148 of 2019 (see NOSI below).' },
   'certification': { label: 'Compliance & official bodies', description: 'The official bodies a contractor deals with: company incorporation through GAFI; tax registration, VAT and e-invoicing with the ETA; membership of the contractors federation (EFCBC), which Law 104/1992 requires for contracting work above EGP 50,000 per operation; the Engineers Syndicate, since engineering posts and engineering work may only go to registered engineers (Law 66/1974); social insurance with NOSI (Law 148 of 2019); and, for sites in new cities, building permits from NUCA.' },
 };
@@ -59,7 +59,7 @@ const arUrl = new URL('/eg/ar/', Astro.site).toString();
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">12%</div>
-        <div class="mt-1 text-xs text-slate-600">employer social insurance share (old age, disability, death)</div>
+        <div class="mt-1 text-xs text-slate-600">employer social insurance share for old age, disability and death (Law 148/2019)</div>
       </div>
     </section>
 
@@ -67,7 +67,7 @@ const arUrl = new URL('/eg/ar/', Astro.site).toString();
       <div>
         <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">⏰ Compliance guide · ETA e-invoicing is mandatory for taxpayers named in ETA's phased decisions</p>
         <h2 class="mt-1 text-base font-bold text-slate-900">ETA e-invoicing (الفاتورة الإلكترونية) for Egyptian contractors</h2>
-        <p class="mt-1 text-sm text-slate-700">The clearance model, who must comply and how to check, VAT on contracting works, and which tools in this directory say they submit to the ETA, including <span dir="rtl">مستخلصات</span>.</p>
+        <p class="mt-1 text-sm text-slate-700">How e-invoices are signed and sent to the ETA, who must comply and how to check, VAT on contracting works, and which tools in this directory say they submit to the ETA, including <span dir="rtl">مستخلصات</span>.</p>
       </div>
       <a href="/eg/guides/eta-e-invoicing/" class="shrink-0 rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Read the guide →</a>
     </section>
@@ -75,7 +75,7 @@ const arUrl = new URL('/eg/ar/', Astro.site).toString();
     <section class="mb-10 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-orange-200 bg-orange-50 p-5">
       <div>
         <h2 class="text-base font-bold text-slate-900">Deciding between two options?</h2>
-        <p class="mt-1 text-sm text-slate-700">See Egyptian vendors compared side by side: a clear verdict, pros and cons, Egypt-specific notes, and pricing, head to head.</p>
+        <p class="mt-1 text-sm text-slate-700">See Egyptian vendors compared side by side: a short verdict, pros and cons, Egypt-specific notes, and pricing, head to head.</p>
       </div>
       <a href="/eg/compare/" class="shrink-0 rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">Compare Egyptian vendors →</a>
     </section>
@@ -83,7 +83,7 @@ const arUrl = new URL('/eg/ar/', Astro.site).toString();
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">What’s different about choosing software in Egypt</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        One thing shapes Egyptian software selection: <strong>ETA e-invoicing.</strong> The Egyptian Tax Authority made e-invoicing mandatory in phases by decision (phase 5 began on 15 December 2021 and phase 8 ran from September to December 2022), and its online inquiry tool shows whether a business is covered. E-invoices must be electronically signed and sent through integration with ETA's system, through your own software or one of the service providers ETA lists; ETA also runs an e-receipt system. The vendors here describe different routes: Daftra, Edara ERP (Ultimate plan), AccFlex ERP, Namasoft, Voko ERP and Odoo say they support ETA e-invoicing; DoubleClick ERP says it sends <span dir="rtl">مستخلصات</span> (payment certificates) and invoices to the ETA directly; OrchidaTax links existing ERPs such as SAP, Oracle and Microsoft Dynamics to the ETA; and the Egypt-facing pages of Wafeq and QuickBooks make no ETA e-invoicing claim. Currency matters too: Daftra, Edara ERP, Odoo and PlanRadar list prices in USD, so their EGP cost moves with the exchange rate, while Wafeq publishes EGP prices. Beyond that: the general VAT rate is <strong>14%</strong>, and October 2025 press reports describe it being applied to contracting works; and under Law 104/1992, contracting work above <strong>EGP 50,000</strong> per operation needs <strong>EFCBC membership</strong>.
+        One thing shapes Egyptian software selection: <strong>ETA e-invoicing.</strong> The Egyptian Tax Authority made e-invoicing mandatory in phases by decision (its inquiry page dates the obligation for phase 5 from 15 December 2021 and for phase 8 in four sub-phases from 15 September to 15 December 2022), and its online inquiry tool shows whether a business is covered. E-invoices must be electronically signed and sent through integration with ETA's system, through your own software or one of the service providers ETA lists; ETA also runs an e-receipt system. The vendors here describe different routes: Daftra, Edara ERP (Ultimate plan), AccFlex ERP, Namasoft, Voko ERP and Odoo say they support ETA e-invoicing; DoubleClick ERP says it sends <span dir="rtl">مستخلصات</span> (payment certificates) and invoices to the ETA directly; OrchidaTax links existing ERPs such as SAP, Oracle and Microsoft Dynamics to the ETA; and the Egypt-facing pages of Wafeq and QuickBooks make no ETA e-invoicing claim. Currency matters too: Daftra, Edara ERP, Odoo and PlanRadar list prices in USD, so their EGP cost moves with the exchange rate, while Wafeq publishes EGP prices. Beyond that: the general VAT rate is <strong>14%</strong>, and October 2025 press reports describe it being applied to contracting works; and under Law 104/1992, contracting work above <strong>EGP 50,000</strong> per operation needs <strong>EFCBC membership</strong>.
       </p>
     </section>
 
@@ -151,7 +151,7 @@ const arUrl = new URL('/eg/ar/', Astro.site).toString();
 
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Are you an Egyptian software vendor?</h2>
-      <p class="mt-2 text-slate-300 leading-relaxed">If you build software or services for Egyptian contractors and the building trades and want to be reviewed or featured, get in touch through our <a href="/for-vendors/" class="underline">vendor program</a>.</p>
+      <p class="mt-2 text-slate-300 leading-relaxed">If you build software or services for Egyptian contractors and the building trades and want to be reviewed or listed, get in touch through our <a href="/for-vendors/" class="underline">vendor program</a>.</p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/for-vendors/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Work with us →</a>
         <a href="/sa/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">🇸🇦 Saudi directory</a>

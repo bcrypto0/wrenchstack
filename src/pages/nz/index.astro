@@ -33,6 +33,7 @@ const categoryMeta: Record<string, { label: string; description: string }> = {
 
 const vendorsByCategory: Record<string, NzVendor[]> = {};
 categories.forEach(c => { vendorsByCategory[c] = vendors.filter(v => v.category === c); });
+const activeCategoryCount = categories.filter(c => vendorsByCategory[c].length > 0).length;
 
 const pageTitle = 'NZ Trades Vendor Directory | WrenchStack New Zealand';
 const pageDescription = `WrenchStack's New Zealand trades vendor directory: ${vendors.length} entries across job management software, lead generation, insurance, payroll, and licensing bodies and trade associations (EWRB, PGDB, LBP), with prices where the vendor or body publishes them.`;
@@ -55,7 +56,7 @@ const breadcrumbs = [
         New Zealand Trades Vendor Directory
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Independent reviews of {vendors.length} New Zealand-relevant entries across 5 categories: job management software from Auckland-based Fergus and NextMinute, Tradify (founded in New Zealand, now owned by the UK's Access Group) and Australian-origin tools; licensing through EWRB for electrical work, PGDB for plumbing, gasfitting and drainlaying, and the LBP scheme for Restricted Building Work on homes; and payroll services that file with Inland Revenue.
+        Independent reviews of {vendors.length} New Zealand-relevant entries across {activeCategoryCount} categories: job management software from Auckland-based Fergus and NextMinute, Tradify (founded in New Zealand, now owned by the UK's Access Group) and Australian-origin tools; licensing through EWRB for electrical work, PGDB for plumbing, gasfitting and drainlaying, and the LBP scheme for Restricted Building Work on homes; and payroll services that file with Inland Revenue.
       </p>
     </header>
 

@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, formatPrice, priceTier, teamSizeBucket, freshnessTier, freshnessLabel } from '../lib/data';
+import triosData from '../data/trios.json';
+import { tools, verticals, formatPrice, entryPriceLabel, toolType, getTool } from '../lib/data';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -12,8 +13,18 @@ const breadcrumbs = [
 const choose = (n: number, k: number) => { let r = 1; for (let i = 1; i <= k; i++) r = (r * (n - k + i)) / i; return Math.round(r); };
 const comboCount = [2, 3, 4, 5].reduce((sum, k) => sum + choose(tools.length, k), 0);
 const comboMillions = Math.round(comboCount / 1e6);
-let sharedPairs = 0;
-for (let i = 0; i < tools.length; i++) for (let j = i + 1; j < tools.length; j++) if (tools[i].verticals.some((v) => tools[j].verticals.includes(v))) sharedPairs++;
+// Comparison pages exist for every pair of tools that share a trade, plus the CMMS
+// tools compared with each other (as /compare/[pair]/ builds them); 3-way pages for
+// each trio in trios.json whose tools all exist (as /multi-compare/[trio]/ builds them).
+const isCmms = (t: (typeof tools)[number]) => toolType(t) === 'cmms';
+let pairPages = 0;
+for (let i = 0; i < tools.length; i++) {
+  for (let j = i + 1; j < tools.length; j++) {
+    if (tools[i].verticals.some((v) => tools[j].verticals.includes(v)) || (isCmms(tools[i]) && isCmms(tools[j]))) pairPages++;
+  }
+}
+const trioPages = triosData.trios.filter((tr) => tr.slugs.every((s) => getTool(s))).length;
+const verticalNames: Record<string, string> = Object.fromEntries(verticals.map((v) => [v.slug, v.name]));
 
 // Tool data shipped to client-side JS
 const builderTools = tools.map((t) => ({
@@ -23,15 +34,19 @@ const builderTools = tools.map((t) => ({
   bestFor: t.best_for,
   startingPrice: t.pricing.starting_at_usd,
   formattedPrice: formatPrice(t),
-  tiers: t.pricing.tiers,
-  tier: priceTier(t),
+  priceLabel: entryPriceLabel(t),
   freeTrialDays: t.pricing.free_trial_days ?? 0,
-  verifiedDate: t.pricing.verified_date,
-  freshness: freshnessTier(t),
-  freshnessLabel: freshnessLabel(t),
+  // Only the date ships: the age and the green/amber/red tier are worked out in the
+  // browser when the page is viewed. Computed at build time, "Verified 2 days ago" was
+  // false the day after deploy (2026-10-01).
+  verifiedDate: t.pricing.verified_date ?? '',
   bestTeamSize: t.best_team_size ?? '-',
-  teamBucket: teamSizeBucket(t),
   verticals: t.verticals,
+  // Trades with our fit score, highest first.
+  fits: t.verticals
+    .map((v) => ({ name: verticalNames[v] ?? v.replace(/_/g, ' '), fit: t.vertical_fit?.[v] ?? 5 }))
+    .sort((x, y) => y.fit - x.fit || x.name.localeCompare(y.name)),
+  isCmms: isCmms(t),
   keyFeatures: t.key_features,
   integrations: t.integrations,
   hasQuickBooks: t.integrations.some((i) => i.includes('quickbooks')),
@@ -50,19 +65,19 @@ const builderTools = tools.map((t) => ({
 
 <Layout
   title="Build your own comparison: pick any 2-5 trades software tools"
-  description="Interactive side-by-side comparison builder. Pick any 2-5 trades software platforms from our directory and see them compared instantly across pricing, features, integrations, and freshness."
+  description="Side-by-side comparison builder. Pick any 2-5 trades software platforms from our directory and compare their pricing, listed features and integrations, fit by trade and when each price was checked."
   breadcrumbs={breadcrumbs}
 >
   <article class="mx-auto max-w-6xl px-4 py-12">
     <header class="mb-8">
       <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
-        Free · live calculation · no email required
+        Free · no email required
       </p>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
         Build your own side-by-side comparison
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        Pick any 2-5 trades software platforms from our directory. We'll show them compared instantly (pricing, features, integrations, freshness) without you having to find a pre-built comparison page that happens to include your exact tools.
+        Pick any 2-5 trades software platforms from our directory and see them side by side: pricing, listed features and integrations, fit by trade, and when each price was last checked.
       </p>
     </header>
 
@@ -111,24 +126,24 @@ const builderTools = tools.map((t) => ({
         Pick at least 2 tools above to see your custom side-by-side comparison.
       </p>
       <p class="mt-2 text-xs text-slate-500">
-        Need pre-built comparisons instead? Browse <a href="/compare/" class="text-orange-600 hover:underline">{sharedPairs.toLocaleString('en-US')} head-to-head pairings</a>.
+        Need a pre-built comparison instead? Head-to-head pages exist for {pairPages.toLocaleString('en-US')} pairs; <a href="/compare/" class="text-orange-600 hover:underline">browse the comparisons</a>.
       </p>
     </section>
 
     <section class="mt-12 prose prose-slate max-w-none">
       <h2>Why an interactive builder?</h2>
       <p>
-        Pre-built comparison pages cover the most-searched matchups (Jobber vs Housecall Pro, ServiceTitan vs FieldEdge, etc.). But what if you're comparing three tools? Or your shortlist includes a niche specialty platform that doesn't have a popular comparison page yet? The interactive builder lets you compare any combination across our directory: about {comboMillions} million possible 2-5-tool combinations from {tools.length} platforms.
+        Pre-built comparison pages cover pairs of tools that share a trade, and a set of three-way comparisons. To compare four or five tools at once, or a combination that has no page, use the builder: there are about {comboMillions} million possible combinations of 2 to 5 of our {tools.length} platforms.
       </p>
 
       <h2>What the comparison includes</h2>
       <ul>
-        <li><strong>Headline metrics</strong>: Starting price (per-user or flat-rate detected), best team size, free trial, founded year, headquarters.</li>
-        <li><strong>Freshness badge</strong>: When we last verified the pricing tier against the vendor's public page. Green if under 90 days; amber if 91-180; red if older.</li>
-        <li><strong>Integration check</strong>: Does the tool integrate with QuickBooks, Stripe, Xero, Zapier, Google Local Services Ads? Y/N per integration.</li>
-        <li><strong>Feature counts</strong>: Number of key features and integrations shipped, with samples listed.</li>
-        <li><strong>Vertical fit</strong>: Which trades the tool serves and how well (1-10 scoring).</li>
-        <li><strong>Best for / target buyer</strong>: Each tool's stated target customer profile.</li>
+        <li><strong>Headline facts</strong>: starting price and how it scales (per user, a flat company price, or a base price plus users), best team size, free trial or free tier, founded year, headquarters.</li>
+        <li><strong>Freshness badge</strong>: when we last checked the price against the vendor's own pricing page. Green at 90 days or less, amber at 91-180 days, red after that.</li>
+        <li><strong>Integration check</strong>: whether our entry lists an integration with QuickBooks, Stripe, Xero, Zapier or Google Local Services Ads. "Not listed" means our entry does not record one, not that the tool cannot connect.</li>
+        <li><strong>Features and integrations as listed</strong>: the key features and integrations in our entry for each tool, with the number of integrations (a Fit Score factor). Entries use different words for similar features, so check a feature you need on the vendor's site.</li>
+        <li><strong>Fit by trade</strong>: each trade the tool serves, with our 1-10 fit score.</li>
+        <li><strong>Best for</strong>: the target customer in our entry for each tool.</li>
       </ul>
 
       <h2>Sharing your comparison</h2>
@@ -138,7 +153,7 @@ const builderTools = tools.map((t) => ({
 
       <h2>Other ways to compare</h2>
       <p>
-        For deep editorial side-by-side analysis (decision matrix, pros/cons, implementation timelines, 8-FAQ pairings), see our <a href="/compare/">{sharedPairs.toLocaleString('en-US')} pre-built head-to-head comparisons</a>: every tool-pair that shares at least one vertical. For curated 3-way matchups by buyer segment, see the <a href="/multi-compare/">28 multi-tool comparison pages</a>.
+        For side-by-side pricing, the differences in our data and FAQs for two tools, see the <a href="/compare/">pre-built head-to-head comparisons</a>: {pairPages.toLocaleString('en-US')} pairs, every pair of tools that share a trade plus the maintenance (CMMS) tools compared with each other. For three tools, see the <a href="/multi-compare/">{trioPages} three-way comparison pages</a>.
       </p>
     </section>
   </article>
@@ -164,6 +179,24 @@ const builderTools = tools.map((t) => ({
 
       function findTool(slug) {
         return tools.find((t) => t.slug === slug);
+      }
+
+      // Age of a price check when the page is viewed, with the thresholds of
+      // freshnessTier and freshnessLabel in lib/data.ts (fresh up to 90 days, aging up
+      // to 180, stale after that).
+      function freshnessOf(dateStr) {
+        const ms = dateStr ? Date.parse(dateStr + 'T00:00:00Z') : NaN;
+        if (Number.isNaN(ms)) return { tier: 'stale', label: 'No verified date' };
+        const d = Math.max(0, Math.floor((Date.now() - ms) / 86400000));
+        const tier = d <= 90 ? 'fresh' : d <= 180 ? 'aging' : 'stale';
+        let label;
+        if (d === 0) label = 'Verified today';
+        else if (d === 1) label = 'Verified yesterday';
+        else if (d < 14) label = `Verified ${d} days ago`;
+        else if (d < 60) label = `Verified ${Math.round(d / 7)} weeks ago`;
+        else if (d < 365) label = `Verified ${Math.round(d / 30)} months ago`;
+        else label = `Verified over ${Math.floor(d / 365)} year${d >= 730 ? 's' : ''} ago`;
+        return { tier, label };
       }
 
       function searchTools(q) {
@@ -200,7 +233,7 @@ const builderTools = tools.map((t) => ({
               class="block w-full px-3 py-2 text-left text-sm transition hover:bg-orange-50 focus:bg-orange-50 focus:outline-none"
             >
               <div class="font-medium text-slate-900">${escHtml(t.name)}</div>
-              <div class="text-xs text-slate-500">${escHtml(t.formattedPrice)} · ${escHtml(t.bestTeamSize)} techs</div>
+              <div class="text-xs text-slate-500">${escHtml(t.formattedPrice)} · best team size ${escHtml(t.bestTeamSize)}</div>
             </button>
           `,
           )
@@ -262,7 +295,7 @@ const builderTools = tools.map((t) => ({
         const rows = [
           {
             label: 'Starting price',
-            cells: cols.map((t) => `<strong>${escHtml(t.formattedPrice)}</strong>${t.pricingNote ? `<div class="mt-1 text-xs text-slate-500">${escHtml(t.pricingNote.slice(0, 80))}${t.pricingNote.length > 80 ? '…' : ''}</div>` : ''}`),
+            cells: cols.map((t) => `<strong>${escHtml(t.formattedPrice)}</strong><div class="mt-1 text-xs text-slate-700">${escHtml(t.priceLabel)}</div>${t.pricingNote ? `<div class="mt-1 text-xs text-slate-500">${escHtml(t.pricingNote.slice(0, 80))}${t.pricingNote.length > 80 ? '…' : ''}</div>` : ''}`),
           },
           {
             label: 'Best team size',
@@ -270,18 +303,19 @@ const builderTools = tools.map((t) => ({
           },
           {
             label: 'Free trial',
-            cells: cols.map((t) => t.freeTrialDays > 0 ? `<span class="text-emerald-700">${t.freeTrialDays}-day trial</span>` : (t.hasFreeTier ? '<span class="text-emerald-700">Free tier</span>' : '<span class="text-slate-400">No</span>')),
+            cells: cols.map((t) => t.freeTrialDays > 0 ? `<span class="text-emerald-700">${t.freeTrialDays}-day trial</span>` : (t.hasFreeTier ? '<span class="text-emerald-700">Free tier</span>' : '<span class="text-slate-400">None listed</span>')),
           },
           {
             label: 'Pricing freshness',
             cells: cols.map((t) => {
-              const color = freshnessColors[t.freshness] ?? freshnessColors.fresh;
-              return `<span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${color}">${escHtml(t.freshnessLabel)}</span><div class="mt-1 text-xs text-slate-500">${t.verifiedDate}</div>`;
+              const f = freshnessOf(t.verifiedDate);
+              const color = freshnessColors[f.tier] ?? freshnessColors.stale;
+              return `<span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${color}">${escHtml(f.label)}</span>${t.verifiedDate ? `<div class="mt-1 text-xs text-slate-500">${escHtml(t.verifiedDate)}</div>` : ''}`;
             }),
           },
           {
             label: 'Founded',
-            cells: cols.map((t) => t.founded ? `${t.founded}<div class="mt-1 text-xs text-slate-500">${2026 - t.founded} years</div>` : '<span class="text-slate-400">-</span>'),
+            cells: cols.map((t) => t.founded ? `${t.founded}` : '<span class="text-slate-400">-</span>'),
           },
           {
             label: 'Headquarters',
@@ -289,41 +323,39 @@ const builderTools = tools.map((t) => ({
           },
           {
             label: 'QuickBooks',
-            cells: cols.map((t) => t.hasQuickBooks ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">-</span>'),
+            cells: cols.map((t) => t.hasQuickBooks ? '<span class="text-emerald-700 font-semibold">✓ Listed</span>' : '<span class="text-slate-400">Not listed</span>'),
           },
           {
             label: 'Stripe',
-            cells: cols.map((t) => t.hasStripe ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">-</span>'),
+            cells: cols.map((t) => t.hasStripe ? '<span class="text-emerald-700 font-semibold">✓ Listed</span>' : '<span class="text-slate-400">Not listed</span>'),
           },
           {
             label: 'Xero',
-            cells: cols.map((t) => t.hasXero ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">-</span>'),
+            cells: cols.map((t) => t.hasXero ? '<span class="text-emerald-700 font-semibold">✓ Listed</span>' : '<span class="text-slate-400">Not listed</span>'),
           },
           {
             label: 'Zapier',
-            cells: cols.map((t) => t.hasZapier ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">-</span>'),
+            cells: cols.map((t) => t.hasZapier ? '<span class="text-emerald-700 font-semibold">✓ Listed</span>' : '<span class="text-slate-400">Not listed</span>'),
           },
           {
             label: 'Google LSA',
-            cells: cols.map((t) => t.hasLSA ? '<span class="text-emerald-700 font-semibold">✓ Yes</span>' : '<span class="text-slate-400">-</span>'),
+            cells: cols.map((t) => t.hasLSA ? '<span class="text-emerald-700 font-semibold">✓ Listed</span>' : '<span class="text-slate-400">Not listed</span>'),
           },
           {
-            label: 'Key features (count)',
-            cells: cols.map((t) => {
-              const sample = t.keyFeatures.slice(0, 4).map((f) => f.replace(/_/g, ' ')).join(', ');
-              return `<strong>${t.keyFeatures.length}</strong><div class="mt-1 text-xs text-slate-500">${escHtml(sample)}${t.keyFeatures.length > 4 ? '…' : ''}</div>`;
-            }),
+            // No count: feature lists use an uncontrolled vocabulary, so their length says how
+            // finely an entry was written, not how much the product does (methodology v1.2).
+            label: 'Key features (as listed)',
+            cells: cols.map((t) => `<div class="text-xs text-slate-700">${escHtml(t.keyFeatures.map((f) => f.replace(/_/g, ' ')).join(', '))}</div>`),
           },
           {
-            label: 'Integrations (count)',
-            cells: cols.map((t) => {
-              const sample = t.integrations.slice(0, 3).map((i) => i.replace(/_/g, ' ')).join(', ');
-              return `<strong>${t.integrations.length}</strong><div class="mt-1 text-xs text-slate-500">${escHtml(sample)}${t.integrations.length > 3 ? '…' : ''}</div>`;
-            }),
+            label: 'Integrations listed',
+            cells: cols.map((t) => `<strong>${t.integrations.length}</strong><div class="mt-1 text-xs text-slate-500">${escHtml(t.integrations.map((i) => i.replace(/_/g, ' ')).join(', '))}</div>`),
           },
           {
-            label: 'Verticals served',
-            cells: cols.map((t) => `<div class="text-xs text-slate-700">${t.verticals.slice(0, 4).map((v) => escHtml(v.replace(/_/g, ' '))).join(', ')}${t.verticals.length > 4 ? '…' : ''}</div>`),
+            label: 'Fit by trade (1-10)',
+            cells: cols.map((t) => t.fits.length
+              ? `<strong>${t.fits.length} ${t.fits.length === 1 ? 'trade' : 'trades'}</strong><div class="mt-1 text-xs text-slate-700">${t.fits.map((f) => `${escHtml(f.name)} ${f.fit}`).join(', ')}</div>`
+              : '<span class="text-slate-400">No trades in our data</span>'),
           },
           {
             label: 'Best for',
@@ -384,23 +416,31 @@ const builderTools = tools.map((t) => ({
           </div>
         `;
 
-        // Pairwise links: for any pair, link to the full pre-built comparison page
+        // Pairwise links, only for pairs that have a comparison page: tools that share a
+        // trade, or two CMMS tools (the rule /compare/[pair]/ builds by). Other pairs used
+        // to get a link too, which redirected or 404'd.
         let pairLinks = '';
         if (cols.length >= 2) {
           const pairs = [];
           for (let i = 0; i < cols.length; i++) {
             for (let j = i + 1; j < cols.length; j++) {
-              const [a, b] = [cols[i].slug, cols[j].slug].sort();
-              pairs.push(`<a href="/compare/${a}-vs-${b}/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-900 hover:border-orange-400 hover:text-orange-600">${escHtml(cols[i].name)} vs ${escHtml(cols[j].name)} (deep) →</a>`);
+              const x = cols[i];
+              const y = cols[j];
+              const hasPage = x.verticals.some((v) => y.verticals.includes(v)) || (x.isCmms && y.isCmms);
+              if (!hasPage) continue;
+              const [a, b] = [x.slug, y.slug].sort();
+              pairs.push(`<a href="/compare/${a}-vs-${b}/" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-900 hover:border-orange-400 hover:text-orange-600">${escHtml(x.name)} vs ${escHtml(y.name)} →</a>`);
             }
           }
-          pairLinks = `
-            <div class="mt-6 rounded-lg bg-slate-50 p-5">
-              <h3 class="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-700">Deep pre-built comparisons</h3>
-              <p class="mb-3 text-sm text-slate-600">For editorial side-by-side analysis with decision matrix, pros/cons, and 8-FAQ pairings, see the dedicated comparison pages:</p>
-              <div class="flex flex-wrap gap-2">${pairs.join('')}</div>
-            </div>
-          `;
+          if (pairs.length > 0) {
+            pairLinks = `
+              <div class="mt-6 rounded-lg bg-slate-50 p-5">
+                <h3 class="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-700">Head-to-head comparison pages</h3>
+                <p class="mb-3 text-sm text-slate-600">For pricing, the differences in our data and FAQs for two of these tools, see the comparison pages:</p>
+                <div class="flex flex-wrap gap-2">${pairs.join('')}</div>
+              </div>
+            `;
+          }
         }
 
         output.innerHTML = header + headerCards + table + pairLinks;

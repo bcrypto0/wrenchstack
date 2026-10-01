@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { tools, verticals, verticalFitScore, verticalToUrl, type Tool } from '../../lib/data';
+import { tools, verticals, verticalFitScore, verticalToUrl, toolType, type Tool } from '../../lib/data';
 import { isComparisonIndexable } from '../../lib/compare-index.mjs';
 
 interface Pair {
@@ -17,14 +17,27 @@ for (let i = 0; i < tools.length; i++) {
     if (!a.verticals.some((v) => b.verticals.includes(v))) continue;
     const [first, second] = [a, b].sort((x, y) => x.slug.localeCompare(y.slug));
     // Only surface indexable comparisons (see compare-index.mjs) so crawl budget
-    // and internal PageRank concentrate on the ~150 pages that can rank, instead
-    // of bleeding into ~1,800 noindexed long-tail pairs.
+    // and internal links concentrate on the pages that can rank, not on the
+    // noindexed long-tail pairs.
     if (!isComparisonIndexable(first.slug, second.slug)) continue;
     pairs.push({ a: first, b: second });
   }
 }
 
-// Featured comparisons: curated list of highest-search-volume pairs.
+// Every comparison page that exists (one per unordered pair, as /compare/[pair]/ builds
+// them: tools that share a trade, plus CMMS tools compared with each other), and the
+// tools that appear in the pairs listed here. Computed so the copy cannot go stale.
+let totalPairs = 0;
+for (let i = 0; i < tools.length; i++) {
+  for (let j = i + 1; j < tools.length; j++) {
+    const shared = tools[i].verticals.some((v) => tools[j].verticals.includes(v));
+    const bothCmms = toolType(tools[i]) === 'cmms' && toolType(tools[j]) === 'cmms';
+    if (shared || bothCmms) totalPairs++;
+  }
+}
+const listedToolCount = new Set(pairs.flatMap((p) => [p.a.slug, p.b.slug])).size;
+
+// Featured comparisons: a hand-picked list (no search-volume data behind it).
 const featuredSlugPairs: [string, string][] = [
   ['jobber', 'housecall-pro'],
   ['jobber', 'servicetitan'],
@@ -79,7 +92,7 @@ const breadcrumbs = [
 
 <Layout
   title={`Compare trades software side-by-side: ${pairs.length} head-to-head comparisons`}
-  description={`${pairs.length} head-to-head comparisons of trades software. Decision matrix, pricing side-by-side, pros and cons, implementation timelines. Updated ${new Date().getFullYear()}.`}
+  description={`${pairs.length} head-to-head comparisons of trades software from our data: pricing side by side, where the two differ, fit by trade and FAQs.`}
   breadcrumbs={breadcrumbs}
 >
   <section class="mx-auto max-w-6xl px-4 py-12">
@@ -88,37 +101,37 @@ const breadcrumbs = [
         Compare trades software, side-by-side
       </h1>
       <p class="mt-4 max-w-3xl text-lg text-slate-600">
-        {pairs.length} head-to-head comparisons across {verticals.length} trades. Each comparison includes a decision matrix ("pick A if…" / "pick B if…"), side-by-side pricing, detailed pros and cons, implementation timelines, and {pairs.length > 100 ? '8+' : 'multiple'} FAQs.
+        This page lists {pairs.length} head-to-head comparisons among {listedToolCount} tools, across {pairsByVertical.length} trades. Comparison pages exist for {totalPairs.toLocaleString('en-US')} pairs in all (every pair of tools that share a trade, plus the maintenance tools compared with each other); open any of them from the <a href="/compare-builder/" class="text-orange-600 hover:underline">comparison builder</a>. Each template-built comparison includes a decision matrix ("pick A if…" / "pick B if…"), side-by-side pricing, pros and cons from our data, FAQs, and fit in each trade both tools serve (the maintenance tools are listed under no trade, so their comparisons have no fit table). The Housecall Pro vs Jobber page is written separately and sets out prices, seat costs, where each comes out ahead in our data, and fit by trade.
       </p>
       <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500">
-        <span><span class="font-bold text-slate-900">{pairs.length}</span> comparisons</span>
+        <span><span class="font-bold text-slate-900">{pairs.length}</span> comparisons listed</span>
         <span class="text-slate-300">·</span>
-        <span><span class="font-bold text-slate-900">{tools.length}</span> tools</span>
+        <span><span class="font-bold text-slate-900">{listedToolCount}</span> tools</span>
         <span class="text-slate-300">·</span>
-        <span><span class="font-bold text-slate-900">{verticals.length}</span> trades</span>
+        <span><span class="font-bold text-slate-900">{pairsByVertical.length}</span> trades</span>
       </div>
     </header>
 
     <nav class="mb-8 rounded-lg border border-slate-200 bg-slate-50 p-4">
       <div class="text-sm font-semibold text-slate-700">Jump to:</div>
       <div class="mt-2 flex flex-wrap gap-x-4 gap-y-2 text-sm">
-        <a href="#featured" class="text-orange-600 hover:underline">Most popular ({featuredPairs.length})</a>
+        <a href="#featured" class="text-orange-600 hover:underline">Featured ({featuredPairs.length})</a>
         <span class="text-slate-300">·</span>
         <a href="#by-trade" class="text-orange-600 hover:underline">Browse by trade</a>
         <span class="text-slate-300">·</span>
-        <a href="#all-pairs" class="text-orange-600 hover:underline">All {pairs.length} comparisons</a>
+        <a href="#all-pairs" class="text-orange-600 hover:underline">All {pairs.length} listed comparisons</a>
       </div>
     </nav>
 
     <section class="mb-12 rounded-2xl border border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50 p-6 md:p-8">
       <div class="flex flex-wrap items-start justify-between gap-4">
         <div class="max-w-2xl">
-          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-orange-700">New · Interactive</div>
+          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-orange-700">Interactive</div>
           <h2 class="text-xl font-bold text-slate-900 md:text-2xl">
             Don't see your specific matchup? Build a custom 2-5 tool comparison.
           </h2>
           <p class="mt-2 text-sm text-slate-700">
-            The pre-built pages cover most-searched pairings. The interactive builder lets you pick any combination from all {tools.length} tools: pricing, freshness and integrations side-by-side, instantly.
+            The interactive builder lets you pick any 2 to 5 of our {tools.length} tools and see pricing, freshness and integrations side-by-side, with links to the full comparison page for each pair that has one.
           </p>
         </div>
         <a
@@ -131,9 +144,9 @@ const breadcrumbs = [
     </section>
 
     <section id="featured" class="mb-16 scroll-mt-8">
-      <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Most popular comparisons</h2>
+      <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Featured comparisons</h2>
       <p class="mb-6 text-slate-600">
-        The most-searched matchups in trades software: the comparisons buyers actually look up when deciding.
+        A hand-picked set of head-to-head pages between field service and construction tools.
       </p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {featuredPairs.map(({ a, b }) => {
@@ -146,7 +159,7 @@ const breadcrumbs = [
                 {a.name} vs {b.name}
               </h3>
               <p class="mt-1 text-xs text-slate-500">
-                Decision matrix · pricing · pros and cons
+                {a.slug === 'housecall-pro' && b.slug === 'jobber' ? 'Prices · seat costs · fit by trade' : 'Decision matrix · pricing · pros and cons'}
               </p>
             </a>
           );
@@ -157,7 +170,7 @@ const breadcrumbs = [
     <section id="by-trade" class="mb-16 scroll-mt-8">
       <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">Browse by trade</h2>
       <p class="mb-6 text-slate-600">
-        Comparisons within each trade, ordered by how well both tools fit it: the head-to-head matchups most relevant when both tools serve the same vertical.
+        Comparisons within each trade, ordered by the two tools' combined fit score for that trade.
       </p>
       <div class="space-y-10">
         {pairsByVertical.map(({ vertical, pairs: verticalPairs }) => (
@@ -195,7 +208,7 @@ const breadcrumbs = [
     <section id="all-pairs" class="mb-12 scroll-mt-8">
       <h2 class="mb-2 text-2xl font-bold tracking-tight text-slate-900">All comparisons (alphabetical)</h2>
       <p class="mb-6 text-slate-600">
-        Every comparison in the directory, alphabetical by first tool. Use ⌘F / Ctrl+F to find a specific matchup.
+        Every comparison listed on this page, alphabetical by first tool. Use ⌘F / Ctrl+F to find a specific matchup, or the comparison builder for any other pair.
       </p>
       <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {allPairsAlphabetical.map(({ a, b }) => (

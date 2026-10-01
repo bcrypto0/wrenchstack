@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { INTL_MARKETS, type IntlVendor } from '../../lib/intl';
+import { usVendorLists } from '../../lib/data';
 import ukData from '../../data/international/uk.json';
 import auData from '../../data/international/au.json';
 import caData from '../../data/international/ca.json';
@@ -23,9 +24,15 @@ const marketsData = order.map((code) => ({
   certs: sources[code].vendors.filter((v) => v.category === 'certification'),
 }));
 const totalCerts = marketsData.reduce((n, m) => n + m.certs.length, 0);
+const marketNames = marketsData.map((m) => m.market.name);
+const marketList = `${marketNames.slice(0, -1).join(', ')} and ${marketNames[marketNames.length - 1]}`;
+const usCategoryCount = usVendorLists().length;
 
 const pageTitle = 'Trades Certification & Licensing by Country (2026): UK, Australia, Canada, NZ, Ireland, South Africa';
-const pageDescription = `The trade-certification and licensing bodies that matter across ${marketsData.length} markets: ${totalCerts} schemes covering gas, electrical, plumbing, and building work. Which are legally mandatory, who runs them, and how to verify a licence.`;
+// The entries include tax offices, workers' compensation boards and voluntary
+// associations as well as licensing registers, so the page no longer calls them
+// all "schemes covering gas, electrical, plumbing, and building work" (2026-10-01).
+const pageDescription = `The certification, licensing and compliance bodies in WrenchStack's directories for ${marketList}: ${totalCerts} entries, from gas, electrical, plumbing and building registers to tax offices, workers' compensation boards and voluntary trade associations, each linked to its official site.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -53,7 +60,7 @@ const itemListSchema = {
         Trades Certification &amp; Licensing by Country
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Unlike software or insurance, trade certification is often a legal requirement, not a competitive edge, and the rules differ sharply by country (and sometimes by state or province). This is the map of the {totalCerts} key certification and licensing bodies across the {marketsData.length} English-speaking markets we cover, for gas, electrical, plumbing, and building work. Each links to a full breakdown and the official body.
+        The {totalCerts} certification, licensing and compliance entries in our directories for {marketList}. The rules differ by country, and in Australia and Canada by state or province. Each entry links to its WrenchStack page and to the official site.
       </p>
     </header>
 
@@ -68,9 +75,9 @@ const itemListSchema = {
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
-      <h2 class="mb-2 text-base font-bold text-slate-900">Why certification works differently abroad</h2>
+      <h2 class="mb-2 text-base font-bold text-slate-900">What the entries are</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        In most of these markets, gas, electrical, and (often) plumbing work for hire is restricted to licensed or registered practitioners; doing it unlicensed is a criminal offense, not just a reputational risk. The schemes also double as consumer-trust signals: homeowners are taught to check for the Gas Safe, NICEIC, RGI, ECRA/ESA, or equivalent registration before hiring. A few schemes (like Canada's Red Seal or the HVAC institute HRAI) are about portable qualification and industry standing rather than a legal licence. The US is the outlier: there is no single national trades-licensing body; it is regulated state by state.
+        Some entries are legal registers: for example Gas Safe Register for gas work in Great Britain and Northern Ireland, RGI and Safe Electric in Ireland, and the EWRB and PGDB in New Zealand. Others are tax or workers' compensation bodies, such as the ATO, SARS, Ireland's Relevant Contracts Tax, WSIB in Ontario and South Africa's Compensation Fund. Some are not licences: a Red Seal endorsement does not by itself certify anyone to carry on a trade, HRAI is a trade association, and membership of New Zealand's Registered Master Builders and Master Plumbers is voluntary. In Australia trade licensing is run by the states, and in Canada trade certification by the provinces and territories. Each market section below summarises the rules our entries document.
       </p>
     </section>
 
@@ -105,7 +112,7 @@ const itemListSchema = {
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Working in the US instead?</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        US trades licensing is regulated state by state rather than through a single national body. Browse our US directory and state-by-state pages for software, lead-gen, insurance, and more.
+        The US directory covers {usCategoryCount} categories, including field-service software, lead generation and insurance. The state pages repeat our national field-service software rankings for each state and do not cover state licensing rules.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">US directory →</a>

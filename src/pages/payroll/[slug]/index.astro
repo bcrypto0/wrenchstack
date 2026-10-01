@@ -21,7 +21,13 @@ const tier = payrollTier(service);
 const siblings = payrollServices.filter((s) => s.slug !== service.slug).slice(0, 6);
 
 const pageTitle = `${service.name} Review (2026): Pricing, Features, Pros & Cons`;
-const pageDescription = `${service.name} payroll review for trades contractors. ${asSentence(service.tagline)} ${service.reputation_flag ? 'Includes a reputation warning. ' : ''}Updated ${new Date().getFullYear()}.`;
+const pageDescription = `${service.name} payroll review for trades contractors. ${asSentence(service.tagline)} ${service.reputation_flag ? 'Includes a reputation warning. ' : ''}Verified ${service.verified_date}.`;
+
+// Computed from the link this page actually uses (affiliate_url falls back to vendor_url),
+// not from the unverified affiliate notes in the data.
+const affiliateDisclosure = service.affiliate_url.startsWith('http')
+  ? `The link to ${service.name} on this page is an affiliate link: we may earn a commission if you sign up through it.`
+  : `The link to ${service.name} on this page goes to its own site and is not an affiliate link.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -162,7 +168,7 @@ const faqSchema = {
         {service.starting_price_usd !== null && (
           <p class="mt-2 text-sm text-slate-600">Starting base: ${service.starting_price_usd}/mo{service.per_employee_fee_usd !== null && ` + $${service.per_employee_fee_usd}/employee`}</p>
         )}
-        <p class="mt-3 text-sm text-slate-700"><strong class="text-slate-900">Affiliate disclosure:</strong> {asSentence(service.affiliate_payout_note)}</p>
+        <p class="mt-3 text-sm text-slate-700"><strong class="text-slate-900">Affiliate disclosure:</strong> {affiliateDisclosure}</p>
       </div>
     </section>
 

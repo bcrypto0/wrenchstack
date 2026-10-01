@@ -36,8 +36,15 @@ const { vertical } = Astro.props;
 const ranked: Tool[] = rankToolsForVertical(vertical.slug);
 
 // Compute most recent verified date across tools shown
-const verifiedDates = ranked.map(t => t.pricing.verified_date).sort();
-const lastVerifiedDate = verifiedDates[verifiedDates.length - 1] ?? new Date().toISOString().slice(0, 10);
+const verifiedDates = ranked.map(t => t.pricing.verified_date).filter(Boolean).sort();
+// No build-date fallback (removed 2026-10-01): the Byline labels this date "Latest price
+// check", so a build date there would read as a price check that never happened.
+// getStaticPaths drops trades with no tools, so the build stops here only if none of a
+// trade's tools carries a verified_date.
+const lastVerifiedDate = verifiedDates[verifiedDates.length - 1];
+if (!lastVerifiedDate) {
+  throw new Error(`No pricing verified_date for any ${vertical.name} tool; refusing to publish a price-check date.`);
+}
 
 const topPicks = ranked.slice(0, 5);
 // Keep acronyms (HVAC) in capitals and use the singular trade name, so copy reads

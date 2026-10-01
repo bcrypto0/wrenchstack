@@ -1,29 +1,30 @@
 ---
 import Layout from '../../../../layouts/Layout.astro';
 
-// Tools from our Morocco directory and what each says about the DGI mandate.
-// None of the invoicing apps claims DGI accreditation, and the DGI had not
-// published the technical rules as of August 2026 (see the data file).
+// Tools from our Morocco directory and what each says about the DGI mandate,
+// from the entries re-verified on 30 September 2026. None of the invoicing apps
+// claims DGI accreditation, and the DGI had not published the technical rules
+// as of August 2026 (see the data file).
 const tools = [
   { name: 'Hisab', status: 'Exports UBL 2.1 and CII, with e-signature and 10-year archiving; says it is ready for the 2026 mandate and will submit invoices to the DGI for validation; claims no DGI accreditation', fit: 'Online invoicing for SMEs and accounting firms (not a construction tool)', note: 'From 1,490 MAD a year (Starter)', href: '/ma/hisab/' },
   { name: 'Fawatir AI', status: 'Says its invoices carry ICE, IF and TVA; states it is not certified, accredited or approved by the DGI and does not transmit invoices to the tax administration', fit: 'Shops, auto-entrepreneurs, freelancers and small firms', note: 'Pro 1,699 DH a year', href: '/ma/fawatir-ai/' },
   { name: 'Aube', status: 'Says its PDFs carry the article 145 CGI mentions, with unbroken numbering and TVA by line, and that it is ready for the 2026 roadmap; claims no DGI accreditation', fit: 'SME quotes, invoices and situations (progress billing)', note: '450 DH a month excl. VAT, 2 users', href: '/ma/aube-ma/' },
-  { name: 'Gestion BTP', status: 'Construction and accounting web app; DGI and CNSS exports per the vendor; e-invoicing features not confirmed', fit: 'BTP management with accounting, per the vendor', note: 'Published prices from 950 MAD HT a month, billed annually; no free trial', href: '/ma/gestion-btp-ma/' },
+  { name: 'Gestion BTP', status: 'Construction and accounting web app; DGI and CNSS exports per the vendor; e-invoicing features not confirmed', fit: 'BTP management with accounting and payroll, per the vendor', note: 'Published prices from 950 MAD HT a month, billed annually; no free trial', href: '/ma/gestion-btp-ma/' },
   { name: 'Sage Batigest Connect', status: 'Moroccan TVA, CNSS and e-invoicing features not described on the reseller page read', fit: 'Quotes, métré, invoicing and worksite tracking; accounting via Sage 100', note: 'Quote-based; no public prices in Morocco', href: '/ma/sage-batigest-connect-maroc/' },
   { name: 'Odoo', status: 'Ships a Morocco accounting localization (chart of accounts, tax report); an e-invoicing connection is not covered in our entry', fit: 'One system for quotes, projects, purchasing, invoicing and accounting', note: 'Published on odoo.com (USD); implementation extra', href: '/ma/odoo-btp-maroc/' },
 ];
 
 const faqs = [
-  { q: 'When does e-invoicing become mandatory in Morocco?', a: `Hespress reported in August 2026 that e-invoicing will start in phases from the end of 2026, beginning with large companies and suppliers to the public sector. Le360, citing Challenge (June 2026), reported that SMEs follow in 2027-2028 and small firms after 2028. No firm calendar date is legally fixed yet, and the DGI had not published the technical rules as of August 2026. A pilot with volunteer companies has been running since October 2025. Treat any source quoting a specific go-live day as unverified.` },
-  { q: 'What is the "clearance" model, and is it confirmed?', a: `Commentary on the Moroccan project describes a clearance (validation préalable) model: each invoice would transit a DGI platform and be validated before it is sent to the client. Hisab, for example, says it will submit invoices to the DGI for validation. But as of August 2026 the DGI had not published the final technical rules, so treat the model as announced, not final. Clearance models, used in Mexico, Turkey, Italy and Saudi Arabia, are stricter than sending a PDF, because the tax authority sees each invoice in real time.` },
-  { q: 'What is the legal basis?', a: 'The obligation sits in Article 145-IX of the Code Général des Impôts (CGI). The legal foundation was first introduced by the 2018 Finance Law, and the 2024 Finance Law gave it concrete operational impetus by activating the obligation on a progressive, revenue-based schedule. Some commentary loosely calls it "the 2024 Finance Law": that is a shorthand; both Finance Laws matter.' },
-  { q: 'What format will invoices use?', a: `The DGI had not published the technical rules, including the format, as of August 2026, and Fawatir AI notes that the official format for SMEs and the self-employed is not yet published. Commentary has cited structured XML (UBL 2.1 or CII) exchanged through a DGI portal, and some tools already export those formats (Hisab exports UBL 2.1 and CII), but treat the format as pending. Invoices already carry mandatory mentions: Aube lists the ICE, IF, RC, TVA detail and HT/TVA/TTC totals under article 145 of the CGI.` },
-  { q: 'Who is affected, and am I (a small contractor) in scope yet?', a: `Hespress (August 2026) reports that the first phase, from the end of 2026, covers large companies and suppliers to the public sector. Le360, citing Challenge (June 2026), put the first wave at about 1,655 companies with turnover above 200 million dirhams, with SMEs in 2027-2028 and small firms after 2028; confirm these thresholds when the implementing text is published. Scope covers companies subject to corporate tax (IS) and certain taxpayers under the Bénéfice Net Réel (BNR) regime. So a small contractor is generally not in the first wave, but one that supplies the public sector should check whether the first phase applies to it, and every firm should get ready, because the direction is set.` },
+  { q: 'When does e-invoicing become mandatory in Morocco?', a: `Hespress reported in August 2026 that e-invoicing will start in phases from the end of 2026, beginning with large companies and suppliers to the public sector. Le360, citing Challenge (June 2026), reported that SMEs follow in 2027-2028 and small firms after 2028. The DGI had not published the technical rules as of August 2026, and Fawatir AI says the official calendar and format for SMEs and the self-employed are not yet published. Treat any source quoting a specific go-live day as unverified.` },
+  { q: 'What is the "clearance" model, and is it confirmed?', a: `In a clearance model, each invoice is validated by the tax authority's platform before it reaches the client. Hisab's mandate guide (updated June 2026) describes the Moroccan system this way, and Hisab says it will submit invoices to the DGI for validation. But as of August 2026 the DGI had not published the technical rules, so treat the model as described by vendors, not final.` },
+  { q: 'What is the legal basis?', a: 'Hisab’s mandate guide (updated June 2026) says the system rests on article 145 of the Code Général des Impôts (CGI), the same article Aube cites for the mandatory invoice mentions. The implementing technical rules had not been published by the DGI as of August 2026.' },
+  { q: 'What format will invoices use?', a: `The DGI had not published the technical rules, including the format, as of August 2026, and Fawatir AI notes that the official format for SMEs and the self-employed is not yet published. Hisab's guide cites UBL 2.1 or UN/CEFACT CII, and Hisab already exports both, but treat the format as pending. Invoices already carry mandatory mentions: Aube lists the ICE, IF, RC, TVA detail and HT/TVA/TTC totals under article 145 of the CGI.` },
+  { q: 'Who is affected, and am I (a small contractor) in scope yet?', a: `Hespress (August 2026) reports that the first phase, from the end of 2026, covers large companies and suppliers to the public sector. Le360, citing Challenge (June 2026), put the first wave at about 1,655 companies with turnover above 200 million dirhams, with SMEs in 2027-2028 and small firms after 2028; confirm these thresholds when the implementing text is published. On those reports a small contractor is not in the first wave unless it supplies the public sector, in which case it should check whether the first phase applies to it.` },
   { q: 'What should I do now?', a: `Two practical steps. First, make sure your ICE appears correctly on every invoice and devis: it has been mandatory on official documents since July 2016, and Hespress reported in July 2025 that the tax administration accepts only invoices that carry it. Second, ask your invoicing software one question: "Which mandatory mentions do your invoices carry, and how will you connect to the DGI e-invoicing platform once the DGI publishes the technical rules?" If you are still on Word or Excel, choose invoicing software that stores your ICE and your clients’ ICE numbers.` },
 ];
 
 const pageTitle = 'DGI E-Invoicing (Facturation Électronique) in Morocco: 2026 Guide for Contractors';
-const pageDescription = `Morocco’s mandatory e-invoicing explained for the building trades: the legal basis (Article 145-IX du CGI), the announced clearance model, the phased rollout reported from late 2026 for large companies and public-sector suppliers first (with no invented go-live date), the ICE requirement, and what invoicing tools say about it. Independent; published June 2026, updated September 2026.`;
+const pageDescription = `Morocco’s planned e-invoicing explained for the building trades: the phased rollout reported from late 2026 for large companies and public-sector suppliers first (with no invented go-live date), the clearance model vendors describe, the ICE requirement, and what invoicing tools say about it. Independent; published June 2026, updated October 2026.`;
 
 const guideUrl = new URL('/ma/guides/facturation-electronique-maroc/', Astro.site).toString();
 const frUrl = new URL('/ma/fr/guides/facturation-electronique-maroc/', Astro.site).toString();
@@ -35,7 +36,7 @@ const breadcrumbs = [
 
 const articleSchema = {
   '@context': 'https://schema.org', '@type': 'Article', headline: pageTitle, description: pageDescription,
-  datePublished: '2026-06-20', dateModified: '2026-09-30', inLanguage: 'en',
+  datePublished: '2026-06-20', dateModified: '2026-10-01', inLanguage: 'en',
   author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
   publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
   mainEntityOfPage: guideUrl,
@@ -60,15 +61,15 @@ const faqSchema = {
         DGI E-Invoicing (Facturation Électronique) in Morocco
       </h1>
       <p class="mt-3 text-lg text-slate-600 leading-relaxed">
-        What Morocco's mandatory e-invoicing means for the building trades: the legal basis, the announced clearance model, who is affected first, and what the tools in our directory say about it. We frame this on what has been reported, not on a deadline or format the DGI hasn't published.
+        What Morocco's planned e-invoicing means for the building trades: who is reported to be affected first, the model vendors describe, and what the tools in our directory say about it. We frame this on what has been reported, not on a deadline or format the DGI hasn't published.
       </p>
-      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published June 2026 · Timeline and tool details updated 30 September 2026 · Not tax advice: confirm your situation with the DGI (tax.gov.ma) or your fiduciaire/comptable.</p>
+      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published June 2026 · Timeline and tool details updated 1 October 2026 · Not tax advice: confirm your situation with the DGI (tax.gov.ma) or your fiduciaire/comptable.</p>
     </header>
 
     <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
       <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ The short version</h2>
       <p class="text-slate-800 leading-relaxed">
-        Morocco is introducing <strong>mandatory e-invoicing</strong>. Commentary describes a <strong>clearance model</strong>, in which each invoice is validated by a DGI platform <em>before</em> it reaches the client, but the DGI had not published the final technical rules as of August 2026. The legal basis is <strong>Article 145-IX of the CGI</strong> (introduced by the 2018 Finance Law, operationalised by the 2024 one). Hespress reported in August 2026 that it will start <strong>in phases from the end of 2026, with large companies and suppliers to the public sector first</strong>; Le360, citing Challenge, reported SMEs following in 2027-2028 and small firms after 2028. <strong>No firm go-live date is legally fixed yet</strong>, so be sceptical of any source quoting a specific day.
+        Morocco is preparing <strong>mandatory e-invoicing</strong>. Hespress reported in August 2026 that it will start <strong>in phases from the end of 2026, with large companies and suppliers to the public sector first</strong>; Le360, citing Challenge, reported SMEs following in 2027-2028 and small firms after 2028. Vendors such as Hisab describe a <strong>clearance model</strong>, in which each invoice is validated by a DGI platform <em>before</em> it reaches the client, but the DGI had not published the technical rules as of August 2026. <strong>Treat any specific go-live day or format as unconfirmed</strong> until the DGI publishes them.
       </p>
     </section>
 
@@ -79,7 +80,7 @@ const faqSchema = {
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">Clearance</div>
-        <div class="mt-1 text-xs text-slate-600">announced model: DGI validation before sending; final rules pending</div>
+        <div class="mt-1 text-xs text-slate-600">model described by vendors: DGI validation before sending; rules not yet published</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">ICE</div>
@@ -88,40 +89,37 @@ const faqSchema = {
     </section>
 
     <section class="mb-10 prose prose-slate max-w-none">
-      <h2>What is confirmed, and what isn't</h2>
-      <p>It's worth being precise here, because a lot of Moroccan vendor content quotes a confident deadline the law hasn't set.</p>
-      <p><strong>Confirmed:</strong></p>
+      <h2>What has been reported, and what isn't published</h2>
+      <p><strong>Reported:</strong></p>
       <ul>
-        <li>The DGI Director General has publicly confirmed the launch <strong>during 2026</strong>, beginning with <strong>large companies in B2B</strong>.</li>
-        <li>A <strong>pilot / phase de test has run since October 2025</strong> with volunteer companies (after a public consultation that opened in October 2024).</li>
-        <li>A <strong>platform-development public tender was issued in May 2024, budgeted at 6.48M MAD</strong> with a one-year delivery: the closest thing to a hard, document-backed milestone.</li>
         <li>Hespress reported in August 2026 that e-invoicing will be deployed <strong>in phases from the end of 2026</strong>, beginning with <strong>large companies and suppliers to the public sector</strong>.</li>
+        <li>Le360, citing Challenge (June 2026), reported a first wave of about 1,655 companies with turnover above 200 million dirhams, then <strong>SMEs in 2027-2028</strong> and <strong>small firms after 2028</strong>.</li>
+        <li>Hisab’s mandate guide (updated June 2026) says a pilot phase started in October 2025.</li>
       </ul>
-      <p><strong>Pending (do not treat as fact):</strong></p>
+      <p><strong>Not yet published by the DGI (do not treat as fact):</strong></p>
       <ul>
-        <li><strong>No firm calendar go-live date.</strong> Trackers (EDICOM, VATupdate) state the start is "pending the publication of an implementing decree currently being drafted," and that the DGI has yet to publish full technical details.</li>
-        <li>The first-wave <strong>threshold</strong>: Le360, citing Challenge (June 2026), reported about 1,655 companies with turnover above 200 million dirhams; confirm it when the implementing text is published.</li>
-        <li>The <strong>model and format</strong>. Commentary describes clearance (pre-validation) in UBL through a DGI portal, with a later phase open to certified private operators, but the DGI had not published the final technical rules as of August 2026.</li>
+        <li><strong>A firm go-live date.</strong> The dates above are press reports; the DGI had not published the technical rules as of August 2026.</li>
+        <li>The first-wave <strong>threshold</strong>: confirm the reported 1,655 companies and 200 million dirham turnover when the implementing text is published.</li>
+        <li>The <strong>model and format</strong>. Hisab’s guide describes clearance with UBL 2.1 or CII invoices, but the DGI had not published the technical rules as of August 2026.</li>
       </ul>
 
-      <h2>The phased rollout</h2>
+      <h2>The reported phases</h2>
       <ul>
-        <li><strong>From the end of 2026: large companies and suppliers to the public sector</strong> (Hespress, August 2026). Companies subject to corporate tax (IS), and certain taxpayers under the Bénéfice Net Réel (BNR) regime; Le360, citing Challenge, counts about 1,655 companies with turnover above 200 million dirhams in this wave.</li>
+        <li><strong>From the end of 2026: large companies and suppliers to the public sector</strong> (Hespress, August 2026); Le360, citing Challenge, counts about 1,655 companies with turnover above 200 million dirhams in this wave.</li>
         <li><strong>2027-2028: SMEs</strong> (Le360, citing Challenge, June 2026).</li>
-        <li><strong>After 2028: small firms (TPE).</strong> A small contractor is likely not in the first wave; if you supply the public sector, check whether it applies to you. The direction is set.</li>
-        <li><strong>B2C and cross-border</strong> follow in later phases.</li>
+        <li><strong>After 2028: small firms (TPE).</strong> On these reports a small contractor is not in the first wave unless it supplies the public sector, in which case it should check whether the first phase applies to it.</li>
       </ul>
 
-      <h2>Why this matters for contractors specifically</h2>
+      <h2>Why this matters for contractors</h2>
       <p>
-        Moroccan trades already work to a <strong>devis → facture</strong> norm with mandatory identifiers, so the leap to structured invoicing is smaller than it looks, but two things are trade-specific. First, <strong>check what your quoting tool covers</strong>: EBP Bâtiment and Sage Batigest Connect handle quotes and invoicing, with accounting sold as a separate product, and neither of our entries describes a DGI e-invoicing connection, so the platform path matters as much as the quoting features. Second, your <strong>ICE</strong> (Identifiant Commun de l'Entreprise) has been mandatory on official documents since July 2016, and Hespress reported in July 2025 that the tax administration accepts only invoices that carry it; get it right now.
+        Two points are specific to the building trades. First, <strong>check what your quoting tool covers</strong>: EBP Bâtiment and Sage Batigest Connect handle quotes and invoicing, with accounting sold as a separate product, and neither of our entries describes a DGI e-invoicing connection, so the platform path matters as much as the quoting features. Second, your <strong>ICE</strong> (Identifiant Commun de l'Entreprise) has been mandatory on official documents since July 2016, and Hespress reported in July 2025 that the tax administration accepts only invoices that carry it; get it right now.
       </p>
 
       <h2>The wider Moroccan tax context</h2>
       <ul>
-        <li><strong>TVA:</strong> 20% standard, with reduced rates of 14%, 10% and 7%. Your software must apply the right rate per line.</li>
-        <li><strong>IS (corporate tax):</strong> progressive, mid-reform; rates shift each Finance Law.</li>
-        <li><strong>SIMPL</strong> (simpl.tax.gov.ma) is the DGI's existing online portal for télédéclaration/télépaiement of TVA, IS and IR; the DGI had not published how e-invoices will be transmitted as of August 2026.</li>
+        <li><strong>TVA:</strong> 20% standard; Aube, for example, applies TVA at 20, 14, 10, 7 or 0% line by line. Your software must apply the right rate per line.</li>
+        <li><strong>IS and IR:</strong> rules change with Finance Laws; our DGI entry notes that IR changed in 2026.</li>
+        <li><strong>SIMPL</strong> is the DGI's online service for TVA, IS and IR declarations (SIMPL-TVA, SIMPL-IS, SIMPL-IR); the DGI had not published how e-invoices will be transmitted as of August 2026.</li>
       </ul>
 
       <h2>What the tools in our directory say</h2>
@@ -151,13 +149,13 @@ const faqSchema = {
           ))}
         </tbody>
       </table>
-      <p class="mt-3 text-xs text-slate-500">The e-invoicing column reports what each vendor says, or what our entry could not confirm, as checked in September 2026. None of it is a DGI accreditation. Confirm directly with each vendor.</p>
+      <p class="mt-3 text-xs text-slate-500">The e-invoicing column reports what each vendor says, or what our entry could not confirm, as checked on 30 September 2026. None of it is a DGI accreditation. Confirm directly with each vendor.</p>
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-2 text-lg font-bold text-slate-900">The one question to ask any vendor</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Don't assume a good quoting tool covers the mandate. Ask: <strong>"Which mandatory mentions (ICE, IF, TVA) do your invoices carry, and how will you connect to the DGI e-invoicing platform once the DGI publishes the technical rules?"</strong> If the answer is vague, that's your signal. And confirm your <a href="/ma/ice-identifiant-commun-entreprise/" class="font-medium text-orange-700 hover:underline">ICE</a> is correct on every document today.
+        Don't assume a quoting tool covers the mandate. Ask: <strong>"Which mandatory mentions (ICE, IF, TVA) do your invoices carry, and how will you connect to the DGI e-invoicing platform once the DGI publishes the technical rules?"</strong> If the answer is vague, that's your signal. And confirm your <a href="/ma/ice-identifiant-commun-entreprise/" class="font-medium text-orange-700 hover:underline">ICE</a> is correct on every document today.
       </p>
     </section>
 
@@ -174,12 +172,12 @@ const faqSchema = {
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
-      <strong class="text-slate-700">Sources &amp; verification:</strong> First published June 2026 from EDICOM, VATupdate, Upsilon Consulting, Experio and Sage Maroc. Updated 30 September 2026 from our re-verified directory entries: the timeline from Hespress (August 2026) and Le360 citing Challenge (June 2026), and each tool’s own statements. Legal basis: Article 145-IX du CGI (introduced by the 2018 Finance Law, operationalised by the 2024 Finance Law). Reported: phased start from the end of 2026 with large companies and public-sector suppliers first, pilot since October 2025, the 6.48M MAD platform tender (May 2024). Pending and explicitly NOT stated as fact here: the clearance model and invoice format (DGI technical rules not published as of August 2026), the exact go-live date and the first-wave threshold. General information, not tax advice. Spotted an error? <a href="/contact/" class="underline">Tell us</a>.
+      <strong class="text-slate-700">Sources &amp; verification:</strong> Timeline from our re-verified directory entries (30 September 2026): Hespress (August 2026) and Le360 citing Challenge (June 2026). Model, format, legal article and pilot as described in Hisab's mandate guide (updated 5 June 2026, read on 1 October 2026); invoice mentions from Aube; each tool's position from its own statements. Not published by the DGI as of August 2026, and NOT stated as fact here: the technical rules, the invoice format, the exact go-live date and the first-wave threshold. General information, not tax advice. Spotted an error? <a href="/contact/" class="underline">Tell us</a>.
     </section>
 
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Compare Moroccan trades software & services</h2>
-      <p class="mt-2 text-slate-300 leading-relaxed">Independent reviews of Moroccan BTP software, tender intelligence, CNSS payroll and mandatory construction insurance, with no pay-to-play.</p>
+      <p class="mt-2 text-slate-300 leading-relaxed">Independent reviews of Moroccan BTP software, tender intelligence, CNSS payroll and TRC and décennale construction insurance, with no pay-to-play.</p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/ma/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">🇲🇦 Morocco directory →</a>
         <a href="/ma/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Compare vendors</a>

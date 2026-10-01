@@ -8,39 +8,42 @@ interface SaVendor {
 }
 const vendors = (saData as { vendors: SaVendor[] }).vendors;
 const softwareCount = vendors.filter(v => v.category === 'software').length;
+const inDirectory = (slug: string) => vendors.some(v => v.slug === slug);
+const nameOf = (slug: string, fallback: string) => vendors.find(v => v.slug === slug)?.name ?? fallback;
 
 // ZATCA-relevant rows, driven by our own verified vendor data.
 const zatcaReady = [
-  { slug: 'qoyod', name: 'Qoyod', status: 'Says it is ZATCA-certified; Phase 2 on Pro and Advanced plans only', fit: 'Cloud accounting with e-invoicing, inventory and POS; projects and tasks on Pro and Advanced', pricing: 'No public price page: prices shown at sign-up; 14-day free trial' },
+  { slug: 'qoyod', name: 'Qoyod', status: 'Says it is ZATCA-certified; its plan guide puts Phase 2 integration on the Pro (Professional) and Advanced plans only', fit: 'Cloud accounting with e-invoicing, inventory and POS; projects and tasks on Pro and Advanced', pricing: 'Published, yearly in SAR: Basic 1,200 (Phase 1 only), Professional 1,800 (Phase 2); 14-day free trial' },
   { slug: 'wafeq', name: 'Wafeq', status: 'Says it supports Phase 2 and links directly to Fatoora', fit: 'Accounting with projects and cost centres that filter the profit and loss report: profit by job', pricing: 'Published: Starter SAR 119/month or SAR 1,190/year, excl. VAT; 14-day free trial' },
   { slug: 'first-bit-erp', name: 'First Bit ERP', status: 'Says it sends Phase 2 e-invoices to Fatoora and generates VAT and WHT returns', fit: 'Construction ERP: project cost control, procurement, finance, HR and payroll, equipment', pricing: 'Quote-based' },
   { slug: 'medad-erp', name: 'Medad ERP', status: 'Says it is approved for ZATCA Phase 2', fit: 'Saudi SME accounting and ERP: finance, inventory and payroll in one', pricing: 'Quote-based (Medad Online priced by number of users)' },
   { slug: 'daftra', name: 'Daftra', status: 'Says it meets Phase 1 and Phase 2 at no extra cost', fit: 'Contracting module with progress-payment statements, retention and per-project profit reports', pricing: 'Published in USD: from $30/month, or $240/year' },
   { slug: 'onyx-pro-erp', name: 'Onyx Pro ERP', status: 'Vendor says it issues Phase 2 e-invoices linked to Fatoora', fit: 'Arabic and English ERP with project management and payroll modules; no contractor-specific features described', pricing: 'Quote-based' },
   { slug: 'pact-erp', name: 'PACT ERP', status: 'Site lists ZATCA e-invoicing support; no ZATCA approval claimed', fit: 'Contracting ERP: scheduling, budget and cost tracking, procurement, payroll', pricing: 'Quote-based' },
-];
-const zatcaCount = 7; // table rows: vendors in our directory that say they support ZATCA e-invoicing (Focus Softnet's separate e-invoicing module not counted)
+].filter((row) => inDirectory(row.slug));
+// Vendors in our directory that say they support ZATCA e-invoicing (Focus Softnet's separate e-invoicing module is noted in the text, not counted).
+const zatcaCount = zatcaReady.length;
 
 const notInvoicing = [
   { slug: 'oracle-aconex', name: 'Oracle Aconex' },
   { slug: 'oracle-primavera-p6', name: 'Oracle Primavera P6' },
-  { slug: 'autodesk-construction-cloud', name: 'Autodesk Construction Cloud' },
+  { slug: 'autodesk-construction-cloud', name: 'Autodesk Forma' },
   { slug: 'procore', name: 'Procore' },
   { slug: 'planradar', name: 'PlanRadar' },
   { slug: 'bentley-systems', name: 'Bentley Systems' },
-];
+].filter((row) => inDirectory(row.slug)).map((row) => ({ slug: row.slug, name: nameOf(row.slug, row.name) }));
 
 const faqs = [
-  { q: 'Does ZATCA e-invoicing apply to construction companies?', a: 'Yes. E-invoicing applies to all VAT-registered businesses in Saudi Arabia, including contractors and construction firms. Phase 1 (Generation) has applied since 4 December 2021; handwritten, Word or Excel invoices stopped being acceptable then. Phase 2 (Integration) is being rolled out in waves by revenue, and the thresholds have dropped low enough to reach small contracting businesses.' },
-  { q: 'Has the Wave 24 deadline passed, and what about later waves?', a: 'Yes, it has passed. Wave 24 covered businesses whose VAT-taxable revenue exceeded SAR 375,000 in any of 2022, 2023 or 2024; EY reports that its integration window ran from 1 April to 30 June 2026. If you were in scope and are still not integrated, you are now non-compliant and should onboard immediately. A later wave has been announced: EY reports that ZATCA announced Wave 25 in July 2026, covering taxable turnover above SAR 187,500 in any year from 2022 to 2025, with integration starting from 1 February 2027. ZATCA notifies the businesses in each wave directly, so keep checking your Fatoora notifications.' },
-  { q: 'What does Phase 2 (Integration) actually require?', a: 'Your invoicing system must integrate with ZATCA’s Fatoora platform via API and issue invoices in the required XML (or PDF/A-3 with embedded XML) format, carrying a UUID, cryptographic stamp and QR code. Standard (B2B) invoices are cleared with ZATCA in near real time before being valid; simplified (B2C) invoices must be reported within 24 hours.' },
+  { q: 'Does ZATCA e-invoicing apply to construction companies?', a: 'EY describes Phase 1, effective 4 December 2021, as mandating the generation of e-invoices and e-notes with related processing and record keeping, and Phase 2, effective 1 January 2023 and implemented in waves, as integrating a taxpayer\'s system with ZATCA and transmitting e-invoices and e-notes to it. EY\'s reports of Waves 24 and 25 define them by taxable turnover, not by industry, so a contracting business is called into Phase 2 when its turnover crosses a wave\'s threshold; EY reports that Wave 25 reaches taxable turnover above SAR 187,500.' },
+  { q: 'Has the Wave 24 deadline passed, and what about later waves?', a: 'Yes. EY reports that Wave 24 covered taxpayers with taxable turnover above SAR 375,000 in calendar year 2022, 2023 or 2024, with integration between 1 April and 30 June 2026. If you were in scope and are still not integrated, you are now non-compliant and should onboard immediately. A later wave has been announced: EY reports that ZATCA announced Wave 25 on 24 July 2026 for taxable turnover above SAR 187,500 in any of 2022 to 2025, and that taxpayers in it should prepare to comply with the Phase 2 requirements starting from 1 February 2027. EY also reports that ZATCA notifies the affected taxpayers before they link their systems to Fatoora, so keep checking your Fatoora notifications.' },
+  { q: 'What does Phase 2 (Integration) actually require?', a: 'EY describes Phase 2 as integrating your invoicing system with ZATCA and transmitting e-invoices and e-notes to it, through ZATCA\'s Fatoora platform. Vendors in our directory describe different details: Qoyod says it sends each Phase 2 invoice to Fatoora with a QR code, digital signature and cryptographic stamp; First Bit says it sends Phase 2 e-invoices with digital signatures; and Daftra says it adds the QR code automatically. This guide does not set out ZATCA\'s technical specifications; check them in ZATCA\'s e-invoicing documentation and ask your vendor to show its Fatoora integration working.' },
   { q: 'Is Procore, Aconex or Primavera ZATCA-compliant?', a: 'The question does not apply: these are project-management, document-control and scheduling platforms, not invoicing systems. They do not issue tax invoices, so ZATCA e-invoicing stays in your accounting or ERP system (for example Qoyod, Wafeq, Daftra or First Bit, which each say they support Phase 2). A contractor that runs one of these platforms still needs a ZATCA-compliant accounting or ERP system for e-invoicing.' },
-  { q: 'How does e-invoicing handle progress claims, advance payments and retention?', a: 'These are the construction-specific flows to test before you buy: a progress claim (mustakhlas) must still produce a compliant tax invoice against the contract; advance payments need compliant advance invoices with correct offsetting on later claims; retention affects when amounts fall due, not your VAT obligations on issued invoices. A generic invoicing tool can be ZATCA-certified yet still handle these flows poorly. Make the vendor demo YOUR billing scenarios.' },
-  { q: 'What happens now if we are still not integrated?', a: 'If you were in Wave 24, its deadline (30 June 2026) has passed and you are non-compliant now. If you fall in Wave 25, EY reports that integration starts from 1 February 2027, so plan onboarding before then. Businesses comply to avoid possible penalties; confirm the current penalty rules with ZATCA or your tax advisor. If you are behind, treat onboarding (2-3 months for setup and clearance testing) as urgent, not optional.' },
+  { q: 'How does e-invoicing handle progress claims, advance payments and retention?', a: 'These are the construction-specific flows to test before you buy: how the system raises the tax invoice for each certified progress claim (mustakhlas) against the contract, how it invoices advance payments and offsets them on later claims, and how it tracks retention. Whether a tool handles these flows well is a separate question from whether it supports Phase 2, so make the vendor demo YOUR billing scenarios, and confirm the VAT treatment of each with your tax advisor.' },
+  { q: 'What happens now if we are still not integrated?', a: 'If you were in Wave 24, its integration window (1 April to 30 June 2026, per EY) has closed and you are non-compliant now. If you fall in Wave 25, EY reports that you should prepare to comply with Phase 2 starting from 1 February 2027, so plan onboarding before then. EY says businesses should comply to preclude possible penalties; confirm the current penalty rules with ZATCA or your tax advisor. If you are behind, treat onboarding as urgent, not optional.' },
 ];
 
 const pageTitle = 'ZATCA Phase 2 E-Invoicing for Construction Companies in Saudi Arabia (2026 Guide)';
-const pageDescription = 'ZATCA Wave 24 (SAR 375k threshold) closed on 30 June 2026, and EY reports that Wave 25 covers taxable turnover above SAR 187,500, with integration from 1 February 2027. What Phase 2 integration requires from Saudi contractors (progress claims, advance payments, retention) and which construction software vendors say they support it. Independent, updated September 2026.';
+const pageDescription = 'EY reports that ZATCA Wave 24 (taxable turnover above SAR 375,000) had its integration window from 1 April to 30 June 2026, and that Wave 25 (above SAR 187,500) should prepare to comply with Phase 2 starting from 1 February 2027. What Phase 2 asks of Saudi contractors, what to test for progress claims, advance payments and retention, and which construction software vendors say they support it. Independent, updated October 2026.';
 
 const enUrl = new URL('/sa/guides/zatca-e-invoicing-contractors/', Astro.site).toString();
 const arUrl = new URL('/sa/ar/guides/zatca-e-invoicing-contractors/', Astro.site).toString();
@@ -57,7 +60,7 @@ const articleSchema = {
   headline: pageTitle,
   description: pageDescription,
   datePublished: '2026-06-11',
-  dateModified: '2026-09-30',
+  dateModified: '2026-10-01',
   inLanguage: 'en',
   author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
   publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
@@ -92,20 +95,20 @@ const faqSchema = {
       <p class="mt-3 text-lg text-slate-600 leading-relaxed">
         What the Fatoora integration mandate means for Saudi contractors (progress claims, advance payments, retention) and which construction software vendors say they support it.
       </p>
-      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published June 2026 · Updated 30 September 2026 · Not tax advice; confirm your status with ZATCA or your tax advisor.</p>
+      <p class="mt-3 text-sm text-slate-500">By WrenchStack Research · Published June 2026 · Updated 1 October 2026 · Not tax advice; confirm your status with ZATCA or your tax advisor.</p>
     </header>
 
     <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
       <h2 class="mb-2 text-lg font-bold text-slate-900">✅ The short version</h2>
       <p class="text-slate-800 leading-relaxed">
-        <strong>Wave 24 has closed, and Wave 25 has been announced.</strong> If your contracting business had VAT-taxable revenue over <strong>SAR 375,000</strong> in any of 2022, 2023 or 2024, you were in <strong>Wave 24</strong> of ZATCA's Phase 2 rollout, and its integration deadline of <strong>30 June 2026 has now passed</strong>. EY reports that <strong>Wave 25</strong>, announced in July 2026, covers taxable turnover above <strong>SAR 187,500</strong> in any year from 2022 to 2025, with integration starting from <strong>1 February 2027</strong>. Phase 2 requires your invoicing system to integrate with ZATCA's Fatoora platform and send e-invoices to it. If you were in Wave 24 and are not there yet, you are non-compliant and should onboard now. Project-management platforms like Procore or Aconex do <em>not</em> satisfy this: they do not issue tax invoices, so the e-invoice must come from your accounting or ERP system.
+        <strong>Wave 24's integration window has closed, and Wave 25 has been announced.</strong> EY reports that <strong>Wave 24</strong> of ZATCA's Phase 2 rollout covered taxable turnover above <strong>SAR 375,000</strong> in 2022, 2023 or 2024, with integration between 1 April and <strong>30 June 2026</strong>, a date that has now passed. EY reports that <strong>Wave 25</strong>, announced in July 2026, covers taxable turnover above <strong>SAR 187,500</strong> in any year from 2022 to 2025, and that taxpayers in it should prepare to comply with Phase 2 starting from <strong>1 February 2027</strong>. Phase 2 requires your invoicing system to integrate with ZATCA's Fatoora platform and send e-invoices to it. If you were in Wave 24 and are not there yet, you are non-compliant and should onboard now. Project-management platforms like Procore or Aconex do <em>not</em> satisfy this: they do not issue tax invoices, so the e-invoice must come from your accounting or ERP system.
       </p>
     </section>
 
     <section class="mb-10 grid gap-3 sm:grid-cols-3">
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">1 Feb 2027</div>
-        <div class="mt-1 text-xs text-slate-600">Wave 25 integration starts (per EY)</div>
+        <div class="mt-1 text-xs text-slate-600">Wave 25: comply with Phase 2 starting from this date (per EY)</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">SAR 187.5k</div>
@@ -113,42 +116,37 @@ const faqSchema = {
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">{zatcaCount} of {softwareCount}</div>
-        <div class="mt-1 text-xs text-slate-600">construction platforms in our Saudi directory whose vendors say they support ZATCA e-invoicing (September 2026)</div>
+        <div class="mt-1 text-xs text-slate-600">software listings in our Saudi directory whose vendors say they support ZATCA e-invoicing (September 2026)</div>
       </div>
     </section>
 
     <section class="mb-10 prose prose-slate max-w-none">
       <h2>What Phase 2 actually requires</h2>
       <p>
-        Saudi e-invoicing arrived in two phases. <strong>Phase 1 (Generation)</strong>, in force since 4 December 2021, ended manual invoicing: handwritten invoices, Word and Excel stopped counting; invoices must be generated by a compliant electronic system. <strong>Phase 2 (Integration)</strong>, rolling out in waves since January 2023, is the harder step: your system must <em>integrate with ZATCA's Fatoora platform</em> via API.
+        Saudi e-invoicing arrived in two phases. EY describes <strong>Phase 1 (Generation)</strong>, effective 4 December 2021, as mandating the generation of e-invoices and e-notes, including related processing and record keeping. <strong>Phase 2 (Integration)</strong>, effective 1 January 2023 and implemented in waves, is the harder step: your system must <em>integrate with ZATCA's Fatoora platform</em> and transmit e-invoices and e-notes to it.
       </p>
-      <p>In practice, Phase 2 means your invoicing software must:</p>
-      <ul>
-        <li>issue invoices in the required <strong>XML format</strong> (or PDF/A-3 with embedded XML);</li>
-        <li>carry a <strong>UUID</strong>, a <strong>cryptographic stamp</strong> and a <strong>QR code</strong> on every invoice;</li>
-        <li><strong>clear standard (B2B) invoices with ZATCA in near real time</strong> (the invoice isn't valid until cleared);</li>
-        <li>report simplified (B2C) invoices to ZATCA within 24 hours;</li>
-        <li>onboard your devices/solution with ZATCA (CSID) through the Fatoora portal.</li>
-      </ul>
       <p>
-        ZATCA assigns businesses to <strong>waves by turnover</strong> and notifies them directly. Thresholds started high (Wave 1: over SAR 3 billion) and have stepped down since; <strong>Wave 24 covered taxable turnover above SAR 375,000</strong>, with integration between 1 April and 30 June 2026 according to EY, which put small contracting businesses in scope. That deadline <strong>has now passed</strong>. EY reports that <strong>Wave 25</strong>, announced in July 2026, covers taxable turnover above <strong>SAR 187,500</strong> in any year from 2022 to 2025, with integration starting from <strong>1 February 2027</strong>. A small contractor above that level should expect a ZATCA notice, so watch your Fatoora notifications.
+        Vendors in our directory describe different details: Qoyod says it sends each Phase 2 invoice to Fatoora with a QR code, digital signature and cryptographic stamp; First Bit says it sends Phase 2 e-invoices with digital signatures; and Daftra says it adds the QR code automatically. This guide does not set out ZATCA's technical specifications, so check them in ZATCA's e-invoicing documentation and ask any vendor to show its Fatoora integration working before you sign.
+      </p>
+      <p>
+        ZATCA calls businesses into Phase 2 in <strong>waves by taxable turnover</strong>, and EY reports that ZATCA notifies the affected taxpayers before they link their systems to Fatoora. According to EY, <strong>Wave 24 covered taxable turnover above SAR 375,000</strong> in 2022, 2023 or 2024, with integration between 1 April and 30 June 2026; that window <strong>has now closed</strong>. EY reports that <strong>Wave 25</strong>, announced in July 2026, covers taxable turnover above <strong>SAR 187,500</strong> in any year from 2022 to 2025, and that taxpayers in it should prepare to comply with Phase 2 starting from <strong>1 February 2027</strong>. A small contractor above that level should expect a ZATCA notice, so watch your Fatoora notifications.
       </p>
 
-      <h2>Why construction billing makes this harder</h2>
+      <h2>What to test for construction billing</h2>
       <p>
-        A café issues simple invoices; a contractor doesn't. Construction billing has structures that generic invoicing tools handle badly even when they're technically "ZATCA-certified". Before you commit to any system, make the vendor demo <em>your</em> flows:
+        Construction billing includes progress claims, advance payments, retention and supply-and-install contracts. Whether a tool handles these well is a separate question from whether it supports Phase 2, so before you commit to any system, make the vendor demo <em>your</em> flows:
       </p>
       <ul>
         <li><strong>Progress claims (المستخلصات):</strong> can the system raise a compliant tax invoice against a contract for each certified progress claim, with correct cumulative quantities, previous-claim deductions and VAT?</li>
         <li><strong>Advance payments:</strong> can it issue a compliant advance-payment invoice, then offset that advance correctly across later claims?</li>
         <li><strong>Retention (محتجزات الضمان):</strong> retention changes when money falls due; your system must keep VAT treatment correct on invoiced amounts while tracking retained balances to final account.</li>
-        <li><strong>Supply-and-install contracts:</strong> mixed goods + services billing on one contract, still producing clean XML.</li>
+        <li><strong>Supply-and-install contracts:</strong> mixed goods and services billing on one contract.</li>
         <li><strong>Subcontractor chain:</strong> matching incoming subcontractor e-invoices to certificates, and handling withholding tax where it applies.</li>
       </ul>
 
       <h2>Which construction software says it is ZATCA-ready?</h2>
       <p>
-        From the {softwareCount} construction-software platforms in our <a href="/sa/">Saudi directory</a>, these are the ones advertising ZATCA e-invoicing capability, with our notes on fit. (Always verify a vendor against <a href="https://zatca.gov.sa/en/E-Invoicing/SolutionProviders/Pages/SolutionProvidersDirectory.aspx" rel="nofollow noopener" target="_blank">ZATCA's official solution-provider directory</a> before signing.)
+        From the {softwareCount} software listings in our <a href="/sa/">Saudi directory</a>, these are the ones advertising ZATCA e-invoicing capability, with our notes on fit. Focus Softnet also sells a separate ZATCA e-invoicing module for its ERP and others; its Focus CAFM product is not an invoicing system. (Always verify a vendor against <a href="https://zatca.gov.sa/en/E-Invoicing/SolutionProviders/Pages/SolutionProvidersDirectory.aspx" rel="nofollow noopener" target="_blank">ZATCA's official solution-provider directory</a> before signing.)
       </p>
     </section>
 
@@ -186,12 +184,12 @@ const faqSchema = {
     <section class="mb-10 prose prose-slate max-w-none">
       <h2>Compliance checklist for contractors</h2>
       <ol>
-        <li><strong>Confirm your status.</strong> If VAT-taxable revenue exceeded SAR 375,000 in 2022, 2023 or 2024, you were in Wave 24 (deadline 30 June 2026, now passed). If it exceeded SAR 187,500 in any year from 2022 to 2025 and you were not in an earlier wave, EY reports that Wave 25 covers you, with integration starting from 1 February 2027. Check the Fatoora portal and your registered contacts for ZATCA's notice.</li>
-        <li><strong>Pick certified software now.</strong> Shortlist from the table above; cross-check ZATCA's solution-provider directory. If your deadline has already passed, onboarding is urgent: don't add more non-compliant months; otherwise leave 2-3 months before your date.</li>
+        <li><strong>Confirm your status.</strong> EY reports that Wave 24 covered taxable turnover above SAR 375,000 in 2022, 2023 or 2024, with integration between 1 April and 30 June 2026 (now passed). If your taxable turnover exceeded SAR 187,500 in any year from 2022 to 2025 and you were not in an earlier wave, EY reports that Wave 25 covers you, with Phase 2 compliance starting from 1 February 2027. Check the Fatoora portal and your registered contacts for ZATCA's notice.</li>
+        <li><strong>Pick software now.</strong> Shortlist from the table above; cross-check ZATCA's solution-provider directory. If your deadline has already passed, onboarding is urgent: don't add more non-compliant months; otherwise leave time to set up and test before your date.</li>
         <li><strong>Demo YOUR billing flows.</strong> Progress claims, advances, retention, supply-and-install: in the demo, on your real contract structure.</li>
-        <li><strong>Onboard with Fatoora.</strong> Device/solution onboarding (CSID issuance) through the portal, done by your vendor or accountant.</li>
-        <li><strong>Run a clearance test.</strong> Issue real cleared invoices in a controlled batch before switching the whole business over.</li>
-        <li><strong>Train the back office.</strong> The people raising claims need to know what now blocks an invoice (missing buyer VAT number, wrong format); fix at source, not at month-end.</li>
+        <li><strong>Connect to Fatoora.</strong> Your vendor or accountant connects your invoicing solution to the Fatoora platform; agree who does each step.</li>
+        <li><strong>Run a test.</strong> Issue a small batch of real e-invoices through the integration before switching the whole business over.</li>
+        <li><strong>Train the back office.</strong> The people raising claims need to know which invoice data the integration requires; fix errors at source, not at month-end.</li>
       </ol>
     </section>
 
@@ -208,7 +206,7 @@ const faqSchema = {
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
-      <strong class="text-slate-700">Sources &amp; verification:</strong> ZATCA e-invoicing guidance (zatca.gov.sa) · Wave 24 (above SAR 375,000, integration 1 April-30 June 2026) and Wave 25 (above SAR 187,500, integration from 1 February 2027) as reported in EY tax alerts · vendor capabilities as each vendor describes them, re-checked September 2026. This guide is general information, not tax advice; confirm your obligations with ZATCA or a licensed advisor. Spotted an error? <a href="/contact/" class="underline">Tell us</a> and we'll correct it.
+      <strong class="text-slate-700">Sources &amp; verification:</strong> Phase 1 and Phase 2 descriptions, Wave 24 (above SAR 375,000 in 2022, 2023 or 2024; integration 1 April-30 June 2026) and Wave 25 (above SAR 187,500 in 2022 to 2025; comply with Phase 2 starting from 1 February 2027) as reported in EY tax alerts, re-read 1 October 2026; zatca.gov.sa could not be reached for this update. Vendor capabilities as each vendor describes them, re-checked September 2026. This guide is general information, not tax advice; confirm your obligations with ZATCA or a licensed advisor. Spotted an error? <a href="/contact/" class="underline">Tell us</a>.
     </section>
 
     <section class="rounded-lg bg-slate-900 p-8 text-white">

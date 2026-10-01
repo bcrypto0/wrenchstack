@@ -5,7 +5,10 @@ import { asSentence,
   formatPrice,
   verticalToUrl,
   verticals,
-  type Tool, priceTier, toolType} from '../../../lib/data';
+  isQuoteOnly,
+  nonMonthlyPricingOnly,
+  entryPriceLabel,
+  type Tool, toolType} from '../../../lib/data';
 import FreshnessBadge from '../../../components/FreshnessBadge.astro';
 import { isComparisonIndexable } from '../../../lib/compare-index.mjs';
 import MissingFromList from '../../../components/MissingFromList.astro';
@@ -13,9 +16,8 @@ import { priceScaling } from '../../../lib/data';
 
 export async function getStaticPaths() {
   // Generate both directions per pair (e.g. jobber-vs-servicetitan AND
-  // servicetitan-vs-jobber). Google indexes both, the canonical tag points
-  // to the alphabetical version to consolidate ranking signals. Captures
-  // search demand at either word order without losing PageRank.
+  // servicetitan-vs-jobber). The canonical tag points to the alphabetical
+  // version to consolidate ranking signals.
   const pairs: { a: Tool; b: Tool }[] = [];
   for (let i = 0; i < tools.length; i++) {
     for (let j = 0; j < tools.length; j++) {
@@ -50,6 +52,11 @@ interface Props {
 
 const { a, b } = Astro.props;
 
+// Feature and integration lists are our entries' labels, not a controlled vocabulary
+// (the methodology's v1.2 note: "quotes" on one entry, "estimates" on another). A label
+// missing from one list means our entry does not record it, not that the tool lacks
+// it, so the copy below says "listed" and never "only X has" (2026-10-01).
+const label = (s: string) => s.replace(/_/g, ' ');
 const sharedFeatures = a.key_features.filter((f) => b.key_features.includes(f));
 const onlyA = a.key_features.filter((f) => !b.key_features.includes(f));
 const onlyB = b.key_features.filter((f) => !a.key_features.includes(f));
@@ -63,14 +70,38 @@ const sharedVerticals = a.verticals
   .map((v) => verticals.find((x) => x.slug === v))
   .filter((v): v is NonNullable<typeof v> => v !== undefined);
 
+// Monthly starting prices (null for quote-only tools and for the two that publish
+// only one-time or per-project prices).
+const aStart = a.pricing.starting_at_usd;
+const bStart = b.pricing.starting_at_usd;
 const cheaperTool =
-  a.pricing.starting_at_usd !== null &&
-  b.pricing.starting_at_usd !== null &&
-  a.pricing.starting_at_usd !== b.pricing.starting_at_usd
-    ? a.pricing.starting_at_usd < b.pricing.starting_at_usd
+  aStart !== null && bStart !== null && aStart !== bStart
+    ? aStart < bStart
       ? a
       : b
     : null;
+const otherOf = (t: Tool) => (t === a ? b : a);
+
+// Price transparency: quote-only is pricing_model 'quote_only' (isQuoteOnly), never
+// "starting_at_usd is null". Until 2026-10-01 these pages told readers that Trash Flow
+// and Pylon, which publish one-time and per-project prices, "quote only".
+const aQuote = isQuoteOnly(a);
+const bQuote = isQuoteOnly(b);
+// "From $29/mo", "Free tier available", or the non-monthly wording.
+function shortPrice(t: Tool): string {
+  if (nonMonthlyPricingOnly(t)) return 'one-time or per-project prices, not a monthly plan';
+  return formatPrice(t);
+}
+
+// "starts at $29 per user a month" / "has a free tier" ("starts at a free tier" read badly).
+const startsAt = (t: Tool) => (t.pricing.starting_at_usd === 0 ? 'has a free tier' : `starts at ${entryPriceLabel(t)}`);
+
+// "a 14-day free trial" / "a free tier" / null when our data records neither.
+function trialPhrase(t: Tool): string | null {
+  if ((t.pricing.free_trial_days ?? 0) > 0) return `a ${t.pricing.free_trial_days}-day free trial`;
+  if (t.pricing.starting_at_usd === 0) return 'a free tier';
+  return null;
+}
 
 // --- VERTICAL-FIT WINNER PER SHARED VERTICAL ---
 // Computed up here because the differences list, decision matrix, pros and verdict
@@ -100,54 +131,58 @@ function fitNames(wins: typeof verticalWinners): string {
   return joinOr(wins.slice(0, 3).map((vw) => vw.vertical.name));
 }
 
-// --- HELPER: classify each tool by pricing tier ---
-// priceTier was duplicated here until 2026-09-01. Removed: a second copy of a rule is a
-// second thing to forget to update, which is exactly how the median ended up with three
-// different answers. Imported from lib/data now.
+// QuickBooks products named in a tool's integration list.
+const QB_NAMES: Record<string, string> = {
+  quickbooks_online: 'QuickBooks Online',
+  quickbooks_desktop: 'QuickBooks Desktop',
+  quickbooks_enterprise: 'QuickBooks Enterprise',
+  quickbooks_time: 'QuickBooks Time',
+  quickbooks: 'QuickBooks (product not specified)',
+};
+const qbList = (t: Tool) => t.integrations.filter((i) => i.includes('quickbooks')).map((i) => QB_NAMES[i] ?? label(i));
 
-const tierA = priceTier(a);
-const tierB = priceTier(b);
-
-const aHasQB = a.integrations.some((i) => i.includes('quickbooks'));
-const bHasQB = b.integrations.some((i) => i.includes('quickbooks'));
-const aHasStripe = a.integrations.some((i) => i.includes('stripe'));
-const bHasStripe = b.integrations.some((i) => i.includes('stripe'));
+const aHasQB = qbList(a).length > 0;
+const bHasQB = qbList(b).length > 0;
 const aHasGLS = a.integrations.some((i) => i.includes('google_local_services'));
 const bHasGLS = b.integrations.some((i) => i.includes('google_local_services'));
 const aHasTrial = (a.pricing.free_trial_days ?? 0) > 0;
 const bHasTrial = (b.pricing.free_trial_days ?? 0) > 0;
-const aHasPublicPricing = a.pricing.starting_at_usd !== null;
-const bHasPublicPricing = b.pricing.starting_at_usd !== null;
+
+// Lower-case the first letter of a data phrase unless it starts an acronym ("HVAC").
+const lcFirst = (s: string) => (s.length > 1 && /[a-z]/.test(s[1]) ? s.charAt(0).toLowerCase() + s.slice(1) : s);
 
 // --- WHAT ACTUALLY SEPARATES THEM (added 2026-09-07, thin-page audit) -------
 // Measured 2026-09-07: two comparison pages shared 801 of 857 unique word
-// tokens (93%). The pages were not short, 1,731 words, and the extra length
-// was all shared furniture. The differentiating facts existed but sat below
-// several screens of boilerplate, so every page read like every other page.
-//
-// This builds a list of ONLY the things that differ for this specific pair,
-// from data, and the template renders it directly under the H1. It is unique
-// per pair by construction. If a pair genuinely differs in nothing here, the
-// block renders nothing rather than padding with filler.
+// tokens (93%). This builds a list of ONLY the things that differ for this
+// specific pair, from data, and the template renders it directly under the H1.
+// If a pair differs in nothing here, the block renders nothing.
 const verticalLabel = (slug: string) =>
   verticals.find((x) => x.slug === slug)?.name ?? slug.replace(/_/g, ' ');
 
 const differences: string[] = [];
 
-if (aHasPublicPricing && bHasPublicPricing && cheaperTool) {
-  const dearer = cheaperTool === a ? b : a;
+if (cheaperTool) {
+  const dearer = otherOf(cheaperTool);
   const lo = cheaperTool.pricing.starting_at_usd as number;
   const hi = dearer.pricing.starting_at_usd as number;
-  const mult = hi / lo;
+  // A ratio only means something when both prices scale the same way (and the lower
+  // one is not $0, which printed "Infinityx" until 2026-10-01).
+  const mult = lo > 0 && priceScaling(cheaperTool) === priceScaling(dearer) ? hi / lo : null;
   differences.push(
-    `**Entry price:** ${cheaperTool.name} starts at ${formatPrice(cheaperTool)}, ${dearer.name} at ${formatPrice(dearer)}` +
-      (mult >= 1.5 ? `, so ${dearer.name} is ${mult >= 10 ? Math.round(mult) : mult.toFixed(1)}x the entry cost.` : '.')
+    `**Entry price:** ${cheaperTool.name} ${startsAt(cheaperTool)}; ${dearer.name} ${startsAt(dearer)}` +
+      (mult !== null && mult >= 1.5 ? `, so ${dearer.name}'s entry price is ${mult >= 10 ? Math.round(mult) : mult.toFixed(1)} times ${cheaperTool.name}'s.` : '.')
   );
-} else if (aHasPublicPricing !== bHasPublicPricing) {
-  const open = aHasPublicPricing ? a : b;
-  const closed = aHasPublicPricing ? b : a;
+} else if (aQuote !== bQuote) {
+  const open = aQuote ? b : a;
+  const closed = aQuote ? a : b;
   differences.push(
-    `**Price transparency:** ${open.name} publishes a starting price (${formatPrice(open)}). ${closed.name} does not, so comparing them costs you a sales call.`
+    `**Price transparency:** ${open.name} publishes its prices (${shortPrice(open)}). ${closed.name} does not, so you need a quote from ${closed.name} to compare them.`
+  );
+} else if (!aQuote && !bQuote && nonMonthlyPricingOnly(a) !== nonMonthlyPricingOnly(b)) {
+  const nm = nonMonthlyPricingOnly(a) ? a : b;
+  const monthly = otherOf(nm);
+  differences.push(
+    `**Price structure:** ${nm.name} publishes one-time or per-project prices rather than a monthly plan; ${monthly.name} ${startsAt(monthly)}. Compare the total over the period you expect to use each.`
   );
 }
 
@@ -155,24 +190,25 @@ const aOnlyVerticals = a.verticals.filter((v: string) => !b.verticals.includes(v
 const bOnlyVerticals = b.verticals.filter((v: string) => !a.verticals.includes(v));
 if (aOnlyVerticals.length || bOnlyVerticals.length) {
   const parts: string[] = [];
-  if (aOnlyVerticals.length) parts.push(`${a.name} covers ${aOnlyVerticals.map(verticalLabel).join(', ')}`);
-  if (bOnlyVerticals.length) parts.push(`${b.name} covers ${bOnlyVerticals.map(verticalLabel).join(', ')}`);
-  differences.push(`**Trades served:** ${parts.join('; ')}. The other does not.`);
+  if (aOnlyVerticals.length) parts.push(`${a.name} serves ${aOnlyVerticals.map(verticalLabel).join(', ')}`);
+  if (bOnlyVerticals.length) parts.push(`${b.name} serves ${bOnlyVerticals.map(verticalLabel).join(', ')}`);
+  differences.push(`**Trades served:** ${parts.join('; ')}. The other tool's entry does not list ${aOnlyVerticals.length + bOnlyVerticals.length === 1 ? 'it' : 'them'}.`);
 }
 
 if (aHasTrial !== bHasTrial) {
   const t = aHasTrial ? a : b;
+  const other = otherOf(t);
   differences.push(
-    `**Free trial:** ${t.name} runs a ${t.pricing.free_trial_days}-day trial. ${(aHasTrial ? b : a).name} has none, so you evaluate it on a demo.`
+    `**Free trial:** ${t.name} offers a ${t.pricing.free_trial_days}-day free trial. ${other.pricing.starting_at_usd === 0 ? `${other.name} has a free tier instead.` : `Our data records no free trial for ${other.name}.`}`
   );
 }
 
 if (onlyAIntegrations.length || onlyBIntegrations.length) {
-  const fmt = (list: string[]) => list.slice(0, 4).map((i) => i.replace(/_/g, ' ')).join(', ');
+  const fmt = (list: string[]) => list.slice(0, 4).map(label).join(', ');
   const parts: string[] = [];
-  if (onlyAIntegrations.length) parts.push(`only ${a.name} connects to ${fmt(onlyAIntegrations)}`);
-  if (onlyBIntegrations.length) parts.push(`only ${b.name} connects to ${fmt(onlyBIntegrations)}`);
-  differences.push(`**Integrations:** ${parts.join('; ')}.`);
+  if (onlyAIntegrations.length) parts.push(`${a.name}: ${fmt(onlyAIntegrations)}`);
+  if (onlyBIntegrations.length) parts.push(`${b.name}: ${fmt(onlyBIntegrations)}`);
+  differences.push(`**Integrations listed for one tool only:** ${parts.join('; ')}.`);
 }
 
 if (fitWinsA.length || fitWinsB.length) {
@@ -186,39 +222,44 @@ if (fitWinsA.length || fitWinsB.length) {
 
 if (onlyA.length || onlyB.length) {
   const parts: string[] = [];
-  if (onlyA.length) parts.push(`${a.name} has ${onlyA.slice(0, 3).join(', ')}`);
-  if (onlyB.length) parts.push(`${b.name} has ${onlyB.slice(0, 3).join(', ')}`);
-  differences.push(`**Features the other lacks:** ${parts.join('; ')}.`);
+  if (onlyA.length) parts.push(`${a.name}: ${onlyA.slice(0, 3).map(label).join(', ')}`);
+  if (onlyB.length) parts.push(`${b.name}: ${onlyB.slice(0, 3).map(label).join(', ')}`);
+  differences.push(`**Features listed for one tool only:** ${parts.join('; ')}.`);
 }
 
 // --- DECISION MATRIX ---
+// Every line states a difference in our data. Removed 2026-10-01: "requires a demo"
+// and "requires Zapier or manual workarounds" (no source said so), and the feature-count
+// line (the methodology dropped feature counts in v1.2 as a measure of how finely an
+// entry was written, not of the product).
 function getDecisionMatrix(): { pickA: string[]; pickB: string[] } {
   const pickA: string[] = [];
   const pickB: string[] = [];
+  const side = (t: Tool) => (t === a ? pickA : pickB);
 
   // Best-for lines (always include)
   pickA.push(`Your situation matches **${a.name}'s target profile**: ${a.best_for}`);
   pickB.push(`Your situation matches **${b.name}'s target profile**: ${b.best_for}`);
 
-  // Cheaper at entry
-  if (cheaperTool === a) {
-    pickA.push(`**Budget is the constraint**: ${a.name} starts at $${a.pricing.starting_at_usd}/mo vs $${b.pricing.starting_at_usd}/mo for ${b.name}`);
-  } else if (cheaperTool === b) {
-    pickB.push(`**Budget is the constraint**: ${b.name} starts at $${b.pricing.starting_at_usd}/mo vs $${a.pricing.starting_at_usd}/mo for ${a.name}`);
+  // Lower entry price
+  if (cheaperTool) {
+    const other = otherOf(cheaperTool);
+    side(cheaperTool).push(`**Entry price matters most**: ${cheaperTool.name} ${startsAt(cheaperTool)}; ${other.name} ${startsAt(other)}`);
   }
 
-  // Free trial advantage
-  if (aHasTrial && !bHasTrial && !(b.pricing.starting_at_usd === 0)) {
-    pickA.push(`**You want to try before buying**: ${a.name} offers a ${a.pricing.free_trial_days}-day free trial; ${b.name} requires a demo`);
-  } else if (bHasTrial && !aHasTrial && !(a.pricing.starting_at_usd === 0)) {
-    pickB.push(`**You want to try before buying**: ${b.name} offers a ${b.pricing.free_trial_days}-day free trial; ${a.name} requires a demo`);
+  // Free trial
+  for (const t of [a, b]) {
+    const other = otherOf(t);
+    if ((t.pricing.free_trial_days ?? 0) > 0 && !((other.pricing.free_trial_days ?? 0) > 0) && other.pricing.starting_at_usd !== 0) {
+      side(t).push(`**You want to try before buying**: ${t.name} offers a ${t.pricing.free_trial_days}-day free trial; our data records none for ${other.name}`);
+    }
   }
 
   // QuickBooks
   if (aHasQB && !bHasQB) {
-    pickA.push(`**QuickBooks is critical**: ${a.name} has native integration; ${b.name} requires Zapier or manual workarounds`);
+    pickA.push(`**QuickBooks matters**: ${a.name} lists a QuickBooks integration (${qbList(a).join(', ')}); our entry for ${b.name} lists none`);
   } else if (bHasQB && !aHasQB) {
-    pickB.push(`**QuickBooks is critical**: ${b.name} has native integration; ${a.name} requires Zapier or manual workarounds`);
+    pickB.push(`**QuickBooks matters**: ${b.name} lists a QuickBooks integration (${qbList(b).join(', ')}); our entry for ${a.name} lists none`);
   }
 
   // Better vertical fit in the buyer's trade
@@ -229,46 +270,39 @@ function getDecisionMatrix(): { pickA: string[]; pickB: string[] } {
     pickB.push(`**You work in ${fitNames(fitWinsB)}**: ${b.name} has the higher vertical-fit score there (${fitWinsB[0].vertical.name}: ${fitWinsB[0].bFit}/10 vs ${fitWinsB[0].aFit}/10)`);
   }
 
-  // Published price vs quote-only
-  if (aHasPublicPricing && !bHasPublicPricing) {
-    pickA.push(`**You want to budget without a sales call**: ${a.name} publishes its price (${formatPrice(a)}); ${b.name} quotes only`);
-  } else if (bHasPublicPricing && !aHasPublicPricing) {
-    pickB.push(`**You want to budget without a sales call**: ${b.name} publishes its price (${formatPrice(b)}); ${a.name} quotes only`);
+  // Published prices vs quote-only
+  if (!aQuote && bQuote) {
+    pickA.push(`**You want to budget before asking for a quote**: ${a.name} publishes its prices (${shortPrice(a)}); ${b.name} quotes only`);
+  } else if (!bQuote && aQuote) {
+    pickB.push(`**You want to budget before asking for a quote**: ${b.name} publishes its prices (${shortPrice(b)}); ${a.name} quotes only`);
   }
 
   // Multi-vertical
   if (a.verticals.length > b.verticals.length + 1) {
-    pickA.push(`**You serve multiple trades**: ${a.name} covers ${a.verticals.length} verticals vs ${b.name}'s ${b.verticals.length}`);
+    pickA.push(`**You serve several trades**: ${a.name} serves ${a.verticals.length} trades in our data, against ${b.verticals.length} for ${b.name}`);
   } else if (b.verticals.length > a.verticals.length + 1) {
-    pickB.push(`**You serve multiple trades**: ${b.name} covers ${b.verticals.length} verticals vs ${a.name}'s ${a.verticals.length}`);
+    pickB.push(`**You serve several trades**: ${b.name} serves ${b.verticals.length} trades in our data, against ${a.verticals.length} for ${a.name}`);
   }
 
-  // Feature breadth
-  if (a.key_features.length > b.key_features.length + 2) {
-    pickA.push(`**You want broader feature coverage**: ${a.name} ships ${a.key_features.length} core features vs ${b.name}'s ${b.key_features.length}`);
-  } else if (b.key_features.length > a.key_features.length + 2) {
-    pickB.push(`**You want broader feature coverage**: ${b.name} ships ${b.key_features.length} core features vs ${a.name}'s ${a.key_features.length}`);
-  }
-
-  // Integration breadth
+  // Integration count (a Fit Score factor)
   if (a.integrations.length > b.integrations.length + 1) {
-    pickA.push(`**Integration ecosystem matters**: ${a.name} has ${a.integrations.length} native integrations vs ${b.name}'s ${b.integrations.length}`);
+    pickA.push(`**Integrations matter**: ${a.name} lists ${a.integrations.length} integrations in our data, against ${b.integrations.length} for ${b.name}`);
   } else if (b.integrations.length > a.integrations.length + 1) {
-    pickB.push(`**Integration ecosystem matters**: ${b.name} has ${b.integrations.length} native integrations vs ${a.name}'s ${a.integrations.length}`);
+    pickB.push(`**Integrations matter**: ${b.name} lists ${b.integrations.length} integrations in our data, against ${a.integrations.length} for ${a.name}`);
   }
 
-  // GLS for inbound-call businesses
+  // Google Local Services Ads
   if (aHasGLS && !bHasGLS) {
-    pickA.push(`**Google Local Services Ads drive your inbound calls**: ${a.name} has native GLS integration; ${b.name} doesn't`);
+    pickA.push(`**Google Local Services Ads bring in your calls**: ${a.name} lists a Google Local Services Ads integration; our entry for ${b.name} does not`);
   } else if (bHasGLS && !aHasGLS) {
-    pickB.push(`**Google Local Services Ads drive your inbound calls**: ${b.name} has native GLS integration; ${a.name} doesn't`);
+    pickB.push(`**Google Local Services Ads bring in your calls**: ${b.name} lists a Google Local Services Ads integration; our entry for ${a.name} does not`);
   }
 
-  // Founding maturity (only if significant)
+  // Founding year (only if more than five years apart)
   if (a.founded && b.founded && (a.founded < b.founded - 5)) {
-    pickA.push(`**You want a longer track record**: ${a.name} dates from ${a.founded} (${2026 - a.founded} years) vs ${b.name}'s ${b.founded}`);
+    pickA.push(`**You want a longer track record**: ${a.name} was founded in ${a.founded}, ${b.name} in ${b.founded}`);
   } else if (b.founded && a.founded && (b.founded < a.founded - 5)) {
-    pickB.push(`**You want a longer track record**: ${b.name} dates from ${b.founded} (${2026 - b.founded} years) vs ${a.name}'s ${a.founded}`);
+    pickB.push(`**You want a longer track record**: ${b.name} was founded in ${b.founded}, ${a.name} in ${a.founded}`);
   }
 
   return { pickA: pickA.slice(0, 6), pickB: pickB.slice(0, 6) };
@@ -276,101 +310,106 @@ function getDecisionMatrix(): { pickA: string[]; pickB: string[] } {
 
 const decisionMatrix = getDecisionMatrix();
 
-// --- PRICING ANALYSIS NARRATIVE ---
-function pricingAnalysis(): string {
-  if (!aHasPublicPricing && !bHasPublicPricing) {
-    return `Neither ${a.name} nor ${b.name} has a published list price, so both need a quote before you can compare them. Request quotes for the same team size and feature set, and get what is included (users, integrations, onboarding) in writing.`;
-  }
-  if (!aHasPublicPricing) {
-    return `${a.name} has no published list price; ${b.name} has transparent public pricing starting at $${b.pricing.starting_at_usd}/mo. If budget predictability matters, ${b.name} wins on transparency alone. To compare, get a written quote from ${a.name} for your team size.`;
-  }
-  if (!bHasPublicPricing) {
-    return `${b.name} has no published list price; ${a.name} has transparent public pricing starting at $${a.pricing.starting_at_usd}/mo. If budget predictability matters, ${a.name} wins on transparency alone. To compare, get a written quote from ${b.name} for your team size.`;
-  }
+// --- PRICING TABLE AND ANALYSIS ---
+// Bluebeam Revu's tier prices are per user per YEAR (pricing_model annual_per_user);
+// until 2026-10-01 the table printed them as "$590/mo". Tools that publish only
+// one-time or per-project prices have no tier figures: the price is in the tier name
+// or the pricing note, so the cell no longer says "Custom".
+function tierCell(t: Tool, i: number): string {
+  const tierName = t.pricing.tiers[i];
+  if (!tierName) return '-';
+  const p = t.pricing.tier_prices_usd?.[i];
+  if (nonMonthlyPricingOnly(t)) return tierName;
+  if (p === null || p === undefined) return `${tierName}: quote`;
+  if (p === 0) return `${tierName}: free`;
+  if (t.pricing.pricing_model === 'annual_per_user') return `${tierName}: $${p} per user a year`;
+  return `${tierName}: $${p}/mo`;
+}
 
-  // Both have public pricing
+function topTierPhrase(t: Tool): string {
+  const n = t.pricing.tiers.length;
+  const top = t.pricing.tier_prices_usd?.[n - 1];
+  if (n < 2 || typeof top !== 'number' || top <= 0 || top === t.pricing.starting_at_usd) return '';
+  const unit = t.pricing.pricing_model === 'annual_per_user' ? 'per user a year' : 'a month';
+  return `; its top published tier, ${t.pricing.tiers[n - 1]}, is $${top} ${unit}`;
+}
+
+function describePrice(t: Tool): string {
+  if (isQuoteOnly(t)) return `${t.name} publishes no price, so ask for a written quote for your team size.`;
+  if (nonMonthlyPricingOnly(t)) return `${t.name} publishes one-time or per-project prices rather than a monthly plan (listed in its full review), so compare the total over the period you expect to use it.`;
+  if (t.pricing.starting_at_usd === 0) return `${t.name} has a free tier (${t.pricing.tiers[0]})${topTierPhrase(t)}.`;
+  return `${t.name} starts at ${entryPriceLabel(t)} on ${t.pricing.tiers[0]}${topTierPhrase(t)}.`;
+}
+
+function pricingAnalysis(): string {
+  if (aQuote && bQuote) {
+    return `Neither ${a.name} nor ${b.name} publishes a price, so both need a quote before you can compare them. Request quotes for the same team size and feature set, and get what is included (users, integrations, onboarding) in writing.`;
+  }
+  let analysis = `${describePrice(a)} ${describePrice(b)}`;
+
   // Structure comes from pricing_model (2026-09-10); matching 'unlimited users'
   // in the note text called per-user tools flat.
   const aIsFlat = priceScaling(a) === 'flat';
   const bIsFlat = priceScaling(b) === 'flat';
   const flatVsPerUser = (aIsFlat && priceScaling(b) === 'per_user') || (bIsFlat && priceScaling(a) === 'per_user');
-  const aTopPrice = a.pricing.tier_prices_usd?.[a.pricing.tiers.length - 1];
-  const bTopPrice = b.pricing.tier_prices_usd?.[b.pricing.tiers.length - 1];
-
-  let analysis = `${a.name} starts at $${a.pricing.starting_at_usd}/mo on ${a.pricing.tiers[0]}${aTopPrice && typeof aTopPrice === 'number' ? ` and scales to $${aTopPrice}/mo on ${a.pricing.tiers[a.pricing.tiers.length - 1]}` : ''}. ${b.name} starts at $${b.pricing.starting_at_usd}/mo on ${b.pricing.tiers[0]}${bTopPrice && typeof bTopPrice === 'number' ? ` and scales to $${bTopPrice}/mo on ${b.pricing.tiers[b.pricing.tiers.length - 1]}` : ''}.`;
-
   if (flatVsPerUser) {
     const flatTool = aIsFlat ? a : b;
     const perUserTool = aIsFlat ? b : a;
     analysis += ` ${flatTool.name} charges a flat monthly price per plan while ${perUserTool.name} charges per user, so ${flatTool.name} gets relatively cheaper as your team grows; check each plan's user or usage limits.`;
-  } else if (a.pricing.starting_at_usd !== b.pricing.starting_at_usd) {
-    const diff = Math.abs(a.pricing.starting_at_usd - b.pricing.starting_at_usd);
-    const cheaper = cheaperTool!;
-    const pricier = cheaper === a ? b : a;
-    analysis += ` ${cheaper.name} is $${Math.round(diff)}/mo cheaper at the entry tier. At scale (5+ users), both platforms typically converge in price as you climb the tier ladder.`;
+  } else if (cheaperTool) {
+    // An invented "both platforms typically converge in price at scale" followed this
+    // until 2026-10-01; no data supports it.
+    const diff = Math.abs((aStart as number) - (bStart as number));
+    const diffText = Number.isInteger(diff) ? String(diff) : diff.toFixed(2);
+    analysis += ` ${cheaperTool.name}'s entry price is $${diffText} a month lower.`;
   }
 
   return analysis;
 }
 
-// --- IMPLEMENTATION TIMELINE COMPARISON ---
-function implementationTimeline(t: Tool): string {
-  const tier = priceTier(t);
-  // A tool that publishes no price is not automatically an enterprise deployment. Until
-  // 2026-09-01 these shared the 'enterprise' bucket and every quote-only product was
-  // described as a 3-6 month rollout with a dedicated implementation manager, which was
-  // invented for 45 of the 54 tools it was applied to.
-  if (tier === 'quote-only') return 'Not published; the vendor quotes per account, so ask for the onboarding plan in writing before signing';
-  if (tier === 'enterprise') return '3-6 months is typical at this price level; ask for the onboarding plan in writing';
-  if (tier === 'mid') return '4-8 weeks is typical at this price level; confirm whether onboarding is self-service or a paid service';
-  if (tier === 'free' || tier === 'entry') return '1-3 weeks is typical at this price level; ask whether there is a setup fee';
-  return '2-4 weeks typical';
-}
-
-// --- PROS PER TOOL (4-5 templated bullets) ---
+// --- PROS PER TOOL (from data) ---
 function getPros(t: Tool, isCheaper: boolean, fitWins: typeof verticalWinners): string[] {
   const pros: string[] = [];
-  const hasQB = t.integrations.some((i) => i.includes('quickbooks'));
+  const other = otherOf(t);
+  const qb = qbList(t);
   const hasStripe = t.integrations.some((i) => i.includes('stripe'));
   const hasGLS = t.integrations.some((i) => i.includes('google_local_services'));
   const hasFreeTrial = (t.pricing.free_trial_days ?? 0) > 0;
 
   if (isCheaper) pros.push(`Lower entry price: ${formatPrice(t)}`);
-  if (hasFreeTrial) pros.push(`${t.pricing.free_trial_days}-day free trial, no credit card required`);
+  if (!isQuoteOnly(t) && isQuoteOnly(other)) pros.push(`Publishes its prices; ${other.name} quotes only`);
+  if (hasFreeTrial) pros.push(`${t.pricing.free_trial_days}-day free trial`);
   if (fitWins.length) pros.push(`Higher vertical-fit score for ${fitNames(fitWins)}`);
-  if (hasQB) pros.push(`Native QuickBooks integration (bidirectional sync)`);
-  if (hasStripe) pros.push(`Built-in Stripe payment processing`);
-  if (hasGLS) pros.push(`Native Google Local Services Ads integration`);
-  if (t.verticals.length >= 5) pros.push(`Covers ${t.verticals.length} trade verticals (strong multi-vertical fit)`);
-  if (t.key_features.length >= 8) pros.push(`Broad feature coverage (${t.key_features.length} core features)`);
-  if (t.founded && t.founded <= 2015) pros.push(`${2026 - t.founded}-year track record (since ${t.founded})`);
+  if (qb.length) pros.push(`QuickBooks integration listed (${qb.join(', ')})`);
+  if (hasStripe) pros.push(`Stripe integration listed`);
+  if (hasGLS) pros.push(`Google Local Services Ads integration listed`);
+  if (t.verticals.length >= 5) pros.push(`Serves ${t.verticals.length} trades in our data`);
+  if (t.founded && t.founded <= 2015) pros.push(`Founded in ${t.founded}`);
   if (priceScaling(t) === 'flat') pros.push(`Flat monthly price per plan, not per user`);
 
   return pros.slice(0, 5);
 }
 
-// --- CONS PER TOOL (parsed from weaknesses + templated) ---
+// --- CONS PER TOOL (parsed from weaknesses + data gaps) ---
 function getCons(t: Tool, otherT: Tool): string[] {
   const cons: string[] = [];
-  // Parse weaknesses string into bullets
+  // Parse the weaknesses string into bullets. Split on semicolons and sentence ends
+  // only: splitting on every "." cut prices such as "$29.90" in two.
   if (t.weaknesses) {
     const parsed = t.weaknesses
-      .split(/[;.]\s*/)
-      .map((s) => s.trim())
+      .split(/;\s*|\.\s+(?=[A-Z])/)
+      .map((s) => s.trim().replace(/\.$/, ''))
       .filter((s) => s.length > 5)
       .map((s) => s.charAt(0).toUpperCase() + s.slice(1));
     cons.push(...parsed);
   }
-  // Add templated cons based on what the OTHER tool has
-  const tHasQB = t.integrations.some((i) => i.includes('quickbooks'));
-  const otherHasQB = otherT.integrations.some((i) => i.includes('quickbooks'));
-  if (otherHasQB && !tHasQB) cons.push(`No native QuickBooks integration (${otherT.name} has it)`);
+  if (qbList(otherT).length && !qbList(t).length) cons.push(`No QuickBooks integration in our data (${otherT.name} lists one)`);
 
   const tHasTrial = (t.pricing.free_trial_days ?? 0) > 0;
   const otherHasTrial = (otherT.pricing.free_trial_days ?? 0) > 0;
-  if (otherHasTrial && !tHasTrial && t.pricing.starting_at_usd !== 0) cons.push(`No free trial (${otherT.name} offers ${otherT.pricing.free_trial_days} days)`);
+  if (otherHasTrial && !tHasTrial && t.pricing.starting_at_usd !== 0) cons.push(`No free trial in our data (${otherT.name} offers ${otherT.pricing.free_trial_days} days)`);
 
-  if (t.pricing.starting_at_usd === null) cons.push(`No public pricing: sales call required for a quote`);
+  if (isQuoteOnly(t)) cons.push(`No published price: you need a quote`);
 
   return cons.slice(0, 5);
 }
@@ -380,50 +419,70 @@ const prosB = getPros(b, cheaperTool === b, fitWinsB);
 const consA = getCons(a, b);
 const consB = getCons(b, a);
 
-// --- EXTENDED FAQs (8 total) ---
+// --- FAQs ---
+// Rewritten 2026-10-01 from data. Removed: implementation durations by price tier
+// ("3-6 months", "4-8 weeks", "1-3 weeks"), migration and parallel-run durations,
+// support channels and response times by tier, and "the lower-priced option typically
+// wins": none came from a vendor or from our data.
+function cheaperAnswer(): string {
+  if (cheaperTool) {
+    const other = otherOf(cheaperTool);
+    return `${cheaperTool.name} has the lower entry price: ${entryPriceLabel(cheaperTool)}, against ${entryPriceLabel(other)} for ${other.name}. Total cost depends on your team size, the plan you need and any add-ons; see the pricing table above.`;
+  }
+  if (aQuote && bQuote) return `Neither publishes a price. Request quotes from both for the same team size and features.`;
+  if (aQuote !== bQuote) {
+    const open = aQuote ? b : a;
+    const closed = aQuote ? a : b;
+    return `${open.name} publishes its prices (${shortPrice(open)}); ${closed.name} quotes only, so ask ${closed.name} for a written quote at your team size before comparing.`;
+  }
+  if (nonMonthlyPricingOnly(a) || nonMonthlyPricingOnly(b)) {
+    return `${[a, b].filter(nonMonthlyPricingOnly).map((t) => t.name).join(' and ')} ${nonMonthlyPricingOnly(a) && nonMonthlyPricingOnly(b) ? 'publish' : 'publishes'} one-time or per-project prices rather than a monthly plan, so compare the total over the period you expect to use each.`;
+  }
+  if (aStart === 0 && bStart === 0) return `Both have a free tier. Total cost depends on the paid plan you need, if any; see the pricing table above.`;
+  // Same figure, charged differently ($60 per user against $60 a month for the company):
+  // until 2026-10-01 this said "Both start at $60 per user a month" and then contradicted
+  // itself in brackets.
+  if (entryPriceLabel(a) !== entryPriceLabel(b)) {
+    return `${a.name} starts at ${entryPriceLabel(a)}; ${b.name} starts at ${entryPriceLabel(b)}. The figure is the same but it is charged differently, so compare the two at your team size.`;
+  }
+  return `Both start at ${entryPriceLabel(a)}. Total cost depends on your team size and the plan you need.`;
+}
+
+const qbSentence = (t: Tool) =>
+  qbList(t).length ? `${t.name} lists ${qbList(t).join(' and ')}.` : `Our entry for ${t.name} lists no QuickBooks integration.`;
+const trialAnswer = (t: Tool) => {
+  const p = trialPhrase(t);
+  return p ? `${t.name}: ${p}.` : `${t.name}: no free trial in our data.`;
+};
+
 const faqs = [
   {
     q: `Which is better, ${a.name} or ${b.name}?`,
-    a: `Neither is universally better; they target different buyers. ${a.name} is best for ${asSentence(a.best_for)} ${b.name} is best for ${asSentence(b.best_for)} See the decision matrix above for situation-specific guidance, or jump to the per-vertical winner table if you're in a specific trade.`,
+    a: `It depends on your trade, team size and budget. ${a.name} is best for ${lcFirst(asSentence(a.best_for))} ${b.name} is best for ${lcFirst(asSentence(b.best_for))} ${verticalWinners.length ? 'See the decision matrix above, and the trade-by-trade fit table if you work in one trade.' : 'See the decision matrix above.'}`,
   },
   {
     q: `Is ${a.name} cheaper than ${b.name}?`,
-    a:
-      cheaperTool !== null
-        ? `${cheaperTool.name} has a lower starting price (${formatPrice(cheaperTool)} vs ${formatPrice(cheaperTool === a ? b : a)}). However, total cost depends on team size, features needed, and tier. See the full pricing breakdown above.`
-        : `Both ${a.name} and ${b.name} use custom pricing or have similar entry costs; request quotes from both to compare apples-to-apples for your specific team size.`,
+    a: cheaperAnswer(),
   },
   {
     q: `Can ${a.name} and ${b.name} integrate with QuickBooks?`,
-    a: `${
-      aHasQB
-        ? `${a.name} integrates with QuickBooks natively.`
-        : `${a.name} does not have a native QuickBooks integration (Zapier workaround may exist).`
-    } ${
-      bHasQB
-        ? `${b.name} integrates with QuickBooks natively.`
-        : `${b.name} does not have a native QuickBooks integration.`
-    } ${aHasQB && bHasQB ? 'Both work with QuickBooks Online; confirm QuickBooks Desktop support before signing if your accountant uses Desktop.' : ''}`,
+    a: `${qbSentence(a)} ${qbSentence(b)} Check which way each sync runs, and on which plans, in each tool's full review before you buy.`,
   },
   {
     q: `Do ${a.name} or ${b.name} offer a free trial?`,
-    a: `${a.name}: ${aHasTrial ? `${a.pricing.free_trial_days}-day free trial, no credit card required` : 'no free trial advertised; demo on request'}. ${b.name}: ${bHasTrial ? `${b.pricing.free_trial_days}-day free trial, no credit card required` : 'no free trial advertised; demo on request'}.`,
+    a: `${trialAnswer(a)} ${trialAnswer(b)}`,
   },
   {
-    q: `How long does ${a.name} vs ${b.name} take to implement?`,
-    a: `${a.name}: ${implementationTimeline(a)}. ${b.name}: ${implementationTimeline(b)}. These are typical ranges for each price level, not figures the vendors publish: the top price tier often takes 3-6 months with dedicated admin time, and mid-tier platforms often reach operational status in 4-8 weeks. Ask each vendor for its onboarding plan in writing.`,
-  },
-  {
-    q: `Can I migrate from ${a.name} to ${b.name} (or vice versa)?`,
-    a: `Yes, but expect data normalization work. Customer records and active jobs typically import cleanly via CSV. Historical job data, recurring service agreements, and custom pricebooks rarely transfer perfectly; most shops leave historical data in the source system as archival reference rather than migrating it. Budget 2-4 weeks of parallel operation between the two systems during the cutover.`,
+    q: `Can I move from ${a.name} to ${b.name} (or the other way)?`,
+    a: `Our data does not record migration support for either tool. Ask both vendors which records they import and export (customers, jobs, invoices, recurring agreements, price books), in which file format, and whether they help with the import.`,
   },
   {
     q: `${a.name} vs ${b.name}: which has better customer support?`,
-    a: `Both ${a.name} and ${b.name} offer email support across all tiers, with phone and live chat typically reserved for higher tiers. Response time SLAs vary by tier: entry-tier customers usually get 24-48 hour email response; enterprise customers get dedicated account managers with same-day response. Read recent reviews on G2 and Capterra, linked from each full review, for support-quality signals before committing.`,
+    a: `Our data does not record support channels or response times for either tool. Ask each vendor which support comes with the plan you would buy. Each full review links to G2 and Capterra, where you can read current user reviews.`,
   },
   {
-    q: `Which is better for solo contractors vs growing teams?`,
-    a: `For solo contractors and 2-3 person teams, the lower-priced option (${cheaperTool ? cheaperTool.name : 'either'}) typically wins on cost without sacrificing core features. For growing teams (5-15 employees), evaluate based on which platform's upper tiers include the features you'll need at your 12-18 month projected scale rather than buying for today's team size. For established 15+ employee operations, the depth of enterprise features (reporting, multi-location, marketing attribution) matters more than entry-tier price.`,
+    q: `Which suits a solo contractor, and which a growing team?`,
+    a: `Our data puts ${a.name}'s best team size at ${a.best_team_size ?? 'an unrecorded size'} and ${b.name}'s at ${b.best_team_size ?? 'an unrecorded size'}. ${a.name}'s entry price is ${entryPriceLabel(a)}; ${b.name}'s is ${entryPriceLabel(b)}. Price both at the team size you expect to have, not only today's.`,
   },
 ];
 
@@ -437,8 +496,12 @@ const faqSchema = {
   })),
 };
 
-const pageTitle = `${a.name} vs ${b.name} (2026): Side-by-Side Comparison`;
-const pageDescription = `${a.name} vs ${b.name} compared head-to-head: pricing, features, integrations, pros and cons. Updated ${a.pricing.verified_date}.`;
+// The year in the title is the year of the older of the two price checks, so a
+// rebuild in a later year does not claim a fresher comparison than the data.
+const checkedDates = [...new Set([a.pricing.verified_date, b.pricing.verified_date].filter(Boolean))].sort();
+const titleYear = checkedDates.length ? checkedDates[0].slice(0, 4) : String(new Date().getFullYear());
+const pageTitle = `${a.name} vs ${b.name} (${titleYear}): Side-by-Side Comparison`;
+const pageDescription = `${a.name} vs ${b.name} compared head-to-head: pricing, features, integrations, pros and cons.${checkedDates.length ? ` Prices checked ${checkedDates.join(' and ')}.` : ''}`;
 
 // Canonical URL points to the alphabetical version of the pair so Google
 // consolidates ranking signals across both directions (X-vs-Y and Y-vs-X).
@@ -484,7 +547,7 @@ const breadcrumbs = [
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
             <div class="font-semibold text-slate-900">Considering switching {a.name} → {b.name}?</div>
-            <div class="text-sm text-slate-700">See the 12-month total cost: subscription delta + implementation + training + parallel run.</div>
+            <div class="text-sm text-slate-700">Estimate a 12-month switching cost: the subscription difference, the implementation fee from your quote, and assumed training time and a month of running both systems.</div>
           </div>
           <a
             href={`/cost-of-switch/?from=${a.slug}&to=${b.slug}`}
@@ -516,7 +579,7 @@ const breadcrumbs = [
               <div class="flex justify-between">
                 <dt class="text-slate-500">Free trial</dt>
                 <dd class="font-semibold text-slate-900">
-                  {t.pricing.free_trial_days && t.pricing.free_trial_days > 0 ? `${t.pricing.free_trial_days} days` : 'No'}
+                  {t.pricing.free_trial_days && t.pricing.free_trial_days > 0 ? `${t.pricing.free_trial_days} days` : t.pricing.starting_at_usd === 0 ? 'Free tier instead' : 'None listed'}
                 </dd>
               </div>
             </dl>
@@ -537,7 +600,7 @@ const breadcrumbs = [
       <section class="mb-12">
         <h2 class="mb-4 text-2xl font-bold text-slate-900">What actually separates them</h2>
         <p class="mb-4 text-sm text-slate-600">
-          Only the points where {a.name} and {b.name} genuinely differ, from our verified data.
+          Only the points where our data on {a.name} and {b.name} differs. A feature or integration missing from one tool's list means our entry does not record it, not that the tool lacks it.
           Everything they share is further down.
         </p>
         <ul class="space-y-3 rounded-lg border border-orange-200 bg-orange-50 p-6">
@@ -567,17 +630,17 @@ const breadcrumbs = [
         )}
         {cheaperTool && (
           <p class="mt-1 text-sm text-slate-600">
-            <strong>{cheaperTool.name}</strong> has a lower starting price ({formatPrice(cheaperTool)}).
+            <strong>{cheaperTool.name}</strong> has the lower starting price ({formatPrice(cheaperTool)}).
           </p>
         )}
-        {aHasPublicPricing !== bHasPublicPricing && (
+        {aQuote !== bQuote && (
           <p class="mt-1 text-sm text-slate-600">
-            <strong>{aHasPublicPricing ? a.name : b.name}</strong> publishes a starting price ({formatPrice(aHasPublicPricing ? a : b)}); {aHasPublicPricing ? b.name : a.name} quotes only.
+            <strong>{aQuote ? b.name : a.name}</strong> publishes its prices ({shortPrice(aQuote ? b : a)}); {aQuote ? a.name : b.name} quotes only.
           </p>
         )}
         {a.integrations.length !== b.integrations.length && (
           <p class="mt-1 text-sm text-slate-600">
-            <strong>{a.integrations.length > b.integrations.length ? a.name : b.name}</strong> lists more native integrations ({Math.max(a.integrations.length, b.integrations.length)} vs {Math.min(a.integrations.length, b.integrations.length)}).
+            <strong>{a.integrations.length > b.integrations.length ? a.name : b.name}</strong> lists more integrations in our data ({Math.max(a.integrations.length, b.integrations.length)} vs {Math.min(a.integrations.length, b.integrations.length)}).
           </p>
         )}
       </div>
@@ -624,18 +687,12 @@ const breadcrumbs = [
           </thead>
           <tbody class="divide-y divide-slate-100">
             {[0, 1, 2, 3].map((i) => {
-              const aTier = a.pricing.tiers[i];
-              const bTier = b.pricing.tiers[i];
-              if (!aTier && !bTier) return null;
-              const aPrice = a.pricing.tier_prices_usd?.[i];
-              const bPrice = b.pricing.tier_prices_usd?.[i];
-              const fmt = (p: number | null | undefined) =>
-                p === null || p === undefined ? 'Custom' : p === 0 ? 'Free' : `$${p}/mo`;
+              if (!a.pricing.tiers[i] && !b.pricing.tiers[i]) return null;
               return (
                 <tr>
                   <td class="p-3 font-semibold text-slate-900">Tier {i + 1}</td>
-                  <td class="p-3 text-slate-700">{aTier ? `${aTier}: ${fmt(aPrice)}` : '-'}</td>
-                  <td class="p-3 text-slate-700">{bTier ? `${bTier}: ${fmt(bPrice)}` : '-'}</td>
+                  <td class="p-3 text-slate-700">{tierCell(a, i)}</td>
+                  <td class="p-3 text-slate-700">{tierCell(b, i)}</td>
                 </tr>
               );
             })}
@@ -650,12 +707,14 @@ const breadcrumbs = [
       <div class="grid gap-6 md:grid-cols-2">
         <div>
           <h3 class="mb-3 text-lg font-bold text-slate-900">{a.name}</h3>
-          <div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 p-4">
-            <div class="mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-700">Pros</div>
-            <ul class="space-y-1.5 text-sm text-emerald-900">
-              {prosA.map((p) => <li>+ {p}</li>)}
-            </ul>
-          </div>
+          {prosA.length > 0 && (
+            <div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+              <div class="mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-700">Pros</div>
+              <ul class="space-y-1.5 text-sm text-emerald-900">
+                {prosA.map((p) => <li>+ {p}</li>)}
+              </ul>
+            </div>
+          )}
           <div class="rounded-lg border border-orange-200 bg-orange-50 p-4">
             <div class="mb-2 text-xs font-semibold uppercase tracking-wider text-orange-700">Cons</div>
             <ul class="space-y-1.5 text-sm text-orange-900">
@@ -665,12 +724,14 @@ const breadcrumbs = [
         </div>
         <div>
           <h3 class="mb-3 text-lg font-bold text-slate-900">{b.name}</h3>
-          <div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 p-4">
-            <div class="mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-700">Pros</div>
-            <ul class="space-y-1.5 text-sm text-emerald-900">
-              {prosB.map((p) => <li>+ {p}</li>)}
-            </ul>
-          </div>
+          {prosB.length > 0 && (
+            <div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+              <div class="mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-700">Pros</div>
+              <ul class="space-y-1.5 text-sm text-emerald-900">
+                {prosB.map((p) => <li>+ {p}</li>)}
+              </ul>
+            </div>
+          )}
           <div class="rounded-lg border border-orange-200 bg-orange-50 p-4">
             <div class="mb-2 text-xs font-semibold uppercase tracking-wider text-orange-700">Cons</div>
             <ul class="space-y-1.5 text-sm text-orange-900">
@@ -682,55 +743,45 @@ const breadcrumbs = [
     </section>
 
     <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-bold text-slate-900">Implementation timeline comparison</h2>
-      <div class="grid gap-6 md:grid-cols-2">
-        <div class="rounded-lg border border-slate-200 bg-white p-5">
-          <h3 class="mb-2 font-bold text-slate-900">{a.name}</h3>
-          <p class="text-sm text-slate-700">{implementationTimeline(a)}</p>
-        </div>
-        <div class="rounded-lg border border-slate-200 bg-white p-5">
-          <h3 class="mb-2 font-bold text-slate-900">{b.name}</h3>
-          <p class="text-sm text-slate-700">{implementationTimeline(b)}</p>
-        </div>
-      </div>
-      <p class="mt-4 text-sm text-slate-600 leading-relaxed">
-        Typical ranges, not vendor figures: platforms in the top price tier ($250+/user/mo) often take 3-6 months with dedicated admin time, custom pricebook setup, and phased rollout to field techs. Mid-tier platforms often reach operational status in 4-8 weeks, and entry-tier platforms often go live in 1-3 weeks. Ask each vendor for its onboarding plan in writing, and plan for 2-4 weeks of parallel operation with your existing system before cutting over.
-      </p>
-    </section>
-
-    <section class="mb-12">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Feature comparison</h2>
+      <p class="mb-4 text-sm text-slate-600">
+        Features as listed in our entries. The lists use different words for similar features, so check a feature you need on both vendors' sites.
+      </p>
       <div class="grid gap-4 md:grid-cols-3">
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <h3 class="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-500">
-            Only in {a.name}
+            Listed for {a.name} only
           </h3>
           {onlyA.length > 0 ? (
             <ul class="space-y-1 text-sm text-slate-700">
-              {onlyA.map((f) => <li>+ {f.replace(/_/g, ' ')}</li>)}
+              {onlyA.map((f) => <li>+ {label(f)}</li>)}
             </ul>
           ) : (
-            <p class="text-sm text-slate-500">No exclusive features</p>
+            <p class="text-sm text-slate-500">None</p>
           )}
         </div>
         <div class="rounded-lg border border-green-200 bg-green-50 p-4">
           <h3 class="mb-2 text-sm font-semibold uppercase tracking-wider text-green-700">
-            Both have
+            Listed for both
           </h3>
-          <ul class="space-y-1 text-sm text-green-900">
-            {sharedFeatures.map((f) => <li>✓ {f.replace(/_/g, ' ')}</li>)}
-          </ul>
+          {sharedFeatures.length > 0 ? (
+            <ul class="space-y-1 text-sm text-green-900">
+              {sharedFeatures.map((f) => <li>✓ {label(f)}</li>)}
+            </ul>
+          ) : (
+            <p class="text-sm text-green-700">None</p>
+          )}
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <h3 class="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-500">
-            Only in {b.name}
+            Listed for {b.name} only
           </h3>
           {onlyB.length > 0 ? (
             <ul class="space-y-1 text-sm text-slate-700">
-              {onlyB.map((f) => <li>+ {f.replace(/_/g, ' ')}</li>)}
+              {onlyB.map((f) => <li>+ {label(f)}</li>)}
             </ul>
           ) : (
-            <p class="text-sm text-slate-500">No exclusive features</p>
+            <p class="text-sm text-slate-500">None</p>
           )}
         </div>
       </div>
@@ -741,38 +792,38 @@ const breadcrumbs = [
       <div class="grid gap-4 md:grid-cols-3">
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <h3 class="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-500">
-            Only in {a.name}
+            Listed for {a.name} only
           </h3>
           {onlyAIntegrations.length > 0 ? (
             <ul class="space-y-1 text-sm text-slate-700">
-              {onlyAIntegrations.map((f) => <li>+ {f.replace(/_/g, ' ')}</li>)}
+              {onlyAIntegrations.map((f) => <li>+ {label(f)}</li>)}
             </ul>
           ) : (
-            <p class="text-sm text-slate-500">None unique</p>
+            <p class="text-sm text-slate-500">None</p>
           )}
         </div>
         <div class="rounded-lg border border-green-200 bg-green-50 p-4">
           <h3 class="mb-2 text-sm font-semibold uppercase tracking-wider text-green-700">
-            Both integrate with
+            Listed for both
           </h3>
           {sharedIntegrations.length > 0 ? (
             <ul class="space-y-1 text-sm text-green-900">
-              {sharedIntegrations.map((f) => <li>✓ {f.replace(/_/g, ' ')}</li>)}
+              {sharedIntegrations.map((f) => <li>✓ {label(f)}</li>)}
             </ul>
           ) : (
-            <p class="text-sm text-green-700">No common integrations</p>
+            <p class="text-sm text-green-700">None in common in our data</p>
           )}
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <h3 class="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-500">
-            Only in {b.name}
+            Listed for {b.name} only
           </h3>
           {onlyBIntegrations.length > 0 ? (
             <ul class="space-y-1 text-sm text-slate-700">
-              {onlyBIntegrations.map((f) => <li>+ {f.replace(/_/g, ' ')}</li>)}
+              {onlyBIntegrations.map((f) => <li>+ {label(f)}</li>)}
             </ul>
           ) : (
-            <p class="text-sm text-slate-500">None unique</p>
+            <p class="text-sm text-slate-500">None</p>
           )}
         </div>
       </div>
@@ -812,7 +863,7 @@ const breadcrumbs = [
           </table>
         </div>
         <p class="mt-2 text-xs text-slate-500">
-          Vertical-fit scores combine feature coverage, customer base concentration, and the tool's own positioning for the trade. See <a href="/methodology/" class="underline hover:text-slate-700">methodology</a>.
+          Vertical-fit scores (1-10) rate how well each tool is built for the trade, checked against the trades the vendor's own pages say it serves. See <a href="/methodology/" class="underline hover:text-slate-700">methodology</a>.
         </p>
       </section>
     )}
@@ -832,7 +883,7 @@ const breadcrumbs = [
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Need a deeper look?</h2>
       <p class="mt-2 text-slate-300">
-        See our full reviews with detailed pricing tiers, integration depth, and weaknesses.
+        See our full reviews with each tool's pricing tiers, integrations and weaknesses.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a

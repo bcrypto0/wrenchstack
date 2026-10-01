@@ -23,8 +23,20 @@ const matched = marketingAgencies.filter(
 const byTier: Record<'S' | 'A' | 'F', MarketingAgency[]> = { S: [], A: [], F: [] };
 for (const a of matched) byTier[agencyTier(a)].push(a);
 
+function joinNames(names: string[]): string {
+  if (names.length <= 1) return names.join('');
+  return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+}
+
+// Keep acronyms such as HVAC in capitals; lowercase ordinary trade names.
+const tradeLower = vertical.name === vertical.name.toUpperCase() ? vertical.name : vertical.name.toLowerCase();
+const listingTrade = matched.filter((a) => a.verticals_specialty.includes(verticalSlug));
+const pricePublished = matched.filter((a) => a.pricing_published);
+const flaggedNames = byTier.F.map((a) => a.name);
+const coverageLine = `${listingTrade.length} of the ${matched.length} agencies on this page list ${tradeLower} among the trades they serve; the other ${matched.length - listingTrade.length} ${matched.length - listingTrade.length === 1 ? 'is a home-services or general agency' : 'are home-services or general agencies'} whose listing here does not include ${tradeLower}.`;
+
 const pageTitle = `Best Marketing Agencies for ${vertical.name} Contractors (2026)`;
-const pageDescription = `Independent reviews of marketing agencies serving ${vertical.name.toLowerCase()} contractors specifically: trade specialists, home-services generalists, and honest reputation warnings on Townsquare Interactive and Marketing 360.`;
+const pageDescription = `Independent reviews of marketing agencies for ${tradeLower} contractors: agencies that list ${tradeLower} among the trades they serve, plus home-services and general agencies, with published prices where they exist${flaggedNames.length > 0 ? ` and reputation warnings on ${joinNames(flaggedNames)}` : ''}.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -34,38 +46,35 @@ const breadcrumbs = [
 
 const tierMeta = {
   S: { label: 'Tier S: price published, no warning', description: `No reputation warning, and the agency's own site publishes the price of its core service, so you can compare cost before a sales call. This is not a ranking of quality or results.`, color: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
-  A: { label: 'Tier A: no reputation warning', description: `No reputation warning, but outside the Tier S rule: most of these agencies quote the core service after a call instead of publishing a price. Get the fee, any setup fee and the minimum term in writing.`, color: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
+  A: { label: 'Tier A: no reputation warning', description: `No reputation warning, but the agency's own site does not publish the price of its core service, so the price comes in a quote${byTier.A.some((a) => a.slug === 'service-direct-marketing') ? '; Service Direct sells pay-per-call leads at a price you set instead of a retainer' : ''}. Get the fee, any setup fee and the minimum term in writing.`, color: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
   F: { label: 'Tier F: reputation warning applies', description: `Each of these agencies carries a reputation warning. Read it on the card and in the full review before you sign.`, color: 'bg-rose-100 text-rose-900 ring-rose-300', cardBorder: 'border-rose-300' },
 };
-
-function joinNames(names: string[]): string {
-  if (names.length <= 1) return names.join('');
-  return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
-}
 
 function tradeIntro(slug: string): string {
   switch (slug) {
     case 'hvac':
-      return 'HVAC demand rises in summer and winter, and many searches are urgent no-heat or no-cool calls. Ask any agency how it paces ad spend through the seasons and how after-hours calls are handled.';
+      return 'Marketing agencies for HVAC contractors, with prices and contract terms where the agency publishes them. Before you sign, ask how the agency paces ad spend across the year and how after-hours calls are handled.';
     case 'plumbing':
-      return 'Plumbing work splits between emergency calls, where the customer wants someone now, and planned remodel jobs, where the customer compares quotes. Ask any agency how it plans campaigns and content for both.';
+      return 'Marketing agencies for plumbing contractors, with prices and contract terms where the agency publishes them. Before you sign, ask how the agency plans campaigns for emergency calls and for planned remodel work.';
     case 'roofing':
-      return 'Roofing demand follows the seasons and storms, and much restoration work runs through insurance claims. Ask any agency how it handles storm-driven demand and what insurance-restoration campaigns it has run.';
+      return 'Marketing agencies for roofing contractors, with prices and contract terms where the agency publishes them. Before you sign, ask how the agency handles storm-driven demand and whether it has run insurance-restoration campaigns.';
     default:
-      return `Marketing agencies that serve ${vertical.name.toLowerCase()} contractors, with prices and contract terms where the agency publishes them.`;
+      return `Marketing agencies for ${tradeLower} contractors, with prices and contract terms where the agency publishes them.`;
   }
 }
 
 const faqs = [
   {
-    q: `How do I choose a marketing agency for ${vertical.name.toLowerCase()} contractors?`,
+    q: `How do I choose a marketing agency for ${tradeLower} contractors?`,
     a: byTier.S.length > 0
-      ? `We do not rank agencies on quality. Tier S marks the agencies serving ${vertical.name.toLowerCase()} contractors that carry no reputation warning and publish the price of their core service on their own site: ${joinNames(byTier.S.map((a) => a.name))}. A published price lets you compare cost before a sales call. Whichever agency you consider, compare the price, the minimum contract and who owns your website and ad accounts before you sign.`
-      : `We do not rank agencies on quality. Start with the agencies below that list ${vertical.name.toLowerCase()} among their specialties, then broader home-services agencies such as Adapt Digital Solutions or Lemonade Stand. Compare the price, the minimum contract and who owns your website and ad accounts before you sign.`,
+      ? `We do not rank agencies on quality. Tier S marks the agencies on this page that carry no reputation warning and publish the price of their core service on their own site: ${joinNames(byTier.S.map((a) => a.name))}. A published price lets you compare cost before a sales call. Whichever agency you consider, compare the price, the minimum contract and who owns your website and ad accounts before you sign.`
+      : `We do not rank agencies on quality. Start with the agencies below that list ${tradeLower} among the trades they serve, then the broader agencies. Compare the price, the minimum contract and who owns your website and ad accounts before you sign.`,
   },
   {
-    q: `What does a typical marketing retainer cost for ${vertical.name.toLowerCase()}?`,
-    a: 'Few agencies publish prices. Among those in this directory that do: Footbridge Media is $249/mo; Hook Agency starts at $2,800/mo for local SEO and $2,000/mo for PPC; Plumbing & HVAC SEO is $2,495/mo for its core program plus a $5,000 setup fee; Builder Funnel runs $3,500-$7,500/mo; and Comrade lists full-service packages at $4,000-$7,000/mo. The rest quote after a call, so get the monthly fee, setup fee and minimum term in writing.',
+    q: `What do marketing agencies for ${tradeLower} contractors charge?`,
+    a: pricePublished.length > 0
+      ? `${pricePublished.length} of the ${matched.length} agencies on this page publish the price of their core service on their own site: ${joinNames(pricePublished.map((a) => a.name))}. Each card above shows the published price. The others do not publish the price of their core service, so get the monthly fee, setup fee and minimum term in writing.`
+      : `None of the agencies on this page publishes the price of its core service, so get the monthly fee, setup fee and minimum term in writing.`,
   },
   {
     q: `What should I know about Townsquare Interactive and Marketing 360?`,
@@ -96,6 +105,7 @@ const faqSchema = {
         Best Marketing Agencies for {vertical.name} Contractors (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">{tradeIntro(verticalSlug)}</p>
+      <p class="mt-3 text-sm text-slate-600 leading-relaxed">{coverageLine}</p>
     </header>
 
     {(['S', 'A', 'F'] as const).map((tier) => {
@@ -135,13 +145,17 @@ const faqSchema = {
                   </div>
                 )}
 
+                {!a.verticals_specialty.includes(verticalSlug) && (
+                  <p class="mb-3 text-xs text-slate-500 leading-relaxed">{`${vertical.name} is not among the trades listed for this agency; it appears here as a ${a.agency_type === 'generalist' ? 'general' : 'home-services'} agency.`}</p>
+                )}
+
                 <p class="mb-3 text-sm text-slate-700 leading-relaxed">
-                  <strong class="text-slate-900">Best for {vertical.name.toLowerCase()}:</strong> {a.best_for}
+                  <strong class="text-slate-900">Best for:</strong> {a.best_for}
                 </p>
 
                 <div class="flex flex-wrap gap-2">
                   <a href={`/agencies/${a.slug}/`} class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">Read full review →</a>
-                  <a href={a.affiliate_url.startsWith('http') ? a.affiliate_url : a.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md border border-orange-300 bg-white px-4 py-2 text-sm font-semibold text-orange-700 hover:bg-orange-50">Visit {a.name.split(' ')[0]}</a>
+                  <a href={a.affiliate_url.startsWith('http') ? a.affiliate_url : a.vendor_url} rel="sponsored nofollow noopener" target="_blank" class="rounded-md border border-orange-300 bg-white px-4 py-2 text-sm font-semibold text-orange-700 hover:bg-orange-50">Visit {a.name.replace(/ \(.*\)$/, '')}</a>
                 </div>
               </article>
             ))}
@@ -151,7 +165,7 @@ const faqSchema = {
     })}
 
     <section class="mb-10">
-      <h2 class="mb-5 text-2xl font-bold text-slate-900">Frequently asked for {vertical.name.toLowerCase()} contractors</h2>
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">Frequently asked for {tradeLower} contractors</h2>
       <div class="space-y-3">
         {faqs.map((f) => (
           <details class="rounded-lg border border-slate-200 bg-white p-4">
@@ -163,11 +177,11 @@ const faqSchema = {
     </section>
 
     <section class="rounded-lg bg-slate-900 p-8 text-white">
-      <h2 class="text-2xl font-bold">More for {vertical.name.toLowerCase()} contractors</h2>
+      <h2 class="text-2xl font-bold">More for {tradeLower} contractors</h2>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href={`/${verticalToUrl(verticalSlug)}/`} class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">{vertical.name} software directory →</a>
-        <a href={`/lead-gen/trade/${verticalToUrl(verticalSlug)}/`} class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Lead-gen for {vertical.name.toLowerCase()}</a>
-        <a href={`/insurance/trade/${verticalToUrl(verticalSlug)}/`} class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Insurance for {vertical.name.toLowerCase()}</a>
+        <a href={`/lead-gen/trade/${verticalToUrl(verticalSlug)}/`} class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Lead-gen for {tradeLower}</a>
+        <a href={`/insurance/trade/${verticalToUrl(verticalSlug)}/`} class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Insurance for {tradeLower}</a>
       </div>
     </section>
   </article>

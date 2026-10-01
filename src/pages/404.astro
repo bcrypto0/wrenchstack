@@ -2,14 +2,16 @@
 import Layout from '../layouts/Layout.astro';
 import { tools, verticals, verticalToUrl, wrenchStackScore, formatPrice } from '../lib/data';
 
-// Top 6 flagship tools by Fit Score, then name, for the "popular tools" section
-// (sorted by G2/Capterra rating until 2026-09-30, when those scores were dropped)
+// Six tools by Fit Score, then name, for the "Tool reviews" section (sorted by
+// G2/Capterra rating until 2026-09-30, when those scores were dropped). Headed
+// "Popular tools" until 2026-10-01, but nothing here measures popularity.
 const popularTools = [...tools]
   .filter((t) => (t as { long_description?: string }).long_description)
   .sort((a, b) => wrenchStackScore(b) - wrenchStackScore(a) || a.name.localeCompare(b.name))
   .slice(0, 6);
 
-// Curated most-searched comparisons
+// Hand-picked comparisons (labelled "most-searched" until 2026-10-01; no search
+// data supports that)
 const popularComparisons = [
   { a: 'jobber', b: 'housecall-pro', label: 'Jobber vs Housecall Pro' },
   { a: 'jobber', b: 'servicetitan', label: 'Jobber vs ServiceTitan' },
@@ -25,11 +27,11 @@ function comparisonUrl(a: string, b: string): string {
 }
 
 const tools_for_section = [
-  { label: 'Get Matched Quiz', desc: 'Find your tool in 60 seconds', href: '/quiz/' },
-  { label: 'ROI Calculator', desc: 'Estimate annual savings and payback', href: '/roi-calculator/' },
-  { label: 'Cost-of-Switch Calc', desc: 'Real 12-month switching cost', href: '/cost-of-switch/' },
+  { label: 'Get Matched Quiz', desc: 'Answer 5 questions, get ranked picks', href: '/quiz/' },
+  { label: 'ROI Calculator', desc: 'Estimate annual return and payback', href: '/roi-calculator/' },
+  { label: 'Cost-of-Switch Calc', desc: 'Estimate your 12-month switching cost', href: '/cost-of-switch/' },
   { label: 'Glossary', desc: 'FSM/CMMS/AIA jargon explained', href: '/glossary/' },
-  { label: 'All Tools', desc: 'Filter and browse 59 tools', href: '/tools/' },
+  { label: 'All Tools', desc: `Filter and browse ${tools.length} tools`, href: '/tools/' },
   { label: 'Methodology', desc: 'How we rank and disclose', href: '/methodology/' },
 ];
 ---
@@ -83,7 +85,7 @@ const tools_for_section = [
 
     <section class="mb-12">
       <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-700">
-        Popular tools
+        Tool reviews
       </h2>
       <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {popularTools.map((t) => {
@@ -105,7 +107,7 @@ const tools_for_section = [
 
     <section class="mb-12">
       <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-700">
-        Most-searched comparisons
+        Head-to-head comparisons
       </h2>
       <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {popularComparisons.map((c) => (
@@ -140,7 +142,7 @@ const tools_for_section = [
       <p>
         Came from a broken link?
         Email <a href="mailto:hello@wrenchstack.com" class="text-orange-600 hover:underline">hello@wrenchstack.com</a>
-        with the URL. We'll fix the link or add a redirect.
+        with the URL you followed so we can fix the link or add a redirect.
       </p>
     </section>
   </section>

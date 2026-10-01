@@ -1,20 +1,20 @@
 {
   "_note": "Migration paths between trades software tools. Used by /migrate/from-X-to-Y/ pages.",
   "migrations": [
-    { "from": "jobber", "to": "servicetitan", "reason": "outgrew_small_business", "intent": "Scaling residential service business past 10 techs" },
-    { "from": "jobber", "to": "housecall-pro", "reason": "lateral_features", "intent": "Want consumer financing and integrated payments" },
-    { "from": "housecall-pro", "to": "servicetitan", "reason": "enterprise_growth", "intent": "Past $1M revenue, need deeper reporting" },
-    { "from": "housecall-pro", "to": "jobber", "reason": "simpler_ux", "intent": "Want cleaner UX with fewer baked-in features" },
+    { "from": "jobber", "to": "servicetitan", "reason": "outgrew_small_business", "intent": "Growing past 10 techs and wanting deeper dispatch, marketing attribution and reporting" },
+    { "from": "jobber", "to": "housecall-pro", "reason": "lateral_features", "intent": "Want QuickBooks Desktop sync or recurring service plans (on Housecall Pro's MAX plan)" },
+    { "from": "housecall-pro", "to": "servicetitan", "reason": "enterprise_growth", "intent": "Growing team that wants deeper dispatch, marketing attribution and reporting" },
+    { "from": "housecall-pro", "to": "jobber", "reason": "simpler_ux", "intent": "Prefer Jobber's plans and features, such as its client portal and automated quote and invoice follow-ups" },
     { "from": "joist", "to": "jobber", "reason": "grew_past_solo", "intent": "Outgrew quote-and-invoice only, need scheduling" },
-    { "from": "joist", "to": "housecall-pro", "reason": "grew_past_solo_with_payments", "intent": "Need integrated payment processing" },
+    { "from": "joist", "to": "housecall-pro", "reason": "grew_past_solo_with_payments", "intent": "Outgrew quotes and invoices; need team scheduling and dispatching as the crew grows" },
     { "from": "servicefusion", "to": "servicetitan", "reason": "enterprise_growth", "intent": "Need deeper reporting and marketing attribution" },
-    { "from": "fieldedge", "to": "servicetitan", "reason": "modern_ui", "intent": "Want a modern UI and broader marketing tools" },
-    { "from": "workiz", "to": "jobber", "reason": "broader_coverage", "intent": "Need more polished features beyond on-demand workflows" },
-    { "from": "workiz", "to": "housecall-pro", "reason": "home_services_polish", "intent": "Moving from on-demand to traditional home services" },
-    { "from": "mhelpdesk", "to": "housecall-pro", "reason": "modernization", "intent": "Tired of dated UI and mobile app limitations" },
-    { "from": "razorsync", "to": "jobber", "reason": "modernization", "intent": "Want modern UX and active product development" },
-    { "from": "servicefusion", "to": "fieldedge", "reason": "quickbooks_depth", "intent": "Need deeper QuickBooks integration for accounting" },
-    { "from": "jobber", "to": "servicefusion", "reason": "unlimited_users", "intent": "Hitting per-user cost ceiling, want flat per-company pricing" },
-    { "from": "housecall-pro", "to": "servicefusion", "reason": "unlimited_users", "intent": "Scaling team but paying per-user is expensive" }
+    { "from": "fieldedge", "to": "servicetitan", "reason": "modern_ui", "intent": "Want ServiceTitan's marketing attribution (Marketing Pro) and dispatch tools (Dispatch Pro)" },
+    { "from": "workiz", "to": "jobber", "reason": "broader_coverage", "intent": "Moving from on-demand calls toward scheduled and recurring work, and want published prices" },
+    { "from": "workiz", "to": "housecall-pro", "reason": "home_services_polish", "intent": "Moving toward scheduled home service work, and want published prices" },
+    { "from": "mhelpdesk", "to": "housecall-pro", "reason": "modernization", "intent": "Want published prices and a free trial you can start right away" },
+    { "from": "razorsync", "to": "jobber", "reason": "modernization", "intent": "Want Jobber's client portal, online booking and automated quote and invoice follow-ups" },
+    { "from": "servicefusion", "to": "fieldedge", "reason": "quickbooks_depth", "intent": "Want FieldEdge's real-time, two-way QuickBooks integration (as FieldEdge markets it) and HVAC, plumbing and electrical workflows" },
+    { "from": "jobber", "to": "servicefusion", "reason": "unlimited_users", "intent": "Adding users is raising the bill; want a flat company price with unlimited users" },
+    { "from": "housecall-pro", "to": "servicefusion", "reason": "unlimited_users", "intent": "Adding users beyond the plan's included seats; want a flat company price with unlimited users" }
   ]
 }

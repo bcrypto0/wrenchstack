@@ -5,6 +5,8 @@ import { asSentence,
   getTool,
   formatPrice,
   wrenchStackScore,
+  isQuoteOnly,
+  priceScaling,
   type Tool,
 } from '../../../lib/data';
 import WrenchScore from '../../../components/WrenchScore.astro';
@@ -29,16 +31,26 @@ interface Props {
   reason: string;
 }
 
-const { fromTool, toTool, intent, reason } = Astro.props;
+const { fromTool, toTool, intent } = Astro.props;
 
 const fromScore = wrenchStackScore(fromTool);
 const toScore = wrenchStackScore(toTool);
 
+// Feature and integration lists are what our data records for each tool. They are
+// not exhaustive and name things differently between tools, so the copy says
+// "listed for" rather than "has" or "lacks" (2026-10-01; it used to promise "a clean
+// upgrade" and say integrations "continue to work without disruption").
 const onlyInFromFeatures = fromTool.key_features.filter(f => !toTool.key_features.includes(f));
 const onlyInToFeatures = toTool.key_features.filter(f => !fromTool.key_features.includes(f));
 const sharedIntegrations = fromTool.integrations.filter(i => toTool.integrations.includes(i));
 const lostIntegrations = fromTool.integrations.filter(i => !toTool.integrations.includes(i));
 const newIntegrations = toTool.integrations.filter(i => !fromTool.integrations.includes(i));
+const human = (slug: string) => slug.replace(/_/g, ' ');
+const listJoin = (names: string[]) =>
+  names.length <= 1 ? (names[0] ?? '') : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+const toHasZapier = toTool.integrations.some((i) => /zapier/i.test(i));
+const toQuickBooks = toTool.integrations.filter((i) => /quickbooks/i.test(i));
+const toTrialDays = toTool.pricing.free_trial_days ?? 0;
 
 // Cost-of-switch analysis
 const fromPrice = fromTool.pricing.starting_at_usd;
@@ -46,14 +58,43 @@ const toPrice = toTool.pricing.starting_at_usd;
 const monthlyDelta = (fromPrice !== null && toPrice !== null) ? Math.round(toPrice - fromPrice) : null;
 const annualDelta = monthlyDelta !== null ? monthlyDelta * 12 : null;
 
+// Starting prices are only like for like when both tools charge the same way.
+const scalingLabel = (t: Tool): string => {
+  const s = priceScaling(t);
+  if (s === 'per_user') return 'per user';
+  if (s === 'flat') return 'per company';
+  if (s === 'base_plus_seat') return 'per company with some users included, plus a fee per extra user';
+  if (s === 'free') return 'nothing on its free tier, with paid plans above it';
+  if (s === 'quote') return isQuoteOnly(t) ? 'by quote' : 'one-time or per-project prices';
+  return 'in a way described in its pricing note';
+};
+const modelsDiffer = priceScaling(fromTool) !== priceScaling(toTool);
+const modelCaveat = modelsDiffer
+  ? ` These starting prices are not like for like: ${fromTool.name} charges ${scalingLabel(fromTool)} and ${toTool.name} charges ${scalingLabel(toTool)}, so compare them at your team size.`
+  : '';
+// "$29/mo", "$39/user/mo" or "a free tier", for sentences that already say "starts at".
+const priceShort = (t: Tool) =>
+  t.pricing.starting_at_usd === 0 ? 'a free tier' : `$${t.pricing.starting_at_usd}${priceScaling(t) === 'per_user' ? '/user' : ''}/mo`;
+// When both tools charge per user, the monthly difference is per user too.
+const deltaUnit = priceScaling(fromTool) === 'per_user' && priceScaling(toTool) === 'per_user' ? ' per user' : '';
+const noPriceText = (t: Tool) => isQuoteOnly(t) ? `${t.name} publishes no price` : `${t.name} publishes no monthly plan (see its pricing note)`;
+
 // No tier-guessed fee: vendors at the same price differ (some include onboarding,
 // some charge for it), so point to the pricing note and a written quote instead.
-const implSummary = toPrice === null
+const implSummary = isQuoteOnly(toTool)
   ? `not published for ${toTool.name}; ask for it in the written quote`
   : `check ${toTool.name}'s pricing note and confirm its setup fee in writing, since some vendors include onboarding and others charge for it`;
 
+const softwareCostChange = monthlyDelta === null
+  ? `${[fromPrice === null ? noPriceText(fromTool) : null, toPrice === null ? noPriceText(toTool) : null].filter(Boolean).join(' and ')}, so compare your current bill with a written quote at your team size.`
+  : monthlyDelta > 0
+    ? `about $${monthlyDelta}/month${deltaUnit} more on ${toTool.name} at the starting price (${priceShort(toTool)} against ${priceShort(fromTool)}), or about $${annualDelta} a year${deltaUnit}.${modelCaveat}`
+    : monthlyDelta < 0
+      ? `about $${Math.abs(monthlyDelta)}/month${deltaUnit} less on ${toTool.name} at the starting price (${priceShort(toTool)} against ${priceShort(fromTool)}), or about $${Math.abs(annualDelta ?? 0)} a year${deltaUnit}.${modelCaveat}`
+      : `the starting prices are the same (${priceShort(toTool)}).${modelCaveat}`;
+
 const pageTitle = `How to migrate from ${fromTool.name} to ${toTool.name} (2026)`;
-const pageDescription = `Practical guide to switching from ${fromTool.name} to ${toTool.name}. Why teams migrate, what to expect, timeline, and what to watch out for.`;
+const pageDescription = `Guide to switching from ${fromTool.name} to ${toTool.name}: published prices, the features and integrations our data lists for both, the steps of a switch, a data export checklist, and what to ask both vendors.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -64,46 +105,46 @@ const breadcrumbs = [
 const faqs = [
   {
     q: `How long does it take to migrate from ${fromTool.name} to ${toTool.name}?`,
-    a: `Realistic timeline: 4-12 weeks for a full cutover. Week 1-2: account setup + initial config. Week 2-4: data import (customers, recurring service agreements). Week 4-8: team training + parallel run. Week 8-12: full cutover + decommission of ${fromTool.name}. Faster is possible for small teams; enterprise migrations to ${toTool.name === 'ServiceTitan' || toTool.name === 'Procore' || toTool.name === 'BuildOps' ? toTool.name : 'enterprise platforms'} can run 3-6 months.`,
+    a: `We have no measured timeline for this switch. It depends on how many customers, open jobs, recurring agreements and integrations you move, and on how much training your team needs. Ask ${toTool.name} for a written onboarding plan with dates before you sign, and keep ${fromTool.name} active until the new system is running.`,
   },
   {
     q: `Will all my ${fromTool.name} data transfer?`,
-    a: `Customer records and active job data typically transfer cleanly via CSV export from ${fromTool.name} and import into ${toTool.name}. Historical job data, custom fields, and recurring service agreements often need manual review or rebuilding. Plan to export everything from ${fromTool.name} before terminating your subscription; vendors typically lock out access immediately after cancellation.`,
+    a: `Ask both vendors before you cancel anything: what ${fromTool.name} lets you export and in which format, and what ${toTool.name} can import. Export everything you need while your ${fromTool.name} subscription is still active, including invoices, attachments and recurring service agreements, and ask ${fromTool.name} how long you keep access after cancelling. After importing, check a sample of customers and jobs against ${fromTool.name}.`,
   },
   {
     q: `What about integrations I rely on?`,
     a: lostIntegrations.length > 0
-      ? `Heads up: ${fromTool.name} integrates with ${lostIntegrations.map(i => i.replace(/_/g, ' ')).join(', ')}, but ${toTool.name} doesn't (at least natively). You'll need to find workarounds via Zapier, custom middleware, or rebuilding the workflow internally before cutover.`
-      : `${toTool.name} covers the same integrations you're already using on ${fromTool.name}: no major workflow disruptions expected.`,
+      ? `Our data lists ${listJoin(lostIntegrations.map(human))} for ${fromTool.name} but not for ${toTool.name}. Our integration lists are not exhaustive, so ask ${toTool.name} whether it connects to ${lostIntegrations.length === 1 ? 'it' : 'each'}${toHasZapier ? ', directly or through Zapier' : ''}, before cutover.`
+      : `Every integration our data lists for ${fromTool.name} is also listed for ${toTool.name}${sharedIntegrations.length ? ` (${listJoin(sharedIntegrations.map(human))})` : ''}. You will still need to connect each one to ${toTool.name} and check that it syncs the way you use it.`,
   },
   {
     q: `Is ${toTool.name} more expensive than ${fromTool.name}?`,
     a: (() => {
-      const fp = fromTool.pricing.starting_at_usd;
-      const tp = toTool.pricing.starting_at_usd;
-      if (fp === null && tp === null) return 'Both use custom-quote pricing; request quotes from both for a real comparison at your team size.';
-      if (fp === null) return `${fromTool.name} uses custom pricing; ${toTool.name} starts at ${formatPrice(toTool)}. Compare the actual quote you got from ${fromTool.name} against ${toTool.name}'s public tier closest to your team size.`;
-      if (tp === null) return `${toTool.name} uses custom pricing; request a quote at your team size and compare against your current ${fromTool.name} bill.`;
-      if (tp > fp) return `${toTool.name} starts at ${formatPrice(toTool)} vs ${fromTool.name}'s ${formatPrice(fromTool)}, about ${Math.round(((tp - fp) / fp) * 100)}% more at the entry tier. Worth it if you're hitting feature ceilings on ${fromTool.name}.`;
-      if (tp < fp) return `${toTool.name} starts at ${formatPrice(toTool)} vs ${fromTool.name}'s ${formatPrice(fromTool)}, about ${Math.round(((fp - tp) / fp) * 100)}% cheaper at entry. Read the feature differences below to make sure you're not downgrading capability.`;
-      return 'Entry pricing is roughly the same. Compare based on features and integrations rather than price.';
+      if (fromPrice === null && toPrice === null) return `${noPriceText(fromTool)} and ${noPriceText(toTool)}; request quotes from both for a comparison at your team size.`;
+      if (fromPrice === null) return `${noPriceText(fromTool)}; ${toTool.name} starts at ${priceShort(toTool)}. Compare your current ${fromTool.name} bill against ${toTool.name}'s published plan for your team size.`;
+      if (toPrice === null) return `${noPriceText(toTool)}; request a quote at your team size and compare it against your current ${fromTool.name} bill.`;
+      if (toPrice === 0 && fromPrice > 0) return `${toTool.name} has a free tier; ${fromTool.name} starts at ${priceShort(fromTool)}. Check the free plan's limits in ${toTool.name}'s pricing note.${modelCaveat}`;
+      if (toPrice > fromPrice && fromPrice > 0) return `${toTool.name} starts at ${priceShort(toTool)} against ${fromTool.name}'s ${priceShort(fromTool)}, about ${Math.round(((toPrice - fromPrice) / fromPrice) * 100)}% more at the starting price.${modelCaveat}`;
+      if (toPrice > fromPrice) return `${toTool.name} starts at ${priceShort(toTool)}; ${fromTool.name} has a free tier.${modelCaveat}`;
+      if (toPrice < fromPrice) return `${toTool.name} starts at ${priceShort(toTool)} against ${fromTool.name}'s ${priceShort(fromTool)}, about ${Math.round(((fromPrice - toPrice) / fromPrice) * 100)}% less at the starting price. Check the feature lists below for anything you would give up.${modelCaveat}`;
+      return `Both start at ${priceShort(toTool)}. Compare features and integrations rather than price.${modelCaveat}`;
     })(),
   },
   {
     q: `What's the total cost of switching from ${fromTool.name} to ${toTool.name}?`,
-    a: `Three components: (1) software-cost change: ${monthlyDelta !== null ? `${monthlyDelta > 0 ? `~$${monthlyDelta}/month more` : `~$${Math.abs(monthlyDelta)}/month less`} at the entry tier` : 'depends on quoted pricing for both'}. (2) Implementation fees: ${implSummary}. (3) Team time during transition: typically 40-100 hours of office-staff time across the 4-12 week migration, plus 2-4 hours per field technician for training. For most shops, the total switching cost is recovered within 6-18 months if the new platform delivers on its value proposition.`,
+    a: `Three components: (1) Software-cost change: ${softwareCostChange} (2) Implementation fees: ${implSummary}. (3) Staff time for setup, data checks and training. We have no measured figure for staff time; the cost-of-switch calculator adds it from stated assumptions (8 hours per tech and 60 office hours) and lets you enter the fee from your quote.`,
   },
   {
     q: `Can I run ${fromTool.name} and ${toTool.name} in parallel during migration?`,
-    a: `Yes, and you should. Plan for 2-4 weeks of parallel operation: new jobs entered in ${toTool.name}, in-flight jobs completed in ${fromTool.name}. Both subscriptions active during this window. The parallel period catches data-integrity issues before you've cancelled ${fromTool.name} and lost access. Don't try to cut over in a single day; that's how shops lose customer data and miss appointments during the chaos.`,
+    a: `Yes, if you pay for both subscriptions while they overlap. Entering new jobs in ${toTool.name} while finishing open jobs in ${fromTool.name} lets you check the new system before you cancel the old one. How long to overlap depends on your job cycle; the cost-of-switch calculator assumes one month.`,
   },
   {
     q: `What if my team resists the move from ${fromTool.name}?`,
-    a: `Team adoption resistance is the #1 cause of failed migrations. Mitigate by: (1) getting your 2-3 most software-resistant techs and office staff into a ${toTool.name} demo BEFORE signing the contract (if they push back hard, your timeline doubles or the migration fails outright); (2) frame ${toTool.name} as solving specific pain points they complain about (not as "we're switching"); (3) train champions first (tech-comfortable team members) who then peer-train the rest. Skipping team buy-in causes 6-month migration projects to stretch into 18-month disasters.`,
+    a: `Before signing, have the team members least comfortable with software try ${toTool.name}${toTrialDays > 0 ? ` (it lists a ${toTrialDays}-day free trial)` : ` (our data lists no free trial for it, so ask ${toTool.name} how your team can try it)`}, and ask what they would need to do their daily work in it. Present the switch in terms of the problems they already complain about, train a few willing people first, and have them help the rest.`,
   },
   {
     q: `Should I migrate during peak season or off-season?`,
-    a: `Off-season, almost always. HVAC: avoid summer (peak cooling) and winter (peak heating); best window is March-May or September-October. Plumbing: same pattern. Pest control: avoid spring-summer peak. Landscaping: avoid spring setup and fall cleanup. The reasoning is simple: migration consumes office-staff capacity that you need for customer-facing work during peak demand. Migrate during a quiet period when missed dispatch decisions don't compound into lost revenue.`,
+    a: `In a quieter period for your business, because setup, data checks and training take office time away from customer work. Your own job history (jobs per month over the past year) shows which months are quieter.`,
   },
 ];
 
@@ -129,14 +170,14 @@ const faqSchema = {
         Migrating from {fromTool.name} to {toTool.name}
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        For: <strong>{intent}.</strong> Realistic timeline, what to expect, what data transfers cleanly, and what to watch out for.
+        For: <strong>{intent}.</strong> What our data records for both tools, the steps of a switch in order, and what to check with both vendors before you cancel anything.
       </p>
 
       <div class="mt-6 rounded-lg border border-orange-200 bg-orange-50 p-4">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <div class="font-semibold text-slate-900">Calculate the real 12-month cost</div>
-            <div class="text-sm text-slate-700">Subscription delta + implementation + training + parallel run, for your team size.</div>
+            <div class="font-semibold text-slate-900">Estimate the 12-month cost</div>
+            <div class="text-sm text-slate-700">Subscription difference, the implementation fee from your quote, and training and overlap costs from stated assumptions, for your team size.</div>
           </div>
           <a
             href={`/cost-of-switch/?from=${fromTool.slug}&to=${toTool.slug}`}
@@ -162,7 +203,7 @@ const faqSchema = {
         </div>
         <dl class="space-y-1 text-sm">
           <div class="flex justify-between"><dt class="text-slate-500">Price</dt><dd class="font-medium">{formatPrice(fromTool)}</dd></div>
-          <div class="flex justify-between"><dt class="text-slate-500">Best for</dt><dd class="font-medium text-right">{fromTool.best_team_size ?? '-'} techs</dd></div>
+          <div class="flex justify-between"><dt class="text-slate-500">Best for</dt><dd class="font-medium text-right">{fromTool.best_team_size ? `${fromTool.best_team_size} techs` : '-'}</dd></div>
         </dl>
       </div>
 
@@ -179,7 +220,7 @@ const faqSchema = {
         </div>
         <dl class="space-y-1 text-sm">
           <div class="flex justify-between"><dt class="text-slate-500">Price</dt><dd class="font-medium">{formatPrice(toTool)}</dd></div>
-          <div class="flex justify-between"><dt class="text-slate-500">Best for</dt><dd class="font-medium text-right">{toTool.best_team_size ?? '-'} techs</dd></div>
+          <div class="flex justify-between"><dt class="text-slate-500">Best for</dt><dd class="font-medium text-right">{toTool.best_team_size ? `${toTool.best_team_size} techs` : '-'}</dd></div>
         </dl>
         <a
           href={toTool.affiliate_url.startsWith('http') ? toTool.affiliate_url : toTool.vendor_url}
@@ -193,131 +234,124 @@ const faqSchema = {
     </section>
 
     <section class="mb-12 prose prose-slate max-w-none">
-      <h2>Why teams make this switch</h2>
-      <p>{intent}. Specifically:</p>
+      <h2>Why you might make this switch</h2>
+      <p>{asSentence(intent)} What our data says about the two tools:</p>
       <ul>
-        <li><strong>What {toTool.name} adds:</strong> {toTool.best_for}</li>
-        <li><strong>What {fromTool.name} was limited on:</strong> {fromTool.weaknesses}</li>
+        <li><strong>{toTool.name} is listed as best for:</strong> {asSentence(toTool.best_for)}</li>
+        <li><strong>{fromTool.name}'s listed weaknesses:</strong> {asSentence(fromTool.weaknesses)}</li>
       </ul>
 
-      <h2>What you'll GAIN moving to {toTool.name}</h2>
+      <h2>Features listed for {toTool.name} but not for {fromTool.name}</h2>
+      <p>Our feature lists are not exhaustive and name features differently between tools, so check each one on the vendor's site.</p>
       {onlyInToFeatures.length > 0 ? (
         <ul>
-          {onlyInToFeatures.map(f => <li><strong>{f.replace(/_/g, ' ')}</strong></li>)}
+          {onlyInToFeatures.map(f => <li><strong>{human(f)}</strong></li>)}
         </ul>
       ) : (
-        <p>No major new features; the migration would be about something else (pricing structure, integration depth, UX preference, team size scaling).</p>
+        <p>Every feature our data lists for {toTool.name} is also listed for {fromTool.name}.</p>
       )}
 
-      <h2>What you might LOSE leaving {fromTool.name}</h2>
+      <h2>Features listed for {fromTool.name} but not for {toTool.name}</h2>
       {onlyInFromFeatures.length > 0 ? (
         <ul>
-          {onlyInFromFeatures.map(f => <li>{f.replace(/_/g, ' ')}</li>)}
+          {onlyInFromFeatures.map(f => <li>{human(f)}</li>)}
         </ul>
       ) : (
-        <p>{toTool.name} covers everything {fromTool.name} did and more. Migration is a clean upgrade.</p>
+        <p>Every feature our data lists for {fromTool.name} is also listed for {toTool.name}. Check the features you use daily on {toTool.name}'s site anyway.</p>
       )}
 
       <h2>Cost-of-switch analysis</h2>
       <p>Three cost components when migrating from {fromTool.name} to {toTool.name}:</p>
       <ul>
-        <li>
-          <strong>Software-cost change:</strong>{' '}
-          {monthlyDelta === null
-            ? `${fromPrice === null ? fromTool.name : toTool.name} uses custom-quoted pricing; request actual quotes for both to compare at your team size.`
-            : monthlyDelta > 0
-              ? `~$${monthlyDelta}/month more on ${toTool.name} (${formatPrice(toTool)} vs ${formatPrice(fromTool)}). Annual delta: ~$${annualDelta} extra.`
-              : monthlyDelta < 0
-                ? `~$${Math.abs(monthlyDelta)}/month less on ${toTool.name} (${formatPrice(toTool)} vs ${formatPrice(fromTool)}). Annual savings: ~$${Math.abs(annualDelta ?? 0)}.`
-                : `Entry pricing is identical. Compare based on features and integrations, not price.`}
-        </li>
-        <li><strong>Implementation fees:</strong> {toPrice === null ? `${toTool.name} has no published list price or setup fee, so ask for the implementation fee in the same written quote.` : `Check ${toTool.name}'s pricing note and confirm its setup fee in writing: some vendors include onboarding in the subscription and others charge for guided setup.`}</li>
-        <li><strong>Team time during transition:</strong> 40-100 hours of office-staff time across the 4-12 week migration, plus 2-4 hours per field technician for training. For a 10-tech shop with 2 office staff, total internal labor cost typically runs $5,000-$15,000 at loaded hourly rates.</li>
+        <li><strong>Software-cost change:</strong> {softwareCostChange}</li>
+        <li><strong>Implementation fees:</strong> {isQuoteOnly(toTool) ? `${toTool.name} publishes no price or setup fee, so ask for the implementation fee in the same written quote.` : `Check ${toTool.name}'s pricing note and confirm its setup fee in writing: some vendors include onboarding in the subscription and others charge for it.`}</li>
+        <li><strong>Staff time:</strong> setup, data checks and training take time from office staff and techs. We have no measured figure for it; the <a href={`/cost-of-switch/?from=${fromTool.slug}&to=${toTool.slug}`}>cost-of-switch calculator</a> adds it from stated assumptions that you can scale to your own hours and wages.</li>
       </ul>
-      <p>For most shops, the total switching cost is recovered within 6-18 months if the new platform delivers on its value proposition. Below 6 months, the math usually doesn't work; make sure your reason for switching justifies the friction.</p>
 
-      <h2>Migration timeline (realistic)</h2>
+      <h2>Migration steps, in order</h2>
+      <p>We have no measured durations for these steps; ask {toTool.name} for a written onboarding plan with dates.</p>
 
-      <h3>Week 1-2: Account setup + initial config</h3>
-      <p>Sign up for {toTool.name}, configure company settings, set up users + permissions, build pricebook (if applicable). Don't import anything yet; get the foundation right first.</p>
+      <h3>1. Set up {toTool.name}</h3>
+      <p>Configure company settings, users and permissions, and your price book if you use one. Get this right before you import anything.</p>
 
-      <h3>Week 2-4: Data import</h3>
-      <p>Export customer list + active jobs from {fromTool.name} via CSV. Import to {toTool.name}. Spot-check 20-30 customers for data integrity. Recurring service agreements often don't transfer cleanly; plan to rebuild these.</p>
+      <h3>2. Import your data</h3>
+      <p>Export your customer list and active jobs from {fromTool.name} and import them into {toTool.name}. Check a sample of customers and jobs against {fromTool.name}. Check recurring service agreements one by one, and ask {toTool.name} whether its import carries them over.</p>
 
-      <h3>Week 4-8: Team training + parallel run</h3>
-      <p>Train dispatchers and office staff first, then field techs. Run both systems in parallel for 2-4 weeks: new jobs in {toTool.name}, complete pre-cutover jobs in {fromTool.name}.</p>
+      <h3>3. Train the team and run both systems</h3>
+      <p>Train dispatchers and office staff first, then field techs. While both systems run, enter new jobs in {toTool.name} and complete jobs already booked in {fromTool.name}.</p>
 
-      <h3>Week 8-12: Full cutover</h3>
-      <p>Stop entering new data in {fromTool.name}. Export all historical data before terminating. Cancel {fromTool.name} subscription.</p>
+      <h3>4. Cut over</h3>
+      <p>Stop entering new data in {fromTool.name}. Export all historical data before you cancel, then cancel the {fromTool.name} subscription.</p>
 
-      <h3>Month 3-6: Optimization</h3>
-      <p>Build out automation workflows {toTool.name} unlocks that you couldn't do on {fromTool.name}. This is where the ROI of switching actually shows up.</p>
+      <h3>5. After the switch</h3>
+      <p>Set up the automations and reports you planned to use in {toTool.name}, and check them against the reasons you switched.</p>
 
       <h2>Data export checklist (before cancelling {fromTool.name})</h2>
-      <p>Export everything from {fromTool.name} BEFORE you cancel; vendors typically lock out access immediately after subscription termination. Your checklist:</p>
+      <p>Export everything from {fromTool.name} before you cancel, and ask {fromTool.name} how long you keep access afterwards. Your checklist:</p>
       <ul>
         <li><strong>Customer records</strong>: full export with names, addresses, contact info, custom fields, service notes</li>
         <li><strong>Active job data</strong>: open work orders, scheduled appointments, recurring service agreements</li>
-        <li><strong>Historical invoices</strong>: at minimum the last 12 months for accounting reference; ideally everything for tax/audit purposes</li>
-        <li><strong>Payment records</strong>: past payments, outstanding balances, payment method history (with tokenization concerns)</li>
-        <li><strong>Photo and document attachments</strong>: job site photos, signed agreements, equipment photos (often the hardest to migrate cleanly)</li>
-        <li><strong>Pricebook / service catalog</strong>: your service offerings with pricing structure (often rebuilt in new platform regardless)</li>
+        <li><strong>Historical invoices</strong>: as many years as your accountant needs for tax and audit records</li>
+        <li><strong>Payment records</strong>: past payments and outstanding balances</li>
+        <li><strong>Photo and document attachments</strong>: job site photos, signed agreements, equipment photos</li>
+        <li><strong>Price book / service catalog</strong>: your service offerings with their prices</li>
         <li><strong>Membership/maintenance plan data</strong>: recurring billing setups, plan tiers, member status</li>
-        <li><strong>Integration configurations</strong>: screenshot/document existing QuickBooks sync, Stripe setup, Zapier workflows for re-creation</li>
-        <li><strong>User accounts and permissions</strong>: list of staff with their role assignments (rebuilt in new platform)</li>
+        <li><strong>Integration configurations</strong>: screenshot or write down your QuickBooks sync, payment setup and Zapier workflows so you can re-create them</li>
+        <li><strong>User accounts and permissions</strong>: list of staff with their role assignments</li>
         <li><strong>Reports and saved views</strong>: note custom dashboards or reports you'll need to rebuild</li>
       </ul>
 
-      <h2>Integration migration checklist</h2>
+      <h2>Integration checklist</h2>
+      <p>From the integrations our data lists for each tool. The lists are not exhaustive, so confirm each one with the vendor.</p>
       {sharedIntegrations.length > 0 && (
         <>
-          <p><strong>Continues to work without disruption:</strong></p>
+          <p><strong>Listed for both tools</strong> (you will still need to connect each one to {toTool.name} and check how it syncs):</p>
           <ul>
-            {sharedIntegrations.map(i => <li>{i.replace(/_/g, ' ')}: both {fromTool.name} and {toTool.name} support this natively</li>)}
+            {sharedIntegrations.map(i => <li>{human(i)}</li>)}
           </ul>
         </>
       )}
       {lostIntegrations.length > 0 && (
         <>
-          <p><strong>Need rebuilding or workarounds:</strong></p>
+          <p><strong>Listed for {fromTool.name} but not for {toTool.name}:</strong></p>
           <ul>
-            {lostIntegrations.map(i => <li><strong>{i.replace(/_/g, ' ')}</strong>: {fromTool.name} has this natively, but {toTool.name} doesn't. Bridge via Zapier, custom middleware, or accept the workflow loss.</li>)}
+            {lostIntegrations.map(i => <li><strong>{human(i)}</strong>: ask {toTool.name} whether it connects{toHasZapier ? ', directly or through Zapier' : ''}, or plan the workflow without it.</li>)}
           </ul>
         </>
       )}
       {newIntegrations.length > 0 && (
         <>
-          <p><strong>New integration options on {toTool.name}</strong> (worth evaluating during migration):</p>
+          <p><strong>Listed for {toTool.name} but not for {fromTool.name}</strong> (worth evaluating during migration):</p>
           <ul>
-            {newIntegrations.slice(0, 6).map(i => <li>{i.replace(/_/g, ' ')}</li>)}
+            {newIntegrations.map(i => <li>{human(i)}</li>)}
           </ul>
         </>
       )}
 
-      <h2>Common migration pitfalls (and how to avoid them)</h2>
+      <h2>Migration pitfalls to plan for</h2>
       <ul>
-        <li><strong>Cancelling {fromTool.name} too early.</strong> Don't terminate until you've verified data exported cleanly and the new platform is operational. Keep both subscriptions active during the 2-4 week parallel run, even though it's painful to pay double.</li>
-        <li><strong>Skipping the pricebook rebuild.</strong> Pricebook data rarely migrates cleanly between platforms (different schemas, line-item structures). Rebuild fresh in {toTool.name} during the parallel period; don't try to import.</li>
-        <li><strong>Ignoring custom workflows.</strong> If your office staff built custom workflows or automations on {fromTool.name} (specific dispatch rules, custom email templates, automated billing sequences), those won't transfer. List every custom workflow you depend on and rebuild equivalents in {toTool.name} before cutover.</li>
-        <li><strong>Underestimating team adoption resistance.</strong> Get tech-resistant team members on a {toTool.name} demo BEFORE signing the contract. If they hate it, your timeline doubles or the migration fails. Train champions first, peer-train resistant team members second.</li>
-        <li><strong>Migrating during peak season.</strong> Don't switch HVAC software in July or roofing software during storm season. Migration friction during peak demand cascades into missed customers and lost revenue.</li>
-        <li><strong>Not budgeting for parallel-run cost.</strong> 2-4 weeks of running both subscriptions adds ${monthlyDelta !== null && fromPrice !== null && toPrice !== null ? `~$${Math.round((fromPrice + toPrice) / 2)}` : 'up to a month of both fees'} in subscription overlap. Plan for it; don't surprise yourself.</li>
+        <li><strong>Cancelling {fromTool.name} too early.</strong> Don't cancel until you've checked the exported data and {toTool.name} is running your daily work. Keep both subscriptions while they overlap.</li>
+        <li><strong>Trusting an imported price book unchecked.</strong> If you use a price book, check every imported item and price in {toTool.name}, or rebuild it there, before you send quotes from it.</li>
+        <li><strong>Forgetting custom workflows.</strong> If your office built custom workflows or automations in {fromTool.name} (dispatch rules, email templates, automated billing), list every one and ask {toTool.name} how to rebuild each before cutover.</li>
+        <li><strong>Skipping the team.</strong> Have the team members least comfortable with software try {toTool.name} before you sign. Train a few willing people first and have them help the rest.</li>
+        <li><strong>Switching in your busiest months.</strong> Setup, data checks and training take office time you need for customers when demand peaks.</li>
+        <li><strong>Not budgeting for the overlap.</strong> While both tools run, you keep paying for {fromTool.name}: {fromPrice !== null && fromPrice > 0 ? `${priceShort(fromTool)} at its starting price, or more on a higher plan` : fromPrice === 0 ? 'nothing on its free plan, or your paid plan price' : 'your current monthly bill'}.</li>
       </ul>
 
       <h2>Things to verify BEFORE you sign the new contract</h2>
       <ul>
-        <li><strong>Data export from {fromTool.name}.</strong> Confirm you can export customers, jobs, invoices in usable CSV format. Some platforms restrict this aggressively at cancellation.</li>
-        <li><strong>QuickBooks integration parity.</strong> If you're QuickBooks-heavy, the new tool's QB integration depth + sync direction matters more than any single feature.</li>
-        <li><strong>Cancellation terms on {fromTool.name}.</strong> Most field service software is month-to-month; confirm there's no annual lock-in surprise.</li>
-        <li><strong>Implementation cost on {toTool.name}.</strong> Enterprise platforms often charge $5-20K+ for implementation services. Ask upfront.</li>
-        <li><strong>Team adoption.</strong> Get your 2-3 most software-resistant team members on a {toTool.name} demo. If they push back hard, your migration timeline doubles.</li>
+        <li><strong>Data export from {fromTool.name}.</strong> Confirm you can export customers, jobs and invoices in a format {toTool.name} can import.</li>
+        <li><strong>QuickBooks integration.</strong> If you keep your books in QuickBooks, check that {toTool.name} supports your version (Online or Desktop) and the sync direction you need.{toQuickBooks.length > 0 ? ` Our data lists ${listJoin(toQuickBooks.map(human))} for ${toTool.name}.` : ` Our data lists no QuickBooks integration for ${toTool.name}.`}</li>
+        <li><strong>Cancellation terms on {fromTool.name}.</strong> Check your contract for a minimum term or annual commitment and the notice period.</li>
+        <li><strong>Implementation cost on {toTool.name}.</strong> Ask for the setup or onboarding fee in writing.</li>
+        <li><strong>Team adoption.</strong> Have the team members least comfortable with software try {toTool.name} before you sign.</li>
       </ul>
 
-      <h2>When NOT to migrate</h2>
+      <h2>When to hold off</h2>
       <ul>
-        <li>You're in the middle of a peak season (busy summer for HVAC, winter for snow management). Migrations during peak = chaos.</li>
+        <li>You're in your busiest months. Setup and training compete with customer work.</li>
         <li>Your current pain is a single missing feature that the new tool also doesn't solve. Verify the feature gap closes before signing.</li>
-        <li>Your team just adopted {fromTool.name} less than 12 months ago. Change fatigue is real. Make sure the move is worth the team friction.</li>
+        <li>Your team adopted {fromTool.name} recently. Another change soon after can wear on a team; make sure the move is worth it.</li>
       </ul>
     </section>
 

@@ -1,36 +1,37 @@
 ---
 import Layout from '../../../../../layouts/Layout.astro';
 
-// Outils de notre annuaire Maroc et ce que chacun dit du mandat DGI.
-// Aucune application de facturation ne revendique d'agrément DGI, et la DGI
-// n'avait pas publié les règles techniques en août 2026 (voir le fichier de données).
+// Outils de notre annuaire Maroc et ce que chacun dit du mandat DGI, d'après les
+// fiches revérifiées le 30 septembre 2026. Aucune application de facturation ne
+// revendique d'agrément DGI, et la DGI n'avait pas publié les règles techniques
+// en août 2026 (voir le fichier de données).
 const tools = [
-  { name: 'Hisab', status: 'Export UBL 2.1 et CII, signature électronique et archivage 10 ans ; se dit prêt pour le mandat 2026 et annonce soumettre les factures à la DGI pour validation ; ne revendique aucun agrément DGI', fit: 'Facturation en ligne pour PME et fiduciaires (pas un outil BTP)', note: 'Dès 1 490 MAD/an (Starter)', href: '/ma/hisab/' },
-  { name: 'Fawatir AI', status: 'Indique que ses factures portent ICE, IF et TVA ; déclare n’être ni certifié, ni agréé, ni approuvé par la DGI, et ne transmet pas les factures à l’administration fiscale', fit: 'Commerces, auto-entrepreneurs, indépendants et petites entreprises', note: 'Pro 1 699 DH/an', href: '/ma/fawatir-ai/' },
+  { name: 'Hisab', status: 'Export UBL 2.1 et CII, signature électronique et archivage 10 ans ; se dit prêt pour le mandat 2026 et annonce soumettre les factures à la DGI pour validation ; ne revendique aucun agrément DGI', fit: 'Facturation en ligne pour PME et fiduciaires (pas un outil BTP)', note: 'Dès 1 490 MAD/an (Starter)', href: '/ma/hisab/' },
+  { name: 'Fawatir AI', status: 'Indique que ses factures portent ICE, IF et TVA ; déclare n’être ni certifié, ni agréé, ni approuvé par la DGI, et ne transmet pas les factures à l’administration fiscale', fit: 'Commerces, auto-entrepreneurs, indépendants et petites entreprises', note: 'Pro 1 699 DH/an', href: '/ma/fawatir-ai/' },
   { name: 'Aube', status: 'Indique que ses PDF portent les mentions de l’article 145 du CGI, avec numérotation continue et TVA par ligne, et se dit prêt pour la feuille de route 2026 ; ne revendique aucun agrément DGI', fit: 'Devis, factures et situations (avancement) pour PME', note: '450 DH HT/mois, 2 utilisateurs', href: '/ma/aube-ma/' },
-  { name: 'Gestion BTP', status: 'Application web de gestion BTP et de comptabilité ; exports DGI et CNSS selon l’éditeur ; facturation électronique non confirmée', fit: 'Gestion BTP avec comptabilité, selon l’éditeur', note: 'Prix publiés dès 950 MAD HT par mois, facturation annuelle ; pas d’essai gratuit', href: '/ma/gestion-btp-ma/' },
+  { name: 'Gestion BTP', status: 'Application web de gestion BTP et de comptabilité ; exports DGI et CNSS selon l’éditeur ; facturation électronique non confirmée', fit: 'Gestion BTP avec comptabilité et paie, selon l’éditeur', note: 'Prix publiés dès 950 MAD HT par mois, facturation annuelle ; pas d’essai gratuit', href: '/ma/gestion-btp-ma/' },
   { name: 'Sage Batigest Connect', status: 'Fonctions TVA marocaine, CNSS et facturation électronique non décrites sur la page revendeur consultée', fit: 'Devis, métré, facturation et suivi de chantier ; comptabilité via Sage 100', note: 'Sur devis ; pas de prix publics au Maroc', href: '/ma/sage-batigest-connect-maroc/' },
   { name: 'Odoo', status: 'Livré avec une localisation comptable marocaine (plan comptable, rapport fiscal) ; connexion à la facturation électronique non couverte par notre fiche', fit: 'Un seul système pour devis, projets, achats, facturation et comptabilité', note: 'Publié sur odoo.com (USD) ; intégration en sus', href: '/ma/odoo-btp-maroc/' },
 ];
 
 const faqs = [
-  { q: 'Quand la facturation électronique devient-elle obligatoire au Maroc ?', a: `Hespress a rapporté en août 2026 que la facturation électronique démarrera par étapes à partir de fin 2026, en commençant par les grandes entreprises et les fournisseurs du secteur public. Le360, citant Challenge (juin 2026), a indiqué que les PME suivront en 2027-2028 et les petites entreprises après 2028. Aucune date calendaire ferme n’est encore fixée par la loi, et la DGI n’avait pas publié les règles techniques en août 2026. Une phase pilote avec des entreprises volontaires est en cours depuis octobre 2025. Considérez toute source qui annonce un jour précis de démarrage comme non vérifiée.` },
-  { q: 'Qu’est-ce que le modèle « clearance », et est-il confirmé ?', a: `Les commentaires sur le projet marocain décrivent un modèle de validation préalable (« clearance ») : chaque facture transiterait par une plateforme de la DGI et serait validée avant d’être envoyée au client. Hisab, par exemple, annonce qu’il soumettra les factures à la DGI pour validation. Mais en août 2026, la DGI n’avait pas publié les règles techniques définitives : considérez ce modèle comme annoncé, pas définitif. Les modèles de « clearance », utilisés au Mexique, en Turquie, en Italie ou en Arabie saoudite, sont plus stricts qu’un simple envoi de PDF, car l’administration voit chaque facture en temps réel.` },
-  { q: 'Quelle est la base légale ?', a: 'L’obligation figure à l’article 145-IX du Code Général des Impôts (CGI). Le fondement légal a d’abord été introduit par la Loi de Finances 2018, et la Loi de Finances 2024 lui a donné une impulsion opérationnelle concrète en activant l’obligation selon un calendrier progressif fondé sur le chiffre d’affaires. Certains commentaires parlent simplement de « la Loi de Finances 2024 » : c’est un raccourci ; les deux lois comptent.' },
-  { q: 'Quel format pour les factures ?', a: `En août 2026, la DGI n’avait pas publié les règles techniques, format compris, et Fawatir AI rappelle que le format officiel pour les PME et les auto-entrepreneurs n’est pas encore publié. Les commentaires citent du XML structuré (UBL 2.1 ou CII) échangé via un portail de la DGI, et certains outils exportent déjà ces formats (Hisab exporte en UBL 2.1 et CII), mais considérez le format comme en attente. Les factures portent déjà des mentions obligatoires : Aube cite l’ICE, l’IF, le RC, le détail de la TVA et les totaux HT/TVA/TTC au titre de l’article 145 du CGI.` },
-  { q: 'Qui est concerné, et un petit entrepreneur l’est-il déjà ?', a: `Selon Hespress (août 2026), la première phase, à partir de fin 2026, concerne les grandes entreprises et les fournisseurs du secteur public. Le360, citant Challenge (juin 2026), évalue la première vague à environ 1 655 entreprises réalisant plus de 200 millions de dirhams de chiffre d’affaires, avec les PME en 2027-2028 et les petites entreprises après 2028 ; vérifiez ces seuils à la publication du texte d’application. Le périmètre couvre les sociétés soumises à l’IS et certains contribuables au régime du Bénéfice Net Réel (BNR). Un petit entrepreneur n’est donc généralement pas dans la première vague ; s’il fournit le secteur public, il doit vérifier si la première phase le concerne. Toute entreprise doit s’y préparer, car la direction est fixée.` },
+  { q: 'Quand la facturation électronique devient-elle obligatoire au Maroc ?', a: `Hespress a rapporté en août 2026 que la facturation électronique démarrera par étapes à partir de fin 2026, en commençant par les grandes entreprises et les fournisseurs du secteur public. Le360, citant Challenge (juin 2026), a indiqué que les PME suivront en 2027-2028 et les petites entreprises après 2028. La DGI n’avait pas publié les règles techniques en août 2026, et Fawatir AI indique que le calendrier et le format officiels pour les PME et les auto-entrepreneurs ne sont pas encore publiés. Considérez toute source qui annonce un jour précis de démarrage comme non vérifiée.` },
+  { q: 'Qu’est-ce que le modèle « clearance », et est-il confirmé ?', a: `Dans un modèle de « clearance » (validation préalable), chaque facture est validée par la plateforme de l’administration fiscale avant d’atteindre le client. Le guide de Hisab sur le mandat (mis à jour en juin 2026) décrit ainsi le système marocain, et Hisab annonce qu’il soumettra les factures à la DGI pour validation. Mais en août 2026, la DGI n’avait pas publié les règles techniques : considérez ce modèle comme décrit par des éditeurs, pas comme définitif.` },
+  { q: 'Quelle est la base légale ?', a: 'Le guide de Hisab sur le mandat (mis à jour en juin 2026) indique que le système repose sur l’article 145 du Code Général des Impôts (CGI), le même article qu’Aube cite pour les mentions obligatoires des factures. La DGI n’avait pas publié les règles techniques d’application en août 2026.' },
+  { q: 'Quel format pour les factures ?', a: `En août 2026, la DGI n’avait pas publié les règles techniques, format compris, et Fawatir AI rappelle que le format officiel pour les PME et les auto-entrepreneurs n’est pas encore publié. Le guide de Hisab cite l’UBL 2.1 ou l’UN/CEFACT CII, et Hisab exporte déjà ces deux formats, mais considérez le format comme en attente. Les factures portent déjà des mentions obligatoires : Aube cite l’ICE, l’IF, le RC, le détail de la TVA et les totaux HT/TVA/TTC au titre de l’article 145 du CGI.` },
+  { q: 'Qui est concerné, et un petit entrepreneur l’est-il déjà ?', a: `Selon Hespress (août 2026), la première phase, à partir de fin 2026, concerne les grandes entreprises et les fournisseurs du secteur public. Le360, citant Challenge (juin 2026), évalue la première vague à environ 1 655 entreprises réalisant plus de 200 millions de dirhams de chiffre d’affaires, avec les PME en 2027-2028 et les petites entreprises après 2028 ; vérifiez ces seuils à la publication du texte d’application. D’après ces informations, un petit entrepreneur n’est pas dans la première vague, sauf s’il fournit le secteur public : il doit alors vérifier si la première phase le concerne.` },
   { q: 'Que faire dès maintenant ?', a: `Deux étapes concrètes. D’abord, assurez-vous que votre ICE figure correctement sur chaque facture et devis : il est obligatoire sur les documents officiels depuis juillet 2016, et Hespress a rapporté en juillet 2025 que l’administration fiscale n’accepte que les factures qui le portent. Ensuite, posez une question à votre logiciel de facturation : « Quelles mentions obligatoires portent vos factures, et comment vous connecterez-vous à la plateforme de facturation électronique de la DGI une fois les règles techniques publiées ? » Si vous êtes encore sur Word ou Excel, choisissez un logiciel de facturation qui enregistre votre ICE et celui de vos clients.` },
 ];
 
 const pageTitle = 'Facturation électronique DGI au Maroc : Guide 2026 pour le BTP';
-const pageDescription = `La facturation électronique obligatoire au Maroc expliquée pour le bâtiment : la base légale (article 145-IX du CGI), le modèle « clearance » annoncé, le déploiement par étapes annoncé à partir de fin 2026 (grandes entreprises et fournisseurs du secteur public d’abord), sans date inventée, l’obligation d’ICE, et ce que disent les outils de facturation. Indépendant ; publié en juin 2026, mis à jour en septembre 2026.`;
+const pageDescription = `La facturation électronique prévue au Maroc expliquée pour le bâtiment : le déploiement par étapes annoncé à partir de fin 2026 (grandes entreprises et fournisseurs du secteur public d’abord), sans date inventée, le modèle « clearance » décrit par les éditeurs, l’obligation d’ICE, et ce que disent les outils de facturation. Indépendant ; publié en juin 2026, mis à jour en octobre 2026.`;
 
 const enUrl = new URL('/ma/guides/facturation-electronique-maroc/', Astro.site).toString();
 const frUrl = new URL('/ma/fr/guides/facturation-electronique-maroc/', Astro.site).toString();
 
 const articleSchema = {
   '@context': 'https://schema.org', '@type': 'Article', headline: pageTitle, description: pageDescription,
-  datePublished: '2026-06-20', dateModified: '2026-09-30', inLanguage: 'fr',
+  datePublished: '2026-06-20', dateModified: '2026-10-01', inLanguage: 'fr',
   author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
   publisher: { '@type': 'Organization', name: 'WrenchStack', url: 'https://wrenchstack.com' },
   mainEntityOfPage: frUrl,
@@ -55,15 +56,15 @@ const faqSchema = {
         Facturation électronique DGI au Maroc
       </h1>
       <p class="mt-3 text-lg text-slate-600 leading-relaxed">
-        Ce que la facturation électronique obligatoire signifie pour le BTP : la base légale, le modèle « clearance » annoncé, qui est concerné en premier, et ce que disent les outils de notre annuaire. Nous nous appuyons sur ce qui a été rapporté, pas sur une date ou un format que la DGI n’a pas publiés.
+        Ce que la facturation électronique prévue au Maroc signifie pour le BTP : qui serait concerné en premier selon la presse, le modèle que décrivent les éditeurs, et ce que disent les outils de notre annuaire. Nous nous appuyons sur ce qui a été rapporté, pas sur une date ou un format que la DGI n’a pas publiés.
       </p>
-      <p class="mt-3 text-sm text-slate-500">Par WrenchStack Research · Publié en juin 2026 · Calendrier et fiches outils mis à jour le 30 septembre 2026 · Ceci n’est pas un conseil fiscal : vérifiez votre situation auprès de la DGI (tax.gov.ma) ou de votre fiduciaire.</p>
+      <p class="mt-3 text-sm text-slate-500">Par WrenchStack Research · Publié en juin 2026 · Calendrier et fiches outils mis à jour le 1ᵉʳ octobre 2026 · Ceci n’est pas un conseil fiscal : vérifiez votre situation auprès de la DGI (tax.gov.ma) ou de votre fiduciaire.</p>
     </header>
 
     <section class="mb-8 rounded-lg border-2 border-orange-300 bg-orange-50 p-6">
       <h2 class="mb-2 text-lg font-bold text-slate-900">⏰ En bref</h2>
       <p class="text-slate-800 leading-relaxed">
-        Le Maroc introduit la <strong>facturation électronique obligatoire</strong>. Les commentaires décrivent un <strong>modèle de validation préalable (« clearance »)</strong>, où chaque facture est validée par une plateforme de la DGI <em>avant</em> d’atteindre le client, mais la DGI n’avait pas publié les règles techniques définitives en août 2026. La base légale est l’<strong>article 145-IX du CGI</strong> (introduit par la LF 2018, opérationnalisé par la LF 2024). Hespress a rapporté en août 2026 un démarrage <strong>par étapes à partir de fin 2026, grandes entreprises et fournisseurs du secteur public d’abord</strong> ; Le360, citant Challenge, annonce les PME en 2027-2028 et les petites entreprises après 2028. <strong>Aucune date ferme n’est encore fixée par la loi</strong> : méfiez-vous de toute source annonçant un jour précis.
+        Le Maroc prépare la <strong>facturation électronique obligatoire</strong>. Hespress a rapporté en août 2026 un démarrage <strong>par étapes à partir de fin 2026, grandes entreprises et fournisseurs du secteur public d’abord</strong> ; Le360, citant Challenge, annonce les PME en 2027-2028 et les petites entreprises après 2028. Des éditeurs comme Hisab décrivent un <strong>modèle de validation préalable (« clearance »)</strong>, où chaque facture est validée par une plateforme de la DGI <em>avant</em> d’atteindre le client, mais la DGI n’avait pas publié les règles techniques en août 2026. <strong>Considérez toute date ou tout format précis comme non confirmé</strong> tant que la DGI ne les a pas publiés.
       </p>
     </section>
 
@@ -74,7 +75,7 @@ const faqSchema = {
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">Clearance</div>
-        <div class="mt-1 text-xs text-slate-600">modèle annoncé : validation DGI avant l’envoi ; règles définitives en attente</div>
+        <div class="mt-1 text-xs text-slate-600">modèle décrit par les éditeurs : validation DGI avant l’envoi ; règles non publiées</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">ICE</div>
@@ -83,40 +84,37 @@ const faqSchema = {
     </section>
 
     <section class="mb-10 prose prose-slate max-w-none">
-      <h2>Ce qui est confirmé, et ce qui ne l’est pas</h2>
-      <p>Soyons précis, car beaucoup de contenus de prestataires marocains citent une échéance ferme que la loi n’a pas fixée.</p>
-      <p><strong>Confirmé :</strong></p>
+      <h2>Ce qui a été rapporté, et ce qui n’est pas publié</h2>
+      <p><strong>Rapporté :</strong></p>
       <ul>
-        <li>Le Directeur Général de la DGI a confirmé publiquement le lancement <strong>en 2026</strong>, à commencer par les <strong>grandes entreprises en B2B</strong>.</li>
-        <li>Une <strong>phase de test est en cours depuis octobre 2025</strong> avec des entreprises volontaires (après une consultation publique ouverte en octobre 2024).</li>
-        <li>Un <strong>appel d’offres de développement de la plateforme a été lancé en mai 2024, budgété à 6,48M MAD</strong> avec une livraison à un an : le jalon le plus tangible et documenté.</li>
         <li>Hespress a rapporté en août 2026 un déploiement <strong>par étapes à partir de fin 2026</strong>, en commençant par les <strong>grandes entreprises et les fournisseurs du secteur public</strong>.</li>
+        <li>Le360, citant Challenge (juin 2026), évoque une première vague d’environ 1 655 entreprises au chiffre d’affaires supérieur à 200 millions de dirhams, puis les <strong>PME en 2027-2028</strong> et les <strong>petites entreprises après 2028</strong>.</li>
+        <li>Le guide de Hisab sur le mandat (mis à jour en juin 2026) indique qu’une phase pilote a démarré en octobre 2025.</li>
       </ul>
-      <p><strong>En attente (à ne pas présenter comme un fait) :</strong></p>
+      <p><strong>Pas encore publié par la DGI (à ne pas présenter comme un fait) :</strong></p>
       <ul>
-        <li><strong>Aucune date calendaire ferme.</strong> Les trackers (EDICOM, VATupdate) indiquent que le démarrage « reste tributaire de la publication d’un décret en cours d’élaboration », et que la DGI n’a pas encore publié l’ensemble des détails techniques.</li>
-        <li>Le <strong>seuil</strong> de la première vague : Le360, citant Challenge (juin 2026), évoque environ 1 655 entreprises au chiffre d’affaires supérieur à 200 millions de dirhams ; à confirmer à la publication du texte d’application.</li>
-        <li>Le <strong>modèle et le format</strong>. Les commentaires décrivent un « clearance » (validation préalable) en UBL via un portail DGI, avec une phase ultérieure ouverte à des opérateurs privés certifiés, mais la DGI n’avait pas publié les règles techniques définitives en août 2026.</li>
+        <li><strong>Une date de démarrage ferme.</strong> Les dates ci-dessus viennent de la presse ; la DGI n’avait pas publié les règles techniques en août 2026.</li>
+        <li>Le <strong>seuil</strong> de la première vague : vérifiez les 1 655 entreprises et les 200 millions de dirhams annoncés à la publication du texte d’application.</li>
+        <li>Le <strong>modèle et le format</strong>. Le guide de Hisab décrit une « clearance » avec des factures en UBL 2.1 ou CII, mais la DGI n’avait pas publié les règles techniques en août 2026.</li>
       </ul>
 
-      <h2>Le déploiement par étapes</h2>
+      <h2>Les phases annoncées</h2>
       <ul>
-        <li><strong>À partir de fin 2026 : grandes entreprises et fournisseurs du secteur public</strong> (Hespress, août 2026). Sociétés soumises à l’IS, et certains contribuables au régime du Bénéfice Net Réel (BNR) ; Le360, citant Challenge, compte environ 1 655 entreprises au chiffre d’affaires supérieur à 200 millions de dirhams dans cette vague.</li>
+        <li><strong>À partir de fin 2026 : grandes entreprises et fournisseurs du secteur public</strong> (Hespress, août 2026) ; Le360, citant Challenge, compte environ 1 655 entreprises au chiffre d’affaires supérieur à 200 millions de dirhams dans cette vague.</li>
         <li><strong>2027-2028 : PME</strong> (Le360, citant Challenge, juin 2026).</li>
-        <li><strong>Après 2028 : petites entreprises (TPE).</strong> Un petit entrepreneur n’est probablement pas dans la première vague ; s’il fournit le secteur public, qu’il vérifie si elle le concerne. La direction est fixée.</li>
-        <li><strong>B2C et transfrontalier</strong> dans des phases ultérieures.</li>
+        <li><strong>Après 2028 : petites entreprises (TPE).</strong> D’après ces informations, un petit entrepreneur n’est pas dans la première vague, sauf s’il fournit le secteur public : il doit alors vérifier si elle le concerne.</li>
       </ul>
 
-      <h2>Pourquoi c’est important pour le BTP en particulier</h2>
+      <h2>Pourquoi c’est important pour le BTP</h2>
       <p>
-        Les métiers marocains travaillent déjà selon une norme <strong>devis → facture</strong> avec des identifiants obligatoires, donc le passage au format structuré est plus petit qu’il n’y paraît, mais deux choses sont propres au BTP. D’abord, <strong>vérifiez ce que couvre votre outil de devis</strong> : EBP Bâtiment et Sage Batigest Connect gèrent les devis et la facturation, la comptabilité étant vendue à part, et aucune de nos fiches ne décrit de connexion à la facturation électronique DGI pour ces deux outils. Le chemin vers la plateforme compte autant que les fonctions de devis. Ensuite, votre <strong>ICE</strong> (Identifiant Commun de l’Entreprise) est obligatoire sur les documents officiels depuis juillet 2016, et Hespress a rapporté en juillet 2025 que l’administration fiscale n’accepte que les factures qui le portent : fiabilisez-le dès maintenant.
+        Deux points sont propres au BTP. D’abord, <strong>vérifiez ce que couvre votre outil de devis</strong> : EBP Bâtiment et Sage Batigest Connect gèrent les devis et la facturation, la comptabilité étant vendue à part, et aucune de nos fiches ne décrit de connexion à la facturation électronique DGI pour ces deux outils. Le chemin vers la plateforme compte autant que les fonctions de devis. Ensuite, votre <strong>ICE</strong> (Identifiant Commun de l’Entreprise) est obligatoire sur les documents officiels depuis juillet 2016, et Hespress a rapporté en juillet 2025 que l’administration fiscale n’accepte que les factures qui le portent : fiabilisez-le dès maintenant.
       </p>
 
       <h2>Le contexte fiscal marocain plus large</h2>
       <ul>
-        <li><strong>TVA :</strong> 20 % standard, avec des taux réduits de 14 %, 10 % et 7 %. Votre logiciel doit appliquer le bon taux par ligne.</li>
-        <li><strong>IS (impôt sur les sociétés) :</strong> progressif, en pleine réforme (les taux évoluent à chaque Loi de Finances).</li>
-        <li><strong>SIMPL</strong> (simpl.tax.gov.ma) est le portail en ligne existant de la DGI pour la télédéclaration/télépaiement de la TVA, l’IS et l’IR ; la DGI n’avait pas publié en août 2026 comment les factures électroniques seront transmises.</li>
+        <li><strong>TVA :</strong> 20 % au taux normal ; Aube, par exemple, applique la TVA à 20, 14, 10, 7 ou 0 % ligne par ligne. Votre logiciel doit appliquer le bon taux par ligne.</li>
+        <li><strong>IS et IR :</strong> les règles évoluent avec les Lois de Finances ; notre fiche DGI relève que l’IR a changé en 2026.</li>
+        <li><strong>SIMPL</strong> est le service en ligne de la DGI pour les déclarations de TVA, d’IS et d’IR (SIMPL-TVA, SIMPL-IS, SIMPL-IR) ; la DGI n’avait pas publié en août 2026 comment les factures électroniques seront transmises.</li>
       </ul>
 
       <h2>Ce que disent les outils de notre annuaire</h2>
@@ -146,13 +144,13 @@ const faqSchema = {
           ))}
         </tbody>
       </table>
-      <p class="mt-3 text-xs text-slate-500">La colonne sur la facturation électronique reprend ce que dit chaque prestataire, ou ce que notre fiche n’a pas pu confirmer, vérifié en septembre 2026. Rien de cela n’est un agrément DGI. À confirmer directement avec chaque prestataire.</p>
+      <p class="mt-3 text-xs text-slate-500">La colonne sur la facturation électronique reprend ce que dit chaque prestataire, ou ce que notre fiche n’a pas pu confirmer, vérifié le 30 septembre 2026. Rien de cela n’est un agrément DGI. À confirmer directement avec chaque prestataire.</p>
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-2 text-lg font-bold text-slate-900">La question à poser à tout prestataire</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Ne supposez pas qu’un bon outil de devis couvre le mandat. Demandez : <strong>« Quelles mentions obligatoires (ICE, IF, TVA) portent vos factures, et comment vous connecterez-vous à la plateforme de facturation électronique de la DGI une fois les règles techniques publiées ? »</strong> Si la réponse est vague, c’est un signal. Et vérifiez que votre <a href="/ma/ice-identifiant-commun-entreprise/" class="font-medium text-orange-700 hover:underline">ICE</a> est correct sur chaque document dès aujourd’hui.
+        Ne supposez pas qu’un outil de devis couvre le mandat. Demandez : <strong>« Quelles mentions obligatoires (ICE, IF, TVA) portent vos factures, et comment vous connecterez-vous à la plateforme de facturation électronique de la DGI une fois les règles techniques publiées ? »</strong> Si la réponse est vague, c’est un signal. Et vérifiez que votre <a href="/ma/ice-identifiant-commun-entreprise/" class="font-medium text-orange-700 hover:underline">ICE</a> est correct sur chaque document dès aujourd’hui.
       </p>
     </section>
 
@@ -169,12 +167,12 @@ const faqSchema = {
     </section>
 
     <section class="mb-10 rounded-lg bg-slate-50 p-5 text-xs text-slate-500 leading-relaxed">
-      <strong class="text-slate-700">Sources et vérification :</strong> Première publication en juin 2026 à partir d’EDICOM, VATupdate, Upsilon Consulting, Experio et Sage Maroc. Mis à jour le 30 septembre 2026 à partir de nos fiches revérifiées : le calendrier selon Hespress (août 2026) et Le360 citant Challenge (juin 2026), et les déclarations de chaque outil. Base légale : article 145-IX du CGI (introduit par la LF 2018, opérationnalisé par la LF 2024). Rapporté : démarrage par étapes à partir de fin 2026, grandes entreprises et fournisseurs du secteur public d’abord, pilote depuis octobre 2025, l’appel d’offres plateforme de 6,48M MAD (mai 2024). En attente et explicitement NON présenté comme un fait ici : le modèle « clearance » et le format des factures (règles techniques DGI non publiées en août 2026), la date exacte de démarrage et le seuil de la première vague. Information générale, pas un conseil fiscal. Une erreur ? <a href="/contact/" class="underline">Dites-le-nous</a>.
+      <strong class="text-slate-700">Sources et vérification :</strong> calendrier d’après nos fiches revérifiées (30 septembre 2026) : Hespress (août 2026) et Le360 citant Challenge (juin 2026). Modèle, format, article de loi et phase pilote tels que décrits par le guide de Hisab sur le mandat (mis à jour le 5 juin 2026, consulté le 1ᵉʳ octobre 2026) ; mentions des factures selon Aube ; position de chaque outil d’après ses propres déclarations. Non publiés par la DGI en août 2026, et NON présentés comme des faits ici : les règles techniques, le format des factures, la date exacte de démarrage et le seuil de la première vague. Information générale, pas un conseil fiscal. Une erreur ? <a href="/contact/" class="underline">Dites-le-nous</a>.
     </section>
 
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Comparez les logiciels et services BTP au Maroc</h2>
-      <p class="mt-2 text-slate-300 leading-relaxed">Avis indépendants sur les logiciels BTP marocains, la veille des appels d’offres, la paie CNSS et l’assurance construction obligatoire, sans pay-to-play.</p>
+      <p class="mt-2 text-slate-300 leading-relaxed">Avis indépendants sur les logiciels BTP marocains, la veille des appels d’offres, la paie CNSS et l’assurance TRC et décennale, sans pay-to-play.</p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/ma/fr/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">🇲🇦 Annuaire Maroc →</a>
         <a href="/ma/compare/" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Comparer les solutions</a>

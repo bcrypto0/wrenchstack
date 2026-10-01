@@ -3,9 +3,10 @@ import Layout from '../../../layouts/Layout.astro';
 import useCasesData from '../../../data/use_cases.json';
 import {
   getTool,
-  formatPrice,
   verticals,
   verticalToUrl,
+  isQuoteOnly,
+  entryPriceLabel,
   type Tool,
 } from '../../../lib/data';
 
@@ -44,40 +45,88 @@ const relevantVerticals = useCase.verticals
   .map((v) => verticals.find((x) => x.slug === v))
   .filter((v): v is NonNullable<typeof v> => v !== undefined);
 
+// "A, B and C", for answers that name tied tools.
+const namesList = (list: Tool[]): string =>
+  list.length <= 1
+    ? (list[0]?.name ?? '')
+    : `${list.slice(0, -1).map((t) => t.name).join(', ')} and ${list[list.length - 1].name}`;
+const tradeNames = relevantVerticals.map((v) => v.name);
+const tradeNamesText = tradeNames.length <= 1
+  ? (tradeNames[0] ?? '')
+  : `${tradeNames.slice(0, -1).join(', ')} or ${tradeNames[tradeNames.length - 1]}`;
+
+// Trade fit for this guide's trade(s), counted only where the tool serves the trade;
+// for a guide that names several trades, the tool's highest fit among them.
+const guideFit = (t: Tool): number | null => {
+  const fits = useCase.verticals
+    .filter((v) => t.verticals.includes(v) && typeof t.vertical_fit?.[v] === 'number')
+    .map((v) => t.vertical_fit![v] as number);
+  return fits.length > 0 ? Math.max(...fits) : null;
+};
+const fitLabel = relevantVerticals.length === 1
+  ? `${relevantVerticals[0].name} fit score`
+  : 'trade fit score';
+const fitRule = relevantVerticals.length > 1
+  ? ` (each tool's highest across ${tradeNames.slice(0, -1).join(', ')} and ${tradeNames[tradeNames.length - 1]})`
+  : '';
+
+// QuickBooks editions each tool lists, from its integrations.
+const qbEditionsFor = (t: Tool): string[] =>
+  [
+    t.integrations.includes('quickbooks_online') ? 'Online' : null,
+    t.integrations.includes('quickbooks_desktop') ? 'Desktop' : null,
+    t.integrations.includes('quickbooks_enterprise') ? 'Enterprise' : null,
+  ].filter((e): e is string => !!e);
+const hasQb = (t: Tool) => t.integrations.some((i) => i.includes('quickbooks'));
+const qbLabel = (t: Tool): string => {
+  if (!hasQb(t)) return 'None listed';
+  const ed = qbEditionsFor(t);
+  return ed.length > 0 ? `QuickBooks ${ed.join(', ')}` : 'QuickBooks (edition not recorded)';
+};
+
+// FAQ answers rewritten 2026-10-01. They said the first pick "ranks first because" of its
+// best_for text (the order is hand-picked, per use_cases.json, not scored), compared bare
+// starting prices across per-user and per-company plans, said "some tools are
+// iPhone-first", said "all five picks" whatever the count, and said tools without a
+// QuickBooks integration "use Zapier". Each answer now comes from the data.
+const fitRanked = picks.filter((t) => guideFit(t) !== null);
+const topFit = fitRanked.length > 0 ? Math.max(...fitRanked.map((t) => guideFit(t) as number)) : null;
+const topFitPicks = topFit === null ? [] : fitRanked.filter((t) => guideFit(t) === topFit);
+const pricedPicks = picks.filter((t) => t.pricing.starting_at_usd !== null);
+const lowestPrice = pricedPicks.length > 0 ? Math.min(...pricedPicks.map((t) => t.pricing.starting_at_usd as number)) : null;
+const lowestPricePicks = lowestPrice === null ? [] : pricedPicks.filter((t) => t.pricing.starting_at_usd === lowestPrice);
+const quoteOnlyPicks = picks.filter(isQuoteOnly);
+const qbPicks = picks.filter(hasQb);
+const noQbPicks = picks.filter((t) => !hasQb(t));
+
 const faqs = [
   {
-    q: `What is the best option overall?`,
-    a: `${picks[0]?.name ?? 'Our top pick'} ranks first because: ${picks[0]?.best_for ?? 'it best matches the buyer profile described in this guide'}. See the full ranked list above with the rationale for each pick.`,
+    q: `Which of these has the highest ${fitLabel}?`,
+    a: topFitPicks.length > 0
+      ? `${namesList(topFitPicks)} ${topFitPicks.length === 1 ? 'has' : 'share'} the highest ${fitLabel}${fitRule} of these ${picks.length} picks (${topFit}/10). The order above was picked by hand for this buyer profile; it is not a score. Each tool's fit score is on its review page.`
+      : `None of these picks is listed for ${tradeNamesText} in our data. The order above was picked by hand for this buyer profile; it is not a score.`,
   },
   {
-    q: `What's the cheapest option here?`,
-    a: (() => {
-      const cheapest = picks.reduce<Tool | null>(
-        (lowest, t) => {
-          const price = t.pricing.starting_at_usd;
-          if (price === null) return lowest;
-          if (!lowest || (lowest.pricing.starting_at_usd ?? 999) > price) return t;
-          return lowest;
-        },
-        null,
-      );
-      if (!cheapest) return 'All picks here use custom-quote pricing; request quotes from each to compare.';
-      return `${cheapest.name} starts at ${formatPrice(cheapest)}. Note: cheapest starting price isn't always cheapest total cost: per-user pricing scales differently than per-company pricing as you grow.`;
-    })(),
+    q: `Which of these has the lowest starting price?`,
+    a: lowestPricePicks.length > 0
+      ? `${namesList(lowestPricePicks)} ${lowestPricePicks.length === 1 ? 'has' : 'share'} the lowest published starting price here: ${entryPriceLabel(lowestPricePicks[0])}.${
+          quoteOnlyPicks.length > 0
+            ? ` ${namesList(quoteOnlyPicks)} ${quoteOnlyPicks.length === 1 ? 'publishes' : 'publish'} no price, so you need a quote to compare ${quoteOnlyPicks.length === 1 ? 'it' : 'them'}.`
+            : ''
+        } A per-user price grows with each seat and a company price does not, so compare the total at your team size.`
+      : `None of these picks publishes a monthly starting price${quoteOnlyPicks.length > 0 ? `: ${namesList(quoteOnlyPicks)} ${quoteOnlyPicks.length === 1 ? 'is' : 'are'} quote-only` : ''}. Ask each for a written quote at your team size to compare them.`,
   },
   {
     q: `Which one has the best mobile app?`,
-    a: 'It depends on how your crew works. Each tool detail page lists the mobile apps under its key features and description, and some tools are iPhone-first, so confirm iOS and Android support with the vendor before you buy.',
+    a: 'We do not rate mobile apps, and our key-feature lists are not a complete record of each tool\'s apps. Confirm iOS and Android support with each vendor, and try the app during a trial or demo before you buy.',
   },
   {
     q: `Do these integrate with QuickBooks?`,
-    a: (() => {
-      const withQb = picks.filter((t) => t.integrations.some((i) => i.includes('quickbooks')));
-      if (withQb.length === picks.length) {
-        return 'Yes, all five picks integrate with QuickBooks. Integration depth varies (one-way push vs two-way sync); check each tool detail page for specifics.';
-      }
-      return `${withQb.length} of the ${picks.length} picks integrate with QuickBooks: ${withQb.map((t) => t.name).join(', ')}. The others use Zapier or have no native QuickBooks integration.`;
-    })(),
+    a: qbPicks.length > 0
+      ? `${qbPicks.length === picks.length ? `All ${picks.length} picks list` : `${qbPicks.length} of the ${picks.length} picks list`} a QuickBooks integration in our data: ${qbPicks.map((t) => `${t.name} (${qbEditionsFor(t).join(', ') || 'edition not recorded'})`).join('; ')}.${
+          noQbPicks.length > 0 ? ` ${namesList(noQbPicks)} ${noQbPicks.length === 1 ? 'lists' : 'list'} none.` : ''
+        } Check which edition you use and what each one syncs before you buy.`
+      : `None of these picks lists a QuickBooks integration in our data. Ask each vendor how invoices and payments reach your accounting software.`,
   },
 ];
 
@@ -144,8 +193,12 @@ const breadcrumbs = [
       <p class="text-slate-700">{useCase.intro}</p>
     </section>
 
+    {/* Was "What we looked for": the picks do not all meet these points (in the solo HVAC
+        guide, FieldPulse is quote-only with no free trial against "no contact-sales pricing"
+        and "free trial"), so the list is offered as a checklist, not as our selection test.
+        The facts under each pick come from the data so a reader can check (2026-10-01). */}
     <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-bold text-slate-900">What we looked for</h2>
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">What to check before you buy</h2>
       <ul class="space-y-2 text-slate-700">
         {useCase.buying_criteria.map((criterion) => (
           <li class="flex gap-2">
@@ -157,9 +210,15 @@ const breadcrumbs = [
     </section>
 
     <section class="mb-12">
-      <h2 class="mb-6 text-2xl font-bold text-slate-900">The ranked picks</h2>
+      <h2 class="mb-2 text-2xl font-bold text-slate-900">The picks</h2>
+      <p class="mb-6 text-sm text-slate-600">
+        Picked by hand for this buyer profile and listed in that order; the order is not a score. The facts under each pick come from its review page, so check them against the list above.
+      </p>
       <div class="space-y-10">
         {picks.map((tool, i) => {
+          const fit = guideFit(tool);
+          const trial = tool.pricing.free_trial_days;
+          const priceLabel = entryPriceLabel(tool);
           return (
             <div class="rounded-lg border border-slate-200 bg-white p-6">
               <div class="mb-3 flex flex-wrap items-baseline justify-between gap-3">
@@ -173,14 +232,26 @@ const breadcrumbs = [
               <dl class="grid gap-3 text-sm md:grid-cols-2">
                 <div>
                   <dt class="font-semibold text-slate-900">Starting price</dt>
-                  <dd class="text-slate-700">{formatPrice(tool)}</dd>
+                  <dd class="text-slate-700">{priceLabel.charAt(0).toUpperCase() + priceLabel.slice(1)}</dd>
                 </div>
                 <div>
                   <dt class="font-semibold text-slate-900">Best team size</dt>
                   <dd class="text-slate-700">{tool.best_team_size ?? 'n/a'}</dd>
                 </div>
+                <div>
+                  <dt class="font-semibold text-slate-900">{relevantVerticals.length === 1 ? `${relevantVerticals[0].name} fit` : 'Trade fit'}</dt>
+                  <dd class="text-slate-700">{fit === null ? `Not listed for ${tradeNamesText}` : `${fit}/10`}</dd>
+                </div>
+                <div>
+                  <dt class="font-semibold text-slate-900">Free trial</dt>
+                  <dd class="text-slate-700">{typeof trial === 'number' && trial > 0 ? `${trial} days` : trial === 0 ? 'None listed' : 'Not recorded (see the pricing note)'}</dd>
+                </div>
+                <div>
+                  <dt class="font-semibold text-slate-900">QuickBooks</dt>
+                  <dd class="text-slate-700">{qbLabel(tool)}</dd>
+                </div>
                 <div class="md:col-span-2">
-                  <dt class="font-semibold text-slate-900">Why it ranks here</dt>
+                  <dt class="font-semibold text-slate-900">Best for</dt>
                   <dd class="text-slate-700">{tool.best_for}</dd>
                 </div>
                 <div class="md:col-span-2">

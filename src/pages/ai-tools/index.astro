@@ -42,7 +42,7 @@ const itemListSchema = {
         Best AI Tools for Contractors & Home-Service Trades (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        This page lists AI tools sold to trades businesses for answering calls, measuring roofs and exteriors, planning routes, and collecting reviews. Each entry shows the starting price the vendor publishes, if any, any free trial, the team size it suits and its affiliate status. Each review page shows the date its details were last checked.
+        This page lists {aiTools.length} AI tools for answering calls, measuring roofs and exteriors, planning routes, and collecting reviews. Each entry shows the starting monthly price listed here, if any (each review page has the pricing details we could confirm), any free trial, the team size it suits and its affiliate status. Each review page shows the date its details were last checked.
       </p>
     </header>
 
@@ -76,7 +76,7 @@ const itemListSchema = {
                     </div>
                   </div>
                   <div class="shrink-0 text-right text-xs">
-                    <p class="font-bold text-slate-900">{t.starting_price_usd === null ? 'Custom quote' : t.starting_price_usd === 0 ? 'Free tier' : `From $${t.starting_price_usd}/mo`}</p>
+                    <p class="font-bold text-slate-900">{t.starting_price_usd === null ? 'No monthly price listed' : t.starting_price_usd === 0 ? 'Free tier' : `From $${t.starting_price_usd}/mo`}</p>
                     {t.free_trial_days > 0 && <p class="text-slate-500">{t.free_trial_days}-day trial</p>}
                   </div>
                 </div>
@@ -102,8 +102,8 @@ const itemListSchema = {
                     <dd class="font-semibold text-slate-900">{t.founded ?? 'n/a'}</dd>
                   </div>
                   <div>
-                    <dt class="text-slate-500 uppercase tracking-wider">Affiliate</dt>
-                    <dd class="font-semibold text-slate-900">{t.affiliate_program === 'none' || t.affiliate_program === 'unknown' ? 'None' : t.affiliate_program}</dd>
+                    <dt class="text-slate-500 uppercase tracking-wider">Affiliate link</dt>
+                    <dd class="font-semibold text-slate-900">{t.affiliate_url.startsWith('http') ? 'Yes' : 'No'}</dd>
                   </div>
                 </dl>
 

@@ -31,8 +31,16 @@ const groups = categoryOrder
   }))
   .filter((g) => g.pairs.length > 0);
 
+// The categories that have at least one pair in this market, in display order. Six
+// markets have no payroll entries and four have a single lead-gen entry (no pair), so
+// the copy names the groups actually shown instead of a fixed list of four (2026-10-01).
+const groupNames = groups.map((g) => g.label.toLowerCase());
+const groupList = groupNames.length > 1
+  ? `${groupNames.slice(0, -1).join(', ')} and ${groupNames[groupNames.length - 1]}`
+  : groupNames[0] ?? '';
+
 const pageTitle = `Compare ${market.name} Trades Software & Services (2026): ${pairs.length} Head-to-Head`;
-const pageDescription = `${pairs.length} side-by-side comparisons of ${market.name} trades vendors across field service software, lead generation, insurance, and payroll: tier, pros and cons, ${market.name}-specific notes, and pricing, head to head.`;
+const pageDescription = `${pairs.length} side-by-side comparisons of ${market.name} trades vendors (${groupList}): tier, pros and cons, ${market.name}-specific notes, and pricing, head to head.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -64,7 +72,7 @@ const itemListSchema = {
       </div>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">Compare {market.name} trades vendors, side by side</h1>
       <p class="mt-4 max-w-3xl text-lg text-slate-600 leading-relaxed">
-        {pairs.length} head-to-head comparisons across {market.name} field service software, lead generation, insurance, and payroll, each with a short summary drawn from the data, the tier (whether prices are published), pros and cons, {market.name}-specific compliance notes, and typical pricing.
+        {`${pairs.length} head-to-head comparisons of ${market.name} vendors in ${groupList}, each with a short summary drawn from the data, the tier, pros and cons, ${market.name}-specific notes and typical pricing.`}
       </p>
     </header>
 

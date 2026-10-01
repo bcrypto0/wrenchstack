@@ -267,7 +267,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
       {affiliate && (
         <div class="border-b border-amber-200/70 bg-amber-50/60">
           <p class="mx-auto max-w-6xl px-4 py-2 text-xs text-slate-600">
-            Some links on this page are affiliate links; WrenchStack may earn a commission at no extra cost to you, which never affects our ratings or what we write. <a href="/disclosure/" class="font-medium underline hover:text-slate-900">How we make money</a>.
+            WrenchStack may earn a commission when you sign up with a vendor through a tracked link. The vendor pays it and we add no charge of our own. Commissions are not an input to our scores, tiers or rankings. <a href="/disclosure/" class="font-medium underline hover:text-slate-900">How we make money</a>.
           </p>
         </div>
       )}
@@ -280,7 +280,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
           <div>
             <div class="mb-2 font-semibold text-slate-900">WrenchStack</div>
             <p class="text-slate-600">
-              The trades software directory. {toolCount}+ field service platforms compared across {verticalCount} verticals, with verified pricing, head-to-head matchups, and buyer guides by team size.
+              A directory of software and services for trades businesses: {toolCount} software tools compared across {verticalCount} trades, each with the date its pricing was last verified, and head-to-head comparisons.
             </p>
           </div>
           <div>
@@ -357,7 +357,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
           </div>
         </div>
         <div class="mt-8 border-t border-slate-200 pt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
-          <span>Independent · no pay-to-play. WrenchStack may earn affiliate commissions from some links, which never affect our ratings or reviews. <a href="/disclosure/" class="text-slate-700 hover:underline">Affiliate disclosure</a> · <a href="/methodology/" class="text-slate-700 hover:underline">WrenchStack Fit Score™ Methodology v1.3</a></span>
+          <span>Independent · no pay-to-play. WrenchStack may earn affiliate commissions from some links; commissions are not an input to our scores, tiers or rankings. <a href="/disclosure/" class="text-slate-700 hover:underline">Affiliate disclosure</a> · <a href="/methodology/" class="text-slate-700 hover:underline">WrenchStack Fit Score™ Methodology v1.3</a></span>
         </div>
         <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
           <span>© {new Date().getFullYear()} WrenchStack. Independent research publication.</span>
@@ -451,6 +451,13 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
           const toolA = findToolByName(match[1].trim());
           const toolB = findToolByName(match[2].trim());
           if (!toolA || !toolB || !toolA.slug || !toolB.slug) return null;
+          // Suggest a compare page only where one is built: same rule as getStaticPaths
+          // in compare/[pair] (the tools share a trade, or both are CMMS tools, which are
+          // the only tools with no trades). Other pairs have no page and 404 (2026-10-01).
+          const va = toolA.verticals ?? [];
+          const vb = toolB.verticals ?? [];
+          const hasPage = toolA.slug !== toolB.slug && (va.some((v) => vb.includes(v)) || (va.length === 0 && vb.length === 0));
+          if (!hasPage) return null;
           // Build the alphabetical URL since both directions now exist
           const [first, second] = [toolA.slug, toolB.slug].sort();
           return {

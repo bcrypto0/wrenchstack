@@ -1,18 +1,28 @@
 ---
-import { freshnessTier, freshnessLabel, daysSinceVerified, type Tool } from '../lib/data';
+import { freshnessTier, type Tool } from '../lib/data';
 
 interface Props {
   tool: Tool;
-  // 'compact' shows just a dot + days; 'full' shows label text too
+  // 'compact' shows a dot + month and year; 'full' shows the full date in a pill
   variant?: 'compact' | 'full';
-  // Show the raw verified_date for forensics
+  // Kept for callers; the full variant now always shows the date.
   showDate?: boolean;
 }
 
-const { tool, variant = 'compact', showDate = false } = Astro.props;
+const { tool, variant = 'compact' } = Astro.props;
 const tier = freshnessTier(tool);
-const label = freshnessLabel(tool);
-const days = daysSinceVerified(tool);
+// Absolute dates, not "N days ago" (2026-10-01): pages are static, so a relative
+// age is true only on the day of the build and grows wrong until the next one.
+// Dates are YYYY-MM-DD and formatted in UTC so a US-timezone build does not print
+// the previous day.
+const verifiedDate = tool.pricing.verified_date;
+const fmt = (d: string, opts: Intl.DateTimeFormatOptions) =>
+  new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { ...opts, timeZone: 'UTC' });
+const label = !verifiedDate
+  ? 'No verified date'
+  : variant === 'compact'
+    ? `Verified ${fmt(verifiedDate, { month: 'short', year: 'numeric' })}`
+    : `Pricing verified ${fmt(verifiedDate, { month: 'short', day: 'numeric', year: 'numeric' })}`;
 
 const tierStyles = {
   fresh: {
@@ -33,7 +43,7 @@ const tierStyles = {
 };
 
 const style = tierStyles[tier];
-const titleText = `Pricing last verified ${tool.pricing.verified_date} (${days} day${days === 1 ? '' : 's'} ago)`;
+const titleText = verifiedDate ? `Pricing last verified ${verifiedDate}` : 'No verified date';
 ---
 
 {variant === 'compact' ? (
@@ -51,10 +61,5 @@ const titleText = `Pricing last verified ${tool.pricing.verified_date} (${days} 
   >
     <span class={`h-2 w-2 rounded-full ${style.dot}`}></span>
     <span>{label}</span>
-    {showDate && (
-      <span class="text-slate-500">
-        · {tool.pricing.verified_date}
-      </span>
-    )}
   </span>
 )}
