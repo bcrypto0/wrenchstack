@@ -15,7 +15,7 @@ const intlVendorCount = Object.values(intlModules).reduce(
 );
 
 const pageTitle = 'Submit your product for review | WrenchStack vendor program';
-const pageDescription = 'WrenchStack accepts submissions from trades-contractor vendors across software, lead-gen, insurance, payroll, and marketing agencies. Published methodology. No pay-to-play. Editorial review within 5 business days.';
+const pageDescription = 'WrenchStack accepts submissions from trades-contractor vendors across software, lead-gen, insurance, payroll, and marketing agencies. Published methodology. No pay-to-play.';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -34,14 +34,14 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
         Submit your product for editorial review
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        WrenchStack covers {totalVendorCount}+ US vendors across {categoryCount} categories, plus {intlVendorCount} listings across {intlMarkets} international markets, serving trades and construction businesses. If your platform serves the trades and you believe it deserves coverage, submit it below. We respond within 5 business days.
+        WrenchStack covers {totalVendorCount} US vendors across {categoryCount} categories, plus {intlVendorCount} listings across {intlMarkets} international markets, serving trades and construction businesses. If your platform serves the trades and you believe it deserves coverage, submit it below. We reply in writing, by email.
       </p>
     </header>
 
     <section class="mb-10 grid gap-3 grid-cols-2 sm:grid-cols-4">
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-        <div class="text-2xl font-bold text-slate-900">{totalVendorCount}+</div>
-        <div class="mt-1 text-xs text-slate-600">Vendors evaluated</div>
+        <div class="text-2xl font-bold text-slate-900">{totalVendorCount}</div>
+        <div class="mt-1 text-xs text-slate-600">US vendors listed</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">{verticalCount}</div>
@@ -52,8 +52,8 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
         <div class="mt-1 text-xs text-slate-600">International markets</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-        <div class="text-2xl font-bold text-slate-900">5</div>
-        <div class="mt-1 text-xs text-slate-600">Business-day SLA</div>
+        <div class="text-2xl font-bold text-slate-900">{categoryCount}</div>
+        <div class="mt-1 text-xs text-slate-600">US categories</div>
       </div>
     </section>
 
@@ -69,7 +69,7 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
         <div class="rounded-lg border border-slate-200 bg-white p-5">
           <div class="mb-2 text-xs font-bold uppercase tracking-wider text-orange-600">2. Editorial review</div>
           <p class="text-sm text-slate-700 leading-relaxed">
-            Our editorial team evaluates whether your platform fits an existing or planned category. Within 5 business days, we respond with: editorial fit assessment, expected publication timeline, methodology reference, and any clarifying questions.
+            We evaluate whether your platform fits an existing category and reply with a fit assessment, a link to the methodology and any clarifying questions.
           </p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-5">
@@ -81,7 +81,7 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
         <div class="rounded-lg border border-slate-200 bg-white p-5">
           <div class="mb-2 text-xs font-bold uppercase tracking-wider text-orange-600">4. Publication</div>
           <p class="text-sm text-slate-700 leading-relaxed">
-            Your review publishes with the same structure as every other vendor in your category: long-form editorial, pros/cons, pricing breakdown, FAQs, and verified_date stamp. You'll see the WrenchStack Fit Score™, integration matrix, and (where applicable) reputation_flag context. We notify you when live.
+            If the evaluation ends in a listing, the entry follows the format of its section. US entries carry long-form editorial, pros and cons, pricing, FAQs and a verified date; field-service software reviews also carry the WrenchStack Fit Score™. International market entries are shorter profiles with pros, cons, pricing and a market note. An evaluation can also end without a listing.
           </p>
         </div>
       </div>
@@ -91,9 +91,9 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
       <h2 class="mb-3 text-lg font-bold text-emerald-900">What inclusion means (and doesn't)</h2>
       <ul class="space-y-2 text-sm text-emerald-900 leading-relaxed">
         <li><strong>✓ Inclusion is editorial.</strong> We evaluate, write, and publish, independent of whether you have an affiliate program or sponsor placements.</li>
-        <li><strong>✓ Same methodology applies.</strong> Your WrenchStack Fit Score™ comes from the same formula as every other vendor in your category.</li>
+        <li><strong>✓ Same methodology applies.</strong> Your listing follows the same rules as every other vendor in your category, and field-service software is ranked with the same WrenchStack Fit Score™ formula.</li>
         <li><strong>✓ Affiliate relationships disclosed.</strong> If you run a program we join, it's flagged in our per-vendor ledger. Recommendation isn't conditional on it.</li>
-        <li><strong>✗ Inclusion does not guarantee a positive review.</strong> If our research surfaces concerns (FTC actions, audit-pattern complaints, customer-hostile contract terms), the review will document them with citations.</li>
+        <li><strong>✗ Inclusion does not guarantee a positive review.</strong> If our research finds a regulator order, court record, BBB complaint record or contract term that puts contractors at risk, the review documents it with citations.</li>
         <li><strong>✗ Inclusion does not guarantee absence of a reputation_flag.</strong> Reputation flags get attached based on documented patterns regardless of vendor relationship.</li>
         <li><strong>✗ Inclusion is not for sale.</strong> We don't accept payment to be included, to influence ranking, to remove cons, or to soften reputation flags. See <a href="/methodology/" class="underline">methodology</a> for the full list.</li>
       </ul>
@@ -102,7 +102,7 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
     <section class="mb-10 rounded-lg border border-slate-200 bg-white p-6">
       <h2 class="mb-2 text-lg font-bold text-slate-900">Already listed? Show it.</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        If you're already in the directory, you can embed a free <a href="/badges/" class="text-orange-600 hover:underline font-semibold">"Rated on WrenchStack" badge</a> on your site; it links back to your independent review, signals to your customers that a neutral third party assessed you, and costs nothing. Displaying it never changes your score. <a href="/badges/" class="text-orange-600 hover:underline">Get your badge →</a>
+        If you're already in the directory, you can embed a free <a href="/badges/" class="text-orange-600 hover:underline font-semibold">"Rated on WrenchStack" badge</a> on your site; it links back to your independent review, signals to your customers that a neutral third party assessed you, and costs nothing. Displaying it does not change your listing, your ranking or your score. <a href="/badges/" class="text-orange-600 hover:underline">Get your badge →</a>
       </p>
     </section>
 
@@ -217,12 +217,12 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
               Submit for editorial review →
             </button>
             <p class="text-xs text-slate-500">
-              We respond within 5 business days. By submitting you confirm the information provided is accurate.
+              We reply by email. By submitting you confirm the information provided is accurate.
             </p>
           </div>
 
           <div id="vendor-submission-status" class="hidden rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
-            Thanks. Your submission was received. Our editorial team will review and respond within 5 business days at the email you provided.
+            Thanks. Your submission was received. Replies go to the email you provided.
           </div>
         </form>
 
@@ -267,7 +267,7 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
         </details>
         <details class="rounded-lg border border-slate-200 bg-white p-4">
           <summary class="cursor-pointer font-semibold text-slate-900">How long does editorial review take?</summary>
-          <p class="mt-3 text-sm text-slate-700">Initial review response within 5 business days. Full editorial publication typically 3-4 weeks from submission to live page, depending on data collection complexity and editorial queue.</p>
+          <p class="mt-3 text-sm text-slate-700">It varies by submission. We reply by email with a fit assessment and any clarifying questions. Whether a listing follows, and when, depends on the evaluation; some submissions end without one.</p>
         </details>
         <details class="rounded-lg border border-slate-200 bg-white p-4">
           <summary class="cursor-pointer font-semibold text-slate-900">Can I review or approve the editorial before it publishes?</summary>
@@ -275,15 +275,15 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
         </details>
         <details class="rounded-lg border border-slate-200 bg-white p-4">
           <summary class="cursor-pointer font-semibold text-slate-900">What if the review surfaces concerns about our product?</summary>
-          <p class="mt-3 text-sm text-slate-700">Our reviews include both pros and cons; sometimes the cons are significant. Where we document patterns warranting a reputation_flag (FTC actions, BBB complaint volume, audit-pattern complaints, customer-hostile contract terms), the warning appears prominently. Concerns get cited to documented sources.</p>
+          <p class="mt-3 text-sm text-slate-700">Our reviews include both pros and cons; sometimes the cons are significant. Where a regulator order, court record, BBB profile or the vendor's own terms supports a reputation_flag, the warning appears prominently. Concerns get cited to documented sources.</p>
         </details>
         <details class="rounded-lg border border-slate-200 bg-white p-4">
           <summary class="cursor-pointer font-semibold text-slate-900">Can I update my listing after publication?</summary>
-          <p class="mt-3 text-sm text-slate-700">Yes. For factual updates (pricing changes, new features, new integrations, geographic expansion), email <a href="mailto:partners@wrenchstack.com" class="text-orange-600 hover:underline">partners@wrenchstack.com</a> with documentation. We refresh on a quarterly cadence and incorporate factual updates promptly.</p>
+          <p class="mt-3 text-sm text-slate-700">Yes. For factual updates (pricing changes, new features, new integrations, geographic expansion), email <a href="mailto:partners@wrenchstack.com" class="text-orange-600 hover:underline">partners@wrenchstack.com</a> with documentation. Pricing is verified on a monthly cycle, as the <a href="/methodology/" class="text-orange-600 hover:underline">methodology</a> sets out, and documented factual updates are applied once confirmed.</p>
         </details>
         <details class="rounded-lg border border-slate-200 bg-white p-4">
           <summary class="cursor-pointer font-semibold text-slate-900">Do you cover international vendors?</summary>
-          <p class="mt-3 text-sm text-slate-700">Yes, extensively. Alongside deep US coverage, we run {intlMarkets} international markets: the UK, Canada, Australia, New Zealand, Ireland, the six GCC states, South Africa, France, Morocco, Jordan, Egypt and Malaysia, with the Gulf and other MENA markets published in both English and Arabic. Non-US vendors are welcome to submit; the editorial timeline depends on category readiness in your market.</p>
+          <p class="mt-3 text-sm text-slate-700">Yes. Alongside US coverage, we run {intlMarkets} international markets: the UK, Canada, Australia, New Zealand, Ireland, the six GCC states, South Africa, France, Morocco, Jordan, Egypt and Malaysia, with Arabic-language pages for the UAE, Saudi Arabia, Kuwait, Qatar, Jordan and Egypt, and French-language pages for France and Morocco. International entries are shorter profiles than US reviews. Non-US vendors are welcome to submit; the editorial timeline depends on category readiness in your market.</p>
         </details>
       </div>
     </section>

@@ -10,6 +10,8 @@ import { asSentence,
   medianUsd,
   verticalFitScore,
   priceTier,
+  isQuoteOnly,
+  hasFreeTier,
   type Vertical,
   type Tool,
 } from '../../lib/data';
@@ -18,7 +20,9 @@ import WrenchScore from '../../components/WrenchScore.astro';
 import ToolLogo from '../../components/ToolLogo.astro';
 
 export async function getStaticPaths() {
-  return verticals.map((v) => ({
+  // A trade with no tools would publish an empty ranking and a "pricing verified"
+  // date with nothing verified behind it, so it gets no page.
+  return verticals.filter((v) => rankToolsForVertical(v.slug).length > 0).map((v) => ({
     params: { vertical: verticalToUrl(v.slug) },
     props: { vertical: v },
   }));
@@ -34,10 +38,18 @@ const ranked: Tool[] = rankToolsForVertical(vertical.slug);
 // Compute most recent verified date across tools shown
 const verifiedDates = ranked.map(t => t.pricing.verified_date).sort();
 const lastVerifiedDate = verifiedDates[verifiedDates.length - 1] ?? new Date().toISOString().slice(0, 10);
-const estimatedReadingMin = readingTimeMinutes(4500); // approx page word count after content expansion
 
 const topPicks = ranked.slice(0, 5);
-const verticalLower = vertical.name.toLowerCase();
+// Keep acronyms (HVAC) in capitals and use the singular trade name, so copy reads
+// "HVAC software" and "general contractor software", not "hvac" or "general contractors software".
+const verticalLower = vertical.name
+  .split(' ')
+  .map((w) => (/^[A-Z]{2,}$/.test(w) ? w : w.toLowerCase()))
+  .join(' ')
+  .replace(/^general contractors$/, 'general contractor');
+// Singular forms, so a one-tool trade never reads "1 platforms" or "1 tools".
+const plat = ranked.length === 1 ? 'platform' : 'platforms';
+const toolsWord = ranked.length === 1 ? 'tool' : 'tools';
 
 // Quotable, dated stats computed from THIS vertical's tools: the answer-first
 // numbers AI assistants and journalists can lift with attribution. All derived
@@ -49,32 +61,31 @@ const publicPrices = ranked
 // Shared helper rather than a fifth hand-rolled median. This copy happened to be
 // correct, which is exactly how the last one survived long enough to publish $79.
 const medianPrice = publicPrices.length ? medianUsd(publicPrices) : null;
-const hidePricingCount = ranked.filter((t) => t.pricing.starting_at_usd === null).length;
+// Quote-only = pricing_model 'quote_only'. A null starting price is not the test: two
+// tools publish one-time or per-project prices instead of a monthly plan, and they are
+// counted separately (otherPricing) rather than as hiding their price.
+const hidePricingCount = ranked.filter(isQuoteOnly).length;
+const otherPricing = ranked.filter((t) => t.pricing.starting_at_usd === null && !isQuoteOnly(t));
 const qbCount = ranked.filter((t) => t.integrations.some((i) => i.includes('quickbooks'))).length;
-const lastVerifiedLabel = new Date(lastVerifiedDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+// Verified dates are YYYY-MM-DD; format in UTC so a build in a US timezone does not
+// print the 1st of a month as the previous month. Show the range of months, because
+// a page's tools are not all verified in the same month.
+const monthLabel = (d: string, withYear = true) =>
+  new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', withYear ? { month: 'long', year: 'numeric', timeZone: 'UTC' } : { month: 'long', timeZone: 'UTC' });
+const firstVerifiedDate = verifiedDates[0] ?? lastVerifiedDate;
+const lastVerifiedLabel = monthLabel(lastVerifiedDate);
+const verifiedLabel = monthLabel(firstVerifiedDate) === lastVerifiedLabel
+  ? lastVerifiedLabel
+  : `${monthLabel(firstVerifiedDate, firstVerifiedDate.slice(0, 4) !== lastVerifiedDate.slice(0, 4))} to ${lastVerifiedLabel}`;
 const showStatStrip = ranked.length >= 3;
 
-// Forward freshness promise: pricing is re-verified quarterly (see /methodology/).
-// A visible "next review" date is a cheap, honest trust signal almost no
-// competitor publishes.
-const nextReviewDate = (() => {
-  const d = new Date(lastVerifiedDate);
-  d.setMonth(d.getMonth() + 3);
-  return d.toISOString().slice(0, 10);
-})();
-
-// Cheapest published-price option: drives the "tightest budget" callout in
-// the decision block. Null when every option hides pricing behind a sales call.
-const budgetPick = ranked
-  .filter((t) => t.pricing.starting_at_usd !== null && (t.pricing.starting_at_usd as number) > 0)
-  .sort((a, b) => (a.pricing.starting_at_usd as number) - (b.pricing.starting_at_usd as number))[0] ?? null;
-
-// "Best value" award = cheapest published-price option AMONG the top picks
-// (excluding the #1 overall), an honest value flag for the recommended set,
-// rather than crowning a low-ranked budget tool.
-const valuePick = topPicks
-  .filter((t, i) => i !== 0 && t.pricing.starting_at_usd !== null && (t.pricing.starting_at_usd as number) > 0)
-  .sort((a, b) => (a.pricing.starting_at_usd as number) - (b.pricing.starting_at_usd as number))[0] ?? null;
+// "Tightest budget" callout: the lowest starting price among tools with no free tier,
+// naming every tool at that price. Tools with a free tier are left out because their
+// paid tiers can cost less than this (busybusy Pro is $9.99), and every trade page
+// has at least one free-tier tool, so no paid tool has "the lowest entry price".
+const paidEntries = ranked.filter((t) => (t.pricing.starting_at_usd ?? 0) > 0);
+const lowestPaid = paidEntries.length ? Math.min(...paidEntries.map((t) => t.pricing.starting_at_usd as number)) : null;
+const budgetPicks = paidEntries.filter((t) => t.pricing.starting_at_usd === lowestPaid);
 
 // "What it actually costs" pricing guide: buckets ranked tools by published
 // entry price into honest bands (custom-quote tools surfaced separately). The
@@ -89,11 +100,50 @@ const pricingBands = [
   { label: 'Budget', range: 'under $100/user/mo', tools: inTier('entry') },
   { label: 'Mid-market', range: '$100-$249/user/mo', tools: inTier('mid') },
   { label: 'Premium', range: '$250+/user/mo', tools: inTier('enterprise') },
-  { label: 'Custom quote only', range: 'sales call required', tools: inTier('quote-only') },
+  // Published prices that are not a monthly plan (one-time license, per-project fee).
+  { label: 'Other published pricing', range: 'not a monthly plan', tools: otherPricing },
+  { label: 'Custom quote only', range: 'sales call required', tools: inTier('quote-only').filter(isQuoteOnly) },
 ].filter((b) => b.tools.length > 0);
 const priceLo = publicPrices.length ? `$${publicPrices[0]}/mo` : null;
 const priceHi = publicPrices.length ? `$${publicPrices[publicPrices.length - 1]}/mo` : null;
 const showPricingGuide = ranked.length >= 4 && pricingBands.length >= 2;
+const publishedPriceCount = ranked.filter((t) => t.pricing.starting_at_usd !== null).length;
+const freeTierCount = ranked.filter(hasFreeTier).length;
+
+// "How to choose" brackets, filled from this trade's ranking (2026-10-01). They
+// used to name the same tools and plan prices on all 21 trade pages, including
+// tools that do not serve the trade (Joist, Service Fusion, FieldEdge and BuildOps
+// on /pest-control/). A tool belongs to every bracket its stated best team size
+// range overlaps, so "1-30" counts as solo, growing and established. Bucketing by
+// the top of the range told solo shops on seven pages that nothing fit, although
+// 8 to 20 tools on each listed a range that includes 1-3 techs.
+// Tools with no stated team size are left out, because their bracket is a guess.
+const teamRange = (t: Tool): [number, number] | null => {
+  const s = t.best_team_size ?? '';
+  const plus = s.match(/^\s*(\d+)\s*\+\s*$/);
+  if (plus) return [Number(plus[1]), Infinity];
+  const m = s.match(/(\d+)-(\d+)/);
+  return m ? [Number(m[1]), Number(m[2])] : null;
+};
+const sizeBracket = (heading: string, rule: string, lo: number, hi: number, advice: string) => {
+  const fits = ranked.filter((t) => {
+    const r = teamRange(t);
+    return r !== null && r[0] <= hi && r[1] >= lo;
+  });
+  return { heading, rule, advice, total: fits.length, picks: fits.slice(0, 3) };
+};
+const sizeBrackets = [
+  sizeBracket("If you're solo or have 1-3 techs", 'overlaps 1 to 3 techs', 1, 3,
+    "Don't pay for enterprise features you won't touch."),
+  sizeBracket('If you have 4-15 techs and are growing', 'overlaps 4 to 15 techs', 4, 15,
+    'Check whether each plan is priced per user or per company, because that decides how the bill changes as you add techs.'),
+  sizeBracket('If you have more than 15 techs', 'goes past 15 techs', 16, Infinity,
+    'Get any quote in writing before you sign.'),
+];
+
+// Glossary: name only the tools on this page whose integrations list Google Local
+// Services, instead of the old unsourced "Housecall Pro and Workiz lead here".
+const glsTools = ranked.filter((t) => t.integrations.includes('google_local_services'));
 
 // Phase 3 custom content flags: use deep content when present
 const hasIndustryContext = !!vertical.industry_context;
@@ -101,50 +151,51 @@ const hasBuyingPersonas = !!vertical.buying_personas;
 const hasFeaturePriorities = !!vertical.feature_priorities;
 const hasRegulatoryNotes = !!vertical.regulatory_notes;
 const hasSeasonality = !!vertical.seasonality;
-const hasCustomFaqs = (vertical.vertical_faqs?.length ?? 0) > 0;
 
-const templatedFaqs = [
-  {
-    q: `What is the best ${verticalLower} software in 2026?`,
-    a: `Based on our analysis of vertical fit, published pricing and integrations, the top three options are ${topPicks
-      .slice(0, 3)
-      .map((t) => t.name)
-      .join(', ')}. The right pick depends on your team size and budget; see the buyer's guide below for size-specific recommendations.`,
-  },
-  {
-    q: `How much does ${verticalLower} software cost?`,
-    a: `Entry-level tools start around $29/month billed annually (Jobber Core; $49 month-to-month) to $59/month billed annually (Housecall Pro Basic). Mid-tier platforms like Service Fusion charge flat per-company rates of $208-$533/month billed annually with unlimited users. Platforms like ServiceTitan and BuildOps publish no price, so their cost depends on the quote you get.`,
-  },
-  {
-    q: `What is the cheapest ${verticalLower} software?`,
-    a: `Joist starts at $10/month (Basics, up to 5 documents a month; its free tier was discontinued), making it one of the cheapest legitimate options, but below its new Run plan it is quote-and-invoice only, with no scheduling or dispatching. For full FSM features at the low end, Jobber Core ($29/month billed annually, $49 month-to-month) is the best value. Connecteam offers a genuinely free tier for teams under 10.`,
-  },
-  {
-    q: `Is ${vertical.name === 'HVAC' ? 'ServiceTitan' : topPicks[0]?.name ?? 'this software'} worth it?`,
-    a: vertical.name === 'HVAC'
-      ? `ServiceTitan can be worth it for established HVAC businesses with office staff and several technicians, where the reporting depth, marketing attribution and pricebook tools pay for the higher cost. Smaller shops can cover the core workflow for far less on Jobber or Housecall Pro.`
-      : `It depends on your team size and revenue. Read our detailed reviews below for the team-size breakpoints where each option starts paying for itself.`,
-  },
-  {
-    q: `Can I integrate ${verticalLower} software with QuickBooks?`,
-    a: `Yes. Every major tool on this list integrates with QuickBooks. The integration depth varies: FieldEdge and Knowify are built around two-way QuickBooks sync. Jobber syncs one way to QuickBooks Online only, and Housecall Pro syncs one way to QuickBooks Desktop. Always confirm whether you need QuickBooks Online or QuickBooks Desktop support; they're not interchangeable.`,
-  },
-];
+// The templated fallback FAQs were deleted 2026-10-01. Every trade has its own
+// vertical_faqs, so they never rendered, but they carried fixed plan prices,
+// "best value" and "every major tool" claims that would have published verbatim
+// on any trade added without FAQs. A trade without FAQs now gets only the
+// ranking FAQ below.
+const baseFaqs = vertical.vertical_faqs ?? [];
 
 // Lead the FAQ (and its FAQPage schema) with the exact high-intent query plus
 // a full ranked answer, the most AI-citable FAQ we can publish, and the only
 // place the complete ranking lands in structured data. Skip if the curated set
 // already answers the general "best … in 2026" form, to avoid a duplicate.
-const baseFaqs = hasCustomFaqs ? vertical.vertical_faqs! : templatedFaqs;
+// Tools tied with #1 on both trade fit and Fit Score; the order among them is alphabetical,
+// so the page must not present the first of them as a unique pick.
+const topTied = ranked.length
+  ? ranked.filter((t) => verticalFitScore(t, vertical.slug) === verticalFitScore(ranked[0], vertical.slug) && wrenchStackScore(t, vertical.slug) === wrenchStackScore(ranked[0], vertical.slug))
+  : [];
+
 const rankingFaq = {
   q: `What is the best ${verticalLower} software in 2026?`,
-  a: `Ranked by our independent WrenchStack Fit Score (vertical fit, pricing transparency, and integration coverage), the best ${verticalLower} software in 2026 is: ${ranked
+  a: `Ranked first by fit for the trade, with our independent WrenchStack Fit Score (vertical fit, pricing transparency and integration coverage) breaking ties and then name, the top of our 2026 ${verticalLower} software ranking is: ${ranked
     .slice(0, 8)
     .map((t, i) => `${i + 1}. ${t.name}`)
-    .join('; ')}. ${topPicks[0]?.name ?? 'The top pick'} leads overall${topPicks[0] ? ` (${formatPrice(topPicks[0])})` : ''}, but the right choice depends on your team size and budget; see the decision guide on this page for size-specific picks.`,
+    .join('; ')}. ${topPicks[0]?.name ?? 'The top pick'} ${topTied.length > 1 ? `is listed first of ${topTied.length} tools tied on trade fit and Fit Score` : 'ranks first'}${topPicks[0] ? ` (${formatPrice(topPicks[0])})` : ''}, but the right choice depends on your team size and budget; see the decision guide on this page for size-specific picks.`,
 };
 const alreadyHasRankingFaq = baseFaqs.some((f) => /\bbest\b/i.test(f.q) && /2026/.test(f.q));
 const faqs = alreadyHasRankingFaq ? baseFaqs : [rankingFaq, ...baseFaqs];
+
+// Reading time, estimated from this page's own content (2026-10-01). It was a fixed
+// readingTimeMinutes(4500), so all 21 pages said "20 min read" while their article text
+// ran from about 3,200 to 5,300 words. The words each page draws from the data are
+// counted here; TEMPLATE_WORDS approximates the fixed template prose (headings, guide
+// text, glossary, labels), measured from the built pages on 2026-10-01, where it came
+// to 1,650-1,800 words on every trade.
+const TEMPLATE_WORDS = 1750;
+const wc = (s?: string | null) => (s ?? '').split(/\s+/).filter(Boolean).length;
+const pageWords = TEMPLATE_WORDS
+  + [vertical.industry_context, vertical.buying_personas, vertical.feature_priorities, vertical.regulatory_notes, vertical.seasonality]
+    .reduce((n, s) => n + wc(s), 0)
+  + faqs.reduce((n, f) => n + wc(f.q) + wc(f.a), 0)
+  + ranked.reduce((n, t) => n + wc(t.name) + wc(t.best_for) + wc(formatPrice(t)) + 2, 0)
+  + topPicks.reduce((n, t) => n + wc(t.tagline) + wc(t.best_for) + wc(t.weaknesses)
+    + t.key_features.slice(0, 6).length * 2 + t.integrations.length * 2, 0)
+  + topPicks.slice(0, 4).reduce((n, t) => n + wc(t.best_for) + wc(t.weaknesses?.split(';')[0]), 0);
+const estimatedReadingMin = readingTimeMinutes(pageWords);
 
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -157,7 +208,7 @@ const faqSchema = {
 };
 
 const pageTitle = `Best ${vertical.name} Software 2026: Compared and Ranked`;
-const pageDescription = `Compare the ${ranked.length} best ${verticalLower} software options for 2026. Verified pricing, full feature matrices, head-to-head comparisons. Updated quarterly.`;
+const pageDescription = `Compare ${ranked.length} ${verticalLower} software ${ranked.length === 1 ? 'option' : 'options'} for 2026, ranked by fit for the trade. Pricing verified ${verifiedLabel}.`;
 
 const itemListSchema = {
   '@context': 'https://schema.org',
@@ -197,16 +248,17 @@ const breadcrumbs = [
         Best {vertical.name} Software in 2026
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        A comparison of {ranked.length} platforms for {verticalLower} businesses, ranked by vertical fit, pricing transparency, and integration coverage.
+        A comparison of {ranked.length} {plat} for {verticalLower} businesses, ranked by fit for the trade, then by Fit Score, then by name.
       </p>
-      <Byline updatedDate={lastVerifiedDate} nextReviewDate={nextReviewDate} readingMinutes={estimatedReadingMin} />
+      <Byline updatedDate={lastVerifiedDate} readingMinutes={estimatedReadingMin} />
     </header>
 
     {topPicks.length > 0 && (
       <section class="mb-10 rounded-lg border-l-4 border-orange-500 bg-orange-50/40 p-5">
         <p class="text-xs font-bold uppercase tracking-wider text-orange-600">The short answer</p>
         <p class="mt-2 text-slate-800 leading-relaxed">
-          For most {verticalLower} businesses in 2026, <a href={`/tools/${topPicks[0].slug}/`} class="font-semibold text-orange-700 hover:underline">{topPicks[0].name}</a> is our top pick ({formatPrice(topPicks[0])}{topPicks[0].best_team_size ? `, best for ${topPicks[0].best_team_size} techs` : ''}){topPicks.length > 1 ? (<>, followed by {topPicks.slice(1, 3).map((t, i) => (<>{i > 0 ? ' and ' : ''}<a href={`/tools/${t.slug}/`} class="font-semibold text-orange-700 hover:underline">{t.name}</a></>))}</>) : null}. Picks come from our independent <a href="/methodology/" class="underline hover:text-orange-700">Fit Score</a> (vertical fit, pricing transparency and integration coverage), and no vendor pays for placement. Full ranking, pricing and trade-offs below.
+          {topTied.length > 1 ? (<>For {verticalLower} businesses in 2026, {topTied.map((t, i) => (<>{i > 0 ? (i === topTied.length - 1 ? ' and ' : ', ') : ''}<a href={`/tools/${t.slug}/`} class="font-semibold text-orange-700 hover:underline">{t.name}</a></>))}{' '}tie at the top of our ranking on trade fit and Fit Score (ties are listed alphabetically). Picks are ordered by fit for the trade, then by our independent <a href="/methodology/" class="underline hover:text-orange-700">Fit Score</a> (vertical fit, pricing transparency and integration coverage), then by name, and no vendor pays for placement. Full ranking, pricing and trade-offs below.</>) : (<>
+          For {verticalLower} businesses in 2026, <a href={`/tools/${topPicks[0].slug}/`} class="font-semibold text-orange-700 hover:underline">{topPicks[0].name}</a> is our top pick ({formatPrice(topPicks[0])}{topPicks[0].best_team_size ? `, best for ${topPicks[0].best_team_size} techs` : ''}){topPicks.length > 1 ? (<>, followed by {topPicks.slice(1, 3).map((t, i) => (<>{i > 0 ? ' and ' : ''}<a href={`/tools/${t.slug}/`} class="font-semibold text-orange-700 hover:underline">{t.name}</a></>))}</>) : null}. Picks are ordered by fit for the trade, then by our independent <a href="/methodology/" class="underline hover:text-orange-700">Fit Score</a> (vertical fit, pricing transparency and integration coverage), then by name, and no vendor pays for placement. Full ranking, pricing and trade-offs below.</>)}
         </p>
       </section>
     )}
@@ -216,12 +268,12 @@ const breadcrumbs = [
         <div class="grid gap-3 grid-cols-2 sm:grid-cols-4">
           <div class="text-center">
             <div class="text-2xl font-bold text-slate-900">{ranked.length}</div>
-            <div class="mt-1 text-xs text-slate-600">{verticalLower} platforms compared</div>
+            <div class="mt-1 text-xs text-slate-600">{verticalLower} {plat} compared</div>
           </div>
           {medianPrice !== null && (
             <div class="text-center">
               <div class="text-2xl font-bold text-slate-900">${medianPrice}/mo</div>
-              <div class="mt-1 text-xs text-slate-600">median entry price (published tiers)</div>
+              <div class="mt-1 text-xs text-slate-600">median paid entry price (published tiers)</div>
             </div>
           )}
           <div class="text-center">
@@ -234,7 +286,7 @@ const breadcrumbs = [
           </div>
         </div>
         <p class="mt-3 text-center text-xs text-slate-500">
-          WrenchStack analysis of {ranked.length} {verticalLower} platforms · pricing verified {lastVerifiedLabel} · free to cite with attribution
+          WrenchStack analysis of {ranked.length} {verticalLower} {plat} · pricing verified {verifiedLabel} · free to cite with attribution
         </p>
       </section>
     )}
@@ -264,6 +316,7 @@ const breadcrumbs = [
             <tr>
               <th class="p-3 font-semibold">#</th>
               <th class="p-3 font-semibold">Tool</th>
+              <th class="p-3 font-semibold whitespace-nowrap">Trade fit</th>
               <th class="p-3 font-semibold">Score</th>
               <th class="p-3 font-semibold">Starting price</th>
               <th class="p-3 font-semibold">Best for</th>
@@ -280,13 +333,13 @@ const breadcrumbs = [
                       <ToolLogo tool={t} size={32} />
                       <span class="font-semibold text-slate-900">{t.name}</span>
                     </a>
-                    {(i === 0 || (valuePick && t.slug === valuePick.slug)) && (
+                    {verticalFitScore(t, vertical.slug) === verticalFitScore(topPicks[0], vertical.slug) && (
                       <div class="ml-11 mt-1">
-                        {i === 0 && <span class="inline-block rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-800">Best overall</span>}
-                        {valuePick && t.slug === valuePick.slug && i !== 0 && <span class="inline-block rounded-full bg-orange-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-orange-800">Best value</span>}
+                        <span class="inline-block rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-800">Highest trade fit</span>
                       </div>
                     )}
                   </td>
+                  <td class="p-3 whitespace-nowrap text-slate-700">{verticalFitScore(t, vertical.slug)}/10</td>
                   <td class="p-3">
                     <WrenchScore score={score} size="sm" />
                   </td>
@@ -299,7 +352,7 @@ const breadcrumbs = [
         </table>
       </div>
       <p class="mt-2 text-xs text-slate-500">
-        Score combines vertical fit (60%), pricing transparency (20%), and integration coverage (20%).
+        Order: trade fit first, then Score, then name. Score combines vertical fit (60%), pricing transparency (20%), and integration coverage (20%).
         <a href="/methodology/" class="underline hover:text-slate-700">Full methodology →</a>
       </p>
     </section>
@@ -307,7 +360,7 @@ const breadcrumbs = [
     {topPicks.length >= 2 && (
       <section class="mb-12">
         <h2 id="which-to-choose" class="mb-1 scroll-mt-20 text-2xl font-bold text-slate-900">Which {verticalLower} software should you choose?</h2>
-        <p class="mb-5 text-sm text-slate-600">The short, honest version by situation; full reasoning in the reviews below.</p>
+        <p class="mb-5 text-sm text-slate-600">The top {['', 'one', 'two', 'three', 'four'][Math.min(4, topPicks.length)]} picks in brief; full reasoning in the reviews below.</p>
         <div class="space-y-3">
           {topPicks.slice(0, 4).map((t) => {
             const watch = t.weaknesses ? t.weaknesses.split(';')[0].trim() : null;
@@ -324,9 +377,9 @@ const breadcrumbs = [
               </div>
             );
           })}
-          {budgetPick && (
+          {budgetPicks.length > 0 && (
             <div class="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-700">
-              <span class="font-semibold text-slate-900">Tightest budget:</span> <a href={`/tools/${budgetPick.slug}/`} class="font-semibold text-orange-700 hover:underline">{budgetPick.name}</a> has the lowest published entry price: {formatPrice(budgetPick)}.
+              <span class="font-semibold text-slate-900">Tightest budget:</span>{' '}{budgetPicks.map((t, i) => (<>{i > 0 ? (i === budgetPicks.length - 1 ? ' and ' : ', ') : ''}<a href={`/tools/${t.slug}/`} class="font-semibold text-orange-700 hover:underline">{t.name}</a></>))}{' '}{budgetPicks.length === 1 ? 'has' : 'share'} the lowest monthly starting price among tools with no free tier: {formatPrice(budgetPicks[0])}.{freeTierCount > 0 ? ` ${freeTierCount} ${freeTierCount === 1 ? 'tool' : 'tools'} on this page ${freeTierCount === 1 ? 'lists' : 'list'} a free tier.` : ''}
             </div>
           )}
         </div>
@@ -337,9 +390,10 @@ const breadcrumbs = [
       <section class="mb-12">
         <h2 id="pricing" class="mb-1 scroll-mt-20 text-2xl font-bold text-slate-900">What does {verticalLower} software actually cost?</h2>
         <p class="mb-5 text-sm text-slate-600 leading-relaxed">
-          {priceLo && priceHi && (<>Across the {ranked.length} platforms we track, published entry prices run from {priceLo} to {priceHi}{medianPrice !== null ? <>, with a median of ${medianPrice}/mo</> : null}. </>)}
-          {hidePricingCount > 0 && (<>{hidePricingCount} of {ranked.length} publish no price and quote only on a sales call. </>)}
-          Pricing verified {lastVerifiedLabel}.
+          {priceLo && priceHi && (<>Across the {ranked.length}{' '}{plat} we track, {freeTierCount > 0 ? <>{freeTierCount}{' '}{freeTierCount === 1 ? 'offers' : 'offer'} a free tier and the other</> : 'the'}{' '}published monthly starting prices run from {priceLo} to {priceHi}{medianPrice !== null ? <>, with a median of ${medianPrice}/mo</> : null}. </>)}
+          {hidePricingCount > 0 && (<>{hidePricingCount} of {ranked.length}{' '}{hidePricingCount === 1 ? 'publishes' : 'publish'} no price and {hidePricingCount === 1 ? 'quotes' : 'quote'} only on a sales call. </>)}
+          {otherPricing.length > 0 && (<>{otherPricing.length}{' '}{otherPricing.length === 1 ? 'publishes' : 'publish'} prices that are not a monthly plan, such as a one-time license or a per-project fee. </>)}
+          Pricing verified {verifiedLabel}.
         </p>
         <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
           <table class="w-full text-sm">
@@ -365,7 +419,7 @@ const breadcrumbs = [
           </table>
         </div>
         <p class="mt-2 text-xs text-slate-500">
-          Bands compare the lowest published tier per user per month; a flat company plan is split across a 5-person team, so a $300/mo flat plan counts as $60 per user. Most platforms add per-user or higher-tier costs above this (see each review for the full tier breakdown). <a href="/methodology/" class="underline hover:text-slate-700">How we verify pricing →</a>
+          Bands compare the lowest published tier per user per month; a flat company plan is split across a 5-person team, so a $300/mo flat plan counts as $60 per user. Plans can add per-user or higher-tier costs above this (see each review for the full tier breakdown). <a href="/methodology/" class="underline hover:text-slate-700">How we verify pricing →</a>
         </p>
       </section>
     )}
@@ -382,10 +436,10 @@ const breadcrumbs = [
         that stopped early. */}
     <section class="mb-12">
       <h2 id="all-platforms" class="mb-1 scroll-mt-20 text-2xl font-bold text-slate-900">
-        All {ranked.length} {verticalLower} platforms, ranked
+        All {ranked.length} {verticalLower} {plat}, ranked
       </h2>
       <p class="mb-5 text-sm text-slate-600 leading-relaxed">
-        The complete list behind the picks above, ordered by <a href="/methodology/" class="underline hover:text-orange-700">Fit Score</a> for {verticalLower} work. Fit is how well the product suits this trade specifically, not how good it is generally. Pricing verified {lastVerifiedLabel}.
+        The complete list behind the picks above, ordered by the Fit column (how well the product suits {verticalLower} work specifically, not how good it is generally), then by <a href="/methodology/" class="underline hover:text-orange-700">Fit Score</a>, then by name. Pricing verified {verifiedLabel}.
       </p>
       <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
         <table class="w-full text-sm">
@@ -419,24 +473,22 @@ const breadcrumbs = [
     </section>
 
     <section class="mb-12 prose prose-slate max-w-none">
-      <h2>Why {verticalLower} businesses need specialized software</h2>
+      <h2>What {verticalLower} software does</h2>
       <p>
-        Running a {verticalLower} business without dedicated software in 2026 means losing money
-        in three predictable ways: missed calls become missed jobs, paper invoices delay payment
-        by 30+ days, and unscheduled drive time eats 15-25% of technician hours. Field service
-        management (FSM) software addresses all three at once.
+        Software for {verticalLower} businesses covers some or all of the steps from first contact
+        to a paid invoice, such as booking, scheduling, dispatching, quoting, invoicing and taking
+        payment, and some tools cover design, proposals or project management instead. Tools differ
+        in which steps they cover, so check each review's feature list against the way your business works.
       </p>
       <p>
-        The category has matured enough that even the lowest-priced options ($39-65/month per
-        user) include scheduling, dispatching, invoicing, mobile apps, customer portals, and
-        payment processing. The decision today isn't <em>whether</em> to adopt FSM software;
-        it's <em>which platform fits your team size and operating model.</em>
+        Of the {ranked.length} {toolsWord} on this page, {publishedPriceCount} {publishedPriceCount === 1 ? 'publishes' : 'publish'} an entry price{freeTierCount > 0 ? <> and {freeTierCount} of those {freeTierCount === 1 ? 'lists' : 'list'} a free tier</> : null}{priceLo ? <>; among tools with no free tier, the lowest monthly starting price is {priceLo}</> : null}{otherPricing.length > 0 ? <>; {otherPricing.length} more {otherPricing.length === 1 ? 'publishes' : 'publish'} prices that are not a monthly plan</> : null}.
+        What an entry plan includes differs from tool to tool, so the useful question is
+        <em>which platform fits your team size and the way you work.</em>
       </p>
       <p>
-        We've organized this guide around the three sizing brackets where the right answer
-        actually changes: <strong>solo (1-3 techs)</strong>, <strong>growing (4-15 techs)</strong>,
-        and <strong>established (15+ techs)</strong>. Skip to the bracket that matches your
-        business.
+        The <a href="#how-to-choose">How to choose</a> section below uses three sizing brackets:
+        <strong>solo (1-3 techs)</strong>, <strong>growing (4-15 techs)</strong>,
+        and <strong>established (more than 15 techs)</strong>.
       </p>
     </section>
 
@@ -490,10 +542,12 @@ const breadcrumbs = [
                   <dt class="font-semibold text-slate-900">Key features</dt>
                   <dd class="text-slate-700">{t.key_features.slice(0, 6).map((f) => f.replace(/_/g, ' ')).join(' · ')}</dd>
                 </div>
+                {t.integrations.length > 0 && (
                 <div>
                   <dt class="font-semibold text-slate-900">Integrations</dt>
                   <dd class="text-slate-700">{t.integrations.map((i) => i.replace(/_/g, ' ')).join(' · ')}</dd>
                 </div>
+                )}
                 <div class="md:col-span-2">
                   <dt class="font-semibold text-slate-900">Watch out for</dt>
                   <dd class="text-slate-700">{t.weaknesses}</dd>
@@ -556,96 +610,73 @@ const breadcrumbs = [
 
     <section class="mb-12 prose prose-slate max-w-none">
       <h2 id="how-to-choose" class="scroll-mt-20">How to choose the right {verticalLower} software</h2>
-      <h3>If you're solo or have 1-3 techs</h3>
       <p>
-        Start with <strong>Jobber Core ($29/mo billed annually)</strong> or <strong>Joist Basics ($10/mo)</strong>.
-        Joist is one of the cheapest legitimate options but, below its new Run plan, only handles
-        estimates and invoices, with no scheduling. If you need to schedule jobs across days, go Jobber. Don't pay for
-        enterprise features you won't touch.
+        Each tool counts in every bracket that its stated best team size range overlaps, so a
+        tool listed as best for 1-30 techs counts in all three. Tools with no stated team size are left out.
       </p>
-      <h3>If you have 4-15 techs and are growing</h3>
-      <p>
-        This is where <strong>Housecall Pro Essentials</strong> ($149/mo billed annually, 5 users included), <strong>Jobber Connect</strong>{' '}
-        ($99/mo billed annually), and <strong>Service Fusion Starter</strong> ($208/mo billed annually, unlimited users) compete
-        head-to-head. Service Fusion gets relatively cheaper as you add techs because every plan includes unlimited users,
-        while Housecall Pro and Jobber cost more as you add users. Housecall Pro wins if you want consumer financing baked in.
-        Jobber wins on UX polish.
-      </p>
-      <h3>If you have 15+ techs or do $1M+ annual revenue</h3>
-      <p>
-        Look at <strong>ServiceTitan</strong> (residential, all-in-one), <strong>FieldEdge</strong>{' '}
-        (mid-size, QuickBooks-heavy), or <strong>BuildOps</strong> (commercial-only). Plan for a
-        3-6 month implementation. Get pricing in writing; these are custom-quoted and the spread
-        is wide.
-      </p>
+      {sizeBrackets.map((b) => (
+        <>
+          <h3>{b.heading}</h3>
+          {b.picks.length > 0 ? (
+            <>
+              <p>
+                {b.total} of the {ranked.length} {toolsWord} on this page {b.total === 1 ? 'lists' : 'list'} a best team size range that {b.rule}{b.total > b.picks.length ? `; the first ${b.picks.length} in the ranking are` : ''}:
+              </p>
+              <ul>
+                {b.picks.map((t) => (
+                  <li><a href={`/tools/${t.slug}/`}>{t.name}</a>: {formatPrice(t)}, best for {t.best_team_size} techs</li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <p>No tool on this page lists a best team size range that {b.rule}.</p>
+          )}
+          <p>{b.advice}</p>
+        </>
+      ))}
 
-      <h2>Common mistakes {verticalLower} businesses make picking software</h2>
+      <h2>Mistakes to avoid when picking {verticalLower} software</h2>
 
-      <h3>1. Buying for where you are, not where you'll be in 18 months</h3>
+      <h3>1. Buying for the team you have, not the one you plan to have</h3>
       <p>
-        The most expensive mistake we see: solo contractors pick Joist or a free tier, grow to
-        5 techs in 8 months, and discover their software has no dispatching or team management.
-        The migration to a real FSM platform mid-growth is brutal: historical job data, customer
-        history, and recurring service agreements often don't transfer cleanly.
-        <strong>Buy software for your team size 12-18 months out, not today.</strong>
+        If you plan to hire, check that the tool handles dispatching and team management before
+        you need them. Switching platforms later means moving job history, customer records and
+        recurring service agreements, so ask each vendor what its import and export carry over.
+        <strong>Buy for the team size you plan to have, not only the one you have today.</strong>
       </p>
 
       <h3>2. Underestimating implementation time</h3>
       <p>
-        Vendors quote "you'll be live in 2 weeks." Reality for a real shop with existing customer
-        data, recurring contracts, and a team that needs training: <strong>4-12 weeks</strong> for
-        mid-tier platforms like Housecall Pro or Jobber, and <strong>3-6 months</strong> for
-        enterprise platforms like ServiceTitan or BuildOps. Plan accordingly. Don't sign a contract
-        that locks you into a go-live date you can't realistically hit.
+        Setup time depends on how much customer data and how many recurring contracts you bring
+        over, and on how much training your team needs. Ask each vendor for a written onboarding
+        plan, and don't sign a contract that locks you into a go-live date you can't realistically hit.
       </p>
 
       <h3>3. Skipping the QuickBooks integration deep-dive</h3>
       <p>
-        QuickBooks integration is the make-or-break feature most {verticalLower} businesses overlook
-        until it's too late. Things to verify before signing:
+        {qbCount} of the {ranked.length} {toolsWord} on this page {qbCount === 1 ? 'lists' : 'list'} a QuickBooks integration. If you
+        keep your books in QuickBooks, verify these before signing:
       </p>
       <ul>
-        <li><strong>QuickBooks Desktop vs Online support</strong>: some tools only support one. If your accountant is on Desktop, FieldEdge or Knowify is a safer bet than Method:CRM (which prefers Online).</li>
+        <li><strong>QuickBooks Desktop vs Online support</strong>: confirm the tool supports the version your accountant uses; support for one does not mean support for the other.</li>
         <li><strong>Sync direction</strong>: one-way push (FSM → QuickBooks) vs two-way sync. Two-way matters if your accountant adjusts entries in QB.</li>
-        <li><strong>Sync frequency</strong>: real-time (FieldEdge, Smart Service) vs nightly batches (most others). Matters less if you reconcile weekly, matters a lot if you reconcile daily.</li>
-        <li><strong>Customer record merge behavior</strong>: what happens when a customer exists in both systems with slightly different addresses. Some tools merge intelligently, some create duplicates.</li>
+        <li><strong>Sync frequency</strong>: ask whether changes sync in real time or on a schedule. This matters more if you reconcile daily than if you reconcile weekly.</li>
+        <li><strong>Customer record merge behavior</strong>: when a customer exists in both systems with slightly different addresses, ask whether the tool merges the records or creates a duplicate.</li>
       </ul>
 
       <h3>4. Over-indexing on price at the entry tier</h3>
       <p>
-        The lowest tier of any FSM platform is usually missing critical features (no dispatch
-        optimization, no automated reminders, no recurring service tracking). Going up one tier
-        often adds the features that actually justify the software vs your current spreadsheet.
+        Check what the entry tier leaves out (for example dispatch optimization, automated
+        reminders or recurring service tracking) before you compare prices.
         Compare the tier you'd realistically use, not the marketing "starting at" price.
       </p>
 
       <h3>5. Ignoring the team-adoption tax</h3>
       <p>
-        Software ROI requires the team to actually use it. The slickest UI doesn't help if your
-        senior tech refuses to enter job notes in the app. Before committing, get your 2-3 most
-        software-resistant team members on a 30-min demo. If they push back hard on basic workflows,
+        Software only pays off if the team uses it. A polished app doesn't help if your
+        senior tech won't enter job notes in it. Before committing, get your most
+        software-resistant team members on a demo. If they push back hard on basic workflows,
         keep shopping.
-      </p>
-
-      <h2>Implementation timeline: what to actually expect</h2>
-
-      <p>
-        Skip the vendor-promised "2-week go-live" fantasy. Here's the realistic timeline based on
-        what we've seen with {verticalLower} businesses across our directory:
-      </p>
-
-      <ul>
-        <li><strong>Week 1-2:</strong> Account setup, basic configuration, schedule data import (customers, recurring service agreements). Don't try to import historical job data yet.</li>
-        <li><strong>Week 2-4:</strong> Train office staff on dispatching + invoicing workflows. Set up QuickBooks integration. Run parallel (old system + new system) for 2-4 weeks.</li>
-        <li><strong>Week 4-8:</strong> Train field techs on mobile app. Address adoption resistance. Refine workflow based on real usage.</li>
-        <li><strong>Week 8-12:</strong> Cut over fully. Decommission old system. Build first automation workflows (recurring billing, follow-up reminders).</li>
-        <li><strong>Month 3-6:</strong> Optimization phase. Add advanced features (marketing automation, customer financing, KPI dashboards). This is where ROI compounds.</li>
-      </ul>
-
-      <p>
-        Enterprise platforms (ServiceTitan, BuildOps) add another
-        2-3 months because they require deeper data migration, custom pricebook setup, and
-        sometimes custom integration work.
       </p>
 
       {hasRegulatoryNotes && (
@@ -664,35 +695,35 @@ const breadcrumbs = [
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <dt class="font-semibold text-slate-900">Dispatching</dt>
-          <dd class="text-slate-600">The process of assigning jobs to specific technicians based on skill, location, and availability. Good dispatch software minimizes drive time and matches tech certifications to job requirements automatically.</dd>
+          <dd class="text-slate-600">The process of assigning jobs to specific technicians based on skill, location, and availability. Some dispatch tools also suggest routes or match technician skills to jobs; check each review's feature list.</dd>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <dt class="font-semibold text-slate-900">Service agreement</dt>
-          <dd class="text-slate-600">A recurring contract where customers pay annually or monthly for scheduled maintenance + priority service. Common in HVAC and commercial plumbing. Strong service-agreement support is critical for shops with 20%+ recurring revenue.</dd>
+          <dd class="text-slate-600">A recurring contract where customers pay annually or monthly for scheduled maintenance + priority service. Common in HVAC and commercial plumbing.</dd>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <dt class="font-semibold text-slate-900">Pricebook</dt>
-          <dd class="text-slate-600">A standardized catalog of services and prices used to generate quotes consistently across techs. Pricebook automation (ServiceTitan's "Pricebook Pro," Housecall Pro's flat-rate pricing) ensures techs charge the right price every time.</dd>
+          <dd class="text-slate-600">A standardized catalog of services and prices used to generate quotes consistently across techs. Some platforms package it as a named feature, such as ServiceTitan's Pricebook Pro.</dd>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <dt class="font-semibold text-slate-900">Flat-rate pricing</dt>
-          <dd class="text-slate-600">Quoting the same price for the same job regardless of how long it takes. Standard in residential trades. Requires a pricebook. Opposite of time-and-materials billing.</dd>
+          <dd class="text-slate-600">Quoting the same price for the same job regardless of how long it takes, using set prices such as those in a pricebook. Opposite of time-and-materials billing.</dd>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <dt class="font-semibold text-slate-900">AIA billing</dt>
-          <dd class="text-slate-600">An invoicing standard used in commercial construction and large contracting projects. Progress-based billing tied to project milestones. If you do commercial work, your software needs to support this; generic FSM tools usually don't.</dd>
+          <dd class="text-slate-600">An invoicing standard used in commercial construction and large contracting projects. Progress billing on standard AIA payment-application forms, which bill the share of work completed against a schedule of values. If your customers require it, check that your software supports it.</dd>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <dt class="font-semibold text-slate-900">Two-way QuickBooks sync</dt>
-          <dd class="text-slate-600">Real-time bidirectional data flow between FSM software and QuickBooks. Changes in either system propagate to the other. Critical if your accountant makes adjustments directly in QB.</dd>
+          <dd class="text-slate-600">Bidirectional data flow between FSM software and QuickBooks. Changes in either system propagate to the other. Critical if your accountant makes adjustments directly in QB.</dd>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <dt class="font-semibold text-slate-900">Consumer financing</dt>
-          <dd class="text-slate-600">Financing offers (such as Wisetack, GreenSky or Synchrony) that let customers pay for large repairs over time. Some field service platforms connect a lender to estimates and invoices: Wisetack lists Housecall Pro and Jobber among its integrations.</dd>
+          <dd class="text-slate-600">Financing offers (such as Wisetack, GreenSky or Synchrony) that let customers pay for large repairs over time. Some field service platforms connect a lender to estimates and invoices: <a href="https://www.wisetack.com/" rel="nofollow noopener" class="underline hover:text-slate-900">Wisetack's site lists</a> Housecall Pro and Jobber among its partners.</dd>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4">
           <dt class="font-semibold text-slate-900">GLS (Google Local Services Ads)</dt>
-          <dd class="text-slate-600">Google's "Local Services" ad placement (with the green check). FSM platforms with native GLS integration auto-attribute booked jobs to specific ads, making it easier to measure ROI. Housecall Pro and Workiz lead here.</dd>
+          <dd class="text-slate-600">Google's "Local Services" ad placement (with the green check).{glsTools.length > 0 && (<> Of the tools on this page, {glsTools.map((t, i) => (<>{i > 0 ? (i === glsTools.length - 1 ? ' and ' : ', ') : ''}<a href={`/tools/${t.slug}/`} class="underline hover:text-slate-900">{t.name}</a></>))}{' '}{glsTools.length === 1 ? 'lists' : 'list'} a Google Local Services integration.</>)}</dd>
         </div>
       </dl>
     </section>

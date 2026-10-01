@@ -164,7 +164,10 @@ export function asSentence(s: string | null | undefined): string {
 
 export function formatPrice(t: Tool): string {
   const p = t.pricing;
-  if (p.starting_at_usd === null) return 'Custom quote';
+  // A null starting price is not always a quote: trash-flow sells one-time licenses and
+  // pylon-solar charges per project, both published (pricing_model 'unclear'). Until
+  // 2026-10-01 both rendered "Custom quote".
+  if (p.starting_at_usd === null) return isQuoteOnly(t) ? 'Custom quote' : 'No monthly plan (see pricing note)';
   if (p.starting_at_usd === 0) return 'Free tier available';
   return `From $${p.starting_at_usd}/mo`;
 }
@@ -203,7 +206,9 @@ export function wrenchStackScoreBreakdown(t: Tool, verticalSlug?: string): Score
   const fitValues = Object.values(t.vertical_fit ?? {});
   const bestFit = fitValues.length ? Math.max(...fitValues) : 5;
   const fit = verticalSlug ? verticalFitScore(t, verticalSlug) : bestFit;
-  const transparency = t.pricing.starting_at_usd !== null ? 10 : 5;
+  // Quote-only tools (no price anywhere) score 5; tools that publish prices score 10,
+  // including the two that publish one-time or per-project prices (2026-10-01).
+  const transparency = isQuoteOnly(t) ? 5 : 10;
   // Integration coverage scaled to a denominator that is actually reachable. It used to
   // be min(count, 10) while the directory maximum is 7 and the mean is 2.7, so no tool
   // could ever score above 7 on a 10-point factor and every tool took a silent haircut.
@@ -396,7 +401,11 @@ export function teamSizeBucket(t: Tool): TeamSizeBucket {
 // not a point at the top of it. Anything comparing tiers must special-case it rather than
 // let indexOf return -1 and silently score it as cheaper than free.
 const PRICE_TIER_ORDER: PriceTier[] = ['free', 'entry', 'mid', 'enterprise'];
-const isQuoteOnly = (tier: PriceTier) => tier === 'quote-only';
+// Renamed from isQuoteOnly on 2026-10-01 so the exported isQuoteOnly(tool) below can
+// take that name. This one tests a price TIER, which is 'quote-only' for every tool
+// with no monthly starting price, including the two that publish one-time or
+// per-project prices.
+const isQuoteOnlyTier = (tier: PriceTier) => tier === 'quote-only';
 const TEAM_BUCKET_ORDER: TeamSizeBucket[] = ['solo', 'small', 'mid', 'large'];
 
 export interface ScoredAlternative {
@@ -445,10 +454,10 @@ function buildAlternativeRationale(source: Tool, alt: Tool): string {
   const altPrice = alt.pricing.starting_at_usd;
 
   // 1. Pricing relationship
-  if (isQuoteOnly(altTier) || isQuoteOnly(sourceTier)) {
+  if (isQuoteOnlyTier(altTier) || isQuoteOnlyTier(sourceTier)) {
     // One side publishes no price, so any "cheaper" or "upgrade path" claim would be
     // invented. Say what is actually true instead.
-    if (isQuoteOnly(altTier)) fragments.push('Quote-only pricing, so compare on fit not cost');
+    if (isQuoteOnlyTier(altTier)) fragments.push('Quote-only pricing, so compare on fit not cost');
   } else if (altTier === 'free' && sourceTier !== 'free') {
     fragments.push('Has a free tier');
   } else if (altTierIdx < sourceTierIdx) {
@@ -581,7 +590,7 @@ export function smartAlternatives(t: Tool, n: number = 6): ScoredAlternative[] {
     // rather than pretending an unknown price sits next to $250+.
     const candTier = priceTier(c);
     const candTierIdx = PRICE_TIER_ORDER.indexOf(candTier);
-    const tierScore = (isQuoteOnly(candTier) || isQuoteOnly(sourceTier))
+    const tierScore = (isQuoteOnlyTier(candTier) || isQuoteOnlyTier(sourceTier))
       ? 5
       : Math.max(0, 10 - Math.abs(sourceTierIdx - candTierIdx) * 5);
 
@@ -1658,6 +1667,8 @@ export interface FlaggedEntry {
 export interface FlagGroup {
   category: string;
   categoryUrl: string;
+  /** Every vendor in the category, flagged or not. */
+  total: number;
   entries: FlaggedEntry[];
 }
 
@@ -1669,6 +1680,7 @@ function collectFlags(
   return {
     category,
     categoryUrl: `/${prefix}/`,
+    total: arr.length,
     entries: arr
       .filter((e) => e.reputation_flag)
       .map((e) => ({
@@ -1681,7 +1693,12 @@ function collectFlags(
   };
 }
 
-/** Every documented reputation warning in the directory, grouped by category. */
+/** Every documented reputation warning in the US directory, grouped by category.
+ *  The one definition of the flag count: every page that quotes it reads this.
+ *  AI tools added 2026-10-01: this list was written when no AI tool carried a
+ *  flag, so NiceJob's (added 2026-09-30, shown as a reputation warning on its
+ *  page) was missing here while /trends-2026/, /press/ and /research/index/
+ *  counted it, and the totals differed (24 against 25). */
 export function reputationFlagGroups(): FlagGroup[] {
   return [
     collectFlags(leadGenPlatforms, 'Lead generation', 'lead-gen'),
@@ -1692,6 +1709,7 @@ export function reputationFlagGroups(): FlagGroup[] {
     collectFlags(marketingAgencies, 'Marketing agencies', 'agencies'),
     collectFlags(payrollServices, 'Payroll', 'payroll'),
     collectFlags(accountingSoftware, 'Accounting', 'accounting'),
+    collectFlags(aiTools, 'AI tools', 'ai-tools'),
   ].filter((g) => g.entries.length > 0);
 }
 
@@ -1699,10 +1717,29 @@ export function totalReputationFlags(): number {
   return reputationFlagGroups().reduce((n, g) => n + g.entries.length, 0);
 }
 
-/** Share of field-service tools that publish no price at all (quote-only). */
+/** Quote-only: the vendor publishes no price at all (pricing_model 'quote_only').
+ *  A null starting_at_usd is NOT the test: trash-flow (one-time licenses) and
+ *  pylon-solar (per-project fees) have no monthly starting price but do publish
+ *  prices, with pricing_model 'unclear'. Added 2026-10-01 as the one definition. */
+export function isQuoteOnly(t: Tool): boolean {
+  return t.pricing.pricing_model === 'quote_only';
+}
+
+/** A tool has a free tier when its starting price is $0, whatever its paid tiers cost. */
+export function hasFreeTier(t: Tool): boolean {
+  return t.pricing.starting_at_usd === 0;
+}
+
+/** Number of quote-only tools in a list (default: the whole directory). */
+export function quoteOnlyCount(list: Tool[] = tools): number {
+  return list.filter(isQuoteOnly).length;
+}
+
+/** Share of field-service tools that publish no price at all (quote-only).
+ *  Counted with isQuoteOnly since 2026-10-01; it used starting_at_usd === null,
+ *  which also counted the two tools that publish one-time or per-project prices. */
 export function quoteOnlyPct(): number {
-  const n = tools.filter((t) => t.pricing.starting_at_usd === null).length;
-  return Math.round((n / tools.length) * 100);
+  return Math.round((quoteOnlyCount() / tools.length) * 100);
 }
 
 /** Share of field-service tools integrating with QuickBooks. */

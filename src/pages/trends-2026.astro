@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, verticals, medianUsd as sharedMedianUsd, perUserMedian, flatFeeMedian, perUserTools, flatFeeTools, priceTier, REFERENCE_TEAM_SIZE, teamSizeBucket, freshnessTier, accountingSoftware, paymentProcessors, bankingProviders, financingProviders, insuranceProviders, leadGenPlatforms, payrollServices, marketingAgencies, aiTools } from '../lib/data';
+import { tools, verticals, medianUsd as sharedMedianUsd, perUserMedian, flatFeeMedian, perUserTools, flatFeeTools, priceTier, perUserEquivalentUsd, isQuoteOnly, hasFreeTier, quoteOnlyCount, REFERENCE_TEAM_SIZE, teamSizeBucket, freshnessTier, accountingSoftware, paymentProcessors, bankingProviders, financingProviders, insuranceProviders, leadGenPlatforms, payrollServices, marketingAgencies, aiTools } from '../lib/data';
+import { INTL_MARKETS } from '../lib/intl';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -12,11 +13,15 @@ const breadcrumbs = [
 // Pricing distribution
 const tierDist = { free: 0, entry: 0, mid: 0, enterprise: 0, 'quote-only': 0 };
 for (const t of tools) tierDist[priceTier(t)]++;
-const topPricedSentence = tierDist.enterprise === 0
-  ? 'None publishes a starting price of $250 or more per user.'
-  : tierDist.enterprise === 1
-  ? 'Only one publishes a starting price of $250 or more per user.'
-  : `A further ${tierDist.enterprise} publish a starting price of $250 or more per user.`;
+// FastEST, the one tool in this tier today, prices per application license on a
+// single PC or tablet, not per named user, so the sentence says "per seat" and
+// spells out its unit (from its pricing_note).
+const topPricedTools = tools.filter((t) => priceTier(t) === 'enterprise');
+const topPricedSentence = topPricedTools.length === 0
+  ? 'None publishes a starting price of $250 or more per seat.'
+  : topPricedTools.length === 1
+  ? `Only one, ${topPricedTools[0].name}, publishes a starting price of $250 or more per seat${topPricedTools[0].slug === 'fastest' ? `: $${topPricedTools[0].pricing.starting_at_usd} a month per application license on a single PC or tablet` : ''}.`
+  : `A further ${topPricedTools.length} publish a starting price of $250 or more per seat.`;
 
 const pricedTools = tools.filter((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0);
 const prices = pricedTools.map((t) => t.pricing.starting_at_usd!).sort((a, b) => a - b);
@@ -24,8 +29,22 @@ const medianPrice = sharedMedianUsd(prices);
 const minPrice = prices[0];
 const maxPrice = prices[prices.length - 1];
 
+// The blended median above mixes pricing models. Count each model among the same
+// priced tools, so the per-user, flat and any other counts add up to pricedTools
+// (until 2026-10-01 the prose gave 15 + 45 against 61 priced tools, because Bluebeam's
+// annual per-user plan was in neither group). Counting over pricedTools also keeps a
+// $0 plan whose pricing_model is still 'flat' (Calday) out of the flat-fee count.
+const perUserPriced = perUserTools(pricedTools).length;
+const flatPriced = flatFeeTools(pricedTools).length;
+const otherModelTools = pricedTools.filter((t) => perUserTools([t]).length === 0 && flatFeeTools([t]).length === 0);
+const otherModelClause = otherModelTools.length === 0
+  ? ''
+  : otherModelTools.every((t) => t.pricing.pricing_model === 'annual_per_user')
+  ? `${otherModelTools.length} ${otherModelTools.length === 1 ? 'sells' : 'sell'} an annual per-user subscription`
+  : `${otherModelTools.length} ${otherModelTools.length === 1 ? 'uses' : 'use'} another pricing model`;
+
 // Free tier prevalence
-const withFreeTier = tools.filter((t) => t.pricing.starting_at_usd === 0).length;
+const withFreeTier = tools.filter(hasFreeTier).length;
 const withFreeTrial = tools.filter((t) => (t.pricing.free_trial_days ?? 0) > 0).length;
 const avgTrialDays = Math.round(
   tools.filter((t) => (t.pricing.free_trial_days ?? 0) > 0)
@@ -33,9 +52,12 @@ const avgTrialDays = Math.round(
   Math.max(withFreeTrial, 1)
 );
 
-// Custom-quoted prevalence (enterprise opacity)
-const customQuoted = tools.filter((t) => t.pricing.starting_at_usd === null).length;
+// Custom-quoted prevalence (enterprise opacity). Quote-only is the pricing model,
+// not a null starting price: Trash Flow (one-time licenses) and Pylon (per-project
+// prices) have no monthly starting price but do publish prices.
+const customQuoted = quoteOnlyCount();
 const customQuotedPct = Math.round((customQuoted / tools.length) * 100);
+const nonMonthlyPriced = tools.filter((t) => t.pricing.starting_at_usd === null && !isQuoteOnly(t));
 
 // Founded years
 const foundedYears = tools.filter((t) => t.founded).map((t) => t.founded!);
@@ -51,7 +73,7 @@ const cohortExamples = (picks: [string, string][], inCohort: (year: number) => b
     .map((p) => `${p.label} (${p.year})`)
     .join(', ');
 const post2015Examples = cohortExamples([
-  ['fieldpulse', 'FieldPulse'], ['limble', 'Limble'], ['skimmer', 'Skimmer'], ['maintainx', 'MaintainX'],
+  ['fieldpulse', 'FieldPulse'], ['limble', 'Limble CMMS'], ['skimmer', 'Skimmer'], ['maintainx', 'MaintainX'],
   ['jobtread', 'JobTread'], ['sera-systems', 'Sera Systems'], ['roofr', 'Roofr'],
 ], (y) => y >= 2015);
 const pre2010Examples = cohortExamples([
@@ -65,10 +87,14 @@ const withStripe = tools.filter((t) => t.integrations.some((i) => i.includes('st
 const withZapier = tools.filter((t) => t.integrations.some((i) => i.includes('zapier'))).length;
 const withXero = tools.filter((t) => t.integrations.some((i) => i.includes('xero'))).length;
 const withLSA = tools.filter((t) => t.integrations.some((i) => i.includes('google_local_services'))).length;
-const withSageOrNetsuite = tools.filter((t) => t.integrations.some((i) => i.includes('sage') || i.includes('netsuite'))).length;
+// Sage Intacct and NetSuite only, matching the table label. Until 2026-10-01 this
+// matched any 'sage' slug, so Sage 100, Sage 300 CRE and plain 'sage' were counted too.
+const isSageOrNetsuite = (i: string) => i === 'sage_intacct' || i.includes('netsuite');
+const withSageOrNetsuite = tools.filter((t) => t.integrations.some(isSageOrNetsuite)).length;
 
 // Vertical coverage
 const verticalSizes = verticals.map((v) => ({
+  slug: v.slug,
   name: v.name,
   count: tools.filter((t) => t.verticals.includes(v.slug)).length,
 })).sort((a, b) => b.count - a.count);
@@ -96,12 +122,16 @@ const perCompanyCount = tools.filter(detectsPerCompany).length;
 // subtracted a second time (fixed 2026-08-27).
 const perUserCount = pricedTools.length - perCompanyCount;
 
-// Median entry price by trade (publicly-priced paid tools; trades with >=4 such tools)
+// Median entry price by trade (publicly-priced paid tools; trades with >=4 such tools).
+// Cost per user, the same basis as the price tiers: flat and base-plus-seat plans are
+// split across REFERENCE_TEAM_SIZE users. Until 2026-10-01 this took a median of raw
+// starting prices across pricing models, so a trade served mostly by per-user tools
+// (Fire Protection) ranked "cheapest" against trades priced by flat company plans.
 const medianUsd = sharedMedianUsd;
 const pricedByTrade = verticals
   .map((v) => {
-    const ps = pricedTools.filter((t) => t.verticals.includes(v.slug)).map((t) => t.pricing.starting_at_usd!);
-    return { name: v.name, n: ps.length, median: ps.length ? medianUsd(ps) : 0, min: ps.length ? Math.min(...ps) : 0, max: ps.length ? Math.max(...ps) : 0 };
+    const ps = pricedTools.filter((t) => t.verticals.includes(v.slug)).map((t) => perUserEquivalentUsd(t)!);
+    return { name: v.name, n: ps.length, median: ps.length ? Math.round(medianUsd(ps)) : 0, min: ps.length ? Math.round(Math.min(...ps)) : 0, max: ps.length ? Math.round(Math.max(...ps)) : 0 };
   })
   .filter((r) => r.n >= 4)
   .sort((a, b) => a.median - b.median);
@@ -139,14 +169,138 @@ const intlVendorCount = Object.values(intlModules).reduce(
   (s: number, m: any) => s + (m.default?.vendors?.length ?? m.vendors?.length ?? 0),
   0
 );
+// Entries with category 'certification' are regulators and schemes (ZATCA, Gas Safe
+// Register and the like), not vendors, so the prose counts them separately.
+const intlCertCount = Object.values(intlModules).reduce(
+  (s: number, m: any) => s + (m.default?.vendors ?? m.vendors ?? []).filter((v: any) => v.category === 'certification').length,
+  0
+);
+
+// --- PROSE FIGURES (2026-10-01) ---
+// Names, counts and rankings quoted in the prose are computed here from the data
+// files, so the copy cannot drift from the tables beside it. Until 2026-10-01 the
+// flag paragraph ranked financing second against a table that showed banking
+// second, and the specialty paragraph named one pool platform when there were four.
+type DirTool = (typeof tools)[number];
+const listJoin = (xs: string[]) => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : xs[0] ?? '');
+const catLabel = (name: string) => (name.startsWith('AI ') ? name : name.charAt(0).toLowerCase() + name.slice(1));
+const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+const pickTools = (slugs: string[], keep: (t: DirTool) => boolean = () => true) =>
+  slugs.map((s) => tools.find((t) => t.slug === s)).filter((t): t is DirTool => !!t && keep(t));
+const pickNames = (slugs: string[], keep?: (t: DirTool) => boolean) => listJoin(pickTools(slugs, keep).map((t) => t.name));
+const priceOf = (slug: string) => tools.find((t) => t.slug === slug)?.pricing;
+
+// The data date: the latest verified_date among the tools and the adjacent-stack
+// vendors this report counts. It is derived from the data, so a data edit moves the
+// citation date with the figures (until 2026-10-01 it was a hand-edited constant).
+// The header label and both suggested citations use it.
+const allVerified = [
+  ...tools.map((t) => t.pricing.verified_date),
+  ...stackCats.flatMap((c) => (c.items as any[]).map((x) => x.verified_date)),
+].filter((d): d is string => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d)).sort();
+const DATA_AS_OF = allVerified[allVerified.length - 1];
+const toolVerified = tools.map((t) => t.pricing.verified_date).filter((d): d is string => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d)).sort();
+const priceOldestDay = toolVerified.length ? new Date(`${toolVerified[0]}T00:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }) : '';
+const dataAsOfDay = new Date(`${DATA_AS_OF}T00:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+// The last edit to this page's copy. dateModified is whichever is later, the copy
+// edit or the data date.
+const PAGE_MODIFIED = '2026-10-01';
+const dateModified = PAGE_MODIFIED > DATA_AS_OF ? PAGE_MODIFIED : DATA_AS_OF;
+
+// Named prices
+const joistPricing = priceOf('joist');
+const tradifyPricing = priceOf('tradify');
+const markatePricing = priceOf('markate');
+
+// Free trials
+const trialLengths = tools.map((t) => t.pricing.free_trial_days ?? 0).filter((d) => d > 0);
+const trialTally = new Map<number, number>();
+for (const d of trialLengths) trialTally.set(d, (trialTally.get(d) ?? 0) + 1);
+const [trialModeDays, trialModeCount] = [...trialTally].sort((a, b) => b[1] - a[1])[0] ?? [0, 0];
+const trials30plus = trialLengths.filter((d) => d >= 30).length;
+const longTrialExamples = pickNames(['maintainx', 'limble'], (t) => (t.pricing.free_trial_days ?? 0) >= 30);
+
+// Integrations
+const hasXero = (t: DirTool) => t.integrations.some((i) => i.includes('xero'));
+const nonUsXero = (t: DirTool) => hasXero(t) && !!t.headquartered && isNonUsHQ(t.headquartered);
+const xeroNonUsCount = tools.filter(nonUsXero).length;
+const xeroNonUsExamples = pickNames(['tradify', 'bigchange', 'powered-now'], nonUsXero);
+const xeroExamples = pickNames(['tradify', 'simpro', 'bigchange'], hasXero);
+const sageExamples = pickNames(['buildops', 'procore', 'servicetrade'], (t) => t.integrations.some(isSageOrNetsuite));
+const withQBDesktop = tools.filter((t) => t.integrations.includes('quickbooks_desktop')).length;
+const withQBOnlineOnly = tools.filter((t) => t.integrations.includes('quickbooks_online') && !t.integrations.some((i) => i === 'quickbooks' || i === 'quickbooks_desktop')).length;
+// Plain 'quickbooks' with no edition named; Desktop + Online-only + this = withQuickBooks.
+const withQBUnspecified = tools.filter((t) => t.integrations.includes('quickbooks') && !t.integrations.includes('quickbooks_desktop')).length;
+// CompanyCam integrations from both sides: CompanyCam's own list and every tool that
+// lists CompanyCam (until 2026-10-01 only CompanyCam's side was read, which left out
+// Housecall Pro, FieldPulse and others that list it).
+const ccSide = new Set(tools.find((t) => t.slug === 'companycam')?.integrations ?? []);
+const companyCamPartnerTools = tools
+  .filter((t) => t.slug !== 'companycam' && (ccSide.has(t.slug) || t.integrations.includes('companycam')))
+  .sort((a, b) => a.name.localeCompare(b.name));
+const companyCamPartners = listJoin(companyCamPartnerTools.map((t) => t.name));
+
+// Large teams: tools whose listed best-fit team size reaches past 50 (or is open-ended)
+const largeTeamTools = tools.filter((t) => teamSizeBucket(t) === 'large');
+const largeQuoteOnly = largeTeamTools.filter(isQuoteOnly).length;
+
+// Adjacent-stack category nouns for the "Beyond" paragraph
+const stackNoun: Record<string, string> = {
+  Accounting: 'accounting tools',
+  Payments: 'payment processors',
+  'Business banking': 'business banks',
+  Financing: 'financing providers',
+  Insurance: 'insurance providers',
+  'Lead generation': 'lead-generation platforms',
+  Payroll: 'payroll services',
+  'Marketing agencies': 'marketing agencies',
+  'AI tools': 'AI tools',
+};
+const stackRowsText = listJoin(stackRows.map((r) => `${r.total} ${stackNoun[r.name] ?? catLabel(r.name)}`));
+
+// Headquarters
+const hqExamples = listJoin(
+  pickTools(['tradify', 'bigchange', 'powered-now', 'praxedo', 'vonigo', 'joist'], (t) => !!t.headquartered && isNonUsHQ(t.headquartered))
+    .map((t) => `${t.name} (${t.headquartered})`)
+);
+
+// Vertical coverage and specialty depth (a vertical-fit score of 10, the top of the 1-10 scale)
+const topCovered = verticalSizes.slice(0, 3);
+const topCoveredText = listJoin(topCovered.map((v, i) => `${v.name} (${v.count}${i === 0 ? ' platforms' : ''})`));
+const listAllTopCovered = tools.filter((t) => topCovered.every((v) => t.verticals.includes(v.slug))).length;
+const specialistsFor = (slug: string) =>
+  tools.filter((t) => t.vertical_fit?.[slug] === 10).map((t) => t.name.split(' (formerly ')[0]);
+const specialtyFor = (slug: string) => {
+  const names = specialistsFor(slug);
+  return names.length ? `${names.length} (${listJoin(names)})` : 'none';
+};
+const tradesWithoutSpecialist = listJoin(verticals.filter((v) => specialistsFor(v.slug).length === 0).map((v) => v.name));
+
+// Reputation-flag ranking, from the same rows as the flag table
+const flagTop = flagsSorted.filter((r) => r.flagged === flagsSorted[0]?.flagged);
+const flagNext = flagsSorted.filter((r) => r.flagged === flagsSorted[flagTop.length]?.flagged);
+const flagLeaders = listJoin([...flagTop, ...flagNext].map((r) => `${catLabel(r.name)} (${r.flagged})`));
+const flagRankSentence = flagTop.length
+  ? `${capFirst(listJoin(flagTop.map((r) => `${catLabel(r.name)} (${r.flagged} of ${r.total} vendors tracked)`)))} ${flagTop.length > 1 ? 'share' : 'has'} the most flags` +
+    (flagNext.length ? `, followed by ${listJoin(flagNext.map((r) => `${catLabel(r.name)} (${r.flagged} of ${r.total})`))}` : '') +
+    '.'
+  : '';
+
+// International market names, from the same data files as intlMarkets
+const intlMarketNames = listJoin(
+  Object.keys(intlModules)
+    .map((p) => (p.split('/').pop() ?? '').replace('.json', ''))
+    .map((code) => INTL_MARKETS[code]?.name ?? code.toUpperCase())
+    .sort((a, b) => a.localeCompare(b))
+);
 
 const articleSchema = {
   '@context': 'https://schema.org',
   '@type': 'Article',
   headline: 'Trades software market report 2026: pricing, integrations, and the state of the industry',
-  description: `Original analysis of ${tools.length} field service platforms across ${verticals.length} verticals, expanded to the full ${totalStackVendors}-vendor contractor software stack and ${intlMarkets} international markets. Pricing distribution, integration prevalence, the reputation-flag ledger, and the multi-market picture from the WrenchStack directory.`,
+  description: `Original analysis of ${tools.length} trades software platforms across ${verticals.length} verticals, expanded to a ${totalStackVendors}-vendor contractor software stack and ${intlMarkets} international markets. Pricing distribution, integration prevalence, the reputation-flag ledger, and the multi-market picture from the WrenchStack directory.`,
   datePublished: '2026-05-26',
-  dateModified: '2026-09-10',
+  dateModified,
   author: {
     '@type': 'Organization',
     name: 'WrenchStack Research',
@@ -162,7 +316,7 @@ const articleSchema = {
 
 <Layout
   title="Trades software market report 2026: pricing, integrations, state of the industry"
-  description={`Original analysis of ${tools.length} field service and trades software platforms. Pricing distribution, integration prevalence, founded-year cohorts, 15 data findings. Source: WrenchStack directory.`}
+  description={`Original analysis of ${tools.length} trades software platforms: pricing, integrations, founding years and vendor reputation flags. Data as of ${dataAsOfDay}.`}
   breadcrumbs={breadcrumbs}
 >
   <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
@@ -170,13 +324,13 @@ const articleSchema = {
   <article class="mx-auto max-w-4xl px-4 py-12">
     <header class="mb-12">
       <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
-        Original Research · Updated June 2026
+        Original Research · Data as of {dataAsOfDay}
       </p>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
         Trades software market report 2026
       </h1>
       <p class="mt-4 text-lg text-slate-700 leading-relaxed sm:text-xl">
-        Original data findings from analysis of {tools.length} field service platforms across {verticals.length} verticals, now expanded to the full {totalStackVendors}-vendor contractor software stack ({totalCategories} categories) and {intlMarkets} international markets. What pricing actually looks like in 2026, which integrations matter, who we flag and why, and where the gaps are.
+        Original data findings from analysis of {tools.length} trades software platforms across {verticals.length} verticals, now expanded to a {totalStackVendors}-vendor contractor software stack ({totalCategories} categories) and {intlMarkets} international markets. What pricing actually looks like in 2026, which integrations matter, who we flag and why, and where the gaps are.
       </p>
       <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500">
         <span><a href="/research/" class="text-orange-600 hover:underline">WrenchStack Research</a></span>
@@ -190,18 +344,18 @@ const articleSchema = {
     <section class="mb-12 rounded-lg border border-orange-200 bg-orange-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">TL;DR for journalists and analysts</h2>
       <ul class="space-y-1 text-sm text-slate-700">
-        <li>· Median entry-tier pricing in trades software: <strong>${medianPrice}/month</strong> blended across per-user and flat-fee plans (range ${minPrice}-${maxPrice}); per-user median <strong>${perUserMedian()}/user/month</strong>, flat-fee median <strong>${flatFeeMedian()}/month</strong></li>
+        <li>· Median published entry price across the directory: <strong>${medianPrice}/month</strong> blended across per-user and flat-fee plans (range ${minPrice}-${maxPrice}); per-user median <strong>${perUserMedian()}/user/month</strong>, flat-fee median <strong>${flatFeeMedian()}/month</strong></li>
         <li>· <strong>{customQuotedPct}%</strong> of platforms use custom-quoted "request a demo" pricing instead of publishing tier prices</li>
-        <li>· <strong>{withQuickBooks}</strong> of {tools.length} platforms integrate with QuickBooks ({Math.round(withQuickBooks/tools.length*100)}%), the universal integration benchmark</li>
-        <li>· <strong>{post2015}</strong> platforms founded since 2015; modern-cloud cohort now {Math.round(post2015/tools.length*100)}% of market</li>
-        <li>· <strong>{avgTrialDays}-day</strong> average free trial length; 2025 standard was 14 days, 2026 expanding</li>
-        <li>· <strong>{totalStackVendors}+</strong> vendors tracked across <strong>{totalCategories} categories</strong>: FSM software plus accounting, payments, banking, financing, insurance, lead-gen, payroll, marketing and AI</li>
-        <li>· <strong>{totalFlagged}</strong> vendors across the adjacent-category stack carry a documented reputation warning, concentrated in lead-gen (FTC actions), financing (deferred-interest), and fintech banking (account freezes)</li>
-        <li>· <strong>{intlMarkets} international markets</strong> covered ({intlVendorCount} localized listings), including the only independent English-and-Arabic Gulf construction-software directory we're aware of</li>
-        <li>· By trade, <strong>{cheapestTrade?.name}</strong> is the cheapest field to equip (median <strong>${cheapestTrade?.median}/mo</strong>) and <strong>{priciestTrade?.name}</strong> the priciest (<strong>${priciestTrade?.median}/mo</strong>)</li>
+        <li>· <strong>{withQuickBooks}</strong> of {tools.length} platforms integrate with QuickBooks ({Math.round(withQuickBooks/tools.length*100)}%), the most common integration we track</li>
+        <li>· <strong>{post2015}</strong> of the {foundedYears.length} platforms with a founding year on record were founded in 2015 or later</li>
+        <li>· <strong>{avgTrialDays}-day</strong> average free trial across the {withFreeTrial} platforms that offer one; {trials30plus} offer 30 days or more</li>
+        <li>· <strong>{totalStackVendors}</strong> vendors tracked across <strong>{totalCategories} categories</strong>: trades software plus accounting, payments, banking, financing, insurance, lead-gen, payroll, marketing and AI</li>
+        <li>· <strong>{totalFlagged}</strong> vendors across the adjacent-category stack carry a documented reputation warning, led by {flagLeaders}</li>
+        <li>· <strong>{intlMarkets} international markets</strong> covered ({intlVendorCount} localized listings: {intlVendorCount - intlCertCount} vendors and {intlCertCount} certification and regulatory bodies)</li>
+        <li>· By trade, counting cost per user (flat plans split across a {REFERENCE_TEAM_SIZE}-person team), <strong>{cheapestTrade?.name}</strong> has the lowest median published entry price (<strong>${cheapestTrade?.median}/user/mo</strong>) and <strong>{priciestTrade?.name}</strong> the highest (<strong>${priciestTrade?.median}/user/mo</strong>)</li>
       </ul>
       <p class="mt-3 text-xs text-slate-600">
-        All data sourced from public vendor pricing pages and integration directories. Cite as: "WrenchStack Trades Software Market Report 2026," WrenchStack Research · <a href="mailto:press@wrenchstack.com" class="text-orange-600 hover:underline">press@wrenchstack.com</a>
+        Prices are taken from each vendor's own pricing page and dated per row. Cite as: "WrenchStack Trades Software Market Report 2026," WrenchStack Research, data as of {dataAsOfDay} · <a href="mailto:press@wrenchstack.com" class="text-orange-600 hover:underline">press@wrenchstack.com</a>
       </p>
     </section>
 
@@ -210,12 +364,12 @@ const articleSchema = {
       <h2>Pricing: what trades software actually costs</h2>
 
       <p>
-        The trades software market in 2026 spans an order of magnitude in price. Entry-tier platforms like Joist ($10/month Basics) and Tradify ($47/user/month Lite tier) live alongside platforms like ServiceTitan and BuildOps that publish no price at all. The median published entry price across our directory is <strong>${medianPrice}/month</strong>. That blended figure mixes two pricing models and is not a per-seat rate: {perUserTools().length} platforms charge per user (median <strong>${perUserMedian()} per user/month</strong>) and {flatFeeTools().length} charge a flat monthly platform fee (median <strong>${flatFeeMedian()}/month</strong>). Our price tiers compare cost per user instead, with each flat plan split across a {REFERENCE_TEAM_SIZE}-person team: {tierDist.entry} platforms come in under $100 per user a month, {tierDist.mid} at $100-$249, {tierDist.enterprise} at $250 or more, and {tierDist['quote-only']} publish no price at all.
+        Published entry prices in the directory run from ${minPrice} to ${maxPrice} a month, before allowing for whether a plan is priced per user or per company. Entry-tier platforms like Joist (${joistPricing?.starting_at_usd}/month {joistPricing?.tiers[0]}) and Tradify (${tradifyPricing?.starting_at_usd}/user/month {tradifyPricing?.tiers[0]} tier) live alongside platforms like ServiceTitan and BuildOps that publish no price at all. The median published entry price across our directory is <strong>${medianPrice}/month</strong>. That blended figure mixes pricing models and is not a per-seat rate: {perUserPriced} platforms charge per user each month (median <strong>${perUserMedian()} per user/month</strong>){otherModelClause ? ', ' : ' and '}{flatPriced} charge a flat monthly platform fee (median <strong>${flatFeeMedian()}/month</strong>){otherModelClause ? ` and ${otherModelClause}` : ''}. Our price tiers compare cost per user instead, with each flat plan split across a {REFERENCE_TEAM_SIZE}-person team: {tierDist.entry} platforms come in under $100 per user a month, {tierDist.mid} at $100-$249, {tierDist.enterprise} at $250 or more, and {tierDist['quote-only']} have no monthly price to compare. Of those, {customQuoted} publish no price at all{nonMonthlyPriced.length ? `, and ${listJoin(nonMonthlyPriced.map((t) => t.name))} ${nonMonthlyPriced.length === 1 ? 'publishes' : 'publish'} only non-monthly prices, such as one-time licenses or per-project fees` : ''}.
       </p>
 
       <div class="not-prose my-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-          <div class="text-2xl font-bold text-slate-900">{tierDist.free}</div>
+          <div class="text-2xl font-bold text-slate-900">{withFreeTier}</div>
           <div class="mt-1 text-xs text-slate-600">Free tier available</div>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
@@ -227,13 +381,13 @@ const articleSchema = {
           <div class="mt-1 text-xs text-slate-600">Mid-tier ($100-249/user)</div>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-          <div class="text-2xl font-bold text-slate-900">{tierDist.enterprise + tierDist['quote-only']}</div>
-          <div class="mt-1 text-xs text-slate-600">$250+/user or quote-only ({tierDist.enterprise} priced, {tierDist['quote-only']} unpublished)</div>
+          <div class="text-2xl font-bold text-slate-900">{customQuoted}</div>
+          <div class="mt-1 text-xs text-slate-600">Quote-only, no published price (plus {tierDist.enterprise} at $250+/seat and {nonMonthlyPriced.length} with non-monthly prices, counted separately)</div>
         </div>
       </div>
 
       <p>
-        The pricing distribution is heavily bimodal: {tierDist.entry} platforms come in under $100 per user a month once flat plans are split across a {REFERENCE_TEAM_SIZE}-person team (Jobber, Housecall Pro, Tradify, Service Autopilot, Joist), while {tierDist['quote-only']} publish no price at all, a group that includes ServiceTitan, BuildOps and Procore alongside vendors such as Aspire and FieldRoutes that quote by company size or customer count. {topPricedSentence} Those two groups are counted separately here on purpose: an unpublished price is not evidence of an expensive one. The middle is sparse, with only {tierDist.mid} platforms in the $100-$249 per-user band.
+        The pricing distribution splits into two large groups: {tierDist.entry} platforms come in under $100 per user a month once flat plans are split across a {REFERENCE_TEAM_SIZE}-person team (Jobber, Housecall Pro, Tradify, Service Autopilot, Joist), while {customQuoted} publish no price at all, a group that includes ServiceTitan, BuildOps and Procore alongside vendors such as Aspire and FieldRoutes that quote by company size or customer count. {topPricedSentence} Those two groups are counted separately here on purpose: an unpublished price is not evidence of an expensive one. The middle is sparse, with only {tierDist.mid} platform{tierDist.mid === 1 ? '' : 's'} in the $100-$249 per-user band.
       </p>
 
       <h2>The "custom-quoted" opacity tax</h2>
@@ -243,13 +397,13 @@ const articleSchema = {
       </p>
 
       <p>
-        The opacity has a tax. Contractors evaluating these platforms can't comparison-shop on price without committing time to multiple sales calls. The information asymmetry favors vendors: the buyer doesn't know if their quote is fair until they've already invested significant evaluation effort. User-reported pricing ranges (Reddit threads, G2 reviews, vendor RFP responses shared publicly) are the only public-data signal of what these platforms actually cost.
+        The opacity has a tax. Contractors evaluating these platforms can't comparison-shop on price without committing time to multiple sales calls. The information asymmetry favors vendors: the buyer doesn't know if their quote is fair until they've already invested significant evaluation effort. This report does not estimate their prices: they are counted as quote-only and left out of every price median on this page.
       </p>
 
       <h2>What software costs by trade</h2>
 
       <p>
-        Median entry pricing is not uniform across trades. Pulling the publicly-priced platforms that serve each trade (those with at least four such tools), <strong>{cheapestTrade?.name}</strong> is the cheapest field to equip, at a median of <strong>${cheapestTrade?.median}/month</strong>, while <strong>{priciestTrade?.name}</strong> sits at the top at <strong>${priciestTrade?.median}/month</strong>. Most field-service trades cluster in the $45-$80 band; the high-end outliers reflect specialized, heavier platforms.
+        Median entry pricing is not uniform across trades. Pulling the publicly-priced platforms that serve each trade (those with at least four such tools) and counting cost per user, with flat plans split across a {REFERENCE_TEAM_SIZE}-person team as in the price tiers above, <strong>{cheapestTrade?.name}</strong> has the lowest median published entry price, <strong>${cheapestTrade?.median} per user a month</strong>, and <strong>{priciestTrade?.name}</strong> the highest, <strong>${priciestTrade?.median}</strong>, a median taken from {priciestTrade?.n} publicly-priced tools.
       </p>
 
       <div class="not-prose my-8 overflow-x-auto">
@@ -257,7 +411,7 @@ const articleSchema = {
           <thead>
             <tr class="border-b-2 border-slate-200 text-left text-slate-700">
               <th class="py-2 pr-4 font-semibold">Trade</th>
-              <th class="py-2 pr-4 font-semibold">Median entry $/mo</th>
+              <th class="py-2 pr-4 font-semibold">Median entry $/user/mo</th>
               <th class="py-2 pr-4 font-semibold">Range</th>
               <th class="py-2 font-semibold">Priced tools</th>
             </tr>
@@ -273,7 +427,7 @@ const articleSchema = {
             ))}
           </tbody>
         </table>
-        <p class="mt-2 text-xs text-slate-500">Medians of publicly-listed entry pricing; quote-only platforms excluded. Trades with fewer than four publicly-priced tools omitted.</p>
+        <p class="mt-2 text-xs text-slate-500">Medians of published paid entry prices per user per month, with flat and base-plus-seat plans split across a {REFERENCE_TEAM_SIZE}-person team, rounded to the nearest dollar; free plans, quote-only platforms and platforms with no monthly price excluded. Trades with fewer than four publicly-priced tools omitted.</p>
       </div>
 
       <h2>Free tiers and free trials: buyers' leverage</h2>
@@ -294,17 +448,17 @@ const articleSchema = {
       </div>
 
       <p>
-        Only <strong>{withFreeTier} platforms</strong> in the directory offer a genuine free tier (usable indefinitely, not just a trial), among them Yardbook's free landscape software, Contractor+'s Freedom plan, Connecteam's small-team plan, MaintainX Basic, Mitti's (formerly SafetyCulture) free plan, Roofr's Starter plan and OpenSolar's free platform. Every other platform requires a paid plan once any trial ends.
+        Only <strong>{withFreeTier} platforms</strong> in the directory offer a genuine free tier (usable indefinitely, not just a trial), among them Yardbook's free landscape software, Contractor+'s Freedom plan, Connecteam's small-team plan, MaintainX Basic, Mitti's (formerly SafetyCulture) free plan, Roofr's Starter plan and OpenSolar's free platform.
       </p>
 
       <p>
-        Free trial length is trending up. The 2025 standard was 14 days; the 2026 average across {withFreeTrial} platforms is <strong>{avgTrialDays} days</strong>. Skimmer (30 days), MaintainX (30 days), and Limble (30 days) lead the trial-length shift. Trial length matters because field service software's value compounds over weeks: a 14-day trial barely captures a single billing cycle and rarely captures customer follow-up workflows.
+        Across the {withFreeTrial} platforms that offer a free trial, the average is <strong>{avgTrialDays} days</strong>. The most common length is {trialModeDays} days ({trialModeCount} platforms), and {trials30plus} offer 30 days or more{longTrialExamples ? `, among them ${longTrialExamples}` : ''}. Trial length matters for field service software: a 14-day trial is shorter than a monthly billing cycle, so it can end before you have run a full month of jobs, invoices and follow-ups.
       </p>
 
-      <h2>The integration consolidation</h2>
+      <h2>The common integrations</h2>
 
       <p>
-        Field service software has consolidated around a small set of universal integrations. <strong>{withQuickBooks} of {tools.length} platforms ({Math.round(withQuickBooks/tools.length*100)}%)</strong> integrate with QuickBooks, making it the closest thing to a universal accounting standard in the trades software market. Stripe (<strong>{withStripe}</strong> platforms) is the payments standard. Zapier (<strong>{withZapier}</strong> platforms) is the workflow-automation escape hatch when native integrations aren't available.
+        Field service software clusters around a small set of common integrations. <strong>{withQuickBooks} of {tools.length} platforms ({Math.round(withQuickBooks/tools.length*100)}%)</strong> integrate with QuickBooks, the most common integration in the directory. Stripe (<strong>{withStripe}</strong> platforms) is the most common payments integration. Zapier (<strong>{withZapier}</strong> platforms) is the workflow-automation escape hatch when native integrations aren't available.
       </p>
 
       <div class="not-prose my-8 overflow-x-auto rounded-lg border border-slate-200">
@@ -313,7 +467,7 @@ const articleSchema = {
             <tr>
               <th class="px-4 py-3 font-semibold">Integration</th>
               <th class="px-4 py-3 font-semibold">Platforms supporting</th>
-              <th class="px-4 py-3 font-semibold">% of market</th>
+              <th class="px-4 py-3 font-semibold">% of directory</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
@@ -352,17 +506,17 @@ const articleSchema = {
       </div>
 
       <p>
-        Two integration signals matter for buyer evaluation: <strong>Xero</strong> ({withXero} platforms) is the AU/NZ/UK accounting standard and signals international roots: Tradify, Simpro, BigChange, Powered Now. <strong>Sage Intacct / NetSuite</strong> ({withSageOrNetsuite} platforms) signals commercial enterprise positioning: most platforms only integrate with QuickBooks-tier accounting, so when a vendor ships Sage Intacct or NetSuite integration, they're targeting larger commercial operations.
+        Two integration signals matter for buyer evaluation: <strong>Xero</strong> ({withXero} platforms) points to roots outside the US, since {xeroNonUsCount} of those platforms are headquartered elsewhere, among them {xeroNonUsExamples}. <strong>Sage Intacct / NetSuite</strong> ({withSageOrNetsuite} platforms, against {withQuickBooks} for QuickBooks) narrows the field: if your books are in either system, check for the integration early. The platforms that list it include {sageExamples}.
       </p>
 
-      <h2>The modern-cloud cohort</h2>
+      <h2>Founding years</h2>
 
       <p>
-        <strong>{post2015} platforms</strong> in the directory were founded since 2015, the "modern cloud" cohort that defines the current product expectations for trades software. {post2015Examples}. This cohort tends to share design conventions: mobile-first architecture, cloud-native deployment, customer portals, modern dashboards, AI features in product roadmaps.
+        Of the {foundedYears.length} platforms with a founding year on record, <strong>{post2015}</strong> were founded in 2015 or later, among them {post2015Examples}.
       </p>
 
       <p>
-        At the other end, <strong>{pre2010} platforms</strong> were founded before 2010, the legacy cohort. {pre2010Examples}. These platforms have deeper customer bases, more integration depth in their target verticals, but typically slower UI evolution and harder migration paths to newer alternatives.
+        At the other end, <strong>{pre2010}</strong> were founded before 2010, among them {pre2010Examples}.
       </p>
 
       <h2>Vertical coverage: where the market is dense</h2>
@@ -387,29 +541,29 @@ const articleSchema = {
       </div>
 
       <p>
-        HVAC, plumbing, and electrical are the most-covered verticals: every general FSM platform targets these because they share workflows (residential service calls, system replacement quotes, recurring service contracts). The "long tail" trades (locksmith, garage door, appliance repair, pool service) are covered by general FSM but have fewer specialty platforms. Pool service has exactly one specialty platform in the directory (Skimmer). Pest control has dedicated specialty platforms (GorillaDesk, PestPac, FieldRoutes, ServSuite). Cleaning has ZenMaid as the only major specialty option alongside multi-trade FSM coverage.
+        {topCoveredText} are the most-covered verticals, and {listAllTopCovered} platforms list all three. Coverage is not the same as specialty depth. Counting only platforms with a vertical-fit score of 10 for the trade, the top of our 1-10 scale, pool service has {specialtyFor('pool_service')}, pest control has {specialtyFor('pest_control')} and cleaning has {specialtyFor('cleaning')}. {tradesWithoutSpecialist && `${tradesWithoutSpecialist} have no platform with that score.`}
       </p>
 
-      <h2>Pricing model evolution: per-user vs per-company</h2>
+      <h2>Pricing models: per-user vs per-company</h2>
 
       <p>
-        Pricing models vary more than headline prices suggest. Some platforms charge one price with unlimited users (Service Fusion on every plan; Buildertrend and Procore in custom quotes), while Jobber, Housecall Pro and JobTread include a set number of users and charge for each one beyond that. For a growing team, price your actual headcount under each model.
+        Pricing models vary more than headline prices suggest. Some platforms charge one price with unlimited users (Service Fusion on every plan; Buildertrend and Procore in custom quotes), while Jobber and JobTread charge for each user beyond those included, and Housecall Pro's MAX plan includes 8 users and charges $35 a month for each additional one. For a growing team, price your actual headcount under each model.
       </p>
 
       <p>
-        At the enterprise end, quotes are commonly tied to technician count (ServiceTitan in third-party reports, Sera Systems per technician, FieldEdge by team size), while Procore prices on construction volume with unlimited users. The middle market is the most fragmented: both pricing models exist and operations evaluating mid-tier platforms (10-20 techs) need to do the math at their specific team size to see which model wins.
+        At the enterprise end, some quote-only platforms tie the price to technician or team count (FieldEdge, ServiceTrade), Sera Systems publishes a base plan that covers up to four technicians and charges for each technician beyond that, and Procore prices on annual construction volume with unlimited users.
       </p>
 
-      <h2>Geographic distribution and international growth</h2>
+      <h2>Geographic distribution</h2>
 
       <p>
-        Of the <strong>{usHQ + intlHQ} platforms</strong> with a headquarters on record, <strong>{usHQ}</strong> are in the United States and <strong>{intlHQ}</strong> are elsewhere ({tools.length - usHQ - intlHQ} of the {tools.length} list no headquarters). The international group includes Tradify (Auckland, NZ), Simpro (Brisbane, AU), BigChange (UK), Powered Now (UK), Praxedo (Paris, France), Vonigo (Vancouver, Canada), Joist (Toronto, Canada). The international cohort has grown notably in 2024-2026 as European and Australian platforms expand US presence: Simpro, BigChange, Praxedo, and Powered Now all have growing US customer bases despite international roots.
+        Of the <strong>{usHQ + intlHQ} platforms</strong> with a headquarters on record, <strong>{usHQ}</strong> are in the United States and <strong>{intlHQ}</strong> are elsewhere ({tools.length - usHQ - intlHQ} of the {tools.length} list no headquarters). The international group includes {hqExamples}.
       </p>
 
-      <h2>Beyond FSM: the full contractor software stack</h2>
+      <h2>Beyond the platforms: the wider contractor software stack</h2>
 
       <p>
-        The 2026 contractor doesn't just buy field-service software; they assemble a stack. Beyond the {tools.length} FSM platforms analyzed above, WrenchStack now tracks <strong>{adjacentVendorCount} vendors across nine adjacent categories</strong>: {stackRows.map((r, i) => `${i > 0 ? ', ' : ''}${r.total} ${r.name.toLowerCase()}`)}. That's <strong>{totalStackVendors} vendors across {totalCategories} categories</strong> in total: the complete back office a trades business actually runs on.
+        Beyond the {tools.length} software platforms analyzed above, WrenchStack now tracks <strong>{adjacentVendorCount} vendors across {stackCats.length} adjacent categories</strong>: {stackRowsText}. That's <strong>{totalStackVendors} vendors across {totalCategories} categories</strong> in total.
       </p>
 
       <div class="not-prose my-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -434,13 +588,13 @@ const articleSchema = {
       <h3>Pricing opacity is structural, and its shape differs by category</h3>
 
       <p>
-        The custom-quote opacity tax isn't unique to FSM; it runs through the whole stack, but it takes a different form in each category. <strong>Accounting is the most transparent</strong>: {acctPriced} of {accountingSoftware.length} providers publish a starting price. <strong>Contractor insurance is the least</strong>: none of the {insuranceProviders.length} carriers we track list a flat published rate, because premiums are underwritten per trade, payroll size, and claims history; every quote is bespoke. <strong>Payments and financing don't have a sticker price at all</strong>: they're priced by rate model (interchange-plus, flat-rate, merchant or dealer fee), so the real cost depends on your card volume, average ticket, and job size, not a monthly number. The practical takeaway for buyers is the same everywhere: the published number, where one exists, is the start of the negotiation, not the end of it.
+        The custom-quote opacity tax isn't unique to the platforms above, but it takes a different form in each category we track. <strong>Accounting is open about price</strong>: {acctPriced} of {accountingSoftware.length} providers publish a starting price. <strong>Contractor insurance is the opposite</strong>: none of the {insuranceProviders.length} insurance providers we track list a flat published rate, because premiums are quoted per business on factors such as trade, payroll and exposures; every quote is bespoke. <strong>Payments and financing are priced mainly as rates, not monthly plans</strong>: per-transaction processing fees for payments, and for several financing providers a fee on each financed sale, so the real cost depends on your card volume, average ticket, and job size.
       </p>
 
       <h3>The honesty ledger: who we flag, and why</h3>
 
       <p>
-        Across the adjacent-category stack, WrenchStack carries a documented reputation warning on <strong>{totalFlagged} vendors</strong>, and unlike vendor-funded "best of" listicles, we publish the specific reason on every one. The flags concentrate exactly where the contractor harm is real and documented:
+        Across the adjacent-category stack, WrenchStack carries a documented reputation warning on <strong>{totalFlagged} vendors</strong> and publishes the specific reason on every one. By category:
       </p>
 
       <div class="not-prose my-8 overflow-x-auto rounded-lg border border-slate-200">
@@ -465,57 +619,55 @@ const articleSchema = {
       </div>
 
       <p>
-        Lead generation tops the list: FTC actions and predatory shared-lead practices are well-documented in that category. Consumer financing follows, on deferred-interest fine print that contractors pass to customers without always understanding it. Fintech banking is third, on the account-freeze patterns that make these accounts risky as a sole operating account. The flip side of the same independence: we recommend commission-free vendors (Acuity, Erie, Google Local Services Ads) when they're genuinely the best fit, even though we earn nothing on them. A vendor-funded directory structurally cannot publish either half of this ledger.
+        {flagRankSentence} The full text of each flag, with what it is based on, is on that vendor's page.
       </p>
 
       <h3>The international picture: {intlMarkets} markets</h3>
 
       <p>
-        WrenchStack's directory now spans <strong>{intlMarkets} markets beyond the US</strong>: the UK, Ireland, Canada, Australia and New Zealand; the six Gulf states (Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman); and France, with <strong>{intlVendorCount} localized vendor listings</strong>. The Gulf coverage is, as far as we can tell, the only independent <strong>English-and-Arabic</strong> construction-software comparison directory in existence; every other source is a vendor's own listing or an English-only Capterra clone. These pages track live compliance deadlines that off-the-shelf comparisons ignore: Saudi Arabia's ZATCA Phase-2 e-invoicing waves (Wave 24 hits the SAR 375k-revenue band on 30 June 2026) and Oman's Fawtara e-invoicing rollout extending to all VAT-registered businesses by 2027, the kind of timing that decides which software a contractor can legally bill on.
+        WrenchStack's directory now spans <strong>{intlMarkets} markets beyond the US</strong> ({intlMarketNames}), with <strong>{intlVendorCount} localized listings</strong>: {intlVendorCount - intlCertCount} vendors and {intlCertCount} certification and regulatory bodies. The Saudi Arabia, UAE, Qatar, Kuwait, Jordan and Egypt directories also have <strong>Arabic-language</strong> pages. These pages track compliance deadlines such as <a href="/sa/guides/zatca-e-invoicing-contractors/">Saudi Arabia's ZATCA Phase-2 e-invoicing waves</a> (EY reports that Wave 25 covers taxable turnover above SAR 187,500, with integration from 1 February 2027) and <a href="/om/guides/oman-e-invoicing-contractors/">Oman's Fawtara e-invoicing rollout</a>, which the Oman Tax Authority's Fawtara FAQ says reaches all remaining VAT-registered taxpayers from August 2027 (other sources give different dates): the kind of timing that decides which software a contractor can legally bill on.
       </p>
 
       <h2>Implications for buyers</h2>
 
       <ul>
         <li><strong>If your team is 3+ techs and you're shopping under $250/user/month</strong>: compare unlimited-user plans (such as Service Fusion) with per-seat plans at your actual headcount; which one wins depends on team size.</li>
-        <li><strong>If you're on QuickBooks Desktop specifically</strong>: your platform choices narrow significantly. {withQuickBooks} platforms integrate with QuickBooks broadly but many are QuickBooks Online only. FieldEdge is the standout for QuickBooks Desktop integration depth.</li>
-        <li><strong>If you're at $5M+ revenue</strong>: many platforms built for your size quote by account, so book demos with 3-5 of them and compare written quotes. User-reported ranges in our pricing notes are a rough anchor, not a quote.</li>
-        <li><strong>If you're on Xero</strong> (AU/NZ/UK markets): Tradify, Simpro, BigChange are your strongest matches. US-rooted platforms typically have weaker Xero integration than QuickBooks integration.</li>
-        <li><strong>If you do significant insurance restoration work</strong>: photo documentation discipline matters more than FSM choice. CompanyCam pairs with whatever FSM you use.</li>
-        <li><strong>If you're solo or 1-2 techs</strong>: Joist (from $10/mo Basics) and Markate (from about $40/mo) are genuinely viable starting points before committing to mid-tier FSM.</li>
+        <li><strong>If you're on QuickBooks Desktop specifically</strong>: of the {withQuickBooks} platforms that integrate with QuickBooks in some form, {withQBDesktop} name QuickBooks Desktop, {withQBOnlineOnly} name QuickBooks Online only, and {withQBUnspecified} list QuickBooks without saying which edition. Confirm Desktop support with the vendor before you buy.</li>
+        <li><strong>If you run a large team</strong>: {largeQuoteOnly} of the {largeTeamTools.length} platforms whose listed best-fit team size reaches past 50 people publish no price, so book demos with several of them and compare written quotes.</li>
+        <li><strong>If you're on Xero</strong>: {withXero} platforms list a Xero integration, among them {xeroExamples}, against {withQuickBooks} for QuickBooks.</li>
+        <li><strong>If you do insurance restoration work</strong>: CompanyCam, a photo documentation platform, is listed as integrating with {companyCamPartnerTools.length} platforms in the directory ({companyCamPartners}); check whether your FSM is one of them.</li>
+        <li><strong>If you're solo or 1-2 techs</strong>: Joist (from ${joistPricing?.starting_at_usd}/mo {joistPricing?.tiers[0]}) and Markate (from about ${Math.round(markatePricing?.starting_at_usd ?? 0)}/mo) are low-cost starting points before committing to mid-tier FSM; check each plan's limits.</li>
       </ul>
 
       <h2>Implications for software vendors</h2>
 
       <ul>
-        <li><strong>Custom-quoted pricing is leaving SMB demand on the table.</strong> {customQuotedPct}% of platforms in our directory publish no price at all. Buyers who are comparison-shopping skip straight to whichever competitor gives them a number.</li>
-        <li><strong>14-day free trials are below market norm now</strong>: the 30-day cohort is winning evaluation conversions. Skimmer, MaintainX, and Limble all ship 30-day trials.</li>
-        <li><strong>Per-company pricing is a real competitive differentiator for SMB segments</strong>. Seat-inclusive bundles like Housecall Pro's Essentials and MAX are pulling share from per-user competitors at 5+ user operations.</li>
-        <li><strong>Mobile-first UX is now table stakes, not differentiation.</strong> Every platform founded since 2015 ships mobile-first. The remaining differentiation is in the trade-specific workflow depth.</li>
+        <li><strong>Quote-only pricing keeps a platform out of price comparisons.</strong> {customQuotedPct}% of platforms in our directory publish no price at all, so they are left out of every price median and trade table on this page.</li>
+        <li><strong>Trial length is easy to benchmark.</strong> {trialModeCount} of the {withFreeTrial} platforms with a free trial offer {trialModeDays} days, and {trials30plus} offer 30 days or more.</li>
       </ul>
 
       <h2>Methodology</h2>
 
       <p>
-        All data was sourced from public vendor pricing pages and integration directories. For platforms using custom-quoted pricing, user-reported pricing ranges were used (sourced from Reddit threads, G2 review text, vendor RFP responses shared publicly). Verification dates on individual tool pages document when each pricing tier was last verified against the vendor's public page.
+        Prices come from each vendor's own pricing page, and every price carries the date it was last checked against that page (shown on each tool page and in the <code>pricing_verified_date</code> column of the open dataset). A platform that publishes no price is counted as quote-only, and one that publishes only one-time or per-project prices has no monthly starting price; both are left out of every price median on this page. Medians use only platforms with a published paid starting price, so free plans are counted separately. A starting price is the vendor's headline monthly figure for its cheapest paid plan, or its monthly equivalent where the vendor prices by the year. Where that headline figure assumes annual billing (Jobber, Housecall Pro, Service Fusion, Markate and others), the annual-billed monthly figure is used, so month-to-month prices can be higher; where it is a month-to-month rate (Joist, for example), annual billing can cost less. The headline median blends per-user rates with flat plan fees; the per-user and flat-fee medians keep them apart, and the price tiers and the by-trade table compare cost per user, with flat plans split across a {REFERENCE_TEAM_SIZE}-person team. A median of an even number of prices is the average of the middle two, rounded to the nearest dollar. No price on this page comes from review sites, user reports or third-party estimates.
       </p>
 
       <p>
-        This report uses the full WrenchStack directory as of the current build, recomputed automatically every time the directory changes ({tools.length} platforms across {verticals.length} verticals). For methodology details and the per-tool affiliate ledger (which platforms have active affiliate relationships with WrenchStack, which are pending, which are none), see the <a href="/methodology/">methodology page</a>.
+        This report uses the full WrenchStack directory with data as of {dataAsOfDay}, the latest verification date in the data ({tools.length} platforms across {verticals.length} verticals; software prices were last verified between {priceOldestDay} and {dataAsOfDay}). For methodology details and the per-tool affiliate ledger (which platforms have an active or approved affiliate relationship with WrenchStack, which are pending, and which have none), see the <a href="/methodology/">methodology page</a>.
       </p>
 
       <h2>Open dataset (CC BY 4.0)</h2>
 
       <p>
-        The pricing data behind this report is published as an open dataset, free for anyone to use with attribution: journalists, analysts, academics, and AI systems included. It regenerates from the live directory on every site build, so unlike a one-off data dump it cannot go stale; each row carries its own <code>pricing_verified_date</code> showing when that price was last checked against the vendor's page.
+        The pricing data behind this report is published as an open dataset, free for anyone to use with attribution: journalists, analysts, academics, and AI systems included. It regenerates from the live directory on every site build, and each row carries its own <code>pricing_verified_date</code> showing when that price was last checked against the vendor's page.
       </p>
 
       <ul>
         <li>
-          <a href="/data/trades-software-pricing-2026.csv"><strong>CSV</strong></a> ({tools.length} rows): slug, name, vendor URL, verticals, quote-only flag, entry price, tier names and prices, free-trial days, verification date, team-size fit, founding year, HQ, and the pricing model (per user, flat, flat plus seats, free tier, quote only), which you need before comparing entry prices across platforms.
+          <a href="/data/trades-software-pricing-2026.csv"><strong>CSV</strong></a> ({tools.length} rows): slug, name, vendor URL, verticals, quote-only flag, entry price, tier names and prices, free-trial days, verification date, team-size fit, founding year, HQ, and the pricing model (per user, annual per user, flat, flat plus seats, free tier, quote only or unclear), which you need before comparing entry prices across platforms.
         </li>
         <li>
-          <a href="/data/trades-software-pricing-2026.json"><strong>JSON</strong></a>: the same rows plus dataset metadata and the summary statistics computed exactly as this page computes them, so the dataset and the report can never disagree.
+          <a href="/data/trades-software-pricing-2026.json"><strong>JSON</strong></a>: the same rows plus dataset metadata and the summary statistics computed the same way this page computes them, so the dataset and the report match.
         </li>
       </ul>
 
@@ -526,18 +678,18 @@ const articleSchema = {
       <h2>Citing this report</h2>
 
       <p>
-        Journalists, analysts, and industry researchers are welcome to cite findings from this report. Suggested citation: <em>"WrenchStack Trades Software Market Report 2026." WrenchStack Research, May 2026.</em>
+        Journalists, analysts, and industry researchers are welcome to cite findings from this report. Suggested citation: <em>"WrenchStack Trades Software Market Report 2026." WrenchStack Research, data as of {dataAsOfDay}.</em>
       </p>
 
       <p>
-        For interview requests, data deep-dives, or follow-up questions, email <a href="mailto:press@wrenchstack.com">press@wrenchstack.com</a>. We respond within 3 business days and are happy to share underlying data and methodology details with credentialed journalists.
+        For questions about the data or the methodology, email <a href="mailto:press@wrenchstack.com">press@wrenchstack.com</a>.
       </p>
 
     </section>
 
     <section class="mt-12 rounded-lg bg-slate-50 p-6 text-sm text-slate-600">
       <p>
-        This report is updated annually. <a href="/methodology/" class="text-orange-600 hover:underline">Methodology page</a> shows when individual data points were last verified. For the live directory of {tools.length} platforms with full reviews, head to <a href="/tools/" class="text-orange-600 hover:underline">/tools/</a>.
+        The figures in this report are recomputed from the directory on every site build, and each tool page shows when its pricing was last verified (see the <a href="/methodology/" class="text-orange-600 hover:underline">methodology page</a>). For the live directory of {tools.length} platforms with full reviews, head to <a href="/tools/" class="text-orange-600 hover:underline">/tools/</a>.
       </p>
     </section>
   </article>

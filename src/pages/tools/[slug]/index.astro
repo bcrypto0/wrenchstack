@@ -68,7 +68,9 @@ const isFree = startingPrice === 0;
 // Split 2026-09-01. These were one flag and they are not one thing: an unpublished price
 // is not evidence of an expensive one. Conflating them made this page assert an enterprise
 // rollout and $1M+ revenue requirements for products that may cost $40/month.
-const isQuoteOnly = !hasPublicPricing;
+const isQuoteOnly = tool.pricing.pricing_model === 'quote_only';
+// Published prices that are not a monthly plan (one-time license, per project): not quote-only.
+const nonMonthlyPricing = !hasPublicPricing && !isQuoteOnly;
 // Tiers come from priceTier, which compares cost per user: until 2026-09-27 this page
 // used the starting price alone, so a $297/mo flat company plan was called
 // "enterprise" next to per-user plans a 5-person team pays more for.
@@ -120,6 +122,9 @@ function pricingAnalysis(): string {
   const tierCount = tool.pricing.tiers.length;
   const topPrice = tool.pricing.tier_prices_usd?.[tierCount - 1];
 
+  if (nonMonthlyPricing) {
+    return `${tool.name} publishes its prices, but not as a monthly plan: see the pricing note for its one-time or per-project prices, and compare the total over the period you expect to use it.`;
+  }
   if (!hasPublicPricing) {
     return `${tool.name} does not publish a list price we can compare, so you need a quote first. Quote-only is not the same as expensive or enterprise: vendors quote by team size, customer count, company size or usage. Get the quote in writing and confirm what's included (number of users, integrations, onboarding, support tier) before signing.`;
   }
@@ -250,7 +255,7 @@ function getCons(): string[] {
   }
 
   // No public pricing
-  if (!hasPublicPricing) {
+  if (isQuoteOnly) {
     cons.push(
       `**No public pricing**: every quote requires a sales call. Hard to comparison-shop without committing time to a demo.`,
     );
@@ -320,6 +325,8 @@ function getFaqs(): { q: string; a: string }[] {
     a: `${tool.name} is worth it if you fit the target profile: ${asSentence(tool.best_for)} ${
       isQuoteOnly
         ? `${tool.name} does not publish a price, so the ROI maths cannot be done from public information. Get a written quote for your seat count before comparing it against anything here.`
+        : nonMonthlyPricing
+        ? `${tool.name} publishes one-time or per-project prices rather than a monthly plan (see the pricing note), so compare its total cost over the period you expect to use it.`
         : isFree
         ? `The free tier lets you test that with real jobs before you pay anything; check which features the paid tiers add before your team grows into them.`
         : isEnterprise
@@ -661,7 +668,7 @@ const breadcrumbs = [
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700">
         <strong class="text-slate-900">{tool.name}</strong> is best for {asSentence(tool.best_for)}
-        Pricing {hasPublicPricing ? `starts at $${startingPrice}/mo` : 'is custom-quoted (sales call required)'}.
+        Pricing {hasPublicPricing ? `starts at $${startingPrice}/mo` : isQuoteOnly ? 'is custom-quoted (sales call required)' : 'is published as one-time or per-project prices (see the pricing note)'}.
         {strongVerticals.length > 0 && ` Strongest fit: ${strongVerticals.slice(0, 3).join(', ')}.`}
         {hasFreeTrial && ` ${tool.pricing.free_trial_days}-day free trial available.`}
       </p>
@@ -749,7 +756,7 @@ const breadcrumbs = [
         <p class="mt-3 text-xs text-slate-600" id="pw-note">
           {hasPublicPricing
             ? `Estimate uses the published starting tier and detects per-user vs per-company pricing automatically. For an exact quote at your team size and feature requirements, request a quote from ${tool.name}.`
-            : `${tool.name} has no published price we can model at your team size, so we do not estimate one: any figure here would be a guess. Ask ${tool.name} for a quote.`}
+            : `${tool.name} has no published monthly price we can model at your team size, so we do not estimate one: any figure here would be a guess. ${isQuoteOnly ? `Ask ${tool.name} for a quote.` : 'See the pricing note for its published prices.'}`}
         </p>
         <div class="mt-3 flex flex-wrap gap-2 text-xs">
           <a

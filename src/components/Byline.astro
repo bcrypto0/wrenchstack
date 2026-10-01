@@ -1,12 +1,14 @@
 ---
 interface Props {
   updatedDate?: string;
-  nextReviewDate?: string;
   readingMinutes?: number;
 }
 
-const { updatedDate, nextReviewDate, readingMinutes } = Astro.props;
-const fmt = (d: string) => new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+// "Next review <date>" was removed 2026-10-01: a dated review promise is a forward
+// commitment, which the editorial policy does not make. Dates are YYYY-MM-DD and
+// formatted in UTC, so a build in a US timezone does not print the previous day.
+const { updatedDate, readingMinutes } = Astro.props;
+const fmt = (d: string) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 ---
 
 <div class="mb-6 border-y border-slate-200 py-3 text-sm text-slate-500">
@@ -17,13 +19,10 @@ const fmt = (d: string) => new Date(d).toLocaleDateString('en-US', { year: 'nume
   </div>
   <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
     {updatedDate && (
-      <span>Last updated <time>{fmt(updatedDate)}</time></span>
-    )}
-    {nextReviewDate && (
-      <>{updatedDate && <span aria-hidden="true">·</span>}<span>Next review <time>{fmt(nextReviewDate)}</time></span></>
+      <span>Last updated <time datetime={updatedDate}>{fmt(updatedDate)}</time></span>
     )}
     {readingMinutes && (
-      <>{(updatedDate || nextReviewDate) && <span aria-hidden="true">·</span>}<span>{readingMinutes} min read</span></>
+      <>{updatedDate && <span aria-hidden="true">·</span>}<span>{readingMinutes} min read</span></>
     )}
   </div>
 </div>

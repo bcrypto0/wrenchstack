@@ -1,11 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import {
+  tools,
   reputationFlagGroups,
   totalReputationFlags,
   usVendorTotal,
 } from '../lib/data';
-import { intlVendorCount } from '../lib/intl';
 
 // The reputation ledger: every documented warning in the directory, on one
 // page, with the policy that governs it. Counts and entries are computed at
@@ -18,28 +18,37 @@ import { intlVendorCount } from '../lib/intl';
 
 const groups = reputationFlagGroups();
 const totalFlags = totalReputationFlags();
-const totalVendors = usVendorTotal() + intlVendorCount;
+// US only: the ledger lists the US datasets' flags. International listings
+// carry their own warnings on their country pages and are not counted here,
+// so the vendor total in "Of the N vendors" must be US-only too (2026-10-01).
+// Field-service software (tools.json) has no reputation_flag field and was not
+// part of the flag checks, so it is left out of the denominator as well.
+const totalVendors = usVendorTotal() - tools.length;
 
-const removedFlags = [
+// These four were proposed during the July 2026 re-verification and never
+// published (docs/verification-runs.md, 2026-07-31: "4 REJECTED as
+// unpublishable"; no data commit ever gave them a reputation_flag). Until
+// 2026-10-01 this page described them as flags we had published and removed.
+const refusedFlags = [
   {
     name: 'Thumbtack',
     reason:
-      'We had cited an "active class action." On re-verification (July 2026) the case had been compelled to arbitration and terminated on 20 July 2026. Citing it as live would have been false, so the flag came down.',
+      'A proposed flag cited an "active class action." The case had been compelled to arbitration and terminated on 20 July 2026, so no flag was published.',
   },
   {
     name: 'Houzz',
     reason:
-      'The underlying complaint was stricken and the case closed in June 2025. A stricken complaint is not evidence. Removed.',
+      'The underlying complaint had been stricken and the case closed in June 2025. A stricken complaint is not evidence, so no flag was published.',
   },
   {
     name: 'Liberty Mutual',
     reason:
-      'The "data breach" we referenced traced back to a ransomware group\'s own unverified claim, which the company denies; the related suit was voluntarily dismissed. An attacker\'s press release is not a primary source. Removed.',
+      'The proposed "data breach" traced back to a ransomware group\'s own unverified claim, which the company denies; the related suit was voluntarily dismissed. An attacker\'s press release is not a primary source. Not published.',
   },
   {
-    name: 'biBerk',
+    name: 'biBERK',
     reason:
-      'The complaint-index figure we found existed only on affiliate SEO sites and could not be traced to the named regulator, while BBB showed an A+ rating. Unsourceable, so removed.',
+      'The complaint-index figure existed only on affiliate SEO sites and could not be traced to the named regulator, while BBB showed an A+ rating. Not published.',
   },
 ];
 
@@ -51,7 +60,7 @@ const breadcrumbs = [
 
 <Layout
   title={`The Reputation Ledger: ${totalFlags} Documented Vendor Warnings`}
-  description={`Every reputation flag in the WrenchStack directory on one page: ${totalFlags} vendors with documented regulatory actions or sustained complaint patterns, each with its evidence. No vendor can pay to remove a flag.`}
+  description={`Every reputation flag in the WrenchStack US directory on one page: ${totalFlags} vendors with documented regulatory actions, court records, BBB complaint counts or contract terms, each with its evidence. No vendor can pay to remove a flag.`}
   breadcrumbs={breadcrumbs}
 >
   <article class="mx-auto max-w-3xl px-4 py-12 prose prose-slate">
@@ -61,13 +70,13 @@ const breadcrumbs = [
         Reputation flags: {totalFlags} vendors with documented problems
       </h1>
       <p class="mt-3 text-lg text-slate-600">
-        Of the {totalVendors} vendors WrenchStack reviews, {totalFlags} carry a documented warning. This page lists every one of them, with the evidence. It is the part of the directory that costs us money, and the part we are proudest of.
+        Of the {totalVendors} US vendors outside field-service software that WrenchStack reviews, {totalFlags} carry a documented warning. This page lists every one of them, with the evidence. Field-service software entries do not carry reputation flags, and warnings on international listings appear on their country pages.
       </p>
     </div>
 
     <h2>What earns a flag</h2>
     <p>
-      A reputation flag is reserved for <strong>documented, current evidence</strong>: a regulatory action (FTC, SEC, CFPB, a state insurance regulator), a court record that is actually live, or a sustained, specific complaint pattern at a named source such as a BBB profile with counts. The flag text states the source so you can check it yourself.
+      A reputation flag is reserved for <strong>documented evidence</strong>: a regulatory action (FTC, SEC, CFPB, a state insurance regulator or attorney general), a court record, a complaint count at a named source such as a BBB profile, or the vendor's own published terms where they put a contractor at specific risk (fund holds, non-refundable fees, non-solicitation penalties). The flag text states the source so you can check it yourself.
     </p>
     <p>
       What does <em>not</em> earn a flag: a handful of angry reviews, an anonymous forum post, a lawsuit that has been dismissed or sent to arbitration and terminated, a security "breach" that exists only in an attacker's claims, or any figure we cannot trace to a primary source. If we cannot verify it, we do not publish it.
@@ -77,25 +86,31 @@ const breadcrumbs = [
       <h2 class="text-lg font-bold text-slate-900 mb-2">The policy, in four lines</h2>
       <ul class="space-y-2 text-slate-700 text-sm">
         <li><strong>No vendor can pay to remove a flag.</strong> Not through advertising, not through an affiliate program, not through partnership. There is no price.</li>
-        <li><strong>Flags run on evidence, both ways.</strong> Send a primary source showing a flag is factually wrong or outdated and it is corrected the same day. See the removals below: it happens.</li>
+        <li><strong>Flags run on evidence, both ways.</strong> Send a primary source showing a flag is factually wrong or outdated and the flag is checked against it. See the removals below: it happens.</li>
         <li><strong>Affiliate relationships never touch flags.</strong> Some flagged vendors run affiliate programs we could earn from. The flags stay.</li>
-        <li><strong>Every flag is re-verified</strong> on the monthly data cycle, against the original source.</li>
+        <li><strong>Every flag shown</strong> was last re-verified against its source on the date printed on its entry.</li>
       </ul>
     </div>
 
-    <h2>Flags we removed, and why</h2>
+    <h2>Flags we refused or removed, and why</h2>
     <p>
-      The standard only means something if it runs both directions. In July 2026 we re-verified every flag in the directory and <strong>removed four</strong> that no longer held up:
+      The standard only means something if it runs both directions. In July 2026 our re-verification proposed four new flags, and we <strong>refused to publish them</strong> because the evidence did not hold up:
     </p>
     <ul>
-      {removedFlags.map((r) => (
+      {refusedFlags.map((r) => (
         <li>
           <strong>{r.name}:</strong> {r.reason}
         </li>
       ))}
     </ul>
     <p>
-      Publishing a warning that is not true is worse than publishing no warning at all. That cut both ways then, and it will again.
+      On 10 September 2026 we removed the flag on National Processing (now pmtbox): its hidden-fee, equipment-lease and PCI-fee claims could no longer be traced to a source.
+    </p>
+    <p>
+      On 30 September 2026 the 153 entries then in the nine US datasets outside field-service software were re-checked against primary sources. Four entries whose prices could not be confirmed on the vendor's own site (OnPay, Auris, Patriot Accounting, Thumbtack) kept their earlier verified dates. Flags that rested only on forum posts, or that described complaint patterns we could not read for ourselves, were removed, including those on Hiscox, Homeyou, Pro Referral, Bluevine, Clover, QuickBooks Payments and five consumer-financing lenders; where a remaining flag cites a BBB complaint count, it gives the count from the BBB profile. The flags that stayed were rebuilt from primary documents (FTC, CFPB, SEC, state attorney general and court records, BBB profiles, vendor terms), and new ones were added, among them Bank of America and U.S. Bank on CFPB orders.
+    </p>
+    <p>
+      Publishing a warning that is not true is worse than publishing no warning at all.
     </p>
 
     <h2>The ledger</h2>
@@ -107,7 +122,7 @@ const breadcrumbs = [
       <section>
         <h3>
           <a href={g.categoryUrl}>{g.category}</a>
-          <span class="text-slate-400 font-normal"> ({g.entries.length} of the category flagged)</span>
+          <span class="text-slate-400 font-normal"> ({g.entries.length} of {g.total} flagged)</span>
         </h3>
         <div class="not-prose space-y-4">
           {g.entries.map((e) => (
@@ -130,7 +145,7 @@ const breadcrumbs = [
       Most software directories are funded by the vendors they review, which makes a page like this structurally impossible for them. WrenchStack is affiliate-supported with per-vendor disclosure, and no vendor can pay for placement, ranking, or silence. The ledger exists because a contractor about to route customer financing, payroll, or insurance through one of these companies deserves to know what the record shows.
     </p>
     <p class="text-sm text-slate-500">
-      See something wrong on this page, in either direction? Email <a href="mailto:press@wrenchstack.com">press@wrenchstack.com</a> with a primary source. Corrections are applied the same day, and this page regenerates from the live directory on every build. Related: <a href="/methodology/">methodology</a>, <a href="/editorial-standards/">editorial standards</a>, <a href="/verification-log/">verification log</a>.
+      See something wrong on this page, in either direction? Email <a href="mailto:press@wrenchstack.com">press@wrenchstack.com</a> with a primary source. Corrections are checked against the source you send, and this page regenerates from the live directory on every build. Related: <a href="/methodology/">methodology</a>, <a href="/editorial-standards/">editorial standards</a>, <a href="/verification-log/">verification log</a>.
     </p>
   </article>
 </Layout>

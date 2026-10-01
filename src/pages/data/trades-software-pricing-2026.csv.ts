@@ -5,6 +5,11 @@ import { tools } from '../../lib/data';
 // build time from tools.json, so the published dataset can never drift from
 // the live directory. This is the open-data companion to /trends-2026/.
 // License: CC BY 4.0 (attribution: WrenchStack, wrenchstack.com).
+// 2026-10-01: the file is plain CSV, header on line 1. The eight '#' comment
+// lines that used to open it broke standard parsers (pandas, the Hugging Face
+// viewer): line 1 was read as a one-column header. The license, attribution
+// and field notes now live in the JSON's `dataset` block and the dataset card
+// (docs/hf-dataset-card.md).
 
 function csvField(v: unknown): string {
   if (v === null || v === undefined) return '';
@@ -39,7 +44,10 @@ export const GET: APIRoute = () => {
 
   const rows = tools.map((t) => {
     const p = t.pricing;
-    const quoteOnly = p.starting_at_usd === null;
+    // 2026-10-01: quote_only follows pricing_model (the vendor publishes no entry
+    // price). A null starting price alone also covers the 'unclear' rows, which
+    // publish one-time or per-project prices.
+    const quoteOnly = p.pricing_model === 'quote_only';
     return [
       t.slug,
       t.name,
@@ -60,18 +68,7 @@ export const GET: APIRoute = () => {
       .join(',');
   });
 
-  const preamble = [
-    '# WrenchStack Trades Software Pricing Dataset 2026',
-    '# License: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)',
-    '# Attribution: WrenchStack, https://wrenchstack.com/trends-2026/',
-    '# Every price was checked against the vendor\'s own pricing page on the pricing_verified_date shown per row.',
-    '# quote_only=true means the vendor publishes no price at all (contact-sales only).',
-    '# pricing_model: per_user, annual_per_user, flat, flat_plus_seat, free_tier, quote_only or unclear. Compare starting_price_usd_month only between rows with the same pricing_model.',
-    '# 2026-09-30: the g2_rating and capterra_rating columns were removed because those third-party scores could not be verified. Read current reviews on G2 and Capterra directly.',
-    `# Rows: ${tools.length}. Generated at build time from the live directory; re-download for the current version.`,
-  ].join('\n');
-
-  const body = preamble + '\n' + header.join(',') + '\n' + rows.join('\n') + '\n';
+  const body = header.join(',') + '\n' + rows.join('\n') + '\n';
 
   return new Response(body, {
     headers: {

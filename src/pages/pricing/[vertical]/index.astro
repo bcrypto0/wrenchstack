@@ -38,7 +38,7 @@ const cheapestFirst = [...verticalTools].sort((a, b) => {
 
 const cheapestPublic = cheapestFirst.find((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0);
 const freeTier = cheapestFirst.find((t) => t.pricing.starting_at_usd === 0);
-const customQuoteOnly = verticalTools.filter((t) => t.pricing.starting_at_usd === null);
+const customQuoteOnly = verticalTools.filter((t) => t.pricing.pricing_model === 'quote_only');
 
 // Pricing model classification
 const flatRateTools = verticalTools.filter((t) => priceScaling(t) === 'flat' || priceScaling(t) === 'base_plus_seat');
@@ -175,7 +175,8 @@ const breadcrumbs = [
           <tbody class="divide-y divide-slate-100">
             {cheapestFirst.map((t) => {
               const trial = t.pricing.free_trial_days;
-              const isCustom = t.pricing.starting_at_usd === null;
+              const isCustom = t.pricing.pricing_model === 'quote_only';
+              const isNonMonthly = t.pricing.starting_at_usd === null && !isCustom;
               const isFree = t.pricing.starting_at_usd === 0;
               return (
                 <tr class="hover:bg-slate-50">
@@ -185,7 +186,7 @@ const breadcrumbs = [
                     </a>
                   </td>
                   <td class="p-3 font-semibold text-slate-900">
-                    {isFree ? 'Free tier' : isCustom ? 'Custom' : `$${t.pricing.starting_at_usd}/mo`}
+                    {isFree ? 'Free tier' : isCustom ? 'Custom' : isNonMonthly ? 'No monthly plan' : `$${t.pricing.starting_at_usd}/mo`}
                   </td>
                   <td class="p-3 text-slate-600 text-xs">
                     {t.pricing.pricing_note ?? (isCustom ? 'Custom quote: request from vendor' : 'Per-user/month (typical)')}

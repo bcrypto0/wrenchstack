@@ -10,7 +10,7 @@ const METHODOLOGY_EFFECTIVE_DATE = '2026-09-30';
 const totalVendorsCovered = tools.length + leadGenPlatforms.length + insuranceProviders.length + payrollServices.length + marketingAgencies.length + aiTools.length + paymentProcessors.length + financingProviders.length + accountingSoftware.length + bankingProviders.length;
 const totalCategories = 10;
 const totalTrades = verticals.length;
-const totalCriteriaTracked = 47;
+const totalCriteriaTracked = tools.length;
 const totalCountries = 18; // US + 17 international markets, all live
 
 const breadcrumbs = [
@@ -104,7 +104,7 @@ const counts = {
 
 <Layout
   title="WrenchStack Fit Score™ Methodology v1.3: How we rank trades vendors"
-  description="The WrenchStack Fit Score™ is our published, versioned methodology for evaluating trades vendors across 10 categories: software, payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI. Three weighted factors. Public scoring rubric. Independence statement. Per-vendor affiliate ledger."
+  description="WrenchStack's published, versioned methodology for trades vendors across 10 categories: the WrenchStack Fit Score™ (three weighted factors) for field-service software and rule-based tiers for payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI. Independence statement. Per-vendor affiliate ledger."
   breadcrumbs={breadcrumbs}
 >
   <article class="mx-auto max-w-3xl px-4 py-12 prose prose-slate">
@@ -135,8 +135,8 @@ const counts = {
         <div class="text-xs uppercase tracking-wider text-slate-500">Trade verticals</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white px-3 py-3">
-        <div class="text-2xl font-bold text-slate-900">{totalCriteriaTracked}+</div>
-        <div class="text-xs uppercase tracking-wider text-slate-500">Criteria tracked</div>
+        <div class="text-2xl font-bold text-slate-900">{totalCriteriaTracked}</div>
+        <div class="text-xs uppercase tracking-wider text-slate-500">Software tools scored</div>
       </div>
     </div>
 
@@ -144,7 +144,7 @@ const counts = {
       <h2 class="text-base font-bold text-slate-900 mb-2 mt-0">Changelog: non-software categories (2026-09-30)</h2>
       <ul class="list-disc pl-5 space-y-1 m-0">
         <li><strong>Every entry re-verified.</strong> Accounting, payroll, insurance, lead generation, financing, banking, payments, marketing agencies and AI tools were checked against primary sources (vendor pages, filings, regulator and court documents), and prices were re-checked wherever the vendor publishes them.</li>
-        <li><strong>No third-party review scores for these vendors.</strong> G2, Capterra, Trustpilot, Google, BBB and A.M. Best scores and forum sentiment are no longer shown in these categories: we could not verify them, and several were out of date. Each review page links to the vendor's BBB and Trustpilot pages instead. Software tool pages stopped showing G2 and Capterra ratings the same day (see v1.3).</li>
+        <li><strong>No third-party review scores for these vendors.</strong> G2, Capterra, Trustpilot, Google, BBB and A.M. Best scores and forum sentiment are no longer shown in these categories: we could not verify them, and several were out of date. Lead-generation, insurance, payroll and marketing-agency review pages link to the vendor's BBB and Trustpilot pages instead. Software tool pages stopped showing G2 and Capterra ratings the same day (see v1.3).</li>
         <li><strong>Tiers use verified facts only.</strong> Lead generation: Recommended means no reputation warning and each lead or call goes to one business. Payroll: Tier S is online or specialty payroll with a published starting price and no warning; Tier B is legacy payroll, PEOs or a warning. Marketing agencies: Tier S is no warning plus published prices for the core service. Insurance: no Tier S; providers are listed with or without a warning, because nothing we could verify ranks insurers on quality.</li>
         <li><strong>Warnings need a readable source.</strong> A reputation warning must trace to a regulator order, court record, BBB profile or the vendor's own terms. Warnings that rested only on forum posts or on complaint text we could not read were removed.</li>
       </ul>
@@ -184,7 +184,7 @@ const counts = {
     <h2>What the WrenchStack Fit Score™ measures</h2>
 
     <p>
-      Every vendor in our directory carries a WrenchStack Fit Score™ on a 0-10 scale. The score is calculated from three weighted factors and is the primary input to where a vendor ranks on category pages, vertical landing pages, and buyer guides. The same formula applies to every vendor, regardless of affiliate relationship, sponsorship status, or commercial alignment.
+      Every field-service software platform in our directory carries a WrenchStack Fit Score™ on a 0-10 scale, calculated from three weighted factors. On each trade page, platforms are ordered by their fit for that trade first and by Fit Score second. The same formula applies to every platform, regardless of affiliate relationship or commercial alignment.
     </p>
 
     <h2>The WrenchStack Fit Score™ formula</h2>
@@ -206,7 +206,7 @@ const counts = {
         <tr>
           <td><strong>Pricing transparency</strong></td>
           <td>20%</td>
-          <td>Tools with public tier pricing score 10. Tools requiring sales calls for any number score 5. Weight raised from 10% to 15% in v1.2 and to 20% in v1.3.</td>
+          <td>Tools that publish their prices score 10. Quote-only tools, which need a sales call for any number, score 5. Weight raised from 10% to 15% in v1.2 and to 20% in v1.3.</td>
         </tr>
         <tr>
           <td><strong>Integration coverage</strong></td>
@@ -224,16 +224,16 @@ const counts = {
     <h2>Our evaluation timeline</h2>
 
     <p>
-      Each vendor evaluation follows a documented timeline so vendors and readers know what to expect.
+      Each vendor evaluation follows the same steps, in this order. How long it takes depends on what the vendor publishes and how readable its site is.
     </p>
 
     <ol>
-      <li><strong>Discovery (week 1)</strong>: vendor identified through editorial research, vendor self-submission, contractor request, or category sweep. Initial fit assessment against category definition.</li>
-      <li><strong>Data collection (week 1-2)</strong>: pricing tiers verified directly from vendor pricing page with date stamp; feature list compiled from vendor documentation and product pages; integration directory cross-referenced.</li>
-      <li><strong>Reputation check (week 2)</strong>: regulator actions (FTC, CFPB, SEC, state attorneys general), court records, BBB profiles and the vendor's own terms. We do not use forum or social-media sentiment, and a warning we cannot trace to a readable source is removed.</li>
-      <li><strong>Scoring (week 2-3)</strong>: WrenchStack Fit Score™ computed using published weights; reputation_flag attached if structural concerns warrant warning to readers.</li>
-      <li><strong>Editorial draft (week 3)</strong>: long-form review written (1,200-2,500 words typical), structured pros/cons, FAQs, best-fit framing.</li>
-      <li><strong>Publication (week 4)</strong>: review goes live with verified_date stamp. Vendor profile becomes part of the directory.</li>
+      <li><strong>Discovery</strong>: vendor identified through editorial research, vendor self-submission, contractor request, or category sweep. Initial fit assessment against category definition.</li>
+      <li><strong>Data collection</strong>: pricing tiers verified directly from vendor pricing page with date stamp; feature list compiled from vendor documentation and product pages; integration directory cross-referenced.</li>
+      <li><strong>Reputation check</strong>: regulator actions (FTC, CFPB, SEC, state attorneys general), court records, BBB profiles and the vendor's own terms. We do not use forum or social-media sentiment, and a warning we cannot trace to a readable source is removed.</li>
+      <li><strong>Scoring</strong>: for field-service software, the WrenchStack Fit Score™ is computed using published weights; reputation_flag attached if structural concerns warrant warning to readers.</li>
+      <li><strong>Editorial draft</strong>: review written with structured pros and cons, FAQs and best-fit framing.</li>
+      <li><strong>Publication</strong>: review goes live with verified_date stamp. Vendor profile becomes part of the directory.</li>
       <li><strong>Monthly refresh</strong>: pricing re-verified; reputation warnings re-checked against their sources.</li>
     </ol>
 
@@ -246,7 +246,7 @@ const counts = {
     </div>
 
     <p>
-      We recommend vendors with no affiliate program when they're the best fit (Acuity Insurance, Erie Insurance, Google Local Services Ads). We flag vendors with FTC actions even when they have affiliate programs (HomeAdvisor, Angi). This is the editorial position the methodology requires.
+      We list vendors with no affiliate program on the same terms as everyone else (Acuity Insurance, Erie Insurance and Google Local Services Ads run none). We flag vendors even when they run affiliate or referral programs we could join (Melio, Mercury). This is the editorial position the methodology requires.
     </p>
 
     <h2>What "verified" means here</h2>
@@ -262,8 +262,8 @@ const counts = {
     <h2>How often we update</h2>
 
     <p>
-      <strong>Pricing</strong> is verified on a monthly review cycle. Each tool entry carries a verified date;
-      tiers older than 90 days are flagged and re-verified before the page is published.
+      <strong>Pricing</strong> is re-checked on a monthly cycle. Each tool entry carries a verified date;
+      prices older than 90 days show an amber freshness pill and prices older than 180 days a red one.
     </p>
 
     <p>
@@ -298,8 +298,8 @@ const counts = {
 
     <p>
       If we publish something wrong about a tool (pricing, feature claim, weakness), we correct
-      it within 48 hours of confirmation. Corrections are noted on the page with a dated stamp,
-      never silently edited.
+      it once the error is confirmed against a primary source. Corrections are noted on the page
+      with a dated stamp.
     </p>
 
     <p>
@@ -316,9 +316,9 @@ const counts = {
     </p>
 
     <p>
-      Where vendors don't publish pricing publicly (typical for enterprise tools like ServiceTitan,
-      BuildOps, and FieldEdge), we cite user-reported pricing ranges from public sources rather
-      than custom-quoted figures.
+      Where a vendor publishes no price (ServiceTitan is one example), the listing says so and the
+      tool counts as quote-only. A pricing note may mention a third-party estimate, labelled as
+      unverified; such an estimate is never used as the listed price or in any figure we publish.
     </p>
 
     <h2 id="how-we-make-money">How we make money</h2>
@@ -440,9 +440,8 @@ const counts = {
     <p>
       Each pricing tier shows a <strong>verified date</strong>. We re-check pricing on the monthly cycle by
       visiting each vendor's public pricing page. When a vendor publishes no prices, the page says so;
-      we do not estimate prices from forum posts or other secondhand reports. Numbers older than 90 days get flagged with an amber freshness pill;
-      older than 180 days get a red pill and are queued for re-verification before they show on
-      ranked pages.
+      we do not estimate prices from forum posts or other secondhand reports. Numbers older than 90 days get an amber freshness pill;
+      older than 180 days, a red pill.
     </p>
 
     <p>
@@ -454,10 +453,8 @@ const counts = {
     <h2>Questions or corrections?</h2>
 
     <p>
-      Email <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a>. We respond to
-      vendor pricing corrections within 48 hours, methodology questions within 5 business days.
-      Substantive complaints about ranking or review accuracy get a public response on the
-      affected page if the dispute can't be resolved privately.
+      Email <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a>. Include the page URL
+      and a primary source; corrections are checked against the source you send.
     </p>
   </article>
 </Layout>

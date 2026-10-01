@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, verticals, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies } from '../lib/data';
+import { tools, verticals, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, usVendorTotal, usVendorLists, totalReputationFlags } from '../lib/data';
+import { intlMarketCount } from '../lib/intl';
 
 const toolCount = tools.length;
 const verticalCount = verticals.length;
@@ -11,13 +12,12 @@ const leadGenCount = leadGenPlatforms.length;
 const insuranceCount = insuranceProviders.length;
 const payrollCount = payrollServices.length;
 const agencyCount = marketingAgencies.length;
-const totalVendorCount = toolCount + leadGenCount + insuranceCount + payrollCount + agencyCount;
-const categoryCount = 5;
-const reputationFlagCount = [
-  ...leadGenPlatforms,
-  ...insuranceProviders,
-  ...marketingAgencies,
-].filter((v) => 'reputation_flag' in v && v.reputation_flag !== null).length;
+// Shared helpers, so this page matches every other surface (2026-10-01). It used
+// to sum 5 of the 10 US datasets (224 against 276) and count flags in only 3 of
+// the 9 flagged categories (13 against 25).
+const totalVendorCount = usVendorTotal();
+const categoryCount = usVendorLists().length;
+const reputationFlagCount = totalReputationFlags();
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -30,7 +30,7 @@ const organizationSchema = {
   '@type': 'Organization',
   name: 'WrenchStack',
   url: 'https://wrenchstack.com',
-  description: `WrenchStack is an independent research desk covering trades-contractor vendors across ${categoryCount} categories: software, lead-generation, insurance, payroll, and marketing agencies. We publish the WrenchStack Fit Score™ methodology and per-vendor affiliate disclosure for every recommendation.`,
+  description: `WrenchStack is an independent research desk covering trades-contractor vendors across ${categoryCount} US categories: field-service software, payments, accounting, banking, financing, payroll, insurance, lead generation, marketing agencies and AI tools. We publish the WrenchStack Fit Score™ methodology and per-vendor affiliate disclosure for every recommendation.`,
   foundingDate: '2026',
   knowsAbout: [
     'Field service management software',
@@ -51,7 +51,7 @@ const organizationSchema = {
 
 <Layout
   title="About WrenchStack: independent trades vendor research desk"
-  description={`WrenchStack is an independent research desk covering ${totalVendorCount}+ trades-contractor vendors across 10 categories (software, payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI) plus 13 international markets. Published methodology, transparent affiliate disclosure, honest reputation flags.`}
+  description={`WrenchStack is an independent research desk covering ${totalVendorCount} US trades-contractor vendors across ${categoryCount} categories (software, payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI) plus ${intlMarketCount} international markets. Published methodology, transparent affiliate disclosure, honest reputation flags.`}
   breadcrumbs={breadcrumbs}
 >
   <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
@@ -64,14 +64,14 @@ const organizationSchema = {
         The independent research desk for trades vendors.
       </h1>
       <p class="mt-6 text-lg text-slate-700 leading-relaxed sm:text-xl">
-        WrenchStack covers every vendor a trades contractor buys from (software, lead-generation, insurance, payroll, and marketing agencies) under a single published methodology and per-vendor affiliate ledger. {totalVendorCount}+ vendors evaluated. {reputationFlagCount} reputation flags issued. Zero pay-to-play.
+        WrenchStack covers the vendors a trades contractor buys from (field-service software, payments, accounting, banking, financing, payroll, insurance, lead generation, marketing agencies and AI tools) with published standards and per-vendor affiliate disclosure. {totalVendorCount} US vendors evaluated. {reputationFlagCount} reputation flags issued. Zero pay-to-play.
       </p>
     </header>
 
     <section class="mb-12 grid gap-3 grid-cols-2 sm:grid-cols-4">
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
-        <div class="text-2xl font-bold text-slate-900">{totalVendorCount}+</div>
-        <div class="mt-1 text-xs text-slate-600">Vendors evaluated</div>
+        <div class="text-2xl font-bold text-slate-900">{totalVendorCount}</div>
+        <div class="mt-1 text-xs text-slate-600">US vendors evaluated</div>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4 text-center">
         <div class="text-2xl font-bold text-slate-900">{categoryCount}</div>
@@ -92,11 +92,11 @@ const organizationSchema = {
       <h2>What we do</h2>
 
       <p>
-        We are an independent research desk publishing comparative analysis of the vendors trades contractors buy from. Across {categoryCount} categories (field service software, customer lead-generation platforms, business insurance providers, payroll services, and marketing agencies), we publish a unified <a href="/methodology/">WrenchStack Fit Score™</a> methodology, per-vendor affiliate disclosure, and reputation flags on the platforms whose track records earn them.
+        We are an independent research desk publishing comparative analysis of the vendors trades contractors buy from. Across {categoryCount} US categories (field-service software, payments, accounting, banking, financing, payroll, insurance, lead generation, marketing agencies and AI tools), we publish per-vendor affiliate disclosure and reputation flags on the vendors whose records earn them. Field-service software is ranked by the published <a href="/methodology/">WrenchStack Fit Score™</a> methodology.
       </p>
 
       <p>
-        Our editorial position is uncomplicated: contractors deserve evaluation that's not paid for by the vendors being evaluated. The methodology applies identically to every vendor in the directory, whether we have an active affiliate relationship, a pending application, or no commercial alignment at all. The reputation flags get attached based on documented patterns (FTC actions, BBB complaint volume, audit-pattern customer reports, Reddit sentiment) regardless of whether a flagged vendor pays us anything.
+        Our editorial position is uncomplicated: contractors deserve evaluation that's not paid for by the vendors being evaluated. The methodology applies identically to every vendor in the directory, whether we have an active affiliate relationship, a pending application, or no commercial alignment at all. Reputation flags are attached only where a regulator order, court record, BBB profile or the vendor's own terms supports them, regardless of whether a flagged vendor pays us anything.
       </p>
 
       <h2>Why this exists</h2>
@@ -144,7 +144,7 @@ const organizationSchema = {
 
       <ol>
         <li>
-          <strong>Multi-category coverage under one methodology.</strong> Software, lead-gen, insurance, payroll, marketing agencies: same WrenchStack Fit Score™ formula, same independence rules, same reputation-flag standards. Single-category competitors structurally cannot match the cross-category coverage; multi-category competitors don't exist.
+          <strong>Multi-category coverage under one set of rules.</strong> All {usVendorLists().length} US categories share the same independence rules and reputation-flag standards, and field-service software is also ranked by the WrenchStack Fit Score™. Single-category competitors structurally cannot match the cross-category coverage; multi-category competitors don't exist.
         </li>
         <li>
           <strong>Verified pricing with visible dates.</strong> Every pricing tier shows a <code>verified_date</code> stamp. Pricing under 90 days old gets a green freshness pill; 91-180 days gets amber; over 180 gets red. The freshness signal is a UI element, not buried metadata.
@@ -160,8 +160,8 @@ const organizationSchema = {
       <h2>What we ship</h2>
 
       <ul>
-        <li><strong>{toolCount} software platforms</strong> across {verticalCount} trade verticals with 100% deep-editorial coverage (1,200-2,500 words each)</li>
-        <li><strong>{leadGenCount} lead-gen platforms</strong> with shared-vs-exclusive filter and FTC-cited reputation flags on documented bad actors</li>
+        <li><strong>{toolCount} software platforms</strong> across {verticalCount} trade verticals, each with a full review: pros and cons, pricing and FAQs</li>
+        <li><strong>{leadGenCount} lead-gen platforms</strong> with a shared-vs-exclusive filter and {leadGenPlatforms.filter((p) => p.reputation_flag).length} documented reputation warnings</li>
         <li><strong>{insuranceCount} insurance providers</strong> with agent-vs-direct filter and per-trade buyer guides</li>
         <li><strong>{payrollCount} payroll services</strong> with company-size guides (1-5, 6-20, 20+ employees)</li>
         <li><strong>{agencyCount} marketing agencies</strong> with trade-specific specialists flagged and documented lock-in contract warnings</li>
@@ -174,7 +174,7 @@ const organizationSchema = {
       <h2>Geographic coverage</h2>
 
       <p>
-        WrenchStack covers the United States with all-state coverage, plus five English-speaking international markets that are <strong>live now</strong>: the United Kingdom, Canada, Australia, New Zealand, and Ireland. Each has its own vendor directory, per-vendor reviews, head-to-head comparisons, and a certification guide reflecting local requirements: Checkatrade and Gas Safe (UK), Hipages (AU), HomeStars and Red Seal (CA), Fergus and the PGDB (NZ), and MyBuilder and RGI (IE).
+        WrenchStack covers the United States, with state-level pages, plus {intlMarketCount} international markets. The United Kingdom, Canada, Australia, New Zealand and Ireland each have their own vendor directory, per-vendor profiles, head-to-head comparisons and a certification guide reflecting local requirements: Checkatrade and Gas Safe (UK), Hipages (AU), HomeStars and Red Seal (CA), Fergus and the PGDB (NZ), and MyBuilder and RGI (IE).
       </p>
 
       <h2>What we will never do</h2>
