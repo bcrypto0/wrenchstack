@@ -5499,7 +5499,8 @@
         "pricing_note": "Per route (schedule) per month, billed monthly: Basic $49, Pro $99, Growth $149. Paid annually: $539, $1,089 and $1,639 a year (about $44.92, $90.75 and $136.58 a month). Only schedules need a paid seat: a solo technician needs one, a crew needs one for its leader, and admin users and mobile devices are unlimited on every plan. Month-to-month, no contracts or setup fees, free data import. Text messaging is extra: $5/month plus message packs ($50 for 1,000, $100 for 2,500, $200 for 8,000). 14-day free trial, no credit card. Verified against gorilladesk.com/pricing and gorilladesk.com/industries/pest-control-software 2026-09-29.",
         "verified_date": "2026-09-29",
         "pricing_model": "per_user",
-        "free_trial_days": 14
+        "free_trial_days": 14,
+        "seat_unit": "route"
       },
       "key_features": [
         "scheduling",
@@ -9310,10 +9311,11 @@
           44.1,
           null
         ],
-        "pricing_note": "Per-driver pricing: Lite $35.10 and Pro $44.10 per driver/mo billed annually (monthly billing about 10% more); Custom plan quote-based. Lite up to 700 orders, Pro up to 1,000; multi-day routes and pickup-and-delivery are Custom features. 30-day free trial, no credit card. Verified against optimoroute.com/pricing 2026-09-28.",
+        "pricing_note": "Per-driver pricing: Lite $35.10 and Pro $44.10 per driver/mo billed annually (paying a year upfront gives a 10% discount); Custom plan quote-based. Lite up to 700 orders, Pro up to 1,000; multi-day routes and pickup-and-delivery are Custom features. 30-day free trial, no credit card. Verified against optimoroute.com/pricing 2026-09-28.",
         "verified_date": "2026-09-28",
         "free_trial_days": 30,
-        "pricing_model": "per_user"
+        "pricing_model": "per_user",
+        "seat_unit": "driver"
       },
       "key_features": [
         "route_optimization",
@@ -9352,7 +9354,7 @@
         "waste_removal": 7,
         "fire_protection": 6
       },
-      "long_description": "OptimoRoute is route planning and scheduling software for businesses that run many stops a day, founded in 2012 by Goran Kukolj and Marin Saric and based in Palo Alto, California. It serves delivery and field service operations, including pest control, landscaping, cleaning and pool service, where route density drives the economics.\n\nIt optimizes routes around time windows, driver skills and vehicle capacity, tracks drivers live, and re-plans when jobs change. Lite covers the mobile app, live tracking, route history, exports and API access for up to 700 orders; Pro adds weekly planning, real-time order tracking, proof of delivery, customer feedback and analytics for up to 1,000 orders; the Custom plan adds multi-day routes, pickup and delivery, commercial routing and dynamic depots.\n\nPricing is per driver: Lite $35.10 and Pro $44.10 a month billed annually (about 10% more monthly), with Custom quoted. There is a 30-day free trial with no credit card. It connects to other systems through its REST API and Zapier, with integrations for Shopify, WooCommerce, Salesforce, HubSpot and NetSuite.\n\nThe trade-off: OptimoRoute is routing only, not a full FSM, so it sits beside your quoting, invoicing and customer records. Shops with a handful of stops a day usually get enough from their FSM's built-in routing.",
+      "long_description": "OptimoRoute is route planning and scheduling software for businesses that run many stops a day, founded in 2012 by Goran Kukolj and Marin Saric and based in Palo Alto, California. It serves delivery and field service operations, including pest control, landscaping, cleaning and pool service, where route density drives the economics.\n\nIt optimizes routes around time windows, driver skills and vehicle capacity, tracks drivers live, and re-plans when jobs change. Lite covers the mobile app, live tracking, route history, exports and API access for up to 700 orders; Pro adds weekly planning, real-time order tracking, proof of delivery, customer feedback and analytics for up to 1,000 orders; the Custom plan adds multi-day routes, pickup and delivery, commercial routing and dynamic depots.\n\nPricing is per driver: Lite $35.10 and Pro $44.10 a month billed annually (paying a year upfront gives a 10% discount), with Custom quoted. There is a 30-day free trial with no credit card. It connects to other systems through its REST API and Zapier, with integrations for Shopify, WooCommerce, Salesforce, HubSpot and NetSuite.\n\nThe trade-off: OptimoRoute is routing only, not a full FSM, so it sits beside your quoting, invoicing and customer records. Shops with a handful of stops a day usually get enough from their FSM's built-in routing.",
       "pros_detail": [
         {
           "title": "Dedicated route optimization",
@@ -9962,9 +9964,9 @@
           39,
           49
         ],
-        "pricing_note": "Essentials $29/user/mo billed annually with 3-user minimum; Pro $39, Max $49 per user/mo.",
-        "verified_date": "2026-09-10",
-        "free_trial_days": 30,
+        "pricing_note": "Essentials $29, Pro $39 and Max $49 per user a month, billed annually, with a 3-user minimum. Free trial: GoCanvas's trial page says a product specialist activates it after a setup call, and its pricing, trial and FAQ pages state no length; its release notes of 24 November 2025 say the trial messaging was updated to a 14-day duration. Verified against gocanvas.com/pricing, gocanvas.com/free-trial and help.gocanvas.com 2026-10-05.",
+        "verified_date": "2026-10-05",
+        "free_trial_days": 14,
         "pricing_model": "per_user"
       },
       "key_features": [
@@ -10003,7 +10005,7 @@
         "pest_control": 5,
         "pool_service": 5
       },
-      "long_description": "GoCanvas is a mobile forms and field operations platform, founded in 2008 and based in Reston, Virginia. Since July 2024 it has been part of the Nemetschek Group, in the same Build & Construct division as Bluebeam. Trades businesses use it for the forms their main FSM doesn't cover well: inspection forms, safety checklists, equipment audits, custom work orders and trade-specific data collection.\n\nThe form builder is the core: conditional logic, calculation fields, photo capture with annotations, GPS tagging, signatures, barcode scanning and offline use for techs in low-signal areas, with a template library to start from. Essentials also includes dispatch and scheduling and configurable PDF reports; Pro adds multi-user workflows, customer and project management and API access; Max adds departments, follow-up tasks, live data sources and single sign-on.\n\nPricing is per user, billed annually with a 3-user minimum: Essentials $29, Pro $39 and Max $49 per user per month, with a 30-day free trial. Integrations include QuickBooks, Salesforce, Procore (two-way), Zapier, Microsoft Power Automate, Box, Dropbox and Google Drive.\n\nThe trade-off: GoCanvas centers on forms and field data, not quoting, invoicing and payments, so most trades run it beside an FSM. Building good forms takes someone with an eye for logic and workflow.",
+      "long_description": "GoCanvas is a mobile forms and field operations platform, founded in 2008 and based in Reston, Virginia. Since July 2024 it has been part of the Nemetschek Group, in the same Build & Construct division as Bluebeam. Trades businesses use it for the forms their main FSM doesn't cover well: inspection forms, safety checklists, equipment audits, custom work orders and trade-specific data collection.\n\nThe form builder is the core: conditional logic, calculation fields, photo capture with annotations, GPS tagging, signatures, barcode scanning and offline use for techs in low-signal areas, with a template library to start from. Essentials also includes dispatch and scheduling and configurable PDF reports; Pro adds multi-user workflows, customer and project management and API access; Max adds departments, follow-up tasks, live data sources and single sign-on.\n\nPricing is per user, billed annually with a 3-user minimum: Essentials $29, Pro $39 and Max $49 per user per month. GoCanvas offers a free trial, which a product specialist activates after a setup call; its release notes put it at 14 days (November 2025). Integrations include QuickBooks, Salesforce, Procore (two-way), Zapier, Microsoft Power Automate, Box, Dropbox and Google Drive.\n\nThe trade-off: GoCanvas centers on forms and field data, not quoting, invoicing and payments, so most trades run it beside an FSM. Building good forms takes someone with an eye for logic and workflow.",
       "pros_detail": [
         {
           "title": "Custom mobile form builder with depth",
@@ -10015,11 +10017,11 @@
         },
         {
           "title": "Offline mode for low-signal environments",
-          "explanation": "Forms work offline and sync when connectivity returns. Critical for techs working in basements, rooftops, remote rural locations, or other low-signal areas. Many FSM-bundled form features lack this depth."
+          "explanation": "Forms work offline and sync when connectivity returns. Useful for techs working in basements, rooftops, remote rural locations, or other low-signal areas. Many FSM-bundled form features lack this depth."
         },
         {
-          "title": "30-day free trial",
-          "explanation": "The trial includes every feature, long enough to build real forms, connect integrations and test with field techs."
+          "title": "Free trial with every feature",
+          "explanation": "GoCanvas's help center says you can use \"any and all features and functions\" during the trial, with unlimited form building, devices and users. Its release notes put the trial at 14 days (November 2025), and a product specialist activates it after a setup call."
         },
         {
           "title": "Procore, Salesforce and QuickBooks integrations",
@@ -10048,7 +10050,7 @@
           "explanation": "Most modern FSM platforms ship some mobile form capability. Operations should genuinely need custom forms beyond FSM-bundled features to justify GoCanvas; operations that use FSM-bundled forms for everything don't need GoCanvas's depth."
         }
       ],
-      "implementation_notes": "Deployment time depends on how many custom forms you build. Start from the template library and adapt templates rather than building from scratch, then test each form with field techs and iterate. Connect the integrations you need (QuickBooks, Salesforce, Procore, cloud storage) once the forms are stable. Moving from paper is mostly a habit change; moving from another forms tool usually means rebuilding forms. Adoption is fastest when GoCanvas forms are required, not optional.",
+      "implementation_notes": "Deployment time depends on how many custom forms you build. Start from the template library and adapt templates rather than building from scratch, then test each form with field techs and iterate. Connect the integrations you need (QuickBooks, Salesforce, Procore, cloud storage) once the forms are stable. Moving from paper is mostly a habit change; moving from another forms tool usually means rebuilding forms. Make the GoCanvas forms a required step, not an optional one.",
       "tool_faqs": [
         {
           "q": "Do I need GoCanvas if my FSM has mobile forms?",
@@ -10060,7 +10062,7 @@
         },
         {
           "q": "What kinds of forms do operations build in GoCanvas?",
-          "a": "Common form types: HVAC equipment inspection checklists, plumbing service call documentation, electrical audit forms, roofing damage assessment forms, vehicle inspection forms, safety pre-work checklists, equipment maintenance logs, customer signature acceptance forms, time tracking with project codes, and many trade-specific data collection workflows. The form library has thousands of pre-built templates as starting points."
+          "a": "Common form types: HVAC equipment inspection checklists, plumbing service call documentation, electrical audit forms, roofing damage assessment forms, vehicle inspection forms, safety pre-work checklists, equipment maintenance logs, customer signature acceptance forms, time tracking with project codes, and many trade-specific data collection workflows. GoCanvas's template library has pre-built forms to start from, such as daily field reports, estimates, risk assessments and work orders."
         },
         {
           "q": "Does GoCanvas work offline?",
@@ -10100,8 +10102,8 @@
           24,
           null
         ],
-        "pricing_note": "Free plan covers up to 10 seats with 5 active inspection templates (unlimited inspections), basic analytics, training, tasks, and issue reporting. Premium $24/seat/mo billed annually ($29 monthly) adds unlimited seats and active inspection templates, advanced analytics, unlimited data history, integrations, and SSO. Enterprise custom-quoted. SafetyCulture rebranded as Mitti on 2026-08-11; safetyculture.com now redirects to mitti.com. Verified against mitti.com/pricing 2026-09-10.",
-        "verified_date": "2026-09-10",
+        "pricing_note": "Free plan covers up to 10 seats with 5 active inspection templates (unlimited inspections), basic analytics, training, tasks, and issue reporting; Mitti's FAQ at mitti.com/safetyculture says the free plan has no time limit. Premium $24/seat/mo billed annually ($29 monthly) adds unlimited seats and active inspection templates, advanced analytics, extended data history, integrations, and SSO. Enterprise custom-quoted. Every plan includes AI credits per full seat each month: up to 300 on Free, from 500 on Premium and from 800 on Enterprise. Multi-site operations can instead get a quoted location-based price: one fixed price per site with unlimited users. Premium has a 30-day free trial, per Mitti's preventive maintenance software guide (mitti.com/apps/preventive-maintenance-software, checked 2026-10-05); the pricing page FAQ says card details are collected when the trial starts and you are not charged if you return to the Free plan before it ends. SafetyCulture rebranded as Mitti on 2026-08-11; safetyculture.com now redirects to mitti.com. Verified against mitti.com/pricing and help.mitti.com/000867 2026-10-05.",
+        "verified_date": "2026-10-05",
         "free_trial_days": 30,
         "pricing_model": "free_tier"
       },
@@ -10118,7 +10120,6 @@
       "integrations": [
         "salesforce",
         "procore",
-        "xero",
         "zapier",
         "workato",
         "power_bi",
@@ -10142,11 +10143,11 @@
         "cleaning": 5,
         "pest_control": 5
       },
-      "long_description": "Mitti (formerly SafetyCulture, and before that iAuditor) is an inspection, safety and frontline operations platform. Luke Anear started the business in 2004 in Townsville, Australia; it is now headquartered in Sydney, and the company says more than 2 million frontline workers across 80,000 organizations use it. SafetyCulture rebranded to Mitti on 11 August 2026 with the product, pricing and team unchanged, and safetyculture.com now redirects to mitti.com.\n\nFor trades, the core is structured inspections: custom checklist templates (plus a public library of ready-made ones), photo evidence tied to checklist items, issue and incident reporting, asset tracking, dashboards and audit trails. That makes it useful where OSHA, insurers or customers expect documented inspections, such as commercial property service, facility maintenance or government contracting.\n\nThe Free plan covers up to 10 seats with 5 active inspection templates at a time (unlimited inspections) and has no time limit. Premium, at $24 per seat per month billed annually ($29 monthly), adds unlimited seats and active templates, advanced analytics, unlimited data history, integrations and single sign-on; Enterprise is custom-quoted. Paid tiers come with a 30-day free trial.\n\nIntegrations, available on Premium and Enterprise, include a two-way Salesforce integration, Procore, Xero, Zapier, Workato, Microsoft Power BI, Power Automate and SharePoint, and file tools such as Google Drive, Dropbox and OneDrive.\n\nThe trade-off: Mitti is not a full FSM. It doesn't schedule, dispatch or invoice, and shops without formal inspection or compliance requirements usually get enough from the photo and checklist features in their FSM.",
+      "long_description": "Mitti (formerly SafetyCulture, and before that iAuditor) is an inspection, safety and frontline operations platform. Luke Anear started the business in 2004 in Townsville, Australia; it is now headquartered in Sydney, and the company says more than 2 million frontline workers across 80,000 organizations use it. SafetyCulture rebranded to Mitti on 11 August 2026; Mitti's developer changelog calls it the same platform and team with a new name, and safetyculture.com now redirects to mitti.com.\n\nFor trades, the core is structured inspections: custom checklist templates (plus a public library of ready-made ones), photo evidence with annotations, issue and incident reporting, asset tracking, dashboards and audit-ready records. That makes it useful where OSHA, insurers or customers expect documented inspections, such as commercial property service, facility maintenance or government contracting.\n\nThe Free plan covers up to 10 seats with 5 active inspection templates at a time (unlimited inspections), and Mitti says it has no time limit. Premium, at $24 per seat per month billed annually ($29 monthly), adds unlimited seats and active templates, advanced analytics, extended data history, integrations and single sign-on; Enterprise is custom-quoted. Premium comes with a 30-day free trial; Mitti collects card details when it starts and does not charge you if you return to the Free plan before it ends.\n\nIntegrations, available on Premium and Enterprise, include a two-way Salesforce integration built by the partner OpSmooth, Procore, Zapier, Workato, Microsoft Power BI, Power Automate and SharePoint, and file tools such as Google Drive, Dropbox and OneDrive.\n\nThe trade-off: Mitti is not a full FSM. It schedules inspections, but its plans list no job dispatch, quoting or customer invoicing, and shops without formal inspection or compliance requirements usually get enough from the photo and checklist features in their FSM.",
       "pros_detail": [
         {
-          "title": "Genuinely free plan (up to 10 seats)",
-          "explanation": "The Free plan covers up to 10 seats with 5 active inspection templates at a time, unlimited inspections, basic analytics, training, tasks and issue reporting, with no time limit."
+          "title": "Free plan (up to 10 seats)",
+          "explanation": "The Free plan covers up to 10 seats with 5 active inspection templates at a time, unlimited inspections, basic analytics, training, tasks and issue reporting. Mitti says the Free plan has no time limit."
         },
         {
           "title": "Unlimited custom checklist templates on Premium",
@@ -10154,25 +10155,25 @@
         },
         {
           "title": "Audit-ready inspection records",
-          "explanation": "Inspections carry photo evidence, timestamps, location and an audit trail: the documentation OSHA inspectors, insurers and compliance-minded customers ask for. It replaces paper forms that get lost or filled in after the fact."
+          "explanation": "Mitti says each inspection keeps a complete record, including date and time stamps, GPS location and user attribution, alongside photo evidence: the documentation OSHA inspectors, insurers and compliance-minded customers ask for. It replaces paper forms that get lost or filled in after the fact."
         },
         {
           "title": "Widely used",
           "explanation": "The company says more than 2 million frontline workers across 80,000 organizations use it, so ready-made templates exist for most trades and staff may already know the app."
         },
         {
-          "title": "30-day free trial on paid tiers",
-          "explanation": "Paid tiers come with a 30-day free trial, long enough to test custom templates and integrations, and the Free plan has no time limit."
+          "title": "30-day free trial of Premium",
+          "explanation": "Mitti offers a 30-day free trial of Premium. It collects card details when the trial starts; return to the Free plan before the trial ends and you are not charged."
         },
         {
           "title": "Salesforce, Procore and BI integrations",
-          "explanation": "A two-way Salesforce integration can trigger inspections from Salesforce jobs and feed results back; Procore, Xero, Zapier, Workato and Power BI round out the list on Premium and Enterprise."
+          "explanation": "A two-way Salesforce integration, built by the partner OpSmooth, creates Mitti inspections from Salesforce jobs and writes the results back to the job record; Procore, Zapier, Workato and Power BI round out the list on Premium and Enterprise."
         }
       ],
       "cons_detail": [
         {
           "title": "Not a full FSM",
-          "explanation": "SafetyCulture doesn't handle scheduling, dispatching, customer billing, or invoicing. Requires existing FSM platform for those workflows. Adds another monthly subscription on top of FSM for operations needing both."
+          "explanation": "Mitti schedules inspections, but its plans list no job dispatch, customer billing or invoicing, so you need an FSM platform for those workflows. That adds another monthly subscription on top of the FSM for operations needing both."
         },
         {
           "title": "Can feel overkill for shops without compliance requirements",
@@ -10184,14 +10185,14 @@
         },
         {
           "title": "Per-user pricing scales with team size",
-          "explanation": "At $24/seat/month billed annually ($29 monthly) once you outgrow the Free plan, large operations (50+ users) hit $1,200+/month for Mitti alone. Cost-benefit depends on compliance value: operations with real audit/insurance requirements typically justify the cost; operations without don't."
+          "explanation": "At $24/seat/month billed annually ($29 monthly) once you outgrow the Free plan, 50 full seats come to $1,200 a month for Mitti alone; Premium includes free guest seats for occasional users. Cost-benefit depends on compliance value: operations with real audit/insurance requirements typically justify the cost; operations without don't."
         },
         {
           "title": "Integrations need a paid plan",
           "explanation": "Free-plan users can't connect Mitti to other systems; integrations start on Premium."
         }
       ],
-      "implementation_notes": "Plan for one to three weeks, depending on how many inspection workflows you set up. Onboarding is self-service on Free and Premium; Enterprise includes implementation help. Start from the public template library, adapt the templates to your own workflows, set photo standards, and roll the mobile app out to field staff. If you are replacing paper, the work is mostly habit: make inspections a required step, or uptake stays slow. If you are moving from another inspection tool, expect to rebuild your templates.",
+      "implementation_notes": "Setup time depends on how many inspection workflows you build. Mitti's pricing table lists onboarding services and training as not included on Free and as a contact-sales item on Premium and Enterprise. Start from the public template library, adapt the templates to your own workflows, set photo standards, and roll the mobile app out to field staff. If you are replacing paper, the work is mostly habit: make inspections a required step, or uptake stays slow. If you are moving from another inspection tool, expect to rebuild your templates.",
       "tool_faqs": [
         {
           "q": "Is Mitti the same as SafetyCulture and iAuditor?",
@@ -10199,11 +10200,11 @@
         },
         {
           "q": "Do I need SafetyCulture if I have a general FSM platform?",
-          "a": "Depends on your compliance requirements. If your operations face OSHA inspections, insurance audit requirements, or customer compliance documentation needs (commercial property service, healthcare facility maintenance, government contracting), SafetyCulture's structured inspection workflow is significantly more rigorous than general FSM photo documentation. If your operations don't face these requirements, general FSM with built-in photo documentation is usually sufficient."
+          "a": "Depends on your compliance requirements. If your operations face OSHA inspections, insurance audit requirements, or customer compliance documentation needs (commercial property service, healthcare facility maintenance, government contracting), Mitti's structured inspections are built for that documentation: Mitti says each inspection keeps a complete record, including date and time stamps, GPS location and user attribution. If your operations don't face these requirements, general FSM with built-in photo documentation is usually sufficient."
         },
         {
           "q": "Is SafetyCulture's free tier actually usable for a real business?",
-          "a": "Yes for operations up to 10 users with core inspection needs. The Free plan has no time limit and covers up to 10 seats with 5 active inspection templates at a time (unlimited inspections), basic analytics, training, tasks and issue reporting. Premium ($24/seat/month billed annually, $29 monthly) removes the seat and template caps and adds advanced analytics, unlimited data history, integrations and SSO. Integrations need Premium or Enterprise."
+          "a": "Yes for operations up to 10 users with core inspection needs. Mitti says the Free plan has no time limit; it covers up to 10 seats with 5 active inspection templates at a time (unlimited inspections), basic analytics, training, tasks and issue reporting. Premium ($24/seat/month billed annually, $29 monthly) removes the seat and template caps and adds advanced analytics, extended data history, integrations and SSO. Integrations need Premium or Enterprise."
         },
         {
           "q": "How does SafetyCulture compare to GoCanvas?",

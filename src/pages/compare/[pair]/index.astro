@@ -12,7 +12,7 @@ import { asSentence,
 import FreshnessBadge from '../../../components/FreshnessBadge.astro';
 import { isComparisonIndexable } from '../../../lib/compare-index.mjs';
 import MissingFromList from '../../../components/MissingFromList.astro';
-import { priceScaling } from '../../../lib/data';
+import { priceScaling, seatUnit, formatUsd } from '../../../lib/data';
 
 export async function getStaticPaths() {
   // Generate both directions per pair (e.g. jobber-vs-servicetitan AND
@@ -166,8 +166,9 @@ if (cheaperTool) {
   const lo = cheaperTool.pricing.starting_at_usd as number;
   const hi = dearer.pricing.starting_at_usd as number;
   // A ratio only means something when both prices scale the same way (and the lower
-  // one is not $0, which printed "Infinityx" until 2026-10-01).
-  const mult = lo > 0 && priceScaling(cheaperTool) === priceScaling(dearer) ? hi / lo : null;
+  // one is not $0, which printed "Infinityx" until 2026-10-01), and per-seat prices
+  // charge for the same seat (a route or a driver is not a user; seatUnit, 2026-10-05).
+  const mult = lo > 0 && priceScaling(cheaperTool) === priceScaling(dearer) && seatUnit(cheaperTool) === seatUnit(dearer) ? hi / lo : null;
   differences.push(
     `**Entry price:** ${cheaperTool.name} ${startsAt(cheaperTool)}; ${dearer.name} ${startsAt(dearer)}` +
       (mult !== null && mult >= 1.5 ? `, so ${dearer.name}'s entry price is ${mult >= 10 ? Math.round(mult) : mult.toFixed(1)} times ${cheaperTool.name}'s.` : '.')
@@ -322,16 +323,16 @@ function tierCell(t: Tool, i: number): string {
   if (nonMonthlyPricingOnly(t)) return tierName;
   if (p === null || p === undefined) return `${tierName}: quote`;
   if (p === 0) return `${tierName}: free`;
-  if (t.pricing.pricing_model === 'annual_per_user') return `${tierName}: $${p} per user a year`;
-  return `${tierName}: $${p}/mo`;
+  if (t.pricing.pricing_model === 'annual_per_user') return `${tierName}: $${formatUsd(p)} per ${seatUnit(t)} a year`;
+  return `${tierName}: $${formatUsd(p)}/mo`;
 }
 
 function topTierPhrase(t: Tool): string {
   const n = t.pricing.tiers.length;
   const top = t.pricing.tier_prices_usd?.[n - 1];
   if (n < 2 || typeof top !== 'number' || top <= 0 || top === t.pricing.starting_at_usd) return '';
-  const unit = t.pricing.pricing_model === 'annual_per_user' ? 'per user a year' : 'a month';
-  return `; its top published tier, ${t.pricing.tiers[n - 1]}, is $${top} ${unit}`;
+  const unit = t.pricing.pricing_model === 'annual_per_user' ? `per ${seatUnit(t)} a year` : 'a month';
+  return `; its top published tier, ${t.pricing.tiers[n - 1]}, is $${formatUsd(top)} ${unit}`;
 }
 
 function describePrice(t: Tool): string {
@@ -355,7 +356,7 @@ function pricingAnalysis(): string {
   if (flatVsPerUser) {
     const flatTool = aIsFlat ? a : b;
     const perUserTool = aIsFlat ? b : a;
-    analysis += ` ${flatTool.name} charges a flat monthly price per plan while ${perUserTool.name} charges per user, so ${flatTool.name} gets relatively cheaper as your team grows; check each plan's user or usage limits.`;
+    analysis += ` ${flatTool.name} charges a flat monthly price per plan while ${perUserTool.name} charges per ${seatUnit(perUserTool)}, so ${flatTool.name} gets relatively cheaper as your team grows; check each plan's user or usage limits.`;
   } else if (cheaperTool) {
     // An invented "both platforms typically converge in price at scale" followed this
     // until 2026-10-01; no data supports it.

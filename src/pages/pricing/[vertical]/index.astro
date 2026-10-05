@@ -8,6 +8,8 @@ import {
   wrenchStackScore,
   getTool,
   priceScaling,
+  seatUnit,
+  formatUsd,
   priceTier,
   isQuoteOnly,
   hasFreeTier,
@@ -65,18 +67,26 @@ const lowestPaidPrice = paidTools.length ? (paidTools[0].pricing.starting_at_usd
 const lowestPaidTools = paidTools.filter((t) => t.pricing.starting_at_usd === lowestPaidPrice);
 // How each entry price scales, for naming tools that tie on the lowest price but are
 // priced differently (pest-control: Jobber base-plus-seat and GoCanvas per user at $29).
+// A per-seat price names its seat (pricing.seat_unit: 'route' for GorillaDesk, 'driver'
+// for OptimoRoute; 'user' when unset). Until 2026-10-05 every per-seat price said "user".
 const scaleWord = (t: Tool) => {
   const s = priceScaling(t);
-  return s === 'per_user' ? 'per user' : s === 'flat' ? 'per company' : s === 'base_plus_seat' ? 'base price plus a fee per extra user' : 'see the pricing note';
+  return s === 'per_user' ? `per ${seatUnit(t)}` : s === 'flat' ? 'per company' : s === 'base_plus_seat' ? 'base price plus a fee per extra user' : 'see the pricing note';
 };
-const lowestSameScale = lowestPaidTools.every((t) => priceScaling(t) === priceScaling(lowestPaidTools[0]));
+// Tools tied on the lowest price share one label only when they scale the same way and,
+// for per-seat prices, charge for the same seat ($35 per driver is not $35 per user).
+const lowestSameScale = lowestPaidTools.every((t) => priceScaling(t) === priceScaling(lowestPaidTools[0]) && seatUnit(t) === seatUnit(lowestPaidTools[0]));
 const lowestPaidLabel = lowestPaidPrice !== null
   ? (lowestSameScale
-      ? `$${lowestPaidPrice} a month${lowestPaidTools.every(isPerUser) ? ' per user' : ''} (${listJoin(lowestPaidTools.map((t) => t.name))})`
+      ? `$${lowestPaidPrice} a month${lowestPaidTools.every(isPerUser) ? ` per ${seatUnit(lowestPaidTools[0])}` : ''} (${listJoin(lowestPaidTools.map((t) => t.name))})`
       : `$${lowestPaidPrice} a month (${lowestPaidTools.map((t) => `${t.name}, ${scaleWord(t)}`).join('; ')})`)
   : null;
 const medianPaid = paidTools.length ? medianUsd(pricedEntryValues(verticalTools)) : null;
 const perUserPaid = paidTools.filter(isPerUser);
+// Page-level wording for the per-seat group: "per user" while every tool in it charges
+// per user, "per seat" once one charges per route or per driver (seat_unit), so a
+// sentence such as "Every paid starting price on this page is per user" stays true.
+const seatWord = perUserPaid.every((t) => seatUnit(t) === 'user') ? 'user' : 'seat';
 const flatPaid = paidTools.filter((t) => priceScaling(t) === 'flat');
 const seatPaid = paidTools.filter((t) => priceScaling(t) === 'base_plus_seat');
 const unclearPaid = paidTools.filter((t) => priceScaling(t) === 'unclear');
@@ -130,7 +140,7 @@ const tierPicks = [
 function modelLabel(t: Tool): string {
   if (isQuoteOnly(t)) return 'Custom quote: request from vendor';
   const s = priceScaling(t);
-  if (s === 'per_user') return 'Per user';
+  if (s === 'per_user') return `Per ${seatUnit(t)}`;
   if (s === 'flat') return 'Flat per company';
   if (s === 'base_plus_seat') return 'Base price plus per-seat fee';
   if (s === 'free') return 'Free tier, paid plans above it';
@@ -141,7 +151,7 @@ function startingLabel(t: Tool): string {
   const p = t.pricing.starting_at_usd;
   if (p === 0) return 'Free tier';
   if (p === null) return isQuoteOnly(t) ? 'Custom' : 'No monthly plan';
-  return `$${p}${isPerUser(t) ? '/user' : ''}/mo`;
+  return `$${p}${isPerUser(t) ? `/${seatUnit(t)}` : ''}/mo`;
 }
 
 function tierPriceLabel(t: Tool, price: number | null | undefined): string {
@@ -150,9 +160,9 @@ function tierPriceLabel(t: Tool, price: number | null | undefined): string {
   if (price === null || price === undefined) return isQuoteOnly(t) ? 'Custom quote' : t.pricing.starting_at_usd === null ? 'See pricing note' : 'Not published';
   if (price === 0) return 'Free';
   // Bluebeam publishes yearly per-user prices; its tier prices are per year.
-  if (t.pricing.pricing_model === 'annual_per_user') return `$${price}/user/yr`;
-  if (t.pricing.pricing_model === 'per_user') return `$${price}/user/mo`;
-  return `$${price}/mo`;
+  if (t.pricing.pricing_model === 'annual_per_user') return `$${formatUsd(price)}/${seatUnit(t)}/yr`;
+  if (t.pricing.pricing_model === 'per_user') return `$${formatUsd(price)}/${seatUnit(t)}/mo`;
+  return `$${formatUsd(price)}/mo`;
 }
 
 // Minimums stated in a pricing note: a number of users or a yearly spend.
@@ -217,11 +227,11 @@ const allPerUser = paidTools.length > 0 && perUserPaid.length === paidTools.leng
 const allPerCompany = paidTools.length > 0 && flatPaid.length + seatPaid.length === paidTools.length;
 const mixedModels = perUserPaid.length > 0 && flatPaid.length + seatPaid.length > 0;
 const medianClause = allPerUser
-  ? `median $${medianPaid} per user a month`
+  ? `median $${medianPaid} per ${seatWord} a month`
   : allPerCompany
     ? `median $${medianPaid} a month, all per-company plans`
     : mixedModels
-      ? `median $${medianPaid} a month, blending per-user and per-company plans`
+      ? `median $${medianPaid} a month, blending per-${seatWord} and per-company plans`
       : `median $${medianPaid} a month; see each pricing note for how the price scales`;
 
 // "What it costs" answer, built from the counts above.
@@ -234,7 +244,7 @@ const costParts = [
 const costAnswer = `Of the ${verticalTools.length} ${verticalLower} ${verticalTools.length === 1 ? 'tool' : 'tools'} on this page, ${listJoin(costParts)}.`;
 
 const modelParts = [
-  perUserPaid.length ? `${count(perUserPaid.length, 'is', 'are')} priced per user` : null,
+  perUserPaid.length ? `${count(perUserPaid.length, 'is', 'are')} priced per ${seatWord}` : null,
   flatPaid.length ? `${count(flatPaid.length, 'charges', 'charge')} a flat price per company` : null,
   seatPaid.length ? `${count(seatPaid.length, 'charges', 'charge')} a base price that includes some users, plus a fee for each extra user` : null,
   unclearPaid.length ? `${count(unclearPaid.length, 'is', 'are')} priced another way (see the pricing note)` : null,
@@ -257,11 +267,11 @@ const faqs = [
       lowestPaidLabel ? `The lowest published paid starting price on this page is ${lowestPaidLabel}.` : null,
       paidTools.length
         ? (allPerUser
-            ? 'Every paid starting price on this page is per user, so multiply it by the seats you need and check each pricing note for a minimum number of users or an entry plan limited to one user; the scenario table above shows 3, 10 and 25 techs.'
+            ? `Every paid starting price on this page is per ${seatWord}, so multiply it by the seats you need and check each pricing note for a minimum number of users or an entry plan limited to one user; the scenario table above shows 3, 10 and 25 techs.`
             : allPerCompany
               ? `Every paid starting price on this page is a company price${seatPaid.length ? ' (some plans add a fee for each extra user)' : ''}; check each plan's user and job limits against your team size.`
               : mixedModels
-                ? 'Starting prices mix per-user and per-company plans, so which option costs least depends on your team size; the scenario table above shows 3, 10 and 25 techs.'
+                ? `Starting prices mix per-${seatWord} and per-company plans, so which option costs least depends on your team size; the scenario table above shows 3, 10 and 25 techs.`
                 : 'Check each pricing note for how the starting price changes with your team size; the scenario table above shows 3, 10 and 25 techs.')
         : null,
       !freeTierTools.length && !paidTools.length ? `No tool on this page publishes a monthly price, so compare written quotes for the same team size.` : null,
@@ -270,7 +280,7 @@ const faqs = [
   {
     q: `Per-user pricing vs flat-rate pricing: which is better?`,
     a: modelParts.length
-      ? `Neither is cheaper in general. Of the ${count(paidTools.length, 'tool', 'tools')} on this page with a paid monthly price, ${listJoin(modelParts)}. Per-user plans rise with each paid seat you add above any minimum the vendor sets; check the pricing note for the minimum and for which users need a seat. A flat plan's starting price is for the company, but its user, job or usage limits, or paid extra licenses, can move you to a bigger plan or a higher charge. Base-plus-seat plans stay the same until you pass the included users. Price each option at the team size you plan to have, using the limits in each tool's pricing note.`
+      ? `Neither is cheaper in general. Of the ${count(paidTools.length, 'tool', 'tools')} on this page with a paid monthly price, ${listJoin(modelParts)}. Per-${seatWord} plans rise with each paid seat you add above any minimum the vendor sets; check the pricing note for the minimum and for which users need a seat. A flat plan's starting price is for the company, but its user, job or usage limits, or paid extra licenses, can move you to a bigger plan or a higher charge. Base-plus-seat plans stay the same until you pass the included users. Price each option at the team size you plan to have, using the limits in each tool's pricing note.`
       : `No tool on this page publishes a paid monthly price, so there is no per-user or flat price to compare; ask each vendor how its quote changes with team size.`,
   },
   {
@@ -294,7 +304,7 @@ const faqs = [
   },
   {
     q: `How does pricing scale as I grow from 3 to 10 to 25 techs?`,
-    a: `It depends on how each platform charges. ${perUserExample ? `Per-user prices grow with headcount: at $${perUserExample.pricing.starting_at_usd} per user a month, ${perUserExample.name} comes to about $${Math.round((perUserExample.pricing.starting_at_usd as number) * 3)} at 3 techs, $${Math.round((perUserExample.pricing.starting_at_usd as number) * 10)} at 10 and $${Math.round((perUserExample.pricing.starting_at_usd as number) * 25)} at 25, if every tech needs a seat. ` : ''}Flat, base-plus-seat and free plans are shown at their entry price in the scenario table, because the user limits, job limits and seat fees that move you to a bigger plan differ by vendor; each tool's pricing note lists them. Model the team size you plan to have against each vendor's current pricing page.`,
+    a: `It depends on how each platform charges. ${perUserExample ? `Per-${seatUnit(perUserExample) === 'user' ? 'user' : 'seat'} prices grow with headcount: at $${perUserExample.pricing.starting_at_usd} per ${seatUnit(perUserExample)} a month, ${perUserExample.name} comes to about $${Math.round((perUserExample.pricing.starting_at_usd as number) * 3)} at 3 techs, $${Math.round((perUserExample.pricing.starting_at_usd as number) * 10)} at 10 and $${Math.round((perUserExample.pricing.starting_at_usd as number) * 25)} at 25, if every tech needs a seat. ` : ''}Flat, base-plus-seat and free plans are shown at their entry price in the scenario table, because the user limits, job limits and seat fees that move you to a bigger plan differ by vendor; each tool's pricing note lists them. Model the team size you plan to have against each vendor's current pricing page.`,
   },
   {
     q: `Can I negotiate ${verticalLower} software pricing?`,
@@ -411,7 +421,7 @@ const breadcrumbs = [
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Pricing scenarios by team size</h2>
       <p class="mb-6 text-slate-600">
-        Estimated monthly cost at three team sizes for up to 10 tools on this page with a published monthly price, lowest starting price first. Per-user prices are multiplied by team size, or by the vendor's minimum where the pricing note sets one; where the pricing note limits the entry plan to one user, the next plan's price is used for a team. Flat, base-plus-seat and free plans are shown at their entry price, because the limits and seat fees that move you to a bigger plan differ by vendor.
+        Estimated monthly cost at three team sizes for up to 10 tools on this page with a published monthly price, lowest starting price first. Per-{seatWord} prices are multiplied by team size, or by the vendor's minimum where the pricing note sets one; where the pricing note limits the entry plan to one user, the next plan's price is used for a team. Flat, base-plus-seat and free plans are shown at their entry price, because the limits and seat fees that move you to a bigger plan differ by vendor.
       </p>
       <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
         <table class="w-full text-sm">
@@ -432,7 +442,7 @@ const breadcrumbs = [
                   <td class="p-3">
                     <a href={`/tools/${t.slug}/`} class="font-semibold text-slate-900 hover:text-orange-600">{t.name}</a>
                   </td>
-                  <td class="p-3 text-xs text-slate-600">{scaling === 'per_user' ? 'Per user' : scaling === 'flat' ? 'Flat per plan' : scaling === 'base_plus_seat' ? 'Base + per seat' : scaling === 'free' ? 'Free tier' : 'See pricing note'}</td>
+                  <td class="p-3 text-xs text-slate-600">{scaling === 'per_user' ? `Per ${seatUnit(t)}` : scaling === 'flat' ? 'Flat per plan' : scaling === 'base_plus_seat' ? 'Base + per seat' : scaling === 'free' ? 'Free tier' : 'See pricing note'}</td>
                   <td class="p-3 text-right text-slate-700">{scenarioCost(t, 3)}</td>
                   <td class="p-3 text-right text-slate-700">{scenarioCost(t, 10)}</td>
                   <td class="p-3 text-right text-slate-700">{scenarioCost(t, 25)}</td>
@@ -443,7 +453,7 @@ const breadcrumbs = [
         </table>
       </div>
       <p class="mt-3 text-xs text-slate-500">
-        Per-user estimates are the entry price × team size, assuming every tech needs a seat. Where a per-user plan's pricing note sets a minimum number of users or a minimum yearly spend, the estimate uses that minimum and is marked "vendor minimum". Where the pricing note limits the entry plan to one user, the estimate uses the next plan's per-user price and is marked "multi-user plan". Flat and base-plus-seat plans show their entry price only; user limits, job limits and seat fees can move you to a higher plan (see each tool's pricing note). "From $0" is a free plan; where the vendor caps users, jobs or features on it, a team past the cap needs a paid plan (see the pricing note). Actual cost depends on the tier, monthly or annual billing, and any discount in your quote.
+        Per-{seatWord} estimates are the entry price × team size, assuming every tech needs a seat. Where a per-{seatWord} plan's pricing note sets a minimum number of users or a minimum yearly spend, the estimate uses that minimum and is marked "vendor minimum". Where the pricing note limits the entry plan to one user, the estimate uses the next plan's per-{seatWord} price and is marked "multi-user plan". Flat and base-plus-seat plans show their entry price only; user limits, job limits and seat fees can move you to a higher plan (see each tool's pricing note). "From $0" is a free plan; where the vendor caps users, jobs or features on it, a team past the cap needs a paid plan (see the pricing note). Actual cost depends on the tier, monthly or annual billing, and any discount in your quote.
       </p>
     </section>
 

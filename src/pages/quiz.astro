@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, verticals, getLogoUrl, formatPrice, priceScaling } from '../lib/data';
+import { tools, verticals, getLogoUrl, formatPrice, priceScaling, seatUnit } from '../lib/data';
 
 const toolsForQuiz = tools.map(t => ({
   slug: t.slug,
@@ -9,8 +9,9 @@ const toolsForQuiz = tools.map(t => ({
   starting_at_usd: t.pricing.starting_at_usd,
   // formatPrice tells quote-only tools apart from the two that publish one-time or
   // per-project prices; until 2026-10-01 both showed "Custom". A per-user price is
-  // labelled as one, as on the pricing pages, so it does not read as a company price.
-  pricing_label: priceScaling(t) === 'per_user' ? `From $${t.pricing.starting_at_usd}/user/mo` : formatPrice(t),
+  // labelled as one, as on the pricing pages, so it does not read as a company price;
+  // the seat is pricing.seat_unit where the vendor prices per route or per driver.
+  pricing_label: priceScaling(t) === 'per_user' ? `From $${t.pricing.starting_at_usd}/${seatUnit(t)}/mo` : formatPrice(t),
   verticals: t.verticals,
   vertical_fit: t.vertical_fit ?? {},
   best_team_size: t.best_team_size ?? '',

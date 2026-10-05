@@ -35,6 +35,11 @@ export interface ToolPricing {
   pricing_note?: string;
   verified_date: string;
   free_trial_days?: number;
+  /** The seat a per_user / annual_per_user price is charged for when it is not a
+   *  user account, as a singular noun: 'route' (GorillaDesk), 'driver' (OptimoRoute).
+   *  Unset means 'user'. Read it through seatUnit(), which ignores it on other
+   *  pricing models. Added 2026-10-05. */
+  seat_unit?: string;
 }
 
 export interface ProConItem {
@@ -486,8 +491,11 @@ function buildAlternativeRationale(source: Tool, alt: Tool): string {
     // The same figure is the same price only when both are charged the same way: $49 per
     // user against $49 a month for the company matched only for a one-person team.
     // An 'unclear' model says nothing about scaling, so it never counts as a match.
+    // Per-seat prices match only for the same seat: $35 per driver (OptimoRoute) is not
+    // the same price as $35 per user (Method CRM). seatUnit is 'user' when unset.
     const sameModel = alt.pricing.pricing_model === source.pricing.pricing_model
-      && priceScaling(alt) !== 'unclear';
+      && priceScaling(alt) !== 'unclear'
+      && seatUnit(alt) === seatUnit(source);
     fragments.push(
       sameModel
         ? 'Same starting price'
@@ -1755,6 +1763,25 @@ export function nonMonthlyPricingOnly(t: Tool): boolean {
   return t.pricing.starting_at_usd === null && !isQuoteOnly(t);
 }
 
+/** The seat a per-seat price (per_user / annual_per_user) is charged for:
+ *  pricing.seat_unit, else 'user'. Use it wherever a per-seat price gets a unit
+ *  ("/route/mo", "per driver a month"): until 2026-10-05 every renderer hard-coded
+ *  "user", so GorillaDesk's per-route price read "$49/user/mo". For any other
+ *  pricing_model it returns 'user' whatever seat_unit says: no renderer words a
+ *  flat_plus_seat extra-seat fee from seat_unit yet, so a key on such an entry has
+ *  no effect until one does. */
+export function seatUnit(t: Tool): string {
+  const m = t.pricing.pricing_model;
+  return m === 'per_user' || m === 'annual_per_user' ? (t.pricing.seat_unit ?? 'user') : 'user';
+}
+
+/** A tier price for display: whole dollars as they are ("49"), anything else with two
+ *  decimals ("35.10", "29.99"). Until 2026-10-05 tier tables printed OptimoRoute's
+ *  $35.10 and $44.10 as "$35.1" and "$44.1". */
+export function formatUsd(p: number): string {
+  return Number.isInteger(p) ? String(p) : p.toFixed(2);
+}
+
 /** The entry price with how it scales, for prose: "$47 per user a month",
  *  "$208 a month for the company", "a free tier". Read from pricing_model, so a
  *  sentence comparing two entry prices says what each one buys. Added 2026-10-01. */
@@ -1764,8 +1791,8 @@ export function entryPriceLabel(t: Tool): string {
   if (p === null) return 'one-time or per-project prices (no monthly plan)';
   if (p === 0) return 'a free tier';
   switch (t.pricing.pricing_model) {
-    case 'per_user': return `$${p} per user a month`;
-    case 'annual_per_user': return `$${p} per user a month, billed annually`;
+    case 'per_user': return `$${p} per ${seatUnit(t)} a month`;
+    case 'annual_per_user': return `$${p} per ${seatUnit(t)} a month, billed annually`;
     case 'flat': return `$${p} a month for the company`;
     case 'flat_plus_seat': return `$${p} a month base, more as users are added`;
     default: return `$${p} a month`;

@@ -17,6 +17,8 @@ import { asSentence,
   toolType,
   priceTier,
   priceScaling,
+  seatUnit,
+  formatUsd,
   perUserEquivalentUsd,
   REFERENCE_TEAM_SIZE,
   hasFreeTier,
@@ -91,6 +93,10 @@ const perUserEq = perUserEquivalentUsd(tool);
 // corrected (2026-10-01); the scaling guard turns this off once it is.
 const PER_INSTALL_SLUGS = new Set(['fastest']);
 const perInstall = scaling === 'per_user' && PER_INSTALL_SLUGS.has(tool.slug);
+// The seat a per-seat price is charged for: 'user' unless pricing.seat_unit names
+// another (GorillaDesk prices per route, OptimoRoute per driver). Until 2026-10-05 the
+// labels below hard-coded "user".
+const unit = seatUnit(tool);
 const priceText = startingPrice === null
   ? ''
   : perInstall
@@ -100,16 +106,16 @@ const priceText = startingPrice === null
   : scaling === 'base_plus_seat'
   ? `$${startingPrice}/mo base, plus seats`
   : scaling === 'per_user'
-  ? `$${startingPrice}/user/mo`
+  ? `$${startingPrice}/${unit}/mo`
   : `$${startingPrice}/mo`;
 // Tier prices as the vendor lists them: per user a year for annual_per_user (Bluebeam
 // Revu), per user a month for per_user, a month otherwise (see the schema note in
 // pages/data/trades-software-pricing-2026.json.ts). Until 2026-10-01 the pricing table
 // printed every tier as "$X/mo", so Bluebeam's $260 a year read as $260 a month.
 const tierUnit = tool.pricing.pricing_model === 'annual_per_user'
-  ? '/user/yr'
+  ? `/${unit}/yr`
   : tool.pricing.pricing_model === 'per_user'
-  ? '/user/mo'
+  ? `/${unit}/mo`
   : '/mo';
 const tierPrices: (number | null)[] = tool.pricing.tiers.map((_, i) => tool.pricing.tier_prices_usd?.[i] ?? null);
 const paidTierPrices = tierPrices.filter((p): p is number => typeof p === 'number' && p > 0);
@@ -121,7 +127,7 @@ const unpricedTierCount = tierPrices.filter((p) => p === null).length;
 // (Workyard, Fastest, Bodhi, Encircle), so the table points to the pricing note; until
 // 2026-10-01 it printed "Custom quote" for all of them.
 const tierPriceCell = (price: number | null): string =>
-  price === null ? (isQuoteOnly ? 'Custom quote' : 'See pricing note') : price === 0 ? 'Free' : `$${price}${tierUnit}`;
+  price === null ? (isQuoteOnly ? 'Custom quote' : 'See pricing note') : price === 0 ? 'Free' : `$${formatUsd(price)}${tierUnit}`;
 // Notes column: the lowest and highest tier prices in the table. It said "Entry tier" for
 // the first row and "Top tier" for the last, and the last is not always the dearest; then
 // "Lowest/Highest published tier price" until 2026-10-01, but some pricing notes publish
@@ -241,11 +247,11 @@ function pricingAnalysis(): string {
     && startingPrice !== null
     && Math.abs(firstTierPrice - startingPrice) < 0.5;
   const range = lowTierPrice !== null && highTierPrice !== null && lowTierPrice !== highTierPrice
-    ? ` The tier prices in the table above run from $${lowTierPrice} to $${highTierPrice}${tierUnit}; the pricing note gives the billing terms and any other published prices.`
+    ? ` The tier prices in the table above run from $${formatUsd(lowTierPrice)} to $${formatUsd(highTierPrice)}${tierUnit}; the pricing note gives the billing terms and any other published prices.`
     : '';
   // MeasureSquare's starting price is an annual price divided by 12, below every
   // month-to-month tier price in its table.
-  const belowTiers = lowTierPrice !== null && tierUnit !== '/user/yr' && startingPrice !== null && startingPrice < lowTierPrice - 0.5
+  const belowTiers = lowTierPrice !== null && tool.pricing.pricing_model !== 'annual_per_user' && startingPrice !== null && startingPrice < lowTierPrice - 0.5
     ? ' The starting price is below the tier prices in the table; see the pricing note for how each is billed.'
     : '';
   const unpriced = tierCount > 1 && unpricedTierCount === tierCount
@@ -257,9 +263,12 @@ function pricingAnalysis(): string {
   // "Check which features X keeps for its higher tiers" was removed 2026-10-01: it
   // printed for every multi-tier tool, including CorkCRM, Pool Founder and Estimate
   // Rocket, whose notes say every plan has the same features.
-  // The band counts FastEST's per-install price as per user (priceTier), so it says so.
+  // The band counts FastEST's per-install price as per user (priceTier), so it says so;
+  // likewise a per-route or per-driver price (seat_unit).
   const bandSentence = perInstall
     ? `We place it in our ${band} by counting one install as one user.`
+    : scaling === 'per_user' && unit !== 'user'
+    ? `We place it in our ${band} by counting one ${unit} as one user.`
     : `Its starting price places it in our ${band}.`;
   return `${tool.name} starts at ${priceText}${firstTierIsStart ? ` (${tool.pricing.tiers[0]} tier)` : ''}. ${perUserNote}${bandSentence}${range}${belowTiers}${unpriced}${trialNote}`;
 }
@@ -813,6 +822,7 @@ const breadcrumbs = [
         data-starting-price={tool.pricing.starting_at_usd ?? ''}
         data-pricing-note={tool.pricing.pricing_note ?? ''}
         data-pricing-model={perInstall ? 'per_install' : (tool.pricing.pricing_model ?? '')}
+        data-seat-unit={unit !== 'user' ? unit : undefined}
         data-tool-name={tool.name}
       >
         <div class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-700">
@@ -841,7 +851,7 @@ const breadcrumbs = [
         </div>
         <p class="mt-3 text-xs text-slate-600" id="pw-note">
           {hasPublicPricing
-            ? `Estimate uses the published starting tier and whether that price is per user or per company. For an exact price at your team size and feature requirements, ask ${tool.name}.`
+            ? `Estimate uses the published starting tier and whether that price is per ${unit} or per company. For an exact price at your team size and feature requirements, ask ${tool.name}.`
             : `${tool.name} has no published monthly price we can model at your team size, so we do not estimate one: any figure here would be a guess. ${isQuoteOnly ? `Ask ${tool.name} for a quote.` : 'See the pricing note for its published prices.'}`}
         </p>
         <div class="mt-3 flex flex-wrap gap-2 text-xs">
@@ -1150,6 +1160,9 @@ const breadcrumbs = [
       // Structure comes from pricing_model (hand-classified 2026-09-09); the old
       // note-text guess treated any note mentioning "per month" as per-company.
       const pricingModel = widget.dataset.pricingModel ?? '';
+      // The seat a per-seat price is charged for (pricing.seat_unit): set only when it
+      // is not a user, e.g. 'route' (GorillaDesk) or 'driver' (OptimoRoute).
+      const seatUnitName = widget.dataset.seatUnit || 'user';
       const isPerUser = pricingModel === 'per_user' || pricingModel === 'annual_per_user';
       const isFlat = pricingModel === 'flat';
       const isBasePlusSeat = pricingModel === 'flat_plus_seat';
@@ -1191,7 +1204,9 @@ const breadcrumbs = [
         } else if (isBasePlusSeat) {
           noteEl!.innerHTML = `${toolName} charges a <strong>base price that includes some users</strong>, plus a fee for each extra seat. This estimate shows the base price only; see the pricing note above for seat costs.`;
         } else if (isPerUser) {
-          noteEl!.innerHTML = `${toolName} uses <strong>per-user</strong> pricing at $${startingPrice}/user/mo on the entry tier, so this estimate multiplies it by the number of techs. See the pricing note above for seat minimums and higher tiers.`;
+          noteEl!.innerHTML = seatUnitName === 'user'
+            ? `${toolName} uses <strong>per-user</strong> pricing at $${startingPrice}/user/mo on the entry tier, so this estimate multiplies it by the number of techs. See the pricing note above for seat minimums and higher tiers.`
+            : `${toolName} charges <strong>per ${seatUnitName}</strong> at $${startingPrice}/${seatUnitName}/mo on the entry tier, and this estimate counts one ${seatUnitName} per tech. See the pricing note above for what counts as a ${seatUnitName} and for higher tiers.`;
         } else {
           noteEl!.innerHTML = `${toolName}'s published entry price is $${startingPrice}/mo. How it scales with team size isn't clear from the vendor's page, so this estimate doesn't multiply it; check the pricing note above.`;
         }

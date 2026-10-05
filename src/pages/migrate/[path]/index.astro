@@ -7,6 +7,7 @@ import { asSentence,
   wrenchStackScore,
   isQuoteOnly,
   priceScaling,
+  seatUnit,
   type Tool,
 } from '../../../lib/data';
 import WrenchScore from '../../../components/WrenchScore.astro';
@@ -58,25 +59,28 @@ const toPrice = toTool.pricing.starting_at_usd;
 const monthlyDelta = (fromPrice !== null && toPrice !== null) ? Math.round(toPrice - fromPrice) : null;
 const annualDelta = monthlyDelta !== null ? monthlyDelta * 12 : null;
 
-// Starting prices are only like for like when both tools charge the same way.
+// Starting prices are only like for like when both tools charge the same way, and
+// per-seat prices only when they charge for the same seat (seatUnit: 'user' unless
+// pricing.seat_unit names a route or a driver; 2026-10-05).
 const scalingLabel = (t: Tool): string => {
   const s = priceScaling(t);
-  if (s === 'per_user') return 'per user';
+  if (s === 'per_user') return `per ${seatUnit(t)}`;
   if (s === 'flat') return 'per company';
   if (s === 'base_plus_seat') return 'per company with some users included, plus a fee per extra user';
   if (s === 'free') return 'nothing on its free tier, with paid plans above it';
   if (s === 'quote') return isQuoteOnly(t) ? 'by quote' : 'one-time or per-project prices';
   return 'in a way described in its pricing note';
 };
-const modelsDiffer = priceScaling(fromTool) !== priceScaling(toTool);
+const modelsDiffer = priceScaling(fromTool) !== priceScaling(toTool)
+  || (priceScaling(fromTool) === 'per_user' && seatUnit(fromTool) !== seatUnit(toTool));
 const modelCaveat = modelsDiffer
   ? ` These starting prices are not like for like: ${fromTool.name} charges ${scalingLabel(fromTool)} and ${toTool.name} charges ${scalingLabel(toTool)}, so compare them at your team size.`
   : '';
 // "$29/mo", "$39/user/mo" or "a free tier", for sentences that already say "starts at".
 const priceShort = (t: Tool) =>
-  t.pricing.starting_at_usd === 0 ? 'a free tier' : `$${t.pricing.starting_at_usd}${priceScaling(t) === 'per_user' ? '/user' : ''}/mo`;
-// When both tools charge per user, the monthly difference is per user too.
-const deltaUnit = priceScaling(fromTool) === 'per_user' && priceScaling(toTool) === 'per_user' ? ' per user' : '';
+  t.pricing.starting_at_usd === 0 ? 'a free tier' : `$${t.pricing.starting_at_usd}${priceScaling(t) === 'per_user' ? `/${seatUnit(t)}` : ''}/mo`;
+// When both tools charge per user (per the same seat), the monthly difference is per that seat too.
+const deltaUnit = priceScaling(fromTool) === 'per_user' && priceScaling(toTool) === 'per_user' && seatUnit(fromTool) === seatUnit(toTool) ? ` per ${seatUnit(fromTool)}` : '';
 const noPriceText = (t: Tool) => isQuoteOnly(t) ? `${t.name} publishes no price` : `${t.name} publishes no monthly plan (see its pricing note)`;
 
 // No tier-guessed fee: vendors at the same price differ (some include onboarding,

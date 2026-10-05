@@ -12,6 +12,7 @@ import {
   pricedEntryValues,
   perUserMedian,
   flatFeeMedian,
+  seatUnit,
 } from '../../lib/data';
 
 const breadcrumbs = [
@@ -31,6 +32,9 @@ const monthlyPricedCount = freeTierTools.length + paidTools.length;
 const lowestPaidPrice = paidTools.length ? Math.min(...paidTools.map((t) => t.pricing.starting_at_usd as number)) : null;
 const lowestPaidTools = paidTools.filter((t) => t.pricing.starting_at_usd === lowestPaidPrice);
 const lowestIsPerUser = lowestPaidTools.length > 0 && lowestPaidTools.every((t) => t.pricing.pricing_model === 'per_user' || t.pricing.pricing_model === 'annual_per_user');
+// The seat those lowest per-seat prices are charged for ('user' unless seat_unit names a
+// route or a driver); no unit when tied tools charge for different seats (2026-10-05).
+const lowestSeat = lowestIsPerUser && lowestPaidTools.every((t) => seatUnit(t) === seatUnit(lowestPaidTools[0])) ? seatUnit(lowestPaidTools[0]) : null;
 const paidUnder50 = paidTools.filter((t) => (t.pricing.starting_at_usd ?? 0) < 50).length;
 // Shared helpers, so this page and /trends-2026/ quote the same medians.
 const medianPaidStart = paidTools.length ? medianUsd(pricedEntryValues()) : null;
@@ -148,7 +152,7 @@ const pageDescription = `Starting prices for ${totalTools} field service and tra
           <div class="text-xs font-bold uppercase tracking-wider text-blue-700">Lowest paid starting price</div>
           <div class="mt-2 text-lg font-semibold text-slate-900">{lowestPaidTools.length ? listJoin(lowestPaidTools.map((t) => t.name)) : 'n/a'}</div>
           <p class="mt-1 text-sm text-slate-600">
-            {lowestPaidPrice !== null ? `From $${lowestPaidPrice}${lowestIsPerUser ? ' per user' : ''} a month. ` : ''}{paidUnder50} of the {paidTools.length} tools with a published paid starting price start under $50/month{medianPaidStart !== null ? `; the median starting price is $${medianPaidStart}/month blended across pricing models (per-user median $${perUserMedianUsd} per user a month, flat-fee median $${flatMedianUsd} a month)` : ''}. Some plans are priced per user and others per company, so compare at your team size.
+            {lowestPaidPrice !== null ? `From $${lowestPaidPrice}${lowestSeat ? ` per ${lowestSeat}` : ''} a month. ` : ''}{paidUnder50} of the {paidTools.length} tools with a published paid starting price start under $50/month{medianPaidStart !== null ? `; the median starting price is $${medianPaidStart}/month blended across pricing models (per-user median $${perUserMedianUsd} per user a month, flat-fee median $${flatMedianUsd} a month)` : ''}. Some plans are priced per user and others per company, so compare at your team size.
           </p>
         </div>
         <div>

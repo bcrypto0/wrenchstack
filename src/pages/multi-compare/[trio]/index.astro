@@ -10,6 +10,9 @@ import { asSentence,
   isQuoteOnly,
   nonMonthlyPricingOnly,
   entryPriceLabel,
+  priceScaling,
+  seatUnit,
+  formatUsd,
   type Tool,
 } from '../../../lib/data';
 import WrenchScore from '../../../components/WrenchScore.astro';
@@ -208,9 +211,14 @@ function tierCell(t: Tool, i: number): string {
   if (nonMonthlyPricingOnly(t)) return tierName;
   if (p === null || p === undefined) return `${tierName}: quote`;
   if (p === 0) return `${tierName}: free`;
-  if (t.pricing.pricing_model === 'annual_per_user') return `${tierName}: $${p} per user a year`;
-  return `${tierName}: $${p}/mo`;
+  if (t.pricing.pricing_model === 'annual_per_user') return `${tierName}: $${formatUsd(p)} per ${seatUnit(t)} a year`;
+  return `${tierName}: $${formatUsd(p)}/mo`;
 }
+
+// "A per-user price rises with every user" generalises over the three entry prices; it
+// says "per-seat ... every seat" when one of them charges per route or per driver
+// (seat_unit, 2026-10-05), since entryPriceLabel then names that seat.
+const seatWord = trioTools.every((t) => priceScaling(t) !== 'per_user' || seatUnit(t) === 'user') ? 'user' : 'seat';
 
 // --- FAQs (from data only) ---
 function cheapestAnswer(): string {
@@ -220,7 +228,7 @@ function cheapestAnswer(): string {
     return 'None of the three publishes a price. Request quotes from each for the same team size and features, and get what is included in writing.';
   }
   if (cheapest) {
-    return `${cheapest.name} has the lowest entry price of the three. Entry prices: ${labels}. A per-user price rises with every user and a company price does not, so compare them at your team size; see the pricing table.`;
+    return `${cheapest.name} has the lowest entry price of the three. Entry prices: ${labels}. A per-${seatWord} price rises with every ${seatWord} and a company price does not, so compare them at your team size; see the pricing table.`;
   }
   return `Our data cannot rank them on price. Entry prices: ${labels}.${quoteOnly.length ? ` Ask ${listNames(quoteOnly)} for a written quote at your team size.` : ''}`;
 }
@@ -252,7 +260,7 @@ const faqs = [
   },
   {
     q: `Which suits my team size?`,
-    a: `Our data puts the best team size at ${trioTools.map((t) => `${t.best_team_size ?? 'unrecorded'} for ${t.name}`).join(', ')}. Entry prices: ${trioTools.map((t) => `${t.name}, ${entryPriceLabel(t)}`).join('; ')}. A per-user price rises with every user; a company price changes when you need a bigger plan, so check each plan's user limits and price each at the team size you expect to have.`,
+    a: `Our data puts the best team size at ${trioTools.map((t) => `${t.best_team_size ?? 'unrecorded'} for ${t.name}`).join(', ')}. Entry prices: ${trioTools.map((t) => `${t.name}, ${entryPriceLabel(t)}`).join('; ')}. A per-${seatWord} price rises with every ${seatWord}; a company price changes when you need a bigger plan, so check each plan's user limits and price each at the team size you expect to have.`,
   },
 ];
 

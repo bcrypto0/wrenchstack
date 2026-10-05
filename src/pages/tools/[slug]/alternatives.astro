@@ -7,6 +7,7 @@ import {
   verticals,
   toolsForVertical,
   priceScaling,
+  seatUnit,
   isQuoteOnly,
   type Tool,
 } from '../../../lib/data';
@@ -70,11 +71,15 @@ const priceLabel = (t: Tool): string => {
   const s = priceScaling(t);
   const base = formatPrice(t);
   return s === 'per_user' && PER_INSTALL_SLUGS.has(t.slug) ? `${base} per application install`
-    : s === 'per_user' ? `${base} per user`
+    : s === 'per_user' ? `${base} per ${seatUnit(t)}`
     : s === 'flat' ? `${base} for the company`
     : s === 'base_plus_seat' ? `${base} base, plus seats`
     : base;
 };
+// "per user or per company" for sentences that generalise over the prices they name;
+// "per seat" when one of those tools prices per route or per driver (seat_unit).
+const seatWordFor = (ts: Tool[]): string =>
+  ts.every((t) => priceScaling(t) !== 'per_user' || seatUnit(t) === 'user') ? 'user' : 'seat';
 
 // "A, B and C" (and "and N more" past three), for answers that name tied tools.
 const namesList = (list: Tool[]): string => {
@@ -163,7 +168,7 @@ const faqs = [
             : ''
         }${
           lowestPriceAlts.length > 0
-            ? `On price, ${namesList(lowestPriceAlts)} ${lowestPriceAlts.length === 1 ? 'has' : 'share'} the lowest published starting price (${priceLabel(lowestPriceAlts[0])}; ${tool.name}: ${priceLabel(tool)}); starting prices can be per user or per company, so compare them at your team size. `
+            ? `On price, ${namesList(lowestPriceAlts)} ${lowestPriceAlts.length === 1 ? 'has' : 'share'} the lowest published starting price (${priceLabel(lowestPriceAlts[0])}; ${tool.name}: ${priceLabel(tool)}); starting prices can be per ${seatWordFor([lowestPriceAlts[0], tool])} or per company, so compare them at your team size. `
             : ''
         }The sections above cover other reasons to switch.`
       : `No tool we list shares a trade with ${tool.name}. See the /tools/ directory for the full list.`,
@@ -384,7 +389,7 @@ const breadcrumbs = [
             <div class="rounded-lg border border-slate-200 bg-white p-5">
               <h3 class="mb-3 font-bold text-slate-900">Lower starting price than {tool.name}</h3>
               <p class="mb-3 text-sm text-slate-600">
-                These alternatives publish a lower starting price than {tool.name} ({priceLabel(tool)}). A starting price can be per user or per company, so compare them at your team size.
+                These alternatives publish a lower starting price than {tool.name} ({priceLabel(tool)}). A starting price can be per {seatWordFor([tool, ...cheaperAlternatives])} or per company, so compare them at your team size.
               </p>
               <div class="flex flex-wrap gap-2">
                 {cheaperAlternatives.map((a) => (
