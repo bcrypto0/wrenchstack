@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, verticals, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, aiTools, paymentProcessors, financingProviders, accountingSoftware, bankingProviders } from '../lib/data';
+import { tools, verticals, verticalToUrl, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, aiTools, paymentProcessors, financingProviders, accountingSoftware, bankingProviders } from '../lib/data';
+import { reportRows, reportAsOf } from '../lib/reportLedger';
 
 // WrenchStack Fit Score™ methodology version metadata
 const METHODOLOGY_VERSION = '1.3';
@@ -104,7 +105,7 @@ const counts = {
 
 <Layout
   title="WrenchStack Fit Score™ Methodology v1.3: How we rank trades vendors"
-  description="WrenchStack's published, versioned methodology for trades vendors across 10 categories: the WrenchStack Fit Score™ (three weighted factors) for field-service software and rule-based tiers for payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI. Independence statement. Per-vendor affiliate ledger."
+  description="WrenchStack's published, versioned methodology for trades vendors across 10 categories: the WrenchStack Fit Score™ (three weighted factors) for field-service software and rule-based tiers for payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI. Independence statement. Per-vendor affiliate ledger and report ledger."
   breadcrumbs={breadcrumbs}
 >
   <article class="mx-auto max-w-3xl px-4 py-12 prose prose-slate">
@@ -241,7 +242,7 @@ const counts = {
 
     <div class="not-prose mb-6 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-5">
       <p class="text-sm text-emerald-900 leading-relaxed m-0">
-        <strong class="text-emerald-900">WrenchStack rankings are not for sale.</strong> Vendors cannot pay to be included in the directory, pay to receive a higher WrenchStack Fit Score™, pay to win awards, pay to soften reputation flags, or pay to remove cons from a review. Affiliate relationships are disclosed in the per-vendor ledger below and have no effect on rankings. The methodology applies identically whether we earn commission on a vendor or not.
+        <strong class="text-emerald-900">WrenchStack rankings are not for sale.</strong> Vendors cannot pay to be included in the directory, pay to receive a higher WrenchStack Fit Score™, pay to win awards, pay to soften reputation flags, or pay to remove cons from a review. Affiliate relationships are disclosed in the per-vendor ledger below and have no effect on rankings. Pricing benchmark reports sold to vendors are listed in the report ledger below. Whether a vendor bought a report is not an input to any listing, Fit Score, ranking, award or reputation flag, or to whether a product is listed. The methodology applies identically whether we earn commission on a vendor or not, and whether or not it bought a report.
       </p>
     </div>
 
@@ -318,7 +319,9 @@ const counts = {
     <h2 id="how-we-make-money">How we make money</h2>
 
     <p>
-      WrenchStack is reader-supported. When you click a "Visit [Tool]" button on a tool review,
+      WrenchStack earns money in two ways: affiliate commissions, described here, and pricing
+      benchmark reports sold to software vendors, described below the affiliate ledger.
+      When you click a "Visit [Tool]" button on a tool review,
       <strong>we sometimes earn an affiliate commission</strong> if you sign up for that tool,
       but only when the vendor has approved us into their affiliate program. We never get paid
       for placement, for ranking, or for inclusion in the directory. Vendors cannot buy a higher
@@ -419,14 +422,102 @@ const counts = {
       </li>
     </ul>
 
-    <h3>What we will never do</h3>
+    <h3 id="reports">Pricing benchmark reports</h3>
+
+    <p>
+      We also sell pricing benchmark reports to software vendors, including vendors listed on this site.
+      A report covers one trade: the published prices, price ladders, packaging and pricing terms of the
+      platforms on that trade page, the medians for that trade, and where the buying vendor's own published
+      price, packaging and pricing terms sit against them. It uses vendors' public pages and the data
+      published here. Each price in it is read from the vendor's own page while the report is written, where
+      that page can be read; where it cannot, the report says so and shows the page used and the date it was
+      last read. Prices re-read for a report go through the same second check of the vendor's page as routine
+      re-checks and are updated on the site for every platform in that trade, buyer or not, no later than the
+      day the report is delivered. A report does not explain or recalculate any Fit
+      Score and does not say how any vendor could change its position. Whether a product publishes a price is
+      one of the three Fit Score factors (pricing transparency, 20%, above); the report describes published
+      pricing for every platform, the buyer's included, and computes no score. We do not quote, invoice or
+      take an order while an evaluation, correction, pricing question, dispute or reputation-flag review is
+      open with a vendor, or within 30 days after the latest listing verdict, correction or reputation-flag
+      email we sent it. One price applies to every vendor and every trade; it is on the
+      <a href="/for-vendors/#reports">vendor page</a>, and the <a href="/report-terms/">report terms</a> apply.
+    </p>
+
+    <p class="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm not-prose">
+      <strong class="text-emerald-900">Buying a report doesn't affect ranking.</strong>
+      Whether a vendor bought a report is not an input to any listing, Fit Score, ranking, award or
+      reputation flag, or to whether a product is listed. The WrenchStack Fit Score™ (vertical fit + pricing
+      transparency + integration coverage) is computed the same way for every vendor. The ledger below shows
+      each buyer's Fit Score, rank, award and reputation flag when it ordered and today, so anyone can check.
+    </p>
+
+    <h3 id="report-ledger">Report ledger</h3>
+
+    <p>
+      Every pricing benchmark report sold is listed here, including refunded orders. "When ordered" is the
+      product's Fit Score and rank on that trade page, its award or honorable mention, and any reputation flag
+      on the company's WrenchStack entries, on the day we sent the invoice; the buyer's invoice states the same
+      figures. "Today" is computed from the current data, the same way as the affiliate ledger above. Where
+      the two differ, the note gives each cause with its date: a methodology version in the
+      <a href="#changelog">changelog</a>; a change on the buyer's own public page; a WrenchStack data
+      correction, and whether it came from report work; changes to other platforms on the trade page (see the
+      <a href="/verification-log/">verification log</a>); an award or reputation-flag change; or a product
+      listed after it ordered. Until a cause is recorded, the note says so. The note also records the price
+      re-read made for the report and any change to the buyer's own listing between invoice and delivery.
+    </p>
+
+    {reportRows.length === 0 ? (
+      <p class="not-prose rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+        No reports sold as of {reportAsOf}.
+      </p>
+    ) : (
+      <div class="not-prose mt-4 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-slate-200 bg-slate-50 text-left text-slate-700">
+              <th class="px-3 py-2 font-semibold">Vendor and product</th>
+              <th class="px-3 py-2 font-semibold">Trade</th>
+              <th class="px-3 py-2 font-semibold">Paid</th>
+              <th class="px-3 py-2 font-semibold">Price</th>
+              <th class="px-3 py-2 font-semibold">When ordered</th>
+              <th class="px-3 py-2 font-semibold">Today</th>
+              <th class="px-3 py-2 font-semibold">Status</th>
+              <th class="px-3 py-2 font-semibold">Note</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            {reportRows.map((r) => (
+              <tr>
+                <td class="px-3 py-2">{r.company}{r.tool && (<>: <a href={`/tools/${r.slug}/`} class="font-medium text-slate-900 hover:text-orange-600">{r.tool.name}</a></>)}</td>
+                <td class="px-3 py-2"><a href={`/${verticalToUrl(r.trade)}/`} class="hover:text-orange-600">{r.tradeName}</a></td>
+                <td class="px-3 py-2">{r.paidLabel}</td>
+                <td class="px-3 py-2">${r.price_usd}</td>
+                <td class="px-3 py-2">{r.atOrder}</td>
+                <td class="px-3 py-2">{r.today}</td>
+                <td class="px-3 py-2">{r.status}</td>
+                <td class="px-3 py-2 text-slate-600">{r.noteText}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+
+    <p>
+      Questions about independence, including a claim that a report sale affected a listing, go to
+      <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a> with the page URL. Each one gets a
+      written reply, and a confirmed problem is corrected on the page and noted in this ledger.
+    </p>
+
+    <h3>What we do not do</h3>
 
     <ul>
       <li>Accept payment for placement in a "best of" list</li>
       <li>Accept payment to raise a tool's WrenchStack Score</li>
       <li>Accept payment to omit or soften cons in a tool review</li>
       <li>Hide an affiliate relationship: every tool's status is on this page</li>
-      <li>Recommend a tool we wouldn't recommend if no commission existed</li>
+      <li>Hide a report sale: every pricing benchmark report sold to a vendor is in the report ledger on this page</li>
+      <li>Recommend a tool we wouldn't recommend if no commission or report sale existed</li>
     </ul>
 
     <h2>Where pricing data comes from</h2>

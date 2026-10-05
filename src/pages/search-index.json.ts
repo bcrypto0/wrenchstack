@@ -212,7 +212,7 @@ export const GET: APIRoute = () => {
     { name: 'Multi-tool Comparisons', url: '/multi-compare/', tagline: 'Three-way tool comparisons for specific buyer segments' },
     { name: 'Features', url: '/features/', tagline: 'Browse tools by specific feature (QuickBooks, GPS tracking, etc.)' },
     { name: 'About WrenchStack', url: '/about/', tagline: 'Who we are and why this directory exists' },
-    { name: 'Contact', url: '/contact/', tagline: 'Get in touch: vendor corrections, partnership inquiries' },
+    { name: 'Contact', url: '/contact/', tagline: 'Get in touch: vendor corrections, listings, report orders, press' },
   ];
 
   for (const p of utilityPages) {

@@ -1,0 +1,149 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Pricing benchmark report terms (offers/pricing-benchmark/decisions/site_copy.md D).
+// This text departs from site_copy.md D on 5 October 2026, and site_copy.md D needs
+// the same edits before it is the single source again: clause 9 (invoice paid by
+// bank transfer, USD wire, to the account named on the invoice; route change in
+// decisions/route/ROUTE.md), clause 10 (refunds by USD wire), clause 1
+// (delivery counted from the day the payment arrives, because a wire's arrival date
+// is not known when the invoice is sent) and clause 4 (re-read prices go through
+// the same second check as routine re-checks, DECISIONS.md decision 6). Whether the
+// full refund in clause 10 stays as written at wire cost, and who bears
+// intermediary-bank charges, is the owner's decision before invoice 1. Seller line: clause 1
+// gets one line naming the seller only after the Ministry of Finance registration
+// and the Saudi lawyer's written answer (DECISIONS.md decision 6); until then the
+// terms name no seller. DEPLOY: set lastUpdated to the deploy date (en-US) in the
+// deploy commit; it holds the date the text was written until then.
+const lastUpdated = 'October 5, 2026';
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Pricing benchmark report terms', url: '/report-terms/' },
+];
+---
+
+<Layout
+  title="Pricing benchmark report terms | WrenchStack"
+  description="The terms for WrenchStack pricing benchmark reports sold to software vendors: what you buy, sources and dates, independence, public listing of the sale, use, refunds and liability."
+  breadcrumbs={breadcrumbs}
+>
+  <article class="mx-auto max-w-3xl px-4 py-12">
+    <header class="mb-8">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">Legal</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Pricing benchmark report terms</h1>
+      <p class="mt-3 text-sm text-slate-500">Last updated: {lastUpdated}</p>
+    </header>
+
+    <section class="prose prose-slate max-w-none">
+      <p>
+        These terms apply to every WrenchStack pricing benchmark report. They apply together with our
+        <a href="/terms/">Terms of Use</a>; where the two differ, these terms apply.
+      </p>
+
+      <h2>1. What you buy</h2>
+      <p>
+        One report on one WrenchStack trade page, in English, emailed as a PDF to the address on the invoice by
+        the delivery date. The delivery date falls the number of business days stated on the invoice after the day
+        your payment arrives. The report covers the platforms on that trade page on the day it
+        is written, and places your product's published price, packaging and pricing terms against them.
+        Questions go by email to <a href="mailto:bilal@wrenchstack.com">bilal@wrenchstack.com</a>; there are no
+        calls or meetings.
+      </p>
+
+      <h2>2. Sources</h2>
+      <p>
+        The report uses vendors' public pages and what WrenchStack already publishes. Information another vendor
+        sent us privately is not included unless it already appears on that vendor's WrenchStack listing. Each
+        published price is read from the vendor's own page while the report is written, where that page can be
+        read. Where it cannot, the report says so and shows the page used and the date it was last read.
+      </p>
+
+      <h2>3. Dates</h2>
+      <p>
+        Each figure is as read on the date it shows. Prices and terms change, and the report is not updated after
+        delivery.
+      </p>
+
+      <h2>4. Independence</h2>
+      <p>
+        Whether you bought a report is not an input to any WrenchStack listing, Fit Score, ranking, award or
+        reputation flag, or to whether a product is listed. Buying a report gives no preview of what we publish,
+        no advance notice of changes and no say over what we publish. The report does not explain or recalculate
+        any Fit Score and does not say how any vendor could change its position. Whether a product publishes a
+        price is one of the three Fit Score factors (pricing transparency, 20%, set out on our
+        <a href="/methodology/">methodology page</a>); the report describes published pricing for every platform,
+        yours included, and computes no score. Prices we re-read for a report go through the same second check of
+        the vendor's page as routine re-checks and are updated on WrenchStack for every platform on that trade
+        page, buyer or not, no later than the day the report is delivered.
+      </p>
+      <p>
+        We do not quote a price, send an invoice or take an order while an evaluation, correction, pricing
+        question, dispute or reputation-flag review is open between your company and us, or within 30 days after
+        the latest listing verdict, correction or reputation-flag email we sent you. If one of these opens after
+        you have paid, it follows our normal process and timeline, your order continues, and the report ledger
+        notes it and its outcome. A claim that a report sale affected a listing goes to
+        <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a> with the page URL; each one gets a written
+        reply, and a confirmed problem is corrected on the page and noted in the report ledger.
+      </p>
+
+      <h2>5. Public listing of the sale</h2>
+      <p>
+        We list each sale in the report ledger on
+        <a href="/methodology/#report-ledger">wrenchstack.com/methodology/</a>: your company and product, the
+        trade, the month of payment, the price paid, the order status, and your product's Fit Score, rank, award
+        and reputation flag on that trade page when you ordered and today, with the cause of any difference. The
+        figures from when you ordered are also stated on your invoice. The sale is also noted on your product's
+        tool page and counted on the trade pages that list your product. Refunded orders stay listed. The
+        report's cover states that your company paid for it and did not review or approve its contents.
+      </p>
+
+      <h2>6. Use</h2>
+      <p>
+        The report is for internal use by your company and its advisers. Without our written permission, do not
+        publish it, resell it, share it outside your company, or quote it in advertising, sales material or
+        comparisons with named competitors, and do not present it as a WrenchStack endorsement, ranking or award.
+      </p>
+
+      <h2>7. No warranty</h2>
+      <p>
+        The report is information, not legal, financial or pricing advice. It is provided as is, without any
+        warranty of accuracy or completeness and without a guarantee of any result.
+      </p>
+
+      <h2>8. Corrections</h2>
+      <p>
+        If a figure differed from its source on the date shown, tell us by email within 30 days of delivery, with
+        the source. If we confirm the error, we send a corrected PDF and make the same correction on the site.
+      </p>
+
+      <h2>9. Payment</h2>
+      <p>
+        Payment is by invoice in US dollars, due on receipt, by bank transfer (USD wire) to the account named on
+        the invoice. Work starts when the funds arrive in that account. We add no fee. Each party pays its own
+        bank's charges.
+      </p>
+
+      <h2>10. Cancellation and refunds</h2>
+      <p>
+        You can cancel for a full refund at any time before delivery, and also if we have not delivered by the
+        delivery date in clause 1. A refund is sent by bank transfer (USD wire) to the account you name, and
+        each party pays its own bank's charges. After delivery there is no refund, unless the report covers a
+        different trade from the one ordered. A refund is not given because of anything WrenchStack publishes on
+        its site.
+      </p>
+
+      <h2>11. Liability</h2>
+      <p>
+        Our total liability for a report is limited to the amount you paid for it. We are not liable for indirect
+        or consequential loss or for lost profit. Nothing in these terms limits liability that the law does not
+        allow to be limited.
+      </p>
+
+      <h2>12. Changes</h2>
+      <p>
+        We may change these terms. The version in force on the date of your invoice applies to your order.
+      </p>
+    </section>
+  </article>
+</Layout>

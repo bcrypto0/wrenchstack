@@ -90,7 +90,7 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
     <section class="mb-10 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-emerald-900">What inclusion means (and doesn't)</h2>
       <ul class="space-y-2 text-sm text-emerald-900 leading-relaxed">
-        <li><strong>✓ Inclusion is editorial.</strong> We evaluate, write, and publish, independent of whether you have an affiliate program or sponsor placements.</li>
+        <li><strong>✓ Inclusion is editorial.</strong> We evaluate, write, and publish the same way whether or not you have an affiliate program, and whether or not you buy a pricing benchmark report from us.</li>
         <li><strong>✓ Same methodology applies.</strong> Your listing follows the same rules as every other vendor in your category, and field-service software is ranked with the same WrenchStack Fit Score™ formula.</li>
         <li><strong>✓ Affiliate relationships disclosed.</strong> If you run a program we join, it's flagged in our per-vendor ledger. Recommendation isn't conditional on it.</li>
         <li><strong>✗ Inclusion does not guarantee a positive review.</strong> If our research finds a regulator order, court record, BBB complaint record or contract term that puts contractors at risk, the review documents it with citations.</li>
@@ -279,23 +279,92 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
         </details>
         <details class="rounded-lg border border-slate-200 bg-white p-4">
           <summary class="cursor-pointer font-semibold text-slate-900">Can I update my listing after publication?</summary>
-          <p class="mt-3 text-sm text-slate-700">Yes. For factual updates (pricing changes, new features, new integrations, geographic expansion), email <a href="mailto:partners@wrenchstack.com" class="text-orange-600 hover:underline">partners@wrenchstack.com</a> with documentation. Pricing is verified on a monthly cycle, as the <a href="/methodology/" class="text-orange-600 hover:underline">methodology</a> sets out, and documented factual updates are applied once confirmed.</p>
+          <p class="mt-3 text-sm text-slate-700">Yes. For factual updates (pricing changes, new features, new integrations, geographic expansion), email <a href="mailto:partners@wrenchstack.com" class="text-orange-600 hover:underline">partners@wrenchstack.com</a> with documentation. Pricing is verified on a monthly cycle, as the <a href="/methodology/" class="text-orange-600 hover:underline">methodology</a> sets out, and documented factual updates are applied once confirmed. Buying a report is not needed for this.</p>
         </details>
         <details class="rounded-lg border border-slate-200 bg-white p-4">
           <summary class="cursor-pointer font-semibold text-slate-900">Do you cover international vendors?</summary>
           <p class="mt-3 text-sm text-slate-700">Yes. Alongside US coverage, we run {intlMarkets} international markets: the UK, Canada, Australia, New Zealand, Ireland, the six GCC states, South Africa, France, Morocco, Jordan, Egypt and Malaysia, with Arabic-language pages for the UAE, Saudi Arabia, Kuwait, Qatar, Jordan and Egypt, and French-language pages for France and Morocco. International entries are shorter profiles than US reviews. Non-US vendors are welcome to submit; the editorial timeline depends on category readiness in your market.</p>
         </details>
+        <details class="rounded-lg border border-slate-200 bg-white p-4">
+          <summary class="cursor-pointer font-semibold text-slate-900">Does buying a pricing benchmark report affect my listing?</summary>
+          <p class="mt-3 text-sm text-slate-700">No. Whether a vendor bought a report is not an input to any listing, Fit Score, ranking, award or reputation flag, or to whether a product is listed. Each sale is listed in the <a href="/methodology/#report-ledger" class="text-orange-600 hover:underline">report ledger</a> with the buyer's Fit Score, rank, award and reputation flag when it ordered and today, so anyone can check. See <a href="#reports" class="text-orange-600 hover:underline">pricing benchmark reports</a>.</p>
+        </details>
+      </div>
+    </section>
+
+    {/* Pricing benchmark reports (offers/pricing-benchmark/decisions/site_copy.md A2). This text departs from
+        site_copy.md A2 in three places, on 5 October 2026: payment is by invoice paid by USD wire
+        (route change, decisions/route/ROUTE.md); the invoice states the delivery time counted from
+        the day the payment arrives, because a wire's arrival date is not known when the invoice is sent;
+        and re-read prices go through the same second check as routine re-checks (DECISIONS.md decision 6,
+        as-of rule). site_copy.md A2 and D still need the same edits before they are the single source again. */}
+    <section id="reports" class="mb-10 scroll-mt-8">
+      <h2 class="mb-3 text-2xl font-bold text-slate-900">Pricing benchmark reports</h2>
+      <p class="text-sm font-semibold text-slate-900 leading-relaxed">
+        Buying a report is separate from a listing. The submission form above is free and does not depend on it.
+      </p>
+      <p class="mt-3 text-sm text-slate-700 leading-relaxed">
+        A pricing benchmark report shows where your product's published price and packaging sit against the other platforms on one of our trade pages. It is written from vendors' public pages and our published data. Each price in it is read from the vendor's own page while the report is written, where that page can be read; where it cannot, the report says so and shows the page used and the date it was last read. Every price carries the date it was read.
+      </p>
+
+      <div class="mt-5 grid gap-4 md:grid-cols-2">
+        <div class="rounded-lg border border-slate-200 bg-white p-5">
+          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-orange-600">What it contains</div>
+          <ul class="list-disc space-y-1 pl-5 text-sm text-slate-700 leading-relaxed">
+            <li>Every platform on our page for that trade, in page order, with its published starting price, its pricing model (per seat, per company, base plus users, free tier or quote only), the billing term behind that price and the date the price was read.</li>
+            <li>Each platform's price ladder: tier prices, the users each tier includes, added-user prices and which tiers are priced by quote.</li>
+            <li>What each pricing page puts in a higher tier or prices separately (accounting, routing, texting and phone, AI, customer portal, payments, fleet tracking), and the setup fees and contract terms the pages state.</li>
+            <li>What the quote-only platforms say their quote is based on.</li>
+            <li>The medians for that trade, overall and by pricing model, with the number of platforms behind each figure.</li>
+            <li>Your product's published price, packaging and pricing terms placed against the field, from your public pages and your WrenchStack listing.</li>
+          </ul>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-5">
+          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-orange-600">Price, delivery and ordering</div>
+          <ul class="list-disc space-y-1 pl-5 text-sm text-slate-700 leading-relaxed">
+            <li><strong>$249 per report</strong>, for one trade, in US dollars. The same price for every vendor and every trade.</li>
+            <li>A PDF in English, delivered by email. The invoice states the delivery time in business days, counted from the day your payment arrives. You can cancel for a full refund until the report is delivered, and also if it is late. A refund is sent by bank transfer (USD wire) to the account you name; each party pays its own bank's charges.</li>
+            <li>Questions go by email. There are no calls or meetings.</li>
+            <li>To order, email <a href="mailto:bilal@wrenchstack.com?subject=Report%20order" class="text-orange-600 hover:underline">bilal@wrenchstack.com</a> with a subject starting "Report order", your product name, the trade and the email address for the invoice. We reply with an invoice that states the delivery time and your product's Fit Score, rank, award and reputation flag on that trade page that day. The invoice is paid by bank transfer (USD wire) to the account named on it, due on receipt. We add no fee; each party pays its own bank's charges. Work starts when the funds arrive.</li>
+            <li>We do not quote, invoice or take an order while an evaluation, a correction, a pricing question, a dispute or a reputation-flag review is open between your company and us, or within 30 days after the latest listing verdict, correction or reputation-flag email we sent you. If you ask during that time, we reply with the date from which we can take the order, or with this rule if that date is not yet known.</li>
+            <li>To see the format first, ask the same address for the sample: a pest control excerpt covering 6 platforms, with the vendor section shown as a template.</li>
+            <li>Every report is sold under the <a href="/report-terms/" class="text-orange-600 hover:underline">report terms</a>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-4 rounded-lg border border-slate-200 bg-white p-5">
+        <div class="mb-2 text-xs font-bold uppercase tracking-wider text-orange-600">What it is not</div>
+        <ul class="list-disc space-y-1 pl-5 text-sm text-slate-700 leading-relaxed">
+          <li>Not a listing, and not a route to one.</li>
+          <li>Not a ranking change, a Fit Score change or an award.</li>
+          <li>Not a review of your product.</li>
+          <li>Not a consulting call, and not advice on how to rank on WrenchStack.</li>
+          <li>Not a forecast or a guarantee of any result.</li>
+        </ul>
+      </div>
+
+      <div class="mt-4 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-6">
+        <h3 class="mb-3 text-lg font-bold text-emerald-900">How reports are kept apart from rankings</h3>
+        <ul class="space-y-2 text-sm text-emerald-900 leading-relaxed">
+          <li><strong>✓ Not an input.</strong> Whether a vendor bought a report is not an input to any listing, Fit Score, ranking, award or reputation flag, or to whether a product is listed. No vendor pays for placement or scores.</li>
+          <li><strong>✓ Every sale is public.</strong> Each sale is listed in the <a href="/methodology/#report-ledger" class="underline">report ledger</a>: company and product, trade, month, price, order status, and the product's Fit Score, rank, award and reputation flag when it ordered and today, with the cause of any difference. Refunded orders stay listed. The buyer's tool page notes the order, and each trade page that lists the buyer counts it.</li>
+          <li><strong>✓ Same data for everyone.</strong> Prices we re-read while writing a report go through the same second check of the vendor's page as routine re-checks and are updated on the site for every platform in that trade, buyer or not, no later than the day the report is delivered. What we find on a vendor's own pages is corrected on that vendor's WrenchStack listing, with the date, whether or not it buys.</li>
+          <li><strong>✗ No inside track.</strong> A buyer gets no preview of anything we publish, no advance notice of ranking changes and no say over what we publish.</li>
+          <li><strong>✗ No ranking advice.</strong> A report does not explain or recalculate any Fit Score and does not say how any vendor could change its position. Whether a product publishes a price is one of the three Fit Score factors (pricing transparency, 20%, set out on the <a href="/methodology/" class="underline">methodology page</a>); the report describes published pricing for every platform, the buyer's included, and computes no score.</li>
+          <li><strong>✗ No sale during an open editorial matter.</strong> We do not take an order while an evaluation, correction, pricing question, dispute or reputation-flag review with that vendor is open, or within 30 days after the latest verdict, correction or reputation-flag email we sent it.</li>
+        </ul>
       </div>
     </section>
 
     <section class="rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Questions before submitting?</h2>
       <p class="mt-2 text-slate-300 leading-relaxed">
-        Read the WrenchStack Fit Score™ methodology to understand how we evaluate vendors. Browse existing reviews in your category to see what published editorial looks like. Or email the partnerships desk directly.
+        Read the WrenchStack Fit Score™ methodology to understand how we evaluate vendors. Browse existing reviews in your category to see what published editorial looks like. Or email partners@wrenchstack.com directly.
       </p>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href="/methodology/" class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">Read methodology →</a>
-        <a href="mailto:partners@wrenchstack.com" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Email partnerships desk</a>
+        <a href="mailto:partners@wrenchstack.com" class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Email partners@wrenchstack.com</a>
         <a href="/about/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">About WrenchStack</a>
       </div>
     </section>

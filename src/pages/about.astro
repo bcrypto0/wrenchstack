@@ -53,7 +53,7 @@ const organizationSchema = {
   contactPoint: [
     { '@type': 'ContactPoint', contactType: 'editorial', email: 'hello@wrenchstack.com' },
     { '@type': 'ContactPoint', contactType: 'press', email: 'press@wrenchstack.com' },
-    { '@type': 'ContactPoint', contactType: 'partnerships', email: 'partners@wrenchstack.com' },
+    { '@type': 'ContactPoint', contactType: 'vendor listings', email: 'partners@wrenchstack.com' },
   ],
 };
 ---
@@ -105,23 +105,28 @@ const organizationSchema = {
       </p>
 
       <p>
-        Our editorial position is uncomplicated: contractors deserve evaluation that's not paid for by the vendors being evaluated. The same rules apply to every vendor in a category, whether we have an active affiliate relationship, a pending application, or no commercial alignment at all. Reputation flags are attached only where a regulator order, court record, BBB profile or the vendor's own terms supports them, regardless of whether a flagged vendor pays us anything.
+        Our editorial position is uncomplicated: contractors deserve evaluation that's not paid for by the vendors being evaluated. The same rules apply to every vendor in a category, whether we have an active affiliate relationship, a pending application, or no commercial alignment at all. Reputation flags are attached only where a regulator order, court record, BBB profile or the vendor's own terms supports them, regardless of whether a flagged vendor pays us anything. Some vendors buy pricing benchmark reports from us. Whether a vendor bought a report is not an input to any listing, Fit Score, ranking, award or reputation flag, or to whether a product is listed, and every buyer is listed in the <a href="/methodology/#report-ledger">report ledger</a>.
       </p>
 
       <h2>Why this exists</h2>
 
       <p>
-        The trades-vendor evaluation market is fragmented between two structurally compromised models. Lead-generation directories (Capterra, G2, Software Advice, BeltStack, ContractorNerd) monetize by routing contractor inquiries to vendors who pay for placement, which means stale data, hidden pricing behind sales-call walls, and rankings that correlate with bid amount rather than product fit. Vendor-published comparisons (Housecall Pro vs Jobber pages, Workyard's "best HVAC software" rankings) put the publishing vendor at #1 by definition.
+        A contractor comparing software should be able to see who pays whom. WrenchStack sells no placement
+        and no leads, vendors cannot pay for a higher score or an award, and our affiliate status with every
+        software tool and every pricing benchmark report sale are listed on the
+        <a href="/methodology/">methodology page</a>.
       </p>
 
       <p>
-        Neither model produces evaluation a contractor researching software at 11pm after a 10-hour install day can actually trust. WrenchStack is what the third option looks like: independent research with published methodology, transparent monetization, and honest reputation flags on vendors with documented patterns of contractor-hostile behavior.
+        What we publish instead: a versioned methodology, prices that show the date they were last verified,
+        and reputation flags only where a regulator order, court record, BBB profile or the vendor's own terms
+        supports them.
       </p>
 
       <h2>Editorial structure</h2>
 
       <p>
-        WrenchStack operates as a research desk with clear editorial roles, even where roles consolidate in early operations:
+        WrenchStack is run by one person today, who holds each of these roles:
       </p>
 
       <ul class="not-prose space-y-3">
@@ -139,7 +144,7 @@ const organizationSchema = {
         </li>
         <li class="rounded-lg border border-slate-200 bg-white p-4">
           <div class="font-semibold text-slate-900">Vendor Relations</div>
-          <div class="text-sm text-slate-600 mt-1">Manages vendor outreach, affiliate program applications, sponsored placement disclosures, and editorial correction requests. Operates separately from editorial decisions.</div>
+          <div class="text-sm text-slate-600 mt-1">Vendor correspondence, affiliate program applications, pricing benchmark report orders and correction requests. Held by the same person as the editorial roles; the safeguards are in the method, set out in our <a href="/editorial-standards/" class="text-orange-600 hover:underline">editorial standards</a>.</div>
         </li>
       </ul>
 
@@ -174,7 +179,7 @@ const organizationSchema = {
         <li><strong>{insuranceCount} insurance providers</strong>, each showing how it is sold (online, through agents, or both), with per-trade buyer guides</li>
         <li><strong>{payrollCount} payroll services</strong> with company-size guides (1-5, 6-20, 20+ employees)</li>
         <li><strong>{agencyCount} marketing agencies</strong> with trade-specific specialists flagged and documented lock-in contract warnings</li>
-        <li><strong>Methodology page</strong> with version number, effective date, scoring rubric, evaluation timeline, and per-vendor affiliate ledger</li>
+        <li><strong>Methodology page</strong> with version number, effective date, scoring rubric, evaluation timeline, per-vendor affiliate ledger and report ledger</li>
         <li><strong>WrenchStack Awards 2026</strong>: {awardCount} editorial designations, published {awardsPublished}, no paid placement; chosen when the Fit Score still included third-party review ratings and not re-selected since (see the methodology changelog)</li>
         <li><strong>Comparison pages</strong>: head-to-head pages for pairs of tools that share a trade (CMMS tools are compared with each other), three-way comparisons, and a builder for comparing several tools at once</li>
       </ul>
@@ -193,7 +198,8 @@ const organizationSchema = {
         <li>Accept payment to omit or soften cons in a vendor review</li>
         <li>Accept payment to remove a reputation_flag warning</li>
         <li>Hide an affiliate relationship: every software vendor's status is on the <a href="/methodology/#affiliate-ledger">methodology page ledger</a>, and reviews in the other {categoryCount - 1} categories state it on the page</li>
-        <li>Recommend a vendor we wouldn't recommend if no commission existed</li>
+        <li>Hide a report sale: every pricing benchmark report sold to a vendor is in the <a href="/methodology/#report-ledger">report ledger</a></li>
+        <li>Recommend a vendor we wouldn't recommend if no commission or report sale existed</li>
         <li>Gate pricing data behind a sales call</li>
         <li>Publish "experts agree" content with no editorial accountability</li>
       </ul>
@@ -212,7 +218,8 @@ const organizationSchema = {
 
       <ul>
         <li><strong>General questions, corrections:</strong> <a href="mailto:hello@wrenchstack.com">hello@wrenchstack.com</a></li>
-        <li><strong>Vendor partnerships, affiliate inquiries:</strong> <a href="mailto:partners@wrenchstack.com">partners@wrenchstack.com</a></li>
+        <li><strong>Vendor listings, affiliate inquiries:</strong> <a href="mailto:partners@wrenchstack.com">partners@wrenchstack.com</a></li>
+        <li><strong>Pricing benchmark report orders:</strong> <a href="mailto:bilal@wrenchstack.com?subject=Report%20order">bilal@wrenchstack.com</a></li>
         <li><strong>Press, media, syndication:</strong> <a href="mailto:press@wrenchstack.com">press@wrenchstack.com</a></li>
       </ul>
 

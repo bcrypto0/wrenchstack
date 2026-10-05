@@ -9,7 +9,13 @@ const breadcrumbs = [
 // Response-time promises ("48 hours", "5 business days", "2-3 weeks", "3 business
 // days") and the press offer of interviews were removed on 2026-10-01: they were
 // commitments, not facts, and WrenchStack answers press questions in writing.
-const inboxes = [
+const inboxes: {
+  address: string;
+  subject?: string;
+  role: string;
+  detail: string;
+  link?: { href: string; text: string };
+}[] = [
   {
     address: 'hello@wrenchstack.com',
     role: 'General inquiries, corrections, suggestions',
@@ -17,8 +23,16 @@ const inboxes = [
   },
   {
     address: 'partners@wrenchstack.com',
-    role: 'Vendor partnerships, affiliate programs',
-    detail: 'Software vendors interested in partnership with WrenchStack. We run affiliate links only for tools we would recommend to readers without a commission.',
+    role: 'Vendor listings, affiliate programs',
+    detail: 'Software vendors asking about a listing or an affiliate program. We run affiliate links only for tools we would recommend to readers without a commission.',
+  },
+  // Added with the pricing benchmark report offer (site_copy.md C1, C3 and C7; not live until gate B1).
+  {
+    address: 'bilal@wrenchstack.com',
+    subject: 'Report order',
+    role: 'Pricing benchmark report orders',
+    detail: 'Software vendors ordering a pricing benchmark report. Start the subject with "Report order". Whether a vendor bought a report is not an input to any listing, Fit Score, ranking, award or reputation flag, or to whether a product is listed.',
+    link: { href: '/for-vendors/#reports', text: 'Price, rules and report terms' },
   },
   {
     address: 'press@wrenchstack.com',
@@ -49,7 +63,7 @@ const policies = [
 
 <Layout
   title="Contact WrenchStack: inboxes and editorial policies"
-  description="Three inboxes for different types of inquiries: corrections, partnerships, and press. Editorial policies on corrections, ranking disputes, removal requests, and off-record context."
+  description="Contact addresses for corrections, vendor listings, pricing benchmark report orders and press. Editorial policies on corrections, ranking disputes, removal requests, and off-record context."
   breadcrumbs={breadcrumbs}
 >
   <article class="mx-auto max-w-3xl px-4 py-12">
@@ -59,7 +73,7 @@ const policies = [
         Get in touch
       </h1>
       <p class="mt-4 text-lg text-slate-600">
-        Three inboxes for different types of inquiries. Picking the right one gets your message to the right place.
+        WrenchStack is run by one person. Use the address that fits your question.
       </p>
     </header>
 
@@ -67,13 +81,16 @@ const policies = [
       {inboxes.map((i) => (
         <div class="rounded-lg border border-slate-200 bg-white p-5">
           <a
-            href={`mailto:${i.address}`}
+            href={`mailto:${i.address}${i.subject ? `?subject=${encodeURIComponent(i.subject)}` : ''}`}
             class="text-lg font-semibold text-orange-600 hover:underline"
           >
             {i.address}
           </a>
           <div class="mt-1 text-sm font-medium text-slate-700">{i.role}</div>
-          <p class="mt-2 text-sm text-slate-700 leading-relaxed">{i.detail}</p>
+          <p class="mt-2 text-sm text-slate-700 leading-relaxed">
+            {i.detail}
+            {i.link && (<> <a href={i.link.href} class="text-orange-600 hover:underline">{i.link.text}</a>.</>)}
+          </p>
         </div>
       ))}
     </section>
@@ -94,7 +111,7 @@ const policies = [
 
     <section class="mt-12 rounded-lg bg-slate-50 p-6 text-sm text-slate-600">
       <p>
-        Looking for ranking methodology or affiliate disclosure? See the <a href="/methodology/" class="text-orange-600 hover:underline">methodology page</a> for the full WrenchStack Fit Score formula and per-tool affiliate status ledger.
+        Looking for ranking methodology or affiliate disclosure? See the <a href="/methodology/" class="text-orange-600 hover:underline">methodology page</a> for the full WrenchStack Fit Score formula, the per-tool affiliate status ledger and the report ledger.
       </p>
     </section>
   </article>

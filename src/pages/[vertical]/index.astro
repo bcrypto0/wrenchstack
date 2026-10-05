@@ -18,6 +18,7 @@ import { asSentence,
 import Byline from '../../components/Byline.astro';
 import WrenchScore from '../../components/WrenchScore.astro';
 import ToolLogo from '../../components/ToolLogo.astro';
+import { reportBuyerCount } from '../../lib/reportLedger';
 
 export async function getStaticPaths() {
   // A trade with no tools would publish an empty ranking and a "pricing verified"
@@ -34,6 +35,7 @@ interface Props {
 
 const { vertical } = Astro.props;
 const ranked: Tool[] = rankToolsForVertical(vertical.slug);
+const reportBuyers = reportBuyerCount(ranked);
 
 // Compute most recent verified date across tools shown
 const verifiedDates = ranked.map(t => t.pricing.verified_date).filter(Boolean).sort();
@@ -477,6 +479,12 @@ const breadcrumbs = [
       <p class="mt-2 text-xs text-slate-500">
         No vendor pays for placement or for a score. <a href="/methodology/" class="underline hover:text-slate-700">How we rank →</a>
       </p>
+      {reportBuyers > 0 && (
+        <p class="mt-1 text-xs text-slate-500">
+          {reportBuyers} {reportBuyers === 1 ? 'vendor listed on this page has' : 'vendors listed on this page have'} ordered a WrenchStack pricing benchmark report. Whether a vendor bought a report is not an input to any listing, Fit Score, ranking, award or reputation flag, or to whether a product is listed.
+          <a href="/methodology/#report-ledger" class="underline hover:text-slate-700">Report ledger</a>.
+        </p>
+      )}
     </section>
 
     <section class="mb-12 prose prose-slate max-w-none">
