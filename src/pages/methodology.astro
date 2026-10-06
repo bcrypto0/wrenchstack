@@ -474,12 +474,14 @@ const counts = {
     </p>
 
     <p>
-      <strong>Report announcements.</strong> On dates set in advance we email a short announcement of the
-      report, and only to vendors that contacted us first about a listing, are listed, have no evaluation,
-      correction, pricing question, dispute or reputation-flag review open with us, and received no listing
-      verdict, correction or reputation-flag email from us in the previous 30 days. Each vendor gets at most
-      one announcement and no follow-up, and can opt out by replying. The email does not mention the vendor's
-      Fit Score, rank, award or verdict. Dates and the number of vendors emailed:
+      <strong>Report announcements.</strong> On dates set in advance we email a one-time announcement of the
+      report to software vendors listed on our trade pages: vendors that contacted us first about a listing,
+      and US-based software vendors on our trade pages that have not. A vendor is skipped if it has an
+      evaluation, correction, pricing question, dispute or reputation-flag review open with us, or received a
+      listing verdict, correction or reputation-flag email from us in the previous 30 days. Each vendor gets at
+      most one announcement and no follow-up, and can opt out by replying. The email does not mention the
+      vendor's Fit Score, rank, award or verdict, and whether a vendor received it, replied or bought is not an
+      input to any listing. Dates and the number of vendors emailed:
       {reportAnnouncements.map((a, i) => (
         <>{i > 0 && '; '}{a.label}, {a.sent === null ? 'not yet sent' : `${a.sent} ${a.sent === 1 ? 'vendor' : 'vendors'}`}</>
       ))}.
