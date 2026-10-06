@@ -2,20 +2,19 @@
 import Layout from '../layouts/Layout.astro';
 
 // Pricing benchmark report terms (offers/pricing-benchmark/decisions/site_copy.md D).
-// This text departs from site_copy.md D on 5 October 2026, and site_copy.md D needs
-// the same edits before it is the single source again: clause 9 (invoice paid by
-// bank transfer, USD wire, to the account named on the invoice; route change in
-// decisions/route/ROUTE.md), clause 10 (refunds by USD wire), clause 1
-// (delivery counted from the day the payment arrives, because a wire's arrival date
-// is not known when the invoice is sent) and clause 4 (re-read prices go through
-// the same second check as routine re-checks, DECISIONS.md decision 6). Whether the
-// full refund in clause 10 stays as written at wire cost, and who bears
-// intermediary-bank charges, is the owner's decision before invoice 1. Seller line: clause 1
+// Payment: PayPal invoice, as in site_copy.md D clause 9 (owner decision of
+// 6 October 2026: PayPal until Payoneer is set up; DECISIONS.md decision 6). The
+// 5 October wire wording is withdrawn. This text still departs from site_copy.md D
+// in two places, and site_copy.md D needs the same edits before it is the single
+// source again: clause 1 (delivery counted from the day the payment completes,
+// because the buyer may pay days after the invoice is sent; clause 10 points to
+// clause 1 for the delivery date) and clause 4 (re-read prices go through the same
+// second check as routine re-checks, DECISIONS.md decision 6). Seller line: clause 1
 // gets one line naming the seller only after the Ministry of Finance registration
 // and the Saudi lawyer's written answer (DECISIONS.md decision 6); until then the
 // terms name no seller. DEPLOY: set lastUpdated to the deploy date (en-US) in the
 // deploy commit; it holds the date the text was written until then.
-const lastUpdated = 'October 5, 2026';
+const lastUpdated = 'October 6, 2026';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -45,7 +44,7 @@ const breadcrumbs = [
       <p>
         One report on one WrenchStack trade page, in English, emailed as a PDF to the address on the invoice by
         the delivery date. The delivery date falls the number of business days stated on the invoice after the day
-        your payment arrives. The report covers the platforms on that trade page on the day it
+        your payment completes. The report covers the platforms on that trade page on the day it
         is written, and places your product's published price, packaging and pricing terms against them.
         Questions go by email to <a href="mailto:bilal@wrenchstack.com">bilal@wrenchstack.com</a>; there are no
         calls or meetings.
@@ -119,16 +118,14 @@ const breadcrumbs = [
 
       <h2>9. Payment</h2>
       <p>
-        Payment is by invoice in US dollars, due on receipt, by bank transfer (USD wire) to the account named on
-        the invoice. Work starts when the funds arrive in that account. We add no fee. Each party pays its own
-        bank's charges.
+        Payment is by PayPal invoice in US dollars, due on receipt. Work starts when the payment completes. We add
+        no fee.
       </p>
 
       <h2>10. Cancellation and refunds</h2>
       <p>
         You can cancel for a full refund at any time before delivery, and also if we have not delivered by the
-        delivery date in clause 1. A refund is sent by bank transfer (USD wire) to the account you name, and
-        each party pays its own bank's charges. After delivery there is no refund, unless the report covers a
+        delivery date in clause 1. After delivery there is no refund, unless the report covers a
         different trade from the one ordered. A refund is not given because of anything WrenchStack publishes on
         its site.
       </p>

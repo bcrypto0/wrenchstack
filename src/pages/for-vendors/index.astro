@@ -292,12 +292,13 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
       </div>
     </section>
 
-    {/* Pricing benchmark reports (offers/pricing-benchmark/decisions/site_copy.md A2). This text departs from
-        site_copy.md A2 in three places, on 5 October 2026: payment is by invoice paid by USD wire
-        (route change, decisions/route/ROUTE.md); the invoice states the delivery time counted from
-        the day the payment arrives, because a wire's arrival date is not known when the invoice is sent;
-        and re-read prices go through the same second check as routine re-checks (DECISIONS.md decision 6,
-        as-of rule). site_copy.md A2 and D still need the same edits before they are the single source again. */}
+    {/* Pricing benchmark reports (offers/pricing-benchmark/decisions/site_copy.md A2). Payment is by PayPal
+        invoice, as in site_copy.md A2 (owner decision of 6 October 2026: PayPal until Payoneer is set up;
+        the 5 October wire wording is withdrawn). This text still departs from site_copy.md A2 in two places:
+        the invoice states the delivery time counted from the day the payment completes, because the buyer
+        may pay days after the invoice is sent; and re-read prices go through the same second check as
+        routine re-checks (DECISIONS.md decision 6, as-of rule). site_copy.md A2 and D still need the same
+        edits before they are the single source again. */}
     <section id="reports" class="mb-10 scroll-mt-8">
       <h2 class="mb-3 text-2xl font-bold text-slate-900">Pricing benchmark reports</h2>
       <p class="text-sm font-semibold text-slate-900 leading-relaxed">
@@ -323,9 +324,9 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
           <div class="mb-2 text-xs font-bold uppercase tracking-wider text-orange-600">Price, delivery and ordering</div>
           <ul class="list-disc space-y-1 pl-5 text-sm text-slate-700 leading-relaxed">
             <li><strong>$249 per report</strong>, for one trade, in US dollars. The same price for every vendor and every trade.</li>
-            <li>A PDF in English, delivered by email. The invoice states the delivery time in business days, counted from the day your payment arrives. You can cancel for a full refund until the report is delivered, and also if it is late. A refund is sent by bank transfer (USD wire) to the account you name; each party pays its own bank's charges.</li>
+            <li>A PDF in English, delivered by email. The invoice states the delivery time in business days, counted from the day your payment completes. You can cancel for a full refund until the report is delivered, and also if it is late.</li>
             <li>Questions go by email. There are no calls or meetings.</li>
-            <li>To order, email <a href="mailto:bilal@wrenchstack.com?subject=Report%20order" class="text-orange-600 hover:underline">bilal@wrenchstack.com</a> with a subject starting "Report order", your product name, the trade and the email address for the invoice. We reply with an invoice that states the delivery time and your product's Fit Score, rank, award and reputation flag on that trade page that day. The invoice is paid by bank transfer (USD wire) to the account named on it, due on receipt. We add no fee; each party pays its own bank's charges. Work starts when the funds arrive.</li>
+            <li>To order, email <a href="mailto:bilal@wrenchstack.com?subject=Report%20order" class="text-orange-600 hover:underline">bilal@wrenchstack.com</a> with a subject starting "Report order", your product name, the trade and the email address for the invoice. We reply with a PayPal invoice that states the delivery time and your product's Fit Score, rank, award and reputation flag on that trade page that day. It is paid online through PayPal, in US dollars, due on receipt. We add no fee. Work starts when the payment completes.</li>
             <li>We do not quote, invoice or take an order while an evaluation, a correction, a pricing question, a dispute or a reputation-flag review is open between your company and us, or within 30 days after the latest listing verdict, correction or reputation-flag email we sent you. If you ask during that time, we reply with the date from which we can take the order, or with this rule if that date is not yet known.</li>
             <li>To see the format first, ask the same address for the sample: a pest control excerpt covering 6 platforms, with the vendor section shown as a template.</li>
             <li>Every report is sold under the <a href="/report-terms/" class="text-orange-600 hover:underline">report terms</a>.</li>
