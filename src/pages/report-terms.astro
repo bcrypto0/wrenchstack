@@ -3,8 +3,11 @@ import Layout from '../layouts/Layout.astro';
 
 // Pricing benchmark report terms (offers/pricing-benchmark/decisions/site_copy.md D).
 // Payment: PayPal invoice, as in site_copy.md D clause 9 (owner decision of
-// 6 October 2026: PayPal until Payoneer is set up; DECISIONS.md decision 6). The
-// 5 October wire wording is withdrawn. This text still departs from site_copy.md D
+// 6 October 2026: PayPal until Payoneer is set up; DECISIONS.md decision 6), plus
+// one sentence on paying by card without a PayPal account. Source: PayPal SA
+// invoicing page ("your customer doesn't need an account with PayPal"; "Payment
+// options may vary based on the recipient's location"), read 6 October 2026
+// (decisions/route/paypal_invoice_facts.json). The 5 October wire wording is withdrawn. This text still departs from site_copy.md D
 // in two places, and site_copy.md D needs the same edits before it is the single
 // source again: clause 1 (delivery counted from the day the payment completes,
 // because the buyer may pay days after the invoice is sent; clause 10 points to
@@ -118,8 +121,9 @@ const breadcrumbs = [
 
       <h2>9. Payment</h2>
       <p>
-        Payment is by PayPal invoice in US dollars, due on receipt. Work starts when the payment completes. We add
-        no fee.
+        Payment is by PayPal invoice in US dollars, due on receipt. You can pay with a PayPal account or, where
+        PayPal offers it in your country, by debit or credit card without one. Work starts when the payment
+        completes. We add no fee.
       </p>
 
       <h2>10. Cancellation and refunds</h2>
