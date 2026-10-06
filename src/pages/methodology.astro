@@ -3,6 +3,13 @@ import Layout from '../layouts/Layout.astro';
 import { tools, verticals, verticalToUrl, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, aiTools, paymentProcessors, financingProviders, accountingSoftware, bankingProviders } from '../lib/data';
 import { reportRows, reportAsOf } from '../lib/reportLedger';
 
+// Report announcements (offers/pricing-benchmark/decisions/DECISIONS.md, owner decision of
+// 2026-10-07). Fill `sent` with the number of vendors emailed on that date, the day it goes out.
+const reportAnnouncements: { label: string; sent: number | null }[] = [
+  { label: 'October 13, 2026', sent: null },
+  { label: 'October 27, 2026', sent: null },
+];
+
 // WrenchStack Fit Score™ methodology version metadata
 const METHODOLOGY_VERSION = '1.3';
 const METHODOLOGY_EFFECTIVE_DATE = '2026-09-30';
@@ -464,6 +471,18 @@ const counts = {
       <a href="/verification-log/">verification log</a>); an award or reputation-flag change; or a product
       listed after it ordered. Until a cause is recorded, the note says so. The note also records the price
       re-read made for the report and any change to the buyer's own listing between invoice and delivery.
+    </p>
+
+    <p>
+      <strong>Report announcements.</strong> On dates set in advance we email a short announcement of the
+      report, and only to vendors that contacted us first about a listing, are listed, have no evaluation,
+      correction, pricing question, dispute or reputation-flag review open with us, and received no listing
+      verdict, correction or reputation-flag email from us in the previous 30 days. Each vendor gets at most
+      one announcement and no follow-up, and can opt out by replying. The email does not mention the vendor's
+      Fit Score, rank, award or verdict. Dates and the number of vendors emailed:
+      {reportAnnouncements.map((a, i) => (
+        <>{i > 0 && '; '}{a.label}, {a.sent === null ? 'not yet sent' : `${a.sent} ${a.sent === 1 ? 'vendor' : 'vendors'}`}</>
+      ))}.
     </p>
 
     {reportRows.length === 0 ? (
