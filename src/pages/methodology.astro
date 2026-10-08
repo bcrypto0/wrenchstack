@@ -11,8 +11,10 @@ const reportAnnouncements: { label: string; sent: number | null }[] = [
 ];
 
 // WrenchStack Fit Score™ methodology version metadata
-const METHODOLOGY_VERSION = '1.3';
-const METHODOLOGY_EFFECTIVE_DATE = '2026-09-30';
+// 1.4 (2026-10-06): the two listing checks (#listing-rules) apply to evaluations from that
+// date; the Fit Score formula and weights are unchanged from 1.3.
+const METHODOLOGY_VERSION = '1.4';
+const METHODOLOGY_EFFECTIVE_DATE = '2026-10-06';
 
 // Quantification: coverage stats across all categories
 const totalVendorsCovered = tools.length + leadGenPlatforms.length + insuranceProviders.length + payrollServices.length + marketingAgencies.length + aiTools.length + paymentProcessors.length + financingProviders.length + accountingSoftware.length + bankingProviders.length;
@@ -126,7 +128,7 @@ const counts = {
 ---
 
 <Layout
-  title="WrenchStack Fit Score™ Methodology v1.3: How we rank trades vendors"
+  title={`WrenchStack Fit Score™ Methodology v${METHODOLOGY_VERSION}: How we rank trades vendors`}
   description="WrenchStack's published, versioned methodology for trades vendors across 10 categories: the WrenchStack Fit Score™ (three weighted factors) for field-service software and rule-based tiers for payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI. Independence statement. Per-vendor affiliate ledger and report ledger."
   breadcrumbs={breadcrumbs}
 >
@@ -161,6 +163,15 @@ const counts = {
         <div class="text-2xl font-bold text-slate-900">{totalCriteriaTracked}</div>
         <div class="text-xs uppercase tracking-wider text-slate-500">Software tools scored</div>
       </div>
+    </div>
+
+    <div class="not-prose mb-8 rounded-lg border border-slate-200 bg-slate-50 p-5 text-sm text-slate-700">
+      <h2 class="text-base font-bold text-slate-900 mb-2 mt-0">Changelog: v1.4 (2026-10-06)</h2>
+      <ul class="list-disc pl-5 space-y-1 m-0">
+        <li><strong>Two checks before a new listing.</strong> For products we evaluate from 6 October 2026, a product is listed only when both <a href="#listing-rules">listing checks</a> pass: a sign of use by a trade business outside the vendor, and the operator's legal name, legal form and governing law, as its terms state them, matched to exactly one active registration in a public company register. A product that does not pass both is held, not listed.</li>
+        <li><strong>Earlier listings follow the earlier rule.</strong> Listings published before 6 October 2026 were decided under our earlier rule, which still applies to them: having no independent reviews is shown as a con on the listing, not a reason to hold it.</li>
+        <li><strong>The Fit Score formula is unchanged.</strong> The factors and weights (vertical fit 60%, pricing transparency 20%, integration coverage 20%) are the same as in v1.3, so no score was recomputed for this version.</li>
+      </ul>
     </div>
 
     <div class="not-prose mb-8 rounded-lg border border-slate-200 bg-slate-50 p-5 text-sm text-slate-700">
@@ -259,6 +270,19 @@ const counts = {
       <li><strong>Publication</strong>: review goes live with verified_date stamp. Vendor profile becomes part of the directory.</li>
       <li><strong>Refresh</strong>: pricing re-verified and reputation warnings re-checked against their sources; each US entry shows the date of its latest check.</li>
     </ol>
+
+    {/* Rules 5 and 6 in docs/decisions.md (CEO decision, 2026-10-06). Rule 2 (no independent
+        reviews is a con, never a blocker) is the rule earlier listings followed. */}
+    <h2 id="listing-rules">Two checks before a new listing</h2>
+
+    <p>
+      For products we evaluate from 6 October 2026, both checks below must pass before we list the product. A product that does not pass both is held, not listed. Listings published before that date were decided under our earlier rule, which still applies: having no independent reviews is shown as a con on the listing, not a reason to hold it. The first check asks for a sign of use, not for reviews.
+    </p>
+
+    <ul>
+      <li><strong>Sign of use.</strong> Someone outside the vendor uses the product. That means a trade business that is not owned by or connected to the vendor, named to us, that confirms in writing from its own business email address or domain that it uses the product. A public review that names the business that wrote it also counts. An app-store install count or a number of ratings does not count on its own, because it cannot be tied to any outside business.</li>
+      <li><strong>Who runs the product.</strong> The vendor's terms give the operator's full legal name, its legal form (such as LLC or Inc.) and the law that governs the terms, and a public company register shows exactly one active registration that matches. The terms do not have to state where the company was formed when the register shows it. A person trading under their own name also passes this check.</li>
+    </ul>
 
     <h2>Our independence statement</h2>
 

@@ -13,6 +13,9 @@ import { asSentence,
   priceScaling,
   seatUnit,
   formatUsd,
+  entryMinimumBill,
+  seatMinimumPhrase,
+  pricePublicationPhrase,
   type Tool,
 } from '../../../lib/data';
 import WrenchScore from '../../../components/WrenchScore.astro';
@@ -40,7 +43,7 @@ interface Props {
 // "4-8 weeks", "1-3 weeks") and the parallel-run and migration durations (no vendor
 // publishes them and our data does not record them); "only X has" feature claims
 // (feature lists are our entries' labels, not a controlled vocabulary); "quotes only"
-// for tools that publish one-time or per-project prices (quote-only is isQuoteOnly);
+// for tools that publish module or per-project prices (quote-only is isQuoteOnly);
 // "ranks highest for {segment}" (the Fit Score is not computed per buyer segment);
 // the trios.json segment labels, several of which our data contradicts (Simpro is
 // headquartered in Miami, not outside the US; FieldPulse and Workiz publish no price,
@@ -73,9 +76,14 @@ const scoreSentence =
       : `${listNames(scoreLeaders)} share the highest WrenchStack Fit Score of the three (${topScore})`;
 
 // --- Entry price ---
-const priced = trioTools.filter((t) => t.pricing.starting_at_usd !== null);
-const lowestPrice = priced.length ? Math.min(...priced.map((t) => t.pricing.starting_at_usd as number)) : null;
-const lowestTools = priced.filter((t) => t.pricing.starting_at_usd === lowestPrice);
+// Ranked by the smallest bill: a per-seat price times the vendor's seat minimum
+// (entryMinimumBill, 2026-10-08 final review), as on the two-tool compare pages.
+const priced = trioTools.filter((t) => entryMinimumBill(t) !== null);
+const lowestPrice = priced.length ? Math.min(...priced.map((t) => entryMinimumBill(t) as number)) : null;
+const lowestTools = priced.filter((t) => entryMinimumBill(t) === lowestPrice);
+// "$129.99 per user a month, 3-user minimum" where the vendor sets a seat minimum.
+const withMin = (s: string, t: Tool) => (seatMinimumPhrase(t) ? `${s}, ${seatMinimumPhrase(t)}` : s);
+const entryLabel = (t: Tool) => withMin(entryPriceLabel(t), t);
 // Only call a tool the cheapest when at least two of the three have a monthly entry price,
 // one alone has the lowest, and no tool without a monthly price could undercut it (a
 // quote-only tool may be cheaper; a $0 free tier cannot be undercut). Until 2026-10-01
@@ -83,18 +91,18 @@ const lowestTools = priced.filter((t) => t.pricing.starting_at_usd === lowestPri
 const unpriced = trioTools.filter((t) => t.pricing.starting_at_usd === null);
 const cheapest =
   priced.length >= 2 && lowestTools.length === 1 && (unpriced.length === 0 || lowestPrice === 0) ? lowestTools[0] : null;
-// "publishes no price" / "publishes one-time or per-project prices" / "has a free tier" /
+// "publishes no price" / "publishes module or per-project prices" / "has a free tier" /
 // "starts at $47 per user a month".
 const priceClause = (t: Tool) =>
   isQuoteOnly(t)
     ? 'publishes no price'
     : nonMonthlyPricingOnly(t)
-      ? 'publishes one-time or per-project prices, not a monthly plan'
+      ? 'publishes module or per-project prices, not a monthly plan'
       : t.pricing.starting_at_usd === 0
         ? 'has a free tier'
-        : `starts at ${entryPriceLabel(t)}`;
+        : `starts at ${entryLabel(t)}`;
 const priceSummary = trioTools.map((t) => `${t.name} ${priceClause(t)}.`).join(' ');
-const shortPrice = (t: Tool) => (nonMonthlyPricingOnly(t) ? 'one-time or per-project prices, not a monthly plan' : formatPrice(t));
+const shortPrice = (t: Tool) => (nonMonthlyPricingOnly(t) ? 'module or per-project prices, not a monthly plan' : withMin(formatPrice(t), t));
 
 // --- Lists ---
 const label = (s: string) => s.replace(/_/g, ' ');
@@ -171,7 +179,7 @@ function getDecisionReasonsFor(t: Tool): string[] {
 
   const quoteOnlyOthers = others.filter(isQuoteOnly);
   if (!isQuoteOnly(t) && quoteOnlyOthers.length > 0) {
-    reasons.push(`**You want to budget before asking for a quote**: ${t.name} publishes its prices (${shortPrice(t)}); ${listNames(quoteOnlyOthers)} ${quoteOnlyOthers.length === 1 ? 'quotes' : 'quote'} only`);
+    reasons.push(`**You want to budget before asking for a quote**: ${t.name} ${pricePublicationPhrase(t)} (${shortPrice(t)}); ${listNames(quoteOnlyOthers)} ${quoteOnlyOthers.length === 1 ? 'quotes' : 'quote'} only`);
   }
 
   const noQb = others.filter((o) => qbList(o).length === 0);
@@ -223,7 +231,7 @@ const seatWord = trioTools.every((t) => priceScaling(t) !== 'per_user' || seatUn
 // --- FAQs (from data only) ---
 function cheapestAnswer(): string {
   const quoteOnly = trioTools.filter(isQuoteOnly);
-  const labels = trioTools.map((t) => `${t.name}: ${entryPriceLabel(t)}`).join('; ');
+  const labels = trioTools.map((t) => `${t.name}: ${entryLabel(t)}`).join('; ');
   if (quoteOnly.length === trioTools.length) {
     return 'None of the three publishes a price. Request quotes from each for the same team size and features, and get what is included in writing.';
   }
@@ -260,7 +268,7 @@ const faqs = [
   },
   {
     q: `Which suits my team size?`,
-    a: `Our data puts the best team size at ${trioTools.map((t) => `${t.best_team_size ?? 'unrecorded'} for ${t.name}`).join(', ')}. Entry prices: ${trioTools.map((t) => `${t.name}, ${entryPriceLabel(t)}`).join('; ')}. A per-${seatWord} price rises with every ${seatWord}; a company price changes when you need a bigger plan, so check each plan's user limits and price each at the team size you expect to have.`,
+    a: `Our data puts the best team size at ${trioTools.map((t) => `${t.best_team_size ?? 'unrecorded'} for ${t.name}`).join(', ')}. Entry prices: ${trioTools.map((t) => `${t.name}, ${entryLabel(t)}`).join('; ')}. A per-${seatWord} price rises with every ${seatWord}; a company price changes when you need a bigger plan, so check each plan's user limits and price each at the team size you expect to have.`,
   },
 ];
 
@@ -351,7 +359,7 @@ const breadcrumbs = [
           </p>
         ))}
         <ul class="mt-3 space-y-1 text-sm text-slate-600">
-          {cheapest && <li><strong>{cheapest.name}</strong> has the lowest entry price of the three ({formatPrice(cheapest)}).</li>}
+          {cheapest && <li><strong>{cheapest.name}</strong> has the lowest entry price of the three ({shortPrice(cheapest)}).</li>}
           {fitLeader && <li>Vertical fit favors <strong>{fitLeader.name}</strong> in {fitLeaderWins} of {sharedVerticals.length} shared {sharedVerticals.length === 1 ? 'trade' : 'trades'}.</li>}
           <li>{scoreSentence}.</li>
         </ul>

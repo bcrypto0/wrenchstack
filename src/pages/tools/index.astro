@@ -10,7 +10,7 @@ import MissingFromList from '../../components/MissingFromList.astro';
 function toolFilterAttrs(t: Tool): Record<string, string> {
   const verticalSlugs = t.verticals.join(' ');
   // priceTier puts every tool without a monthly starting price in 'quote-only', which
-  // includes Trash Flow and Pylon (one-time and per-project prices, published). They get
+  // includes Trash Flow and Pylon (module and per-project prices, published). They get
   // their own value so the "Quote-only" chip does not list them (2026-10-01).
   const tier = priceTier(t) === 'quote-only' && !isQuoteOnly(t) ? 'no-monthly' : priceTier(t);
   const team = teamSizeBucket(t);

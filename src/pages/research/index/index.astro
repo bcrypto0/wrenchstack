@@ -6,12 +6,12 @@ import { tools, medianUsd, leadGenPlatforms, insuranceProviders, payrollServices
 const totalTools = tools.length;
 const phase2Tools = tools.filter(t => 'long_description' in t && t.long_description).length;
 // Quote-only is pricing_model 'quote_only', not a null starting price: Trash Flow
-// and Pylon have no monthly starting price but publish one-time or per-project
+// and Pylon have no monthly starting price but publish module or per-project
 // prices (2026-10-01; this page said 51, the right count was 49).
 const customQuotedTools = quoteOnlyCount();
 const customQuotedPct = Math.round((customQuotedTools / totalTools) * 100);
 const freeTierTools = tools.filter(hasFreeTier).length;
-// Tools that publish prices but no monthly starting price (one-time or per-project).
+// Tools that publish prices but no monthly starting price (module or per-project).
 const otherPricedTools = tools.filter(t => !isQuoteOnly(t) && t.pricing.starting_at_usd === null).length;
 const freeTrialTools = tools.filter(t => (t.pricing.free_trial_days ?? 0) > 0).length;
 const freeTrialPct = Math.round((freeTrialTools / totalTools) * 100);
@@ -140,7 +140,7 @@ const updatedDate = '2026-06-19';
         <div class="rounded-lg border-2 border-slate-200 bg-white p-5">
           <div class="text-4xl font-bold text-slate-900">${medianPrice}/mo</div>
           <p class="mt-2 text-sm text-slate-700 leading-relaxed">
-            is the median paid starting price among the {avgPriceTools.length} platforms that publish one in WrenchStack's {totalTools}-tool directory. Left out of the median: {freeTierTools} that start on a free plan{otherPricedTools > 0 && ` and ${otherPricedTools} that publish only one-time or per-project prices`}.
+            is the median paid starting price among the {avgPriceTools.length} platforms that publish one in WrenchStack's {totalTools}-tool directory. Left out of the median: {freeTierTools} that start on a free plan{otherPricedTools > 0 && ` and ${otherPricedTools} that publish only module or per-project prices`}.
           </p>
         </div>
         <div class="rounded-lg border-2 border-slate-200 bg-white p-5">

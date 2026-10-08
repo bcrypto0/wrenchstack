@@ -22,7 +22,7 @@ const breadcrumbs = [
 
 // Quick stats. Quote-only = isQuoteOnly (pricing_model 'quote_only'). Until 2026-10-01
 // this page counted every tool with no monthly starting price as quote-only, which
-// included the two that publish one-time or per-project prices (51 instead of 49).
+// included the two that publish module or per-project prices (51 instead of 49).
 const totalTools = tools.length;
 const freeTierTools = tools.filter(hasFreeTier);
 const quoteOnlyTools = tools.filter(isQuoteOnly);
@@ -118,7 +118,7 @@ const pageDescription = `Starting prices for ${totalTools} field service and tra
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-bold tracking-tight text-slate-900">Pricing by trade</h2>
       <p class="mb-6 text-slate-600">
-        Each trade's pricing page includes a price table sorted by starting price, the top Fit Score pick in each price tier, estimated monthly cost at 3, 10 and 25 techs, the costs to ask about beyond the subscription, and the tiers our data records for each tool.
+        Each trade's pricing page includes a price table sorted by starting price, the top Fit Score pick in each price tier, monthly cost at 3, 10 and 25 techs, the costs to ask about beyond the subscription, and the tiers our data records for each tool.
       </p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {verticals.map((v) => {
@@ -159,7 +159,7 @@ const pageDescription = `Starting prices for ${totalTools} field service and tra
           <div class="text-xs font-bold uppercase tracking-wider text-orange-700">Quote-only (no published price)</div>
           <div class="mt-2 text-lg font-semibold text-slate-900">{quoteOnlyTools.length} tools</div>
           <p class="mt-1 text-sm text-slate-600">
-            {quoteOnlyExamples.length ? `Including ${listJoin(quoteOnlyExamples)}. ` : ''}They publish no price, so the cost is whatever the vendor quotes you; ask for setup or implementation fees in the same written quote.{otherPricedTools.length ? ` A further ${otherPricedTools.length} (${listJoin(otherPricedTools.map((t) => t.name))}) publish prices that are not a monthly plan, such as one-time licenses or per-project fees.` : ''}
+            {quoteOnlyExamples.length ? `Including ${listJoin(quoteOnlyExamples)}. ` : ''}They publish no price, so the cost is whatever the vendor quotes you; ask for setup or implementation fees in the same written quote.{otherPricedTools.length ? ` A further ${otherPricedTools.length} (${listJoin(otherPricedTools.map((t) => t.name))}) publish prices that are not a monthly plan, such as module prices or per-project fees.` : ''}
           </p>
         </div>
       </div>
@@ -173,7 +173,7 @@ const pageDescription = `Starting prices for ${totalTools} field service and tra
       <ul>
         <li><strong>Quick price comparison table</strong>: every tool listed for the trade, sorted by starting price (lowest first, quote-only last), with the vendor's pricing note, free trial length and the date the price was checked.</li>
         <li><strong>Top pick by tier</strong>: the tool with the highest Fit Score for that trade in each price bracket, compared per user per month with flat company plans split across a 5-person team (entry under $100, mid $100-$249, top tier $250+ or quote-only). Ties are named. Tools with a free tier, and tools with no monthly plan, are not placed in a tier.</li>
-        <li><strong>Pricing scenarios by team size</strong>: estimated monthly cost at 3, 10 and 25 techs for up to 10 tools with a published monthly price. Per-user prices are multiplied by team size (or by the vendor's minimum where the pricing note sets one), using the next plan's price where the note limits the entry plan to one user; flat, base-plus-seat and free plans are shown at their entry price, because their user limits and seat fees vary by vendor.</li>
+        <li><strong>Pricing scenarios by team size</strong>: monthly cost at 3, 10 and 25 techs for up to 10 tools with a published monthly price. Each figure is the cheapest plan that allows that many users, worked out from the plan prices and user rules on the vendor's pricing page (billed annually where offered, every tech counted as a full user). Where those facts are not recorded, or the page leaves a needed figure unclear, the cell says why instead of giving a figure.</li>
         <li><strong>Costs beyond the subscription</strong>: card processing fees, setup or implementation fees and paid add-ons, with the tools on that page whose pricing notes mention each.</li>
         <li><strong>Per-tool pricing breakdown</strong>: the tiers our data records for each tool, with the published price where there is one; quote-only tools are marked as custom quote.</li>
         <li><strong>FAQs</strong>: what the trade's software costs, the lowest published prices, per-user against flat pricing, how prices are checked, costs beyond the subscription, scaling with team size, and negotiating.</li>

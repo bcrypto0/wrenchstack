@@ -40,6 +40,98 @@ export interface ToolPricing {
    *  Unset means 'user'. Read it through seatUnit(), which ignores it on other
    *  pricing models. Added 2026-10-05. */
   seat_unit?: string;
+  /** Per-plan billing facts read from the vendor's pricing page (added 2026-10-08):
+   *  what each plan costs on each billing term, what the price is charged for, and
+   *  its user rules. Optional; read it through crewCost() / costAtCrewSize(). When
+   *  present, depth_source_url and depth_read_date are required (the build fails
+   *  without them, see validateDepthFields). */
+  tier_details?: TierDetail[] | null;
+  /** The page tier_details was read from, and the day it was read (YYYY-MM-DD). */
+  depth_source_url?: string | null;
+  depth_read_date?: string | null;
+  /** Quote-only tools: what the vendor says its quote depends on (team size,
+   *  modules, locations...), in the vendor's terms. Requires the source URL and the
+   *  read date (YYYY-MM-DD) below. Added 2026-10-08. */
+  quote_basis?: string | null;
+  quote_basis_source_url?: string | null;
+  quote_basis_read_date?: string | null;
+  /** Set when tier_details or quote_basis was read but is not shown yet, with the reason
+   *  (added 2026-10-08 after review: the headline prices or pricing note still differ
+   *  from what the pricing page showed, and those changes wait for the owner's approval).
+   *  While it is set, hasTierDetails() and hasQuoteBasis() are false, so no crew cost,
+   *  quote block or dataset value comes from the held data. */
+  depth_hold?: string | null;
+  /** The fewest seats a per_user / annual_per_user starting price is charged for, as the
+   *  vendor's page states it, for a tool whose tier_details do not record it (Smart
+   *  Service: 3, smartservice.com/pricing, 2026-10-08). A whole number of 2 or more; read
+   *  it through entrySeatMinimum(). Added 2026-10-08 (final review): compare pages set
+   *  Smart Service's $129.99 per user against Service Fusion's $208 for the company and
+   *  called Smart Service cheaper, though its smallest bill is 3 x $129.99. */
+  seat_minimum?: number | null;
+  /** The vendor's page publishes only a starting rate and says the full price needs a
+   *  quote (Smart Service, 2026-10-08). Pages then say it "publishes a starting rate",
+   *  not "publishes its prices"; see pricePublicationPhrase(). */
+  starting_rate_only?: boolean | null;
+}
+
+/** What a plan's price is charged for, as the vendor's page states it.
+ *  'not_published' (or null): the price cannot be priced per user or per account from the
+ *  page, because the page does not say what it is charged for, it is an account price with
+ *  no stated user rule, or it is charged per route, location or application, or as an
+ *  add-on, rather than per user (2026-10-08 re-review: the definition used to say only
+ *  "the page does not say", which several of these plans' pages do). */
+export type TierPriceBasis = 'per_account' | 'per_user' | 'per_technician' | 'not_published';
+
+/** Something the vendor's page leaves unclear that a crew cost needs (added 2026-10-08):
+ *  'billing_term': a price is shown without saying whether it is billed monthly or
+ *    annually, so both price fields are null and the plan is not priced;
+ *  'extra_user_period': an extra-user fee is shown without its period ('$29 each'), so
+ *    it is not applied and crews above included_users are not priced on that plan;
+ *  'user_count': the page gives the plan's user count two ways, in a form that does
+ *    not read as one number ('+5 users'), or not at all for a priced plan that could be
+ *    the cheapest (a free plan with no stated user limit, 2026-10-08 re-review);
+ *    included_users holds the lower count (null when none is stated), and crews above it
+ *    are not priced on that plan. */
+export type TierUnclear = 'billing_term' | 'extra_user_period' | 'user_count';
+
+/** One plan, as read from the vendor's pricing page. All prices are USD a month,
+ *  exact cents kept (same convention as starting_at_usd). null means the page shows
+ *  no such figure, shows only a starting price for the plan ("starting at $89 per user
+ *  per month", kept in the pricing note), or shows a price without its billing term
+ *  (unclear 'billing_term'). The starting-price case was added to this definition on
+ *  2026-10-08 (final review: QFloors and FloorZap are recorded that way). */
+export interface TierDetail {
+  name: string;
+  /** Price a month when billed annually (the per-month figure on annual billing). */
+  price_annual_billed: number | null;
+  /** Price a month when paid monthly. Some vendors require a 12-month contract for it
+   *  (Leap, MarketSharp, STACK, Encircle); a limited-time promotional price is not
+   *  recorded here (the list price is). */
+  price_monthly_billed: number | null;
+  price_basis: TierPriceBasis | null;
+  /** per_account: users the account price includes. per_user / per_technician: the
+   *  minimum number of users the price is charged for. null: none stated. */
+  included_users: number | null;
+  /** per_account only: fee a month for each user above included_users. Not used for
+   *  per_user / per_technician plans, which charge their own price for every user. */
+  extra_user_price: number | null;
+  /** The user the extra fee is charged for, as a noun ('user', 'technician'). A unit
+   *  naming a period other than the month ('user/year') is not priced. */
+  extra_user_unit: string | null;
+  /** Most users the plan allows. null: the page states no cap. */
+  max_users: number | null;
+  /** A job, appointment, project or other usage cap the page states for the plan, in
+   *  words ('50 jobs a month'). Not part of the arithmetic; shown under a crew figure
+   *  that uses this plan. null: none recorded (which is not a statement that the plan
+   *  has no cap). */
+  usage_limit?: string | null;
+  /** The page prices or limits users by role (office users and crew members, admins
+   *  and sub-users, full and field users): the rule as the page states it. Crew costs
+   *  count every tech as a full user, so a tool with such a plan is not priced by crew
+   *  size (crewCost reason 'field_users'). */
+  field_user_rule?: string | null;
+  /** What the page leaves unclear for this plan; see TierUnclear. */
+  unclear?: TierUnclear | null;
 }
 
 export interface ProConItem {
@@ -172,7 +264,7 @@ export function asSentence(s: string | null | undefined): string {
 
 export function formatPrice(t: Tool): string {
   const p = t.pricing;
-  // A null starting price is not always a quote: trash-flow sells one-time licenses and
+  // A null starting price is not always a quote: trash-flow prices by module and
   // pylon-solar charges per project, both published (pricing_model 'unclear'). Until
   // 2026-10-01 both rendered "Custom quote".
   if (p.starting_at_usd === null) return isQuoteOnly(t) ? 'Custom quote' : 'No monthly plan (see pricing note)';
@@ -215,7 +307,7 @@ export function wrenchStackScoreBreakdown(t: Tool, verticalSlug?: string): Score
   const bestFit = fitValues.length ? Math.max(...fitValues) : 5;
   const fit = verticalSlug ? verticalFitScore(t, verticalSlug) : bestFit;
   // Quote-only tools (no price anywhere) score 5; tools that publish prices score 10,
-  // including the two that publish one-time or per-project prices (2026-10-01).
+  // including the two that publish module or per-project prices (2026-10-01).
   const transparency = isQuoteOnly(t) ? 5 : 10;
   // Integration coverage scaled to a denominator that is actually reachable. It used to
   // be min(count, 10) while the directory maximum is 7 and the mean is 2.7, so no tool
@@ -261,7 +353,7 @@ export function readingTimeMinutes(wordCount: number): number {
 
 export type ToolType = 'fsm' | 'cmms' | 'construction_pm' | 'estimating' | 'crm' | 'specialty' | 'unknown';
 // The 'quote-only' TIER means "no monthly starting price to place on the price axis".
-// It holds the 49 quote-only tools AND the two that publish only one-time or
+// It holds the 49 quote-only tools AND the two that publish only module or
 // per-project prices (Trash Flow, Pylon), and /trends-2026/ relies on that count
 // (2026-10-01). Copy that says "quote-only" must test isQuoteOnly(tool), never this
 // tier; nonMonthlyPricingOnly(tool) names the other two.
@@ -416,7 +508,7 @@ export function teamSizeBucket(t: Tool): TeamSizeBucket {
 const PRICE_TIER_ORDER: PriceTier[] = ['free', 'entry', 'mid', 'enterprise'];
 // Renamed from isQuoteOnly on 2026-10-01 so the exported isQuoteOnly(tool) below can
 // take that name. This one tests a price TIER, which is 'quote-only' for every tool
-// with no monthly starting price, including the two that publish one-time or
+// with no monthly starting price, including the two that publish module or
 // per-project prices.
 const isQuoteOnlyTier = (tier: PriceTier) => tier === 'quote-only';
 const TEAM_BUCKET_ORDER: TeamSizeBucket[] = ['solo', 'small', 'mid', 'large'];
@@ -471,9 +563,9 @@ function buildAlternativeRationale(source: Tool, alt: Tool): string {
   if (isQuoteOnlyTier(altTier) || isQuoteOnlyTier(sourceTier)) {
     // One side has no monthly starting price, so any "cheaper" or "upgrade path" claim
     // would be invented. Say what is actually true instead. Until 2026-10-01 Trash Flow
-    // and Pylon (one-time and per-project prices, both published) were called quote-only.
+    // and Pylon (module and per-project prices, both published) were called quote-only.
     if (isQuoteOnly(alt)) fragments.push('Quote-only pricing, so compare on fit not cost');
-    else if (nonMonthlyPricingOnly(alt)) fragments.push('Publishes one-time or per-project prices, not a monthly plan');
+    else if (nonMonthlyPricingOnly(alt)) fragments.push('Publishes module or per-project prices, not a monthly plan');
     else if (altPrice === 0) fragments.push('Has a free tier');
     else if (altPrice !== null) fragments.push(`Publishes its price: from ${entryPriceLabel(alt)}`);
   } else if (altTier === 'free' && sourceTier !== 'free') {
@@ -1753,14 +1845,14 @@ export function totalReputationFlags(): number {
 }
 
 /** Quote-only: the vendor publishes no price at all (pricing_model 'quote_only').
- *  A null starting_at_usd is NOT the test: trash-flow (one-time licenses) and
+ *  A null starting_at_usd is NOT the test: trash-flow (priced by module) and
  *  pylon-solar (per-project fees) have no monthly starting price but do publish
  *  prices, with pricing_model 'unclear'. Added 2026-10-01 as the one definition. */
 export function isQuoteOnly(t: Tool): boolean {
   return t.pricing.pricing_model === 'quote_only';
 }
 
-/** Publishes prices, but no monthly starting price: one-time licenses (Trash Flow) or
+/** Publishes prices, but no monthly starting price: module prices (Trash Flow) or
  *  per-project fees (Pylon). Not quote-only. Added 2026-10-01. */
 export function nonMonthlyPricingOnly(t: Tool): boolean {
   return t.pricing.starting_at_usd === null && !isQuoteOnly(t);
@@ -1791,7 +1883,7 @@ export function formatUsd(p: number): string {
 export function entryPriceLabel(t: Tool): string {
   const p = t.pricing.starting_at_usd;
   if (isQuoteOnly(t)) return 'no published price (quote only)';
-  if (p === null) return 'one-time or per-project prices (no monthly plan)';
+  if (p === null) return 'module or per-project prices (no monthly plan)';
   if (p === 0) return 'a free tier';
   switch (t.pricing.pricing_model) {
     case 'per_user': return `$${p} per ${seatUnit(t)} a month`;
@@ -1800,6 +1892,45 @@ export function entryPriceLabel(t: Tool): string {
     case 'flat_plus_seat': return `$${p} a month base, more as users are added`;
     default: return `$${p} a month`;
   }
+}
+
+/** The fewest seats the entry price is charged for: pricing.seat_minimum, else the
+ *  included_users of the entry plan (the tier_details row named like tiers[0]) when that
+ *  plan is priced per seat (GoCanvas 3, Praxedo 5), else 1. Always 1 for a price that is
+ *  not per seat. Added 2026-10-08 (final review). */
+export function entrySeatMinimum(t: Tool): number {
+  if (priceScaling(t) !== 'per_user') return 1;
+  const m = t.pricing.seat_minimum;
+  if (typeof m === 'number' && Number.isInteger(m) && m > 1) return m;
+  if (hasTierDetails(t)) {
+    const entry = t.pricing.tier_details!.find((d) => d.name === t.pricing.tiers[0]);
+    const perSeat = entry?.price_basis === 'per_user' || entry?.price_basis === 'per_technician';
+    if (entry && perSeat && typeof entry.included_users === 'number' && entry.included_users > 1) return entry.included_users;
+  }
+  return 1;
+}
+
+/** The smallest monthly bill at the entry price: a per-seat price times
+ *  entrySeatMinimum(), any other price as it is; null when there is no monthly price.
+ *  Compare pages rank entry prices by this since 2026-10-08 (final review): they ranked
+ *  the raw per-seat price, so Smart Service ($129.99 per user, 3-user minimum, so at
+ *  least $389.97) read as cheaper than Service Fusion's $208 for the company. */
+export function entryMinimumBill(t: Tool): number | null {
+  const p = t.pricing.starting_at_usd;
+  if (p === null || isQuoteOnly(t)) return null;
+  return Math.round(p * entrySeatMinimum(t) * 100) / 100;
+}
+
+/** "3-user minimum" for prose beside an entry price, or '' when there is none. */
+export function seatMinimumPhrase(t: Tool): string {
+  const n = entrySeatMinimum(t);
+  return n > 1 ? `${n}-${seatUnit(t)} minimum` : '';
+}
+
+/** "publishes its prices", or "publishes a starting rate" for a tool whose page gives
+ *  only a starting rate and says the full price needs a quote (starting_rate_only). */
+export function pricePublicationPhrase(t: Tool): string {
+  return t.pricing.starting_rate_only ? 'publishes a starting rate' : 'publishes its prices';
 }
 
 /** A tool has a free tier when its starting price is $0, whatever its paid tiers cost. */
@@ -1814,7 +1945,7 @@ export function quoteOnlyCount(list: Tool[] = tools): number {
 
 /** Share of field-service tools that publish no price at all (quote-only).
  *  Counted with isQuoteOnly since 2026-10-01; it used starting_at_usd === null,
- *  which also counted the two tools that publish one-time or per-project prices. */
+ *  which also counted the two tools that publish module or per-project prices. */
 export function quoteOnlyPct(): number {
   return Math.round((quoteOnlyCount() / tools.length) * 100);
 }
@@ -1884,3 +2015,294 @@ export function pricingModelCounts(): Record<string, number> {
   }
   return out;
 }
+
+// --- Cost by crew size (added 2026-10-08) ------------------------------------
+//
+// The /pricing/[vertical]/ scenario table used to multiply only per-user starting
+// prices; flat and base-plus-seat plans showed their entry price in every column
+// (Joist read $8.34 at 25 techs) and free plans showed "From $0". These helpers
+// price a crew only from pricing.tier_details, the per-plan facts read from the
+// vendor's own pricing page. They never estimate: when a figure the sum needs is
+// not recorded, the answer is null.
+
+export type BillingTerm = 'annual' | 'monthly';
+
+/** TierDetail keys in export order (CSV tier_details_* columns, JSON tier_details). */
+export const TIER_DETAIL_KEYS = [
+  'name',
+  'price_annual_billed',
+  'price_monthly_billed',
+  'price_basis',
+  'included_users',
+  'extra_user_price',
+  'extra_user_unit',
+  'max_users',
+  'usage_limit',
+  'field_user_rule',
+  'unclear',
+] as const satisfies readonly (keyof TierDetail)[];
+
+/** Why a crew cost is null:
+ *  'no_depth': the tool carries no tier_details (none recorded, or held: depth_hold);
+ *  'field_users': the page prices users by role (field_user_rule), and the figures here
+ *    count every tech as a full user;
+ *  'unclear': a plan that allows the crew, and could cost less than any priced plan,
+ *    cannot be priced because the page leaves something unclear (see `unclear`);
+ *  'not_published': the page gives no price for that many users. */
+export type CrewCostReason = 'no_depth' | 'field_users' | 'unclear' | 'not_published';
+
+export interface CrewCost {
+  /** USD a month, exact cents; null when the recorded data cannot price this crew. */
+  cost: number | null;
+  /** The plan that gives `cost` (the cheapest one that allows the crew), or for reason
+   *  'unclear' the plan the page leaves unclear. */
+  tier: TierDetail | null;
+  /** The price used. An 'annual' request falls back to the month-to-month price for a
+   *  plan with no annual-billing price ("billed annually where offered"). */
+  billed: BillingTerm | null;
+  reason: CrewCostReason | null;
+  /** For reason 'unclear': what the page leaves unclear. */
+  unclear: TierUnclear | null;
+}
+
+const ACCOUNT_BASIS = 'per_account';
+const SEAT_BASES: ReadonlySet<string> = new Set(['per_user', 'per_technician']);
+const KNOWN_BASES: ReadonlySet<string> = new Set(['per_account', 'per_user', 'per_technician', 'not_published', 'not published']);
+const KNOWN_UNCLEAR: ReadonlySet<string> = new Set(['billing_term', 'extra_user_period', 'user_count']);
+const NON_MONTHLY_UNIT = /\b(year|yr|annual|annually|week|day|quarter)\b/i;
+const roundCents = (n: number) => Math.round(n * 100) / 100;
+
+const isHeld = (t: Tool) => typeof t.pricing.depth_hold === 'string' && t.pricing.depth_hold.trim() !== '';
+
+/** A tool carries per-plan billing facts that are shown (not held by depth_hold). */
+export function hasTierDetails(t: Tool): boolean {
+  return Array.isArray(t.pricing.tier_details) && t.pricing.tier_details.length > 0 && !isHeld(t);
+}
+
+/** A tool records what its quote depends on, and it is shown (not held by depth_hold). */
+export function hasQuoteBasis(t: Tool): boolean {
+  return typeof t.pricing.quote_basis === 'string' && t.pricing.quote_basis.trim() !== '' && !isHeld(t);
+}
+
+function tierPriceFor(d: TierDetail, term: BillingTerm): { price: number; billed: BillingTerm } | null {
+  const annual = typeof d.price_annual_billed === 'number' ? d.price_annual_billed : null;
+  const monthly = typeof d.price_monthly_billed === 'number' ? d.price_monthly_billed : null;
+  if (term === 'monthly') return monthly !== null ? { price: monthly, billed: 'monthly' } : null;
+  if (annual !== null) return { price: annual, billed: 'annual' };
+  return monthly !== null ? { price: monthly, billed: 'monthly' } : null;
+}
+
+/** One plan at one crew size: its cost, or why it has none. `blocked` is set when the
+ *  plan allows the crew but the page leaves unclear what it costs; `floor` is then the
+ *  least it can cost (its recorded price on that term, or 0 when none is recorded). */
+interface TierEval { cost: number | null; blocked: TierUnclear | null; floor: number }
+
+function evalTier(d: TierDetail, crew: number, term: BillingTerm): TierEval {
+  const none: TierEval = { cost: null, blocked: null, floor: 0 };
+  if (!Number.isInteger(crew) || crew < 1) return none;
+  if (typeof d.max_users === 'number' && crew > d.max_users) return none;
+  const unclear = d.unclear ?? null;
+  const p = tierPriceFor(d, term);
+  const floor = p ? p.price : 0;
+  if (unclear === 'billing_term') return { cost: null, blocked: unclear, floor };
+  if (!p) return none;
+  const included = typeof d.included_users === 'number' ? d.included_users : null;
+  const basis: string = d.price_basis ?? '';
+  if (SEAT_BASES.has(basis)) {
+    // Price per user, charged for at least the stated minimum (included_users).
+    return { cost: roundCents(p.price * Math.max(crew, included ?? 0)), blocked: null, floor };
+  }
+  if (basis === ACCOUNT_BASIS) {
+    const extra = typeof d.extra_user_price === 'number' ? d.extra_user_price : null;
+    if (included === null) {
+      if (unclear) return { cost: null, blocked: unclear, floor };
+      // No included-user count: with an extra-user fee we cannot tell where it starts;
+      // without one, the account price is the price for any crew the cap allows.
+      return extra === null ? { cost: roundCents(p.price), blocked: null, floor } : none;
+    }
+    if (crew <= included) return { cost: roundCents(p.price), blocked: null, floor };
+    if (unclear) return { cost: null, blocked: unclear, floor };
+    if (extra === null || NON_MONTHLY_UNIT.test(d.extra_user_unit ?? '')) return none;
+    return { cost: roundCents(p.price + (crew - included) * extra), blocked: null, floor };
+  }
+  // 'not_published' or no basis: the price cannot be read per user or per account (the
+  // page does not say what it is charged for, gives an account price with no user rule,
+  // or charges per route, location, application or as an add-on).
+  return none;
+}
+
+/** One plan's monthly cost for `crew` users, or null when its recorded facts do not
+ *  cover that crew. */
+export function tierCostAtCrewSize(d: TierDetail, crew: number, term: BillingTerm = 'annual'): number | null {
+  return evalTier(d, crew, term).cost;
+}
+
+/** The tool prices or limits users by role on at least one plan (field_user_rule). */
+export function hasFieldUserRule(t: Tool): boolean {
+  return (t.pricing.tier_details ?? []).some((d) => typeof d.field_user_rule === 'string' && d.field_user_rule.trim() !== '');
+}
+
+/** The cheapest plan that allows `crew` users, with its monthly cost. Ties keep the
+ *  plan listed first. No figure is given when a plan the page leaves unclear allows
+ *  the crew and could cost less than the cheapest priced plan, because "cheapest plan"
+ *  would then be unproven. */
+export function crewCost(t: Tool, crew: number, term: BillingTerm = 'annual'): CrewCost {
+  const empty = (reason: CrewCostReason): CrewCost => ({ cost: null, tier: null, billed: null, reason, unclear: null });
+  if (!hasTierDetails(t)) return empty('no_depth');
+  if (hasFieldUserRule(t)) return empty('field_users');
+  let best: CrewCost | null = null;
+  const blockers: { d: TierDetail; e: TierEval }[] = [];
+  for (const d of t.pricing.tier_details!) {
+    const e = evalTier(d, crew, term);
+    if (e.cost !== null) {
+      if (!best || e.cost < (best.cost as number)) {
+        best = { cost: e.cost, tier: d, billed: tierPriceFor(d, term)!.billed, reason: null, unclear: null };
+      }
+    } else if (e.blocked) {
+      blockers.push({ d, e });
+    }
+  }
+  const blocker = blockers.find((b) => best === null || b.e.floor < (best.cost as number));
+  if (blocker) return { cost: null, tier: blocker.d, billed: null, reason: 'unclear', unclear: blocker.e.blocked };
+  return best ?? empty('not_published');
+}
+
+/** Cell text for a crew cost, shared by the scenario table and the tool-page block:
+ *  the figure and its plan (with the plan's usage cap, where one is recorded), or the
+ *  reason there is no figure. */
+export function crewCellText(c: CrewCost, opts: { markMonthly: boolean }): { text: string; sub: string } {
+  if (c.cost !== null && c.tier) {
+    const parts = [c.tier.name];
+    if (opts.markMonthly && c.billed === 'monthly') parts.push('billed monthly');
+    if (c.tier.usage_limit) parts.push(c.tier.usage_limit);
+    return { text: `$${formatUsdAmount(c.cost)}/mo`, sub: parts.join(', ') };
+  }
+  switch (c.reason) {
+    case 'no_depth': return { text: 'Not recorded', sub: '' };
+    case 'field_users': return { text: 'See pricing note', sub: 'Users priced by role' };
+    case 'unclear': {
+      const plan = c.tier?.name ?? '';
+      if (c.unclear === 'billing_term') return { text: 'Billing frequency not stated', sub: plan };
+      if (c.unclear === 'extra_user_period') return { text: 'Extra-user fee period not stated', sub: plan };
+      return { text: "Plan's user count unclear", sub: plan };
+    }
+    default: return { text: 'Not published', sub: '' };
+  }
+}
+
+/** One sentence per cell label, for the footnotes under crew figures. Keys are the
+ *  label texts crewCellText returns for a null cost. */
+export const CREW_LABEL_NOTES: Record<string, string> = {
+  'Not published': `"Not published" means the vendor's pricing page, on the date it was read, gives no price for that many users: no plan with a published price allows them, the fee for extra users is not published, the page does not state how many users a price includes, it gives only a starting price, it does not say whether the price is per user or per account, or it prices by route, location or application rather than by user.`,
+  'Billing frequency not stated': `"Billing frequency not stated" means the page shows a price for a plan that allows that many users but does not say whether it is billed monthly or annually, so it is not used here; the price is in the pricing note.`,
+  'Extra-user fee period not stated': `"Extra-user fee period not stated" means a plan that could cost less charges a fee for each extra user without saying whether the fee is per month or per year, so that crew size is not priced.`,
+  "Plan's user count unclear": `"Plan's user count unclear" means the page gives a plan's user count two ways, as a count that does not read as one number, or not at all (a free plan with no stated user limit, for example), and that plan could cost less, so that crew size is not priced.`,
+  'See pricing note': `"See pricing note" means the vendor prices or limits users by role (office users and crew members, for example), while these figures count every tech as a full user, so no figure is given.`,
+  'Not recorded': `"Not recorded" means this site does not list that tool's plan prices and user rules, so no figure is shown; see its pricing note.`,
+};
+
+/** Monthly cost for a crew of `crew` users from pricing.tier_details: the cheapest plan
+ *  that allows the crew (max_users respected). per_account: price plus
+ *  max(0, crew - included_users) x extra_user_price. per_user / per_technician:
+ *  price x max(crew, included_users). 'annual' uses the annual-billing price where the
+ *  plan has one. Returns null when the data needed is missing (not published). */
+export function costAtCrewSize(t: Tool, crew: number, term: BillingTerm = 'annual'): number | null {
+  return crewCost(t, crew, term).cost;
+}
+
+/** A crew cost for display: "1,234" or "1,234.50". */
+export function formatUsdAmount(n: number): string {
+  return Number.isInteger(n)
+    ? n.toLocaleString('en-US')
+    : n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+/** A source link's visible text: host and path, without www. or a trailing slash. */
+export function sourceLabel(url: string): string {
+  try {
+    const u = new URL(url);
+    return u.hostname.replace(/^www\./, '') + u.pathname.replace(/\/+$/, '');
+  } catch {
+    return url;
+  }
+}
+
+// Fails the build on depth data that would render without its source, or that the
+// helpers above would silently misread (an unknown basis would read as "not
+// published"). Runs at module load, after every declaration above.
+function validateDepthFields(list: Tool[]): void {
+  const problems: string[] = [];
+  const isDate = (v: unknown) => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v);
+  const isUrl = (v: unknown) => typeof v === 'string' && /^https?:\/\//.test(v);
+  const numOrNull = (v: unknown) => v === null || v === undefined || (typeof v === 'number' && Number.isFinite(v) && v >= 0);
+  const intOrNull = (v: unknown, min: number) => v === null || v === undefined || (Number.isInteger(v) && (v as number) >= min);
+  for (const t of list) {
+    const p = t.pricing;
+    const td: unknown = p.tier_details;
+    if (td !== undefined && td !== null) {
+      if (!Array.isArray(td)) {
+        problems.push(`${t.slug}: tier_details is not an array`);
+      } else if (td.length > 0) {
+        if (!isUrl(p.depth_source_url)) problems.push(`${t.slug}: tier_details without an http(s) depth_source_url`);
+        if (!isDate(p.depth_read_date)) problems.push(`${t.slug}: tier_details without a YYYY-MM-DD depth_read_date`);
+        (td as TierDetail[]).forEach((d, i) => {
+          const at = `${t.slug}: tier_details[${i}]`;
+          if (!d || typeof d !== 'object') { problems.push(`${at} is not an object`); return; }
+          if (typeof d.name !== 'string' || !d.name.trim()) problems.push(`${at}.name is empty`);
+          // '|' separates plans in the CSV tier_details_* columns.
+          if (String(d.name ?? '').includes('|') || String(d.extra_user_unit ?? '').includes('|')) problems.push(`${at} has a '|' in name or extra_user_unit`);
+          if (!numOrNull(d.price_annual_billed)) problems.push(`${at}.price_annual_billed is not a number or null`);
+          if (!numOrNull(d.price_monthly_billed)) problems.push(`${at}.price_monthly_billed is not a number or null`);
+          if (!numOrNull(d.extra_user_price)) problems.push(`${at}.extra_user_price is not a number or null`);
+          if (!intOrNull(d.included_users, 0)) problems.push(`${at}.included_users is not a whole number or null (null = none stated)`);
+          if (!intOrNull(d.max_users, 1)) problems.push(`${at}.max_users is not a whole number or null (null = no published cap)`);
+          if (d.price_basis !== null && d.price_basis !== undefined && !KNOWN_BASES.has(d.price_basis)) {
+            problems.push(`${at}.price_basis '${d.price_basis}' is not per_account, per_user, per_technician, not_published or null`);
+          }
+          if (d.extra_user_unit !== null && d.extra_user_unit !== undefined && typeof d.extra_user_unit !== 'string') {
+            problems.push(`${at}.extra_user_unit is not a string or null`);
+          }
+          // 2026-10-08 review fields: usage cap, user roles, what the page leaves unclear.
+          for (const k of ['usage_limit', 'field_user_rule'] as const) {
+            const v = d[k];
+            if (v !== null && v !== undefined && (typeof v !== 'string' || !v.trim() || v.includes('|'))) {
+              problems.push(`${at}.${k} is not a non-empty string without '|', or null`);
+            }
+          }
+          if (d.unclear !== null && d.unclear !== undefined) {
+            if (!KNOWN_UNCLEAR.has(d.unclear)) problems.push(`${at}.unclear '${d.unclear}' is not billing_term, extra_user_period, user_count or null`);
+            if (d.unclear === 'billing_term' && (typeof d.price_annual_billed === 'number' || typeof d.price_monthly_billed === 'number')) {
+              problems.push(`${at}: unclear billing_term with a recorded price`);
+            }
+            if (d.unclear === 'extra_user_period' && typeof d.extra_user_price !== 'number') {
+              problems.push(`${at}: unclear extra_user_period without an extra_user_price`);
+            }
+            if (d.unclear === 'user_count' && d.price_basis !== 'per_account') {
+              problems.push(`${at}: unclear user_count on a plan that is not per_account`);
+            }
+          }
+        });
+      }
+    }
+    // 2026-10-08 final review: a seat minimum outside tier_details, and the starting-rate flag.
+    if (p.seat_minimum !== null && p.seat_minimum !== undefined) {
+      if (!Number.isInteger(p.seat_minimum) || p.seat_minimum < 2) problems.push(`${t.slug}: seat_minimum is not a whole number of 2 or more, or null`);
+      if (p.pricing_model !== 'per_user' && p.pricing_model !== 'annual_per_user') problems.push(`${t.slug}: seat_minimum on a pricing_model that is not per_user or annual_per_user`);
+    }
+    if (p.starting_rate_only !== null && p.starting_rate_only !== undefined && typeof p.starting_rate_only !== 'boolean') {
+      problems.push(`${t.slug}: starting_rate_only is not true, false or null`);
+    }
+    if (p.depth_hold !== null && p.depth_hold !== undefined && (typeof p.depth_hold !== 'string' || !p.depth_hold.trim())) {
+      problems.push(`${t.slug}: depth_hold is not a non-empty string or null`);
+    }
+    // Held quote bases are checked too (hasQuoteBasis is false while depth_hold is set).
+    if (typeof p.quote_basis === 'string' && p.quote_basis.trim() !== '') {
+      if (!isUrl(p.quote_basis_source_url)) problems.push(`${t.slug}: quote_basis without an http(s) quote_basis_source_url`);
+      if (!isDate(p.quote_basis_read_date)) problems.push(`${t.slug}: quote_basis without a YYYY-MM-DD quote_basis_read_date`);
+    }
+  }
+  if (problems.length) {
+    throw new Error(`tools.json pricing depth fields are invalid:\n- ${problems.join('\n- ')}`);
+  }
+}
+validateDepthFields(tools);

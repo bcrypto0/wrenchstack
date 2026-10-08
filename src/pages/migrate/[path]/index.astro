@@ -68,7 +68,7 @@ const scalingLabel = (t: Tool): string => {
   if (s === 'flat') return 'per company';
   if (s === 'base_plus_seat') return 'per company with some users included, plus a fee per extra user';
   if (s === 'free') return 'nothing on its free tier, with paid plans above it';
-  if (s === 'quote') return isQuoteOnly(t) ? 'by quote' : 'one-time or per-project prices';
+  if (s === 'quote') return isQuoteOnly(t) ? 'by quote' : 'module or per-project prices';
   return 'in a way described in its pricing note';
 };
 const modelsDiffer = priceScaling(fromTool) !== priceScaling(toTool)

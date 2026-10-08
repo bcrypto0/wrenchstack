@@ -24,6 +24,14 @@ import { asSentence,
   hasFreeTier,
   quoteOnlyCount,
   isQuoteOnly as isQuoteOnlyTool,
+  hasTierDetails,
+  entrySeatMinimum,
+  hasQuoteBasis,
+  crewCost,
+  crewCellText,
+  CREW_LABEL_NOTES,
+  sourceLabel,
+  type BillingTerm,
   type Tool,
 } from '../../../lib/data';
 
@@ -76,7 +84,7 @@ const isFree = startingPrice === 0;
 // is not evidence of an expensive one. Conflating them made this page assert an enterprise
 // rollout and $1M+ revenue requirements for products that may cost $40/month.
 const isQuoteOnly = isQuoteOnlyTool(tool);
-// Published prices that are not a monthly plan (one-time license, per project): not quote-only.
+// Published prices that are not a monthly plan (by module, per project): not quote-only.
 const nonMonthlyPricing = !hasPublicPricing && !isQuoteOnly;
 // Tiers come from priceTier, which compares cost per user: until 2026-09-27 this page
 // used the starting price alone, so a $297/mo flat company plan was called
@@ -142,6 +150,59 @@ const tierPriceNote = (price: number | null): string =>
     : price === highTierPrice
     ? 'Highest price in this table'
     : '';
+// Cost by crew size (added 2026-10-08): the cheapest plan that allows 1, 3, 5 and 10
+// users, priced by crewCost() from pricing.tier_details, the plan prices and user rules
+// read from the vendor's pricing page on depth_read_date. One column per billing term
+// the plans publish; with both, the annual column uses the monthly price for a plan
+// with no annual price and says so. Shown only when at least one cell has a price.
+const CREW_SIZES = [1, 3, 5, 10];
+const crewDetails = hasTierDetails(tool) ? tool.pricing.tier_details! : [];
+const crewHasAnnual = crewDetails.some((d) => typeof d.price_annual_billed === 'number');
+const crewHasMonthly = crewDetails.some((d) => typeof d.price_monthly_billed === 'number');
+const crewColumns: { term: BillingTerm; label: string }[] = [
+  ...(crewHasAnnual ? [{ term: 'annual' as BillingTerm, label: crewHasMonthly ? 'Billed annually where offered' : 'Billed annually' }] : []),
+  ...(crewHasMonthly ? [{ term: 'monthly' as BillingTerm, label: 'Billed monthly' }] : []),
+];
+// 2026-10-08 review: cell labels come from crewCellText (shared with the scenario
+// table), so a page that leaves a figure unclear, or prices users by role, is not
+// described as publishing no price; a recorded usage cap is named under the figure.
+const crewRows = CREW_SIZES.map((n) => ({
+  users: n,
+  cells: crewColumns.map((col) => {
+    const c = crewCost(tool, n, col.term);
+    return { ...crewCellText(c, { markMonthly: col.term === 'annual' }), priced: c.cost !== null };
+  }),
+}));
+const showCrewBlock = crewColumns.length > 0 && crewRows.some((r) => r.cells.some((c) => c.priced));
+const crewLabels = new Set(crewRows.flatMap((r) => r.cells.filter((c) => !c.priced).map((c) => c.text)));
+const crewLabelNotes = Object.keys(CREW_LABEL_NOTES).filter((k) => crewLabels.has(k)).map((k) => CREW_LABEL_NOTES[k]);
+const crewIntro = [
+  `Monthly cost of the cheapest ${tool.name} plan that allows each number of users, worked out from the plan prices and user rules on its pricing page, counting every tech as a full user.`,
+  'Plan prices and extra-user fees only: job, appointment and other usage limits, add-ons, setup fees and payment processing are not included; where a plan\'s usage limit is recorded, it is named under the figure.',
+  ...crewLabelNotes,
+].join(' ');
+// The "What does it cost at your team size?" widget (2026-10-08 review): it estimated
+// from the starting price, so next to the crew block it read $59 for Housecall Pro at 5
+// techs (crew block: $149 Essentials) and Joist's $8 at any number of techs. It is hidden
+// for every tool with tier_details; for the rest, the script below multiplies only a
+// per-seat price and shows other models' entry price as an entry price, not an estimate.
+// Also hidden while the tool is on depth_hold (2026-10-08 re-review): a hold means the
+// headline prices or pricing note this widget reads are out of date with the pricing page.
+const isDepthHeld = typeof tool.pricing.depth_hold === 'string' && tool.pricing.depth_hold.trim() !== '';
+// Per-user tools whose entry plan allows one user only, with no tier_details to price the
+// next plan (2026-10-08 final review): Powered Now's Business plan is single user only
+// (pricing note, powerednow.com/pricing 2026-10-08), so the widget's 5 x $30.82 used a
+// price no 5-user plan charges (Professional is $35.22 per user). Hidden until the
+// plans are recorded in tier_details.
+const ENTRY_PLAN_ONE_USER_SLUGS = new Set(['powered-now']);
+const showEstimateWidget = !hasTierDetails(tool) && !isDepthHeld && !ENTRY_PLAN_ONE_USER_SLUGS.has(tool.slug);
+// The vendor's seat minimum for the entry price (pricing.seat_minimum; Smart Service 3).
+// The widget charges at least that many seats: until 2026-10-08 it read $129.99 at 1
+// tech, below Smart Service's 3-user minimum.
+const widgetSeatMinimum = entrySeatMinimum(tool);
+// What a quote-only price depends on, in the vendor's terms, with its source.
+const showQuoteBasis = isQuoteOnly && hasQuoteBasis(tool);
+
 // A clause naming a setup, onboarding or implementation fee, unless it says "no" fee:
 // the old single regex also matched "no setup fees" (8 of the 17 notes it hit).
 const hasSetupFee = (tool.pricing.pricing_note ?? '')
@@ -206,7 +267,7 @@ function pricingAnalysis(): string {
   const trialNote = hasFreeTrial ? ` ${tool.pricing.free_trial_days}-day free trial.` : '';
 
   if (nonMonthlyPricing) {
-    return `${tool.name} publishes its prices, but not as a monthly plan: see the pricing note for its one-time or per-project prices, and compare the total over the period you expect to use it.`;
+    return `${tool.name} publishes its prices, but not as a monthly plan: see the pricing note for its module or per-project prices, and compare the total over the period you expect to use it.`;
   }
   if (!hasPublicPricing) {
     return `${tool.name} does not publish a price, so you need a quote before you can compare it (${quoteOnlyCount()} of the ${tools.length} tools we list are quote-only). A missing price is not evidence of a high one. Get the quote in writing and confirm what it includes (number of users, integrations, onboarding, support) before you sign.`;
@@ -402,7 +463,7 @@ function getFaqs(): { q: string; a: string }[] {
       isQuoteOnly
         ? `${tool.name} does not publish a price, so get a written quote for your seat count before you compare it with anything here.`
         : nonMonthlyPricing
-        ? `${tool.name} publishes one-time or per-project prices rather than a monthly plan (see the pricing note), so compare its total cost over the period you expect to use it.`
+        ? `${tool.name} publishes module or per-project prices rather than a monthly plan (see the pricing note), so compare its total cost over the period you expect to use it.`
         : isFree
         ? `The free tier lets you try it with real jobs before you pay; check which features the paid tiers add.`
         : `At ${priceText}, weigh the price against the admin time it saves you, and run real jobs through it in a trial or demo before you commit.`
@@ -476,7 +537,10 @@ const pageWords = FIXED_WORDS
   + (hasCustomPros ? tool.pros_detail!.reduce((n, p) => n + wc(p.title) + wc(p.explanation), 0) : prosList.reduce((n, p) => n + wc(p), 0))
   + (hasCustomCons ? tool.cons_detail!.reduce((n, c) => n + wc(c.title) + wc(c.explanation), 0) : consList.reduce((n, c) => n + wc(c), 0))
   + faqsList.reduce((n, f) => n + wc(f.q) + wc(f.a), 0)
-  + smartAlts.reduce((n, a) => n + wc(a.tool.name) + wc(a.reason) + wc(a.tool.tagline) + wc(formatPrice(a.tool)), 0);
+  + smartAlts.reduce((n, a) => n + wc(a.tool.name) + wc(a.reason) + wc(a.tool.tagline) + wc(formatPrice(a.tool)), 0)
+  // Cost-by-crew-size and quote-basis blocks (2026-10-08), when shown.
+  + (showCrewBlock ? wc(crewIntro) + crewRows.reduce((n, r) => n + 1 + r.cells.reduce((m, c) => m + wc(c.text) + wc(c.sub), 0), 0) + 12 : 0)
+  + (showQuoteBasis ? wc(tool.pricing.quote_basis) + 10 : 0);
 
 const productSchema = {
   '@context': 'https://schema.org',
@@ -775,7 +839,7 @@ const breadcrumbs = [
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700">
         <strong class="text-slate-900">{tool.name}</strong> is best for {asSentence(tool.best_for)}
-        Pricing {isFree ? 'starts with a free tier' : hasPublicPricing ? `starts at ${priceText}` : isQuoteOnly ? 'is quote-only (no published price)' : 'is published as one-time or per-project prices (see the pricing note)'}.
+        Pricing {isFree ? 'starts with a free tier' : hasPublicPricing ? `starts at ${priceText}` : isQuoteOnly ? 'is quote-only (no published price)' : 'is published as module or per-project prices (see the pricing note)'}.
         {strongVerticals.length > 0 && ` Trade fit of 8/10 or higher: ${strongVerticals.slice(0, 3).join(', ')}${strongVerticals.length > 3 ? ` and ${strongVerticals.length - 3} more` : ''}.`}
         {hasFreeTrial && ` ${tool.pricing.free_trial_days}-day free trial available.`}
       </p>
@@ -825,20 +889,65 @@ const breadcrumbs = [
         Pricing verified {tool.pricing.verified_date}. Prices can change, so confirm them with {tool.name} before purchasing.
       </p>
 
-      <div
+      {showCrewBlock && (
+        <div class="mt-6 rounded-lg border border-slate-200 bg-white p-5" id="cost-by-crew-size">
+          <h3 class="text-base font-bold text-slate-900">Cost by crew size</h3>
+          <p class="mt-1 text-xs text-slate-600">{crewIntro}</p>
+          <div class="mt-3 overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="text-left text-slate-700">
+                <tr>
+                  <th class="py-2 pr-3 font-semibold">Users</th>
+                  {crewColumns.map((col) => <th class="py-2 pr-3 text-right font-semibold">{col.label}</th>)}
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                {crewRows.map((r) => (
+                  <tr>
+                    <td class="py-2 pr-3 font-semibold text-slate-900">{r.users}</td>
+                    {r.cells.map((c) => (
+                      <td class="py-2 pr-3 text-right text-slate-700">
+                        {c.text}
+                        {c.sub && <span class="block text-xs text-slate-500">{c.sub}</span>}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="mt-3 text-xs text-slate-500">
+            Source: <a href={tool.pricing.depth_source_url!} rel="nofollow noopener" target="_blank" class="text-orange-700 hover:underline">{sourceLabel(tool.pricing.depth_source_url!)}</a>, read {tool.pricing.depth_read_date}.
+          </p>
+        </div>
+      )}
+
+      {showQuoteBasis && (
+        <div class="mt-6 rounded-lg border border-slate-200 bg-white p-5" id="quote-basis">
+          <h3 class="text-base font-bold text-slate-900">What the quote depends on</h3>
+          <p class="mt-1 text-sm text-slate-700">{asSentence(tool.pricing.quote_basis)}</p>
+          <p class="mt-3 text-xs text-slate-500">
+            Source: <a href={tool.pricing.quote_basis_source_url!} rel="nofollow noopener" target="_blank" class="text-orange-700 hover:underline">{sourceLabel(tool.pricing.quote_basis_source_url!)}</a>, read {tool.pricing.quote_basis_read_date}.
+          </p>
+        </div>
+      )}
+
+      {showEstimateWidget && (<div
         class="mt-6 rounded-lg border border-orange-200 bg-orange-50 p-5"
         data-pricing-widget
         data-starting-price={tool.pricing.starting_at_usd ?? ''}
         data-pricing-note={tool.pricing.pricing_note ?? ''}
         data-pricing-model={perInstall ? 'per_install' : (tool.pricing.pricing_model ?? '')}
         data-seat-unit={unit !== 'user' ? unit : undefined}
+        data-seat-minimum={widgetSeatMinimum > 1 ? String(widgetSeatMinimum) : undefined}
+        data-starting-rate-only={tool.pricing.starting_rate_only ? 'true' : undefined}
         data-tool-name={tool.name}
       >
         <div class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-700">
           What does {tool.name} cost at your team size?
         </div>
         <div class="flex flex-wrap items-end gap-4">
-          <div>
+          <div id="pw-techs-wrap">
             <label for="pw-techs" class="mb-1 block text-xs font-medium text-slate-700">Number of techs</label>
             <input
               type="number"
@@ -850,17 +959,17 @@ const breadcrumbs = [
             />
           </div>
           <div class="flex-1 min-w-[200px]">
-            <div class="text-xs font-medium text-slate-700">Estimated monthly cost</div>
+            <div class="text-xs font-medium text-slate-700" id="pw-monthly-label">Estimated monthly cost</div>
             <div class="mt-1 text-2xl font-bold text-slate-900" id="pw-monthly">-</div>
           </div>
           <div class="flex-1 min-w-[200px]">
-            <div class="text-xs font-medium text-slate-700">Annual cost</div>
+            <div class="text-xs font-medium text-slate-700" id="pw-annual-label">Annual cost</div>
             <div class="mt-1 text-2xl font-bold text-slate-900" id="pw-annual">-</div>
           </div>
         </div>
         <p class="mt-3 text-xs text-slate-600" id="pw-note">
           {hasPublicPricing
-            ? `Estimate uses the published starting tier and whether that price is per ${unit} or per company. For an exact price at your team size and feature requirements, ask ${tool.name}.`
+            ? `Uses the published starting tier and whether that price is per ${unit} or per company: a per-${unit} price is multiplied by the techs${widgetSeatMinimum > 1 ? ` (at least ${widgetSeatMinimum}, the vendor's minimum)` : ''}, and any other price is shown as published. For an exact price at your team size and feature requirements, ask ${tool.name}.`
             : `${tool.name} has no published monthly price we can model at your team size, so we do not estimate one: any figure here would be a guess. ${isQuoteOnly ? `Ask ${tool.name} for a quote.` : 'See the pricing note for its published prices.'}`}
         </p>
         <div class="mt-3 flex flex-wrap gap-2 text-xs">
@@ -871,7 +980,14 @@ const breadcrumbs = [
             Switching from another tool? Estimate the 12-month cost of switching →
           </a>
         </div>
-      </div>
+      </div>)}
+      {!showEstimateWidget && (
+        <p class="mt-6 text-sm">
+          <a href={`/cost-of-switch/?to=${tool.slug}`} class="font-medium text-orange-700 hover:underline">
+            Switching from another tool? Estimate the 12-month cost of switching →
+          </a>
+        </p>
+      )}
     </section>
 
     <section id="features" class="mb-10 scroll-mt-8">
@@ -1060,7 +1176,7 @@ const breadcrumbs = [
             ? `Pricing starts at ${priceText}.`
             : isQuoteOnly
             ? `No published price: ask ${tool.name} for a quote.`
-            : 'Prices are one-time or per project: see the pricing note above.',
+            : 'Prices are by module or per project: see the pricing note above.',
           hasFreeTrial ? `${tool.pricing.free_trial_days}-day free trial.` : '',
           (hasFreeTrial || isFree) && noCardNoted ? 'The pricing note records that no credit card is needed.' : '',
         ].filter(Boolean).join(' ')}
@@ -1178,15 +1294,22 @@ const breadcrumbs = [
       // FastEST (see PER_INSTALL_SLUGS): priced per application install, not per tech,
       // so the estimate is not multiplied (it multiplied $250 by the techs until 2026-10-01).
       const isPerInstall = pricingModel === 'per_install';
+      // The vendor's seat minimum (Smart Service: 3); fewer techs are charged at it.
+      const seatMinimum = Math.max(1, parseInt(widget.dataset.seatMinimum ?? '1', 10) || 1);
+      // The page publishes only a starting rate; the full price needs a quote.
+      const startingRateOnly = widget.dataset.startingRateOnly === 'true';
 
       function format(n: number): string {
-        return '$' + Math.round(n).toLocaleString('en-US');
+        const r = Math.round(n * 100) / 100;
+        return '$' + (Number.isInteger(r)
+          ? r.toLocaleString('en-US')
+          : r.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
       }
 
       function update() {
         const techs = parseInt(techsInput!.value, 10) || 1;
         if (isCustomQuoted) {
-          // No monthly price is either quote-only or a one-time / per-project price
+          // No monthly price is either quote-only or a module or per-project price
           // (Trash Flow, Pylon), which until 2026-10-01 also showed "Quote only".
           const label = pricingModel === 'quote_only' ? 'Quote only' : 'See pricing note';
           techsInput!.disabled = true;
@@ -1202,22 +1325,38 @@ const breadcrumbs = [
           noteEl!.innerHTML = `${toolName} has a free tier. The pricing note above lists what it includes and its limits; paid tiers are priced there too.`;
           return;
         }
-        const monthly = isPerUser ? startingPrice * techs : startingPrice;
+        const monthly = isPerUser ? startingPrice * Math.max(techs, seatMinimum) : startingPrice;
         const annual = monthly * 12;
         monthlyEl!.textContent = format(monthly);
         annualEl!.textContent = format(annual);
+        if (!isPerUser) {
+          // Not multiplied by the techs, so not an estimate at a team size: label it as
+          // the published entry price and hide the techs input, which changes nothing.
+          const wrap = document.getElementById('pw-techs-wrap');
+          if (wrap) wrap.hidden = true;
+          const ml = document.getElementById('pw-monthly-label');
+          const al = document.getElementById('pw-annual-label');
+          if (ml) ml.textContent = 'Published entry price, monthly';
+          if (al) al.textContent = 'Entry price for 12 months';
+        }
         if (isPerInstall) {
-          noteEl!.innerHTML = `${toolName}'s lease price is $${startingPrice}/mo for <strong>one application installed on one PC or tablet</strong>, so this estimate doesn't multiply it by the number of techs. See the pricing note above for additional applications, purchase prices and network licensing.`;
+          noteEl!.innerHTML = `${toolName}'s lease price is $${startingPrice}/mo for <strong>one application installed on one PC or tablet</strong>, so it is not multiplied by the number of techs. See the pricing note above for additional applications, purchase prices and network licensing.`;
         } else if (isFlat) {
-          noteEl!.innerHTML = `${toolName} charges a <strong>flat monthly price per plan</strong>, so this estimate doesn't scale with team size. Plans can cap users or usage, so check which plan fits your team in the pricing note above.`;
+          noteEl!.innerHTML = `${toolName} charges a <strong>flat monthly price per plan</strong>; this is the published entry plan's price, not a cost at your team size. Plans can cap users or usage, so check which plan fits your team in the pricing note above.`;
         } else if (isBasePlusSeat) {
-          noteEl!.innerHTML = `${toolName} charges a <strong>base price that includes some users</strong>, plus a fee for each extra seat. This estimate shows the base price only; see the pricing note above for seat costs.`;
+          noteEl!.innerHTML = `${toolName} charges a <strong>base price that includes some users</strong>, plus a fee for each extra seat. This is the published base price only, not a cost at your team size; see the pricing note above for seat costs.`;
+        } else if (isPerUser && (seatMinimum > 1 || startingRateOnly)) {
+          const minText = seatMinimum > 1 ? ` with a ${seatMinimum}-${seatUnitName} minimum` : '';
+          const by = seatMinimum > 1 ? `the number of techs, or by ${seatMinimum} for fewer techs` : 'the number of techs';
+          noteEl!.innerHTML = startingRateOnly
+            ? `${toolName} publishes a <strong>per-${seatUnitName} starting rate</strong> of $${startingPrice}/${seatUnitName}/mo${minText}, so this estimate multiplies it by ${by}. The full price needs a quote; see the pricing note above.`
+            : `${toolName} uses <strong>per-${seatUnitName}</strong> pricing at $${startingPrice}/${seatUnitName}/mo on the entry tier${minText}, so this estimate multiplies it by ${by}. See the pricing note above for higher tiers.`;
         } else if (isPerUser) {
           noteEl!.innerHTML = seatUnitName === 'user'
             ? `${toolName} uses <strong>per-user</strong> pricing at $${startingPrice}/user/mo on the entry tier, so this estimate multiplies it by the number of techs. See the pricing note above for seat minimums and higher tiers.`
             : `${toolName} charges <strong>per ${seatUnitName}</strong> at $${startingPrice}/${seatUnitName}/mo on the entry tier, and this estimate counts one ${seatUnitName} per tech. See the pricing note above for what counts as a ${seatUnitName} and for higher tiers.`;
         } else {
-          noteEl!.innerHTML = `${toolName}'s published entry price is $${startingPrice}/mo. How it scales with team size isn't clear from the vendor's page, so this estimate doesn't multiply it; check the pricing note above.`;
+          noteEl!.innerHTML = `${toolName}'s published entry price is $${startingPrice}/mo. How it scales with team size isn't clear from the vendor's page, so it is not multiplied; check the pricing note above.`;
         }
       }
 

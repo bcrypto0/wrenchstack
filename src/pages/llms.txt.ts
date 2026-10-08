@@ -12,6 +12,8 @@ import {
   flatFeeTools,
   totalReputationFlags,
   reputationFlagGroups,
+  hasTierDetails,
+  hasQuoteBasis,
 } from '../lib/data';
 import { intlVendorOnlyCount, intlCertificationCount, intlMarketCount } from '../lib/intl';
 
@@ -46,7 +48,7 @@ const flatFee = flatFeeMedian();
 const flatN = flatFeeTools().filter(isPaid).length;
 
 // Quote-only is pricing_model 'quote_only' (shared helper), not a null starting
-// price: Trash Flow and Pylon publish one-time or per-project prices (2026-10-01).
+// price: Trash Flow and Pylon publish module or per-project prices (2026-10-01).
 const quoteOnlyPctValue = Math.round((quoteOnlyCount() / tools.length) * 100);
 
 // Largest flag categories, named rather than totalled, because "29 flagged"
@@ -58,6 +60,13 @@ const sortedFlagGroups = reputationFlagGroups()
   .slice()
   .sort((a, b) => b.entries.length - a.entries.length);
 const flagCut = sortedFlagGroups[2]?.entries.length ?? 0;
+// Open dataset files (listed here from 2026-10-08). The counts say how many rows carry
+// the per-plan billing facts and the quote basis, so the line stays true while they fill.
+const depthN = tools.filter(hasTierDetails).length;
+const quoteQuoteOnlyN = quoteOnlyCount();
+const quoteBasisN = tools.filter(hasQuoteBasis).length;
+const rowWord = (n: number) => `${n} ${n === 1 ? 'platform' : 'platforms'}`;
+
 const flagBreakdown = sortedFlagGroups
   .filter((g) => g.entries.length >= flagCut)
   .map((g) => `${lowerFirst(g.category)} ${g.entries.length}`)
@@ -117,6 +126,8 @@ Key facts about the data: every US pricing figure carries a verified date, shown
 - [Oman e-invoicing (Fawtara) for construction companies](https://wrenchstack.com/om/guides/oman-e-invoicing-contractors/): Oman compliance guide, Peppol-based VAT e-invoicing mandate, 100 large VAT-registered companies from August 2026, all large ones from February 2027 and all remaining VAT-registered taxpayers from August 2027, per the Oman Tax Authority's FAQ, and what accounting software says about Fawtara
 - [Facturation électronique (e-invoicing) for French artisans](https://wrenchstack.com/fr/guides/facturation-electronique-artisans/): France compliance guide, e-invoice reception for all from 1 Sept 2026, issuance for SMEs and micro-entreprises from 1 Sept 2027, the plateforme agréée model, and the e-invoicing route each software in our France directory names
 - [2026 Trades Software Market Report](https://wrenchstack.com/trends-2026/): original research across the full ${usVendorTotal()}-vendor US stack (10 categories) and ${intlMarketCount} international markets. Median published entry price across the directory $${medianEntry}/month, which mixes pricing models and should not be quoted as a per-seat rate: ${perUserN} platforms charge per user (median $${perUser} per user/month), ${flatN} charge a flat monthly fee (median $${flatFee}/month) and ${annualN} ${annualN === 1 ? 'sells' : 'sell'} annual per-user licences. ${quoteOnlyPctValue}% of platforms publish no price at all, ${quickbooksPct()}% integrate with QuickBooks, plus a reputation-flag ledger (${totalReputationFlags()} flagged vendors; largest categories: ${flagBreakdown}) and the international markets, six of them with Arabic pages. Free to cite.
+- [Pricing dataset, CSV](https://wrenchstack.com/data/trades-software-pricing-2026.csv): one row per field-service software platform (${tools.length} rows), CC BY 4.0, regenerated from the directory on every build. Columns: entry price, tier names and prices, pricing model, free-trial days and the date each price was verified; per-plan billing basis (price billed annually and paid monthly, per account or per user), included users, extra-user price, user cap, recorded usage limits, user-role rules and what the page leaves unclear, with the source URL and read date (published for ${rowWord(depthN)}); and, for quote-only platforms, what the quote depends on, with its source URL and read date (recorded for ${quoteBasisN} of ${quoteQuoteOnlyN}).
+- [Pricing dataset, JSON](https://wrenchstack.com/data/trades-software-pricing-2026.json): the same rows and fields (per-plan details as a tier_details list), plus field definitions, license and summary statistics.
 - [Reputation ledger](https://wrenchstack.com/reputation-flags/): all ${totalReputationFlags()} documented vendor warnings on one page, each with its evidence. No vendor can pay to have one removed.
 - [Research hub](https://wrenchstack.com/research/): citable statistics computed from the directory data
 - [2026 Awards](https://wrenchstack.com/awards/2026/): editorial awards by category

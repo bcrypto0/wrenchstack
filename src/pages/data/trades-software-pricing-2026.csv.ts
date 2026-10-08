@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { tools } from '../../lib/data';
+import { tools, TIER_DETAIL_KEYS, hasTierDetails, hasQuoteBasis } from '../../lib/data';
 
 // Static endpoint: Astro generates /data/trades-software-pricing-2026.csv at
 // build time from tools.json, so the published dataset can never drift from
@@ -40,13 +40,26 @@ export const GET: APIRoute = () => {
     // 2026-09-30: the g2_rating and capterra_rating columns before it were removed
     // (third-party review scores could not be verified), so it moved up two places.
     'pricing_model',
+    // 2026-10-08: per-plan billing facts and quote basis, appended last so existing
+    // column positions do not move. Each tier_details_* column holds one value per
+    // plan, '|'-separated in the order of tier_details_name (an empty slot is null),
+    // like tier_names and tier_prices_usd. Empty for rows with no tier_details.
+    ...TIER_DETAIL_KEYS.map((k) => `tier_details_${k}`),
+    'depth_source_url',
+    'depth_read_date',
+    'quote_basis',
+    'quote_basis_source_url',
+    'quote_basis_read_date',
   ];
 
   const rows = tools.map((t) => {
     const p = t.pricing;
+    // hasTierDetails, not the bare array: a tool on depth_hold exports no plan data
+    // (the JSON does the same). Until the 2026-10-08 re-review the CSV exported held rows.
+    const td = hasTierDetails(t) ? p.tier_details! : [];
     // 2026-10-01: quote_only follows pricing_model (the vendor publishes no entry
     // price). A null starting price alone also covers the 'unclear' rows, which
-    // publish one-time or per-project prices.
+    // publish module or per-project prices.
     const quoteOnly = p.pricing_model === 'quote_only';
     return [
       t.slug,
@@ -63,6 +76,12 @@ export const GET: APIRoute = () => {
       t.founded,
       t.headquartered,
       p.pricing_model ?? 'unclear',
+      ...TIER_DETAIL_KEYS.map((k) => (td.length ? td.map((d) => d[k] ?? '').join('|') : '')),
+      td.length ? p.depth_source_url : '',
+      td.length ? p.depth_read_date : '',
+      hasQuoteBasis(t) ? p.quote_basis : '',
+      hasQuoteBasis(t) ? p.quote_basis_source_url : '',
+      hasQuoteBasis(t) ? p.quote_basis_read_date : '',
     ]
       .map(csvField)
       .join(',');

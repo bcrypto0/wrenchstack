@@ -9,6 +9,8 @@ import {
   priceScaling,
   seatUnit,
   isQuoteOnly,
+  entryMinimumBill,
+  seatMinimumPhrase,
   type Tool,
 } from '../../../lib/data';
 
@@ -59,7 +61,11 @@ const alternatives = allAlternatives.slice(0, 8);
 const primaryVerticalLabel = verticals.find((v) => v.slug === primaryVertical)?.name ?? primaryVertical;
 
 // --- Slice alternatives by switching motivation ---
-const toolPrice = tool.pricing.starting_at_usd;
+// "Lower starting price" compares the smallest bills: a per-seat price times the
+// vendor's seat minimum (entryMinimumBill). Until 2026-10-08 (final review) the raw
+// prices were compared, so Service Fusion's page said to pick Smart Service ($129.99 per
+// user, 3-user minimum) for a lower starting price than its $208 for the company.
+const toolMinBill = entryMinimumBill(tool);
 
 // A starting price with its basis, so a per-user price is not read as a company price
 // when two are compared (2026-10-01). "Cheaper" used to compare the bare numbers.
@@ -70,8 +76,9 @@ const PER_INSTALL_SLUGS = new Set(['fastest']);
 const priceLabel = (t: Tool): string => {
   const s = priceScaling(t);
   const base = formatPrice(t);
+  const min = seatMinimumPhrase(t);
   return s === 'per_user' && PER_INSTALL_SLUGS.has(t.slug) ? `${base} per application install`
-    : s === 'per_user' ? `${base} per ${seatUnit(t)}`
+    : s === 'per_user' ? `${base} per ${seatUnit(t)}${min ? `, ${min}` : ''}`
     : s === 'flat' ? `${base} for the company`
     : s === 'base_plus_seat' ? `${base} base, plus seats`
     : base;
@@ -90,10 +97,10 @@ const namesList = (list: Tool[]): string => {
 };
 
 // Cheaper alternatives (only if tool has a price)
-const cheaperAlternatives = toolPrice !== null && toolPrice > 0
+const cheaperAlternatives = toolMinBill !== null && toolMinBill > 0
   ? allAlternatives
-      .filter((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd < toolPrice)
-      .sort((a, b) => (a.pricing.starting_at_usd ?? 999) - (b.pricing.starting_at_usd ?? 999))
+      .filter((t) => entryMinimumBill(t) !== null && (entryMinimumBill(t) as number) < toolMinBill)
+      .sort((a, b) => (entryMinimumBill(a) as number) - (entryMinimumBill(b) as number))
       .slice(0, 4)
   : [];
 
@@ -154,9 +161,9 @@ const fitLine = `${tool.name} scores ${fitScore}/10 on our ${primaryVerticalLabe
 const fitRanked = allAlternatives.filter((t) => primaryFit(t) !== null);
 const topAltFit = fitRanked.length > 0 ? Math.max(...fitRanked.map((t) => primaryFit(t) as number)) : null;
 const topFitAlts = topAltFit === null ? [] : fitRanked.filter((t) => primaryFit(t) === topAltFit);
-const pricedAlts = allAlternatives.filter((t) => t.pricing.starting_at_usd !== null);
-const lowestAltPrice = pricedAlts.length > 0 ? Math.min(...pricedAlts.map((t) => t.pricing.starting_at_usd as number)) : null;
-const lowestPriceAlts = lowestAltPrice === null ? [] : pricedAlts.filter((t) => t.pricing.starting_at_usd === lowestAltPrice);
+const pricedAlts = allAlternatives.filter((t) => entryMinimumBill(t) !== null);
+const lowestAltPrice = pricedAlts.length > 0 ? Math.min(...pricedAlts.map((t) => entryMinimumBill(t) as number)) : null;
+const lowestPriceAlts = lowestAltPrice === null ? [] : pricedAlts.filter((t) => entryMinimumBill(t) === lowestAltPrice);
 
 const faqs = [
   {
@@ -303,8 +310,9 @@ const breadcrumbs = [
       {alternatives.map((alt, i) => {
         const overlap = alt.verticals.filter((v) => tool.verticals.includes(v));
         const altPrice = alt.pricing.starting_at_usd;
-        const isCheaper = altPrice !== null && toolPrice !== null && altPrice < toolPrice;
-        // isQuoteOnly, not a null price: Trash Flow and Pylon publish one-time or
+        const altMinBill = entryMinimumBill(alt);
+        const isCheaper = altMinBill !== null && toolMinBill !== null && altMinBill < toolMinBill;
+        // isQuoteOnly, not a null price: Trash Flow and Pylon publish module or
         // per-project prices, so "instead of a quote" would be false for them.
         const publishesWhereToolQuotes = altPrice !== null && isQuoteOnly(tool);
         const altFit = primaryFit(alt);
@@ -316,7 +324,9 @@ const breadcrumbs = [
         const toolOnlyFeatures = tool.key_features.filter((f) => !alt.key_features.includes(f));
         const pickReasons: string[] = [];
         if (isCheaper) pickReasons.push(`you want a lower starting price (${priceLabel(alt)} against ${priceLabel(tool)}; compare them at your team size)`);
-        if (publishesWhereToolQuotes) pickReasons.push(`you want a published price (${priceLabel(alt)}) instead of a quote`);
+        // A page that gives only a starting rate and says the full price needs a quote
+        // (starting_rate_only, Smart Service) is not "a published price" (2026-10-08).
+        if (publishesWhereToolQuotes) pickReasons.push(`you want ${alt.pricing.starting_rate_only ? 'a published starting rate' : 'a published price'} (${priceLabel(alt)}) instead of a quote`);
         if (isBetterFit) pickReasons.push(`you work in ${primaryVerticalLabel}: ${alt.name} has the higher fit score there (${altFit}/10 against ${fitScore}/10)`);
         if (pickReasons.length === 0) pickReasons.push(`its target profile matches yours: ${alt.best_for}`);
 

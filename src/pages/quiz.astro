@@ -7,7 +7,7 @@ const toolsForQuiz = tools.map(t => ({
   name: t.name,
   tagline: t.tagline,
   starting_at_usd: t.pricing.starting_at_usd,
-  // formatPrice tells quote-only tools apart from the two that publish one-time or
+  // formatPrice tells quote-only tools apart from the two that publish module or
   // per-project prices; until 2026-10-01 both showed "Custom". A per-user price is
   // labelled as one, as on the pricing pages, so it does not read as a company price;
   // the seat is pricing.seat_unit where the vendor prices per route or per driver.

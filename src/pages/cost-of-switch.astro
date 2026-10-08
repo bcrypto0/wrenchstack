@@ -17,7 +17,7 @@ const calculatorTools = tools.map((t) => ({
   pricingNote: t.pricing.pricing_note ?? '',
   pricingModel: t.pricing.pricing_model ?? '',
   bestTeamSize: t.best_team_size ?? '',
-  // Quote-only = isQuoteOnly. Two tools with no monthly starting price (one-time or
+  // Quote-only = isQuoteOnly. Two tools with no monthly starting price (module or
   // per-project prices) are not quote-only and get their own message.
   quoteOnly: isQuoteOnly(t),
 }));
@@ -335,7 +335,7 @@ const faqSchema = {
       const toMonthly = !isNaN(toEntered) && toEntered >= 0 ? toEntered : monthlyCostOf(toTool, techs);
       if (fromMonthly === null || toMonthly === null) {
         const missing = [];
-        const noPrice = (t) => t.quoteOnly ? t.name + ' publishes no price.' : t.name + ' publishes no monthly plan (see its pricing note for one-time or per-project prices).';
+        const noPrice = (t) => t.quoteOnly ? t.name + ' publishes no price.' : t.name + ' publishes no monthly plan (see its pricing note for module or per-project prices).';
         if (fromMonthly === null) missing.push(noPrice(fromTool) + ' Enter your current monthly bill.');
         if (toMonthly === null) missing.push(noPrice(toTool) + ' Enter the monthly cost you were quoted.');
         outputDiv.classList.remove('hidden');

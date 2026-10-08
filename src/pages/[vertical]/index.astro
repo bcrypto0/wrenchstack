@@ -79,7 +79,7 @@ const publicPrices = ranked
 // (Dumpster Rental Systems). Nothing on this page computes with the median.
 const medianPrice = publicPrices.length ? Math.round(medianUsd(publicPrices)) : null;
 // Quote-only = pricing_model 'quote_only'. A null starting price is not the test: two
-// tools publish one-time or per-project prices instead of a monthly plan, and they are
+// tools publish module or per-project prices instead of a monthly plan, and they are
 // counted separately (otherPricing) rather than as hiding their price.
 const hidePricingCount = ranked.filter(isQuoteOnly).length;
 const otherPricing = ranked.filter((t) => t.pricing.starting_at_usd === null && !isQuoteOnly(t));
@@ -117,7 +117,7 @@ const pricingBands = [
   { label: 'Budget', range: 'under $100/user/mo', tools: inTier('entry') },
   { label: 'Mid-market', range: '$100-$249/user/mo', tools: inTier('mid') },
   { label: 'Premium', range: '$250+/user/mo', tools: inTier('enterprise') },
-  // Published prices that are not a monthly plan (one-time license, per-project fee).
+  // Published prices that are not a monthly plan (module prices, per-project fee).
   { label: 'Other published pricing', range: 'not a monthly plan', tools: otherPricing },
   { label: 'Custom quote only', range: 'sales call required', tools: inTier('quote-only').filter(isQuoteOnly) },
 ].filter((b) => b.tools.length > 0);
@@ -409,7 +409,7 @@ const breadcrumbs = [
         <p class="mb-5 text-sm text-slate-600 leading-relaxed">
           {priceLo && priceHi && (<>Across the {ranked.length}{' '}{plat} we track, {freeTierCount > 0 ? <>{freeTierCount}{' '}{freeTierCount === 1 ? 'offers' : 'offer'} a free tier and the other</> : 'the'}{' '}published monthly starting prices run from {priceLo} to {priceHi}{medianPrice !== null ? <>, with a median of ${medianPrice}/mo</> : null}. </>)}
           {hidePricingCount > 0 && (<>{hidePricingCount} of {ranked.length}{' '}{hidePricingCount === 1 ? 'publishes' : 'publish'} no price and {hidePricingCount === 1 ? 'quotes' : 'quote'} only on a sales call. </>)}
-          {otherPricing.length > 0 && (<>{otherPricing.length}{' '}{otherPricing.length === 1 ? 'publishes' : 'publish'} prices that are not a monthly plan, such as a one-time license or a per-project fee. </>)}
+          {otherPricing.length > 0 && (<>{otherPricing.length}{' '}{otherPricing.length === 1 ? 'publishes' : 'publish'} prices that are not a monthly plan, such as module prices or a per-project fee. </>)}
           Pricing verified {verifiedLabel}.
         </p>
         <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">

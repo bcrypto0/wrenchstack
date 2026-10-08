@@ -15,6 +15,11 @@ import {
   hasFreeTier,
   medianUsd,
   pricedEntryValues,
+  crewCost,
+  costAtCrewSize,
+  formatUsdAmount,
+  crewCellText,
+  CREW_LABEL_NOTES,
   type Vertical,
   type Tool,
 } from '../../../lib/data';
@@ -57,7 +62,7 @@ const count = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : 
 // fee, a 6-8 tech "crossover", $20-$200 add-ons, "verified quarterly", "requesting
 // current quotes") and named tools as per-user that are quote-only or base-plus-seat.
 // Quote-only = isQuoteOnly (pricing_model 'quote_only'); a null starting price is not
-// the test, because two tools publish one-time or per-project prices instead.
+// the test, because two tools publish module or per-project prices instead.
 const freeTierTools = verticalTools.filter(hasFreeTier);
 const paidTools = cheapestFirst.filter((t) => t.pricing.starting_at_usd !== null && t.pricing.starting_at_usd > 0);
 const quoteOnlyTools = verticalTools.filter(isQuoteOnly);
@@ -158,7 +163,7 @@ function startingLabel(t: Tool): string {
 }
 
 function tierPriceLabel(t: Tool, price: number | null | undefined): string {
-  // Trash Flow and Pylon publish one-time or per-project prices in their notes (and
+  // Trash Flow and Pylon publish module or per-project prices in their notes (and
   // Trash Flow in its tier names), so a missing tier figure is not "Not published".
   if (price === null || price === undefined) return isQuoteOnly(t) ? 'Custom quote' : t.pricing.starting_at_usd === null ? 'See pricing note' : 'Not published';
   if (price === 0) return 'Free';
@@ -168,57 +173,42 @@ function tierPriceLabel(t: Tool, price: number | null | undefined): string {
   return `$${formatUsd(price)}/mo`;
 }
 
-// Minimums stated in a pricing note: a number of users or a yearly spend.
-const noteOf = (t: Tool) => t.pricing.pricing_note ?? '';
-const hasMinimum = (t: Tool) => /\bminimum\b/i.test(noteOf(t)) && !/\bno minimum\b/i.test(noteOf(t));
-function seatMinimum(t: Tool): number | null {
-  const m = noteOf(t).match(/\bminimum (?:of )?(\d+) (?:users?|seats?)\b/i) ?? noteOf(t).match(/\b(\d+)-(?:user|seat) minimum\b/i);
-  return m ? Number(m[1]) : null;
-}
-function annualMinimumUsd(t: Tool): number | null {
-  const m = noteOf(t).match(/\$([\d,]+) minimum annual/i);
-  return m ? Number(m[1].replace(/,/g, '')) : null;
-}
-// An entry plan the pricing note limits to one user (Powered Now: "Business ... (single
-// user only)"). A team of two or more needs the next plan, so its estimate uses the
-// lowest higher tier price; null when the data records none.
-const singleUserEntry = (t: Tool) => /\bsingle[- ]user only\b|\b1 user only\b/i.test(noteOf(t));
-function seatPriceFor(t: Tool, teamSize: number): number | null {
-  const p = t.pricing.starting_at_usd as number;
-  if (teamSize <= 1 || !singleUserEntry(t)) return p;
-  const higher = (t.pricing.tier_prices_usd ?? []).filter((x): x is number => typeof x === 'number' && x > p).sort((a, b) => a - b);
-  return higher.length ? higher[0] : null;
-}
-
-// Pricing scenario at team sizes
-function scenarioCost(t: Tool, teamSize: number): string {
-  const p = t.pricing.starting_at_usd;
-  if (p === null) return isQuoteOnly(t) ? 'Custom quote' : 'See pricing note';
-  // A free plan can carry its own user, job or project limits (ServiceM8's covers 1 user,
-  // Connecteam's 10; OpenSolar states none), so it is an entry price, not a team-size cost.
-  if (p === 0) return 'From $0 (free plan)';
-  // Only per-user prices scale with headcount. Flat plans and base-plus-seat
-  // bundles carry plan limits and seat fees we do not model, so show the entry
-  // price (their tiers are often job or usage bands, not team sizes).
-  if (isPerUser(t)) {
-    // Apply a minimum the pricing note states, so a small-team cell is not below what
-    // the vendor charges (Praxedo "Minimum 5 users"; Albi "$6,000 minimum annual
-    // subscription"; GoCanvas "3-user minimum"). A minimum this page cannot read is flagged.
-    const seatPrice = seatPriceFor(t, teamSize);
-    if (seatPrice === null) return 'See pricing note';
-    const seats = Math.max(teamSize, seatMinimum(t) ?? 0);
-    const annualMin = annualMinimumUsd(t);
-    const cost = Math.max(seatPrice * seats, annualMin !== null ? annualMin / 12 : 0);
-    const raised = cost > seatPrice * teamSize;
-    const unread = hasMinimum(t) && seatMinimum(t) === null && annualMin === null;
-    const mark = seatPrice > p ? ' (multi-user plan)' : raised ? ' (vendor minimum)' : unread ? ' (minimum applies; see note)' : '';
-    return `~$${Math.round(cost)}/mo${mark}`;
-  }
-  return `From $${p}/mo`;
-}
-// The FAQ example multiplies the starting price by team size, so it skips plans with a
-// minimum and entry plans limited to one user.
-const perUserExample = perUserPaid.find((t) => !hasMinimum(t) && !singleUserEntry(t));
+// Pricing scenario at team sizes (rewritten 2026-10-08). Each cell is costAtCrewSize():
+// the cheapest plan that allows the crew, priced from pricing.tier_details (the plan
+// prices and user rules read from the vendor's pricing page), billed annually where the
+// plan offers it. Until then only per-user starting prices were multiplied (with
+// minimums parsed from the note); flat and base-plus-seat plans showed their entry price
+// in every column, so Joist read $8.34 at 25 techs, and free plans read "From $0".
+// It never estimates: with no recorded figure for that crew the cell says why.
+// 2026-10-08 review: a cell names the plan's usage cap where one is recorded; a tool
+// that prices users by role, or whose page leaves a needed figure unclear, gets its own
+// label (crewCellText) instead of "Not published", which said the vendor gives no price.
+const SCENARIO_CREWS = [3, 10, 25];
+type ScenarioCell = { text: string; sub: string };
+const scenarioCell = (t: Tool, crew: number): ScenarioCell => crewCellText(crewCost(t, crew, 'annual'), { markMonthly: true });
+const scenarioTools = cheapestFirst.filter((t) => t.pricing.starting_at_usd !== null).slice(0, 10);
+const scenarioHasDepth = scenarioTools.some((t) => crewCost(t, SCENARIO_CREWS[0]).reason !== 'no_depth');
+// Footnote sentences for the labels the table shows, in a fixed order.
+const scenarioLabels = new Set(scenarioTools.flatMap((t) => SCENARIO_CREWS.map((n) => scenarioCell(t, n).text)));
+const scenarioLabelNotes = Object.keys(CREW_LABEL_NOTES).filter((k) => scenarioLabels.has(k)).map((k) => CREW_LABEL_NOTES[k]);
+const scenarioHasUsageLimit = scenarioTools.some((t) => SCENARIO_CREWS.some((n) => {
+  const c = crewCost(t, n);
+  return c.cost !== null && !!c.tier?.usage_limit;
+}));
+// FAQ example: the first tool on this page, lowest starting price first, that the
+// recorded plan rules price above $0 at all three crew sizes, on plans with no recorded
+// usage limit (a free plan that allows every size read "$0, $0 and $0", and ServiceM8's
+// $29 Starter at 25 techs is capped at 50 jobs a month, so neither shows scaling).
+const crewExample = cheapestFirst.find((t) => SCENARIO_CREWS.every((n) => {
+  const c = crewCost(t, n);
+  return (c.cost ?? 0) > 0 && !c.tier?.usage_limit;
+}));
+const crewExampleText = crewExample
+  ? (() => {
+      const [a, b, c] = SCENARIO_CREWS.map((n) => formatUsdAmount(costAtCrewSize(crewExample, n) as number));
+      return `For example, ${crewExample.name}'s published plans come to $${a} a month at 3 techs, $${b} at 10 and $${c} at 25 (cheapest plan that allows each size, billed annually where offered). `;
+    })()
+  : '';
 
 const costClause = (ts: Tool[], verb: string) =>
   ts.length ? `; on this page, the pricing ${ts.length === 1 ? 'note' : 'notes'} for ${shortList(ts)} ${verb}` : '';
@@ -242,7 +232,7 @@ const costParts = [
   freeTierTools.length ? `${count(freeTierTools.length, 'has', 'have')} a free tier` : null,
   paidTools.length ? `${count(paidTools.length, 'publishes', 'publish')} a paid monthly starting price (lowest ${lowestPaidLabel}; ${medianClause})` : null,
   quoteOnlyTools.length ? `${count(quoteOnlyTools.length, 'publishes', 'publish')} no price and ${quoteOnlyTools.length === 1 ? 'quotes' : 'quote'} each account${quoteOnlyExampleClause}` : null,
-  otherPricedTools.length ? `${count(otherPricedTools.length, 'publishes', 'publish')} prices that are not a monthly plan, such as one-time licenses or per-project fees (${listJoin(otherPricedTools.map((t) => t.name))})` : null,
+  otherPricedTools.length ? `${count(otherPricedTools.length, 'publishes', 'publish')} prices that are not a monthly plan, such as module prices or per-project fees (${listJoin(otherPricedTools.map((t) => t.name))})` : null,
 ].filter((p): p is string => p !== null);
 const costAnswer = `Of the ${verticalTools.length} ${verticalLower} ${verticalTools.length === 1 ? 'tool' : 'tools'} on this page, ${listJoin(costParts)}.`;
 
@@ -297,7 +287,7 @@ const faqs = [
           quoteOnlyTools.length ? `${quoteOnlyTools.length} of the ${verticalTools.length} tools on this page publish no price${quoteOnlyExampleClause}, so their cost is whatever the vendor quotes you.` : null,
           estimateTools.length ? `The pricing ${estimateTools.length === 1 ? 'note' : 'notes'} for ${listJoin(estimateTools.map((t) => t.name))} ${estimateTools.length === 1 ? 'quotes a third-party estimate, labelled as one' : 'quote third-party estimates, labelled as such'}; treat ${estimateTools.length === 1 ? 'it' : 'them'} as a rough guide, not a quote.` : null,
           quoteOnlyTools.length ? 'Compare written quotes for the same team size and the same modules.' : null,
-          otherPricedTools.length ? `${listJoin(otherPricedTools.map((t) => t.name))} ${otherPricedTools.length === 1 ? 'publishes' : 'publish'} prices that are not a monthly plan, such as one-time licenses or per-project fees; see the pricing note.` : null,
+          otherPricedTools.length ? `${listJoin(otherPricedTools.map((t) => t.name))} ${otherPricedTools.length === 1 ? 'publishes' : 'publish'} prices that are not a monthly plan, such as module prices or per-project fees; see the pricing note.` : null,
         ].filter(Boolean).join(' '),
       }]
     : []),
@@ -307,7 +297,7 @@ const faqs = [
   },
   {
     q: `How does pricing scale as I grow from 3 to 10 to 25 techs?`,
-    a: `It depends on how each platform charges. ${perUserExample ? `Per-${seatUnit(perUserExample) === 'user' ? 'user' : 'seat'} prices grow with headcount: at $${perUserExample.pricing.starting_at_usd} per ${seatUnit(perUserExample)} a month, ${perUserExample.name} comes to about $${Math.round((perUserExample.pricing.starting_at_usd as number) * 3)} at 3 techs, $${Math.round((perUserExample.pricing.starting_at_usd as number) * 10)} at 10 and $${Math.round((perUserExample.pricing.starting_at_usd as number) * 25)} at 25, if every tech needs a seat. ` : ''}Flat, base-plus-seat and free plans are shown at their entry price in the scenario table, because the user limits, job limits and seat fees that move you to a bigger plan differ by vendor; each tool's pricing note lists them. Model the team size you plan to have against each vendor's current pricing page.`,
+    a: `It depends on how each platform charges. A per-user price is paid for every user, and some vendors set a minimum number of users. An account price stays the same up to the users the plan includes; past that, the vendor charges a fee for each extra user or you need a bigger plan. ${crewExampleText}The scenario table above prices 3, 10 and 25 techs from each vendor's published plan prices and user rules, where we have recorded them, counting every tech as a full user, and says why where it gives no figure. Job, appointment and other usage limits are not part of those figures (where we recorded a plan's limit, the table names it under the figure), and neither are add-ons or payment fees; check each tool's pricing note for them.`,
   },
   {
     q: `Can I negotiate ${verticalLower} software pricing?`,
@@ -424,21 +414,24 @@ const breadcrumbs = [
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Pricing scenarios by team size</h2>
       <p class="mb-6 text-slate-600">
-        Estimated monthly cost at three team sizes for up to 10 tools on this page with a published monthly price, lowest starting price first. Per-{seatWord} prices are multiplied by team size, or by the vendor's minimum where the pricing note sets one; where the pricing note limits the entry plan to one user, the next plan's price is used for a team. Flat, base-plus-seat and free plans are shown at their entry price, because the limits and seat fees that move you to a bigger plan differ by vendor.
+        Monthly cost at three team sizes for up to 10 tools on this page with a published monthly price, lowest starting price first. Each figure is the cheapest plan that allows that many users, worked out from the plan prices and user rules on the vendor's pricing page: a per-user price times the users (or the vendor's minimum), or an account price plus the vendor's fee for each user beyond those the plan includes. Every tech is counted as a full user, so a vendor that prices office users and crew members differently is not priced here.{scenarioHasDepth && ' Each priced tool\'s page links the pricing page the figures come from and gives the date it was read.'}
       </p>
       <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
         <table class="w-full text-sm">
           <thead class="bg-slate-50 text-left text-slate-700">
             <tr>
-              <th class="p-3 font-semibold">Tool</th>
-              <th class="p-3 font-semibold">Pricing model</th>
-              <th class="p-3 font-semibold text-right">3 techs</th>
-              <th class="p-3 font-semibold text-right">10 techs</th>
-              <th class="p-3 font-semibold text-right">25 techs</th>
+              <th class="p-3 font-semibold" rowspan="2">Tool</th>
+              <th class="p-3 font-semibold" rowspan="2">Pricing model</th>
+              <th class="px-3 pt-3 pb-1 font-semibold text-right" colspan="3">Monthly cost, billed annually where offered</th>
+            </tr>
+            <tr>
+              {SCENARIO_CREWS.map((n) => (
+                <th class="px-3 pb-3 pt-1 font-semibold text-right">{n} techs</th>
+              ))}
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
-            {cheapestFirst.filter((t) => t.pricing.starting_at_usd !== null).slice(0, 10).map((t) => {
+            {scenarioTools.map((t) => {
               const scaling = priceScaling(t);
               return (
                 <tr class="hover:bg-slate-50">
@@ -446,9 +439,15 @@ const breadcrumbs = [
                     <a href={`/tools/${t.slug}/`} class="font-semibold text-slate-900 hover:text-orange-600">{t.name}</a>
                   </td>
                   <td class="p-3 text-xs text-slate-600">{scaling === 'per_user' ? `Per ${seatUnit(t)}` : scaling === 'flat' ? 'Flat per plan' : scaling === 'base_plus_seat' ? 'Base + per seat' : scaling === 'free' ? 'Free tier' : 'See pricing note'}</td>
-                  <td class="p-3 text-right text-slate-700">{scenarioCost(t, 3)}</td>
-                  <td class="p-3 text-right text-slate-700">{scenarioCost(t, 10)}</td>
-                  <td class="p-3 text-right text-slate-700">{scenarioCost(t, 25)}</td>
+                  {SCENARIO_CREWS.map((n) => {
+                    const cell = scenarioCell(t, n);
+                    return (
+                      <td class="p-3 text-right text-slate-700">
+                        {cell.text}
+                        {cell.sub && <span class="block text-xs text-slate-500">{cell.sub}</span>}
+                      </td>
+                    );
+                  })}
                 </tr>
               );
             })}
@@ -456,7 +455,7 @@ const breadcrumbs = [
         </table>
       </div>
       <p class="mt-3 text-xs text-slate-500">
-        Per-{seatWord} estimates are the entry price × team size, assuming every tech needs a seat. Where a per-{seatWord} plan's pricing note sets a minimum number of users or a minimum yearly spend, the estimate uses that minimum and is marked "vendor minimum". Where the pricing note limits the entry plan to one user, the estimate uses the next plan's per-{seatWord} price and is marked "multi-user plan". Flat and base-plus-seat plans show their entry price only; user limits, job limits and seat fees can move you to a higher plan (see each tool's pricing note). "From $0" is a free plan; where the vendor caps users, jobs or features on it, a team past the cap needs a paid plan (see the pricing note). Actual cost depends on the tier, monthly or annual billing, and any discount in your quote.
+        Each figure names the plan it comes from. Prices are billed annually where the vendor offers annual billing for that plan; "billed monthly" marks a plan priced month to month.{scenarioHasUsageLimit && ' Where we recorded a job, appointment or other usage limit for that plan, it is named under the figure; a crew past the limit needs a bigger plan or pays the vendor\'s overage.'}{scenarioLabelNotes.map((n) => ' ' + n).join('')} The figures cover plan prices and extra-user fees only, not job, appointment or other usage limits, add-ons, setup fees or payment processing, and not any discount in your quote.
       </p>
     </section>
 

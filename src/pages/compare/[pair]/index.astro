@@ -12,7 +12,7 @@ import { asSentence,
 import FreshnessBadge from '../../../components/FreshnessBadge.astro';
 import { isComparisonIndexable } from '../../../lib/compare-index.mjs';
 import MissingFromList from '../../../components/MissingFromList.astro';
-import { priceScaling, seatUnit, formatUsd } from '../../../lib/data';
+import { priceScaling, seatUnit, formatUsd, entrySeatMinimum, entryMinimumBill, seatMinimumPhrase, pricePublicationPhrase } from '../../../lib/data';
 
 export async function getStaticPaths() {
   // Generate both directions per pair (e.g. jobber-vs-servicetitan AND
@@ -71,30 +71,39 @@ const sharedVerticals = a.verticals
   .filter((v): v is NonNullable<typeof v> => v !== undefined);
 
 // Monthly starting prices (null for quote-only tools and for the two that publish
-// only one-time or per-project prices).
+// only module or per-project prices).
 const aStart = a.pricing.starting_at_usd;
 const bStart = b.pricing.starting_at_usd;
+// The lower entry price is the smaller smallest bill: a per-seat price times the
+// vendor's seat minimum (entryMinimumBill). Until 2026-10-08 (final review) the raw
+// starting prices were compared, so 28 pages said Smart Service ($129.99 per user,
+// 3-user minimum: at least $389.97) had a lower entry price than Service Fusion's $208.
+const aMin = entryMinimumBill(a);
+const bMin = entryMinimumBill(b);
 const cheaperTool =
-  aStart !== null && bStart !== null && aStart !== bStart
-    ? aStart < bStart
+  aMin !== null && bMin !== null && aMin !== bMin
+    ? aMin < bMin
       ? a
       : b
     : null;
 const otherOf = (t: Tool) => (t === a ? b : a);
+// A seat minimum named beside an entry price: "$129.99 per user a month, 3-user minimum".
+const withMin = (s: string, t: Tool) => (seatMinimumPhrase(t) ? `${s}, ${seatMinimumPhrase(t)}` : s);
+const entryLabel = (t: Tool) => withMin(entryPriceLabel(t), t);
 
 // Price transparency: quote-only is pricing_model 'quote_only' (isQuoteOnly), never
 // "starting_at_usd is null". Until 2026-10-01 these pages told readers that Trash Flow
-// and Pylon, which publish one-time and per-project prices, "quote only".
+// and Pylon, which publish module and per-project prices, "quote only".
 const aQuote = isQuoteOnly(a);
 const bQuote = isQuoteOnly(b);
 // "From $29/mo", "Free tier available", or the non-monthly wording.
 function shortPrice(t: Tool): string {
-  if (nonMonthlyPricingOnly(t)) return 'one-time or per-project prices, not a monthly plan';
-  return formatPrice(t);
+  if (nonMonthlyPricingOnly(t)) return 'module or per-project prices, not a monthly plan';
+  return withMin(formatPrice(t), t);
 }
 
 // "starts at $29 per user a month" / "has a free tier" ("starts at a free tier" read badly).
-const startsAt = (t: Tool) => (t.pricing.starting_at_usd === 0 ? 'has a free tier' : `starts at ${entryPriceLabel(t)}`);
+const startsAt = (t: Tool) => (t.pricing.starting_at_usd === 0 ? 'has a free tier' : `starts at ${entryLabel(t)}`);
 
 // "a 14-day free trial" / "a free tier" / null when our data records neither.
 function trialPhrase(t: Tool): string | null {
@@ -168,7 +177,9 @@ if (cheaperTool) {
   // A ratio only means something when both prices scale the same way (and the lower
   // one is not $0, which printed "Infinityx" until 2026-10-01), and per-seat prices
   // charge for the same seat (a route or a driver is not a user; seatUnit, 2026-10-05).
-  const mult = lo > 0 && priceScaling(cheaperTool) === priceScaling(dearer) && seatUnit(cheaperTool) === seatUnit(dearer) ? hi / lo : null;
+  // No ratio when either has a seat minimum: the lower entry price is then the smaller
+  // smallest bill, not the smaller per-seat price (2026-10-08).
+  const mult = lo > 0 && priceScaling(cheaperTool) === priceScaling(dearer) && seatUnit(cheaperTool) === seatUnit(dearer) && entrySeatMinimum(cheaperTool) === 1 && entrySeatMinimum(dearer) === 1 ? hi / lo : null;
   differences.push(
     `**Entry price:** ${cheaperTool.name} ${startsAt(cheaperTool)}; ${dearer.name} ${startsAt(dearer)}` +
       (mult !== null && mult >= 1.5 ? `, so ${dearer.name}'s entry price is ${mult >= 10 ? Math.round(mult) : mult.toFixed(1)} times ${cheaperTool.name}'s.` : '.')
@@ -177,13 +188,13 @@ if (cheaperTool) {
   const open = aQuote ? b : a;
   const closed = aQuote ? a : b;
   differences.push(
-    `**Price transparency:** ${open.name} publishes its prices (${shortPrice(open)}). ${closed.name} does not, so you need a quote from ${closed.name} to compare them.`
+    `**Price transparency:** ${open.name} ${pricePublicationPhrase(open)} (${shortPrice(open)}). ${closed.name} does not, so you need a quote from ${closed.name} to compare them.`
   );
 } else if (!aQuote && !bQuote && nonMonthlyPricingOnly(a) !== nonMonthlyPricingOnly(b)) {
   const nm = nonMonthlyPricingOnly(a) ? a : b;
   const monthly = otherOf(nm);
   differences.push(
-    `**Price structure:** ${nm.name} publishes one-time or per-project prices rather than a monthly plan; ${monthly.name} ${startsAt(monthly)}. Compare the total over the period you expect to use each.`
+    `**Price structure:** ${nm.name} publishes module or per-project prices rather than a monthly plan; ${monthly.name} ${startsAt(monthly)}. Compare the total over the period you expect to use each.`
   );
 }
 
@@ -273,9 +284,9 @@ function getDecisionMatrix(): { pickA: string[]; pickB: string[] } {
 
   // Published prices vs quote-only
   if (!aQuote && bQuote) {
-    pickA.push(`**You want to budget before asking for a quote**: ${a.name} publishes its prices (${shortPrice(a)}); ${b.name} quotes only`);
+    pickA.push(`**You want to budget before asking for a quote**: ${a.name} ${pricePublicationPhrase(a)} (${shortPrice(a)}); ${b.name} quotes only`);
   } else if (!bQuote && aQuote) {
-    pickB.push(`**You want to budget before asking for a quote**: ${b.name} publishes its prices (${shortPrice(b)}); ${a.name} quotes only`);
+    pickB.push(`**You want to budget before asking for a quote**: ${b.name} ${pricePublicationPhrase(b)} (${shortPrice(b)}); ${a.name} quotes only`);
   }
 
   // Multi-vertical
@@ -314,7 +325,7 @@ const decisionMatrix = getDecisionMatrix();
 // --- PRICING TABLE AND ANALYSIS ---
 // Bluebeam Revu's tier prices are per user per YEAR (pricing_model annual_per_user);
 // until 2026-10-01 the table printed them as "$590/mo". Tools that publish only
-// one-time or per-project prices have no tier figures: the price is in the tier name
+// module or per-project prices have no tier figures: the price is in the tier name
 // or the pricing note, so the cell no longer says "Custom".
 function tierCell(t: Tool, i: number): string {
   const tierName = t.pricing.tiers[i];
@@ -337,14 +348,15 @@ function topTierPhrase(t: Tool): string {
 
 function describePrice(t: Tool): string {
   if (isQuoteOnly(t)) return `${t.name} publishes no price, so ask for a written quote for your team size.`;
-  if (nonMonthlyPricingOnly(t)) return `${t.name} publishes one-time or per-project prices rather than a monthly plan (listed in its full review), so compare the total over the period you expect to use it.`;
+  if (nonMonthlyPricingOnly(t)) return `${t.name} publishes module or per-project prices rather than a monthly plan (listed in its full review), so compare the total over the period you expect to use it.`;
   if (t.pricing.starting_at_usd === 0) return `${t.name} has a free tier (${t.pricing.tiers[0]})${topTierPhrase(t)}.`;
   // A base-plus-seat label ends "more as users are added", so a tier name after it read
   // as if users are added on that tier ("more as users are added on Owner Operator"),
   // though several entry tiers are one-user plans in their pricing notes. Name the tier
   // first for those (2026-10-08).
-  if (t.pricing.pricing_model === 'flat_plus_seat') return `${t.name} starts on ${t.pricing.tiers[0]}, at ${entryPriceLabel(t)}${topTierPhrase(t)}.`;
-  return `${t.name} starts at ${entryPriceLabel(t)} on ${t.pricing.tiers[0]}${topTierPhrase(t)}.`;
+  if (t.pricing.pricing_model === 'flat_plus_seat') return `${t.name} starts on ${t.pricing.tiers[0]}, at ${entryLabel(t)}${topTierPhrase(t)}.`;
+  const min = seatMinimumPhrase(t);
+  return `${t.name} starts at ${entryPriceLabel(t)} on ${t.pricing.tiers[0]}${min ? `, with a ${min}` : ''}${topTierPhrase(t)}.`;
 }
 
 function pricingAnalysis(): string {
@@ -378,10 +390,16 @@ function pricingAnalysis(): string {
     analysis += ` ${flatTool.name} charges a flat monthly price per plan while ${perUserTool.name} charges per ${seatUnit(perUserTool)}, so ${flatTool.name} gets relatively cheaper as your team grows; check each plan's user or usage limits.`;
   } else if (cheaperTool && aBasis !== null && bBasis !== null && aBasis !== bBasis) {
     analysis += ` ${a.name} charges its entry price per ${aBasis} and ${b.name} per ${bBasis}, so the two figures are not directly comparable; price both at your team size.`;
+  } else if (cheaperTool && aBasis !== null && aBasis === bBasis && (entrySeatMinimum(a) > 1 || entrySeatMinimum(b) > 1)) {
+    // Same seat, but a seat minimum on one side: the per-seat prices are not the bills
+    // (2026-10-08).
+    const withMinimum = [a, b].filter((t) => entrySeatMinimum(t) > 1);
+    analysis += ` Both charge per ${aBasis}, but ${withMinimum.map((t) => `${t.name} charges for at least ${entrySeatMinimum(t)}`).join(' and ')}, so price both at your team size.`;
   } else if (cheaperTool) {
     // An invented "both platforms typically converge in price at scale" followed this
     // until 2026-10-01; no data supports it.
-    const diff = Math.abs((aStart as number) - (bStart as number));
+    // Smallest bills (equal to the starting prices unless a seat minimum applies).
+    const diff = Math.round(Math.abs((aMin as number) - (bMin as number)) * 100) / 100;
     const diffText = Number.isInteger(diff) ? String(diff) : diff.toFixed(2);
     analysis += ` ${cheaperTool.name}'s entry price is $${diffText} a month lower.`;
   }
@@ -398,8 +416,11 @@ function getPros(t: Tool, isCheaper: boolean, fitWins: typeof verticalWinners): 
   const hasGLS = t.integrations.some((i) => i.includes('google_local_services'));
   const hasFreeTrial = (t.pricing.free_trial_days ?? 0) > 0;
 
-  if (isCheaper) pros.push(`Lower entry price: ${formatPrice(t)}`);
-  if (!isQuoteOnly(t) && isQuoteOnly(other)) pros.push(`Publishes its prices; ${other.name} quotes only`);
+  if (isCheaper) pros.push(`Lower entry price: ${shortPrice(t)}`);
+  if (!isQuoteOnly(t) && isQuoteOnly(other)) {
+    const pub = pricePublicationPhrase(t);
+    pros.push(`${pub.charAt(0).toUpperCase()}${pub.slice(1)}; ${other.name} quotes only`);
+  }
   if (hasFreeTrial) pros.push(`${t.pricing.free_trial_days}-day free trial`);
   if (fitWins.length) pros.push(`Higher vertical-fit score for ${fitNames(fitWins)}`);
   if (qb.length) pros.push(`QuickBooks integration listed (${qb.join(', ')})`);
@@ -449,25 +470,29 @@ const consB = getCons(b, a);
 function cheaperAnswer(): string {
   if (cheaperTool) {
     const other = otherOf(cheaperTool);
-    return `${cheaperTool.name} has the lower entry price: ${entryPriceLabel(cheaperTool)}, against ${entryPriceLabel(other)} for ${other.name}. Total cost depends on your team size, the plan you need and any add-ons; see the pricing table above.`;
+    return `${cheaperTool.name} has the lower entry price: ${entryLabel(cheaperTool)}, against ${entryLabel(other)} for ${other.name}. Total cost depends on your team size, the plan you need and any add-ons; see the pricing table above.`;
   }
   if (aQuote && bQuote) return `Neither publishes a price. Request quotes from both for the same team size and features.`;
   if (aQuote !== bQuote) {
     const open = aQuote ? b : a;
     const closed = aQuote ? a : b;
-    return `${open.name} publishes its prices (${shortPrice(open)}); ${closed.name} quotes only, so ask ${closed.name} for a written quote at your team size before comparing.`;
+    return `${open.name} ${pricePublicationPhrase(open)} (${shortPrice(open)}); ${closed.name} quotes only, so ask ${closed.name} for a written quote at your team size before comparing.`;
   }
   if (nonMonthlyPricingOnly(a) || nonMonthlyPricingOnly(b)) {
-    return `${[a, b].filter(nonMonthlyPricingOnly).map((t) => t.name).join(' and ')} ${nonMonthlyPricingOnly(a) && nonMonthlyPricingOnly(b) ? 'publish' : 'publishes'} one-time or per-project prices rather than a monthly plan, so compare the total over the period you expect to use each.`;
+    return `${[a, b].filter(nonMonthlyPricingOnly).map((t) => t.name).join(' and ')} ${nonMonthlyPricingOnly(a) && nonMonthlyPricingOnly(b) ? 'publish' : 'publishes'} module or per-project prices rather than a monthly plan, so compare the total over the period you expect to use each.`;
   }
   if (aStart === 0 && bStart === 0) return `Both have a free tier. Total cost depends on the paid plan you need, if any; see the pricing table above.`;
   // Same figure, charged differently ($60 per user against $60 a month for the company):
   // until 2026-10-01 this said "Both start at $60 per user a month" and then contradicted
   // itself in brackets.
-  if (entryPriceLabel(a) !== entryPriceLabel(b)) {
-    return `${a.name} starts at ${entryPriceLabel(a)}; ${b.name} starts at ${entryPriceLabel(b)}. The figure is the same but it is charged differently, so compare the two at your team size.`;
+  if (aStart !== bStart) {
+    // Different prices with the same smallest bill (a seat minimum on one side).
+    return `${a.name} starts at ${entryLabel(a)}; ${b.name} starts at ${entryLabel(b)}. The smallest monthly bill is the same, so compare the two at your team size.`;
   }
-  return `Both start at ${entryPriceLabel(a)}. Total cost depends on your team size and the plan you need.`;
+  if (entryLabel(a) !== entryLabel(b)) {
+    return `${a.name} starts at ${entryLabel(a)}; ${b.name} starts at ${entryLabel(b)}. The figure is the same but it is charged differently, so compare the two at your team size.`;
+  }
+  return `Both start at ${entryLabel(a)}. Total cost depends on your team size and the plan you need.`;
 }
 
 const qbSentence = (t: Tool) =>
@@ -504,7 +529,7 @@ const faqs = [
   },
   {
     q: `Which suits a solo contractor, and which a growing team?`,
-    a: `Our data puts ${a.name}'s best team size at ${a.best_team_size ?? 'an unrecorded size'} and ${b.name}'s at ${b.best_team_size ?? 'an unrecorded size'}. ${a.name}'s entry price is ${entryPriceLabel(a)}; ${b.name}'s is ${entryPriceLabel(b)}. Price both at the team size you expect to have, not only today's.`,
+    a: `Our data puts ${a.name}'s best team size at ${a.best_team_size ?? 'an unrecorded size'} and ${b.name}'s at ${b.best_team_size ?? 'an unrecorded size'}. ${a.name}'s entry price is ${entryLabel(a)}; ${b.name}'s is ${entryLabel(b)}. Price both at the team size you expect to have, not only today's.`,
   },
 ];
 
@@ -592,7 +617,7 @@ const breadcrumbs = [
             <dl class="mt-4 space-y-2 text-sm">
               <div class="flex justify-between">
                 <dt class="text-slate-500">Starting price</dt>
-                <dd class="font-semibold text-slate-900">{formatPrice(t)}</dd>
+                <dd class="font-semibold text-slate-900">{withMin(formatPrice(t), t)}</dd>
               </div>
               <div class="flex justify-between">
                 <dt class="text-slate-500">Best team size</dt>
@@ -652,12 +677,12 @@ const breadcrumbs = [
         )}
         {cheaperTool && (
           <p class="mt-1 text-sm text-slate-600">
-            <strong>{cheaperTool.name}</strong> has the lower starting price ({formatPrice(cheaperTool)}).
+            <strong>{cheaperTool.name}</strong> has the lower starting price ({shortPrice(cheaperTool)}).
           </p>
         )}
         {aQuote !== bQuote && (
           <p class="mt-1 text-sm text-slate-600">
-            <strong>{aQuote ? b.name : a.name}</strong> publishes its prices ({shortPrice(aQuote ? b : a)}); {aQuote ? a.name : b.name} quotes only.
+            <strong>{aQuote ? b.name : a.name}</strong> {pricePublicationPhrase(aQuote ? b : a)} ({shortPrice(aQuote ? b : a)}); {aQuote ? a.name : b.name} quotes only.
           </p>
         )}
         {a.integrations.length !== b.integrations.length && (
