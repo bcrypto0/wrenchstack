@@ -28,11 +28,13 @@ const breadcrumbs = [
 
 // Build affiliate-status table from the live tools.json. Active comes only
 // from affiliate_url being a real tracked http URL; nothing else can make a
-// tool Active. Every other state comes from the explicit affiliate_status
-// field (mirrors docs/affiliate-status-ledger.md). affiliate_url "TBD" means
-// only "no tracked link" and says nothing about an application, so a tool
-// with no affiliate_status is shown as having no relationship.
-type AffiliateStatus = 'Active' | 'Approved' | 'Pending' | 'None';
+// tool Active. A tracked URL with affiliate_status 'unconfirmed' shows as
+// Unconfirmed (link in use, program status not read in its dashboard). Every
+// other state comes from the explicit affiliate_status field (mirrors
+// docs/affiliate-status-ledger.md). affiliate_url "TBD" means only "no tracked
+// link" and says nothing about an application, so a tool with no
+// affiliate_status is shown as having no relationship.
+type AffiliateStatus = 'Active' | 'Unconfirmed' | 'Approved' | 'Pending' | 'None';
 
 interface ToolStatus {
   slug: string;
@@ -61,6 +63,18 @@ const STATUS_FROM_DATA = {
 } as const;
 
 function classifyAffiliate(t: typeof tools[number]): ToolStatus {
+  if (t.affiliate_url.startsWith('http') && t.affiliate_status === 'unconfirmed') {
+    return {
+      slug: t.slug,
+      name: t.name,
+      status: 'Unconfirmed',
+      note: t.affiliate_note ?? 'Our "Visit" buttons for this tool use a tracked link from the vendor\'s partner program, but we have not confirmed the program\'s status in the vendor\'s partner dashboard, so we do not know whether we earn anything from it.',
+    };
+  }
+  if (t.affiliate_status === 'unconfirmed') {
+    // 'unconfirmed' only describes a tracked link in use.
+    throw new Error(`tools.json: affiliate_status "unconfirmed" on ${t.slug} needs a tracked affiliate_url`);
+  }
   if (t.affiliate_url.startsWith('http')) {
     return {
       slug: t.slug,
@@ -90,12 +104,12 @@ function classifyAffiliate(t: typeof tools[number]): ToolStatus {
   };
 }
 
-const STATUS_ORDER: AffiliateStatus[] = ['Active', 'Approved', 'Pending', 'None'];
+const STATUS_ORDER: AffiliateStatus[] = ['Active', 'Unconfirmed', 'Approved', 'Pending', 'None'];
 
 const toolStatuses = tools
   .map(classifyAffiliate)
   .sort((a, b) => {
-    // Active, Approved, Pending, then None; alphabetical within each
+    // Active, Unconfirmed, Approved, Pending, then None; alphabetical within each
     const aIdx = STATUS_ORDER.indexOf(a.status);
     const bIdx = STATUS_ORDER.indexOf(b.status);
     if (aIdx !== bIdx) return aIdx - bIdx;
@@ -104,6 +118,7 @@ const toolStatuses = tools
 
 const counts = {
   Active: toolStatuses.filter((t) => t.status === 'Active').length,
+  Unconfirmed: toolStatuses.filter((t) => t.status === 'Unconfirmed').length,
   Approved: toolStatuses.filter((t) => t.status === 'Approved').length,
   Pending: toolStatuses.filter((t) => t.status === 'Pending').length,
   None: toolStatuses.filter((t) => t.status === 'None').length,
@@ -326,11 +341,13 @@ const counts = {
     <h2 id="how-we-make-money">How we make money</h2>
 
     <p>
-      WrenchStack earns money in two ways: affiliate commissions, described here, and pricing
-      benchmark reports sold to software vendors, described below the affiliate ledger.
-      When you click a "Visit [Tool]" button on a tool review,
-      <strong>we sometimes earn an affiliate commission</strong> if you sign up for that tool,
-      but only when the vendor has approved us into their affiliate program. We never get paid
+      WrenchStack earns money in two ways: commissions and referral rewards from vendor programs,
+      described here, and pricing benchmark reports sold to software vendors, described below the
+      affiliate ledger. When you click a "Visit [Tool]" button and sign up for that tool,
+      <strong>we may earn a commission or a referral reward</strong>, but only when the link
+      belongs to a program we have joined. Some of those programs are affiliate programs and some
+      are referral programs. The reward is not an input to any listing, Fit Score, rank or award.
+      We never get paid
       for placement, for ranking, or for inclusion in the directory. Vendors cannot buy a higher
       WrenchStack Score, a different spot in a "best of" list, or a softer tone in a review.
     </p>
@@ -348,10 +365,14 @@ const counts = {
       Full transparency. Below is the affiliate status of every software tool in the directory. Vendors in every other category (lead-gen, insurance, payroll, marketing agencies, AI tools, payments, financing, accounting, and business banking) follow the same independence rules, with vendor-specific affiliate disclosure on each review page.
     </p>
 
-    <ul class="not-prose grid grid-cols-2 gap-3 text-sm md:grid-cols-4">
+    <ul class="not-prose grid grid-cols-2 gap-3 text-sm md:grid-cols-5">
       <li class="rounded-lg bg-emerald-50 px-3 py-2 ring-1 ring-emerald-200">
         <span class="font-semibold text-emerald-900">Active:</span>
         <span class="text-emerald-700">{counts.Active} {counts.Active === 1 ? 'tool' : 'tools'}</span>
+      </li>
+      <li class="rounded-lg bg-orange-50 px-3 py-2 ring-1 ring-orange-200">
+        <span class="font-semibold text-orange-900">Unconfirmed:</span>
+        <span class="text-orange-700">{counts.Unconfirmed} {counts.Unconfirmed === 1 ? 'tool' : 'tools'}</span>
       </li>
       <li class="rounded-lg bg-sky-50 px-3 py-2 ring-1 ring-sky-200">
         <span class="font-semibold text-sky-900">Approved:</span>
@@ -379,6 +400,7 @@ const counts = {
         {toolStatuses.map((t) => {
           const statusStyles = {
             Active: 'bg-emerald-100 text-emerald-800 ring-emerald-200',
+            Unconfirmed: 'bg-orange-100 text-orange-800 ring-orange-200',
             Approved: 'bg-sky-100 text-sky-800 ring-sky-200',
             Pending: 'bg-amber-100 text-amber-800 ring-amber-200',
             None: 'bg-slate-100 text-slate-700 ring-slate-200',
@@ -402,13 +424,21 @@ const counts = {
       </tbody>
     </table>
 
-    <h3 class="mt-8">What "Active", "Approved", "Pending", and "None" mean</h3>
+    <h3 class="mt-8">What "Active", "Unconfirmed", "Approved", "Pending", and "None" mean</h3>
 
     <ul>
       <li>
-        <strong>Active</strong>: we have an approved affiliate relationship and use a tracked
-        URL on this tool's review page. If you sign up via our link, we earn a commission. This
-        does not affect what we write about the tool, including the cons section.
+        <strong>Active</strong>: we have joined the vendor's affiliate or referral program, and our
+        "Visit" buttons for this tool use its tracked link. If you sign up through that link, we may
+        earn a commission (affiliate program) or a referral reward (referral program); the note says
+        when it is a referral program. This does not affect what we write about the tool, including
+        the cons section.
+      </li>
+      <li>
+        <strong>Unconfirmed</strong>: our "Visit" buttons for this tool use a tracked link from the
+        vendor's partner program, but we have not confirmed the program's status in the vendor's
+        partner dashboard, so we do not know whether we earn anything from it. This does not affect
+        what we write about the tool.
       </li>
       <li>
         <strong>Approved</strong>: the vendor accepted us into its affiliate program, but we do

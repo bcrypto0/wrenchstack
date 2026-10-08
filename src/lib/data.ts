@@ -59,8 +59,11 @@ export interface Tool {
   affiliate_url: string;
   // What the public affiliate ledger on /methodology/ says when affiliate_url
   // is not a tracked link. Unset = no relationship (not applied, or not
-  // checked). Source of truth: docs/affiliate-status-ledger.md.
-  affiliate_status?: 'applied' | 'approved_unused' | 'declined' | 'no_program';
+  // checked). 'unconfirmed' is the one value used WITH a tracked link: the link
+  // is live on the site but the program's status has not been read in its
+  // dashboard, so the ledger shows Unconfirmed instead of Active.
+  // Source of truth: docs/affiliate-status-ledger.md.
+  affiliate_status?: 'applied' | 'approved_unused' | 'declined' | 'no_program' | 'unconfirmed';
   affiliate_note?: string;
   tagline: string;
   verticals: string[];

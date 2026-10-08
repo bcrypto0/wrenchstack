@@ -80,11 +80,11 @@ const itemListSchema = {
         Read the full <a href="/methodology/" class="underline hover:text-amber-700">scoring methodology</a> for rubric weights, data sources, the per-vendor affiliate-disclosure ledger and the report ledger of pricing benchmark report sales.
       </p>
       <p class="mt-3 text-sm text-amber-800">
-        <strong>Ownership disclosure:</strong> FieldRoutes (Best for Pest Control) and Aspire (Best for Landscaping) are owned by ServiceTitan (Best Enterprise FSM). We may earn a commission on signups through our ServiceTitan referral link, as the ledger shows. We have no affiliate link to FieldRoutes or Aspire, and affiliate status plays no part in the awards.
+        <strong>Ownership disclosure:</strong> FieldRoutes (Best for Pest Control) and Aspire (Best for Landscaping) are owned by ServiceTitan (Best Enterprise FSM). We may earn a referral reward through our ServiceTitan referral link, as the ledger shows. We have no affiliate link to FieldRoutes or Aspire, and affiliate status plays no part in the awards.
       </p>
       {affiliateWinners.length > 0 && (
         <p class="mt-3 text-sm text-amber-800">
-          <strong>Winners with an active affiliate link:</strong> {nameList(affiliateWinners)}.
+          <strong>Winners whose "Visit" links are tracked affiliate or referral links:</strong> {nameList(affiliateWinners)}.
         </p>
       )}
     </section>
@@ -224,7 +224,7 @@ const itemListSchema = {
           <strong class="text-slate-900">No paid placements.</strong> No vendor paid for an award position, and we do not sell "shortlist" badges or featured listings.
         </li>
         <li>
-          <strong class="text-slate-900">Affiliate relationships disclosed.</strong> Each tool's review page carries a general affiliate disclosure, and our public per-vendor <a href="/methodology/#affiliate-ledger" class="underline hover:text-slate-900">affiliate ledger</a> records our status with every tool{affiliateWinners.length > 0 ? '; the winners with an active affiliate link are named above' : ''}. Recommendations are unchanged whether the affiliate is active or pending.
+          <strong class="text-slate-900">Affiliate relationships disclosed.</strong> Each tool's review page carries a general affiliate disclosure, and our public per-vendor <a href="/methodology/#affiliate-ledger" class="underline hover:text-slate-900">affiliate ledger</a> records our status with every tool{affiliateWinners.length > 0 ? '; the winners whose "Visit" links are tracked affiliate or referral links are named above' : ''}. Recommendations are unchanged whether the affiliate is active or pending.
         </li>
         <li>
           <strong class="text-slate-900">Methodology is published.</strong> The rubric, weights, data sources, and verification cadence live on the <a href="/methodology/" class="underline hover:text-slate-900">methodology page</a>.

@@ -18,6 +18,7 @@ const toolsForQuiz = tools.map(t => ({
   key_features: t.key_features,
   integrations: t.integrations,
   affiliate_url: t.affiliate_url.startsWith('http') ? t.affiliate_url : t.vendor_url,
+  tracked: t.affiliate_url.startsWith('http'),
   free_trial_days: t.pricing.free_trial_days ?? 0,
   logo: getLogoUrl(t, 96),
 }));
@@ -382,10 +383,17 @@ const quizFaqSchema = {
         </div>
       `).join('');
 
+      // Same wording as <AffiliateDisclosure referral /> in components/AffiliateDisclosure.astro;
+      // shown only when one of the matches' Visit links is a tracked link.
+      const disclosure = results.some((t) => t.tracked)
+        ? '<p class="mb-4 text-xs text-slate-500 leading-snug">WrenchStack may earn a commission or a referral reward if you sign up through a tracked link on this page. The vendor pays it and we add no charge of our own. Neither is an input to the Fit Score or to how we order tools. <a href="/disclosure/" class="underline hover:text-slate-700">How we make money</a>.</p>'
+        : '';
+
       container.innerHTML = `
         <div class="mb-6 rounded-lg bg-orange-50 border border-orange-200 p-4 text-sm text-slate-700">
           <strong>Your profile:</strong> ${verticalName}, ${answers.team_size} team, ${answers.budget} budget, prioritizing ${answers.priority.replace(/_/g, ' ')}, ${answers.integration === 'none' ? 'no integration preference' : answers.integration + ' integration'}.
         </div>
+        ${disclosure}
         <div class="space-y-4">
           ${results.length > 0 ? items : '<p class="text-slate-600">No tools in our directory are listed for that trade. Try retaking with a different trade.</p>'}
         </div>

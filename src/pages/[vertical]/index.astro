@@ -18,6 +18,7 @@ import { asSentence,
 import Byline from '../../components/Byline.astro';
 import WrenchScore from '../../components/WrenchScore.astro';
 import ToolLogo from '../../components/ToolLogo.astro';
+import AffiliateDisclosure from '../../components/AffiliateDisclosure.astro';
 import { reportBuyerCount } from '../../lib/reportLedger';
 
 export async function getStaticPaths() {
@@ -49,6 +50,9 @@ if (!lastVerifiedDate) {
 }
 
 const topPicks = ranked.slice(0, 5);
+// The Visit buttons render only in the topPicks cards; the disclosure beside them shows
+// only when at least one of those buttons uses a tracked link.
+const topPicksTracked = topPicks.some((t) => t.affiliate_url.startsWith('http'));
 // Keep acronyms (HVAC) in capitals and use the singular trade name, so copy reads
 // "HVAC software" and "general contractor software", not "hvac" or "general contractors software".
 const verticalLower = vertical.name
@@ -527,6 +531,7 @@ const breadcrumbs = [
 
     <section class="mb-12">
       <h2 id="reviews" class="mb-6 scroll-mt-20 text-2xl font-bold text-slate-900">Detailed reviews</h2>
+      {topPicksTracked && <div class="-mt-6 mb-6"><AffiliateDisclosure referral /></div>}
       <div class="space-y-10">
         {topPicks.map((t, i) => {
           const score = wrenchStackScore(t, vertical.slug);
