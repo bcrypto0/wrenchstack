@@ -461,10 +461,10 @@ const implementationText = hasCustomImpl ? tool.implementation_notes : implement
 // readingTimeMinutes(1600) on every tool page, whatever the page held. The words each
 // page draws from the data are counted here. FIXED_WORDS is the fixed text, counted with
 // a script on 2026-10-01 (markup and expressions stripped): 115 words in this template
-// and 294 in the shared components it renders (SourceReviews 29, AffiliateDisclosure 31,
+// and 313 in the shared components it renders (SourceReviews 29, AffiliateDisclosure 50,
 // UserReviews 5, ReviewSubmissionForm 193, MissingFromList 25, Byline 11). Recount them
 // when that text changes.
-const FIXED_WORDS = 115 + 294;
+const FIXED_WORDS = 115 + 313;
 const wc = (s?: string | null) => (s ?? '').split(/\s+/).filter(Boolean).length;
 const slugWords = (list: string[]) => list.reduce((n, s) => n + s.split('_').filter(Boolean).length, 0);
 const pageWords = FIXED_WORDS

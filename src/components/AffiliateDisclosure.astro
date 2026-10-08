@@ -1,29 +1,17 @@
 ---
 // Short, FTC-compliant affiliate disclosure for placement near vendor CTAs on
-// review/comparison pages. Light and honest: discloses the material connection
-// (we may earn a commission), states that commissions are not a scoring or
-// ordering input (see /disclosure/ and wrenchStackScoreBreakdown in lib/data.ts),
-// and links to the full disclosure page. Required by the FTC and by affiliate networks
+// review/comparison pages. Discloses the material connection (we may earn a
+// commission or a referral reward), states that neither is a scoring or ordering
+// input (see /disclosure/ and wrenchStackScoreBreakdown in lib/data.ts), and links
+// to the full disclosure page. Required by the FTC and by affiliate networks
 // (PartnerStack etc.) for sites that earn commissions. See
 // docs/competitive-presentation-benchmark-2026-05-29.md.
 //
-// `referral` (optional, default false): also names the referral reward, for pages
-// whose tracked links can be referral programs rather than affiliate programs (see
-// the ledger on /methodology/). Trade pages use it; quiz.astro repeats the same
-// wording as a string. The default wording is unchanged.
-interface Props {
-  referral?: boolean;
-}
-const { referral = false } = Astro.props;
+// One wording for every page (2026-10-08): tracked links can be affiliate programs
+// (commission) or referral programs (ServiceTitan, SmartMoving and Service Fusion;
+// see the ledger on /methodology/). quiz.astro repeats the same wording as a string.
 ---
-{referral ? (
 <p class="mt-3 text-xs text-slate-500 leading-snug">
   WrenchStack may earn a commission or a referral reward if you sign up through a tracked link on this page. The vendor pays it and we add no charge of our own. Neither is an input to the Fit Score or to how we order tools.
   <a href="/disclosure/" class="underline hover:text-slate-700">How we make money</a>.
 </p>
-) : (
-<p class="mt-3 text-xs text-slate-500 leading-snug">
-  WrenchStack may earn a commission if you sign up through a tracked link on this page. The vendor pays it and we add no charge of our own. Commissions are not an input to the Fit Score or to how we order tools.
-  <a href="/disclosure/" class="underline hover:text-slate-700">How we make money</a>.
-</p>
-)}

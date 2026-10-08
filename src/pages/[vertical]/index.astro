@@ -531,7 +531,7 @@ const breadcrumbs = [
 
     <section class="mb-12">
       <h2 id="reviews" class="mb-6 scroll-mt-20 text-2xl font-bold text-slate-900">Detailed reviews</h2>
-      {topPicksTracked && <div class="-mt-6 mb-6"><AffiliateDisclosure referral /></div>}
+      {topPicksTracked && <div class="-mt-6 mb-6"><AffiliateDisclosure /></div>}
       <div class="space-y-10">
         {topPicks.map((t, i) => {
           const score = wrenchStackScore(t, vertical.slug);

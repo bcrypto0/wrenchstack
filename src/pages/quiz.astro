@@ -383,7 +383,7 @@ const quizFaqSchema = {
         </div>
       `).join('');
 
-      // Same wording as <AffiliateDisclosure referral /> in components/AffiliateDisclosure.astro;
+      // Same wording as <AffiliateDisclosure /> in components/AffiliateDisclosure.astro;
       // shown only when one of the matches' Visit links is a tracked link.
       const disclosure = results.some((t) => t.tracked)
         ? '<p class="mb-4 text-xs text-slate-500 leading-snug">WrenchStack may earn a commission or a referral reward if you sign up through a tracked link on this page. The vendor pays it and we add no charge of our own. Neither is an input to the Fit Score or to how we order tools. <a href="/disclosure/" class="underline hover:text-slate-700">How we make money</a>.</p>'

@@ -53,9 +53,8 @@ const formattedLastVerified = new Date(lastVerifiedDate).toLocaleDateString('en-
   day: 'numeric',
 });
 
-// Live freshness stats: surfacing this on the homepage is our direct
-// attack on competitors' staleness (Capterra ServiceTitan profile last
-// updated Aug 2025 = 9 months stale at time of this writing).
+// Live freshness stats: each software tool's price carries the date we last
+// verified it, and the homepage lists the most recently verified tools.
 const freshness = freshnessStats();
 
 // 6 most-recently-verified tools (lowest days-since-verified). Surfaces
@@ -144,7 +143,7 @@ function featureToUrl(slug: string): string {
         </a>
       </div>
       <p class="mt-5 max-w-2xl text-sm text-slate-500 leading-relaxed">
-        Independent. We may earn an affiliate commission when you sign up with some software vendors through our links, but <strong class="font-semibold text-slate-700">vendors can't pay for a higher score or to be featured</strong>, and a reputation warning goes on a vendor only when a regulator order, court record, BBB profile or the vendor's own terms supports it. <a href="/methodology/" class="underline hover:text-slate-700">How we rate</a> · <a href="/disclosure/" class="underline hover:text-slate-700">how we make money</a>.
+        Independent. We may earn an affiliate commission or a referral reward when you sign up with some software vendors through our links, but <strong class="font-semibold text-slate-700">vendors can't pay for a higher score or to be featured</strong>, and a reputation warning goes on a vendor only when a regulator order, court record, BBB profile or the vendor's own terms supports it. <a href="/methodology/" class="underline hover:text-slate-700">How we rate</a> · <a href="/disclosure/" class="underline hover:text-slate-700">how we make money</a>.
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
         <a
@@ -215,7 +214,7 @@ function featureToUrl(slug: string): string {
         <a href="/methodology/" class="text-sm font-medium text-orange-600 hover:underline">How we verify →</a>
       </div>
       <p class="mb-6 text-slate-600">
-        Each software tool's price carries the date we last verified it. These are the tools verified most recently, with the date stamp underneath. Capterra's ServiceTitan profile, by comparison, is dated August 2025.
+        Each software tool's price carries the date we last verified it. These are the tools verified most recently, with the date stamp underneath.
       </p>
       <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {recentlyVerified.map((t) => {
@@ -322,7 +321,7 @@ function featureToUrl(slug: string): string {
   <section class="bg-white border-t border-slate-100">
     <div class="mx-auto max-w-6xl px-4 py-16">
       <h2 class="mb-3 text-2xl font-bold tracking-tight text-slate-900">
-        The editorial position no competitor can copy
+        How we cover vendors
       </h2>
       <p class="mb-8 max-w-3xl text-slate-600">
         WrenchStack compares vendors for trades businesses in {usCategoryCount} US categories, with the same independence rules and reputation-warning standards in each. We name regulator orders and settlements with their sources, and we list carriers we earn nothing from on the same terms as the rest.
@@ -337,7 +336,7 @@ function featureToUrl(slug: string): string {
         <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-5">
           <div class="mb-2 text-xs font-bold uppercase tracking-wider text-emerald-700">✓ We list the unaffiliated</div>
           <p class="text-sm text-emerald-900 leading-relaxed">
-            We have no affiliate arrangement with <strong>Acuity Insurance</strong>, <strong>Erie Insurance</strong> or <strong>Google Local Services Ads</strong>, so we earn nothing from them, and they are listed on the same terms as every other vendor. Commission does not decide what we list or how we rank it.
+            We have no affiliate arrangement with <strong>Acuity Insurance</strong>, <strong>Erie Insurance</strong> or <strong>Google Local Services Ads</strong>, so we earn nothing from them, and they are listed on the same terms as every other vendor. A commission or a referral reward does not decide what we list or how we rank it.
           </p>
         </div>
         <div class="rounded-lg border border-slate-200 bg-slate-50 p-5">

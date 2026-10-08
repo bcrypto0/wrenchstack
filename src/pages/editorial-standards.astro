@@ -2,11 +2,12 @@
 import Layout from '../layouts/Layout.astro';
 import { tools, verticals } from '../lib/data';
 
-// Date of the last edit to this page's text (2026-10-05: pricing benchmark reports
+// Date of the last edit to this page's text (2026-10-08: referral rewards named beside
+// commissions; third-party estimate sentence replaced. 2026-10-05: pricing benchmark reports
 // named in the opening, the green box and the money section; report ledger; "Who is
 // accountable" rewritten for a one-person operation. Earlier, 2026-10-01: Fit Score
 // scope, flag standard, corrections wording). Set to the deploy date when this ships.
-const lastUpdated = 'October 5, 2026';
+const lastUpdated = 'October 8, 2026';
 const toolCount = tools.length;
 const verticalCount = verticals.length;
 // Software tools with a tracked affiliate link (same test as the methodology ledger).
@@ -41,8 +42,8 @@ const breadcrumbs = [
       <p class="m-0 text-sm leading-relaxed text-emerald-900">
         <strong>The one rule everything else serves:</strong> a vendor cannot pay us for a higher score,
         a better ranking, inclusion in a "best of" list, a softer review, or the removal of a reputation
-        warning. We may earn an affiliate commission on some sign-ups, and we sell pricing benchmark reports
-        to software vendors. Commissions do not change what we publish, and whether a vendor bought a report
+        warning. We may earn an affiliate commission or a referral reward on some sign-ups, and we sell pricing benchmark reports
+        to software vendors. Commissions and referral rewards do not change what we publish, and whether a vendor bought a report
         is not an input to any listing, Fit Score, ranking, award or reputation flag, or to whether a product
         is listed.
       </p>
@@ -70,7 +71,7 @@ const breadcrumbs = [
       <li><strong>Pricing is dated.</strong> Every US vendor entry carries a <em>verified date</em>, and software tool pages mark a price verified more than 90 days ago with an amber or red freshness marker.</li>
       <li><strong>Primary sources win.</strong> When a vendor's claim contradicts its own public page, we publish what the public page says until the page changes.</li>
       <li><strong>No fabricated signals.</strong> We do not invent review counts, ratings, or testimonials. Where we have no first-party reviews for a tool, we say so rather than manufacture them.</li>
-      <li><strong>Quote-only pricing is labeled.</strong> When a software vendor publishes no price, the listing says "Custom quote"; in the other categories the listing says in words that the price is quoted or not published. A pricing note may mention a third-party estimate, labeled as one; it is not used as the listed price or in any price statistic we compute.</li>
+      <li><strong>Quote-only pricing is labeled.</strong> When a software vendor publishes no price, the listing says "Custom quote"; in the other categories the listing says in words that the price is quoted or not published. Pricing notes carry no third-party price estimates.</li>
     </ul>
 
     <h2>Our sources</h2>
@@ -95,8 +96,8 @@ const breadcrumbs = [
 
     <h2>Independence and how we make money</h2>
     <p>
-      When you sign up with some vendors through our links, we may earn a commission: of the {toolCount}
-      software tools, {activeAffiliateCount} have a tracked affiliate or referral link. Commissions do
+      When you sign up with some vendors through our links, we may earn a commission or a referral reward: of the {toolCount}
+      software tools, {activeAffiliateCount} have a tracked affiliate or referral link. Commissions and referral rewards do
       not influence what we publish: the same Fit Score formula (for software), the same tier rules, the
       same reputation standards and the same editorial scrutiny apply to every vendor, affiliate partner
       or not. See our

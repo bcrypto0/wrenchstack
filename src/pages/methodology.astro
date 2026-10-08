@@ -199,7 +199,7 @@ const counts = {
       <ul class="list-disc pl-5 space-y-1 m-0">
         <li><strong>Fixed a scoring bug.</strong> On pages with no trade context (tool pages, awards), the vertical-fit factor previously fell back to a flat 7.0 instead of the tool's actual fit data. It now uses the tool's best trade fit. Context-free scores published before this date understated most tools.</li>
         <li><strong>Unrated tools are no longer scored as if they had earned 2.5 stars.</strong> When no G2/Capterra listing exists, the ratings factor is excluded and remaining weights renormalize, instead of substituting a neutral 5/10.</li>
-        <li><strong>Removed affiliate considerations from category tier rules.</strong> An insurance tier path required an affiliate program, and payroll and agency tiers contained hardcoded exceptions. All tiers are now rule-based on product and reputation data only, which is what this page always promised. Affected tiers were recomputed.</li>
+        <li><strong>Removed affiliate considerations from category tier rules.</strong> An insurance tier path required an affiliate program, and payroll and agency tiers contained hardcoded exceptions. All tiers are now rule-based on product and reputation data only, Affected tiers were recomputed.</li>
         <li><strong>One review cadence.</strong> This page previously said monthly in one section and quarterly in another. The cycle is monthly, matching the published <a href="/verification-log/">verification log</a>.</li>
       </ul>
     </div>
@@ -264,7 +264,7 @@ const counts = {
 
     <div class="not-prose mb-6 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-5">
       <p class="text-sm text-emerald-900 leading-relaxed m-0">
-        <strong class="text-emerald-900">WrenchStack rankings are not for sale.</strong> Vendors cannot pay to be included in the directory, pay to receive a higher WrenchStack Fit Score™, pay to win awards, pay to soften reputation flags, or pay to remove cons from a review. Affiliate relationships are disclosed in the per-vendor ledger below and have no effect on rankings. Pricing benchmark reports sold to vendors are listed in the report ledger below. Whether a vendor bought a report is not an input to any listing, Fit Score, ranking, award or reputation flag, or to whether a product is listed. The methodology applies identically whether we earn commission on a vendor or not, and whether or not it bought a report.
+        <strong class="text-emerald-900">WrenchStack rankings are not for sale.</strong> Vendors cannot pay to be included in the directory, pay to receive a higher WrenchStack Fit Score™, pay to win awards, pay to soften reputation flags, or pay to remove cons from a review. Affiliate relationships are disclosed in the per-vendor ledger below and have no effect on rankings. Pricing benchmark reports sold to vendors are listed in the report ledger below. Whether a vendor bought a report is not an input to any listing, Fit Score, ranking, award or reputation flag, or to whether a product is listed. The methodology applies identically whether or not we earn a commission or a referral reward on a vendor, and whether or not it bought a report.
       </p>
     </div>
 
@@ -273,10 +273,6 @@ const counts = {
     </p>
 
     <h2>What "verified" means here</h2>
-
-    <p>
-      Around the industry, "verified" has come to mean many things: a crawler read the vendor's marketing page, an AI summarized it, or the vendor filled in a form about themselves. None of those is what the word means on this site.
-    </p>
 
     <p>
       On WrenchStack, <strong>verified means the claim was checked against a named primary source on a named date.</strong> For pricing, that source is the vendor's own pricing page; the date is recorded per vendor and shown on the page. For reputation flags, the source is a regulator, a live court record, or a named complaint registry, cited in the flag itself. Anything we could not verify that way is either labeled as unverified or not published at all. Routine re-checks are automated: software reads the vendor's own page, and a change is published only after a second, independent check of that same page confirms it. What is never treated as verification: a figure copied from a third-party listing, an estimate, or the vendor's own say-so without a published source. You can watch the dates move on the <a href="/verification-log/">verification log</a>.
@@ -334,8 +330,7 @@ const counts = {
 
     <p>
       Where a vendor publishes no price (ServiceTitan is one example), the listing says so and the
-      tool counts as quote-only. A pricing note may mention a third-party estimate, labelled as
-      unverified; such an estimate is never used as the listed price or in any figure we publish.
+      tool counts as quote-only. Pricing notes carry no third-party price estimates.
     </p>
 
     <h2 id="how-we-make-money">How we make money</h2>
@@ -347,9 +342,8 @@ const counts = {
       <strong>we may earn a commission or a referral reward</strong>, but only when the link
       belongs to a program we have joined. Some of those programs are affiliate programs and some
       are referral programs. The reward is not an input to any listing, Fit Score, rank or award.
-      We never get paid
-      for placement, for ranking, or for inclusion in the directory. Vendors cannot buy a higher
-      WrenchStack Score, a different spot in a "best of" list, or a softer tone in a review.
+      No vendor has paid for placement, ranking or inclusion in the directory, and payment is not
+      an input to the Fit Score, a spot in a "best of" list or the tone of a review.
     </p>
 
     <p class="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm not-prose">
@@ -455,7 +449,7 @@ const counts = {
         <strong>None</strong>: we have no affiliate relationship with this vendor. Where we have
         a reason on record, the note gives it: the vendor has no program open to publishers, or
         we applied and were not accepted. The "Visit" button points to the vendor's public page.
-        We earn no commission from this tool.
+        We earn no commission or referral reward from this tool.
       </li>
     </ul>
 
@@ -564,11 +558,11 @@ const counts = {
 
     <ul>
       <li>Accept payment for placement in a "best of" list</li>
-      <li>Accept payment to raise a tool's WrenchStack Score</li>
+      <li>Accept payment to raise a tool's WrenchStack Fit Score™</li>
       <li>Accept payment to omit or soften cons in a tool review</li>
       <li>Hide an affiliate relationship: every tool's status is on this page</li>
       <li>Hide a report sale: every pricing benchmark report sold to a vendor is in the report ledger on this page</li>
-      <li>Recommend a tool we wouldn't recommend if no commission or report sale existed</li>
+      <li>Recommend a tool we wouldn't recommend if no commission, referral reward or report sale existed</li>
     </ul>
 
     <h2>Where pricing data comes from</h2>

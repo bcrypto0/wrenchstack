@@ -21,7 +21,7 @@ const pageDescription = `${tool.name} review for trades contractors. ${asSentenc
 // Computed from the link this page actually uses (affiliate_url falls back to vendor_url),
 // not from the unverified affiliate notes in the data.
 const affiliateDisclosure = tool.affiliate_url.startsWith('http')
-  ? `The link to ${tool.name} on this page is an affiliate link: we may earn a commission if you sign up through it.`
+  ? `The link to ${tool.name} on this page is a tracked affiliate or referral link: we may earn a commission or a referral reward if you sign up through it.`
   : `The link to ${tool.name} on this page goes to its own site and is not an affiliate link.`;
 
 const breadcrumbs = [
