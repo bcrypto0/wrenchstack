@@ -57,7 +57,7 @@ const toTrialDays = toTool.pricing.free_trial_days ?? 0;
 const fromPrice = fromTool.pricing.starting_at_usd;
 const toPrice = toTool.pricing.starting_at_usd;
 const monthlyDelta = (fromPrice !== null && toPrice !== null) ? Math.round(toPrice - fromPrice) : null;
-const annualDelta = monthlyDelta !== null ? monthlyDelta * 12 : null;
+const annualDelta = (fromPrice !== null && toPrice !== null) ? Math.round((toPrice - fromPrice) * 12) : null;
 
 // Starting prices are only like for like when both tools charge the same way, and
 // per-seat prices only when they charge for the same seat (seatUnit: 'user' unless

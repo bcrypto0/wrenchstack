@@ -69,7 +69,11 @@ const publicPrices = ranked
   .sort((a, b) => a - b);
 // Shared helper rather than a fifth hand-rolled median. This copy happened to be
 // correct, which is exactly how the last one survived long enough to publish $79.
-const medianPrice = publicPrices.length ? medianUsd(publicPrices) : null;
+// Rounded to whole dollars for display only (Math.round, half up). For an odd count
+// medianUsd() returns the middle price itself, so on 2026-10-08 cleaning, handyman and
+// appliance repair showed "$45.95/mo" (Markate) and waste removal "$79.95/mo"
+// (Dumpster Rental Systems). Nothing on this page computes with the median.
+const medianPrice = publicPrices.length ? Math.round(medianUsd(publicPrices)) : null;
 // Quote-only = pricing_model 'quote_only'. A null starting price is not the test: two
 // tools publish one-time or per-project prices instead of a monthly plan, and they are
 // counted separately (otherPricing) rather than as hiding their price.

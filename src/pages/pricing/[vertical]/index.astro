@@ -81,7 +81,10 @@ const lowestPaidLabel = lowestPaidPrice !== null
       ? `$${lowestPaidPrice} a month${lowestPaidTools.every(isPerUser) ? ` per ${seatUnit(lowestPaidTools[0])}` : ''} (${listJoin(lowestPaidTools.map((t) => t.name))})`
       : `$${lowestPaidPrice} a month (${lowestPaidTools.map((t) => `${t.name}, ${scaleWord(t)}`).join('; ')})`)
   : null;
-const medianPaid = paidTools.length ? medianUsd(pricedEntryValues(verticalTools)) : null;
+// Whole dollars for display (Math.round, half up), as on the trade page: for an odd
+// count medianUsd() returns the middle price itself ($45.95, $79.95 on 2026-10-08).
+// Only medianClause reads this value.
+const medianPaid = paidTools.length ? Math.round(medianUsd(pricedEntryValues(verticalTools))) : null;
 const perUserPaid = paidTools.filter(isPerUser);
 // Page-level wording for the per-seat group: "per user" while every tool in it charges
 // per user, "per seat" once one charges per route or per driver (seat_unit), so a

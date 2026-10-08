@@ -204,7 +204,7 @@ const priceOldestDay = toolVerified.length ? new Date(`${toolVerified[0]}T00:00:
 const dataAsOfDay = new Date(`${DATA_AS_OF}T00:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 // The last edit to this page's copy. dateModified is whichever is later, the copy
 // edit or the data date.
-const PAGE_MODIFIED = '2026-10-01';
+const PAGE_MODIFIED = '2026-10-08';
 const dateModified = PAGE_MODIFIED > DATA_AS_OF ? PAGE_MODIFIED : DATA_AS_OF;
 
 // Named prices
@@ -649,7 +649,7 @@ const articleSchema = {
       <h2>Methodology</h2>
 
       <p>
-        Prices come from each vendor's own pricing page, and every price carries the date it was last checked against that page (shown on each tool page and in the <code>pricing_verified_date</code> column of the open dataset). A platform that publishes no price is counted as quote-only, and one that publishes only one-time or per-project prices has no monthly starting price; both are left out of every price median on this page. Medians use only platforms with a published paid starting price, so free plans are counted separately. A starting price is the vendor's headline monthly figure for its cheapest paid plan, or its monthly equivalent where the vendor prices by the year. Where that headline figure assumes annual billing (Jobber, Housecall Pro, Service Fusion, Markate and others), the annual-billed monthly figure is used, so month-to-month prices can be higher; where it is a month-to-month rate (Joist, for example), annual billing can cost less. The headline median blends per-user rates with flat plan fees; the per-user and flat-fee medians keep them apart, and the price tiers and the by-trade table compare cost per user, with flat plans split across a {REFERENCE_TEAM_SIZE}-person team. A median of an even number of prices is the average of the middle two, rounded to the nearest dollar. No price on this page comes from review sites, user reports or third-party estimates.
+        Prices come from each vendor's own pricing page, and every price carries the date it was last checked against that page (shown on each tool page and in the <code>pricing_verified_date</code> column of the open dataset). A platform that publishes no price is counted as quote-only, and one that publishes only one-time or per-project prices has no monthly starting price; both are left out of every price median on this page. Medians use only platforms with a published paid starting price, so free plans are counted separately. A starting price is a monthly figure the vendor publishes for its cheapest paid plan, or its monthly equivalent where the vendor prices by the year. Where the figure assumes annual billing (Jobber, Housecall Pro, Service Fusion, Markate, Joist and others), month-to-month prices can be higher; where it is a month-to-month rate, annual billing can cost less. The headline median blends per-user rates with flat plan fees; the per-user and flat-fee medians keep them apart, and the price tiers and the by-trade table compare cost per user, with flat plans split across a {REFERENCE_TEAM_SIZE}-person team. A median of an even number of prices is the average of the middle two, rounded to the nearest dollar. No price on this page comes from review sites, user reports or third-party estimates.
       </p>
 
       <p>

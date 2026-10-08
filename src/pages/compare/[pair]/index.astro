@@ -339,6 +339,11 @@ function describePrice(t: Tool): string {
   if (isQuoteOnly(t)) return `${t.name} publishes no price, so ask for a written quote for your team size.`;
   if (nonMonthlyPricingOnly(t)) return `${t.name} publishes one-time or per-project prices rather than a monthly plan (listed in its full review), so compare the total over the period you expect to use it.`;
   if (t.pricing.starting_at_usd === 0) return `${t.name} has a free tier (${t.pricing.tiers[0]})${topTierPhrase(t)}.`;
+  // A base-plus-seat label ends "more as users are added", so a tier name after it read
+  // as if users are added on that tier ("more as users are added on Owner Operator"),
+  // though several entry tiers are one-user plans in their pricing notes. Name the tier
+  // first for those (2026-10-08).
+  if (t.pricing.pricing_model === 'flat_plus_seat') return `${t.name} starts on ${t.pricing.tiers[0]}, at ${entryPriceLabel(t)}${topTierPhrase(t)}.`;
   return `${t.name} starts at ${entryPriceLabel(t)} on ${t.pricing.tiers[0]}${topTierPhrase(t)}.`;
 }
 
@@ -353,10 +358,26 @@ function pricingAnalysis(): string {
   const aIsFlat = priceScaling(a) === 'flat';
   const bIsFlat = priceScaling(b) === 'flat';
   const flatVsPerUser = (aIsFlat && priceScaling(b) === 'per_user') || (bIsFlat && priceScaling(a) === 'per_user');
+  // What one entry price is charged for: the company (a flat price, or the base of a
+  // base-plus-seat plan) or one seat (a user, route or driver; seatUnit). Until
+  // 2026-10-08 a base and a per-seat price were subtracted ("Workyard's entry price is
+  // $39.95 a month lower": $6 per user against Markate's $45.95 base), and so were two
+  // per-seat prices for different seats ($49 per route against $250 per user).
+  // null for free, quote-only and unclear prices.
+  const priceBasis = (t: Tool): string | null => {
+    const s = priceScaling(t);
+    if (s === 'flat' || s === 'base_plus_seat') return 'company';
+    if (s === 'per_user') return seatUnit(t);
+    return null;
+  };
+  const aBasis = priceBasis(a);
+  const bBasis = priceBasis(b);
   if (flatVsPerUser) {
     const flatTool = aIsFlat ? a : b;
     const perUserTool = aIsFlat ? b : a;
     analysis += ` ${flatTool.name} charges a flat monthly price per plan while ${perUserTool.name} charges per ${seatUnit(perUserTool)}, so ${flatTool.name} gets relatively cheaper as your team grows; check each plan's user or usage limits.`;
+  } else if (cheaperTool && aBasis !== null && bBasis !== null && aBasis !== bBasis) {
+    analysis += ` ${a.name} charges its entry price per ${aBasis} and ${b.name} per ${bBasis}, so the two figures are not directly comparable; price both at your team size.`;
   } else if (cheaperTool) {
     // An invented "both platforms typically converge in price at scale" followed this
     // until 2026-10-01; no data supports it.
