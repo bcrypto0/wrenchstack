@@ -103,6 +103,47 @@ export function isInternationalPath(pathname) {
   return seg !== undefined && INTL_MARKET_CODES.has(seg);
 }
 
+// --- Core index (added 2026-10-14, indexing diagnosis) -----------------------
+// Search Console on 2026-10-14: 1 page indexed (the home page) of 742 in the
+// sitemap; 620 never crawled, 121 crawled and declined (mostly /compare/
+// pairs); about 5 crawl requests a day; 2 external links. Indexed sitemap pages
+// fell 11 -> 7 -> 1 between late August and early October.
+// See docs/indexing-diagnosis-2026-10-14.md and docs/core-index-list-2026-10-14.md
+// (owner approved the list 2026-10-14).
+//
+// So the index is cut to the core: home, trade hubs, section hubs, tool
+// reviews and the editorial/trust pages (182 URLs). Everything below is
+// noindex,follow and out of the sitemap: still served, still linked, links on
+// it still followed. Templated sections (compare pairs, multi-compare,
+// pricing, migrate, features, best-software-for) measured 31-70% shared text
+// between sibling pages; /tools/<slug>/alternatives/ pages have about a third
+// of the unique text of the reviews; the non-software vendor entries are off
+// the core topic (their section hubs stay indexable).
+//
+// ONE switch to reverse: release a section by removing it here once the core
+// is indexed and the domain has links.
+export const CORE_GATED_SECTIONS = new Set([
+  'compare', 'multi-compare', 'compare-builder', 'pricing', 'migrate', 'features',
+  'best-software-for', 'state', 'software-by-country',
+  'insurance', 'lead-gen', 'payroll', 'agencies', 'ai-tools',
+  'accounting', 'financing', 'payments', 'banking',
+]);
+// Section hubs that stay indexable although their entries are gated.
+export const CORE_KEPT_SECTION_HUBS = new Set([
+  'insurance', 'lead-gen', 'payroll', 'agencies', 'ai-tools',
+  'accounting', 'financing', 'payments', 'banking',
+]);
+
+/** True for a page outside the core index (noindex,follow; not in the sitemap). */
+export function isCoreGatedPath(pathname) {
+  const segs = String(pathname || '').split('/').filter(Boolean);
+  if (segs.length === 0) return false;
+  if (segs[0] === 'tools' && segs.length === 3 && segs[2] === 'alternatives') return true;
+  if (!CORE_GATED_SECTIONS.has(segs[0])) return false;
+  if (segs.length === 1 && CORE_KEPT_SECTION_HUBS.has(segs[0])) return false;
+  return true;
+}
+
 // Sitemap filter: keep every non-comparison URL; keep a /compare/<a>-vs-<b>/
 // URL only when it is indexable; drop gated intl markets' head-to-heads.
 export function shouldKeepInSitemap(urlStr) {
@@ -110,6 +151,8 @@ export function shouldKeepInSitemap(urlStr) {
   try { path = new URL(urlStr).pathname; } catch { path = urlStr; }
   // Whole international section is out of the sitemap (2026-09-07 thin-page audit).
   if (isInternationalPath(path)) return false;
+  // Core index only (2026-10-14 indexing diagnosis).
+  if (isCoreGatedPath(path)) return false;
   // State hubs and state-by-trade pages: allowlist only.
   const stateVertical = path.match(/^\/state\/([^/]+)\/([^/]+)\/$/);
   if (stateVertical) return isStatePageIndexable(stateVertical[1], stateVertical[2]);

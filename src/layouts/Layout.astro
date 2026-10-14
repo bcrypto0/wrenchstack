@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import { tools, verticals } from '../lib/data';
-import { isInternationalPath } from '../lib/compare-index.mjs';
+import { isInternationalPath, isCoreGatedPath } from '../lib/compare-index.mjs';
 
 export interface BreadcrumbItem {
   name: string;
@@ -33,7 +33,10 @@ const { title, description, canonical, ogImage, noindex = false, breadcrumbs, la
 // `follow` rather than `nofollow`: stop indexing these, but still let Google
 // traverse the links out of them to the US pages that can rank.
 const intlGated = isInternationalPath(Astro.url.pathname);
-const robotsContent = noindex ? 'noindex,nofollow' : intlGated ? 'noindex,follow' : null;
+// Core index only (2026-10-14 indexing diagnosis): templated sections, tool
+// alternatives pages and non-software vendor entries are noindex,follow.
+const coreGated = isCoreGatedPath(Astro.url.pathname);
+const robotsContent = noindex ? 'noindex,nofollow' : (intlGated || coreGated) ? 'noindex,follow' : null;
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
 // PNG, not SVG: LinkedIn/X/Facebook do not render SVG og:images (the card shows blank).
 const ogImageUrl = ogImage ?? new URL('/og-default.png', Astro.site).toString();
