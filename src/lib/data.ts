@@ -1425,7 +1425,7 @@ export interface AiTool {
   ai_category: AiToolCategory;
   pricing_summary: string;
   starting_price_usd: number | null;
-  free_trial_days: number;
+  free_trial_days: number | null;
   verticals_supported: string[];
   founded: number | null;
   headquartered: string;

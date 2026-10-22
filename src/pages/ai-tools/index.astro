@@ -95,7 +95,7 @@ const itemListSchema = {
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Free trial</dt>
-                    <dd class="font-semibold text-slate-900">{t.free_trial_days > 0 ? `${t.free_trial_days} days` : 'No'}</dd>
+                    <dd class="font-semibold text-slate-900">{t.free_trial_days == null ? 'Not stated' : t.free_trial_days > 0 ? `${t.free_trial_days} days` : 'No'}</dd>
                   </div>
                   <div>
                     <dt class="text-slate-500 uppercase tracking-wider">Founded</dt>
