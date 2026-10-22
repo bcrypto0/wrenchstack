@@ -226,16 +226,18 @@ const WEB3FORMS_ACCESS_KEY =
               body: fd,
               headers: { Accept: 'application/json' },
             });
-            const data = await res.json();
+            let data = null;
+            try { data = await res.json(); } catch (_) { data = null; }
+            if (!data && res.ok) data = { success: true };
             if (data.success) {
               form.reset();
               form.style.display = 'none';
               status.classList.remove('hidden');
             } else {
-              alert('Submission failed: ' + (data.message || 'unknown error'));
+              alert('Submission failed: ' + ((data && data.message) || 'unknown error') + '. Please email hello@wrenchstack.com instead.');
             }
           } catch (err) {
-            alert('Submission failed. Please email hello@wrenchstack.com instead.');
+            alert('We could not confirm that your submission was sent. It may still have arrived; to be sure, please also email hello@wrenchstack.com.');
           }
         });
       }
