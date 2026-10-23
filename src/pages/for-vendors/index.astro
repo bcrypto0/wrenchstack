@@ -260,7 +260,7 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
                 let data = null;
                 try { data = await res.json(); } catch (_) { data = null; }
                 if (!data && res.ok) data = { success: true };
-                if (data.success) {
+                if (data && data.success) {
                   (form as HTMLFormElement).reset();
                   (form as HTMLFormElement).style.display = 'none';
                   status.classList.remove('hidden');

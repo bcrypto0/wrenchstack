@@ -229,7 +229,7 @@ const WEB3FORMS_ACCESS_KEY =
             let data = null;
             try { data = await res.json(); } catch (_) { data = null; }
             if (!data && res.ok) data = { success: true };
-            if (data.success) {
+            if (data && data.success) {
               form.reset();
               form.style.display = 'none';
               status.classList.remove('hidden');
