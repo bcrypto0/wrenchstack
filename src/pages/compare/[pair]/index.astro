@@ -346,6 +346,18 @@ function topTierPhrase(t: Tool): string {
   return `; its top published tier, ${t.pricing.tiers[n - 1]}, is $${formatUsd(top)} ${unit}`;
 }
 
+// Name the entry tier when its published price is the starting price (annual_per_user
+// tier prices are a year, the starting price a month). With no tier price recorded,
+// name it unless the vendor publishes only a starting rate: ZenFire's calculator shows
+// $50 to $70 per license with no price per band, so "on 1-10 licenses" tied $50 to a
+// band its page does not (F13, 2026-10-27).
+function entryTierIsStart(t: Tool): boolean {
+  const tierPrice = t.pricing.tier_prices_usd?.[0];
+  const start = t.pricing.starting_at_usd;
+  if (typeof tierPrice !== 'number' || start === null) return !t.pricing.starting_rate_only;
+  return Math.abs(tierPrice - (t.pricing.pricing_model === 'annual_per_user' ? start * 12 : start)) < 0.5;
+}
+
 function describePrice(t: Tool): string {
   if (isQuoteOnly(t)) return `${t.name} publishes no price, so ask for a written quote for your team size.`;
   if (nonMonthlyPricingOnly(t)) return `${t.name} publishes module or per-project prices rather than a monthly plan (listed in its full review), so compare the total over the period you expect to use it.`;
@@ -356,7 +368,7 @@ function describePrice(t: Tool): string {
   // first for those (2026-10-08).
   if (t.pricing.pricing_model === 'flat_plus_seat') return `${t.name} starts on ${t.pricing.tiers[0]}, at ${entryLabel(t)}${topTierPhrase(t)}.`;
   const min = seatMinimumPhrase(t);
-  return `${t.name} starts at ${entryPriceLabel(t)} on ${t.pricing.tiers[0]}${min ? `, with a ${min}` : ''}${topTierPhrase(t)}.`;
+  return `${t.name} starts at ${entryPriceLabel(t)}${entryTierIsStart(t) ? ` on ${t.pricing.tiers[0]}` : ''}${min ? `, with a ${min}` : ''}${topTierPhrase(t)}.`;
 }
 
 function pricingAnalysis(): string {

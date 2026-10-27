@@ -567,7 +567,9 @@ function buildAlternativeRationale(source: Tool, alt: Tool): string {
     if (isQuoteOnly(alt)) fragments.push('Quote-only pricing, so compare on fit not cost');
     else if (nonMonthlyPricingOnly(alt)) fragments.push('Publishes module or per-project prices, not a monthly plan');
     else if (altPrice === 0) fragments.push('Has a free tier');
-    else if (altPrice !== null) fragments.push(`Publishes its price: from ${entryPriceLabel(alt)}`);
+    // A starting rate with the full price by quote (starting_rate_only: ZenFire, Smart
+    // Service) is not "its price" (2026-10-27).
+    else if (altPrice !== null) fragments.push(`${alt.pricing.starting_rate_only ? 'Publishes a starting rate' : 'Publishes its price'}: from ${entryPriceLabel(alt)}`);
   } else if (altTier === 'free' && sourceTier !== 'free') {
     fragments.push('Has a free tier');
   } else if (altPrice !== null && altPrice > 0 && sourcePrice !== null && sourcePrice > 0 && altTierIdx !== sourceTierIdx) {

@@ -14743,11 +14743,11 @@
         "fire_protection"
       ],
       "pricing": {
-        "starting_at_usd": null,
+        "starting_at_usd": 50,
         "tiers": [
-          "1-10 technicians",
-          "11-25 technicians",
-          "26+ technicians",
+          "1-10 licenses",
+          "11-25 licenses",
+          "26+ licenses",
           "Multi-company / PE"
         ],
         "tier_prices_usd": [
@@ -14756,13 +14756,15 @@
           null,
           null
         ],
-        "pricing_note": "No prices are published; quotes are given on a demo call. Pricing is tiered by field technicians and back-office users: 1-10 technicians with 1-2 office users, 11-25 technicians with 5 or more, 26+ technicians with 15 or more, and a multi-company option for private equity portfolios. Scheduling and dispatch are included for every business; invoicing, payments, the customer portal, reporting and multi-location tools are optional. 14-day free trial with no credit card required. Verified against zentrades.pro/pricing 2026-10-08.",
-        "verified_date": "2026-10-08",
-        "pricing_model": "quote_only",
+        "pricing_note": "ZenTrades' pricing page (shared by all its editions; the ZenFire page links to it and says 'Simple per-user pricing') has a calculator that shows $50 to $70 per license per month, billed annually, says the final price depends on your number of licenses, and shows no monthly billing option. Its license bands are 1 to 10, 11 to 25 and 26+ licenses plus multi-company / PE; the calculator shows an estimate only after a license count is chosen ('Choose your number of licenses in Step 1 to see your estimate') and gives no price for each band, so this note does not tie either figure to a band. The calculator says every plan comes with the full platform, 'No add-ons, no feature limits': scheduling and dispatch, invoicing and payments, the customer portal, reporting and multi-location tools are all marked included, while portfolio tools are for multi-company and private equity groups, whose plans are priced around the number of companies and licenses. The FAQ on the same page disagrees with the calculator: it says there is no public price list, that you get a custom quote on a short demo call, that pricing is tiered by field technicians and back-office users, and that you can start with a basic package and add features and licenses as you grow (adding 'more licenses, users, or advanced features at any time'), so confirm in the quote which features are included. The FAQs on the ZenFire page and the ZenTrades home page likewise say pricing depends on team size and the modules you need. The pricing FAQ answers the question on setup or onboarding fees with no fee or amount, saying onboarding depth scales with the plan. No contract length, cancellation or refund terms appear on the pricing or ZenFire pages. 14-day free trial with no credit card required (pricing page FAQ). Verified against zentrades.pro/pricing, zentrades.pro/zenfire and the zentrades.pro home page 2026-10-27.",
+        "verified_date": "2026-10-27",
+        "pricing_model": "annual_per_user",
+        "starting_rate_only": true,
         "free_trial_days": 14,
-        "quote_basis": "Number of field technicians and back-office users, plus the optional capabilities chosen",
-        "quote_basis_source_url": "https://zentrades.pro/pricing",
-        "quote_basis_read_date": "2026-10-08"
+        "quote_basis": null,
+        "quote_basis_source_url": null,
+        "quote_basis_read_date": null,
+        "seat_unit": "license"
       },
       "key_features": [
         "inspection_checklists",
@@ -14773,13 +14775,14 @@
         "dispatching",
         "estimates_quotes",
         "invoicing",
+        "customer_portal",
         "payment_processing",
         "inventory",
         "job_costing",
         "photo_documentation",
-        "gps_tracking",
         "reporting",
-        "mobile_app"
+        "mobile_app",
+        "offline_mode"
       ],
       "integrations": [
         "quickbooks_online",
@@ -14791,7 +14794,7 @@
       ],
       "best_for": "Fire protection contractors, from solo inspectors to multi-company groups, that want NFPA forms, recurring inspections, scheduling and invoicing in one system and want to trial it before buying",
       "best_team_size": "3-100",
-      "weaknesses": "No published prices (quotes depend on technician and office user counts and the modules you add); ZenTrades serves many trades, so check the depth of the fire forms you rely on; offline use is not described on its feature pages",
+      "weaknesses": "Prices shown only as a range ($50 to $70 per license a month, billed annually), and the pricing page's own FAQ still says there is no public price list and quotes come from a demo call; the calculator says no add-ons while the same FAQ talks about adding advanced features, so confirm what a quote covers; no monthly billing option or contract terms are published; the pricing FAQ refers to Starter, Enterprise and PE Firms plans without matching them to the calculator's license bands; ZenTrades serves many trades, so check the depth of the fire forms you rely on",
       "vertical_fit": {
         "hvac": 7,
         "plumbing": 7,
@@ -14799,11 +14802,11 @@
         "restoration": 7,
         "fire_protection": 10
       },
-      "long_description": "ZenFire is the fire protection product from ZenTrades, a field service software company that began in 2015 and launched ZenFire in 2021. ZenTrades is based in New York City with an office in Pune, India, and also sells versions for electrical, elevator, HVAC, plumbing, kitchen equipment and water restoration businesses. ZenTrades says more than 10,000 trade businesses use its software.\n\nZenFire centers on fire inspections: built-in NFPA forms and fire safety checklists, automated recurring inspections with compliance status tracking, deficiency reporting, and one-click inspection reports. Technicians can take photos and share them with the office right away. The office side covers drag-and-drop scheduling and dispatch with real-time updates, technician location tracking, estimates and invoices, online payments, inventory, job costing, crew and project management, customer history and reporting.\n\nZenTrades lists integrations with QuickBooks Online and QuickBooks Desktop for accounting, Stripe and Stax for card payments, and The Compliance Engine and Gravity for inspection compliance. ZenTrades publishes an Android app on Google Play.\n\nZenTrades does not publish prices. Its pricing page says quotes are tiered by the number of field technicians and back-office users, in bands of 1-10, 11-25 and 26+ technicians plus a multi-company option for private equity portfolios. Scheduling and dispatch are included for every business and the other modules are optional. There is a 14-day free trial with no credit card required. The trade-off: you need a demo to get a price, and because ZenTrades serves several trades, fire shops should check that the NFPA forms and inspection types they rely on are covered in the depth they need.",
+      "long_description": "ZenFire is the fire protection product from ZenTrades, a field service software company that also sells versions for electrical, elevator, HVAC, plumbing, kitchen equipment and water restoration businesses. ZenTrades lists offices in New York and in Pune, India, and says more than 10,000 field teams use its software.\n\nZenFire centers on fire inspections: built-in NFPA forms and fire safety checklists, automated recurring inspections with compliance status tracking, deficiency reporting, and one-click inspection reports. The ZenFire page says inspections completed on iPad or mobile sync into structured reports and that deficiencies are logged with photos and notes, and ZenTrades' home page says its mobile app works offline on site and syncs when the technician is back. The office side covers scheduling and dispatch with real-time updates, estimates and invoices, online payments, inventory, job costing, crew and project management, and reporting.\n\nZenTrades lists integrations with QuickBooks Online and QuickBooks Desktop for accounting, Stripe, Stax and Gravity Payments for payments, and The Compliance Engine for NFPA report submission.\n\nZenTrades' pricing page has a calculator that shows $50 to $70 per license per month, billed annually, and says the final price depends on your number of licenses. The calculator says every plan comes with the full platform with no add-ons, marking scheduling and dispatch, invoicing and payments, the customer portal, reporting and multi-location tools as included, and multi-company and private equity portfolio plans are priced around the number of companies and licenses. The FAQ on the same page says there is no public price list, that quotes come from a short demo call, tiered by field technicians and back-office users, and that you can start with a basic package and add advanced features as you grow, so confirm in the quote which features are included. There is a 14-day free trial with no credit card required. The trade-off: the exact price still comes from a quote, the only billing shown is annual, and because ZenTrades serves several trades, fire shops should check that the NFPA forms and inspection types they rely on are covered in the depth they need.",
       "pros_detail": [
         {
           "title": "NFPA forms built in",
-          "explanation": "Digital NFPA forms and fire safety checklists are available on the spot, so inspectors do not have to build forms from scratch."
+          "explanation": "ZenFire comes with built-in NFPA forms and NFPA-compliant checklists and lets you create your own checklists, so inspectors do not start from a blank form."
         },
         {
           "title": "Recurring inspections automated",
@@ -14815,32 +14818,32 @@
         },
         {
           "title": "Both QuickBooks versions",
-          "explanation": "Invoices and payments sync to QuickBooks Online or QuickBooks Desktop, and card payments run through Stripe or Stax."
+          "explanation": "Invoices and payments sync to QuickBooks Online or QuickBooks Desktop, and payments run through Stripe, Stax or Gravity Payments."
         },
         {
           "title": "Broad office toolset",
-          "explanation": "Scheduling and dispatch, estimates, invoicing, online payments, inventory, job costing and technician tracking sit alongside the inspection tools."
+          "explanation": "Scheduling and dispatch with real-time updates, estimates, invoicing, online payments, inventory, job costing and crew task management sit alongside the inspection tools."
         }
       ],
       "cons_detail": [
         {
-          "title": "No published prices",
-          "explanation": "Quotes depend on your technician and office user counts, so you need a demo call to get a number."
+          "title": "Price range, not a fixed price",
+          "explanation": "The pricing calculator shows $50 to $70 per license a month and says the final price depends on your number of licenses, while the FAQ on the same page says there is no public price list and quotes come from a short demo call. Get your per-license rate, and the features it covers, in writing."
         },
         {
-          "title": "Modules priced separately",
-          "explanation": "Scheduling and dispatch are included for everyone; invoicing, payments, the customer portal and reporting are optional, so confirm which modules your quote covers."
+          "title": "Annual billing only shown",
+          "explanation": "The calculator says billed annually and shows no monthly option, and the pricing and ZenFire pages publish no contract length, cancellation or refund terms."
         },
         {
           "title": "Multi-trade vendor",
           "explanation": "ZenTrades sells versions for many trades. Check that the NFPA forms and inspection types you use are covered in enough depth."
         },
         {
-          "title": "Field app details not published",
-          "explanation": "The feature pages do not describe offline use or list supported devices beyond an Android app on Google Play. Test the app on your crew's devices and at low-signal sites."
+          "title": "Plan names not matched to the calculator",
+          "explanation": "The pricing FAQ refers to Starter, Enterprise and PE Firms plans, with Enterprise described as 26+ field techs and 15+ back-office users, while the calculator uses license bands and does not map them to those plans. Ask which plan your quote is on and what it includes."
         }
       ],
-      "implementation_notes": "Start with the 14-day free trial or a demo, then get a quote for your technician and office user counts and the modules you need beyond scheduling and dispatch. Import customers, sites and equipment, set up recurring inspection schedules, and pick the NFPA forms and checklists your technicians need. Connect QuickBooks Online or Desktop, set up Stripe or Stax for card payments, and connect The Compliance Engine if your jurisdictions accept reports there. Test the technician app on the devices your crew uses, including at sites with weak signal.",
+      "implementation_notes": "Start with the 14-day free trial or a demo, then get a written quote for your number of licenses that lists the features included; the pricing calculator shows $50 to $70 per license a month, billed annually. Import customers, sites and equipment, set up recurring inspection schedules, and pick the NFPA forms and checklists your technicians need. Connect QuickBooks Online or Desktop, set up Stripe or Stax for card payments, and connect The Compliance Engine if your jurisdictions accept reports there. Test the technician app, which ZenTrades says works offline, on the devices your crew uses, including at sites with weak signal.",
       "tool_faqs": [
         {
           "q": "What is ZenFire?",
@@ -14848,7 +14851,7 @@
         },
         {
           "q": "How much does ZenFire cost?",
-          "a": "ZenTrades does not publish prices. Quotes are tiered by the number of field technicians and back-office users, and there is a 14-day free trial with no credit card required."
+          "a": "ZenTrades' pricing calculator shows $50 to $70 per license per month, billed annually, and says the final price depends on your number of licenses. The FAQ on the same page says there is no public price list and that you get a custom quote on a short demo call, so confirm your rate and the features it includes in writing. There is a 14-day free trial with no credit card required."
         },
         {
           "q": "Does ZenFire integrate with QuickBooks?",
@@ -14859,12 +14862,11 @@
           "a": "ZenFire is the fire version, but ZenTrades also sells versions for electrical, elevator, HVAC, plumbing, kitchen equipment and water restoration businesses."
         },
         {
-          "q": "Who makes ZenFire and where is it based?",
-          "a": "ZenTrades, which began in 2015 and launched ZenFire in 2021. It is based in New York City and has an office in Pune, India."
+          "q": "Who makes ZenFire?",
+          "a": "ZenTrades, a field service software company with offices listed in New York and in Pune, India. ZenTrades says more than 10,000 field teams use its software."
         }
       ],
-      "founded": 2015,
-      "headquartered": "New York, New York, USA"
+      "founded": null
     },
     {
       "slug": "essential-fire",
