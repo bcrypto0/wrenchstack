@@ -8,6 +8,7 @@ import { reportRows, reportAsOf } from '../lib/reportLedger';
 const reportAnnouncements: { label: string; sent: number | null }[] = [
   { label: 'October 13, 2026', sent: 10 },
   { label: 'October 27, 2026', sent: 8 },
+  { label: 'November 10, 2026', sent: null },
 ];
 
 // WrenchStack Fit Score™ methodology version metadata
@@ -494,7 +495,7 @@ const counts = {
       pricing for every platform, the buyer's included, and computes no score. We do not quote, invoice or
       take an order while an evaluation, correction, pricing question, dispute or reputation-flag review is
       open with a vendor, or within 30 days after the latest listing verdict, correction or reputation-flag
-      email we sent it. One price applies to every vendor and every trade; it is on the
+      email we sent it. A question we ask a vendor counts as closed once it has gone 30 days without an answer; the listing stays as the vendor's public pages describe it, and a later answer is handled as a correction. One price applies to every vendor and every trade; it is on the
       <a href="/for-vendors/#reports">vendor page</a>, and the <a href="/report-terms/">report terms</a> apply.
     </p>
 
