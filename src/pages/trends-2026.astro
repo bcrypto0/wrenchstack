@@ -435,7 +435,7 @@ const articleSchema = {
       <div class="not-prose my-8 grid gap-4 sm:grid-cols-3">
         <div class="rounded-lg border border-slate-200 bg-white p-5">
           <div class="text-3xl font-bold text-slate-900">{withFreeTier}</div>
-          <div class="mt-1 text-sm text-slate-600">Tools with genuine free tier</div>
+          <div class="mt-1 text-sm text-slate-600">Tools with a free plan</div>
         </div>
         <div class="rounded-lg border border-slate-200 bg-white p-5">
           <div class="text-3xl font-bold text-slate-900">{withFreeTrial}</div>
@@ -448,7 +448,7 @@ const articleSchema = {
       </div>
 
       <p>
-        Only <strong>{withFreeTier} platforms</strong> in the directory offer a genuine free tier (usable indefinitely, not just a trial), among them Yardbook's free landscape software, Contractor+'s Freedom plan, Connecteam's small-team plan, MaintainX Basic, Mitti's (formerly SafetyCulture) free plan, Roofr's Starter plan and OpenSolar's free platform.
+        Only <strong>{withFreeTier} platforms</strong> in the directory offer a free plan rather than only a trial, among them Yardbook's free landscape software, Contractor+'s Freedom plan, Connecteam's free plan for up to 10 users, MaintainX Basic, Mitti's (formerly SafetyCulture) free plan (its terms limit free accounts to a period Mitti designates, or 30 days if none is designated), Roofr's Starter plan and OpenSolar's free platform.
       </p>
 
       <p>
@@ -633,9 +633,9 @@ const articleSchema = {
       <ul>
         <li><strong>If your team is 3+ techs and you're shopping under $250/user/month</strong>: compare unlimited-user plans (such as Service Fusion) with per-seat plans at your actual headcount; which one wins depends on team size.</li>
         <li><strong>If you're on QuickBooks Desktop specifically</strong>: of the {withQuickBooks} platforms that integrate with QuickBooks in some form, {withQBDesktop} name QuickBooks Desktop, {withQBOnlineOnly} name QuickBooks Online only, and {withQBUnspecified} list QuickBooks without saying which edition. Confirm Desktop support with the vendor before you buy.</li>
-        <li><strong>If you run a large team</strong>: {largeQuoteOnly} of the {largeTeamTools.length} platforms whose listed best-fit team size reaches past 50 people publish no price, so book demos with several of them and compare written quotes.</li>
+        <li><strong>If you run a large team</strong>: {largeQuoteOnly} of the {largeTeamTools.length} platforms whose listed best-fit team size reaches past 50 people or has no stated upper limit publish no price, so book demos with several of them and compare written quotes.</li>
         <li><strong>If you're on Xero</strong>: {withXero} platforms list a Xero integration, among them {xeroExamples}, against {withQuickBooks} for QuickBooks.</li>
-        <li><strong>If you do insurance restoration work</strong>: CompanyCam, a photo documentation platform, is listed as integrating with {companyCamPartnerTools.length} platforms in the directory ({companyCamPartners}); check whether your FSM is one of them.</li>
+        <li><strong>If you do restoration work</strong>: CompanyCam, a photo documentation platform, is listed as integrating with {companyCamPartnerTools.length} platforms in the directory ({companyCamPartners}); check whether your FSM is one of them.</li>
         <li><strong>If you're solo or 1-2 techs</strong>: Joist (from ${joistPricing?.starting_at_usd}/mo {joistPricing?.tiers[0]}) and Markate (from about ${Math.round(markatePricing?.starting_at_usd ?? 0)}/mo) are low-cost starting points before committing to mid-tier FSM; check each plan's limits.</li>
       </ul>
 
