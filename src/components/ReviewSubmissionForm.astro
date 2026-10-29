@@ -203,11 +203,11 @@ const WEB3FORMS_ACCESS_KEY =
           By submitting you confirm this is your honest experience.
         </p>
       </div>
-
-      <div id={`review-status-${tool.slug}`} class="hidden rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
-        Thanks, your review was submitted. It is moderated by hand before anything is published.
-      </div>
     </form>
+
+    <div id={`review-status-${tool.slug}`} class="hidden rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
+      Thanks, your review was submitted. It is moderated by hand before anything is published.
+    </div>
 
     <script define:vars={{ slug: tool.slug }}>
       // Intercept the form submission to show inline success message instead of
