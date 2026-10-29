@@ -8,6 +8,7 @@ import { asSentence,
   isQuoteOnly,
   priceScaling,
   seatUnit,
+  seatPriceSuffix,
   type Tool,
 } from '../../../lib/data';
 import WrenchScore from '../../../components/WrenchScore.astro';
@@ -78,7 +79,7 @@ const modelCaveat = modelsDiffer
   : '';
 // "$29/mo", "$39/user/mo" or "a free tier", for sentences that already say "starts at".
 const priceShort = (t: Tool) =>
-  t.pricing.starting_at_usd === 0 ? 'a free tier' : `$${t.pricing.starting_at_usd}${priceScaling(t) === 'per_user' ? `/${seatUnit(t)}` : ''}/mo`;
+  t.pricing.starting_at_usd === 0 ? 'a free tier' : priceScaling(t) === 'per_user' ? `$${t.pricing.starting_at_usd}${seatPriceSuffix(t)}` : `$${t.pricing.starting_at_usd}/mo`;
 // When both tools charge per user (per the same seat), the monthly difference is per that seat too.
 const deltaUnit = priceScaling(fromTool) === 'per_user' && priceScaling(toTool) === 'per_user' && seatUnit(fromTool) === seatUnit(toTool) ? ` per ${seatUnit(fromTool)}` : '';
 const noPriceText = (t: Tool) => isQuoteOnly(t) ? `${t.name} publishes no price` : `${t.name} publishes no monthly plan (see its pricing note)`;

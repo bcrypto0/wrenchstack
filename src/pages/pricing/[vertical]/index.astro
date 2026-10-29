@@ -20,6 +20,10 @@ import {
   formatUsdAmount,
   crewCellText,
   CREW_LABEL_NOTES,
+  tierPriceUnit,
+  accountUnitSuffix,
+  seatUnitSuffix,
+  seatPriceSuffix,
   type Vertical,
   type Tool,
 } from '../../../lib/data';
@@ -159,19 +163,36 @@ function startingLabel(t: Tool): string {
   const p = t.pricing.starting_at_usd;
   if (p === 0) return 'Free tier';
   if (p === null) return isQuoteOnly(t) ? 'Custom' : 'No monthly plan';
-  return `$${p}${isPerUser(t) ? `/${seatUnit(t)}` : ''}/mo`;
+  return isPerUser(t) ? `$${p}${seatPriceSuffix(t)}` : `$${p}/mo`;
 }
 
-function tierPriceLabel(t: Tool, price: number | null | undefined): string {
+function tierPriceLabel(t: Tool, i: number): string {
+  const price = t.pricing.tier_prices_usd?.[i];
   // Trash Flow and Pylon publish module or per-project prices in their notes (and
   // Trash Flow in its tier names), so a missing tier figure is not "Not published".
   if (price === null || price === undefined) return isQuoteOnly(t) ? 'Custom quote' : t.pricing.starting_at_usd === null ? 'See pricing note' : 'Not published';
   if (price === 0) return 'Free';
-  // Bluebeam publishes yearly per-user prices; its tier prices are per year.
-  if (t.pricing.pricing_model === 'annual_per_user') return `$${formatUsd(price)}/${seatUnit(t)}/yr`;
-  if (t.pricing.pricing_model === 'per_user') return `$${formatUsd(price)}/${seatUnit(t)}/mo`;
+  // Bluebeam publishes yearly per-user prices; its tier prices are per year. A free_tier
+  // tool's paid tiers take their unit from tier_details price_basis (tierPriceUnit,
+  // 2026-10-29): Mitti's $24 per user read "$24/mo".
+  const u = tierPriceUnit(t, i);
+  if (u?.per === 'seat') return `$${formatUsd(price)}${seatUnitSuffix(u)}`;
+  // An account price names the users it covers (accountUnitSuffix, 2026-10-29 re-review).
+  if (u?.per === 'account') return `$${formatUsd(price)}/mo ${accountUnitSuffix(u)}`;
   return `$${formatUsd(price)}/mo`;
 }
+
+// Paid tiers of a free_tier tool whose basis our data does not record, for the note under
+// its tier table. The note said every paid tier's basis was unrecorded until 2026-10-29,
+// even when tier_details record each one (Mitti: per user; ServiceM8: per account).
+const unrecordedPaidTiers = (t: Tool): string[] =>
+  t.pricing.pricing_model !== 'free_tier'
+    ? []
+    : t.pricing.tiers.filter((_, i) => {
+        const p = t.pricing.tier_prices_usd?.[i];
+        return typeof p === 'number' && p > 0 && tierPriceUnit(t, i) === null;
+      });
+const paidTierCount = (t: Tool): number => (t.pricing.tier_prices_usd ?? []).filter((p) => typeof p === 'number' && p > 0).length;
 
 // Pricing scenario at team sizes (rewritten 2026-10-08). Each cell is costAtCrewSize():
 // the cheapest plan that allows the crew, priced from pricing.tier_details (the plan
@@ -206,7 +227,7 @@ const crewExample = cheapestFirst.find((t) => SCENARIO_CREWS.every((n) => {
 const crewExampleText = crewExample
   ? (() => {
       const [a, b, c] = SCENARIO_CREWS.map((n) => formatUsdAmount(costAtCrewSize(crewExample, n) as number));
-      return `For example, ${crewExample.name}'s published plans come to $${a} a month at 3 techs, $${b} at 10 and $${c} at 25 (cheapest plan that allows each size, billed annually where offered). `;
+      return `For example, ${crewExample.name}'s published plans come to $${a} a month at 3 techs, $${b} at 10 and $${c} at 25 (cheapest plan with a published price for each size, billed annually where offered). `;
     })()
   : '';
 
@@ -414,7 +435,7 @@ const breadcrumbs = [
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Pricing scenarios by team size</h2>
       <p class="mb-6 text-slate-600">
-        Monthly cost at three team sizes for up to 10 tools on this page with a published monthly price, lowest starting price first. Each figure is the cheapest plan that allows that many users, worked out from the plan prices and user rules on the vendor's pricing page: a per-user price times the users (or the vendor's minimum), or an account price plus the vendor's fee for each user beyond those the plan includes. Every tech is counted as a full user, so a vendor that prices office users and crew members differently is not priced here.{scenarioHasDepth && ' Each priced tool\'s page links the pricing page the figures come from and gives the date it was read.'}
+        Monthly cost at three team sizes for up to 10 tools on this page with a published monthly price, lowest starting price first. Each figure is the cheapest plan with a published price for that many users, worked out from the plan prices and user rules on the vendor's pricing page: a per-user price times the users (or the vendor's minimum), or an account price plus the vendor's fee for each user beyond those the plan includes. Every tech is counted as a full user, so a vendor that prices office users and crew members differently is not priced here.{scenarioHasDepth && ' Each priced tool\'s page links the pricing page the figures come from and gives the date it was read.'}
       </p>
       <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
         <table class="w-full text-sm">
@@ -501,14 +522,16 @@ const breadcrumbs = [
                   {t.pricing.tiers.map((tier, i) => (
                     <tr>
                       <td class="p-2 font-medium text-slate-900">{tier}</td>
-                      <td class="p-2 text-slate-700">{tierPriceLabel(t, t.pricing.tier_prices_usd?.[i])}</td>
+                      <td class="p-2 text-slate-700">{tierPriceLabel(t, i)}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            {t.pricing.pricing_model === 'free_tier' && (t.pricing.tier_prices_usd ?? []).some((p) => typeof p === 'number' && p > 0) && (
-              <p class="mt-3 text-xs text-slate-500">Our data does not record whether each paid-tier price above is per user or per company; check the pricing note below and the vendor's pricing page.</p>
+            {unrecordedPaidTiers(t).length > 0 && (
+              <p class="mt-3 text-xs text-slate-500">{unrecordedPaidTiers(t).length === paidTierCount(t)
+                ? 'Our data does not record whether each paid-tier price above is per user or per company'
+                : `Our data does not record whether the ${listJoin(unrecordedPaidTiers(t))} ${unrecordedPaidTiers(t).length === 1 ? 'price above is' : 'prices above are'} per user or per company`}; check the pricing note below and the vendor's pricing page.</p>
             )}
             {t.pricing.pricing_note && (
               <p class="mt-3 text-xs italic text-slate-500">{t.pricing.pricing_note}</p>

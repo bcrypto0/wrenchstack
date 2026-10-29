@@ -11,6 +11,11 @@ import {
   isQuoteOnly,
   entryMinimumBill,
   seatMinimumPhrase,
+  entrySeatMinimum,
+  entryUsersPhrase,
+  entrySeatPriceUnrecorded,
+  formatUsd,
+  formatUsdAmount,
   type Tool,
 } from '../../../lib/data';
 
@@ -69,19 +74,42 @@ const toolMinBill = entryMinimumBill(tool);
 
 // A starting price with its basis, so a per-user price is not read as a company price
 // when two are compared (2026-10-01). "Cheaper" used to compare the bare numbers.
-// FastEST is recorded as per_user in tools.json, but its pricing note prices each
-// application installed on one PC or tablet; labelled from the note until the data's
-// pricing_model is corrected (2026-10-01). The guard turns off once it is.
-const PER_INSTALL_SLUGS = new Set(['fastest']);
+// formatPrice names the seat of a per-seat price since 2026-10-29 ("From $29/user/mo";
+// FastEST's seat_unit is 'application'), so the label no longer adds "per user". A
+// company or account price names the users its entry plan includes where tier_details
+// record them ("From $139/mo with 3 users included"), not "base, plus seats".
 const priceLabel = (t: Tool): string => {
   const s = priceScaling(t);
   const base = formatPrice(t);
   const min = seatMinimumPhrase(t);
-  return s === 'per_user' && PER_INSTALL_SLUGS.has(t.slug) ? `${base} per application install`
-    : s === 'per_user' ? `${base} per ${seatUnit(t)}${min ? `, ${min}` : ''}`
-    : s === 'flat' ? `${base} for the company`
+  const users = entryUsersPhrase(t);
+  return s === 'per_user' ? `${base}${min ? `, ${min}` : ''}`
+    : s === 'flat' && users.startsWith('for ') ? `${base} ${users}`
+    : s === 'flat' ? `${base} for the company${users ? `, ${users}` : ''}`
+    : s === 'base_plus_seat' && users ? `${base} ${users}`
+    : s === 'base_plus_seat' && entrySeatPriceUnrecorded(t) ? `${base} base`
     : s === 'base_plus_seat' ? `${base} base, plus seats`
     : base;
+};
+// The smallest monthly bill, for reasons decided by it (2026-10-29): GoCanvas's page
+// showed Tradify ($47 per user) as a "Lower starting price" than GoCanvas's $29 per user,
+// because GoCanvas's 3-user minimum makes its smallest bill $87. When a seat minimum is
+// involved on either side, the reason names the two bills.
+const hasSeatMinimum = (t: Tool) => entrySeatMinimum(t) > 1;
+// With no minimum bill (a quote-only or module-priced tool) it falls back to the price
+// label rather than formatting a null (2026-10-29 re-review).
+const billLabel = (t: Tool): string => {
+  const bill = entryMinimumBill(t);
+  if (bill === null) return priceLabel(t);
+  const n = entrySeatMinimum(t);
+  const p = t.pricing.starting_at_usd as number;
+  if (bill === 0) return 'a free tier';
+  // A starting rate with the full price by quote (Smart Service) is a floor.
+  return `${t.pricing.starting_rate_only ? 'at least ' : ''}$${formatUsdAmount(bill)} a month${
+    n > 1 ? `, ${n} ${seatUnit(t)}s at $${formatUsd(p)} each`
+    : priceScaling(t) === 'per_user' ? ` for one ${seatUnit(t)}`
+    : ''
+  }`;
 };
 // "per user or per company" for sentences that generalise over the prices they name;
 // "per seat" when one of those tools prices per route or per driver (seat_unit).
@@ -164,6 +192,10 @@ const topFitAlts = topAltFit === null ? [] : fitRanked.filter((t) => primaryFit(
 const pricedAlts = allAlternatives.filter((t) => entryMinimumBill(t) !== null);
 const lowestAltPrice = pricedAlts.length > 0 ? Math.min(...pricedAlts.map((t) => entryMinimumBill(t) as number)) : null;
 const lowestPriceAlts = lowestAltPrice === null ? [] : pricedAlts.filter((t) => entryMinimumBill(t) === lowestAltPrice);
+// Both lists rank by the smallest monthly bill; with a seat minimum on either side the
+// copy names the bills, not only the per-seat prices (2026-10-29).
+const cheaperByBill = hasSeatMinimum(tool) || cheaperAlternatives.some(hasSeatMinimum);
+const lowestByBill = lowestPriceAlts.length > 0 && toolMinBill !== null && (hasSeatMinimum(tool) || lowestPriceAlts.some(hasSeatMinimum));
 
 const faqs = [
   {
@@ -175,7 +207,9 @@ const faqs = [
             : ''
         }${
           lowestPriceAlts.length > 0
-            ? `On price, ${namesList(lowestPriceAlts)} ${lowestPriceAlts.length === 1 ? 'has' : 'share'} the lowest published starting price (${priceLabel(lowestPriceAlts[0])}; ${tool.name}: ${priceLabel(tool)}); starting prices can be per ${seatWordFor([lowestPriceAlts[0], tool])} or per company, so compare them at your team size. `
+            ? lowestByBill
+              ? `On price, ${namesList(lowestPriceAlts)} ${lowestPriceAlts.length === 1 ? 'has' : 'share'} the lowest minimum monthly bill (${billLabel(lowestPriceAlts[0])}; ${tool.name}: ${billLabel(tool)}), counting each vendor's seat minimum; starting prices can be per ${seatWordFor([lowestPriceAlts[0], tool])} or per company, so compare them at your team size. `
+              : `On price, ${namesList(lowestPriceAlts)} ${lowestPriceAlts.length === 1 ? 'has' : 'share'} the lowest published starting price (${priceLabel(lowestPriceAlts[0])}; ${tool.name}: ${priceLabel(tool)}); starting prices can be per ${seatWordFor([lowestPriceAlts[0], tool])} or per company, so compare them at your team size. `
             : ''
         }The sections above cover other reasons to switch.`
       : `No tool we list shares a trade with ${tool.name}. See the /tools/ directory for the full list.`,
@@ -312,6 +346,7 @@ const breadcrumbs = [
         const altPrice = alt.pricing.starting_at_usd;
         const altMinBill = entryMinimumBill(alt);
         const isCheaper = altMinBill !== null && toolMinBill !== null && altMinBill < toolMinBill;
+        const billDecides = isCheaper && (hasSeatMinimum(alt) || hasSeatMinimum(tool));
         // isQuoteOnly, not a null price: Trash Flow and Pylon publish module or
         // per-project prices, so "instead of a quote" would be false for them.
         const publishesWhereToolQuotes = altPrice !== null && isQuoteOnly(tool);
@@ -323,7 +358,8 @@ const breadcrumbs = [
         const altOnlyFeatures = alt.key_features.filter((f) => !tool.key_features.includes(f));
         const toolOnlyFeatures = tool.key_features.filter((f) => !alt.key_features.includes(f));
         const pickReasons: string[] = [];
-        if (isCheaper) pickReasons.push(`you want a lower starting price (${priceLabel(alt)} against ${priceLabel(tool)}; compare them at your team size)`);
+        if (billDecides) pickReasons.push(`you want a lower minimum monthly bill (${alt.name}: ${billLabel(alt)}; ${tool.name}: ${billLabel(tool)}; compare them at your team size)`);
+        else if (isCheaper) pickReasons.push(`you want a lower starting price (${priceLabel(alt)} against ${priceLabel(tool)}; compare them at your team size)`);
         // A page that gives only a starting rate and says the full price needs a quote
         // (starting_rate_only, Smart Service) is not "a published price" (2026-10-08).
         if (publishesWhereToolQuotes) pickReasons.push(`you want ${alt.pricing.starting_rate_only ? 'a published starting rate' : 'a published price'} (${priceLabel(alt)}) instead of a quote`);
@@ -346,7 +382,7 @@ const breadcrumbs = [
             <dl class="grid gap-3 text-sm md:grid-cols-2">
               <div>
                 <dt class="font-semibold text-slate-900">Starting price</dt>
-                <dd class="text-slate-700">{priceLabel(alt)}{isCheaper && <span class="ml-2 rounded bg-emerald-100 px-1.5 py-0.5 text-xs font-medium text-emerald-700">Lower starting price than {tool.name}</span>}</dd>
+                <dd class="text-slate-700">{priceLabel(alt)}{isCheaper && <span class="ml-2 rounded bg-emerald-100 px-1.5 py-0.5 text-xs font-medium text-emerald-700">{billDecides ? 'Lower minimum bill' : 'Lower starting price'} than {tool.name}</span>}</dd>
               </div>
               <div>
                 <dt class="font-semibold text-slate-900">Best for</dt>
@@ -397,9 +433,11 @@ const breadcrumbs = [
         <div class="space-y-6">
           {cheaperAlternatives.length > 0 && (
             <div class="rounded-lg border border-slate-200 bg-white p-5">
-              <h3 class="mb-3 font-bold text-slate-900">Lower starting price than {tool.name}</h3>
+              <h3 class="mb-3 font-bold text-slate-900">{cheaperByBill ? 'Lower minimum bill' : 'Lower starting price'} than {tool.name}</h3>
               <p class="mb-3 text-sm text-slate-600">
-                These alternatives publish a lower starting price than {tool.name} ({priceLabel(tool)}). A starting price can be per {seatWordFor([tool, ...cheaperAlternatives])} or per company, so compare them at your team size.
+                {cheaperByBill
+                  ? `These alternatives have a lower minimum monthly bill than ${tool.name} (${billLabel(tool)}), counting each vendor's seat minimum.`
+                  : `These alternatives publish a lower starting price than ${tool.name} (${priceLabel(tool)}).`} A starting price can be per {seatWordFor([tool, ...cheaperAlternatives])} or per company, so compare them at your team size.
               </p>
               <div class="flex flex-wrap gap-2">
                 {cheaperAlternatives.map((a) => (
@@ -407,7 +445,7 @@ const breadcrumbs = [
                     href={`/tools/${a.slug}/`}
                     class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-sm hover:border-orange-400 hover:text-orange-600"
                   >
-                    {a.name} ({priceLabel(a)})
+                    {a.name} ({priceLabel(a)}{cheaperByBill && hasSeatMinimum(a) ? `; at least $${formatUsdAmount(entryMinimumBill(a) as number)} a month` : ''})
                   </a>
                 ))}
               </div>

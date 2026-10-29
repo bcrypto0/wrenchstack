@@ -12,7 +12,7 @@ import { asSentence,
 import FreshnessBadge from '../../../components/FreshnessBadge.astro';
 import { isComparisonIndexable } from '../../../lib/compare-index.mjs';
 import MissingFromList from '../../../components/MissingFromList.astro';
-import { priceScaling, seatUnit, formatUsd, entrySeatMinimum, entryMinimumBill, seatMinimumPhrase, pricePublicationPhrase } from '../../../lib/data';
+import { priceScaling, seatUnit, formatUsd, entrySeatMinimum, entryMinimumBill, seatMinimumPhrase, pricePublicationPhrase, tierPriceUnit, accountUnitSuffix, entryUsersPhrase, isPlaceholderTierName, seatUnitSuffix } from '../../../lib/data';
 
 export async function getStaticPaths() {
   // Generate both directions per pair (e.g. jobber-vs-servicetitan AND
@@ -327,6 +327,13 @@ const decisionMatrix = getDecisionMatrix();
 // until 2026-10-01 the table printed them as "$590/mo". Tools that publish only
 // module or per-project prices have no tier figures: the price is in the tier name
 // or the pricing note, so the cell no longer says "Custom".
+// Per-seat tier prices name the seat since 2026-10-29 (tierPriceUnit): GoCanvas's Max
+// read "Max: $49/mo" and "is $49 a month" for $49 per user. A free_tier tool's paid
+// tiers take the unit from tier_details price_basis (Mitti per user, ServiceM8 per
+// account); with no recorded basis the cell keeps "/mo". An account price names the
+// users it covers and says "per company" only when none are recorded (accountUnitSuffix,
+// 2026-10-29 re-review), and flat and base-plus-seat tiers take the same suffix, so a
+// table no longer shows RazorSync's "$85/mo" next to ServiceM8's "$29/mo per company".
 function tierCell(t: Tool, i: number): string {
   const tierName = t.pricing.tiers[i];
   if (!tierName) return '-';
@@ -334,7 +341,10 @@ function tierCell(t: Tool, i: number): string {
   if (nonMonthlyPricingOnly(t)) return tierName;
   if (p === null || p === undefined) return `${tierName}: quote`;
   if (p === 0) return `${tierName}: free`;
-  if (t.pricing.pricing_model === 'annual_per_user') return `${tierName}: $${formatUsd(p)} per ${seatUnit(t)} a year`;
+  const u = tierPriceUnit(t, i);
+  if (u?.per === 'seat' && u.period === 'year') return `${tierName}: $${formatUsd(p)} per ${u.seat} a year`;
+  if (u?.per === 'seat') return `${tierName}: $${formatUsd(p)}${seatUnitSuffix(u)}`;
+  if (u?.per === 'account') return `${tierName}: $${formatUsd(p)}/mo ${accountUnitSuffix(u)}`;
   return `${tierName}: $${formatUsd(p)}/mo`;
 }
 
@@ -342,7 +352,14 @@ function topTierPhrase(t: Tool): string {
   const n = t.pricing.tiers.length;
   const top = t.pricing.tier_prices_usd?.[n - 1];
   if (n < 2 || typeof top !== 'number' || top <= 0 || top === t.pricing.starting_at_usd) return '';
-  const unit = t.pricing.pricing_model === 'annual_per_user' ? `per ${seatUnit(t)} a year` : 'a month';
+  const u = tierPriceUnit(t, n - 1);
+  const unit = u?.per === 'seat' && u.first
+    ? `a ${u.period} for the first ${u.seat}`
+    : u?.per === 'seat'
+    ? `per ${u.seat} a ${u.period}`
+    : u?.per === 'account'
+    ? u.wholeCompany ? 'a month for the company' : `a month for the account${u.users ? ` (${u.users})` : ''}`
+    : 'a month';
   return `; its top published tier, ${t.pricing.tiers[n - 1]}, is $${formatUsd(top)} ${unit}`;
 }
 
@@ -366,9 +383,14 @@ function describePrice(t: Tool): string {
   // as if users are added on that tier ("more as users are added on Owner Operator"),
   // though several entry tiers are one-user plans in their pricing notes. Name the tier
   // first for those (2026-10-08).
-  if (t.pricing.pricing_model === 'flat_plus_seat') return `${t.name} starts on ${t.pricing.tiers[0]}, at ${entryLabel(t)}${topTierPhrase(t)}.`;
+  // Likewise a flat price that names its included users (2026-10-29): "$85 a month for
+  // the company, with 2 users included on Solo" read as if the users came with Solo only.
+  // A placeholder tier name ("Starting price (plan not named)") is not printed as a plan
+  // (2026-10-29 final review).
+  const namedTier = !isPlaceholderTierName(t.pricing.tiers[0]);
+  if ((t.pricing.pricing_model === 'flat_plus_seat' || entryUsersPhrase(t)) && namedTier) return `${t.name} starts on ${t.pricing.tiers[0]}, at ${entryLabel(t)}${topTierPhrase(t)}.`;
   const min = seatMinimumPhrase(t);
-  return `${t.name} starts at ${entryPriceLabel(t)}${entryTierIsStart(t) ? ` on ${t.pricing.tiers[0]}` : ''}${min ? `, with a ${min}` : ''}${topTierPhrase(t)}.`;
+  return `${t.name} starts at ${entryPriceLabel(t)}${entryTierIsStart(t) && namedTier ? ` on ${t.pricing.tiers[0]}` : ''}${min ? `, with a ${min}` : ''}${topTierPhrase(t)}.`;
 }
 
 function pricingAnalysis(): string {
@@ -482,7 +504,7 @@ const consB = getCons(b, a);
 function cheaperAnswer(): string {
   if (cheaperTool) {
     const other = otherOf(cheaperTool);
-    return `${cheaperTool.name} has the lower entry price: ${entryLabel(cheaperTool)}, against ${entryLabel(other)} for ${other.name}. Total cost depends on your team size, the plan you need and any add-ons; see the pricing table above.`;
+    return `${cheaperTool.name} has the lower entry price: ${entryLabel(cheaperTool)}, against ${other.name} at ${entryLabel(other)}. Total cost depends on your team size, the plan you need and any add-ons; see the pricing table above.`;
   }
   if (aQuote && bQuote) return `Neither publishes a price. Request quotes from both for the same team size and features.`;
   if (aQuote !== bQuote) {
@@ -537,7 +559,9 @@ const faqs = [
   },
   {
     q: `${a.name} vs ${b.name}: which has better customer support?`,
-    a: `Our data does not record support channels or response times for either tool. Ask each vendor which support comes with the plan you would buy. Each full review links to G2 and Capterra, where you can read current user reviews.`,
+    // It said "Our data does not record support channels" until 2026-10-29, though some
+    // entries do (ServiceM8's). WrenchStack does not rate support, which stays true.
+    a: `WrenchStack does not rate customer support. Check each vendor's own support or contact page for its support channels and hours, and ask which support comes with the plan you would buy. Each full review links to G2 and Capterra, where you can read current user reviews.`,
   },
   {
     q: `Which suits a solo contractor, and which a growing team?`,

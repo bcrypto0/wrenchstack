@@ -31,6 +31,18 @@ import { asSentence,
   crewCellText,
   CREW_LABEL_NOTES,
   sourceLabel,
+  referenceTeamCost,
+  entryUsersPhrase,
+  tierPriceUnit,
+  tierDetailPlanName,
+  entryExtraUserPriced,
+  entryTierDetail,
+  entrySeatPriceUnrecorded,
+  isPlaceholderTierName,
+  firstSeatOnly,
+  seatUnitSuffix,
+  accountUnitSuffix,
+  formatUsdAmount,
   type BillingTerm,
   type Tool,
 } from '../../../lib/data';
@@ -107,14 +119,26 @@ const perInstall = scaling === 'per_user' && PER_INSTALL_SLUGS.has(tool.slug);
 // another (GorillaDesk prices per route, OptimoRoute per driver). Until 2026-10-05 the
 // labels below hard-coded "user".
 const unit = seatUnit(tool);
+// The users an account-priced entry plan includes, from tier_details ("with 3 users
+// included"). Until 2026-10-29 a base-plus-seat price read "base, plus seats" even when
+// the entry plan includes users (Estimate Rocket Launch: 3 full users).
+const entryUsers = entryUsersPhrase(tool);
 const priceText = startingPrice === null
   ? ''
   : perInstall
   ? `$${startingPrice}/mo per application install`
+  : scaling === 'flat' && entryUsers.startsWith('for ')
+  ? `$${startingPrice}/mo ${entryUsers}`
   : scaling === 'flat'
-  ? `$${startingPrice}/mo for the company`
+  ? `$${startingPrice}/mo for the company${entryUsers ? `, ${entryUsers}` : ''}`
+  : scaling === 'base_plus_seat' && entryUsers
+  ? `$${startingPrice}/mo ${entryUsers}`
+  : scaling === 'base_plus_seat' && entrySeatPriceUnrecorded(tool)
+  ? `$${startingPrice}/mo base`
   : scaling === 'base_plus_seat'
   ? `$${startingPrice}/mo base, plus seats`
+  : scaling === 'per_user' && firstSeatOnly(tool)
+  ? `$${startingPrice}/mo for the first ${unit}`
   : scaling === 'per_user'
   ? `$${startingPrice}/${unit}/mo`
   : `$${startingPrice}/mo`;
@@ -122,8 +146,18 @@ const priceText = startingPrice === null
 // Revu), per user a month for per_user, a month otherwise (see the schema note in
 // pages/data/trades-software-pricing-2026.json.ts). Until 2026-10-01 the pricing table
 // printed every tier as "$X/mo", so Bluebeam's $260 a year read as $260 a month.
+// A free_tier tool's paid tiers take their unit from tier_details price_basis
+// (tierPriceUnit, 2026-10-29): Mitti's Premium read "$24/mo" for a per-user price.
+// An account price names the users it covers ("/mo per account, 2 users included"), and
+// says "per company" only when no user count, cap or extra-user fee is recorded
+// (accountUnitSuffix; 2026-10-29 re-review: Contractor+'s Pro Team read "per company").
+const unitText = (u: ReturnType<typeof tierPriceUnit>): string =>
+  !u ? '/mo' : u.per === 'account' ? `/mo ${accountUnitSuffix(u)}` : seatUnitSuffix(u);
+const tierUnitAt = (i: number): string => unitText(tierPriceUnit(tool, i));
 const tierUnit = tool.pricing.pricing_model === 'annual_per_user'
   ? `/${unit}/yr`
+  : tool.pricing.pricing_model === 'per_user' && firstSeatOnly(tool)
+  ? `/mo for the first ${unit}`
   : tool.pricing.pricing_model === 'per_user'
   ? `/${unit}/mo`
   : '/mo';
@@ -132,21 +166,34 @@ const paidTierPrices = tierPrices.filter((p): p is number => typeof p === 'numbe
 const lowTierPrice = paidTierPrices.length > 0 ? Math.min(...paidTierPrices) : null;
 const highTierPrice = paidTierPrices.length > 0 ? Math.max(...paidTierPrices) : null;
 const unpricedTierCount = tierPrices.filter((p) => p === null).length;
+// A $0 tier in the table makes the lowest paid row "Lowest paid price" (ServiceM8: Free
+// $0, Starter $29, 2026-10-29). Paid rows charged on different units (per user and per
+// company) are not ranked against each other.
+const hasZeroTier = tierPrices.some((p) => p === 0);
+// Compared by what is charged for (a seat, or the month for the account), not by the
+// cell text, which names each account plan's included users. A free_tier paid tier with
+// no recorded basis is not ranked against the others (Houzz Pro's Teams); a flat or
+// base-plus-seat tool's model already says its tiers are account prices.
+const unitKindAt = (i: number): string => {
+  const u = tierPriceUnit(tool, i);
+  return u?.per === 'seat' ? `${u.seat}/${u.period}` : u || tool.pricing.pricing_model !== 'free_tier' ? 'month' : 'unknown';
+};
+const paidUnitsDiffer = new Set(tierPrices.map((p, i) => (typeof p === 'number' && p > 0 ? unitKindAt(i) : null)).filter((u) => u !== null)).size > 1;
 // A tier with no recorded price is a custom quote only for a quote-only tool. For the
 // others it can be a quote, a project package or a band shown in a price selector
 // (Workyard, Fastest, Bodhi, Encircle), so the table points to the pricing note; until
 // 2026-10-01 it printed "Custom quote" for all of them.
-const tierPriceCell = (price: number | null): string =>
-  price === null ? (isQuoteOnly ? 'Custom quote' : 'See pricing note') : price === 0 ? 'Free' : `$${formatUsd(price)}${tierUnit}`;
+const tierPriceCell = (price: number | null, i: number): string =>
+  price === null ? (isQuoteOnly ? 'Custom quote' : 'See pricing note') : price === 0 ? 'Free' : `$${formatUsd(price)}${tierUnitAt(i)}`;
 // Notes column: the lowest and highest tier prices in the table. It said "Entry tier" for
 // the first row and "Top tier" for the last, and the last is not always the dearest; then
 // "Lowest/Highest published tier price" until 2026-10-01, but some pricing notes publish
 // higher prices than the table holds (Jobber $529, Housecall Pro $329 monthly).
 const tierPriceNote = (price: number | null): string =>
-  price === null || price === 0 || lowTierPrice === highTierPrice
+  price === null || price === 0 || lowTierPrice === highTierPrice || paidUnitsDiffer
     ? ''
     : price === lowTierPrice
-    ? 'Lowest price in this table'
+    ? (hasZeroTier ? 'Lowest paid price in this table' : 'Lowest price in this table')
     : price === highTierPrice
     ? 'Highest price in this table'
     : '';
@@ -176,8 +223,10 @@ const crewRows = CREW_SIZES.map((n) => ({
 const showCrewBlock = crewColumns.length > 0 && crewRows.some((r) => r.cells.some((c) => c.priced));
 const crewLabels = new Set(crewRows.flatMap((r) => r.cells.filter((c) => !c.priced).map((c) => c.text)));
 const crewLabelNotes = Object.keys(CREW_LABEL_NOTES).filter((k) => crewLabels.has(k)).map((k) => CREW_LABEL_NOTES[k]);
+// "with a published price for that many users", not "that allows" (2026-10-29): a plan
+// whose page gives no price for an added user may still allow one (RazorSync Solo).
 const crewIntro = [
-  `Monthly cost of the cheapest ${tool.name} plan that allows each number of users, worked out from the plan prices and user rules on its pricing page, counting every tech as a full user.`,
+  `Monthly cost of the cheapest ${tool.name} plan with a published price for that many users, worked out from the plan prices and user rules on its pricing page, counting every tech as a full user.`,
   'Plan prices and extra-user fees only: job, appointment and other usage limits, add-ons, setup fees and payment processing are not included; where a plan\'s usage limit is recorded, it is named under the figure.',
   ...crewLabelNotes,
 ].join(' ');
@@ -226,6 +275,10 @@ const qbText = qbEditions.length > 0
 // closing call to action said it for every tool with a trial or a free tier.
 const noCardNoted = /no credit card/i.test(tool.pricing.pricing_note ?? '');
 const freeTierCount = tools.filter(hasFreeTier).length;
+// Lower-case the first letter of a data phrase that follows "is best for", unless it
+// starts an acronym ("HVAC", "U.S."), as the compare template does. No best_for starts
+// with a product or company name (checked 2026-10-29), so none is lower-cased wrongly.
+const lcFirst = (s: string) => (s.length > 1 && /[a-z]/.test(s[1]) ? s.charAt(0).toLowerCase() + s.slice(1) : s);
 const currentYear = new Date().getFullYear();
 
 // Top verticals where this tool fits best (≥8/10)
@@ -282,14 +335,59 @@ function pricingAnalysis(): string {
     : isMidTier
     ? 'mid price band ($100-$249 per user per month)'
     : 'top price band ($250 or more per user per month)';
+  // A per-user figure for a company or account price comes only from a published cost
+  // for a REFERENCE_TEAM_SIZE crew (referenceTeamCost). Until 2026-10-29 the starting
+  // price was divided by 5 even when that plan includes or allows fewer users (Estimate
+  // Rocket Launch includes 3, CompanyCam Core allows 2, RazorSync Solo includes 2).
+  // With no figure, the clause gives crewCost's reason (2026-10-29 re-review): a tool that
+  // prices users by role (Estimate Rocket, LMN) has published prices, so "no published
+  // price" was false for it. The plan is named as the tier list names it
+  // (tierDetailPlanName), not by a placeholder row name.
+  const teamCost = referenceTeamCost(tool);
+  const teamReason = teamCost ? null : crewCost(tool, REFERENCE_TEAM_SIZE, 'annual').reason;
+  const teamPlan = teamCost ? tierDetailPlanName(tool, teamCost.tier!) : null;
+  const teamFigure = teamCost
+    ? `$${formatUsdAmount(teamCost.cost as number)} a month (billed ${teamCost.billed === 'monthly' ? 'monthly' : 'annually'}), about $${Math.round((teamCost.cost as number) / REFERENCE_TEAM_SIZE)} per user`
+    : '';
+  // Skimmer (per serviced location) and Dumpster Rental Systems: their notes say the price
+  // is not charged per user, which "no published price for a 5-person team" misread as a
+  // gap in the data (2026-10-29 re-check). JobTread's note prices users in bands but it
+  // has no tier_details, so 'no_depth' says we have not worked the figure out.
+  const notChargedPerUser = /\bnot (charged |priced )?per[- ]user\b/i.test(tool.pricing.pricing_note ?? '');
+  const crewTableNote = showCrewBlock ? ' (the cost by crew size table below shows the team sizes it does price)' : '';
+  const teamClause = teamCost
+    ? teamPlan
+      ? `for a ${REFERENCE_TEAM_SIZE}-person team the cheapest plan with a published price is ${teamPlan}, at ${teamFigure}. `
+      : `for a ${REFERENCE_TEAM_SIZE}-person team its single plan comes to ${teamFigure}. `
+    : teamReason === 'field_users'
+    ? `its plans price or limit users by role (office and crew users, for example), so we give no per-user figure for a ${REFERENCE_TEAM_SIZE}-person team. `
+    : notChargedPerUser
+    ? `its pricing note records that it is not charged per user, so we give no per-user figure. `
+    : teamReason === 'unclear'
+    ? `its pricing page, as we read it, leaves unclear what a ${REFERENCE_TEAM_SIZE}-person team costs, so we give no per-user figure${crewTableNote}. `
+    : teamReason === 'no_depth'
+    ? `we have not worked out a cost for a ${REFERENCE_TEAM_SIZE}-person team from its plan prices, so we give no per-user figure. `
+    : `our data has no published price for a ${REFERENCE_TEAM_SIZE}-person team, so we give no per-user figure${crewTableNote}. `;
   const perUserNote = perUserEq === null
     ? ''
     : perInstall
     ? `That is a price for one application installed on one PC or tablet; see the pricing note for additional applications, purchase prices and network licensing. `
     : scaling === 'flat'
-    ? `That is a price for the company, not per user: spread across a ${REFERENCE_TEAM_SIZE}-person team it works out to about $${Math.round(perUserEq)} per user. `
+    ? `That is a price for the company, not per user: ${teamClause}`
     : scaling === 'base_plus_seat'
-    ? `That is a base price for the account, with seats added on top (see the pricing note): spread across a ${REFERENCE_TEAM_SIZE}-person team the base alone works out to about $${Math.round(perUserEq)} per user. `
+    ? `${entryUsers.startsWith('with ') && entryExtraUserPriced(tool)
+        ? 'That is a price for the account, with users beyond those included charged on top'
+        : entryUsers.startsWith('with ')
+        ? 'That is a price for the account; our data records no price for users beyond those included'
+        : entryUsers
+        ? "That is a price for the account within the entry plan's user limit"
+        // Clear Estimates' Standard records no seat price (only Pro has one), so "seats
+        // added on top" is said only when the entry plan has no tier_details row to check.
+        : entryTierDetail(tool) && !entryExtraUserPriced(tool)
+        ? 'That is a base price for the account; our data records no seat price for the entry plan'
+        : 'That is a base price for the account, with seats added on top'} (see the pricing note): ${teamClause}`
+    : scaling === 'per_user' && firstSeatOnly(tool)
+    ? `That is the price for the first ${unit}; added ${unit}s are priced separately, so check the pricing note for the cost of more than one. `
     : scaling === 'per_user'
     ? `That is a per-seat price, so the bill grows as you add seats; check the pricing note for what counts as a seat, seat minimums and plan limits. `
     : `We have not confirmed how that price scales with team size, so check before you compare it. `;
@@ -332,8 +430,13 @@ function pricingAnalysis(): string {
     ? `We place it in our ${band} by counting one install as one user.`
     : scaling === 'per_user' && unit !== 'user'
     ? `We place it in our ${band} by counting one ${unit} as one user.`
+    // The band spreads a company or account starting price over 5 users
+    // (perUserEquivalentUsd), so the sentence names that as a placement rule, not a
+    // price; any per-user figure is the published 5-user cost in perUserNote (2026-10-29).
+    : scaling === 'flat' || scaling === 'base_plus_seat'
+    ? `We place it in our ${band} by spreading its starting price across ${REFERENCE_TEAM_SIZE} users; that is a placement rule, not a published price for ${REFERENCE_TEAM_SIZE} users.`
     : `Its starting price places it in our ${band}.`;
-  return `${tool.name} starts at ${priceText}${firstTierIsStart ? ` (${tool.pricing.tiers[0]} tier)` : ''}. ${perUserNote}${bandSentence}${range}${belowTiers}${unpriced}${trialNote}`;
+  return `${tool.name} starts at ${priceText}${firstTierIsStart && !isPlaceholderTierName(tool.pricing.tiers[0]) ? ` (${tool.pricing.tiers[0]} tier)` : ''}. ${perUserNote}${bandSentence}${range}${belowTiers}${unpriced}${trialNote}`;
 }
 
 // --- PROS, CONS AND FAQS: FALLBACKS ---
@@ -531,7 +634,7 @@ const slugWords = (list: string[]) => list.reduce((n, s) => n + s.split('_').fil
 const pageWords = FIXED_WORDS
   + [tool.tagline, tool.long_description, tool.pricing.pricing_note, pricingAnalysis(), tool.best_for, tool.weaknesses, implementationText]
     .reduce((n, s) => n + wc(s), 0)
-  + tool.pricing.tiers.reduce((n, t, i) => n + wc(t) + wc(tierPriceCell(tierPrices[i])) + wc(tierPriceNote(tierPrices[i])), 0)
+  + tool.pricing.tiers.reduce((n, t, i) => n + wc(t) + wc(tierPriceCell(tierPrices[i], i)) + wc(tierPriceNote(tierPrices[i])), 0)
   + slugWords(tool.key_features) + slugWords(tool.integrations)
   + verticalsForThisTool.reduce((n, v) => n + wc(v.name) + 1, 0)
   + (hasCustomPros ? tool.pros_detail!.reduce((n, p) => n + wc(p.title) + wc(p.explanation), 0) : prosList.reduce((n, p) => n + wc(p), 0))
@@ -838,7 +941,7 @@ const breadcrumbs = [
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700">
-        <strong class="text-slate-900">{tool.name}</strong> is best for {asSentence(tool.best_for)}
+        <strong class="text-slate-900">{tool.name}</strong> is best for {lcFirst(asSentence(tool.best_for))}
         Pricing {isFree ? 'starts with a free tier' : hasPublicPricing ? `starts at ${priceText}` : isQuoteOnly ? 'is quote-only (no published price)' : 'is published as module or per-project prices (see the pricing note)'}.
         {strongVerticals.length > 0 && ` Trade fit of 8/10 or higher: ${strongVerticals.slice(0, 3).join(', ')}${strongVerticals.length > 3 ? ` and ${strongVerticals.length - 3} more` : ''}.`}
         {hasFreeTrial && ` ${tool.pricing.free_trial_days}-day free trial available.`}
@@ -871,7 +974,7 @@ const breadcrumbs = [
               return (
                 <tr>
                   <td class="p-3 font-semibold text-slate-900">{tier}</td>
-                  <td class="p-3 text-slate-700">{tierPriceCell(price)}</td>
+                  <td class="p-3 text-slate-700">{tierPriceCell(price, i)}</td>
                   <td class="p-3 text-slate-500">{tierPriceNote(price)}</td>
                 </tr>
               );
@@ -1012,6 +1115,9 @@ const breadcrumbs = [
 
     <section class="mb-10">
       <h2 class="mb-4 text-2xl font-bold text-slate-900">Integrations</h2>
+      {tool.integrations.length === 0 && (
+        <p class="text-sm text-slate-600">No integrations are listed in our data for this tool.</p>
+      )}
       <div class="flex flex-wrap gap-2">
         {tool.integrations.map((i) => (
           <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-sm text-slate-700">

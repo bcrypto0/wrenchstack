@@ -40,6 +40,12 @@ export interface ToolPricing {
    *  Unset means 'user'. Read it through seatUnit(), which ignores it on other
    *  pricing models. Added 2026-10-05. */
   seat_unit?: string;
+  /** The per-seat prices are for the first seat only; the vendor prices added seats
+   *  differently (GorillaDesk from its 28 October 2026 pricing page: first route $49 a
+   *  month, added routes +$30 to +$100 by plan). Labels then read "$44.92/mo for the
+   *  first route", not "$44.92/route/mo". Read it through firstSeatOnly(). Added
+   *  2026-10-29. */
+  seat_price_first_only?: boolean;
   /** Per-plan billing facts read from the vendor's pricing page (added 2026-10-08):
    *  what each plan costs on each billing term, what the price is charged for, and
    *  its user rules. Optional; read it through crewCost() / costAtCrewSize(). When
@@ -269,7 +275,17 @@ export function formatPrice(t: Tool): string {
   // 2026-10-01 both rendered "Custom quote".
   if (p.starting_at_usd === null) return isQuoteOnly(t) ? 'Custom quote' : 'No monthly plan (see pricing note)';
   if (p.starting_at_usd === 0) return 'Free tier available';
-  return `From $${p.starting_at_usd}/mo`;
+  return `From ${monthlyPriceShort(t)}`;
+}
+
+/** The starting price as "$129/user/mo" for a per-seat price (seatUnit names the seat)
+ *  and "$85/mo" otherwise. Listing cards printed every price as "From $X/mo" until
+ *  2026-10-29 (review of nine listings), so GoCanvas's $29 per user read like a
+ *  company price next to RazorSync's $85 for the company. */
+export function monthlyPriceShort(t: Tool): string {
+  const p = t.pricing.starting_at_usd;
+  if (p === null) return '';
+  return priceScaling(t) === 'per_user' ? `$${formatUsd(p)}${seatPriceSuffix(t)}` : `$${p}/mo`;
 }
 
 export interface ScoreFactor {
@@ -466,7 +482,12 @@ export function toolType(t: Tool): ToolType {
  */
 export const REFERENCE_TEAM_SIZE = 5;
 
-/** Starting price per user per month (flat plans spread over REFERENCE_TEAM_SIZE). */
+/** Starting price per user per month, for price-band placement only (flat plans spread
+ *  over REFERENCE_TEAM_SIZE). This is the band rule the trade, /tools/, /pricing/,
+ *  /migrate/ and trends pages state. Pages never print this as a per-user price; a
+ *  per-user figure for a company or account price comes only from referenceTeamCost.
+ *  (2026-10-29: placing by the published 5-user cost was tried and reverted, because it
+ *  moved Leap from entry to mid against the rule those pages publish.) */
 export function perUserEquivalentUsd(t: Tool): number | null {
   const p = t.pricing.starting_at_usd;
   if (p === null || p === 0) return p;
@@ -474,6 +495,166 @@ export function perUserEquivalentUsd(t: Tool): number | null {
   if (s === 'flat' || s === 'base_plus_seat') return p / REFERENCE_TEAM_SIZE;
   // per_user as published; 'unclear' is left undivided because we cannot tell.
   return p;
+}
+
+/** The published monthly cost for a REFERENCE_TEAM_SIZE-user crew of a flat or
+ *  base-plus-seat tool (crewCost, billed annually where offered), or null when its
+ *  tier_details do not price that crew or the tool is priced another way. The one
+ *  source for a per-user figure on a company or account price (2026-10-29). */
+export function referenceTeamCost(t: Tool): CrewCost | null {
+  const s = priceScaling(t);
+  if (s !== 'flat' && s !== 'base_plus_seat') return null;
+  const c = crewCost(t, REFERENCE_TEAM_SIZE, 'annual');
+  return c.cost !== null && c.tier ? c : null;
+}
+
+/** A tier name without case, spacing or a bracketed suffix, for matching tiers[] to
+ *  tier_details rows. */
+const tierNameNorm = (s: string) => s.replace(/\([^)]*\)/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+const tierNameExact = (s: string) => s.replace(/\s+/g, ' ').trim().toLowerCase();
+
+/** A tier name that is a placeholder rather than a plan name ("Starting price (plan not
+ *  named)", "The Customer Factor (single plan)"), so prose does not print it as a plan
+ *  (2026-10-29 final review). */
+export function isPlaceholderTierName(name: string | undefined): boolean {
+  return !name || /plan not named|unnamed on page|no plan name|\(single plan\)/i.test(name);
+}
+
+/** The tier_details rows recorded for a tier name, matched without case and without a
+ *  bracketed suffix on either side ("Freedom (Free)" and "FREEDOM", "Pro Team" and
+ *  "PRO TEAM (annual plan)"). Empty when the tool has no tier_details shown. */
+function tierDetailsNamed(t: Tool, tierName: string | undefined): TierDetail[] {
+  if (!tierName || !hasTierDetails(t)) return [];
+  // An exact match (without case or extra spaces) wins, so tiers that differ only inside
+  // brackets stay apart (Encircle's "Field Documentation (up to 200 jobs/yr)" and
+  // "(201-400 jobs/yr)", 2026-10-29 final review).
+  const exact = tierNameExact(tierName);
+  const same = t.pricing.tier_details!.filter((d) => tierNameExact(d.name) === exact);
+  if (same.length) return same;
+  const want = tierNameNorm(tierName);
+  return want ? t.pricing.tier_details!.filter((d) => tierNameNorm(d.name) === want) : [];
+}
+
+/** The plan a tier_details row describes, named as the tool's tier list names it
+ *  ("Basics" for the row "Basics (billed yearly)"), for prose. null for a tool with one
+ *  tier, or a row named only by a bracketed placeholder, so the caller writes "its single
+ *  plan". Added 2026-10-29: The Customer Factor's page printed "(single plan, unnamed on
+ *  page)" as a plan name. */
+export function tierDetailPlanName(t: Tool, d: TierDetail): string | null {
+  const want = tierNameNorm(d.name);
+  if (!want) return null;
+  const named = t.pricing.tiers.find((n) => tierNameExact(n) === tierNameExact(d.name))
+    ?? t.pricing.tiers.find((n) => tierNameNorm(n) === want);
+  if (named) return named;
+  return t.pricing.tiers.length === 1 ? null : d.name.replace(/\([^)]*\)/g, '').replace(/\s+/g, ' ').trim();
+}
+
+/** The tier_details row for the entry plan: named like tiers[0] and priced at the
+ *  starting price on one of its billing terms. null when none matches. */
+export function entryTierDetail(t: Tool): TierDetail | null {
+  const p = t.pricing.starting_at_usd;
+  if (p === null || p === 0) return null;
+  const near = (v: number | null) => typeof v === 'number' && Math.abs(v - p) < 0.5;
+  return tierDetailsNamed(t, t.pricing.tiers[0]).find((d) => near(d.price_annual_billed) || near(d.price_monthly_billed)) ?? null;
+}
+
+/** A field_user_rule that counts the users a plan covers by role ("3 office users;
+ *  unlimited crew members", "1 business user and 1 mobile license"), as opposed to one
+ *  that prices a role ("field users are $10 a month each"). */
+const ROLE_COUNT_RULE = /^(\d+|unlimited)\b/i;
+
+/** The users an account-priced plan covers, as its tier_details row records them:
+ *  'included' "3 users included" or "1 user included, up to 2 users"; 'limit' "1 user,
+ *  the plan's limit"; 'max' "up to 5 users"; 'roles' "3 office users and unlimited crew
+ *  members included" (a role rule that counts users, 2026-10-29 re-review: Elromco's
+ *  "3 users included" were 3 office users with unlimited crew). null when the row is not
+ *  per account, records none of these, or its user count is unclear. */
+interface AccountUsers { kind: 'included' | 'limit' | 'max' | 'roles'; text: string }
+function accountUsers(d: TierDetail): AccountUsers | null {
+  if (d.price_basis !== ACCOUNT_BASIS || d.unclear === 'user_count') return null;
+  const rule = typeof d.field_user_rule === 'string' ? d.field_user_rule.trim() : '';
+  if (ROLE_COUNT_RULE.test(rule)) return { kind: 'roles', text: `${rule.replace(/\s*;\s*/g, ' and ')} included` };
+  const users = (n: number) => `${n} ${n === 1 ? 'user' : 'users'}`;
+  const inc = typeof d.included_users === 'number' && d.included_users > 0 ? d.included_users : null;
+  const max = typeof d.max_users === 'number' && d.max_users > 0 ? d.max_users : null;
+  if (inc !== null && max !== null && max <= inc) return { kind: 'limit', text: `${users(inc)}, the plan's limit` };
+  if (inc !== null) return { kind: 'included', text: `${users(inc)} included${max !== null ? `, up to ${users(max)}` : ''}` };
+  if (max !== null) return max === 1 ? { kind: 'limit', text: `1 user, the plan's limit` } : { kind: 'max', text: `up to ${users(max)}` };
+  return null;
+}
+
+/** The users an account-priced entry plan includes, as tier_details record them, for
+ *  prose after a price: "with 3 users included", "with 1 user included, up to 2 users",
+ *  "for 1 user, the plan's limit", "for up to 5 users", "with 3 office users and
+ *  unlimited crew members included". '' when the entry plan is not priced per account or
+ *  records neither count, or its user count is unclear. Added 2026-10-29: pages said
+ *  "$139/mo base, plus seats" for Estimate Rocket, whose Launch plan includes 3 full
+ *  users. A phrase starting "with" names included users; see entryExtraUserPriced. */
+export function entryUsersPhrase(t: Tool): string {
+  const d = entryTierDetail(t);
+  const u = d ? accountUsers(d) : null;
+  if (!u) return '';
+  return u.kind === 'included' || u.kind === 'roles' ? `with ${u.text}` : `for ${u.text}`;
+}
+
+/** The entry plan's tier_details row records a monthly fee for each user beyond those it
+ *  includes. Pages say extra users are "charged on top" only then (2026-10-29 re-review:
+ *  Housecall Pro's Basic includes 1 user and records no extra-user price). */
+export function entryExtraUserPriced(t: Tool): boolean {
+  return typeof entryTierDetail(t)?.extra_user_price === 'number';
+}
+
+/** A base-plus-seat entry plan whose tier_details row records no seat price, so labels
+ *  say "base" without "plus seats" or "more as users are added" (2026-10-29 final review:
+ *  Clear Estimates' Standard records none; only Pro charges $9 per added user). False
+ *  when the entry plan has no tier_details row to check (JobTread). */
+export function entrySeatPriceUnrecorded(t: Tool): boolean {
+  return entryTierDetail(t) !== null && !entryExtraUserPriced(t);
+}
+
+/** How a tier_prices_usd figure is charged: per seat (named) a month or a year, per
+ *  account a month, or null when our data does not say. per_user and annual_per_user
+ *  read from pricing_model; a free_tier, flat or base-plus-seat tool's tiers from the
+ *  price_basis of the tier_details rows named like the tier (all of them must agree).
+ *  Added 2026-10-29: Mitti's Premium ($24 per user) and ServiceM8's Starter ($29 for the
+ *  account) both printed "/mo" under a note that said the basis was not recorded.
+ *  For an account price, `users` names the users it covers ("2 users included") and
+ *  `wholeCompany` is true only when the rows record no user count, cap or extra-user
+ *  fee, so "per company" is not printed for Contractor+'s Pro Team (2 users included,
+ *  $20 per extra user). Flat and base-plus-seat tiers were added in the 2026-10-29
+ *  re-review, so RazorSync's "$85/mo" and ServiceM8's "$29/mo per company" no longer
+ *  sat side by side in one compare table. */
+export interface TierPriceUnit { per: 'seat' | 'account'; seat: string; period: 'month' | 'year'; users: string; wholeCompany: boolean; first?: boolean }
+export function tierPriceUnit(t: Tool, i: number): TierPriceUnit | null {
+  const m = t.pricing.pricing_model;
+  if (m === 'annual_per_user') return { per: 'seat', seat: seatUnit(t), period: 'year', users: '', wholeCompany: false };
+  if (m === 'per_user') return { per: 'seat', seat: seatUnit(t), period: 'month', users: '', wholeCompany: false, first: firstSeatOnly(t) };
+  if (m !== 'free_tier' && m !== 'flat' && m !== 'flat_plus_seat') return null;
+  const rows = tierDetailsNamed(t, t.pricing.tiers[i]);
+  const bases = new Set(rows.map((d) => d.price_basis ?? ''));
+  if (bases.size !== 1) return null;
+  const basis = [...bases][0];
+  if (basis === 'per_user') return { per: 'seat', seat: 'user', period: 'month', users: '', wholeCompany: false };
+  if (basis === 'per_technician') return { per: 'seat', seat: 'technician', period: 'month', users: '', wholeCompany: false };
+  if (basis !== ACCOUNT_BASIS) return null;
+  const texts = new Set(rows.map((d) => accountUsers(d)?.text ?? ''));
+  const users = texts.size === 1 ? [...texts][0] : '';
+  const wholeCompany = texts.size === 1 && users === ''
+    && rows.every((d) => typeof d.extra_user_price !== 'number' && d.unclear !== 'user_count');
+  return { per: 'account', seat: 'user', period: 'month', users, wholeCompany };
+}
+
+/** The unit after a per-seat tier price: "/user/mo", "/route/yr", or "/mo for the first
+ *  route" where only the first seat is priced that way (firstSeatOnly). */
+export function seatUnitSuffix(u: TierPriceUnit): string {
+  if (u.first) return `/${u.period === 'year' ? 'yr' : 'mo'} for the first ${u.seat}`;
+  return `/${u.seat}/${u.period === 'year' ? 'yr' : 'mo'}`;
+}
+
+/** What an account price covers, after "/mo": "per company" (no user count, cap or
+ *  extra-user fee recorded), "per account, 2 users included", or "per account". */
+export function accountUnitSuffix(u: TierPriceUnit): string {
+  return u.wholeCompany ? 'per company' : u.users ? `per account, ${u.users}` : 'per account';
 }
 
 export function priceTier(t: Tool): PriceTier {
@@ -578,12 +759,13 @@ function buildAlternativeRationale(source: Tool, alt: Tool): string {
     // was called "Cheaper" than a $135-per-user plan. Only say cheaper or dearer when
     // both measures agree; otherwise state both prices with how each one scales.
     // (Was hardcoded to 'Enterprise-tier upgrade path' for ANY step up before 2026-09.)
-    if (altTierIdx < sourceTierIdx && altPrice < sourcePrice) fragments.push(`Cheaper at $${altPrice}/mo`);
-    else if (altTierIdx > sourceTierIdx && altPrice > sourcePrice) fragments.push(`Costs more at $${altPrice}/mo`);
-    else fragments.push(`Starts at ${entryPriceLabel(alt)}, against ${entryPriceLabel(source)} for ${source.name}`);
+    // The price names its seat when it is per seat ("$29/user/mo", 2026-10-29).
+    if (altTierIdx < sourceTierIdx && altPrice < sourcePrice) fragments.push(`Cheaper at ${monthlyPriceShort(alt)}`);
+    else if (altTierIdx > sourceTierIdx && altPrice > sourcePrice) fragments.push(`Costs more at ${monthlyPriceShort(alt)}`);
+    else fragments.push(`Starts at ${entryPriceLabel(alt)}, against ${source.name} at ${entryPriceLabel(source)}`);
   } else if (altTierIdx > sourceTierIdx && altPrice !== null && altPrice > 0) {
     // Source is free, alternative is paid.
-    fragments.push(`Costs more at $${altPrice}/mo`);
+    fragments.push(`Costs more at ${monthlyPriceShort(alt)}`);
   } else if (altPrice !== null && altPrice > 0 && altPrice === sourcePrice) {
     // The same figure is the same price only when both are charged the same way: $49 per
     // user against $49 a month for the company matched only for a one-person team.
@@ -596,7 +778,7 @@ function buildAlternativeRationale(source: Tool, alt: Tool): string {
     fragments.push(
       sameModel
         ? 'Same starting price'
-        : `Starts at ${entryPriceLabel(alt)}, against ${entryPriceLabel(source)} for ${source.name}`,
+        : `Starts at ${entryPriceLabel(alt)}, against ${source.name} at ${entryPriceLabel(source)}`,
     );
   } else if (altPrice !== null && altPrice > 0) {
     // Same price band. "Similar price point" used to cover $10 against $208 (both under
@@ -1867,6 +2049,17 @@ export function nonMonthlyPricingOnly(t: Tool): boolean {
  *  pricing_model it returns 'user' whatever seat_unit says: no renderer words a
  *  flat_plus_seat extra-seat fee from seat_unit yet, so a key on such an entry has
  *  no effect until one does. */
+/** A per-seat price that covers the first seat only (pricing.seat_price_first_only). */
+export function firstSeatOnly(t: Tool): boolean {
+  return priceScaling(t) === 'per_user' && t.pricing.seat_price_first_only === true;
+}
+
+/** The unit after a per-seat monthly starting price: "/user/mo", "/route/mo", or "/mo
+ *  for the first route" (firstSeatOnly). */
+export function seatPriceSuffix(t: Tool): string {
+  return firstSeatOnly(t) ? `/mo for the first ${seatUnit(t)}` : `/${seatUnit(t)}/mo`;
+}
+
 export function seatUnit(t: Tool): string {
   const m = t.pricing.pricing_model;
   return m === 'per_user' || m === 'annual_per_user' ? (t.pricing.seat_unit ?? 'user') : 'user';
@@ -1888,10 +2081,23 @@ export function entryPriceLabel(t: Tool): string {
   if (p === null) return 'module or per-project prices (no monthly plan)';
   if (p === 0) return 'a free tier';
   switch (t.pricing.pricing_model) {
-    case 'per_user': return `$${p} per ${seatUnit(t)} a month`;
+    case 'per_user': return firstSeatOnly(t) ? `$${p} a month for the first ${seatUnit(t)}` : `$${p} per ${seatUnit(t)} a month`;
     case 'annual_per_user': return `$${p} per ${seatUnit(t)} a month, billed annually`;
-    case 'flat': return `$${p} a month for the company`;
-    case 'flat_plus_seat': return `$${p} a month base, more as users are added`;
+    // With the users the entry plan includes, where tier_details record them (2026-10-29).
+    // A user cap replaces "for the company" ("$49 a month for 1 user, the plan's limit",
+    // not "for the company, for 1 user", 2026-10-29 re-review).
+    case 'flat': {
+      const users = entryUsersPhrase(t);
+      return users.startsWith('for ') ? `$${p} a month ${users}` : `$${p} a month for the company${users ? `, ${users}` : ''}`;
+    }
+    case 'flat_plus_seat': {
+      const users = entryUsersPhrase(t);
+      if (!users) return entrySeatPriceUnrecorded(t) ? `$${p} a month base` : `$${p} a month base, more as users are added`;
+      // "more for extra users" only after an included count, not after a user cap, and
+      // only where the entry plan records an extra-user fee (Housecall Pro's Basic does
+      // not, 2026-10-29 re-review).
+      return `$${p} a month ${users}${users.startsWith('with ') && entryExtraUserPriced(t) ? ', more for extra users' : ''}`;
+    }
     default: return `$${p} a month`;
   }
 }
@@ -2174,7 +2380,9 @@ export function crewCost(t: Tool, crew: number, term: BillingTerm = 'annual'): C
  *  reason there is no figure. */
 export function crewCellText(c: CrewCost, opts: { markMonthly: boolean }): { text: string; sub: string } {
   if (c.cost !== null && c.tier) {
-    const parts = [c.tier.name];
+    // A row named only by a bracketed placeholder ("(single plan, unnamed on page)")
+    // reads as "single plan" (2026-10-29 re-check, The Customer Factor).
+    const parts = [/^\(.*\)$/.test(c.tier.name.trim()) ? 'single plan' : c.tier.name];
     if (opts.markMonthly && c.billed === 'monthly') parts.push('billed monthly');
     if (c.tier.usage_limit) parts.push(c.tier.usage_limit);
     return { text: `$${formatUsdAmount(c.cost)}/mo`, sub: parts.join(', ') };
