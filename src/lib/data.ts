@@ -1638,7 +1638,7 @@ export function getAiTool(slug: string): AiTool | undefined {
 
 export const AI_CATEGORY_META: Record<AiToolCategory, { label: string; blurb: string }> = {
   'ai-receptionist': { label: 'AI Receptionists & Call Answering', blurb: 'AI voice agents that answer inbound calls, take messages and book jobs, so calls you miss on a job site still reach someone.' },
-  'ai-estimating': { label: 'AI Estimating & Measurement', blurb: 'Roof and building measurements from phone photos or aerial and satellite imagery, for use in estimates.' },
+  'ai-estimating': { label: 'AI Estimating & Measurement', blurb: 'Roof and building measurements from phone photos or aerial and satellite imagery, and estimates drafted from site documentation, web forms, phone calls or video walk-throughs.' },
   'ai-scheduling': { label: 'AI Scheduling & Dispatch', blurb: 'Route optimization that plans each day of stops for drivers or crews.' },
   'ai-marketing': { label: 'AI Marketing & Reviews', blurb: 'Review requests and reputation management; some of these tools add AI assistants, customer messaging and payments.' },
   'ai-all-in-one': { label: 'AI All-in-One Assistants', blurb: 'Broad AI assistants spanning calls, follow-up, and back-office tasks.' },
