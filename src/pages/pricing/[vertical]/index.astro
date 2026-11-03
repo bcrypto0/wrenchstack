@@ -24,6 +24,7 @@ import {
   accountUnitSuffix,
   seatUnitSuffix,
   seatPriceSuffix,
+  entryTerms,
   type Vertical,
   type Tool,
 } from '../../../lib/data';
@@ -163,7 +164,8 @@ function startingLabel(t: Tool): string {
   const p = t.pricing.starting_at_usd;
   if (p === 0) return 'Free tier';
   if (p === null) return isQuoteOnly(t) ? 'Custom' : 'No monthly plan';
-  return isPerUser(t) ? `$${p}${seatPriceSuffix(t)}` : `$${p}/mo`;
+  // An annual-billing rate says so (entryTerms, 2026-11-03).
+  return (isPerUser(t) ? `$${p}${seatPriceSuffix(t)}` : `$${p}/mo`) + (entryTerms(t)?.term === 'annual' ? ', billed annually' : '');
 }
 
 function tierPriceLabel(t: Tool, i: number): string {

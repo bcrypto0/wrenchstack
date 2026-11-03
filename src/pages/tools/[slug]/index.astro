@@ -43,6 +43,9 @@ import { asSentence,
   seatUnitSuffix,
   accountUnitSuffix,
   formatUsdAmount,
+  entryTermSuffix,
+  entryExtraSeatWord,
+  tierBillingNote,
   type BillingTerm,
   type Tool,
 } from '../../../lib/data';
@@ -123,7 +126,7 @@ const unit = seatUnit(tool);
 // included"). Until 2026-10-29 a base-plus-seat price read "base, plus seats" even when
 // the entry plan includes users (Estimate Rocket Launch: 3 full users).
 const entryUsers = entryUsersPhrase(tool);
-const priceText = startingPrice === null
+const priceCore = startingPrice === null
   ? ''
   : perInstall
   ? `$${startingPrice}/mo per application install`
@@ -142,6 +145,11 @@ const priceText = startingPrice === null
   : scaling === 'per_user'
   ? `$${startingPrice}/${unit}/mo`
   : `$${startingPrice}/mo`;
+// ", billed annually ($199 billed monthly)" when the starting price is the annual-billing
+// rate (entryTermSuffix, 2026-11-03): "Pricing starts at $165.83/mo for the company"
+// did not say that Fasite's month-to-month price is $199.
+const termText = startingPrice === null ? '' : entryTermSuffix(tool);
+const priceText = `${priceCore}${termText}`;
 // Tier prices as the vendor lists them: per user a year for annual_per_user (Bluebeam
 // Revu), per user a month for per_user, a month otherwise (see the schema note in
 // pages/data/trades-software-pricing-2026.json.ts). Until 2026-10-01 the pricing table
@@ -303,7 +311,14 @@ const matchBasis = tool.verticals.length > 0
 // "Also worth comparing": the matcher's top alternative, chosen without regard to
 // whether we earn on it. Until 2026-09-27 this picked the best match that had an
 // affiliate link, which contradicted the methodology's promise.
-const comparePick = smartAlts[0] ?? null;
+// For a one-trade tool, the matched alternative with the highest fit for that trade (ties
+// keep the matcher's order), 2026-11-03: MoversDesk's box offered Kickserv (Moving 7/10)
+// while Elromco, SmartMoving and Supermove (10/10) were matched too.
+const soleTrade = tool.verticals.length === 1 ? tool.verticals[0] : null;
+const comparePick = soleTrade
+  ? [...smartAlts].sort((x, y) => (y.tool.vertical_fit?.[soleTrade] ?? 0) - (x.tool.vertical_fit?.[soleTrade] ?? 0))[0] ?? null
+  : smartAlts[0] ?? null;
+const soleTradeName = soleTrade ? verticals.find((v) => v.slug === soleTrade)?.name ?? soleTrade : '';
 
 const verticalsForThisTool = tool.verticals
   .map((v) => verticals.find((x) => x.slug === v))
@@ -376,7 +391,9 @@ function pricingAnalysis(): string {
     ? `That is a price for the company, not per user: ${teamClause}`
     : scaling === 'base_plus_seat'
     ? `${entryUsers.startsWith('with ') && entryExtraUserPriced(tool)
-        ? 'That is a price for the account, with users beyond those included charged on top'
+        // The fee names its seat (2026-11-03): MoversDesk charges for extra office seats
+        // only, and its crew members are free.
+        ? `That is a price for the account, with ${entryExtraSeatWord(tool) === 'users' ? 'users beyond those included' : `extra ${entryExtraSeatWord(tool)}`} charged on top`
         : entryUsers.startsWith('with ')
         ? 'That is a price for the account; our data records no price for users beyond those included'
         : entryUsers
@@ -436,7 +453,7 @@ function pricingAnalysis(): string {
     : scaling === 'flat' || scaling === 'base_plus_seat'
     ? `We place it in our ${band} by spreading its starting price across ${REFERENCE_TEAM_SIZE} users; that is a placement rule, not a published price for ${REFERENCE_TEAM_SIZE} users.`
     : `Its starting price places it in our ${band}.`;
-  return `${tool.name} starts at ${priceText}${firstTierIsStart && !isPlaceholderTierName(tool.pricing.tiers[0]) ? ` (${tool.pricing.tiers[0]} tier)` : ''}. ${perUserNote}${bandSentence}${range}${belowTiers}${unpriced}${trialNote}`;
+  return `${tool.name} starts at ${priceCore}${firstTierIsStart && !isPlaceholderTierName(tool.pricing.tiers[0]) ? ` (${tool.pricing.tiers[0]} tier)` : ''}${termText}. ${perUserNote}${bandSentence}${range}${belowTiers}${unpriced}${trialNote}`;
 }
 
 // --- PROS, CONS AND FAQS: FALLBACKS ---
@@ -775,7 +792,7 @@ const breadcrumbs = [
       <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-600">
         {tool.founded &&<span>Founded {tool.founded}</span>}
         {tool.headquartered && <span>HQ {tool.headquartered}</span>}
-        <span>Best team size: {tool.best_team_size ?? 'n/a'}</span>
+        {tool.best_team_size && <span>Best team size: {tool.best_team_size}</span>}
       </div>
 
       <details class="mt-4 rounded-lg border border-slate-200 bg-white text-sm">
@@ -841,8 +858,10 @@ const breadcrumbs = [
             <div class="min-w-0 flex-1">
               <div class="text-xs font-semibold uppercase tracking-wider text-orange-700">Also worth comparing</div>
               <p class="mt-1 text-sm leading-relaxed text-slate-700">
-                Considering {tool.name}? <a href={`/tools/${comparePick.tool.slug}/`} class="font-semibold text-slate-900 hover:text-orange-700">{comparePick.tool.name}</a> ({formatPrice(comparePick.tool)}) {tool.verticals.length > 0
-                  ? `shares ${comparePick.tool.verticals.filter((v) => tool.verticals.includes(v)).length} of ${tool.name}'s ${tool.verticals.length} ${tool.verticals.length === 1 ? 'trade' : 'trades'}.`
+                Considering {tool.name}? <a href={`/tools/${comparePick.tool.slug}/`} class="font-semibold text-slate-900 hover:text-orange-700">{comparePick.tool.name}</a> ({formatPrice(comparePick.tool)}) {soleTrade
+                  ? `also serves ${soleTradeName}${typeof comparePick.tool.vertical_fit?.[soleTrade] === 'number' && typeof tool.vertical_fit?.[soleTrade] === 'number' ? ` (fit ${comparePick.tool.vertical_fit[soleTrade]}/10 against ${tool.name}'s ${tool.vertical_fit[soleTrade]}/10)` : ''}.`
+                  : tool.verticals.length > 0
+                  ? `shares ${comparePick.tool.verticals.filter((v) => tool.verticals.includes(v)).length} of ${tool.name}'s ${tool.verticals.length} trades.`
                   : `is another maintenance (CMMS) tool.`}
               </p>
               <p class="mt-1 text-xs italic text-slate-500">{comparePick.tool.tagline}</p>
@@ -975,7 +994,7 @@ const breadcrumbs = [
                 <tr>
                   <td class="p-3 font-semibold text-slate-900">{tier}</td>
                   <td class="p-3 text-slate-700">{tierPriceCell(price, i)}</td>
-                  <td class="p-3 text-slate-500">{tierPriceNote(price)}</td>
+                  <td class="p-3 text-slate-500">{[tierBillingNote(tool, i), tierPriceNote(price)].filter(Boolean).join('; ')}</td>
                 </tr>
               );
             })}
@@ -1434,16 +1453,19 @@ const breadcrumbs = [
         const monthly = isPerUser ? startingPrice * Math.max(techs, seatMinimum) : startingPrice;
         const annual = monthly * 12;
         monthlyEl!.textContent = format(monthly);
-        annualEl!.textContent = format(annual);
+        annualEl!.textContent = isPerUser ? format(annual) : '';
         if (!isPerUser) {
           // Not multiplied by the techs, so not an estimate at a team size: label it as
           // the published entry price and hide the techs input, which changes nothing.
+          // No 12-month figure either (2026-11-03): an annual-billing rate times 12 is not
+          // the published yearly price (Buildxact's $169 makes $2,028 against $2,030, and
+          // Fasite's $165.83 made $1,989.96 against $1,990).
           const wrap = document.getElementById('pw-techs-wrap');
           if (wrap) wrap.hidden = true;
           const ml = document.getElementById('pw-monthly-label');
-          const al = document.getElementById('pw-annual-label');
-          if (ml) ml.textContent = 'Published entry price, monthly';
-          if (al) al.textContent = 'Entry price for 12 months';
+          if (ml) ml.textContent = 'Published entry price a month';
+          const annualWrap = annualEl!.parentElement;
+          if (annualWrap) annualWrap.hidden = true;
         }
         if (isPerInstall) {
           noteEl!.innerHTML = `${toolName}'s lease price is $${startingPrice}/mo for <strong>one application installed on one PC or tablet</strong>, so it is not multiplied by the number of techs. See the pricing note above for additional applications, purchase prices and network licensing.`;

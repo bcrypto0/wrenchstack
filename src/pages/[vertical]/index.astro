@@ -361,7 +361,7 @@ const breadcrumbs = [
                     <WrenchScore score={score} size="sm" />
                   </td>
                   <td class="p-3 text-slate-700">{formatPrice(t)}</td>
-                  <td class="p-3 text-slate-600">{t.best_team_size ?? '-'} techs</td>
+                  <td class="p-3 text-slate-600">{t.best_team_size ? `${t.best_team_size} techs` : 'Not recorded'}</td>
                 </tr>
               );
             })}

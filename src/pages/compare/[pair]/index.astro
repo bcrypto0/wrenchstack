@@ -12,7 +12,7 @@ import { asSentence,
 import FreshnessBadge from '../../../components/FreshnessBadge.astro';
 import { isComparisonIndexable } from '../../../lib/compare-index.mjs';
 import MissingFromList from '../../../components/MissingFromList.astro';
-import { priceScaling, seatUnit, formatUsd, entrySeatMinimum, entryMinimumBill, seatMinimumPhrase, pricePublicationPhrase, tierPriceUnit, accountUnitSuffix, entryUsersPhrase, isPlaceholderTierName, seatUnitSuffix } from '../../../lib/data';
+import { priceScaling, seatUnit, formatUsd, entrySeatMinimum, entryMinimumBill, seatMinimumPhrase, pricePublicationPhrase, tierPriceUnit, accountUnitSuffix, entryUsersPhrase, isPlaceholderTierName, seatUnitSuffix, entryTerms, entryBillsOnSameTerm, lowerEntryTool, entryPriceBasis, featuresListedOnlyBy, featuresListedByBoth, formatUsdAmount } from '../../../lib/data';
 
 export async function getStaticPaths() {
   // Generate both directions per pair (e.g. jobber-vs-servicetitan AND
@@ -56,10 +56,13 @@ const { a, b } = Astro.props;
 // (the methodology's v1.2 note: "quotes" on one entry, "estimates" on another). A label
 // missing from one list means our entry does not record it, not that the tool lacks
 // it, so the copy below says "listed" and never "only X has" (2026-10-01).
+// Labels for one feature count as one since 2026-11-03 (featureKey: "quotes" and
+// "estimates_quotes"), and a payment-processor or QuickBooks integration counts as that
+// feature: Fasite's "payment processing" was listed as Fasite-only beside Jobber's Stripe.
 const label = (s: string) => s.replace(/_/g, ' ');
-const sharedFeatures = a.key_features.filter((f) => b.key_features.includes(f));
-const onlyA = a.key_features.filter((f) => !b.key_features.includes(f));
-const onlyB = b.key_features.filter((f) => !a.key_features.includes(f));
+const sharedFeatures = featuresListedByBoth(a, b);
+const onlyA = featuresListedOnlyBy(a, b);
+const onlyB = featuresListedOnlyBy(b, a);
 
 const sharedIntegrations = a.integrations.filter((f) => b.integrations.includes(f));
 const onlyAIntegrations = a.integrations.filter((f) => !b.integrations.includes(f));
@@ -78,18 +81,30 @@ const bStart = b.pricing.starting_at_usd;
 // vendor's seat minimum (entryMinimumBill). Until 2026-10-08 (final review) the raw
 // starting prices were compared, so 28 pages said Smart Service ($129.99 per user,
 // 3-user minimum: at least $389.97) had a lower entry price than Service Fusion's $208.
-const aMin = entryMinimumBill(a);
-const bMin = entryMinimumBill(b);
-const cheaperTool =
-  aMin !== null && bMin !== null && aMin !== bMin
-    ? aMin < bMin
-      ? a
-      : b
-    : null;
+// Since 2026-11-03 the two bills are taken on one billing term where tier_details record
+// both (entryBillsOnSameTerm): "Kickserv's entry price is $39 a month lower" set its
+// annual-billed $60 against MoversDesk's month-to-month $99 (billed monthly: $75 and $99).
+const sameTerm = entryBillsOnSameTerm(a, b);
 const otherOf = (t: Tool) => (t === a ? b : a);
+// The lower bill by billing term (lowerEntryTool) is called "lower" only when the two
+// prices are charged on a basis that keeps it lower as a crew grows, the rule the
+// alternatives pages use: a free tier, the same basis, or a company price below a
+// per-seat price (2026-11-03 re-review: "Tradify has the lower starting price" set $47
+// per user against MoversDesk's $99 for the company, crew free).
+const termLower = lowerEntryTool(a, b);
+const basisKeepsLower = (lo: Tool): boolean => {
+  const loBasis = entryPriceBasis(lo);
+  const hiBasis = entryPriceBasis(otherOf(lo));
+  return entryMinimumBill(lo) === 0 || loBasis === hiBasis || (loBasis === 'company' && hiBasis !== null);
+};
+const cheaperTool = termLower && basisKeepsLower(termLower) ? termLower : null;
+const termOf = (t: Tool) => entryTerms(t)?.term ?? null;
 // A seat minimum named beside an entry price: "$129.99 per user a month, 3-user minimum".
 const withMin = (s: string, t: Tool) => (seatMinimumPhrase(t) ? `${s}, ${seatMinimumPhrase(t)}` : s);
-const entryLabel = (t: Tool) => withMin(entryPriceLabel(t), t);
+// An annual-billing price says so (entryPriceLabel); a month-to-month price says so when
+// it stands beside an annual-billing one (2026-11-03).
+const entryLabel = (t: Tool) =>
+  withMin(entryPriceLabel(t) + (termOf(t) === 'monthly' && termOf(otherOf(t)) === 'annual' ? ', billed monthly' : ''), t);
 
 // Price transparency: quote-only is pricing_model 'quote_only' (isQuoteOnly), never
 // "starting_at_usd is null". Until 2026-10-01 these pages told readers that Trash Flow
@@ -172,8 +187,9 @@ const differences: string[] = [];
 
 if (cheaperTool) {
   const dearer = otherOf(cheaperTool);
-  const lo = cheaperTool.pricing.starting_at_usd as number;
-  const hi = dearer.pricing.starting_at_usd as number;
+  // The two figures on one billing term (2026-11-03); no ratio when there are none.
+  const lo = sameTerm ? (cheaperTool === a ? sameTerm.a : sameTerm.b) : 0;
+  const hi = sameTerm ? (dearer === a ? sameTerm.a : sameTerm.b) : 0;
   // A ratio only means something when both prices scale the same way (and the lower
   // one is not $0, which printed "Infinityx" until 2026-10-01), and per-seat prices
   // charge for the same seat (a route or a driver is not a user; seatUnit, 2026-10-05).
@@ -183,6 +199,11 @@ if (cheaperTool) {
   differences.push(
     `**Entry price:** ${cheaperTool.name} ${startsAt(cheaperTool)}; ${dearer.name} ${startsAt(dearer)}` +
       (mult !== null && mult >= 1.5 ? `, so ${dearer.name}'s entry price is ${mult >= 10 ? Math.round(mult) : mult.toFixed(1)} times ${cheaperTool.name}'s.` : '.')
+  );
+} else if (termLower) {
+  // A lower figure on a basis that does not stay lower (2026-11-03).
+  differences.push(
+    `**Entry price:** ${a.name} ${startsAt(a)}; ${b.name} ${startsAt(b)}. One is charged per ${entryPriceBasis(a)} and the other per ${entryPriceBasis(b)}, so which costs less depends on your team size.`
   );
 } else if (aQuote !== bQuote) {
   const open = aQuote ? b : a;
@@ -390,6 +411,9 @@ function describePrice(t: Tool): string {
   const namedTier = !isPlaceholderTierName(t.pricing.tiers[0]);
   if ((t.pricing.pricing_model === 'flat_plus_seat' || entryUsersPhrase(t)) && namedTier) return `${t.name} starts on ${t.pricing.tiers[0]}, at ${entryLabel(t)}${topTierPhrase(t)}.`;
   const min = seatMinimumPhrase(t);
+  // An annual-billing label ends "($49 billed monthly)", so the plan is named first there
+  // (2026-11-03: "billed annually ($49 billed monthly) on Basic").
+  if (entryTierIsStart(t) && namedTier && entryTerms(t)?.term === 'annual') return `${t.name} starts on ${t.pricing.tiers[0]}, at ${entryPriceLabel(t)}${min ? `, with a ${min}` : ''}${topTierPhrase(t)}.`;
   return `${t.name} starts at ${entryPriceLabel(t)}${entryTierIsStart(t) && namedTier ? ` on ${t.pricing.tiers[0]}` : ''}${min ? `, with a ${min}` : ''}${topTierPhrase(t)}.`;
 }
 
@@ -410,32 +434,41 @@ function pricingAnalysis(): string {
   // $39.95 a month lower": $6 per user against Markate's $45.95 base), and so were two
   // per-seat prices for different seats ($49 per route against $250 per user).
   // null for free, quote-only and unclear prices.
-  const priceBasis = (t: Tool): string | null => {
-    const s = priceScaling(t);
-    if (s === 'flat' || s === 'base_plus_seat') return 'company';
-    if (s === 'per_user') return seatUnit(t);
-    return null;
-  };
-  const aBasis = priceBasis(a);
-  const bBasis = priceBasis(b);
+  const aBasis = entryPriceBasis(a);
+  const bBasis = entryPriceBasis(b);
   if (flatVsPerUser) {
     const flatTool = aIsFlat ? a : b;
     const perUserTool = aIsFlat ? b : a;
     analysis += ` ${flatTool.name} charges a flat monthly price per plan while ${perUserTool.name} charges per ${seatUnit(perUserTool)}, so ${flatTool.name} gets relatively cheaper as your team grows; check each plan's user or usage limits.`;
-  } else if (cheaperTool && aBasis !== null && bBasis !== null && aBasis !== bBasis) {
+  } else if (aBasis !== null && bBasis !== null && aBasis !== bBasis) {
     analysis += ` ${a.name} charges its entry price per ${aBasis} and ${b.name} per ${bBasis}, so the two figures are not directly comparable; price both at your team size.`;
   } else if (cheaperTool && aBasis !== null && aBasis === bBasis && (entrySeatMinimum(a) > 1 || entrySeatMinimum(b) > 1)) {
     // Same seat, but a seat minimum on one side: the per-seat prices are not the bills
     // (2026-10-08).
     const withMinimum = [a, b].filter((t) => entrySeatMinimum(t) > 1);
     analysis += ` Both charge per ${aBasis}, but ${withMinimum.map((t) => `${t.name} charges for at least ${entrySeatMinimum(t)}`).join(' and ')}, so price both at your team size.`;
-  } else if (cheaperTool) {
+  } else if (cheaperTool && sameTerm && sameTerm.a > 0 && sameTerm.b > 0) {
     // An invented "both platforms typically converge in price at scale" followed this
     // until 2026-10-01; no data supports it.
-    // Smallest bills (equal to the starting prices unless a seat minimum applies).
-    const diff = Math.round(Math.abs((aMin as number) - (bMin as number)) * 100) / 100;
+    // Smallest bills (equal to the starting prices unless a seat minimum applies), on one
+    // billing term, which the sentence names where our data records it (2026-11-03).
+    const diff = Math.round(Math.abs(sameTerm.a - sameTerm.b) * 100) / 100;
     const diffText = Number.isInteger(diff) ? String(diff) : diff.toFixed(2);
-    analysis += ` ${cheaperTool.name}'s entry price is $${diffText} a month lower.`;
+    const billed = sameTerm.term === 'annual' ? 'billed annually' : 'billed monthly';
+    analysis += sameTerm.converted
+      ? ` ${billed.charAt(0).toUpperCase()}${billed.slice(1)}, ${a.name}'s entry plan is $${formatUsdAmount(sameTerm.a)} a month and ${b.name}'s $${formatUsdAmount(sameTerm.b)}, so ${cheaperTool.name}'s entry price is $${diffText} a month lower on that basis.`
+      : sameTerm.term
+      ? ` ${cheaperTool.name}'s entry price is $${diffText} a month lower, both ${billed}.`
+      : ` ${cheaperTool.name}'s entry price is $${diffText} a month lower.`;
+  } else if (!sameTerm && (entryMinimumBill(a) ?? 0) > 0 && (entryMinimumBill(b) ?? 0) > 0) {
+    // The two figures are not on one billing term that our data can show (2026-11-03).
+    // A tool with no term recorded may still state one in its pricing note (Jobber's $29
+    // is annual-billed), so the sentence says what our plan data lacks, not the vendor.
+    const how = (t: Tool) => (termOf(t) === 'annual' ? 'annually' : 'monthly');
+    const known = [a, b].filter((t) => termOf(t) !== null);
+    analysis += known.length === 1
+      ? ` ${known[0].name}'s figure is billed ${how(known[0])}; we have not recorded ${otherOf(known[0]).name}'s plan prices by billing term, so we give no gap between them.`
+      : ` ${a.name}'s figure is billed ${how(a)} and ${b.name}'s ${how(b)}, and neither entry plan has a price recorded on the other's term, so we give no gap between them.`;
   }
 
   return analysis;
@@ -460,7 +493,8 @@ function getPros(t: Tool, isCheaper: boolean, fitWins: typeof verticalWinners): 
   if (qb.length) pros.push(`QuickBooks integration listed (${qb.join(', ')})`);
   if (hasStripe) pros.push(`Stripe integration listed`);
   if (hasGLS) pros.push(`Google Local Services Ads integration listed`);
-  if (t.verticals.length >= 5) pros.push(`Serves ${t.verticals.length} trades in our data`);
+  // Only for the tool with more trades (2026-11-03: Fasite's 7 was a pro beside Jobber's 18).
+  if (t.verticals.length >= 5 && t.verticals.length > other.verticals.length) pros.push(`Serves ${t.verticals.length} trades in our data`);
   if (t.founded && t.founded <= 2015) pros.push(`Founded in ${t.founded}`);
   if (priceScaling(t) === 'flat') pros.push(`Flat monthly price per plan, not per user`);
 
@@ -486,7 +520,12 @@ function getCons(t: Tool, otherT: Tool): string[] {
   const otherHasTrial = (otherT.pricing.free_trial_days ?? 0) > 0;
   if (otherHasTrial && !tHasTrial && t.pricing.starting_at_usd !== 0) cons.push(`No free trial in our data (${otherT.name} offers ${otherT.pricing.free_trial_days} days)`);
 
-  if (isQuoteOnly(t)) cons.push(`No published price: you need a quote`);
+  // Not when the tool's own weaknesses already say so (2026-11-03: SmartMoving's list said
+  // "No published pricing, so you need a demo and a quote" and then this line).
+  const weaknessSaysUnpublished = (t.weaknesses ?? '')
+    .split(/[.;]/)
+    .some((c) => /\b(no|not)\b/i.test(c) && /\b(publish|public)/i.test(c) && /pric|fee|rate|cost|quote/i.test(c));
+  if (isQuoteOnly(t) && !weaknessSaysUnpublished) cons.push(`No published price: you need a quote`);
 
   return cons.slice(0, 5);
 }
@@ -516,17 +555,37 @@ function cheaperAnswer(): string {
     return `${[a, b].filter(nonMonthlyPricingOnly).map((t) => t.name).join(' and ')} ${nonMonthlyPricingOnly(a) && nonMonthlyPricingOnly(b) ? 'publish' : 'publishes'} module or per-project prices rather than a monthly plan, so compare the total over the period you expect to use each.`;
   }
   if (aStart === 0 && bStart === 0) return `Both have a free tier. Total cost depends on the paid plan you need, if any; see the pricing table above.`;
+  // A lower figure on a basis that does not stay lower, or figures our data cannot put on
+  // one billing term (2026-11-03 re-review: both read "The smallest monthly bill is the
+  // same").
+  if (termLower) {
+    return `${a.name} starts at ${entryLabel(a)}; ${b.name} starts at ${entryLabel(b)}. One is charged per ${entryPriceBasis(a)} and the other per ${entryPriceBasis(b)}, so which costs less depends on your team size; price both at your seat count.`;
+  }
+  if (!sameTerm) {
+    return `${a.name} starts at ${entryLabel(a)}; ${b.name} starts at ${entryLabel(b)}. Our data does not put the two on one billing term, so we do not say which costs less; compare them on the billing term you would pay.`;
+  }
   // Same figure, charged differently ($60 per user against $60 a month for the company):
   // until 2026-10-01 this said "Both start at $60 per user a month" and then contradicted
   // itself in brackets.
   if (aStart !== bStart) {
     // Different prices with the same smallest bill (a seat minimum on one side).
+    // Or the same bill once both are on one billing term (2026-11-03).
+    if (sameTerm?.converted) {
+      return `${a.name} starts at ${entryLabel(a)}; ${b.name} starts at ${entryLabel(b)}. ${sameTerm.term === 'annual' ? 'Billed annually' : 'Billed monthly'}, both entry plans are $${formatUsdAmount(sameTerm.a)} a month, so compare the two at your team size.`;
+    }
     return `${a.name} starts at ${entryLabel(a)}; ${b.name} starts at ${entryLabel(b)}. The smallest monthly bill is the same, so compare the two at your team size.`;
   }
   if (entryLabel(a) !== entryLabel(b)) {
     return `${a.name} starts at ${entryLabel(a)}; ${b.name} starts at ${entryLabel(b)}. The figure is the same but it is charged differently, so compare the two at your team size.`;
   }
   return `Both start at ${entryLabel(a)}. Total cost depends on your team size and the plan you need.`;
+}
+
+function teamSizeSentence(): string {
+  const sized = [a, b].filter((t) => t.best_team_size);
+  if (sized.length === 2) return `Our data puts ${a.name}'s best team size at ${a.best_team_size} and ${b.name}'s at ${b.best_team_size}. `;
+  if (sized.length === 1) return `Our data puts ${sized[0].name}'s best team size at ${sized[0].best_team_size} and records none for ${otherOf(sized[0]).name}. `;
+  return `Our data records a best team size for neither tool. `;
 }
 
 const qbSentence = (t: Tool) =>
@@ -565,7 +624,9 @@ const faqs = [
   },
   {
     q: `Which suits a solo contractor, and which a growing team?`,
-    a: `Our data puts ${a.name}'s best team size at ${a.best_team_size ?? 'an unrecorded size'} and ${b.name}'s at ${b.best_team_size ?? 'an unrecorded size'}. ${a.name}'s entry price is ${entryLabel(a)}; ${b.name}'s is ${entryLabel(b)}. Price both at the team size you expect to have, not only today's.`,
+    // An unset best_team_size printed "an unrecorded size" (2026-11-03); the answer now
+    // names only the sizes our data records.
+    a: `${teamSizeSentence()}${a.name}'s entry price is ${entryLabel(a)}; ${b.name}'s is ${entryLabel(b)}. Price both at the team size you expect to have, not only today's.`,
   },
 ];
 
@@ -655,10 +716,12 @@ const breadcrumbs = [
                 <dt class="text-slate-500">Starting price</dt>
                 <dd class="font-semibold text-slate-900">{withMin(formatPrice(t), t)}</dd>
               </div>
-              <div class="flex justify-between">
-                <dt class="text-slate-500">Best team size</dt>
-                <dd class="font-semibold text-slate-900">{t.best_team_size ?? 'n/a'}</dd>
-              </div>
+              {t.best_team_size && (
+                <div class="flex justify-between">
+                  <dt class="text-slate-500">Best team size</dt>
+                  <dd class="font-semibold text-slate-900">{t.best_team_size}</dd>
+                </div>
+              )}
               <div class="flex justify-between">
                 <dt class="text-slate-500">Free trial</dt>
                 <dd class="font-semibold text-slate-900">

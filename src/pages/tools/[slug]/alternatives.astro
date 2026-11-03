@@ -16,6 +16,11 @@ import {
   entrySeatPriceUnrecorded,
   formatUsd,
   formatUsdAmount,
+  entryTerms,
+  entryPriceBasis,
+  lowerEntryTool,
+  toolType,
+  featuresListedOnlyBy,
   type Tool,
 } from '../../../lib/data';
 
@@ -78,18 +83,21 @@ const toolMinBill = entryMinimumBill(tool);
 // FastEST's seat_unit is 'application'), so the label no longer adds "per user". A
 // company or account price names the users its entry plan includes where tier_details
 // record them ("From $139/mo with 3 users included"), not "base, plus seats".
+// An annual-billing figure ends "billed annually" (2026-11-03), after the phrase on who
+// it covers ("From $60/mo for the company, with 5 users included, billed annually").
 const priceLabel = (t: Tool): string => {
   const s = priceScaling(t);
-  const base = formatPrice(t);
+  const base = formatPrice(t, false);
   const min = seatMinimumPhrase(t);
   const users = entryUsersPhrase(t);
-  return s === 'per_user' ? `${base}${min ? `, ${min}` : ''}`
+  const term = entryTerms(t)?.term === 'annual' ? ', billed annually' : '';
+  return (s === 'per_user' ? `${base}${min ? `, ${min}` : ''}`
     : s === 'flat' && users.startsWith('for ') ? `${base} ${users}`
     : s === 'flat' ? `${base} for the company${users ? `, ${users}` : ''}`
     : s === 'base_plus_seat' && users ? `${base} ${users}`
     : s === 'base_plus_seat' && entrySeatPriceUnrecorded(t) ? `${base} base`
     : s === 'base_plus_seat' ? `${base} base, plus seats`
-    : base;
+    : base) + term;
 };
 // The smallest monthly bill, for reasons decided by it (2026-10-29): GoCanvas's page
 // showed Tradify ($47 per user) as a "Lower starting price" than GoCanvas's $29 per user,
@@ -124,10 +132,30 @@ const namesList = (list: Tool[]): string => {
   return shown.length <= 1 ? (shown[0] ?? '') : `${shown.slice(0, -1).join(', ')} and ${shown[shown.length - 1]}`;
 };
 
+// An alternative with a lower entry price, as these pages say it (2026-11-03): a tool of
+// the same type (busybusy, a time-tracking tool, was a "lower starting price" than
+// MoversDesk), priced on a basis that stays lower as a crew grows (a per-seat price is
+// not lower than a company price: Tradify's $47 per user against MoversDesk's $99 with
+// crew free), and compared on one billing term where tier_details record both
+// (lowerEntryTool). A free tier is lower than any price; a company price below a
+// per-seat price is lower at every crew size its plan allows.
+const toolBasis = entryPriceBasis(tool);
+// Same type, and priced on a basis that can be set against this tool's price (any price
+// when this tool publishes none).
+const priceComparable = (t: Tool): boolean => {
+  const bill = entryMinimumBill(t);
+  if (bill === null || toolType(t) !== toolType(tool)) return false;
+  if (toolMinBill === null) return true;
+  const basis = entryPriceBasis(t);
+  return bill === 0 || basis === toolBasis || (basis === 'company' && toolBasis !== null);
+};
+const lowerThanTool = (t: Tool): boolean =>
+  toolMinBill !== null && priceComparable(t) && lowerEntryTool(t, tool) === t;
+
 // Cheaper alternatives (only if tool has a price)
 const cheaperAlternatives = toolMinBill !== null && toolMinBill > 0
   ? allAlternatives
-      .filter((t) => entryMinimumBill(t) !== null && (entryMinimumBill(t) as number) < toolMinBill)
+      .filter(lowerThanTool)
       .sort((a, b) => (entryMinimumBill(a) as number) - (entryMinimumBill(b) as number))
       .slice(0, 4)
   : [];
@@ -161,6 +189,17 @@ const qbAlternatives = allAlternatives
   .filter((t) => !toolHasQb || t.integrations.some((i) => i.includes('quickbooks_desktop')))
   .slice(0, 4);
 
+// The integrations this tool lists among QuickBooks, Stripe and Zapier, for the migration
+// checklist: it told people leaving MoversDesk (no QuickBooks sync) to check their
+// QuickBooks setup (2026-11-03).
+const toolKeyIntegrations = [
+  toolHasQb ? 'QuickBooks' : null,
+  tool.integrations.includes('stripe') ? 'Stripe' : null,
+  tool.integrations.includes('zapier') ? 'Zapier' : null,
+].filter((n): n is string => n !== null);
+const joinOr = (names: string[]): string =>
+  names.length <= 1 ? names.join('') : `${names.slice(0, -1).join(', ')} or ${names[names.length - 1]}`;
+
 // Parse weaknesses into a bullet list: split on ';' or on a full stop that ends a
 // sentence. Until 2026-10-01 this split on every '.', so QuoteIQ's "$149.99 a month"
 // showed as "$149" and "99 a month)", and Broadlume's "2.79% to 2.99%" fell apart
@@ -189,7 +228,9 @@ const fitLine = `${tool.name} scores ${fitScore}/10 on our ${primaryVerticalLabe
 const fitRanked = allAlternatives.filter((t) => primaryFit(t) !== null);
 const topAltFit = fitRanked.length > 0 ? Math.max(...fitRanked.map((t) => primaryFit(t) as number)) : null;
 const topFitAlts = topAltFit === null ? [] : fitRanked.filter((t) => primaryFit(t) === topAltFit);
-const pricedAlts = allAlternatives.filter((t) => entryMinimumBill(t) !== null);
+// Same tool type and a comparable price basis only (2026-11-03), as for the lower-price
+// list above: MoversDesk's answer named busybusy, then Tradify's $47 per user.
+const pricedAlts = allAlternatives.filter(priceComparable);
 const lowestAltPrice = pricedAlts.length > 0 ? Math.min(...pricedAlts.map((t) => entryMinimumBill(t) as number)) : null;
 const lowestPriceAlts = lowestAltPrice === null ? [] : pricedAlts.filter((t) => entryMinimumBill(t) === lowestAltPrice);
 // Both lists rank by the smallest monthly bill; with a seat minimum on either side the
@@ -226,7 +267,7 @@ const faqs = [
   },
   {
     q: `What should I look for when switching from ${tool.name}?`,
-    a: `Check four things before you commit: (1) data export: can you take your customer list, job history and recurring contracts with you? (2) integrations: will your QuickBooks, Stripe or Zapier setup still work? (3) price at your team size: a per-user price grows with every seat and a company price does not, so price both at your seat count; (4) setup cost and go-live plan: ask each vendor for its setup fee and go-live plan in writing, and plan for a period when both systems run.`,
+    a: `Check four things before you commit: (1) data export: can you take your customer list, job history and recurring contracts with you? (2) integrations: ${toolKeyIntegrations.length ? `will your ${joinOr(toolKeyIntegrations)} setup still work?` : `will the integrations you use still work?`} (3) price at your team size: a per-user price grows with every seat and a company price does not, so price both at your seat count; (4) setup cost and go-live plan: ask each vendor for its setup fee and go-live plan in writing, and plan for a period when both systems run.`,
   },
   {
     q: `How do I migrate customer data from ${tool.name} to another platform?`,
@@ -344,19 +385,19 @@ const breadcrumbs = [
       {alternatives.map((alt, i) => {
         const overlap = alt.verticals.filter((v) => tool.verticals.includes(v));
         const altPrice = alt.pricing.starting_at_usd;
-        const altMinBill = entryMinimumBill(alt);
-        const isCheaper = altMinBill !== null && toolMinBill !== null && altMinBill < toolMinBill;
+        const isCheaper = lowerThanTool(alt);
         const billDecides = isCheaper && (hasSeatMinimum(alt) || hasSeatMinimum(tool));
         // isQuoteOnly, not a null price: Trash Flow and Pylon publish module or
         // per-project prices, so "instead of a quote" would be false for them.
         const publishesWhereToolQuotes = altPrice !== null && isQuoteOnly(tool);
         const altFit = primaryFit(alt);
         const isBetterFit = altFit !== null && altFit > fitScore;
-        // Differences between the two key-feature lists. These lists are not complete
-        // (and use varied names for one feature), so the labels say "lists", not "has":
-        // until 2026-10-01 they read "Has, but X doesn't" and "X has it, Y doesn't".
-        const altOnlyFeatures = alt.key_features.filter((f) => !tool.key_features.includes(f));
-        const toolOnlyFeatures = tool.key_features.filter((f) => !alt.key_features.includes(f));
+        // Differences between the two key-feature lists. These lists are not complete, so
+        // the labels say "lists", not "has": until 2026-10-01 they read "Has, but X
+        // doesn't" and "X has it, Y doesn't". Labels for one feature count as one since
+        // 2026-11-03 (featuresListedOnlyBy: "quotes" and "estimates_quotes").
+        const altOnlyFeatures = featuresListedOnlyBy(alt, tool);
+        const toolOnlyFeatures = featuresListedOnlyBy(tool, alt);
         const pickReasons: string[] = [];
         if (billDecides) pickReasons.push(`you want a lower minimum monthly bill (${alt.name}: ${billLabel(alt)}; ${tool.name}: ${billLabel(tool)}; compare them at your team size)`);
         else if (isCheaper) pickReasons.push(`you want a lower starting price (${priceLabel(alt)} against ${priceLabel(tool)}; compare them at your team size)`);
@@ -516,7 +557,9 @@ const breadcrumbs = [
       </p>
       <ul class="space-y-3 text-slate-700">
         <li><strong class="text-slate-900">Data export</strong>: we have not verified what {tool.name} lets you export. Ask which records come out (customers, invoices, jobs, photos, custom fields) and in what format, and ask the new vendor which of them it can import. Decide whether you need to keep read access to {tool.name} for old records.</li>
-        <li><strong class="text-slate-900">Integrations</strong>: confirm your QuickBooks setup works on the new platform and syncs what you need. Check every other integration you use (payments, Zapier, Google Local Services, custom APIs) the same way.</li>
+        <li><strong class="text-slate-900">Integrations</strong>: {toolHasQb
+          ? 'confirm your QuickBooks setup works on the new platform and syncs what you need. Check every other integration you use (payments, Zapier, Google Local Services, custom APIs) the same way.'
+          : `our entry for ${tool.name} lists no QuickBooks integration, so if you want accounting sync, check which QuickBooks or Xero edition the new platform connects to and what it syncs. Check every integration you use now (payments, Zapier, Google Local Services, custom APIs) the same way.`}</li>
         <li><strong class="text-slate-900">Price at your team size</strong>: a per-user price grows with every seat and a company price does not, so compare the total at your seat count, not just the entry-tier price.</li>
         <li><strong class="text-slate-900">Setup cost and go-live plan</strong>: ask each vendor whether it charges a setup, onboarding or migration fee and for its go-live plan, both in writing. Budget for the time when both systems run.</li>
       </ul>

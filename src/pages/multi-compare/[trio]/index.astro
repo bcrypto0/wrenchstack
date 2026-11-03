@@ -16,6 +16,8 @@ import { asSentence,
   entryMinimumBill,
   seatMinimumPhrase,
   pricePublicationPhrase,
+  lowerEntryTool,
+  entryTerms,
   type Tool,
 } from '../../../lib/data';
 import WrenchScore from '../../../components/WrenchScore.astro';
@@ -83,14 +85,24 @@ const lowestPrice = priced.length ? Math.min(...priced.map((t) => entryMinimumBi
 const lowestTools = priced.filter((t) => entryMinimumBill(t) === lowestPrice);
 // "$129.99 per user a month, 3-user minimum" where the vendor sets a seat minimum.
 const withMin = (s: string, t: Tool) => (seatMinimumPhrase(t) ? `${s}, ${seatMinimumPhrase(t)}` : s);
-const entryLabel = (t: Tool) => withMin(entryPriceLabel(t), t);
+// A month-to-month price says so beside an annual-billing one, as on the pair pages
+// (2026-11-03).
+const anyAnnual = trioTools.some((t) => entryTerms(t)?.term === 'annual');
+const entryLabel = (t: Tool) =>
+  withMin(entryPriceLabel(t) + (anyAnnual && entryTerms(t)?.term === 'monthly' ? ', billed monthly' : ''), t);
 // Only call a tool the cheapest when at least two of the three have a monthly entry price,
 // one alone has the lowest, and no tool without a monthly price could undercut it (a
 // quote-only tool may be cheaper; a $0 free tier cannot be undercut). Until 2026-10-01
 // "Jobber has the lowest entry price of the three" ran beside a quote-only Workiz.
 const unpriced = trioTools.filter((t) => t.pricing.starting_at_usd === null);
+// It must also be lower than each other priced tool on one billing term where the data
+// records both (lowerEntryTool, 2026-11-03), so an annual-billing figure is not ranked
+// below a month-to-month one that costs less on the same term.
 const cheapest =
-  priced.length >= 2 && lowestTools.length === 1 && (unpriced.length === 0 || lowestPrice === 0) ? lowestTools[0] : null;
+  priced.length >= 2 && lowestTools.length === 1 && (unpriced.length === 0 || lowestPrice === 0)
+    && priced.every((t) => t === lowestTools[0] || lowerEntryTool(lowestTools[0], t) === lowestTools[0])
+    ? lowestTools[0]
+    : null;
 // "publishes no price" / "publishes module or per-project prices" / "has a free tier" /
 // "starts at $47 per user a month".
 const priceClause = (t: Tool) =>

@@ -268,24 +268,29 @@ export function asSentence(s: string | null | undefined): string {
   return /[.!?]["'”’)\]]*$/.test(t) ? t : `${t}.`;
 }
 
-export function formatPrice(t: Tool): string {
+/** `withTerm` false leaves out "billed annually", for a caller that places it after a
+ *  phrase of its own ("From $60/mo for the company, billed annually"). */
+export function formatPrice(t: Tool, withTerm = true): string {
   const p = t.pricing;
   // A null starting price is not always a quote: trash-flow prices by module and
   // pylon-solar charges per project, both published (pricing_model 'unclear'). Until
   // 2026-10-01 both rendered "Custom quote".
   if (p.starting_at_usd === null) return isQuoteOnly(t) ? 'Custom quote' : 'No monthly plan (see pricing note)';
   if (p.starting_at_usd === 0) return 'Free tier available';
-  return `From ${monthlyPriceShort(t)}`;
+  return `From ${monthlyPriceShort(t, withTerm)}`;
 }
 
 /** The starting price as "$129/user/mo" for a per-seat price (seatUnit names the seat)
  *  and "$85/mo" otherwise. Listing cards printed every price as "From $X/mo" until
  *  2026-10-29 (review of nine listings), so GoCanvas's $29 per user read like a
- *  company price next to RazorSync's $85 for the company. */
-export function monthlyPriceShort(t: Tool): string {
+ *  company price next to RazorSync's $85 for the company. An annual-billing figure ends
+ *  "billed annually" since 2026-11-03 (entryTerms): Joist's "From $8.34/mo" is $10
+ *  billed monthly. */
+export function monthlyPriceShort(t: Tool, withTerm = true): string {
   const p = t.pricing.starting_at_usd;
   if (p === null) return '';
-  return priceScaling(t) === 'per_user' ? `$${formatUsd(p)}${seatPriceSuffix(t)}` : `$${p}/mo`;
+  const term = withTerm && entryTerms(t)?.term === 'annual' ? ', billed annually' : '';
+  return (priceScaling(t) === 'per_user' ? `$${formatUsd(p)}${seatPriceSuffix(t)}` : `$${p}/mo`) + term;
 }
 
 export interface ScoreFactor {
@@ -604,6 +609,18 @@ export function entryExtraUserPriced(t: Tool): boolean {
   return typeof entryTierDetail(t)?.extra_user_price === 'number';
 }
 
+/** What the entry plan's extra-user fee is charged for, plural, for "more for extra ...":
+ *  "office seats" for MoversDesk, whose crew members are free (2026-11-03: its compare
+ *  pages said "more for extra users"). The row's extra_user_unit without "additional"
+ *  or a bracketed note ("additional user (cleaner, contractor or office manager)" reads
+ *  "users"); "users" when none is recorded. */
+export function entryExtraSeatWord(t: Tool): string {
+  const raw = entryTierDetail(t)?.extra_user_unit ?? '';
+  const unit = raw.replace(/\([^)]*\)/g, '').replace(/^\s*(additional|extra)\s+/i, '').replace(/\s+/g, ' ').trim().toLowerCase();
+  if (!unit || NON_MONTHLY_UNIT.test(unit) || /[/,;]/.test(unit)) return 'users';
+  return /s$/.test(unit) ? unit : `${unit}s`;
+}
+
 /** A base-plus-seat entry plan whose tier_details row records no seat price, so labels
  *  say "base" without "plus seats" or "more as users are added" (2026-10-29 final review:
  *  Clear Estimates' Standard records none; only Pro charges $9 per added user). False
@@ -760,8 +777,11 @@ function buildAlternativeRationale(source: Tool, alt: Tool): string {
     // both measures agree; otherwise state both prices with how each one scales.
     // (Was hardcoded to 'Enterprise-tier upgrade path' for ANY step up before 2026-09.)
     // The price names its seat when it is per seat ("$29/user/mo", 2026-10-29).
-    if (altTierIdx < sourceTierIdx && altPrice < sourcePrice) fragments.push(`Cheaper at ${monthlyPriceShort(alt)}`);
-    else if (altTierIdx > sourceTierIdx && altPrice > sourcePrice) fragments.push(`Costs more at ${monthlyPriceShort(alt)}`);
+    // The prices are compared on one billing term since 2026-11-03 (entryBillsOnSameTerm),
+    // and with none, neither is called cheaper.
+    const same = entryBillsOnSameTerm(alt, source);
+    if (same && altTierIdx < sourceTierIdx && same.a < same.b) fragments.push(`Cheaper at ${monthlyPriceShort(alt)}`);
+    else if (same && altTierIdx > sourceTierIdx && same.a > same.b) fragments.push(`Costs more at ${monthlyPriceShort(alt)}`);
     else fragments.push(`Starts at ${entryPriceLabel(alt)}, against ${source.name} at ${entryPriceLabel(source)}`);
   } else if (altTierIdx > sourceTierIdx && altPrice !== null && altPrice > 0) {
     // Source is free, alternative is paid.
@@ -772,9 +792,11 @@ function buildAlternativeRationale(source: Tool, alt: Tool): string {
     // An 'unclear' model says nothing about scaling, so it never counts as a match.
     // Per-seat prices match only for the same seat: $35 per driver (OptimoRoute) is not
     // the same price as $35 per user (Method CRM). seatUnit is 'user' when unset.
+    // And only on the same billing term (2026-11-03).
     const sameModel = alt.pricing.pricing_model === source.pricing.pricing_model
       && priceScaling(alt) !== 'unclear'
-      && seatUnit(alt) === seatUnit(source);
+      && seatUnit(alt) === seatUnit(source)
+      && (entryTerms(alt)?.term ?? null) === (entryTerms(source)?.term ?? null);
     fragments.push(
       sameModel
         ? 'Same starting price'
@@ -1539,7 +1561,9 @@ export interface MarketingAgency {
   typical_retainer_usd: string;
   /** True when the agency's own site publishes the price of its core service (verified 2026-09-30). */
   pricing_published: boolean;
-  /** null when the agency publishes no minimum term. */
+  /** The agency's published minimum term in months: 0 = no minimum term (month to month,
+   *  no contract), null = no minimum term published. Month-to-month agencies stored 1
+   *  until 2026-11-03, which pages printed as a "1-month minimum". */
   minimum_contract_months: number | null;
   verticals_specialty: string[];
   geographic_coverage: string;
@@ -2081,25 +2105,245 @@ export function entryPriceLabel(t: Tool): string {
   if (p === null) return 'module or per-project prices (no monthly plan)';
   if (p === 0) return 'a free tier';
   switch (t.pricing.pricing_model) {
-    case 'per_user': return firstSeatOnly(t) ? `$${p} a month for the first ${seatUnit(t)}` : `$${p} per ${seatUnit(t)} a month`;
+    case 'per_user': return (firstSeatOnly(t) ? `$${p} a month for the first ${seatUnit(t)}` : `$${p} per ${seatUnit(t)} a month`) + entryTermSuffix(t);
     case 'annual_per_user': return `$${p} per ${seatUnit(t)} a month, billed annually`;
     // With the users the entry plan includes, where tier_details record them (2026-10-29).
     // A user cap replaces "for the company" ("$49 a month for 1 user, the plan's limit",
     // not "for the company, for 1 user", 2026-10-29 re-review).
     case 'flat': {
       const users = entryUsersPhrase(t);
-      return users.startsWith('for ') ? `$${p} a month ${users}` : `$${p} a month for the company${users ? `, ${users}` : ''}`;
+      return (users.startsWith('for ') ? `$${p} a month ${users}` : `$${p} a month for the company${users ? `, ${users}` : ''}`) + entryTermSuffix(t);
     }
     case 'flat_plus_seat': {
       const users = entryUsersPhrase(t);
-      if (!users) return entrySeatPriceUnrecorded(t) ? `$${p} a month base` : `$${p} a month base, more as users are added`;
+      if (!users) return (entrySeatPriceUnrecorded(t) ? `$${p} a month base` : `$${p} a month base, more as users are added`) + entryTermSuffix(t);
       // "more for extra users" only after an included count, not after a user cap, and
       // only where the entry plan records an extra-user fee (Housecall Pro's Basic does
-      // not, 2026-10-29 re-review).
-      return `$${p} a month ${users}${users.startsWith('with ') && entryExtraUserPriced(t) ? ', more for extra users' : ''}`;
+      // not, 2026-10-29 re-review). The fee names its seat (entryExtraSeatWord).
+      return `$${p} a month ${users}${users.startsWith('with ') && entryExtraUserPriced(t) ? `, more for extra ${entryExtraSeatWord(t)}` : ''}` + entryTermSuffix(t);
     }
     default: return `$${p} a month`;
   }
+}
+
+// --- Billing term of the starting price (added 2026-11-03) -------------------------
+//
+// 32 starting prices are the per-month figure on annual billing (Kickserv $60, $75 billed
+// monthly; Fasite $165.83, $199 billed monthly), and compare pages set them against
+// month-to-month prices without saying so: "ZenMaid's entry price is $146.83 a month
+// lower" put ZenMaid's $19 (it publishes no annual price) against Fasite's annual
+// $165.83. The term is read from the entry plan's tier_details row, so it is known only
+// where tier_details record it (Jobber's $29 is annual-billed by its pricing note, but
+// it has no tier_details, so no term is claimed for it).
+
+/** The billing term the starting price is charged on, with the entry plan's price a month
+ *  on each term (null where none is recorded). */
+export interface EntryTerms { term: BillingTerm; annual: number | null; monthly: number | null }
+export function entryTerms(t: Tool): EntryTerms | null {
+  const p = t.pricing.starting_at_usd;
+  if (p === null || p === 0 || isQuoteOnly(t)) return null;
+  if (t.pricing.pricing_model === 'annual_per_user') return { term: 'annual', annual: p, monthly: null };
+  if (!hasTierDetails(t)) return null;
+  // Rows named like the entry tier; then rows named with the tool's name in front
+  // (SingleOps: "SingleOps Essential (billed annually)" and "(billed monthly)"); then
+  // the one row of a one-plan tool, whatever it is called (The Customer Factor).
+  let rows = tierDetailsNamed(t, t.pricing.tiers[0]);
+  if (!rows.length && t.pricing.tiers[0]) rows = tierDetailsNamed(t, `${t.name} ${t.pricing.tiers[0]}`);
+  if (!rows.length && t.pricing.tiers.length === 1 && t.pricing.tier_details!.length === 1) rows = t.pricing.tier_details!;
+  const near = (v: number | null) => typeof v === 'number' && Math.abs(v - p) < 0.5;
+  // The entry plan's price on the other term: on the matched row, else the one price
+  // its rows record on that term.
+  const priceOn = (key: 'price_annual_billed' | 'price_monthly_billed', row: TierDetail): number | null => {
+    if (typeof row[key] === 'number') return row[key] as number;
+    const vals = [...new Set(rows.map((d) => d[key]).filter((v): v is number => typeof v === 'number'))];
+    return vals.length === 1 ? vals[0] : null;
+  };
+  // A start that equals the month-to-month price is on monthly billing, whatever the
+  // annual price.
+  const monthlyRow = rows.find((d) => near(d.price_monthly_billed));
+  if (monthlyRow) return { term: 'monthly', monthly: p, annual: priceOn('price_annual_billed', monthlyRow) };
+  const annualRow = rows.find((d) => near(d.price_annual_billed));
+  if (annualRow) return { term: 'annual', annual: p, monthly: priceOn('price_monthly_billed', annualRow) };
+  return null;
+}
+
+/** "Billed annually ($199 billed monthly)" for a tier price that is its plan's annual-
+ *  billing price on tier_details (with the month-to-month price where one is recorded),
+ *  for the tool page's pricing table: Fasite's only row read "$165.83/mo" with an empty
+ *  note (2026-11-03). "" otherwise, and for annual_per_user tiers, which are priced a
+ *  year. */
+export function tierBillingNote(t: Tool, i: number): string {
+  const price = t.pricing.tier_prices_usd?.[i];
+  if (typeof price !== 'number' || price <= 0 || t.pricing.pricing_model === 'annual_per_user') return '';
+  const near = (v: number | null) => typeof v === 'number' && Math.abs(v - price) < 0.5;
+  let rows = tierDetailsNamed(t, t.pricing.tiers[i]);
+  if (!rows.length && t.pricing.tiers[i]) rows = tierDetailsNamed(t, `${t.name} ${t.pricing.tiers[i]}`);
+  if (!rows.length && t.pricing.tiers.length === 1 && hasTierDetails(t) && t.pricing.tier_details!.length === 1) rows = t.pricing.tier_details!;
+  if (rows.some((d) => near(d.price_monthly_billed))) return '';
+  const row = rows.find((d) => near(d.price_annual_billed));
+  if (!row) return '';
+  const monthly = typeof row.price_monthly_billed === 'number'
+    ? row.price_monthly_billed
+    : (() => {
+        const vals = [...new Set(rows.map((d) => d.price_monthly_billed).filter((v): v is number => typeof v === 'number'))];
+        return vals.length === 1 ? vals[0] : null;
+      })();
+  return `Billed annually${monthly !== null ? ` ($${formatUsdAmount(monthly)} billed monthly)` : ''}`;
+}
+
+/** ", billed annually ($199 billed monthly)" after an entry price charged on annual
+ *  billing; "" for a month-to-month price or a term our data does not record. */
+export function entryTermSuffix(t: Tool): string {
+  const e = entryTerms(t);
+  if (!e || e.term !== 'annual') return '';
+  return `, billed annually${e.monthly !== null ? ` ($${formatUsdAmount(e.monthly)} billed monthly)` : ''}`;
+}
+
+/** What one entry price is charged for: 'company' (a flat price, or the base of a
+ *  base-plus-seat plan) or the seat of a per-seat price (seatUnit: user, route, driver);
+ *  null for free, quote-only and unclear prices. Moved here from the compare page
+ *  2026-11-03 so the alternatives page uses the same rule. */
+export function entryPriceBasis(t: Tool): string | null {
+  const s = priceScaling(t);
+  if (s === 'flat' || s === 'base_plus_seat') return 'company';
+  if (s === 'per_user') return seatUnit(t);
+  return null;
+}
+
+/** Two tools' smallest entry bills (entryMinimumBill) on one billing term, so a gap
+ *  between them compares like with like. As published when both figures are on the same
+ *  term, when our data records neither term, or when either is a free tier; otherwise
+ *  both entry plans' prices on the first term each records (billed monthly, then billed
+ *  annually), with `converted` set. null when either has no monthly price, or when no
+ *  pair exists: one figure's term is not recorded, or the two plans share no term. */
+export interface SameTermBills { a: number; b: number; term: BillingTerm | null; converted: boolean }
+export function entryBillsOnSameTerm(a: Tool, b: Tool): SameTermBills | null {
+  const aMin = entryMinimumBill(a);
+  const bMin = entryMinimumBill(b);
+  if (aMin === null || bMin === null) return null;
+  if (aMin === 0 || bMin === 0) return { a: aMin, b: bMin, term: null, converted: false };
+  const ea = entryTerms(a);
+  const eb = entryTerms(b);
+  if ((ea?.term ?? null) === (eb?.term ?? null)) return { a: aMin, b: bMin, term: ea?.term ?? null, converted: false };
+  if (!ea || !eb) return null;
+  for (const term of ['monthly', 'annual'] as const) {
+    const pa = ea[term];
+    const pb = eb[term];
+    if (pa !== null && pb !== null) {
+      return { a: roundCents(pa * entrySeatMinimum(a)), b: roundCents(pb * entrySeatMinimum(b)), term, converted: true };
+    }
+  }
+  return null;
+}
+
+/** The tool with the lower smallest entry bill: compared on one billing term where the
+ *  data allows (entryBillsOnSameTerm). Otherwise one tool is lower only when every price
+ *  its entry plan records (on either term) is below every price the other's records; a
+ *  figure with no recorded term counts as its own only price, since starting_at_usd is
+ *  the lowest monthly figure a vendor publishes. null on a tie, on overlapping figures,
+ *  or when either has no monthly price. (2026-11-03 re-review: with no shared term the
+ *  published figures were compared, so Fasite's annual $165.83 read as lower than
+ *  Buildxact's $169, though Fasite's monthly price is $199.) */
+export function lowerEntryTool(a: Tool, b: Tool): Tool | null {
+  const s = entryBillsOnSameTerm(a, b);
+  if (s) return s.a === s.b ? null : s.a < s.b ? a : b;
+  const range = (t: Tool): [number, number] | null => {
+    const bill = entryMinimumBill(t);
+    if (bill === null) return null;
+    const e = entryTerms(t);
+    const bills = (e ? [e.annual, e.monthly] : [t.pricing.starting_at_usd])
+      .filter((v): v is number => typeof v === 'number')
+      .map((v) => roundCents(v * entrySeatMinimum(t)));
+    return bills.length ? [Math.min(...bills), Math.max(...bills)] : [bill, bill];
+  };
+  const ra = range(a);
+  const rb = range(b);
+  if (!ra || !rb) return null;
+  if (ra[1] < rb[0]) return a;
+  if (rb[1] < ra[0]) return b;
+  return null;
+}
+
+// --- Feature labels (added 2026-11-03) ----------------------------------------------
+//
+// key_features are each entry's own labels, not a controlled vocabulary, so one feature
+// carries several names. Compare and alternatives pages list the features one entry
+// records and the other does not by these keys, so Jobber's "quotes" and Fasite's
+// "estimates_quotes" no longer show as two features each listed for one tool only. Only
+// labels for the same feature are grouped: "estimating" (cost or takeoff estimating) is
+// not a customer quote and stays apart.
+const FEATURE_SYNONYMS: Record<string, string> = {
+  quotes: 'estimates_quotes',
+  quoting: 'estimates_quotes',
+  estimates: 'estimates_quotes',
+  mobile_quoting: 'estimates_quotes',
+  e_signature: 'esignature',
+  digital_signatures: 'esignature',
+  payments: 'payment_processing',
+  card_payments: 'payment_processing',
+  credit_card_payments: 'payment_processing',
+  credit_card_processing: 'payment_processing',
+  stripe_payments: 'payment_processing',
+  client_portal: 'customer_portal',
+  reports: 'reporting',
+  recurring_jobs: 'recurring_scheduling',
+  recurring_services: 'recurring_scheduling',
+  offline_access: 'offline_mode',
+  quickbooks_sync: 'quickbooks_integration',
+  quickbooks_native_sync: 'quickbooks_integration',
+  quickbooks_sync_realtime: 'quickbooks_integration',
+  quickbooks_sync_two_way: 'quickbooks_integration',
+  appointment_reminders: 'automated_reminders',
+  multi_language: 'multilingual',
+  material_takeoffs: 'takeoffs',
+  work_order_management: 'work_orders',
+  digital_checklists: 'checklists',
+  online_invoicing: 'invoicing',
+  proposal_builder: 'proposals',
+  crew_time_tracking: 'time_tracking',
+  booking_page: 'online_booking',
+};
+export function featureKey(f: string): string {
+  return FEATURE_SYNONYMS[f] ?? f;
+}
+
+// An integration that is the feature: a card-payment processor takes payments (Jobber
+// lists Stripe and no "payment_processing" feature), and a QuickBooks integration is the
+// quickbooks_integration feature.
+const PAYMENT_INTEGRATIONS: ReadonlySet<string> = new Set(['stripe', 'square', 'paypal', 'authorize_net', 'remedy_payments', 'xplor_pay', 'global_payments', 'paysimple', 'worldpay', 'tiger_payment_solutions']);
+
+/** The features an entry records, as feature keys, counting the integrations above. */
+export function featureKeys(t: Tool): Set<string> {
+  const keys = new Set(t.key_features.map(featureKey));
+  if (t.integrations.some((i) => PAYMENT_INTEGRATIONS.has(i))) keys.add('payment_processing');
+  if (t.integrations.some((i) => i.startsWith('quickbooks') && i !== 'quickbooks_time' && i !== 'quickbooks_payroll')) keys.add('quickbooks_integration');
+  return keys;
+}
+
+/** t's key features that `other` does not record under any label, one label per feature,
+ *  in t's order. */
+export function featuresListedOnlyBy(t: Tool, other: Tool): string[] {
+  const otherKeys = featureKeys(other);
+  const seen = new Set<string>();
+  return t.key_features.filter((f) => {
+    const k = featureKey(f);
+    if (otherKeys.has(k) || seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+}
+
+/** t's key features that `other` also records, under any label (t's label kept), one
+ *  label per feature. */
+export function featuresListedByBoth(t: Tool, other: Tool): string[] {
+  const otherKeys = featureKeys(other);
+  const seen = new Set<string>();
+  return t.key_features.filter((f) => {
+    const k = featureKey(f);
+    if (!otherKeys.has(k) || seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
 }
 
 /** The fewest seats the entry price is charged for: pricing.seat_minimum, else the

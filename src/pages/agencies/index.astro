@@ -16,6 +16,53 @@ const tierOrder: Array<'S' | 'A' | 'F'> = ['S', 'A', 'F'];
 const byTier: Record<'S' | 'A' | 'F', MarketingAgency[]> = { S: [], A: [], F: [] };
 for (const a of marketingAgencies) byTier[agencyTier(a)].push(a);
 
+// The card's price slot is narrow, so a long typical_retainer_usd shows its first clause,
+// cut after a whole list item (", " outside brackets, not the comma in "$3,000") when that
+// clause is still long, and says the rest is in the review (2026-11-03: Opus Group's
+// 430-character fee text filled its card). Short texts show in full; the review page
+// prints every one in full.
+// Positions of a separator outside brackets.
+function topLevelAt(s: string, sep: string): number[] {
+  const at: number[] = [];
+  let depth = 0;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (c === '(') depth++;
+    else if (c === ')') depth = Math.max(0, depth - 1);
+    else if (depth === 0 && s.startsWith(sep, i)) at.push(i);
+  }
+  return at;
+}
+// A clause that qualifies the price ("then a month-to-month fee that is not published",
+// "plus a monthly service subscription", "currency (CAD or USD) not stated") is never
+// cut off the price it qualifies, and a later clause naming an unpublished or unstated
+// figure is kept (2026-11-03 re-review).
+const QUALIFIES = /\b(then|plus|not published|not stated|currency)\b/i;
+function briefRetainer(s: string, max = 120): string {
+  const full = s.trim();
+  if (full.length <= max) return full;
+  const lastCommaCut = (t: string) => {
+    const at = topLevelAt(t, ', ').filter((i) => i > 0 && i <= max && !QUALIFIES.test(t.slice(i)));
+    return at.length ? t.slice(0, at[at.length - 1]) : t;
+  };
+  // As many whole clauses as fit; a first clause under 40 characters ("No retainer") takes
+  // the next one too, cut after a list item.
+  const ends = [...topLevelAt(full, '; '), full.length];
+  const fit = ends.filter((e) => e <= max);
+  let out = fit.length ? full.slice(0, fit[fit.length - 1]) : full.slice(0, ends[0]);
+  if (out.length < 40 && fit.length) {
+    const ext = lastCommaCut(full.slice(0, ends[fit.length]));
+    if (ext.length <= max && ext.length > out.length) out = ext;
+  }
+  if (out.length > max) out = lastCommaCut(out);
+  // Still long: without its bracketed asides, then cut again.
+  if (out.length > max) out = lastCommaCut(out.replace(/\s*\([^)]*\)/g, ''));
+  const kept = ends.slice(0, -1).map((e, i) => full.slice(e + 2, ends[i + 1]))
+    .filter((c) => c.length > 0 && !out.includes(c) && /\b(not published|not stated|currency)\b/i.test(c));
+  if (kept.length) out = `${out}; ${kept.join('; ')}`;
+  return out === full ? full : `${out}; more in the review`;
+}
+
 const tierMeta = {
   S: { label: 'Tier S: price published, no warning', description: `Agencies with no reputation warning whose own site publishes the price of their core service, so you can compare cost before a sales call. That is the whole rule; it is not a ranking of quality or results. Read each review for the minimum term and what the price covers.`, badgeColor: 'bg-emerald-100 text-emerald-900 ring-emerald-300', cardBorder: 'border-emerald-300' },
   A: { label: 'Tier A: no reputation warning', description: `Agencies with no reputation warning whose own site does not publish the price of their core service, so the price comes in a quote; Service Direct sells pay-per-call leads at a price you set instead of a retainer. Get the fee, any setup fee and the minimum term in writing before you sign.`, badgeColor: 'bg-blue-100 text-blue-900 ring-blue-300', cardBorder: 'border-blue-300' },
@@ -87,7 +134,7 @@ const itemListSchema = {
                   </div>
                   <div class="max-w-[45%] shrink-0 text-right text-xs">
                     <p class="font-bold text-slate-900 uppercase tracking-wider">{a.agency_type.replace(/-/g, ' ')}</p>
-                    <p class="text-slate-500">{a.typical_retainer_usd}</p>
+                    <p class="text-slate-500">{briefRetainer(a.typical_retainer_usd)}</p>
                   </div>
                 </div>
 

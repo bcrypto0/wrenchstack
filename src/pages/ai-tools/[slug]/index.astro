@@ -15,6 +15,29 @@ const catLabel = AI_CATEGORY_META[tool.ai_category].label;
 
 const siblings = aiTools.filter((t) => t.slug !== tool.slug).slice(0, 6);
 
+// The quick verdict gives a short price line and the first drawback (2026-11-03): it
+// repeated the whole pricing summary and weaknesses, which the Pricing and Pros & cons
+// sections show in full, and InstaBid's ran past 250 words.
+// The figure is left out where the summary prices by location or on annual billing (More
+// Good Reviews' $49 is per location billed yearly; Rooftops AI's are shown billed yearly),
+// since the bare "/mo" figure would not say so.
+const trialText = tool.free_trial_days && tool.free_trial_days > 0 ? `, ${tool.free_trial_days}-day free trial` : '';
+const priceQualified = /\b(billed yearly|yearly billing|billed annually|annual billing|per location)\b/i.test(tool.pricing_summary ?? '');
+const verdictPrice = tool.starting_price_usd === null
+  ? 'no monthly price listed; see Pricing below.'
+  : tool.starting_price_usd === 0
+  ? 'free tier; paid plans are under Pricing below.'
+  : priceQualified
+  ? `published plans${trialText}; each plan's price and billing terms are under Pricing below.`
+  : `from $${tool.starting_price_usd}/mo${trialText}; plans and terms are under Pricing below.`;
+const weaknessParts = (tool.weaknesses ?? '')
+  .split(/;\s*|\.\s+(?=[A-Z])/)
+  .map((s) => s.trim().replace(/\.$/, ''))
+  .filter((s) => s.length > 5);
+const verdictDrawback = weaknessParts.length
+  ? `${asSentence(weaknessParts[0].charAt(0).toUpperCase() + weaknessParts[0].slice(1))}${weaknessParts.length > 1 ? ' More under Pros & cons below.' : ''}`
+  : '';
+
 const pageTitle = `${tool.name} Review (2026): Pricing, Features, Pros & Cons`;
 const pageDescription = `${tool.name} review for trades contractors. ${asSentence(tool.tagline)} ${tool.reputation_flag ? 'Includes a documented reputation note. ' : ''}Affiliate status disclosed. Verified ${tool.verified_date}.`;
 
@@ -105,7 +128,7 @@ const faqSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700 leading-relaxed">
-        Who <strong class="text-slate-900">{tool.name}</strong> fits: {asSentence(tool.best_for)} Pricing: {asSentence(tool.pricing_summary)} Drawbacks: {asSentence(tool.weaknesses)}
+        Who <strong class="text-slate-900">{tool.name}</strong> fits: {asSentence(tool.best_for)} Pricing: {verdictPrice}{verdictDrawback && ` Drawbacks: ${verdictDrawback}`}
       </p>
     </section>
 

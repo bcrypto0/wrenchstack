@@ -31,7 +31,10 @@ const affiliateDisclosure = agency.affiliate_url.startsWith('http')
 
 const minTerm = agency.minimum_contract_months;
 const minTermHeader = minTerm === null ? 'Minimum term not published' : minTerm === 0 ? 'No minimum term' : `${minTerm}-month minimum`;
-const minTermVerdict = minTerm === null ? 'No minimum term is published.' : minTerm === 0 ? 'No minimum term.' : `Minimum: ${minTerm}-month commitment.`;
+// "No minimum term." is left out where the price text already says month to month or no
+// contract (2026-11-03: it repeated "month to month on 30 days' notice").
+const retainerSaysNoTerm = /month[- ]to[- ]month|\bno (long-term )?contracts?\b/i.test(agency.typical_retainer_usd);
+const minTermVerdict = minTerm === null ? 'No minimum term is published.' : minTerm === 0 ? (retainerSaysNoTerm ? '' : 'No minimum term.') : `Minimum: ${minTerm}-month commitment.`;
 const minTermCell = minTerm === null ? 'Not published' : minTerm === 0 ? 'None' : `${minTerm} month${minTerm === 1 ? '' : 's'}`;
 
 const breadcrumbs = [
@@ -124,7 +127,7 @@ const faqSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-lg font-bold text-slate-900">Quick verdict</h2>
       <p class="text-slate-700 leading-relaxed">
-        <strong class="text-slate-900">{agency.name}</strong> is best for {asSentence(agency.best_for)} Pricing: {asSentence(agency.typical_retainer_usd)} {minTermVerdict} {asSentence(agency.weaknesses)}
+        <strong class="text-slate-900">{agency.name}</strong> is best for {asSentence(agency.best_for)} Pricing: {asSentence(agency.typical_retainer_usd)}{minTermVerdict && ` ${minTermVerdict}`} Drawbacks: {asSentence(agency.weaknesses)}
       </p>
     </section>
 

@@ -11,7 +11,7 @@
       "services_offered": "string[] (seo | ppc | web_design | content | local_seo | reputation_management | social_media | email | lead_gen)",
       "pricing_model": "monthly-retainer | performance-based | hybrid | project-based",
       "typical_retainer_usd": "string (e.g. '$2,500-$8,000/mo')",
-      "minimum_contract_months": "number (1 = no minimum, 6+ = lock-in concern)",
+      "minimum_contract_months": "number | null (0 = no minimum term: month to month or no contract; N = an N-month minimum; null = no minimum term published)",
       "verticals_specialty": "string[] (slugs from categories.json)",
       "geographic_coverage": "us-nationwide | us-regional",
       "founded": "number",
@@ -363,7 +363,7 @@
       "pricing_model": "monthly-retainer",
       "typical_retainer_usd": "Not published (quoted after a call); month-to-month, no long-term contracts",
       "pricing_published": false,
-      "minimum_contract_months": 1,
+      "minimum_contract_months": 0,
       "verticals_specialty": [
         "hvac",
         "plumbing",
@@ -462,7 +462,7 @@
       "pricing_model": "monthly-retainer",
       "typical_retainer_usd": "Not published (quote on request); no contracts, no setup fees",
       "pricing_published": false,
-      "minimum_contract_months": 1,
+      "minimum_contract_months": 0,
       "verticals_specialty": [
         "hvac",
         "plumbing",
@@ -2200,7 +2200,7 @@
       "pricing_model": "monthly-retainer",
       "typical_retainer_usd": "$99 to start (refunded if you are not satisfied with the new website), then a month-to-month fee that is not published (call for details)",
       "pricing_published": false,
-      "minimum_contract_months": 1,
+      "minimum_contract_months": 0,
       "verticals_specialty": [
         "roofing"
       ],
