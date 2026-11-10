@@ -7,7 +7,7 @@ import MissingFromList from '../../components/MissingFromList.astro';
 const grouped = paymentsByModel();
 
 const pageTitle = `Best Payment Processing for Contractors & Trades (2026)`;
-const pageDescription = `Compare ${paymentProcessors.length} payment processors for trades businesses by pricing model (flat-rate, interchange-plus, subscription and custom quote), including Square, Stripe, Helcim and Stax. Published rates, monthly fees and ACH costs where the vendor lists them.`;
+const pageDescription = `Compare ${paymentProcessors.length} payment processors and payment platforms for trades businesses by pricing model (flat-rate, interchange-plus, subscription and custom quote), including Square, Stripe, Helcim and Stax. Published rates, monthly fees and ACH costs where the vendor lists them.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -17,7 +17,7 @@ const breadcrumbs = [
 const itemListSchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
-  name: 'Payment Processors for Trades Contractors',
+  name: 'Payment Processors and Platforms for Trades Contractors',
   numberOfItems: paymentProcessors.length,
   itemListElement: paymentProcessors.map((p, i) => ({
     '@type': 'ListItem',
@@ -42,7 +42,7 @@ const itemListSchema = {
         Best Payment Processing for Contractors & Trades (2026)
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        We compare {paymentProcessors.length} payment processors, grouped by <strong>pricing model</strong>: the model sets how the processor charges its markup, and your card volume, average ticket and customers' card mix decide what you pay under it. Rates below are the vendors' published rates where they list them, and each review carries an affiliate disclosure.
+        We compare {paymentProcessors.length} payment processors and payment platforms, grouped by <strong>pricing model</strong>: the model sets how the processor or platform charges its markup, and your card volume, average ticket and customers' card mix decide what you pay under it. Rates below are the vendors' published rates where they list them, and each review carries an affiliate disclosure.
       </p>
     </header>
 
@@ -56,7 +56,7 @@ const itemListSchema = {
     <section class="mb-10 rounded-lg bg-slate-50 p-6">
       <h2 class="mb-3 text-base font-bold text-slate-900">The headline filter: pricing model</h2>
       <p class="text-sm text-slate-700 leading-relaxed">
-        Payment cost depends on the pricing model plus your volume, ticket size and card mix. <strong>Flat-rate</strong> (Square, Stripe, QuickBooks Payments, PayPal) charges a published rate per payment type, a percentage plus, at Square, Stripe and PayPal, a fixed fee per transaction: simple to read, with the markup built into the rate. <strong>Interchange-plus</strong> (Helcim, Dharma Merchant Services) shows the card networks' interchange cost and the processor's markup separately; statements are more detailed and the total depends on your customers' card mix. <strong>Subscription/membership</strong> (Stax, Clover, Authorize.Net) adds a monthly fee: Stax says it charges no percentage markup, Authorize.Net's $25 gateway fee comes with 2.9% + 30 cents per transaction on its All-in-One plan, and this listing quotes no Clover prices, so get its software, hardware and processing costs in writing. <strong>Custom quote</strong> (pmtbox, formerly National Processing) publishes no rate card. For big-ticket jobs, compare each processor's <strong>ACH</strong> fee with its card rate.
+        Payment cost depends on the pricing model plus your volume, ticket size and card mix. <strong>Flat-rate</strong> (Square, Stripe, QuickBooks Payments, PayPal) charges a published rate per payment type, a percentage plus, at Square, Stripe and PayPal, a fixed fee per transaction: simple to read, with the markup built into the rate. <strong>Interchange-plus</strong> (Helcim, Dharma Merchant Services) shows the card networks' interchange cost and the processor's markup separately; statements are more detailed and the total depends on your customers' card mix. Briefcase, a proposal platform whose payments Fiska Inc. processes, prices cards as interchange plus a published platform fee, and its terms say processor, card network and any other applicable fees are separate from that platform fee. <strong>Subscription/membership</strong> (Stax, Clover, Authorize.Net) adds a monthly fee: Stax says it charges no percentage markup, Authorize.Net's $25 gateway fee comes with 2.9% + 30 cents per transaction on its All-in-One plan, and this listing quotes no Clover prices, so get its software, hardware and processing costs in writing. <strong>Custom quote</strong> (pmtbox, formerly National Processing) publishes no rate card. For big-ticket jobs, compare each processor's <strong>ACH</strong> fee with its card rate.
       </p>
     </section>
 
@@ -144,6 +144,6 @@ const itemListSchema = {
         <a href="/tools/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">Software directory</a>
       </div>
     </section>
-    <MissingFromList listName="payment processors for contractors" count={paymentProcessors.length} />
+    <MissingFromList listName="payment processors and platforms for contractors" count={paymentProcessors.length} />
   </article>
 </Layout>
