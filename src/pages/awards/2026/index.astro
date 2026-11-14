@@ -1,11 +1,14 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { awards, tools, getTool, formatPrice, wrenchStackScore } from '../../../lib/data';
+import { awards, tools, getTool } from '../../../lib/data';
 import ToolLogo from '../../../components/ToolLogo.astro';
-import WrenchScore from '../../../components/WrenchScore.astro';
 
-const pageTitle = `WrenchStack Awards ${awards.year}: Best Trades Software by Category`;
-const pageDescription = `WrenchStack's ${awards.year} editorial awards for trades software: winners in ${awards.categories.length} categories spanning HVAC, plumbing, electrical, roofing, landscaping, cleaning, pest control, pool service, CMMS, and construction PM. No vendor paid for placement.`;
+const fmtDate = (d: string) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const publishedLabel = fmtDate(awards.published_date);
+const archivedLabel = fmtDate(awards.archived_date ?? awards.published_date);
+
+const pageTitle = `WrenchStack Awards ${awards.year} (archived)`;
+const pageDescription = `Archived list of the WrenchStack Awards ${awards.year}, chosen on ${publishedLabel} under an earlier scoring method and no longer shown on reviews.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -22,55 +25,36 @@ const categoriesWithTools = awards.categories.map((cat) => {
   return { ...cat, winner, honorableMentions };
 });
 
-// Winners we hold an active affiliate link for, computed from tools.json so the
-// disclosure follows the ledger (2026-10-01). It used to name ServiceTitan only,
-// although Workiz and Service Fusion also carry tracked links.
-const nameList = (names: string[]) =>
-  names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names.join('');
-const affiliateWinners = [...new Set(categoriesWithTools.map((c) => c.winner).filter((t): t is NonNullable<typeof t> => !!t))]
-  .filter((t) => t.affiliate_url.startsWith('http'))
-  .map((t) => t.name);
-
-// Schema.org ItemList for the awards
-const itemListSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'ItemList',
-  name: `WrenchStack Awards ${awards.year}`,
-  numberOfItems: categoriesWithTools.length,
-  itemListElement: categoriesWithTools.map((cat, i) => ({
-    '@type': 'ListItem',
-    position: i + 1,
-    item: {
-      '@type': 'Thing',
-      name: cat.label,
-      description: cat.why,
-      ...(cat.winner ? { url: `https://wrenchstack.com/tools/${cat.winner.slug}/` } : {}),
-    },
-  })),
-};
+// Archived 2026-11-14 (trust batch): no structured data, no live score and no
+// outbound "Visit" link; the category texts stay as the record.
 ---
 
 <Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
-  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
-
   <article class="mx-auto max-w-5xl px-4 py-12">
     <header class="mb-10">
       <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
-        Editorial awards · {awards.year}
+        Archive · {awards.year}
       </p>
       <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
-        WrenchStack Awards {awards.year}
+        WrenchStack Awards {awards.year} (archived)
       </h1>
-      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Winners in {categoriesWithTools.length} categories of trades software, selected by WrenchStack editorial. No vendor paid for placement, and we do not sell "shortlist" badges. How the winners were chosen is set out below; the scoring method is on the methodology page.
+      <h2 class="mt-6 text-xl font-bold text-slate-900">Archived on {archivedLabel}</h2>
+      <p class="mt-2 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-slate-700 leading-relaxed">
+        The WrenchStack Awards {awards.year} were chosen on {publishedLabel} by editorial judgement informed by the
+        Fit Score as it stood then. That score had five factors, two of which, third-party review ratings and
+        feature depth, have since been removed, and the winners were not re-selected. The text under each category
+        is archived as last edited on 8 October 2026 and its prices are not updated; current prices and features are on each review. The awards are
+        archived: they are no longer shown on reviews, and the {awards.year} Pick badge is no longer offered. This
+        page remains at its address so existing links work. The current method is on the
+        <a href="/methodology/" class="underline hover:text-slate-900">methodology page</a>.
       </p>
       <p class="mt-2 text-sm text-slate-500">
-        Published {awards.published_date}
+        Published {publishedLabel}
       </p>
     </header>
 
     <section class="mb-10 rounded-lg border border-amber-200 bg-amber-50 p-6">
-      <h2 class="mb-3 text-lg font-bold text-amber-900">How winners are chosen</h2>
+      <h2 class="mb-3 text-lg font-bold text-amber-900">How the winners were chosen</h2>
       <p class="text-sm text-amber-900 leading-relaxed">
         {/* Written here so the dates and weights sit next to the winners; awards.json's
             methodology_summary says the same thing (both corrected 2026-10-01). */}
@@ -82,11 +66,6 @@ const itemListSchema = {
       <p class="mt-3 text-sm text-amber-800">
         <strong>Ownership disclosure:</strong> FieldRoutes (Best for Pest Control) and Aspire (Best for Landscaping) are owned by ServiceTitan (Best Enterprise FSM). We may earn a referral reward through our ServiceTitan referral link, as the ledger shows. We have no affiliate link to FieldRoutes or Aspire, and affiliate status plays no part in the awards.
       </p>
-      {affiliateWinners.length > 0 && (
-        <p class="mt-3 text-sm text-amber-800">
-          <strong>Winners whose "Visit" links are tracked affiliate or referral links:</strong> {nameList(affiliateWinners)}.
-        </p>
-      )}
     </section>
 
     <nav class="mb-10 rounded-lg bg-slate-50 p-4">
@@ -125,9 +104,6 @@ const itemListSchema = {
                   </h3>
                   <p class="text-sm italic text-slate-600">{cat.winner.tagline}</p>
                 </div>
-                <div class="shrink-0 hidden sm:block">
-                  <WrenchScore score={wrenchStackScore(cat.winner)} size="sm" />
-                </div>
               </div>
 
               <p class="mb-4 text-slate-700 leading-relaxed">{cat.why}</p>
@@ -135,10 +111,6 @@ const itemListSchema = {
               {/* Free trial prints only where the tool entry records one; a missing or
                   zero value prints nothing rather than a guessed "No" (2026-10-01). */}
               <dl class="mb-5 grid grid-cols-2 gap-3 text-sm md:grid-cols-4">
-                <div>
-                  <dt class="text-xs uppercase tracking-wider text-slate-500">Starting price</dt>
-                  <dd class="font-semibold text-slate-900">{formatPrice(cat.winner)}</dd>
-                </div>
                 <div>
                   <dt class="text-xs uppercase tracking-wider text-slate-500">Best team size</dt>
                   <dd class="font-semibold text-slate-900">{cat.winner.best_team_size ?? 'n/a'}</dd>
@@ -149,10 +121,6 @@ const itemListSchema = {
                     <dd class="font-semibold text-slate-900">{cat.winner.pricing.free_trial_days} days</dd>
                   </div>
                 ) : null}
-                <div>
-                  <dt class="text-xs uppercase tracking-wider text-slate-500">Pricing verified</dt>
-                  <dd class="font-semibold text-slate-900">{cat.winner.pricing.verified_date}</dd>
-                </div>
               </dl>
 
               <div class="flex flex-wrap gap-2">
@@ -160,15 +128,7 @@ const itemListSchema = {
                   href={`/tools/${cat.winner.slug}/`}
                   class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
                 >
-                  Read full {cat.winner.name} review →
-                </a>
-                <a
-                  href={cat.winner.affiliate_url.startsWith('http') ? cat.winner.affiliate_url : cat.winner.vendor_url}
-                  rel="sponsored nofollow noopener"
-                  target="_blank"
-                  class="rounded-md border border-orange-300 bg-white px-4 py-2 text-sm font-semibold text-orange-700 hover:bg-orange-50"
-                >
-                  Visit {cat.winner.name} →
+                  Read the current {cat.winner.name} review →
                 </a>
               </div>
             </div>
@@ -224,7 +184,7 @@ const itemListSchema = {
           <strong class="text-slate-900">No paid placements.</strong> No vendor paid for an award position, and we do not sell "shortlist" badges or featured listings.
         </li>
         <li>
-          <strong class="text-slate-900">Affiliate relationships disclosed.</strong> Each tool's review page carries a general affiliate disclosure, and our public per-vendor <a href="/methodology/#affiliate-ledger" class="underline hover:text-slate-900">affiliate ledger</a> records our status with every tool{affiliateWinners.length > 0 ? '; the winners whose "Visit" links are tracked affiliate or referral links are named above' : ''}. Recommendations are unchanged whether the affiliate is active or pending.
+          <strong class="text-slate-900">Affiliate relationships disclosed.</strong> Each tool's review page carries a general affiliate disclosure, and our public per-vendor <a href="/methodology/#affiliate-ledger" class="underline hover:text-slate-900">affiliate ledger</a> records our status with every tool.
         </li>
         <li>
           <strong class="text-slate-900">Methodology is published.</strong> The rubric, weights, data sources, and verification cadence live on the <a href="/methodology/" class="underline hover:text-slate-900">methodology page</a>.

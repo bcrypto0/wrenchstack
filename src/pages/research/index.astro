@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { tools, verticals, accountingSoftware, paymentProcessors, bankingProviders, financingProviders, insuranceProviders, leadGenPlatforms, payrollServices, marketingAgencies, aiTools, usVendorLists, usVendorTotal, awards } from '../../lib/data';
+import { tools, verticals, accountingSoftware, paymentProcessors, bankingProviders, financingProviders, insuranceProviders, leadGenPlatforms, payrollServices, marketingAgencies, aiTools, usVendorLists, usVendorTotal } from '../../lib/data';
 import { intlMarketCount } from '../../lib/intl';
 
 // All 10 US datasets (usVendorLists), not the 5 this hub used to sum.
@@ -45,12 +45,12 @@ const research = [
     tags: ['Index', 'Cross-category'],
   },
   {
-    slug: 'wrenchstack-awards-2026',
-    legacyUrl: '/awards/2026/',
-    title: 'WrenchStack Awards 2026',
-    pubDate: '2026-05-28',
-    description: `${awards.categories.length} editorial categories of vendor recognition across software, with full methodology and per-category winner rationale.`,
-    tags: ['Annual awards', 'Software'],
+    slug: 'hvac-software-published-prices',
+    legacyUrl: '/research/hvac-software-published-prices/',
+    title: 'Which HVAC software publishes its prices, and what 6 users cost',
+    pubDate: '2026-11-14',
+    description: "Read from each vendor's own pricing page on 14 November 2026: which HVAC software shows a price, what the price depends on, and what a team of 6 logins costs where the page's own figures allow it.",
+    tags: ['Pricing', 'HVAC'],
   },
 ];
 ---
@@ -64,7 +64,7 @@ const research = [
         WrenchStack Research
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Original research on the trades-contractor vendor market: industry reports, benchmarks, awards, and editorial analysis. Every report is methodology-backed, dated, and structured for citation.
+        Original research on the trades-contractor vendor market: industry reports, benchmarks and editorial analysis. Every report is methodology-backed, dated, and structured for citation.
       </p>
     </header>
 

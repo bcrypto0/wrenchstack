@@ -1,37 +1,39 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { awards, getTool } from '../../lib/data';
+import { awards } from '../../lib/data';
 
-const pageTitle = `WrenchStack Awards: Best Trades Software`;
-const pageDescription = `WrenchStack's ${awards.year} editorial awards for trades software, with winners in ${awards.categories.length} categories. No vendor paid for placement.`;
+const fmtDate = (d: string) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const publishedLabel = fmtDate(awards.published_date);
+const archivedLabel = fmtDate(awards.archived_date ?? awards.published_date);
+
+const pageTitle = 'WrenchStack Awards 2026 (archived)';
+const pageDescription = `Archive of the WrenchStack Awards ${awards.year}, chosen on ${publishedLabel} under an earlier scoring method. They are no longer shown on reviews.`;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Awards', url: '/awards/' },
 ];
 
-// Computed from awards.json and tools.json so the counts and the affiliate list
-// follow the data (2026-10-01).
-const withMentions = awards.categories.filter((c) => c.honorable_mentions.length > 0).length;
-const nameList = (names: string[]) =>
-  names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names.join('');
-const affiliateWinners = [...new Set(awards.categories.map((c) => c.winner_slug))]
-  .map((slug) => getTool(slug))
-  .filter((t): t is NonNullable<typeof t> => !!t && t.affiliate_url.startsWith('http'))
-  .map((t) => t.name);
 ---
 
 <Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
   <article class="mx-auto max-w-4xl px-4 py-12">
     <header class="mb-10">
       <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">
-        Editorial awards
+        Archive
       </p>
       <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
-        WrenchStack Awards
+        WrenchStack Awards (archived)
       </h1>
-      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        WrenchStack's editorial awards name a winner in each category of trades software, with honorable mentions in {withMentions} of the {awards.categories.length} categories. No vendor paid for placement, and we do not sell "shortlist" badges.
+      <h2 class="mt-6 text-xl font-bold text-slate-900">Archived on {archivedLabel}</h2>
+      <p class="mt-2 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-slate-700 leading-relaxed">
+        The WrenchStack Awards {awards.year} were chosen on {publishedLabel} by editorial judgement informed by the
+        Fit Score as it stood then. That score had five factors, two of which, third-party review ratings and
+        feature depth, have since been removed, and the winners were not re-selected. The text under each category
+        is archived as last edited on 8 October 2026 and its prices are not updated; current prices and features are on each review. The awards are
+        archived: they are no longer shown on reviews, and the {awards.year} Pick badge is no longer offered. This
+        page remains at its address so existing links work. The current method is on the
+        <a href="/methodology/" class="underline hover:text-slate-900">methodology page</a>.
       </p>
     </header>
 
@@ -40,30 +42,30 @@ const affiliateWinners = [...new Set(awards.categories.map((c) => c.winner_slug)
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6 text-amber-600">
           <path d="M12 2l2.39 4.84L20 7.5l-3.91 3.81.93 5.39L12 14.27l-5.02 2.43.93-5.39L4 7.5l5.61-.66L12 2z" />
         </svg>
-        <span class="text-xs font-bold uppercase tracking-wider text-amber-700">Current edition</span>
+        <span class="text-xs font-bold uppercase tracking-wider text-amber-700">Archived edition</span>
       </div>
       <h2 class="mb-2 text-2xl font-bold text-slate-900">
         WrenchStack Awards {awards.year}
       </h2>
       <p class="mb-4 text-slate-700">
-        Winners in {awards.categories.length} categories. Published {awards.published_date}.
+        Winners in {awards.categories.length} categories. Published {publishedLabel}.
       </p>
       <a
         href={`/awards/${awards.year}/`}
         class="inline-block rounded-md bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
       >
-        See the {awards.year} winners →
+        See the archived {awards.year} list →
       </a>
     </section>
 
     <section class="mt-10 rounded-lg border border-slate-200 bg-slate-50 p-6">
-      <h2 class="mb-3 text-lg font-bold text-slate-900">How awards work at WrenchStack</h2>
+      <h2 class="mb-3 text-lg font-bold text-slate-900">How the 2026 awards were chosen</h2>
       <ul class="space-y-2 text-sm text-slate-700 leading-relaxed">
         <li>
           <strong class="text-slate-900">Editorial selection.</strong> The {awards.year} winners were chosen on {awards.published_date} by editorial judgement of fit for each category's buyer profile, informed by the WrenchStack Fit Score as it stood then, which had five factors, including third-party review ratings and feature depth. Feature depth was removed on 2026-09-01 and the ratings factor on 2026-09-30 (we could not verify the ratings), and the winners have not been re-selected since. No vendor paid for a position.
         </li>
         <li>
-          <strong class="text-slate-900">Affiliate disclosure.</strong> Each tool's review page carries an affiliate disclosure, and the <a href="/methodology/#affiliate-ledger" class="underline hover:text-slate-900">affiliate ledger</a> on the methodology page lists our affiliate status with every tool.{affiliateWinners.length > 0 ? ` Winners whose "Visit" links are tracked affiliate or referral links: ${nameList(affiliateWinners)}.` : ''} Pricing benchmark report sales are listed in the <a href="/methodology/#report-ledger" class="underline hover:text-slate-900">report ledger</a>. Whether a vendor bought a report is not an input to any listing, Fit Score, ranking, award or reputation flag, or to whether a product is listed.
+          <strong class="text-slate-900">Affiliate disclosure.</strong> Each tool's review page carries an affiliate disclosure, and the <a href="/methodology/#affiliate-ledger" class="underline hover:text-slate-900">affiliate ledger</a> on the methodology page lists our affiliate status with every tool. Pricing benchmark report sales are listed in the <a href="/methodology/#report-ledger" class="underline hover:text-slate-900">report ledger</a>. Whether a vendor bought a report is not an input to any listing, Fit Score, ranking, award or reputation flag, or to whether a product is listed.
         </li>
         <li>
           <strong class="text-slate-900">Methodology is public.</strong> See the <a href="/methodology/" class="underline hover:text-slate-900">methodology page</a> for the Fit Score factors, weights and data sources.

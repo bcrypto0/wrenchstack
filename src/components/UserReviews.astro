@@ -30,13 +30,14 @@ function formatDate(iso: string): string {
 }
 ---
 
+{toolReviews.length > 0 && (
 <section id="user-reviews" class="mb-10 scroll-mt-8">
   <div class="mb-5 flex items-baseline justify-between gap-4">
     <h2 class="text-2xl font-bold text-slate-900">User reviews</h2>
     <a href="#submit-review" class="text-sm font-semibold text-orange-600 hover:underline">Write a review →</a>
   </div>
 
-  {summary ? (
+  {summary && (
     <div class="mb-6 rounded-lg bg-slate-50 p-4">
       <div class="flex flex-wrap items-baseline gap-3">
         <span class="text-3xl font-bold text-slate-900">{summary.avg.toFixed(1)}</span>
@@ -44,19 +45,6 @@ function formatDate(iso: string): string {
         <span class="text-lg text-amber-500">{ratingStars(summary.avg)}</span>
         <span class="text-sm text-slate-600">· {summary.count} review{summary.count === 1 ? '' : 's'}{verifiedCount > 0 ? `, ${verifiedCount} from verified buyers` : ''}</span>
       </div>
-    </div>
-  ) : (
-    <div class="mb-6 rounded-lg border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
-      <p class="mb-2 font-semibold text-slate-900">No user reviews yet for {tool.name}</p>
-      <p class="mb-4 text-sm text-slate-600">
-        If you use {tool.name}, you can write the first review. Every review is moderated by hand before it is published.
-      </p>
-      <a
-        href="#submit-review"
-        class="inline-block rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600"
-      >
-        Write the first review →
-      </a>
     </div>
   )}
 
@@ -103,3 +91,4 @@ function formatDate(iso: string): string {
     </div>
   )}
 </section>
+)}

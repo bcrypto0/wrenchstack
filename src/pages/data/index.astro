@@ -1,0 +1,46 @@
+---
+// /data/ landing (trust batch 2026-11-14): the folder URL returned 404 while the
+// two dataset files below it were cited. No new figures on this page.
+import Layout from '../../layouts/Layout.astro';
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Open data', url: '/data/' },
+];
+const files = [
+  {
+    href: '/data/trades-software-pricing-2026.csv',
+    name: 'trades-software-pricing-2026.csv',
+    format: 'CSV, header on line 1',
+    holds: 'One row per field-service software platform in the directory: entry price, tier names and prices, pricing model, free-trial days, the date each price was verified, per-plan billing details where recorded, and what a quote depends on for quote-only platforms.',
+  },
+  {
+    href: '/data/trades-software-pricing-2026.json',
+    name: 'trades-software-pricing-2026.json',
+    format: 'JSON',
+    holds: 'The same rows (per-plan details as a tier_details list), plus a dataset block with a description, method notes, licence and attribution, and summary statistics computed the same way as the market report.',
+  },
+];
+---
+<Layout title="Open data: trades software pricing" description="The WrenchStack trades software pricing dataset as CSV and JSON files, free to reuse under CC BY 4.0 with attribution." breadcrumbs={breadcrumbs}>
+  <article class="mx-auto max-w-3xl px-4 py-12">
+    <header class="mb-8">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">Open data</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Trades software pricing dataset</h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">The pricing data behind the WrenchStack directory, as files you can download and reuse.</p>
+    </header>
+    <ul class="space-y-4">
+      {files.map((f) => (
+        <li class="rounded-lg border border-slate-200 bg-white p-5">
+          <a href={f.href} class="font-semibold text-orange-600 hover:underline">{f.name}</a>
+          <p class="mt-1 text-xs uppercase tracking-wider text-slate-500">{f.format} · CC BY 4.0</p>
+          <p class="mt-2 text-sm text-slate-700 leading-relaxed">{f.holds}</p>
+        </li>
+      ))}
+    </ul>
+    <section class="mt-8 space-y-3 text-sm text-slate-700 leading-relaxed">
+      <p><strong>Date.</strong> Neither file carries a generation date. Both are rebuilt from the directory each time the site is built, and each row has its own <code>pricing_verified_date</code>, the date that price was last checked on the vendor's own page.</p>
+      <p><strong>Licence.</strong> <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener" class="text-orange-600 hover:underline">Creative Commons Attribution 4.0</a>. Attribution: <em>WrenchStack (wrenchstack.com)</em>.</p>
+      <p><strong>Context.</strong> The figures are explained in the <a href="/trends-2026/" class="text-orange-600 hover:underline">2026 market report</a> (<a href="/trends-2026/#open-dataset" class="text-orange-600 hover:underline">dataset section</a>), and how prices are checked is on the <a href="/methodology/" class="text-orange-600 hover:underline">methodology page</a>.</p>
+    </section>
+  </article>
+</Layout>

@@ -1,0 +1,190 @@
+---
+// HVAC published prices (site batch part 3, 2026-11-14). Copy from
+// verification/2026-11-14/site-batch/spec_hvac.md with the review fixes in
+// review_hvac.md. Every figure comes from src/data/research/hvac-published-prices.json,
+// which records each vendor's own pricing page as read on 2026-11-14. The /hvac/
+// short answer reads the same file, so the two cannot disagree.
+import Layout from '../../../layouts/Layout.astro';
+import Byline from '../../../components/Byline.astro';
+import { tools, getTool } from '../../../lib/data';
+import hvacPrices from '../../../data/research/hvac-published-prices.json';
+
+type Vendor = (typeof hvacPrices.vendors)[number] & {
+  publishes_label?: string;
+  price_depends_on?: string;
+  six_users_monthly?: string[];
+  six_users_annual?: string[];
+  printed_or_derived?: string;
+  no_price_wording?: string;
+  no_price_summary?: string;
+  page_label?: string;
+  not_in_table_reason?: string;
+  six_users_summary?: string;
+};
+const vendors = hvacPrices.vendors as Vendor[];
+
+// Build check (review S1): the file must cover exactly the tools that have an HVAC
+// trade fit of 8 or more today, or the counts on this page and on /hvac/ would be wrong.
+const fitSlugs = tools.filter((t) => ((t.vertical_fit as Record<string, number> | undefined)?.hvac ?? 0) >= 8).map((t) => t.slug).sort();
+const fileSlugs = vendors.map((v) => v.slug).sort();
+if (fitSlugs.join(',') !== fileSlugs.join(',')) {
+  throw new Error(`hvac-published-prices.json covers ${fileSlugs.join(',')} but HVAC fit >= 8 is ${fitSlugs.join(',')}`);
+}
+
+const read = vendors.filter((v) => v.status === 'READ');
+const unreadable = vendors.filter((v) => v.status === 'UNREADABLE');
+const noPrice = read.filter((v) => v.publishes_price === false);
+const withPrice = read.filter((v) => v.publishes_price === true);
+const notInTable = vendors.filter((v) => v.in_table === false);
+const tableRows = [
+  ...withPrice.filter((v) => v.in_table),
+  ...noPrice,
+  ...unreadable,
+];
+
+const nameList = (names: string[]) =>
+  names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names.join('');
+const numWord = (n: number) => (['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'][n] ?? String(n));
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+// First screen answer (diff review visitor M6): built from the table rows, so it cannot
+// drift from the table.
+const withTotal = tableRows.filter((v) => v.publishes_price === true && v.six_users_summary && v.printed_or_derived !== 'Not computable');
+const withoutTotal = tableRows.filter((v) => v.publishes_price === true && v.six_users_summary && v.printed_or_derived === 'Not computable');
+const totalsSentence = withTotal.length
+  ? `Where the page's own figures give a total for 6: ${withTotal.map((v) => v.six_users_summary as string).join('; ')}.${withoutTotal.length ? ' ' + withoutTotal.map((v) => `${v.six_users_summary}.`).join(' ') : ''}`
+  : '';
+
+const readDate = hvacPrices.summary.read_date;
+const readLabel = new Date(readDate + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const readShort = new Date(readDate + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+
+const pageTitle = 'Which HVAC software publishes its prices, and what 6 users cost';
+const pageDescription = `We opened the pricing pages of ${vendors.length} HVAC software vendors on ${readLabel}: which show a price, what it depends on, and what 6 logins cost.`;
+const url = '/research/hvac-software-published-prices/';
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Research', url: '/research/' },
+  { name: 'HVAC software prices', url },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle,
+  description: pageDescription,
+  datePublished: '2026-11-14',
+  dateModified: '2026-11-14',
+  author: { '@type': 'Organization', name: 'WrenchStack Research', url: 'https://wrenchstack.com/research/' },
+  publisher: { '@type': 'Organization', name: 'WrenchStack', logo: { '@type': 'ImageObject', url: 'https://wrenchstack.com/logo.png' } },
+};
+
+const reviewLinks = vendors
+  .map((v) => getTool(v.slug))
+  .filter((t): t is NonNullable<typeof t> => !!t);
+
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    <header class="mb-6">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">Research · Read from vendor pages on {readLabel}</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">{pageTitle}</h1>
+      <p class="mt-4 text-lg text-slate-700 leading-relaxed">
+        On {readLabel} we opened the pricing page of each of the {vendors.length} tools in our HVAC listing with a trade fit of 8 or more out of 10. {cap(numWord(unreadable.length))} of those pages could not be read that day. Of the {read.length} we read, {numWord(noPrice.length)} show no price at all: they ask you to request pricing, get a custom quote or schedule a call. The other {numWord(withPrice.length)} show a dollar price without an account, a quiz or a sales call, and for those the table works out what a team of 6 would pay per month where the page's own figures allow it. For {numWord(notInTable.length)} of them, {nameList(notInTable.map((v) => v.name))}, the page text we could read does not label every price with its billing option, so they are not in the table. {totalsSentence}
+      </p>
+    </header>
+
+    <Byline updatedDate={readDate} />
+
+    <section class="prose prose-slate max-w-none">
+      <h2>The scenario</h2>
+      <p>
+        Six people who each need a login. We do not assume how many of them work in the office and how many in the field. Vendors count users in different ways (per user, per technician, per installed copy, or a plan with a set number of users included), so where a vendor's page can be read more than one way, the table shows each reading instead of choosing one.
+      </p>
+    </section>
+
+    <section class="not-prose my-8">
+      <div class="overflow-x-auto rounded-lg border border-slate-200">
+        <table class="w-full min-w-[60rem] text-sm">
+          <thead>
+            <tr class="border-b border-slate-200 bg-slate-50 text-left align-bottom text-slate-700">
+              <th class="px-3 py-2 font-semibold">Vendor</th>
+              <th class="px-3 py-2 font-semibold">Publishes a price</th>
+              <th class="px-3 py-2 font-semibold">What the price depends on</th>
+              <th class="px-3 py-2 font-semibold">6 users, monthly</th>
+              <th class="px-3 py-2 font-semibold">6 users, annual</th>
+              <th class="px-3 py-2 font-semibold">Printed or derived</th>
+              <th class="px-3 py-2 font-semibold">Vendor page</th>
+              <th class="px-3 py-2 font-semibold">Read on</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tableRows.map((v) => {
+              const tool = getTool(v.slug);
+              const unread = v.status === 'UNREADABLE';
+              const quoteOnly = v.publishes_price === false;
+              return (
+                <tr class="border-b border-slate-100 align-top">
+                  <td class="px-3 py-2 font-semibold text-slate-900">
+                    {tool ? <a href={`/tools/${tool.slug}/`} class="text-orange-700 hover:underline">{v.name}</a> : v.name}
+                  </td>
+                  <td class="px-3 py-2 text-slate-700">
+                    {unread ? 'Could not be read (HTTP 403)' : quoteOnly ? `No: "${v.no_price_wording}"` : v.publishes_label}
+                  </td>
+                  <td class="px-3 py-2 text-slate-700">{unread ? 'Not read' : v.price_depends_on}</td>
+                  <td class="px-3 py-2 text-slate-700">
+                    {unread ? 'No figure' : quoteOnly ? 'Not estimated' : (v.six_users_monthly ?? []).map((line, i) => (<>{i > 0 && <br />}{line}</>))}
+                  </td>
+                  <td class="px-3 py-2 text-slate-700">
+                    {unread ? 'No figure' : quoteOnly ? 'Not estimated' : (v.six_users_annual ?? []).map((line, i) => (<>{i > 0 && <br />}{line}</>))}
+                  </td>
+                  <td class="px-3 py-2 text-slate-700">{unread || quoteOnly ? 'None' : v.printed_or_derived}</td>
+                  <td class="px-3 py-2 text-slate-700">
+                    <a href={v.url_read} rel="nofollow noopener" target="_blank" class="underline hover:text-orange-700">{v.page_label}</a>
+                  </td>
+                  <td class="px-3 py-2 whitespace-nowrap text-slate-700">{unread ? `Tried ${readShort}, not readable` : readShort}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-xs text-slate-500">Rows are grouped by whether the page shows a price; the order is not a ranking.</p>
+    </section>
+
+    <section class="prose prose-slate max-w-none">
+      <h2>How to read the table</h2>
+      <p>
+        "Printed" means the vendor's page shows a plan price whose stated user allowance covers 6 logins. "Derived" means we did the arithmetic from the page's own figures; the rule is in the row. "Not computable" means the page's own figures do not give a total for 6. "None" means the page shows no price to work from. Monthly billing is the price when you pay month to month. Annual billing is the monthly equivalent when you pay for a year; some vendors charge that year in one payment at sign up. Figures are list prices before sales tax, payment processing fees, add ons, onboarding fees and introductory offers.
+      </p>
+
+      <h2>Vendors that show no price</h2>
+      <p>
+        The {numWord(noPrice.length)} vendors marked "No" in the table ask for a call or a quote; we do not estimate a price for them.
+      </p>
+
+      <h2>Pages we could not read or confirm on {readLabel}</h2>
+      <p>
+        The pricing pages of {nameList(unreadable.map((v) => v.name))} returned an access error (HTTP 403) to our page reader that day. They are not counted in the figures above, and the table shows no price for them.
+        The pricing pages of {nameList(notInTable.map((v) => v.name))} could be read and show prices, but the page text we could read does not label every price with its billing option (Jobber offers no commitment, a 1 year commitment and annual billing; Housecall Pro has an annual and a monthly toggle). We print no 6 user figure for them and leave them out of the table; both count among the {withPrice.length} vendors that show a price. Their review pages and our HVAC page show plan prices from earlier checks, each dated on the page; we did not reuse those figures here because the billing labels were not confirmed on {readLabel}.
+      </p>
+
+      <h2>Method</h2>
+      <p>
+        Which tools: the {vendors.length} tools in our HVAC listing with a trade fit of 8 or more out of 10 on {readLabel}. Trade fit is our editorial judgment of how well a tool serves the trade; the <a href="/methodology/">methodology</a> explains it. How: we opened each vendor's own pricing page on {readLabel}, without creating an account, answering a quiz or speaking to sales. We did not test the software. Quote only vendors are not estimated. Housecall Pro also offers a plan quiz; we did not answer it. Prices on vendor pages change, so check the vendor's page before you buy. No vendor pays for inclusion or placement.
+      </p>
+
+      <h2>Related</h2>
+      <ul>
+        <li><a href="/hvac/">HVAC software compared</a></li>
+        <li>
+          Reviews: {reviewLinks.map((t, i) => (<>{i > 0 && ', '}<a href={`/tools/${t.slug}/`}>{t.name}</a></>))}
+        </li>
+      </ul>
+    </section>
+  </article>
+</Layout>

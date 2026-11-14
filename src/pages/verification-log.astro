@@ -62,20 +62,25 @@ all.sort((a, b) => b.date.localeCompare(a.date));
 
 const buildDate = new Date();
 const buildISO = buildDate.toISOString().slice(0, 10);
+// Calendar days from the build's UTC date, as directoryVerifiedWithinDays counts them,
+// so this page and the home page print the same 30 day figure (2026-11-14).
 const daysAgo = (iso: string) =>
-  Math.max(0, Math.round((buildDate.getTime() - new Date(iso + 'T00:00:00Z').getTime()) / 86400000));
+  Math.max(0, (Date.parse(buildISO + 'T00:00:00Z') - Date.parse(iso + 'T00:00:00Z')) / 86400000);
 
 const within30 = all.filter((d) => daysAgo(d.date) <= 30).length;
 const within90 = all.filter((d) => daysAgo(d.date) <= 90).length;
 const newest = all.slice(0, 20);
 
-// Month histogram (last 8 months with any activity)
+// Month histogram (last 8 months with at least MIN_MONTH entries). Months with a
+// handful of stragglers are left out (2026-11-14 site batch); each entry's own page
+// still shows its date.
 const byMonth = new Map<string, number>();
 for (const d of all) {
   const m = d.date.slice(0, 7);
   byMonth.set(m, (byMonth.get(m) ?? 0) + 1);
 }
-const months = [...byMonth.entries()].sort((a, b) => b[0].localeCompare(a[0])).slice(0, 8);
+const MIN_MONTH = 10;
+const months = [...byMonth.entries()].filter(([, n]) => n >= MIN_MONTH).sort((a, b) => b[0].localeCompare(a[0])).slice(0, 8);
 const monthLabel = (ym: string) => {
   const [y, m] = ym.split('-').map(Number);
   return new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
@@ -141,7 +146,7 @@ const breadcrumbs = [
         </tbody>
       </table>
       <p class="mt-2 text-xs text-slate-500">
-        Count of vendors whose current verification date falls in each month. A vendor re-verified later moves to the newer month, so old months drain as the directory refreshes; that is the point.
+        Count of vendors whose current verification date falls in each month. A vendor re-verified later moves to the newer month, so old months drain as the directory refreshes; that is the point. Months with fewer than {MIN_MONTH} vendors are left out of the table; each entry's own page shows its date.
       </p>
     </div>
 

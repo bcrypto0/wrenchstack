@@ -71,7 +71,6 @@ const SITEWIDE_DATA_PAGES = new Set([
   '/verification-log/',
   '/reputation-flags/',
   '/methodology/',
-  '/awards/2026/',
 ]);
 
 export function lastmodFor(urlStr) {

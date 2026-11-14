@@ -13,17 +13,6 @@ import {
   bankingProviders,
 } from '../../lib/data';
 import { intlVendorIndex } from '../../lib/intl';
-import awardsData from '../../data/awards.json';
-
-// Which vendors may use the 2026 Pick badge. The picker rewrites BOTH snippets,
-// so without this a listed vendor who is not an editorial pick could pick their
-// name and copy the restricted badge in good faith. The rules block above says
-// picks only; this makes the page enforce it rather than merely state it.
-const pickWinnerSlugs = new Set(
-  (awardsData.categories as Array<{ winner_slug?: string }>)
-    .map((c) => c.winner_slug)
-    .filter((x): x is string => Boolean(x))
-);
 
 // Vendor picker, added 2026-09-04.
 //
@@ -46,8 +35,8 @@ const intlCertUrls = new Set(
       .map((v) => `https://wrenchstack.com/${code}/${v.slug}/`);
   })
 );
-const vendorIndex: Array<{ name: string; url: string }> = [
-  ...tools.map((t) => ({ name: t.name, url: `https://wrenchstack.com/tools/${t.slug}/`, pick: pickWinnerSlugs.has(t.slug) })),
+const vendorIndexRaw: Array<{ name: string; url: string }> = [
+  ...tools.map((t) => ({ name: t.name, url: `https://wrenchstack.com/tools/${t.slug}/` })),
   ...leadGenPlatforms.map((v) => ({ name: v.name, url: `https://wrenchstack.com/lead-gen/${v.slug}/` })),
   ...insuranceProviders.map((v) => ({ name: v.name, url: `https://wrenchstack.com/insurance/${v.slug}/` })),
   ...payrollServices.map((v) => ({ name: v.name, url: `https://wrenchstack.com/payroll/${v.slug}/` })),
@@ -58,24 +47,36 @@ const vendorIndex: Array<{ name: string; url: string }> = [
   ...accountingSoftware.map((v) => ({ name: v.name, url: `https://wrenchstack.com/accounting/${v.slug}/` })),
   ...bankingProviders.map((v) => ({ name: v.name, url: `https://wrenchstack.com/banking/${v.slug}/` })),
   ...intlVendorIndex().filter((v) => !intlCertUrls.has(v.url)),
-].sort((a, b) => a.name.localeCompare(b.name));
+];
+// Picker clean up (diff review visitor S7): one entry per URL, a country code printed once
+// ("AroFlo (NZ) (NZ)" came from a name that already ends in its code), and a name that
+// appears on two pages gets its section, so the two options can be told apart.
+const SECTION_LABELS: Record<string, string> = { tools: 'software', 'lead-gen': 'lead generation', insurance: 'insurance', payroll: 'payroll', agencies: 'marketing agency', 'ai-tools': 'AI tools', payments: 'payments', financing: 'financing', accounting: 'accounting', banking: 'banking' };
+const seenUrls = new Set<string>();
+const deduped = vendorIndexRaw
+  .filter((v) => (seenUrls.has(v.url) ? false : (seenUrls.add(v.url), true)))
+  .map((v) => ({ ...v, name: v.name.replace(/ \(([A-Z]{2})\) \(\1\)$/, ' ($1)') }));
+const nameCounts = new Map<string, number>();
+for (const v of deduped) nameCounts.set(v.name, (nameCounts.get(v.name) ?? 0) + 1);
+const vendorIndex = deduped
+  .map((v) => {
+    if ((nameCounts.get(v.name) ?? 0) < 2) return v;
+    const section = new URL(v.url).pathname.split('/')[1] ?? '';
+    return SECTION_LABELS[section] ? { ...v, name: `${v.name} (${SECTION_LABELS[section]})` } : v;
+  })
+  .sort((a, b) => a.name.localeCompare(b.name));
 
-const pageTitle = 'Embeddable Badges: Rated on WrenchStack';
-const pageDescription = 'Free embeddable badges for vendors listed or selected on WrenchStack. Independent: no vendor pays to be listed, and displaying a badge does not change a Fit Score or tier. Copy-paste HTML, links back to your independent review.';
+const pageTitle = 'Embeddable badge: Listed on WrenchStack';
+const pageDescription = 'A free embeddable badge for vendors listed on WrenchStack. No vendor pays to be listed, and displaying the badge does not change a Fit Score or tier. Copy-paste HTML that links to your WrenchStack page.';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'Badges', url: '/badges/' },
 ];
 
-const ratedEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noopener">
-  <img src="https://wrenchstack.com/badges/rated-on-wrenchstack.svg"
-       alt="Rated on WrenchStack, independent review" width="240" height="64" />
-</a>`;
-
-const pickEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noopener">
-  <img src="https://wrenchstack.com/badges/wrenchstack-2026-pick.svg"
-       alt="WrenchStack 2026 Pick" width="240" height="64" />
+const listedEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noopener">
+  <img src="https://wrenchstack.com/badges/listed-on-wrenchstack.svg"
+       alt="Listed on WrenchStack" width="240" height="64" />
 </a>`;
 ---
 
@@ -85,10 +86,10 @@ const pickEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noope
     <header class="mb-10">
       <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">For vendors</p>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
-        Embeddable badges
+        Embeddable badge
       </h1>
       <p class="mt-4 text-lg text-slate-600 leading-relaxed">
-        Listed or selected on WrenchStack? Show it. These badges are free to embed on your site, link back to your independent review, and tell your customers a third party assessed you, not that you bought a placement.
+        Listed on WrenchStack? This badge is free to embed on your site and can link to your WrenchStack page (pick your product below). It shows where you are listed; it is not a rating, and no vendor pays to be listed.
       </p>
     </header>
 
@@ -98,7 +99,6 @@ const pickEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noope
         <li class="flex gap-2"><span class="text-emerald-600">✓</span> <span><strong>Free for any vendor we list.</strong> Listing and badge display carry no charge.</span></li>
         <li class="flex gap-2"><span class="text-emerald-600">✓</span> <span><strong>Displaying a badge does not change your Fit Score or tier.</strong> Both are worked out under the <a href="/methodology/" class="text-orange-600 hover:underline">methodology</a> the same way whether or not you embed anything.</span></li>
         <li class="flex gap-2"><span class="text-emerald-600">✓</span> <span><strong>Link it to your review.</strong> Point the badge at your own WrenchStack review page (see below) so visitors can read the full, independent write-up.</span></li>
-        <li class="flex gap-2"><span class="text-rose-500">✗</span> <span><strong>Use the "2026 Pick" badge only if you're an <a href="/awards/2026/" class="text-orange-600 hover:underline">editorial pick</a>.</strong> The "Rated on WrenchStack" badge is for any listed vendor.</span></li>
       </ul>
     </section>
 
@@ -113,44 +113,25 @@ const pickEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noope
         id="vendor-picker"
         class="mt-3 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-orange-500 focus:outline-none"
       >
-        <option value="https://wrenchstack.com/">Not listed yet, or link to the homepage</option>
-        {vendorIndex.map((v) => <option value={v.url} data-pick={v.pick ? 'yes' : 'no'}>{v.name}</option>)}
+        <option value="https://wrenchstack.com/">Link to the WrenchStack homepage</option>
+        {vendorIndex.map((v) => <option value={v.url}>{v.name}</option>)}
       </select>
       <p class="mt-3 text-xs text-slate-500">
         {vendorIndex.length} vendors listed. Missing? <a href="/for-vendors/" class="text-orange-600 hover:underline">Send us your product</a>.
       </p>
     </section>
 
-    <!-- Badge 1 -->
     <section class="mb-8">
-      <h2 class="mb-4 text-2xl font-bold text-slate-900">"Rated on WrenchStack": any listed vendor</h2>
+      <h2 class="mb-4 text-2xl font-bold text-slate-900">"Listed on WrenchStack": any listed vendor</h2>
       <div class="rounded-lg border border-slate-200 bg-white p-6">
         <div class="mb-5 flex items-center justify-center rounded-md bg-slate-50 py-8">
-          <img src="/badges/rated-on-wrenchstack.svg" alt="Rated on WrenchStack, independent review" width="240" height="64" />
+          <img src="/badges/listed-on-wrenchstack.svg" alt="Listed on WrenchStack" width="240" height="64" />
         </div>
         <p class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Embed code</p>
-        <pre class="overflow-x-auto rounded-md bg-slate-900 p-4 text-xs leading-relaxed text-slate-100"><code id="rated-code">{ratedEmbed}</code></pre>
+        <pre class="overflow-x-auto rounded-md bg-slate-900 p-4 text-xs leading-relaxed text-slate-100"><code id="listed-code">{listedEmbed}</code></pre>
         <button
-          onclick="navigator.clipboard.writeText(document.getElementById('rated-code').textContent); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy embed code', 1500)"
+          onclick="navigator.clipboard.writeText(document.getElementById('listed-code').textContent); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy embed code', 1500)"
           class="mt-3 rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600">Copy embed code</button>
-      </div>
-    </section>
-
-    <!-- Badge 2 -->
-    <section id="pick-badge-section" class="mb-10 transition-opacity">
-      <h2 class="mb-4 text-2xl font-bold text-slate-900">"WrenchStack 2026 Pick": editorial picks only</h2>
-      <div class="rounded-lg border border-slate-200 bg-white p-6">
-        <div class="mb-5 flex items-center justify-center rounded-md bg-slate-50 py-8">
-          <img src="/badges/wrenchstack-2026-pick.svg" alt="WrenchStack 2026 Pick" width="240" height="64" />
-        </div>
-        <p class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Embed code</p>
-        <pre class="overflow-x-auto rounded-md bg-slate-900 p-4 text-xs leading-relaxed text-slate-100"><code id="pick-code">{pickEmbed}</code></pre>
-        <button
-          id="pick-copy-btn"
-          onclick="if (this.disabled) return; navigator.clipboard.writeText(document.getElementById('pick-code').textContent); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy embed code', 1500)"
-          class="mt-3 rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600">Copy embed code</button>
-        <p id="pick-badge-note" hidden class="mt-3 rounded-md bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-900"></p>
-        <p class="mt-3 text-xs text-slate-500">Won a category in the <a href="/awards/2026/" class="underline">2026 Awards</a>? You're cleared to use this one.</p>
       </div>
     </section>
 
@@ -179,66 +160,19 @@ const pickEmbed = `<a href="https://wrenchstack.com/" target="_blank" rel="noope
   </article>
 
   <script is:inline>
-    // Rewrites both embed snippets to the picked vendor review URL. The copy
-    // buttons read the same textContent, so they copy the rewritten code.
-    //
-    // The 2026 Pick badge is restricted to editorial picks, and the picker would
-    // otherwise hand a non-pick vendor working code for it the moment they chose
-    // their own name. Picking a vendor who did not win a category now dims that
-    // section and disables its copy button, so the page enforces the rule the
-    // rules block states.
+    // Rewrites the embed snippet to the picked vendor page.
     (function () {
       var NL = String.fromCharCode(10);
       var picker = document.getElementById('vendor-picker');
-      if (!picker) return;
-      var pickSection = document.getElementById('pick-badge-section');
-      var pickNote = document.getElementById('pick-badge-note');
-      var pickCopy = document.getElementById('pick-copy-btn');
-      var targets = [
-        {
-          el: document.getElementById('rated-code'),
-          file: 'rated-on-wrenchstack.svg',
-          alt: 'Rated on WrenchStack, independent review',
-        },
-        {
-          el: document.getElementById('pick-code'),
-          file: 'wrenchstack-2026-pick.svg',
-          alt: 'WrenchStack 2026 Pick',
-        },
-      ];
-      function render(url) {
-        targets.forEach(function (t) {
-          if (!t.el) return;
-          t.el.textContent =
-            '<a href="' + url + '" target="_blank" rel="noopener">' + NL +
-            '  <img src="https://wrenchstack.com/badges/' + t.file + '"' + NL +
-            '       alt="' + t.alt + '" width="240" height="64" />' + NL +
-            '</a>';
-        });
-      }
-      function gatePick() {
-        if (!pickSection) return;
-        var opt = picker.options[picker.selectedIndex];
-        var chose = picker.value !== 'https://wrenchstack.com/';
-        var eligible = !chose || (opt && opt.getAttribute('data-pick') === 'yes');
-        pickSection.style.opacity = eligible ? '' : '0.45';
-        if (pickCopy) {
-          pickCopy.disabled = !eligible;
-          pickCopy.style.cursor = eligible ? '' : 'not-allowed';
-        }
-        if (pickNote) {
-          pickNote.hidden = eligible;
-          if (!eligible && opt) {
-            pickNote.textContent =
-              opt.textContent + ' is not a 2026 editorial pick, so this badge is not one to use. The Rated on WrenchStack badge above is.';
-          }
-        }
-      }
+      var code = document.getElementById('listed-code');
+      if (!picker || !code) return;
       picker.addEventListener('change', function () {
-        render(picker.value);
-        gatePick();
+        code.textContent =
+          '<a href="' + picker.value + '" target="_blank" rel="noopener">' + NL +
+          '  <img src="https://wrenchstack.com/badges/listed-on-wrenchstack.svg"' + NL +
+          '       alt="Listed on WrenchStack" width="240" height="64" />' + NL +
+          '</a>';
       });
-      gatePick();
     })();
   </script>
 </Layout>

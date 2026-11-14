@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import { tools, verticals } from '../lib/data';
-import { isInternationalPath, isCoreGatedPath } from '../lib/compare-index.mjs';
+import { isNoindexedForAllEngines, isGoogleVisible } from '../lib/compare-index.mjs';
 
 export interface BreadcrumbItem {
   name: string;
@@ -32,11 +32,26 @@ const { title, description, canonical, ogImage, noindex = false, breadcrumbs, la
 // market landings, so no international page can be added later that misses it.
 // `follow` rather than `nofollow`: stop indexing these, but still let Google
 // traverse the links out of them to the US pages that can rank.
-const intlGated = isInternationalPath(Astro.url.pathname);
-// Core index only (2026-10-14 indexing diagnosis): templated sections, tool
-// alternatives pages and non-software vendor entries are noindex,follow.
-const coreGated = isCoreGatedPath(Astro.url.pathname);
-const robotsContent = noindex ? 'noindex,nofollow' : (intlGated || coreGated) ? 'noindex,follow' : null;
+// International, core-gated and archived pages are noindex,follow (see compare-index.mjs).
+const allEnginesGated = isNoindexedForAllEngines(Astro.url.pathname);
+const robotsContent = noindex ? 'noindex,nofollow' : allEnginesGated ? 'noindex,follow' : null;
+// Google-only gate (2026-11-14): a page that no rule above noindexes, and that
+// is not on GOOGLE_VISIBLE_PATHS in compare-index.mjs, stays indexable for every
+// other engine but is hidden from Google. Robots-noindexed pages get no extra tag.
+const googlebotContent = !robotsContent && !isGoogleVisible(Astro.url.pathname) ? 'noindex,follow' : null;
+// hreflang only between indexable pages (trust batch). A noindexed page emits none,
+// a noindexed target is dropped, and a set that collapses to one URL is dropped.
+// Google-only hidden pages and targets count as noindexed here, since hreflang is
+// a signal Google reads.
+const pageNoindexed = robotsContent !== null || googlebotContent !== null;
+const hreflangLinks = (() => {
+  if (pageNoindexed) return [];
+  const kept = alternateUrls.filter((a) => {
+    const p = new URL(a.href, Astro.site).pathname;
+    return !isNoindexedForAllEngines(p) && isGoogleVisible(p);
+  });
+  return new Set(kept.map((a) => a.href)).size >= 2 ? kept : [];
+})();
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
 // PNG, not SVG: LinkedIn/X/Facebook do not render SVG og:images (the card shows blank).
 const ogImageUrl = ogImage ?? new URL('/og-default.png', Astro.site).toString();
@@ -51,9 +66,19 @@ const fullTitle = title.includes('WrenchStack')
     : title;
 // Meta descriptions over ~160 chars get hard-truncated by Google mid-word;
 // clamp to a clean word boundary so the snippet always reads well.
-const metaDescription = description.length > 160
-  ? `${description.slice(0, 157).replace(/\s+\S*$/, '')}…`
-  : description;
+// Since 2026-11-14 (diff review visitor S5) a long description is cut at the last full
+// sentence that fits, without an ellipsis; only a description with no sentence end
+// between 70 and 160 characters falls back to the word cut.
+function clampDescription(d: string): string {
+  if (d.length <= 160) return d;
+  const re = /(?<!\b(?:vs|Inc|etc|e\.g|i\.e|St|Co|No|U\.S))[.!?](?=\s)/g;
+  let cut = -1;
+  for (const m of d.slice(0, 161).matchAll(re)) {
+    if (m.index !== undefined && m.index + 1 <= 160 && m.index + 1 >= 70) cut = m.index + 1;
+  }
+  return cut > 0 ? d.slice(0, cut) : `${d.slice(0, 157).replace(/\s+\S*$/, '')}…`;
+}
+const metaDescription = clampDescription(description);
 const isHomepage = Astro.url.pathname === '/';
 
 // Country/region switcher: detect the active market from the URL path.
@@ -154,8 +179,13 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
     <title>{fullTitle}</title>
     <meta name="description" content={metaDescription} />
     <link rel="canonical" href={canonicalUrl} />
-    {alternateUrls.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+    {hreflangLinks.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
     {robotsContent && <meta name="robots" content={robotsContent} />}
+    {googlebotContent && <meta name="googlebot" content={googlebotContent} />}
+    {/* Apple says Applebot follows Googlebot instructions that do not name Applebot; its page
+        states this for robots.txt and is silent on meta tags (read 2026-11-14). This tag keeps
+        Applebot from reading the Google only noindex as its own. */}
+    {googlebotContent && <meta name="applebot" content="index,follow" />}
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />
@@ -322,7 +352,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
               <li><a href="/glossary/" class="hover:text-slate-900">Glossary</a></li>
               <li><a href="/trends-2026/" class="hover:text-slate-900">2026 Market Report</a></li>
               <li><a href="/research/" class="hover:text-slate-900">Research &amp; data</a></li>
-              <li><a href="/awards/2026/" class="hover:text-slate-900">2026 Awards</a></li>
+              <li><a href="/data/" class="hover:text-slate-900">Open data</a></li>
               <li><a href="/state/" class="hover:text-slate-900">By state</a></li>
               <li><a href="/uk/" class="hover:text-slate-900">🇬🇧 UK directory</a></li>
               <li><a href="/ca/" class="hover:text-slate-900">🇨🇦 Canada directory</a></li>

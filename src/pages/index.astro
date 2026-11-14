@@ -4,7 +4,7 @@ import { EN_MARKET_HREFLANG, intlVendorOnlyCount, intlCertificationCount, intlMa
 import categories from '../data/categories.json';
 import toolsData from '../data/tools.json';
 import featuresData from '../data/features.json';
-import { tools, toolsForVertical, freshnessStats, directoryVerifiedWithinDays, daysSinceVerified, formatPrice, getTool, awards, usVendorLists, totalReputationFlags, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, aiTools, paymentProcessors, financingProviders, accountingSoftware, bankingProviders } from '../lib/data';
+import { tools, toolsForVertical, freshnessStats, directoryVerifiedWithinDays, daysSinceVerified, formatPrice, getTool, usVendorLists, totalReputationFlags, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, aiTools, paymentProcessors, financingProviders, accountingSoftware, bankingProviders } from '../lib/data';
 import FreshnessBadge from '../components/FreshnessBadge.astro';
 
 const verticals = categories.verticals;
@@ -22,16 +22,10 @@ const adjacentCount = leadGenCount + insuranceCount + payrollCount + agencyCount
 // International 'certification' entries (licensing bodies, tax offices, regulators,
 // codes) are not vendors, so "vendors tracked" leaves them out (2026-10-01).
 const totalVendorCount = toolCount + adjacentCount + intlVendorOnlyCount;
-// Computed (2026-10-01): the stats row hard-coded "10 US categories", the awards
-// card "18 categories" and the feature link "All 20 features".
+// Computed (2026-10-01): the stats row hard-coded "10 US categories" and the
+// feature link "All 20 features".
 const usCategoryCount = usVendorLists().length;
 const flagCount = totalReputationFlags();
-const awardCount = awards.categories.length;
-const awardsPublished = new Date(awards.published_date + 'T00:00:00Z').toLocaleDateString('en-US', {
-  year: 'numeric',
-  month: 'long',
-  timeZone: 'UTC',
-});
 // The hero's 30-day count is computed at build time, so it is anchored to the build
 // date (2026-10-01): "in the last 30 days" was true only on the day of the deploy.
 const buildDateLabel = new Date().toLocaleDateString('en-US', {
@@ -115,7 +109,7 @@ function featureToUrl(slug: string): string {
 
 <Layout
   title="WrenchStack | The trades vendor directory: software, lead-gen, insurance, payroll, marketing"
-  description={`Independent reviews of ${totalVendorCount} vendors: ${toolCount} field-service platforms, ${adjacentCount} adjacent US vendors (insurance, payroll, lead-gen, payments, financing, banking, accounting, agencies, AI), and ${intlVendorOnlyCount} vendors across ${intlMarketCount} international markets. Sourced reputation flags. Dated prices from vendor pages. No lead-gen sales calls.`}
+  description="Independent research on vendors for US trades businesses: field-service software, payments, insurance, payroll and more, with dated vendor prices."
   alternateUrls={EN_MARKET_HREFLANG}
 >
   <section class="bg-gradient-to-b from-white to-slate-50">
@@ -326,7 +320,7 @@ function featureToUrl(slug: string): string {
       <p class="mb-8 max-w-3xl text-slate-600">
         WrenchStack compares vendors for trades businesses in {usCategoryCount} US categories, with the same independence rules and reputation-warning standards in each. We name regulator orders and settlements with their sources, and we list carriers we earn nothing from on the same terms as the rest.
       </p>
-      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div class="grid gap-4 md:grid-cols-2">
         <div class="rounded-lg border border-rose-200 bg-rose-50 p-5">
           <div class="mb-2 text-xs font-bold uppercase tracking-wider text-rose-700">⚠ Reputation warnings, with sources</div>
           <p class="text-sm text-rose-900 leading-relaxed">
@@ -349,12 +343,6 @@ function featureToUrl(slug: string): string {
           <div class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-700">🛠 Decision tools</div>
           <p class="text-sm text-slate-700 leading-relaxed">
             Filter the <a href="/tools/" class="text-orange-600 hover:underline">software directory</a> by trade, price, team size and QuickBooks or Stripe support. Or use the <a href="/quiz/" class="text-orange-600 hover:underline">matching quiz</a>, the <a href="/roi-calculator/" class="text-orange-600 hover:underline">ROI calculator</a> and the <a href="/cost-of-switch/" class="text-orange-600 hover:underline">cost-of-switch calculator</a>.
-          </p>
-        </div>
-        <div class="rounded-lg border border-slate-200 bg-white p-5">
-          <div class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-700">🏆 WrenchStack Awards 2026</div>
-          <p class="text-sm text-slate-700 leading-relaxed">
-            Editorial designations across {awardCount} categories, published {awardsPublished}, when the Fit Score still included third-party review ratings; the winners have not been re-selected since. <a href="/awards/2026/" class="text-orange-600 hover:underline">No vendor paid for placement</a>.
           </p>
         </div>
       </div>

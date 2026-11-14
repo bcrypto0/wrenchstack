@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, verticals, rankToolsForVertical, verticalFitScore, wrenchStackScore } from '../lib/data';
+import { tools, verticals, rankToolsForVertical, verticalFitScore, wrenchStackScore, softwareAffiliateLinkSentence } from '../lib/data';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -12,7 +12,6 @@ const breadcrumbs = [
 // them; both are replaced by counts from the data. "Active" uses the same test as the
 // methodology ledger: a tracked http affiliate_url.
 const isActive = (t: (typeof tools)[number]) => t.affiliate_url.startsWith('http');
-const activeCount = tools.filter(isActive).length;
 // A trade counts when none of the tools tied for first place on its trade page
 // (same trade fit and same Fit Score as the first-ranked tool) has a tracked link.
 const tradesTopUnaffiliated = verticals.filter((v) => {
@@ -40,8 +39,7 @@ const tradesTopUnaffiliated = verticals.filter((v) => {
 
     <p>
       WrenchStack may earn a commission or a referral reward when readers sign up with a vendor through a
-      tracked link on our pages. Of the {tools.length} software tools in the directory, {activeCount} have a tracked affiliate
-      or referral link; the <a href="/methodology/#affiliate-ledger">per-vendor ledger</a> lists the status of every one.
+      tracked link on our pages. {softwareAffiliateLinkSentence()} The <a href="/methodology/#affiliate-ledger">per-vendor ledger</a> lists the status of every one.
       Reviews in the other categories state their affiliate status on the page. The vendor pays the
       commission or reward; we add no charge of our own.
     </p>

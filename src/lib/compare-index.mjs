@@ -144,6 +144,22 @@ export function isCoreGatedPath(pathname) {
   return true;
 }
 
+// --- Archived pages (added 2026-11-14, trust batch) -------------------------
+// Kept so outside links still work; not in site navigation; noindex,follow for
+// every engine and out of the sitemap. Undo: remove the path.
+export const ARCHIVED_PATHS = new Set(['/awards/', '/awards/2026/']);
+
+export function isArchivedPath(pathname) {
+  let p = String(pathname || '/');
+  if (!p.endsWith('/')) p += '/';
+  return ARCHIVED_PATHS.has(p);
+}
+
+/** True when the page carries robots noindex, i.e. no engine may index it. */
+export function isNoindexedForAllEngines(pathname) {
+  return isInternationalPath(pathname) || isCoreGatedPath(pathname) || isArchivedPath(pathname);
+}
+
 // Sitemap filter: keep every non-comparison URL; keep a /compare/<a>-vs-<b>/
 // URL only when it is indexable; drop gated intl markets' head-to-heads.
 export function shouldKeepInSitemap(urlStr) {
@@ -153,6 +169,8 @@ export function shouldKeepInSitemap(urlStr) {
   if (isInternationalPath(path)) return false;
   // Core index only (2026-10-14 indexing diagnosis).
   if (isCoreGatedPath(path)) return false;
+  // Archived pages (2026-11-14 trust batch).
+  if (isArchivedPath(path)) return false;
   // State hubs and state-by-trade pages: allowlist only.
   const stateVertical = path.match(/^\/state\/([^/]+)\/([^/]+)\/$/);
   if (stateVertical) return isStatePageIndexable(stateVertical[1], stateVertical[2]);
@@ -160,4 +178,69 @@ export function shouldKeepInSitemap(urlStr) {
   const m = path.match(/^\/compare\/(.+)-vs-(.+)\/$/);
   if (!m) return true;
   return isComparisonIndexable(m[1], m[2]);
+}
+
+// --- Google-visible set (added 2026-11-14, site and search review) -----------
+// Search Console on 10 Nov 2026: 1 page indexed (the home page); the US core has
+// been "Crawled, currently not indexed" since late May. The 14 Nov review
+// (docs/site-and-money-review-2026-11-14.md, docs/site-audit-2026-11-14.json,
+// "search" findings 1, 3 and 6) reads this as a site-level judgement of mass
+// produced content, not a domain-age delay. Owner approved 2026-11-14.
+//
+// So Google is shown only the pages below: trust and utility pages, the
+// editorial and data pages no template repeats, and 12 tool reviews with a high
+// share of text unique to the page (8 word shingles, 10 Nov build, measured in
+// verification/2026-11-14/site-batch/spec_index.md; below rank 9 the cut is
+// within measurement noise, and /tools/responsibid/ (rank 13) takes the place
+// of /tools/contractor-plus/ (rank 3), whose main links are affiliate links).
+//
+// Every other page that is indexable today STAYS indexable for every other
+// engine and for AI crawlers: Layout.astro adds
+//   <meta name="googlebot" content="noindex,follow">
+// only when the page has no robots noindex of its own and is not on this list.
+// The general robots meta, the sitemap, llms.txt and the search index do NOT
+// read this list. Vendors and AI assistants find the trade pages through other
+// engines, and that flow must not be cut.
+//
+// Single source of truth: Layout.astro and scripts/index-states.mjs read it.
+// Entries are lowercase paths with a leading and a trailing slash ('/' is home).
+//
+// To release one page to Google: add its path here and rebuild.
+// To undo the whole gate: set GOOGLE_ONLY_GATE to false (every page that is not
+// robots-noindexed becomes visible to Google again), rebuild, push.
+export const GOOGLE_ONLY_GATE = true;
+
+export const GOOGLE_VISIBLE_PATHS = new Set([
+  // Trust and utility (12)
+  '/', '/about/', '/methodology/', '/editorial-standards/', '/verification-log/',
+  '/reputation-flags/', '/contact/', '/disclosure/', '/privacy/', '/terms/',
+  '/for-vendors/', '/for-vendors/listing-requirements/',
+  // Editorial and data (4)
+  '/cost-of-switch/', '/trends-2026/', '/research/hvac-software-published-prices/', '/research/index/',
+  // Tool reviews, high unique share (12)
+  '/tools/safetyculture/', '/tools/solea/', '/tools/responsibid/', '/tools/knowhow/',
+  '/tools/albi/', '/tools/coolfront/', '/tools/moversdesk/', '/tools/calday/',
+  '/tools/fasite/', '/tools/companycam/', '/tools/estimate-rocket/', '/tools/gorilladesk/',
+]);
+
+// Fail the build on a malformed entry.
+for (const p of GOOGLE_VISIBLE_PATHS) {
+  if (!/^\/(?:[a-z0-9-]+\/)*$/.test(p)) {
+    throw new Error(`GOOGLE_VISIBLE_PATHS: bad entry "${p}" (lowercase, leading and trailing slash)`);
+  }
+}
+
+/** Normalise a request or build path to the form used in GOOGLE_VISIBLE_PATHS. */
+export function toListedPath(pathname) {
+  let p = String(pathname || '/').split(/[?#]/)[0];
+  if (!p.startsWith('/')) p = '/' + p;
+  p = p.replace(/\/{2,}/g, '/').replace(/\/index\.html$/i, '/');
+  if (!p.endsWith('/') && !/\.[a-z0-9]+$/i.test(p)) p += '/';
+  return p.toLowerCase();
+}
+
+/** True when Google may index this page (it still needs no robots noindex). */
+export function isGoogleVisible(pathname) {
+  if (!GOOGLE_ONLY_GATE) return true;
+  return GOOGLE_VISIBLE_PATHS.has(toListedPath(pathname));
 }

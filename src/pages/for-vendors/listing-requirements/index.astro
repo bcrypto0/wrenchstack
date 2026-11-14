@@ -1,0 +1,91 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+const pageTitle = 'What we need before we can list your product';
+const pageDescription = 'Our two listing checks (who runs the product, with a matching registration, and a sign of use), plus category fit and pricing, with examples. Listings are free.';
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'For vendors', url: '/for-vendors/' },
+  { name: 'Listing requirements', url: '/for-vendors/listing-requirements/' },
+];
+---
+
+<Layout title={pageTitle} description={pageDescription} breadcrumbs={breadcrumbs}>
+  <article class="mx-auto max-w-4xl px-4 py-12">
+    {/* Copy from verification/2026-11-14/site-batch/spec_requirements.md with the fixes in
+        review_requirements.md. Items 1 to 3 restate for-vendors #listing-rules and
+        docs/decisions.md rules 2, 5 and 6; items 4 and 5 restate the submission form and
+        /methodology/ (category definition, quote-only pricing, vendor price claims). See the
+        support table in the spec. */}
+    <header class="mb-10">
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">For vendors</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        What we need before we can list your product
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+        This page is for vendors seeking a WrenchStack listing. Inclusion is editorial and free.
+      </p>
+    </header>
+
+    <section class="mb-10 rounded-lg border border-slate-200 bg-white p-6">
+      <p class="text-sm text-slate-700 leading-relaxed">
+        Items 1 and 2 make up our check on who runs the product, and item 3 is our check for a sign of use. For products we evaluate from 6 October 2026, a product that does not pass both checks is held, not listed. Items 4 and 5 are what we read for every product we evaluate.
+        Send what you have for items 1, 2 and 4 to <a href="mailto:partners@wrenchstack.com" class="text-orange-600 hover:underline">partners@wrenchstack.com</a>, or reply to our email if we wrote to you first. For item 3, the trade business sends its own confirmation to the same address, using the wording below.
+      </p>
+      <h2 class="mt-5 mb-3 text-lg font-bold text-slate-900">The checklist</h2>
+      <ol class="list-decimal space-y-3 pl-5 text-sm text-slate-700 leading-relaxed">
+        <li>
+          <strong>Who runs the product.</strong> Your terms give the operator's full legal name, its legal form (such as LLC or Inc.) and the law that governs the terms.
+          <span class="mt-1 block text-slate-500"><em>Example:</em> "Example Field Software LLC. These terms are governed by Texas law."</span>
+        </li>
+        <li>
+          <strong>A registration we can match.</strong> A public company register shows exactly one active registration that matches. To help us find it, tell us where it is registered and its number. A person trading under their own name passes items 1 and 2.
+          <span class="mt-1 block text-slate-500"><em>Example:</em> "Registered in Texas, file number [number]."</span>
+        </li>
+        <li>
+          <strong>A sign of use.</strong> A trade business that is not owned by or connected to you confirms in writing, from its own business email address or domain, that it uses the product. A public review that names the business that wrote it also counts. An install count or a number of ratings does not count on its own.
+          <span class="mt-1 block text-slate-500"><em>Example:</em> the email below, sent from office@smithroofing.example.</span>
+        </li>
+        <li>
+          <strong>Category fit.</strong> The product serves trades businesses and fits one of our existing categories: <a href="/tools/" class="text-orange-600 hover:underline">software</a>, <a href="/payments/" class="text-orange-600 hover:underline">payments</a>, <a href="/accounting/" class="text-orange-600 hover:underline">accounting</a>, <a href="/banking/" class="text-orange-600 hover:underline">business banking</a>, <a href="/financing/" class="text-orange-600 hover:underline">consumer financing</a>, <a href="/lead-gen/" class="text-orange-600 hover:underline">lead generation</a>, <a href="/insurance/" class="text-orange-600 hover:underline">insurance</a>, <a href="/payroll/" class="text-orange-600 hover:underline">payroll</a>, <a href="/agencies/" class="text-orange-600 hover:underline">marketing agencies</a> or <a href="/ai-tools/" class="text-orange-600 hover:underline">AI tools</a>. Tell us which countries it is offered in.
+          <span class="mt-1 block text-slate-500"><em>Example:</em> "Offered to plumbing companies in the US and Canada."</span>
+        </li>
+        <li>
+          <strong>Pricing.</strong> We read prices from your public pricing page and date each one. If you publish no price, a listing says so and counts the product as quote only. Emailed prices that differ from your public page are not used.
+          <span class="mt-1 block text-slate-500"><em>Example:</em> a public pricing page showing each plan's price and contents.</span>
+        </li>
+      </ol>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-3 text-lg font-bold text-slate-900">The confirmation email</h2>
+      <p class="mb-3 text-sm text-slate-700 leading-relaxed">
+        Sent to <a href="mailto:partners@wrenchstack.com" class="text-orange-600 hover:underline">partners@wrenchstack.com</a> from the business's own email address or domain:
+      </p>
+      <pre class="whitespace-pre-wrap rounded-md bg-slate-50 p-4 text-sm text-slate-800">Our business is [business name], [website].
+We use [product] in our business.
+We are not owned by or connected to [vendor].</pre>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-3 text-lg font-bold text-slate-900">What happens next</h2>
+      <p class="text-sm text-slate-700 leading-relaxed">
+        We reply in writing, by email, with a fit assessment and any clarifying questions. An evaluation can end with or without a listing. A listing shows pros and cons, with concerns cited to documented sources. Item 3 asks for a sign of use, not for reviews.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-3 text-lg font-bold text-slate-900">What we do not do</h2>
+      <ul class="list-disc space-y-2 pl-5 text-sm text-slate-700 leading-relaxed">
+        <li>Take payment for inclusion, ranking, score, removing cons or softening reputation flags.</li>
+        <li>Let a vendor review or approve a listing before it publishes.</li>
+      </ul>
+    </section>
+
+    <p class="text-sm">
+      <a href="/methodology/#listing-rules" class="mr-4 text-orange-600 hover:underline">The two checks on the methodology page.</a>
+      <a href="/for-vendors/#submit" class="text-orange-600 hover:underline">Submit your product.</a>
+    </p>
+  </article>
+</Layout>

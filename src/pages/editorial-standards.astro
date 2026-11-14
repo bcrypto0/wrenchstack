@@ -1,17 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, verticals } from '../lib/data';
+import { tools, verticals, softwareAffiliateLinkSentence } from '../lib/data';
 
-// Date of the last edit to this page's text (2026-10-08: referral rewards named beside
+// Date of the last edit to this page's text (2026-11-14: affiliate sentence shared with
+// /disclosure/ and /methodology/, reviews wording, "Who is accountable" reworded.
+// 2026-10-08: referral rewards named beside
 // commissions; third-party estimate sentence replaced. 2026-10-05: pricing benchmark reports
 // named in the opening, the green box and the money section; report ledger; "Who is
-// accountable" rewritten for a one-person operation. Earlier, 2026-10-01: Fit Score
+// accountable" rewritten so the safeguards rest on the method. Earlier, 2026-10-01: Fit Score
 // scope, flag standard, corrections wording). Set to the deploy date when this ships.
-const lastUpdated = 'October 8, 2026';
+const lastUpdated = 'November 14, 2026';
 const toolCount = tools.length;
 const verticalCount = verticals.length;
-// Software tools with a tracked affiliate link (same test as the methodology ledger).
-const activeAffiliateCount = tools.filter((t) => t.affiliate_url.startsWith('http')).length;
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -70,7 +70,7 @@ const breadcrumbs = [
     <ul>
       <li><strong>Pricing is dated.</strong> Every US vendor entry carries a <em>verified date</em>, and software tool pages mark a price verified more than 90 days ago with an amber or red freshness marker.</li>
       <li><strong>Primary sources win.</strong> When a vendor's claim contradicts its own public page, we publish what the public page says until the page changes.</li>
-      <li><strong>No fabricated signals.</strong> We do not invent review counts, ratings, or testimonials. Where we have no first-party reviews for a tool, we say so rather than manufacture them.</li>
+      <li><strong>No fabricated signals.</strong> We do not invent review counts, ratings, or testimonials. Where we have no first-party reviews for a tool, we show none rather than invent them.</li>
       <li><strong>Quote-only pricing is labeled.</strong> When a software vendor publishes no price, the listing says "Custom quote"; in the other categories the listing says in words that the price is quoted or not published. Pricing notes carry no third-party price estimates.</li>
     </ul>
 
@@ -96,8 +96,8 @@ const breadcrumbs = [
 
     <h2>Independence and how we make money</h2>
     <p>
-      When you sign up with some vendors through our links, we may earn a commission or a referral reward: of the {toolCount}
-      software tools, {activeAffiliateCount} have a tracked affiliate or referral link. Commissions and referral rewards do
+      When you sign up with some vendors through our links, we may earn a commission or a referral reward.
+      {softwareAffiliateLinkSentence()} Commissions and referral rewards do
       not influence what we publish: the same Fit Score formula (for software), the same tier rules, the
       same reputation standards and the same editorial scrutiny apply to every vendor, affiliate partner
       or not. See our
@@ -119,9 +119,8 @@ const breadcrumbs = [
 
     <h2>Who is accountable</h2>
     <p>
-      WrenchStack is run by one person, who does the research, the scoring, the vendor correspondence and
-      the sale of pricing benchmark reports. Because those roles are not held by different people, the
-      safeguards are in the method: the Fit Score is a published formula applied to vendors' own public
+      The research, the scoring, the vendor correspondence and the sale of pricing benchmark reports
+      follow one written method, so the safeguards are in the method: the Fit Score is a published formula applied to vendors' own public
       pages; every report buyer is listed in the <a href="/methodology/#report-ledger">report ledger</a> with
       its Fit Score, rank, award and reputation flag when it ordered and today; and no report is quoted,
       invoiced or sold to a vendor while an evaluation, correction, pricing question, dispute or

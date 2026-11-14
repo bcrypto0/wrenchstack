@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { tools, verticals, verticalToUrl, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, aiTools, paymentProcessors, financingProviders, accountingSoftware, bankingProviders } from '../lib/data';
+import { tools, verticals, verticalToUrl, leadGenPlatforms, insuranceProviders, payrollServices, marketingAgencies, aiTools, paymentProcessors, financingProviders, accountingSoftware, bankingProviders, awards, softwareAffiliateLinkCounts, softwareAffiliateLinkSentence } from '../lib/data';
 import { reportRows, reportAsOf } from '../lib/reportLedger';
 
 // Report announcements (offers/pricing-benchmark/decisions/DECISIONS.md, owner decision of
@@ -126,11 +126,19 @@ const counts = {
   Pending: toolStatuses.filter((t) => t.status === 'Pending').length,
   None: toolStatuses.filter((t) => t.status === 'None').length,
 };
+// The shared affiliate sentence (also on /disclosure/ and /editorial-standards/) must agree
+// with the ledger tiles below (trust batch 2026-11-14).
+const linkCounts = softwareAffiliateLinkCounts();
+if (linkCounts.active !== counts.Active || linkCounts.unconfirmed !== counts.Unconfirmed) {
+  throw new Error('methodology: affiliate sentence and ledger tiles disagree');
+}
+const fmtDate = (d: string) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const awardsArchivedLabel = fmtDate(awards.archived_date ?? awards.published_date);
 ---
 
 <Layout
   title={`WrenchStack Fit Score™ Methodology v${METHODOLOGY_VERSION}: How we rank trades vendors`}
-  description="WrenchStack's published, versioned methodology for trades vendors across 10 categories: the WrenchStack Fit Score™ (three weighted factors) for field-service software and rule-based tiers for payments, accounting, payroll, insurance, financing, banking, lead-gen, marketing and AI. Independence statement. Per-vendor affiliate ledger and report ledger."
+  description="Our published, versioned method: the Fit Score for field-service software, rule-based tiers for other categories, our independence statement and ledgers."
   breadcrumbs={breadcrumbs}
 >
   <article class="mx-auto max-w-3xl px-4 py-12 prose prose-slate">
@@ -192,7 +200,7 @@ const counts = {
         <li><strong>Weights are now 60/20/20.</strong> Vertical fit 60%, pricing transparency 20%, integration coverage 20%. Every score was recomputed with the new weights.</li>
         <li><strong>Tool pages link to G2 and Capterra instead.</strong> Software tool pages no longer show G2 or Capterra numbers, and rankings, comparisons and award text no longer cite them. Each tool page links to G2 and Capterra so readers can check current reviews at the source. Reviews submitted directly to WrenchStack are unchanged.</li>
         <li><strong>Trade fit is checked against the vendor's own pages.</strong> For every tool we read who the vendor says it serves. A trade the vendor shows it does not serve is removed; a trade it only names in a list is capped at 7; a trade it never names is capped at 5; a product built for one trade scores 10; and trades a vendor covers with a dedicated page were added at 7 (6 if only listed). Where a vendor's site could not be read, the previous values stand until it can be checked. UpKeep, MaintainX and Limble are maintenance software (CMMS) for teams that look after their own equipment and buildings; their own sites name no contractor trade, so they are no longer ranked on trade pages and are compared with each other instead.</li>
-        <li><strong>The 2026 awards predate this change.</strong> They were selected while the ratings factor was part of the score and have not been re-selected.</li>
+        <li><strong>The 2026 awards predate this change.</strong> They were selected while the ratings factor was part of the score and were not re-selected. They were archived on {awardsArchivedLabel}: they are no longer shown on reviews, and the archive stays at <a href="/awards/2026/">/awards/2026/</a>.</li>
       </ul>
     </div>
 
@@ -266,9 +274,9 @@ const counts = {
       <li><strong>Discovery</strong>: vendor identified through editorial research or vendor self-submission. Initial fit assessment against category definition.</li>
       <li><strong>Data collection</strong>: pricing tiers verified directly from vendor pricing page with date stamp; feature and integration lists compiled from vendor documentation and product pages.</li>
       <li><strong>Reputation check</strong>: regulator actions (FTC, CFPB, SEC, state attorneys general), court records, BBB profiles and the vendor's own terms. We do not use forum or social-media sentiment, and a warning we cannot trace to a readable source is removed.</li>
-      <li><strong>Scoring</strong>: for field-service software, the WrenchStack Fit Score™ is computed using published weights; reputation_flag attached if structural concerns warrant warning to readers.</li>
+      <li><strong>Scoring</strong>: for field-service software, the WrenchStack Fit Score™ is computed using published weights; reputation flag attached if structural concerns warrant warning to readers.</li>
       <li><strong>Editorial draft</strong>: review written with structured pros and cons, FAQs and best-fit framing.</li>
-      <li><strong>Publication</strong>: review goes live with verified_date stamp. Vendor profile becomes part of the directory.</li>
+      <li><strong>Publication</strong>: review goes live with the date it was verified. Vendor profile becomes part of the directory.</li>
       <li><strong>Refresh</strong>: pricing re-verified and reputation warnings re-checked against their sources; each US entry shows the date of its latest check.</li>
     </ol>
 
@@ -277,7 +285,7 @@ const counts = {
     <h2 id="listing-rules">Two checks before a new listing</h2>
 
     <p>
-      For products we evaluate from 6 October 2026, both checks below must pass before we list the product. A product that does not pass both is held, not listed. Listings published before that date were decided under our earlier rule, which still applies: having no independent reviews is shown as a con on the listing, not a reason to hold it. The first check asks for a sign of use, not for reviews.
+      For products we evaluate from 6 October 2026, both checks below must pass before we list the product. A product that does not pass both is held, not listed. Listings published before that date were decided under our earlier rule, which still applies: having no independent reviews is shown as a con on the listing, not a reason to hold it. Neither check requires reviews.
     </p>
 
     <ul>
@@ -285,11 +293,15 @@ const counts = {
       <li><strong>Who runs the product.</strong> The vendor's terms give the operator's full legal name, its legal form (such as LLC or Inc.) and the law that governs the terms, and a public company register shows exactly one active registration that matches. The terms do not have to state where the company was formed when the register shows it. A person trading under their own name also passes this check.</li>
     </ul>
 
+    <p>
+      What to send us for each check, with examples, is on <a href="/for-vendors/listing-requirements/">what we need before we can list your product</a>.
+    </p>
+
     <h2>Our independence statement</h2>
 
     <div class="not-prose mb-6 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-5">
       <p class="text-sm text-emerald-900 leading-relaxed m-0">
-        <strong class="text-emerald-900">WrenchStack rankings are not for sale.</strong> Vendors cannot pay to be included in the directory, pay to receive a higher WrenchStack Fit Score™, pay to win awards, pay to soften reputation flags, or pay to remove cons from a review. Affiliate relationships are disclosed in the per-vendor ledger below and have no effect on rankings. Pricing benchmark reports sold to vendors are listed in the report ledger below. Whether a vendor bought a report is not an input to any listing, Fit Score, ranking, award or reputation flag, or to whether a product is listed. The methodology applies identically whether or not we earn a commission or a referral reward on a vendor, and whether or not it bought a report.
+        <strong class="text-emerald-900">WrenchStack rankings are not for sale.</strong> Vendors cannot pay to be included in the directory, pay to receive a higher WrenchStack Fit Score™, pay for a badge, pay to soften reputation flags, or pay to remove cons from a review. Affiliate relationships are disclosed in the per-vendor ledger below and have no effect on rankings. Pricing benchmark reports sold to vendors are listed in the report ledger below. Whether a vendor bought a report is not an input to any listing, Fit Score, ranking, award or reputation flag, or to whether a product is listed. The methodology applies identically whether or not we earn a commission or a referral reward on a vendor, and whether or not it bought a report.
       </p>
     </div>
 
@@ -383,6 +395,8 @@ const counts = {
     <p>
       Full transparency. Below is the affiliate status of every software tool in the directory. Vendors in every other category (lead-gen, insurance, payroll, marketing agencies, AI tools, payments, financing, accounting, and business banking) follow the same independence rules, with vendor-specific affiliate disclosure on each review page.
     </p>
+
+    <p>{softwareAffiliateLinkSentence()}</p>
 
     <ul class="not-prose grid grid-cols-2 gap-3 text-sm md:grid-cols-5">
       <li class="rounded-lg bg-emerald-50 px-3 py-2 ring-1 ring-emerald-200">

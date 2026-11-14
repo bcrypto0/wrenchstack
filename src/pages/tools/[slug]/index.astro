@@ -59,11 +59,10 @@ import Byline from '../../../components/Byline.astro';
 import WrenchScore from '../../../components/WrenchScore.astro';
 import ToolLogo from '../../../components/ToolLogo.astro';
 import FreshnessBadge from '../../../components/FreshnessBadge.astro';
-import AwardBadge from '../../../components/AwardBadge.astro';
 import UserReviews from '../../../components/UserReviews.astro';
 import ReviewSubmissionForm from '../../../components/ReviewSubmissionForm.astro';
 import AffiliateDisclosure from '../../../components/AffiliateDisclosure.astro';
-import { awardsForTool, awards, userRatingForTool, reviewsForTool } from '../../../lib/data';
+import { userRatingForTool, reviewsForTool } from '../../../lib/data';
 import { reportRowsForTool } from '../../../lib/reportLedger';
 import MissingFromList from '../../../components/MissingFromList.astro';
 import SourceReviews from '../../../components/SourceReviews.astro';
@@ -87,11 +86,10 @@ const scoreBreakdown = wrenchStackScoreBreakdown(tool);
 // time existence check so tools without a screenshot fall back gracefully.
 const hasScreenshot = fs.existsSync(path.join(process.cwd(), 'public', 'screenshots', `${tool.slug}.webp`));
 const vendorHost = (() => { try { return new URL(tool.vendor_url).hostname.replace(/^www\./, ''); } catch { return tool.vendor_url; } })();
-const toolAwards = awardsForTool(tool.slug);
-const wins = toolAwards.filter((a) => a.kind === 'winner');
-const honorableMentions = toolAwards.filter((a) => a.kind === 'honorable_mention');
 const userRating = userRatingForTool(tool.slug);
 const userReviews = reviewsForTool(tool.slug);
+// The review block and form render only for a tool with an approved review (trust batch 2026-11-14).
+const showUserReviews = userReviews.length > 0;
 const startingPrice = tool.pricing.starting_at_usd;
 const hasPublicPricing = startingPrice !== null;
 const isFree = startingPrice === 0;
@@ -644,8 +642,11 @@ const implementationText = hasCustomImpl ? tool.implementation_notes : implement
 // a script on 2026-10-01 (markup and expressions stripped): 115 words in this template
 // and 313 in the shared components it renders (SourceReviews 29, AffiliateDisclosure 50,
 // UserReviews 5, ReviewSubmissionForm 193, MissingFromList 25, Byline 11). Recount them
-// when that text changes.
-const FIXED_WORDS = 115 + 313;
+// when that text changes. 2026-11-14 (trust batch): the awards section and its jump link
+// were deleted (11 template words out, so 104), and UserReviews, ReviewSubmissionForm and
+// the "Reviews" jump link render only when the tool has an approved review, so their
+// 199 words count only then.
+const FIXED_WORDS = 104 + 313 - (showUserReviews ? 0 : 5 + 193 + 1);
 const wc = (s?: string | null) => (s ?? '').split(/\s+/).filter(Boolean).length;
 const slugWords = (list: string[]) => list.reduce((n, s) => n + s.split('_').filter(Boolean).length, 0);
 const pageWords = FIXED_WORDS
@@ -681,8 +682,8 @@ const productSchema = {
   }),
   // Only emit aggregateRating from REAL first-party reviews. Emitting a
   // fabricated reviewCount (e.g. a baseline of 50 with zero real reviews) is a
-  // Google structured-data violation. reviews.json is currently empty, so no
-  // aggregateRating is emitted until genuine reviews exist. Third-party review
+  // Google structured-data violation. No aggregateRating is emitted for a tool
+  // without an approved review in reviews.json. Third-party review
   // scores are not shown (2026-09-30); the page links to the review sites instead.
   ...(userRating && {
     aggregateRating: {
@@ -780,13 +781,6 @@ const breadcrumbs = [
 
       <div class="mt-4 flex flex-wrap items-center gap-2">
         <FreshnessBadge tool={tool} variant="full" showDate={true} />
-        {wins.map((a) => (
-          <AwardBadge category={a.category} kind="winner" variant="pill" hideYear={false} />
-        ))}
-        {honorableMentions.length > 0 && wins.length === 0 && (
-          // If no wins, surface the top honorable mention in the hero
-          <AwardBadge category={honorableMentions[0].category} kind="honorable_mention" variant="pill" hideYear={false} />
-        )}
       </div>
 
       <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-600">
@@ -944,14 +938,12 @@ const breadcrumbs = [
         <a href="#implementation" data-jump-link="implementation" class="jump-link text-orange-600 hover:underline">Implementation</a>
         <span class="text-slate-300">·</span>
         <a href="#alternatives" data-jump-link="alternatives" class="jump-link text-orange-600 hover:underline">Alternatives</a>
-        {toolAwards.length > 0 && (
+        {showUserReviews && (
           <>
             <span class="text-slate-300">·</span>
-            <a href="#awards" data-jump-link="awards" class="jump-link text-orange-600 hover:underline">Awards</a>
+            <a href="#user-reviews" data-jump-link="user-reviews" class="jump-link text-orange-600 hover:underline">Reviews</a>
           </>
         )}
-        <span class="text-slate-300">·</span>
-        <a href="#user-reviews" data-jump-link="user-reviews" class="jump-link text-orange-600 hover:underline">Reviews</a>
         <span class="text-slate-300">·</span>
         <a href="#faqs" data-jump-link="faqs" class="jump-link text-orange-600 hover:underline">FAQs</a>
       </div>
@@ -1226,23 +1218,6 @@ const breadcrumbs = [
       </div>
     </section>
 
-    {toolAwards.length > 0 && (
-      <section id="awards" class="mb-10 scroll-mt-8">
-        <h2 class="mb-2 text-2xl font-bold text-slate-900">WrenchStack Awards</h2>
-        <p class="mb-5 text-sm text-slate-500">
-          Editorial recognitions {tool.name} received in our {awards.year} awards. <a href={`/awards/${awards.year}/`} class="underline hover:text-slate-700">See full methodology →</a>
-        </p>
-        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {wins.map((a) => (
-            <AwardBadge category={a.category} kind="winner" variant="card" />
-          ))}
-          {honorableMentions.map((a) => (
-            <AwardBadge category={a.category} kind="honorable_mention" variant="card" />
-          ))}
-        </div>
-      </section>
-    )}
-
     {smartAlts.length > 0 && (
       <section id="alternatives" class="mb-10 scroll-mt-8">
         <h2 class="mb-2 text-2xl font-bold text-slate-900">Alternatives to {tool.name}</h2>
@@ -1275,9 +1250,12 @@ const breadcrumbs = [
       </section>
     )}
 
-    <UserReviews tool={tool} />
-
-    <ReviewSubmissionForm tool={tool} />
+    {showUserReviews && (
+      <>
+        <UserReviews tool={tool} />
+        <ReviewSubmissionForm tool={tool} />
+      </>
+    )}
 
     <section id="faqs" class="mb-10 scroll-mt-8">
       <h2 class="mb-6 text-2xl font-bold text-slate-900">Frequently asked questions</h2>

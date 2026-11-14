@@ -215,6 +215,29 @@ export function toolsForVertical(verticalSlug: string): Tool[] {
   return tools.filter((t) => t.verticals.includes(verticalSlug));
 }
 
+/** Tracked affiliate or referral links on software tools, split the way the methodology ledger splits them. */
+export function softwareAffiliateLinkCounts() {
+  const tracked = tools.filter((t) => t.affiliate_url.startsWith('http'));
+  const unconfirmed = tracked.filter((t) => t.affiliate_status === 'unconfirmed');
+  return {
+    total: tools.length,
+    tracked: tracked.length,
+    active: tracked.length - unconfirmed.length,
+    unconfirmed: unconfirmed.length,
+    unconfirmedNames: unconfirmed.map((t) => t.name),
+  };
+}
+
+/** The one sentence /disclosure/, /methodology/ and /editorial-standards/ print. */
+export function softwareAffiliateLinkSentence(): string {
+  const c = softwareAffiliateLinkCounts();
+  const has = c.tracked === 1 ? 'has' : 'have';
+  const split = c.unconfirmed === 0
+    ? (c.tracked === 1 ? ', which is active' : ', all active')
+    : `: ${c.active} active and ${c.unconfirmed} unconfirmed (${c.unconfirmedNames.join(', ')})`;
+  return `Of the ${c.total} software tools in the directory, ${c.tracked} ${has} a tracked affiliate or referral link${split}.`;
+}
+
 export function getTool(slug: string): Tool | undefined {
   return tools.find((t) => t.slug === slug);
 }
@@ -290,7 +313,7 @@ export function monthlyPriceShort(t: Tool, withTerm = true): string {
   const p = t.pricing.starting_at_usd;
   if (p === null) return '';
   const term = withTerm && entryTerms(t)?.term === 'annual' ? ', billed annually' : '';
-  return (priceScaling(t) === 'per_user' ? `$${formatUsd(p)}${seatPriceSuffix(t)}` : `$${p}/mo`) + term;
+  return (priceScaling(t) === 'per_user' ? `$${formatUsd(p)}${seatPriceSuffix(t)}` : `$${p.toLocaleString('en-US')}/mo`) + term;
 }
 
 export interface ScoreFactor {
@@ -1020,7 +1043,9 @@ export interface FreshnessStats {
  *  Matches the aggregation on /verification-log/ so the homepage trust strip
  *  and the log can never disagree (added 2026-08-27). */
 export function directoryVerifiedWithinDays(days: number): number {
-  const cutoff = Date.now() - days * 86400000;
+  // Calendar days from today's UTC date, as /verification-log/ counts them (2026-11-14).
+  const today = Date.parse(new Date().toISOString().slice(0, 10) + 'T00:00:00Z');
+  const cutoff = today - days * 86400000;
   const dates: (string | undefined)[] = [
     ...tools.map((t) => t.pricing.verified_date),
     ...aiTools.map((a) => a.verified_date),
@@ -1234,9 +1259,8 @@ function linkifyGlossary(html: string): string {
   return result;
 }
 
-// --- WrenchStack Awards 2026 -------------------------------------------------
-// Editorial awards (no payment for placement). See /awards/2026/ and
-// methodology page for the rubric.
+// --- WrenchStack Awards 2026 (archived) --------------------------------------
+// Chosen 2026-05-28 under an earlier Fit Score; archived, shown only on /awards/ and /awards/2026/.
 
 export interface AwardCategory {
   slug: string;
@@ -1250,11 +1274,16 @@ export interface AwardCategory {
 export interface AwardsData {
   year: number;
   published_date: string;
+  archived?: boolean;
+  archived_date?: string;
   methodology_summary: string;
   categories: AwardCategory[];
 }
 
 export const awards: AwardsData = awardsData as AwardsData;
+
+/** True once the 2026 awards are archived: no award is shown outside /awards/. */
+export const awardsArchived = awards.archived === true;
 
 export interface ToolAward {
   category: AwardCategory;
@@ -1279,10 +1308,15 @@ export function winsForTool(toolSlug: string): AwardCategory[] {
   return awards.categories.filter((c) => c.winner_slug === toolSlug);
 }
 
+/** Awards to show on reviews and ledgers; empty once archived. */
+export function currentAwardsForTool(toolSlug: string): ToolAward[] {
+  return awardsArchived ? [] : awardsForTool(toolSlug);
+}
+
 // --- User reviews ------------------------------------------------------------
-// Submissions arrive at bilal@wrenchstack.com via Web3Forms (or similar)
-// and are added to reviews.json after manual moderation. Display empty state
-// when no approved reviews exist for a tool yet.
+// Submissions arrive via Web3Forms. Approved reviews are added to reviews.json
+// after manual moderation. Tool pages show the review block and form only for a
+// tool with at least one approved review; there is no empty state.
 
 export interface UserReview {
   id: string;

@@ -9,7 +9,7 @@ import {
   verticals,
   rankToolsForVertical,
   wrenchStackScore,
-  awardsForTool,
+  currentAwardsForTool,
   reputationFlagGroups,
   type Tool,
 } from './data';
@@ -65,7 +65,7 @@ export const reportAsOf = utcDate(ledger.as_of, 'as_of').toLocaleDateString('en-
 });
 
 function awardLabel(slug: string): string {
-  const a = awardsForTool(slug);
+  const a = currentAwardsForTool(slug);
   if (a.length === 0) return 'no award';
   return a
     .map((x) => (x.kind === 'winner' ? x.category.label : `${x.category.label}, honorable mention`))
