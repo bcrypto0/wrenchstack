@@ -126,6 +126,11 @@ function trialPhrase(t: Tool): string | null {
   if (t.pricing.starting_at_usd === 0) return 'a free tier';
   return null;
 }
+// A missing free_trial_days means "not recorded", not "none": several pricing notes
+// describe a trial with no published length (Projul's fit page and terms name one,
+// 2026-11-14). Only a recorded 0 lets a sentence say a tool has no free trial, the
+// rule the tool page already follows.
+const recordsNoTrial = (t: Tool) => t.pricing.free_trial_days === 0;
 
 // --- VERTICAL-FIT WINNER PER SHARED VERTICAL ---
 // Computed up here because the differences list, decision matrix, pros and verdict
@@ -232,7 +237,7 @@ if (aHasTrial !== bHasTrial) {
   const t = aHasTrial ? a : b;
   const other = otherOf(t);
   differences.push(
-    `**Free trial:** ${t.name} offers a ${t.pricing.free_trial_days}-day free trial. ${other.pricing.starting_at_usd === 0 ? `${other.name} has a free tier instead.` : `Our data records no free trial for ${other.name}.`}`
+    `**Free trial:** ${t.name} offers a ${t.pricing.free_trial_days}-day free trial. ${other.pricing.starting_at_usd === 0 ? `${other.name} has a free tier instead.` : recordsNoTrial(other) ? `Our data records no free trial for ${other.name}.` : `We have not recorded a free trial for ${other.name}; see its pricing note.`}`
   );
 }
 
@@ -283,7 +288,7 @@ function getDecisionMatrix(): { pickA: string[]; pickB: string[] } {
   // Free trial
   for (const t of [a, b]) {
     const other = otherOf(t);
-    if ((t.pricing.free_trial_days ?? 0) > 0 && !((other.pricing.free_trial_days ?? 0) > 0) && other.pricing.starting_at_usd !== 0) {
+    if ((t.pricing.free_trial_days ?? 0) > 0 && recordsNoTrial(other) && other.pricing.starting_at_usd !== 0) {
       side(t).push(`**You want to try before buying**: ${t.name} offers a ${t.pricing.free_trial_days}-day free trial; our data records none for ${other.name}`);
     }
   }
@@ -381,7 +386,15 @@ function topTierPhrase(t: Tool): string {
     : u?.per === 'account'
     ? u.wholeCompany ? 'a month for the company' : `a month for the account${u.users ? ` (${u.users})` : ''}`
     : 'a month';
-  return `; its top published tier, ${t.pricing.tiers[n - 1]}, is $${formatUsd(top)} ${unit}`;
+  // Say which billing term a monthly figure is on when the tier's row records it
+  // (2026-11-14: Projul's Pro, "$1199 a month for the company", is the annual-billing
+  // rate; paid monthly it is $1,599).
+  const row = (t.pricing.tier_details ?? []).find((d) => d.name === t.pricing.tiers[n - 1]);
+  const near = (v: number | null | undefined) => typeof v === 'number' && Math.abs(v - top) < 0.5;
+  const term = u?.period === 'year' || !row || near(row.price_monthly_billed) || !near(row.price_annual_billed)
+    ? ''
+    : `, billed annually${typeof row.price_monthly_billed === 'number' ? ` ($${formatUsd(row.price_monthly_billed)} billed monthly)` : ''}`;
+  return `; its top published tier, ${t.pricing.tiers[n - 1]}, is $${formatUsd(top)} ${unit}${term}`;
 }
 
 // Name the entry tier when its published price is the starting price (annual_per_user
@@ -518,7 +531,7 @@ function getCons(t: Tool, otherT: Tool): string[] {
 
   const tHasTrial = (t.pricing.free_trial_days ?? 0) > 0;
   const otherHasTrial = (otherT.pricing.free_trial_days ?? 0) > 0;
-  if (otherHasTrial && !tHasTrial && t.pricing.starting_at_usd !== 0) cons.push(`No free trial in our data (${otherT.name} offers ${otherT.pricing.free_trial_days} days)`);
+  if (otherHasTrial && !tHasTrial && recordsNoTrial(t) && t.pricing.starting_at_usd !== 0) cons.push(`No free trial in our data (${otherT.name} offers ${otherT.pricing.free_trial_days} days)`);
 
   // Not when the tool's own weaknesses already say so (2026-11-03: SmartMoving's list said
   // "No published pricing, so you need a demo and a quote" and then this line).
@@ -592,7 +605,7 @@ const qbSentence = (t: Tool) =>
   qbList(t).length ? `${t.name} lists ${qbList(t).join(' and ')}.` : `Our entry for ${t.name} lists no QuickBooks integration.`;
 const trialAnswer = (t: Tool) => {
   const p = trialPhrase(t);
-  return p ? `${t.name}: ${p}.` : `${t.name}: no free trial in our data.`;
+  return p ? `${t.name}: ${p}.` : recordsNoTrial(t) ? `${t.name}: no free trial in our data.` : `${t.name}: we have not recorded a free trial; see its pricing note.`;
 };
 
 const faqs = [
@@ -725,7 +738,7 @@ const breadcrumbs = [
               <div class="flex justify-between">
                 <dt class="text-slate-500">Free trial</dt>
                 <dd class="font-semibold text-slate-900">
-                  {t.pricing.free_trial_days && t.pricing.free_trial_days > 0 ? `${t.pricing.free_trial_days} days` : t.pricing.starting_at_usd === 0 ? 'Free tier instead' : 'None listed'}
+                  {t.pricing.free_trial_days && t.pricing.free_trial_days > 0 ? `${t.pricing.free_trial_days} days` : t.pricing.starting_at_usd === 0 ? 'Free tier instead' : recordsNoTrial(t) ? 'None listed' : 'Not recorded'}
                 </dd>
               </div>
             </dl>

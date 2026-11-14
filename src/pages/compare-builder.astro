@@ -36,6 +36,8 @@ const builderTools = tools.map((t) => ({
   formattedPrice: formatPrice(t),
   priceLabel: entryPriceLabel(t),
   freeTrialDays: t.pricing.free_trial_days ?? 0,
+  // false when the entry has no free_trial_days: "not recorded", not "none" (2026-11-14).
+  trialRecorded: t.pricing.free_trial_days != null,
   // Only the date ships: the age and the green/amber/red tier are worked out in the
   // browser when the page is viewed. Computed at build time, "Verified 2 days ago" was
   // false the day after deploy (2026-10-01).
@@ -303,7 +305,7 @@ const builderTools = tools.map((t) => ({
           },
           {
             label: 'Free trial',
-            cells: cols.map((t) => t.freeTrialDays > 0 ? `<span class="text-emerald-700">${t.freeTrialDays}-day trial</span>` : (t.hasFreeTier ? '<span class="text-emerald-700">Free tier</span>' : '<span class="text-slate-400">None listed</span>')),
+            cells: cols.map((t) => t.freeTrialDays > 0 ? `<span class="text-emerald-700">${t.freeTrialDays}-day trial</span>` : (t.hasFreeTier ? '<span class="text-emerald-700">Free tier</span>' : `<span class="text-slate-400">${t.trialRecorded ? 'None listed' : 'Not recorded'}</span>`)),
           },
           {
             label: 'Pricing freshness',

@@ -204,7 +204,7 @@ function getDecisionReasonsFor(t: Tool): string[] {
     reasons.push(`**Google Local Services Ads bring in your calls**: ${t.name} lists a Google Local Services Ads integration; our ${noGls.length === 1 ? 'entry' : 'entries'} for ${listNames(noGls)} ${noGls.length === 1 ? 'does' : 'do'} not`);
   }
 
-  if (hasTrial(t) && others.every((o) => !hasTrial(o) && o.pricing.starting_at_usd !== 0)) {
+  if (hasTrial(t) && others.every((o) => o.pricing.free_trial_days === 0 && o.pricing.starting_at_usd !== 0)) {
     reasons.push(`**You want to try before buying**: ${t.name} offers a ${t.pricing.free_trial_days}-day free trial; our data records none for ${listNames(others)}`);
   }
 
@@ -346,7 +346,7 @@ const breadcrumbs = [
               </div>
               <div class="flex justify-between">
                 <dt class="text-slate-500">Free trial</dt>
-                <dd class="font-semibold text-slate-900">{hasTrial(t) ? `${t.pricing.free_trial_days} days` : t.pricing.starting_at_usd === 0 ? 'Free tier instead' : 'None listed'}</dd>
+                <dd class="font-semibold text-slate-900">{hasTrial(t) ? `${t.pricing.free_trial_days} days` : t.pricing.starting_at_usd === 0 ? 'Free tier instead' : t.pricing.free_trial_days === 0 ? 'None listed' : 'Not recorded'}</dd>
               </div>
             </dl>
             <a

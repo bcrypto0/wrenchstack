@@ -2125,9 +2125,13 @@ export function seatUnit(t: Tool): string {
 
 /** A tier price for display: whole dollars as they are ("49"), anything else with two
  *  decimals ("35.10", "29.99"). Until 2026-10-05 tier tables printed OptimoRoute's
- *  $35.10 and $44.10 as "$35.1" and "$44.1". */
+ *  $35.10 and $44.10 as "$35.1" and "$44.1". Thousands get a comma since 2026-11-14
+ *  (Projul's Pro tier printed "$1199" beside "$1,599 billed monthly"). Display only:
+ *  never feed the result to structured data or arithmetic. */
 export function formatUsd(p: number): string {
-  return Number.isInteger(p) ? String(p) : p.toFixed(2);
+  return Number.isInteger(p)
+    ? p.toLocaleString('en-US')
+    : p.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 /** The entry price with how it scales, for prose: "$47 per user a month",

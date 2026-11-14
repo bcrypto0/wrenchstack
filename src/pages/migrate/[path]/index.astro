@@ -145,7 +145,7 @@ const faqs = [
   },
   {
     q: `What if my team resists the move from ${fromTool.name}?`,
-    a: `Before signing, have the team members least comfortable with software try ${toTool.name}${toTrialDays > 0 ? ` (it lists a ${toTrialDays}-day free trial)` : ` (our data lists no free trial for it, so ask ${toTool.name} how your team can try it)`}, and ask what they would need to do their daily work in it. Present the switch in terms of the problems they already complain about, train a few willing people first, and have them help the rest.`,
+    a: `Before signing, have the team members least comfortable with software try ${toTool.name}${toTrialDays > 0 ? ` (it lists a ${toTrialDays}-day free trial)` : toTool.pricing.free_trial_days === 0 ? ` (our data lists no free trial for it, so ask ${toTool.name} how your team can try it)` : ` (ask ${toTool.name} how your team can try it)`}, and ask what they would need to do their daily work in it. Present the switch in terms of the problems they already complain about, train a few willing people first, and have them help the rest.`,
   },
   {
     q: `Should I migrate during peak season or off-season?`,
