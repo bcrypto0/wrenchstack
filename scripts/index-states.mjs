@@ -19,8 +19,12 @@ const onlyState = (args.find((a) => a.startsWith('--state=')) || '').split('=')[
 
 let GOOGLE_VISIBLE_PATHS = null;
 let GOOGLE_ONLY_GATE = true;
+// Core-gated pages (the 14 Oct list) are hidden from Google only since 2026-11-14 and
+// stay out of the sitemap on purpose, so they are exempt from the sitemap check below.
+let isCoreGatedPath = () => false;
+let isNoindexedForAllEngines = () => false;
 try {
-  ({ GOOGLE_VISIBLE_PATHS, GOOGLE_ONLY_GATE } = await import(pathToFileURL(join(siteDir, 'src/lib/compare-index.mjs')).href));
+  ({ GOOGLE_VISIBLE_PATHS, GOOGLE_ONLY_GATE, isCoreGatedPath, isNoindexedForAllEngines } = await import(pathToFileURL(join(siteDir, 'src/lib/compare-index.mjs')).href));
 } catch (e) {
   // A broken compare-index.mjs must not pass quietly (a tree without the file skips the list checks).
   if (existsSync(join(siteDir, 'src/lib/compare-index.mjs'))) {
@@ -73,7 +77,8 @@ for (const f of walk(dist)) {
   const robots = metaContent(head, 'robots').join(',');
   const gbot = metaContent(head, 'googlebot').join(',');
   const state = /noindex/i.test(robots) || headerNoindex(p) ? 'noindex' : /noindex/i.test(gbot) ? 'g-hidden' : 'visible';
-  rows.push({ p, state, robots, gbot, inSitemap: sitemap.has(p) });
+  const abot = metaContent(head, 'applebot').join(',');
+  rows.push({ p, state, robots, gbot, abot, inSitemap: sitemap.has(p) });
   if (state === 'visible') {
     const hrefs = new Set();
     for (const m of html.matchAll(/href="(\/[^"#?]*)/g)) hrefs.add(m[1]);
@@ -93,13 +98,21 @@ console.log(`\nHTML pages: ${rows.length}`);
 console.log('  visible  = all engines may index; g-hidden = hidden from Google only; noindex = no engine');
 for (const s of STATES) console.log(`  ${s.padEnd(8)} ${String(tally[s]).padStart(5)}   of which in sitemap: ${inMap[s]}`);
 console.log(`Sitemap URLs: ${sitemap.size}`);
+const coreReleased = rows.filter((r) => r.state === 'g-hidden' && isCoreGatedPath(r.p));
+console.log(`  of the g-hidden pages, core-gated (open to other engines, kept out of the sitemap): ${coreReleased.length}`);
 
 const problems = [];
 const byPath = new Map(rows.map((r) => [r.p, r]));
 for (const p of sitemap) if (!byPath.has(p)) problems.push(`sitemap URL with no built page: ${p}`);
 if (inMap.noindex) problems.push(`${inMap.noindex} robots-noindexed page(s) are in the sitemap`);
 for (const r of rows) {
-  if (r.state !== 'noindex' && !r.inSitemap) problems.push(`indexable page missing from the sitemap: ${r.p}`);
+  if (isCoreGatedPath(r.p)) {
+    if (r.inSitemap) problems.push(`core-gated page is in the sitemap: ${r.p}`);
+    if (r.state === 'visible') problems.push(`core-gated page is visible to Google: ${r.p}`);
+  } else if (r.state !== 'noindex' && !r.inSitemap) problems.push(`indexable page missing from the sitemap: ${r.p}`);
+  // The rule and the build must agree in both directions (follow-up review, 2026-11-14).
+  if (isNoindexedForAllEngines(r.p) && r.state !== 'noindex') problems.push(`rule says no engine may index it, but the built page is ${r.state}: ${r.p}`);
+  if (r.state === 'g-hidden' && r.abot !== 'index,follow') problems.push(`hidden from Google but missing the applebot index,follow tag: ${r.p}`);
   if (r.gbot && r.state !== 'noindex' && r.gbot !== 'noindex,follow') problems.push(`unexpected googlebot value on ${r.p}: ${r.gbot}`);
   if (r.gbot && /noindex/i.test(r.robots)) problems.push(`googlebot tag on a page already robots-noindexed: ${r.p}`);
 }

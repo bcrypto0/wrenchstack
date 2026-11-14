@@ -155,9 +155,50 @@ export function isArchivedPath(pathname) {
   return ARCHIVED_PATHS.has(p);
 }
 
+// --- Vendor entries are hidden from Google only since 2026-11-14 -------------
+// (owner approved 2026-11-14.) The 14 Oct gate above was a robots noindex, so it
+// also removed these pages from Bing and from the assistants that use Bing's
+// index. Bing Webmaster Tools, read 14 Nov 2026
+// (docs/site-and-money-review-2026-11-14.md): 278 pages indexed, 3.1K search
+// impressions and about 90.8K AI citations in 3 months across 173 cited pages.
+// By section, from the full cited-pages list: tool reviews 36.7K, trade and
+// section hubs 28.7K, the non-software vendor entries 20.4K on 55 pages (for
+// example /insurance/next-insurance/ 3.2K, /financing/sunbit/ 1.9K,
+// /ai-tools/podium/ 1.9K, /insurance/trade/plumbing/ 1.6K), and the templated
+// sections almost nothing (/compare/ 381, alternatives 78, /migrate/ 75,
+// /pricing/ 1, none for /features/, /multi-compare/, /best-software-for/).
+// Google meanwhile still lists 1 page, so the robots noindex bought nothing there.
+//
+// So the vendor entries (insurance, lead-gen, payroll, agencies, ai-tools,
+// accounting, financing, payments, banking, including their /trade/ pages) no
+// longer carry robots noindex. They are not on GOOGLE_VISIBLE_PATHS, so
+// Layout.astro gives them the googlebot-only noindex like every other page
+// outside that list, and other engines may index them again. They stay out of
+// the sitemap (isCoreGatedPath is still the sitemap rule), so Google's small
+// crawl is not spent on them. Bing already knows these URLs; the /trade/ pages
+// are linked from their section hubs (TradeGuideLinks.astro).
+//
+// Everything else in the 14 Oct gate keeps the robots noindex for every engine:
+// the templated sections listed here (measured in October at 7 to 33 percent
+// text unique to the page, and barely cited), /tools/<slug>/alternatives/,
+// /state/, /software-by-country/ and /compare-builder/.
+// Undo: add the nine vendor section names to this set.
+export const CORE_GATED_ALL_ENGINES = new Set([
+  'compare', 'multi-compare', 'compare-builder', 'pricing', 'migrate', 'features',
+  'best-software-for', 'state', 'software-by-country',
+]);
+
+/** True for a core-gated page that no engine may index (robots noindex). */
+export function isCoreGatedForAllEngines(pathname) {
+  if (!isCoreGatedPath(pathname)) return false;
+  const segs = String(pathname || '').split('/').filter(Boolean);
+  if (segs[0] === 'tools') return true; // /tools/<slug>/alternatives/
+  return CORE_GATED_ALL_ENGINES.has(segs[0]);
+}
+
 /** True when the page carries robots noindex, i.e. no engine may index it. */
 export function isNoindexedForAllEngines(pathname) {
-  return isInternationalPath(pathname) || isCoreGatedPath(pathname) || isArchivedPath(pathname);
+  return isInternationalPath(pathname) || isCoreGatedForAllEngines(pathname) || isArchivedPath(pathname);
 }
 
 // Sitemap filter: keep every non-comparison URL; keep a /compare/<a>-vs-<b>/

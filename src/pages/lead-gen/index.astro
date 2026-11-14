@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import VendorLogo from '../../components/VendorLogo.astro';
 import MissingFromList from '../../components/MissingFromList.astro';
+import TradeGuideLinks from '../../components/TradeGuideLinks.astro';
 import {
   leadGenPlatforms,
   leadGenTier,
@@ -229,6 +230,8 @@ const itemListSchema = {
         </section>
       );
     })}
+
+    <TradeGuideLinks section="lead-gen" />
 
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Where to start</h2>

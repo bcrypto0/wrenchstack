@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import VendorLogo from '../../components/VendorLogo.astro';
 import { insuranceProviders, insuranceTier, type InsuranceProvider } from '../../lib/data';
 import MissingFromList from '../../components/MissingFromList.astro';
+import TradeGuideLinks from '../../components/TradeGuideLinks.astro';
 
 const pageTitle = `Best Business Insurance for Trades Contractors (2026)`;
 const pageDescription = `Independent reviews of ${insuranceProviders.length} business-insurance providers for HVAC, plumbing, electrical, roofing and other trades: online insurers and marketplaces such as ERGO NEXT, Simply Business, Insureon and Hiscox, and carriers sold through independent agents such as Acuity, Erie and Travelers. Reputation warnings cite a documented record, and every review shows the provider's affiliate status.`;
@@ -187,6 +188,8 @@ const itemListSchema = {
         </section>
       );
     })}
+
+    <TradeGuideLinks section="insurance" />
 
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Where to start</h2>

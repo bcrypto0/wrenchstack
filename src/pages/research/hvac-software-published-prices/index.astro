@@ -36,6 +36,11 @@ const unreadable = vendors.filter((v) => v.status === 'UNREADABLE');
 const noPrice = read.filter((v) => v.publishes_price === false);
 const withPrice = read.filter((v) => v.publishes_price === true);
 const notInTable = vendors.filter((v) => v.in_table === false);
+// The first paragraph names the reason for each of these two vendors in words, so the
+// build stops if the data file ever lists a different set (2026-11-14).
+if (notInTable.map((v) => v.slug).sort().join(',') !== 'housecall-pro,jobber') {
+  throw new Error('hvac-published-prices.json: the vendors left out of the table changed; update the first paragraph of the research page');
+}
 const tableRows = [
   ...withPrice.filter((v) => v.in_table),
   ...noPrice,
@@ -58,6 +63,11 @@ const totalsSentence = withTotal.length
 const readDate = hvacPrices.summary.read_date;
 const readLabel = new Date(readDate + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 const readShort = new Date(readDate + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+// Dates of the earlier price checks shown on the two review pages this page points to.
+const longDate = (d: string) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const jobberChecked = getTool('jobber')?.pricing.verified_date;
+const housecallChecked = getTool('housecall-pro')?.pricing.verified_date;
+if (!jobberChecked || !housecallChecked) throw new Error('HVAC research page: missing verified_date for Jobber or Housecall Pro');
 
 const pageTitle = 'Which HVAC software publishes its prices, and what 6 users cost';
 const pageDescription = `We opened the pricing pages of ${vendors.length} HVAC software vendors on ${readLabel}: which show a price, what it depends on, and what 6 logins cost.`;
@@ -94,7 +104,7 @@ const reviewLinks = vendors
       <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-orange-600">Research · Read from vendor pages on {readLabel}</p>
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">{pageTitle}</h1>
       <p class="mt-4 text-lg text-slate-700 leading-relaxed">
-        On {readLabel} we opened the pricing page of each of the {vendors.length} tools in our HVAC listing with a trade fit of 8 or more out of 10. {cap(numWord(unreadable.length))} of those pages could not be read that day. Of the {read.length} we read, {numWord(noPrice.length)} show no price at all: they ask you to request pricing, get a custom quote or schedule a call. The other {numWord(withPrice.length)} show a dollar price without an account, a quiz or a sales call, and for those the table works out what a team of 6 would pay per month where the page's own figures allow it. For {numWord(notInTable.length)} of them, {nameList(notInTable.map((v) => v.name))}, the page text we could read does not label every price with its billing option, so they are not in the table. {totalsSentence}
+        On {readLabel} we opened the pricing page of each of the {vendors.length} tools in our HVAC listing with a trade fit of 8 or more out of 10. {cap(numWord(unreadable.length))} of those pages could not be read that day. Of the {read.length} we read, {numWord(noPrice.length)} show no price at all: they ask you to request pricing, get a custom quote or schedule a call. The other {numWord(withPrice.length)} show a dollar price without an account, a quiz or a sales call, and for those the table works out what a team of 6 would pay per month where the page's own figures allow it. {cap(numWord(notInTable.length))} of them, {nameList(notInTable.map((v) => v.name))}, are not in the table: we could not confirm which Jobber price belongs to which billing option, and Housecall Pro's page showed two different sets of prices on the same day, depending on the answers a visitor had given to its plan questions; the section near the end of this page gives the details. {totalsSentence}
       </p>
     </header>
 
@@ -170,12 +180,17 @@ const reviewLinks = vendors
       <h2>Pages we could not read or confirm on {readLabel}</h2>
       <p>
         The pricing pages of {nameList(unreadable.map((v) => v.name))} returned an access error (HTTP 403) to our page reader that day. They are not counted in the figures above, and the table shows no price for them.
-        The pricing pages of {nameList(notInTable.map((v) => v.name))} could be read and show prices, but the page text we could read does not label every price with its billing option (Jobber offers no commitment, a 1 year commitment and annual billing; Housecall Pro has an annual and a monthly toggle). We print no 6 user figure for them and leave them out of the table; both count among the {withPrice.length} vendors that show a price. Their review pages and our HVAC page show plan prices from earlier checks, each dated on the page; we did not reuse those figures here because the billing labels were not confirmed on {readLabel}.
+        The pricing pages of {nameList(notInTable.map((v) => v.name))} could be read by our page reader and show prices, but we print no 6 user figure for them and leave them out of the table; both count among the {withPrice.length} vendors that show a price. Their review pages show plan prices from earlier checks, dated on each page (Jobber {longDate(jobberChecked)}, Housecall Pro {longDate(housecallChecked)}), and our HVAC page shows their starting prices from those checks; we did not reuse those figures here because the billing options of Jobber's prices could not be confirmed and Housecall Pro's prices depend on the plan questions.
       </p>
+      <ul>
+        {notInTable.map((v) => (
+          <li><strong>{v.name}.</strong> {v.not_in_table_reason}</li>
+        ))}
+      </ul>
 
       <h2>Method</h2>
       <p>
-        Which tools: the {vendors.length} tools in our HVAC listing with a trade fit of 8 or more out of 10 on {readLabel}. Trade fit is our editorial judgment of how well a tool serves the trade; the <a href="/methodology/">methodology</a> explains it. How: we opened each vendor's own pricing page on {readLabel}, without creating an account, answering a quiz or speaking to sales. We did not test the software. Quote only vendors are not estimated. Housecall Pro also offers a plan quiz; we did not answer it. Prices on vendor pages change, so check the vendor's page before you buy. No vendor pays for inclusion or placement.
+        Which tools: the {vendors.length} tools in our HVAC listing with a trade fit of 8 or more out of 10 on {readLabel}. Trade fit is our editorial judgment of how well a tool serves the trade; the <a href="/methodology/">methodology</a> explains it. How: we opened each vendor's own pricing page on {readLabel}, without creating an account, answering a quiz or speaking to sales. We did not test the software. Quote only vendors are not estimated. Housecall Pro also offers a plan quiz; we did not answer it on {readLabel}, and the section above says what the page showed in a browser where it had been answered earlier. Prices on vendor pages change, so check the vendor's page before you buy. No vendor pays for inclusion or placement.
       </p>
 
       <h2>Related</h2>

@@ -3,8 +3,26 @@
   "summary": {
     "read_date": "2026-11-14",
     "selection": "Tools in src/data/tools.json with vertical_fit.hvac of 8 or more on 2026-11-14.",
-    "selected_slugs": ["jobber", "housecall-pro", "servicefusion", "smart-service", "sera-systems", "fastest", "servicetitan", "fieldedge", "servicetrade", "buildops", "fieldpulse", "commusoft", "workiz", "simpro"],
-    "billing_not_confirmed": ["Jobber", "Housecall Pro"]
+    "selected_slugs": [
+      "jobber",
+      "housecall-pro",
+      "servicefusion",
+      "smart-service",
+      "sera-systems",
+      "fastest",
+      "servicetitan",
+      "fieldedge",
+      "servicetrade",
+      "buildops",
+      "fieldpulse",
+      "commusoft",
+      "workiz",
+      "simpro"
+    ],
+    "billing_not_confirmed": [
+      "Jobber",
+      "Housecall Pro"
+    ]
   },
   "vendors": [
     {
@@ -13,9 +31,14 @@
       "status": "READ",
       "publishes_price": true,
       "in_table": false,
-      "not_in_table_reason": "The page shows a price for each plan, but the page text we could read does not label every price with its billing option, so we could not confirm a 6 user figure for each billing option.",
+      "not_in_table_reason": "The page shows prices for each plan under three billing options (\"No commitment\", \"1 year commitment\" and \"Billed annually\"), but the page text we could read repeats the no commitment price beside each option and does not mark which figure is crossed out, so we could not confirm which price belongs to which option. The vendor's site also blocked the browser we used to check by eye that day, so the mapping stays unconfirmed.",
       "url_read": "https://getjobber.com/pricing/",
-      "read_date": "2026-11-14"
+      "read_date": "2026-11-14",
+      "browser_check": {
+        "date": "2026-11-14",
+        "result": "blocked by the vendor's site (Cloudflare block page)",
+        "url": "https://www.getjobber.com/pricing/"
+      }
     },
     {
       "slug": "housecall-pro",
@@ -23,9 +46,14 @@
       "status": "READ",
       "publishes_price": true,
       "in_table": false,
-      "not_in_table_reason": "The page shows a price for each plan, but the page text we could read does not label every price with its billing option, so we could not confirm a 6 user figure for each billing option.",
+      "not_in_table_reason": "The page showed two different sets of prices on 14 November 2026. With no answers to its plan questions, it showed Essentials at $149 or $189 a month with 5 users included, and Max at $299 or $329 a month with 8 users included and $35 a month for each additional user (the page has an Annual and Monthly switch labelled \"Save with annual\"; the lower figure of each pair is the annual one, matched using the \"Saving\" amount on each card, which equals the gap between the two figures). In a browser in which the plan questions had been answered on 22 October 2026 (plumbing, a team of 6 to 10), the page opened its plumbing version (\"Pricing built for Plumbing businesses\"), and its \"Teams\" view showed Essentials at $299 a month with 5 users included and $100 a month for each additional user, and Max at $649 a month with 8 users included and $75 a month for each additional user; the part of the page we read stated no billing term for these. The prices the page shows depend on the answers a visitor has given to its plan questions, so we print no single figure for a team of 6.",
       "url_read": "https://www.housecallpro.com/pricing/",
-      "read_date": "2026-11-14"
+      "read_date": "2026-11-14",
+      "browser_check": {
+        "date": "2026-11-14",
+        "result": "read by eye; the page opened its plumbing version in the browser in which the quiz was answered on 2026-10-22, and showed the Teams view prices quoted in not_in_table_reason",
+        "url": "https://www.housecallpro.com/pricing/?hcp_industry=plumbing"
+      }
     },
     {
       "slug": "servicefusion",
@@ -35,8 +63,12 @@
       "in_table": true,
       "publishes_label": "Yes",
       "price_depends_on": "Plan only; \"Unlimited Users\" on every plan",
-      "six_users_monthly": ["Starter: $259"],
-      "six_users_annual": ["Starter: $220 a month, charged as one annual payment at sign up"],
+      "six_users_monthly": [
+        "Starter: $259"
+      ],
+      "six_users_annual": [
+        "Starter: $220 a month, charged as one annual payment at sign up"
+      ],
       "six_users_summary": "Service Fusion $259 a month ($220 a month on annual billing)",
       "printed_or_derived": "Printed",
       "page_label": "servicefusion.com/pricing",
@@ -51,8 +83,12 @@
       "in_table": true,
       "publishes_label": "Yes, a starting rate",
       "price_depends_on": "Per user, five user minimum; the rate \"comes down as your team grows\"; 15% off with annual billing, 30% off on a 3 year contract",
-      "six_users_monthly": ["No figure. The page gives a starting rate of $129 per user per month with a five user minimum, says the rate comes down as the team grows, and says totals use a team price; the calculator's total was not in the page text we could read."],
-      "six_users_annual": ["No figure, for the same reason."],
+      "six_users_monthly": [
+        "No figure. The page gives a starting rate of $129 per user per month with a five user minimum, says the rate comes down as the team grows, and says totals use a team price; the calculator's total was not in the page text we could read."
+      ],
+      "six_users_annual": [
+        "No figure, for the same reason."
+      ],
       "six_users_summary": "Smart Service gives a starting rate but no total",
       "printed_or_derived": "Not computable",
       "page_label": "smartservice.com/pricing",
@@ -67,8 +103,15 @@
       "in_table": true,
       "publishes_label": "Yes",
       "price_depends_on": "Account price with unlimited admins and up to 4 technicians; $149 a month per additional technician",
-      "six_users_monthly": ["A. All 6 are technicians: $697", "B. 5 technicians and 1 admin: $548", "C. 4 technicians and 2 admins: $399", "Billing term not stated"],
-      "six_users_annual": ["No annual price shown"],
+      "six_users_monthly": [
+        "A. All 6 are technicians: $697",
+        "B. 5 technicians and 1 admin: $548",
+        "C. 4 technicians and 2 admins: $399",
+        "Billing term not stated"
+      ],
+      "six_users_annual": [
+        "No annual price shown"
+      ],
       "six_users_summary": "Sera Systems $399 to $697 a month depending on how many of the 6 are technicians",
       "printed_or_derived": "A and B derived: $399 plus $149 for each technician beyond the fourth. C printed",
       "page_label": "sera.tech",
@@ -83,8 +126,13 @@
       "in_table": true,
       "publishes_label": "Yes",
       "price_depends_on": "Estimating software licensed per PC or tablet, not per login: per application, installed on a single PC or tablet; shared session licences by quote",
-      "six_users_monthly": ["A. 6 PCs leased: $775, if a second copy counts as an \"additional application\"", "B. No figure, if it means a different program; the page does not define it"],
-      "six_users_annual": ["No annual price shown; the page offers a monthly lease or a one time purchase ($4,995 for the first application, $2,495 for each additional one), with optional yearly maintenance"],
+      "six_users_monthly": [
+        "A. 6 PCs leased: $775, if a second copy counts as an \"additional application\"",
+        "B. No figure, if it means a different program; the page does not define it"
+      ],
+      "six_users_annual": [
+        "No annual price shown; the page offers a monthly lease or a one time purchase ($4,995 for the first application, $2,495 for each additional one), with optional yearly maintenance"
+      ],
       "six_users_summary": "FastEST $775 a month for 6 leased copies if a second copy counts as an additional application",
       "printed_or_derived": "A derived: $250 + 5 × $105. B not computable",
       "page_label": "fastest-inc.com/pricing",

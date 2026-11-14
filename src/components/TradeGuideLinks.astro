@@ -1,0 +1,43 @@
+---
+// Links from a section hub to its by-trade guide pages (added 2026-11-14).
+// The /insurance/trade/, /lead-gen/trade/ and /agencies/trade/ pages had no link from
+// their own hub, so a crawler could reach them only by remembering the URL. The lists
+// below must match TARGET_VERTICALS in each section's trade/[vertical]/index.astro; the
+// build stops if a listed trade has no vertical record.
+import { getVertical, verticalToUrl } from '../lib/data';
+
+interface Props {
+  section: 'insurance' | 'lead-gen' | 'agencies';
+}
+const { section } = Astro.props;
+
+const GUIDES: Record<Props['section'], { heading: string; verticals: string[] }> = {
+  insurance: {
+    heading: 'Insurance by trade',
+    verticals: ['hvac', 'plumbing', 'electrical', 'roofing', 'general_contractor', 'landscaping', 'cleaning', 'pest_control'],
+  },
+  'lead-gen': {
+    heading: 'Lead generation by trade',
+    verticals: ['hvac', 'plumbing', 'electrical', 'roofing', 'general_contractor', 'landscaping', 'cleaning', 'pest_control'],
+  },
+  agencies: {
+    heading: 'Marketing agencies by trade',
+    verticals: ['hvac', 'plumbing', 'roofing'],
+  },
+};
+
+const guide = GUIDES[section];
+const links = guide.verticals.map((slug) => {
+  const v = getVertical(slug);
+  if (!v) throw new Error(`TradeGuideLinks: no vertical record for "${slug}"`);
+  return { name: v.name, href: `/${section}/trade/${verticalToUrl(slug)}/` };
+});
+---
+<section class="mt-12">
+  <h2 class="text-xl font-bold text-slate-900">{guide.heading}</h2>
+  <ul class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+    {links.map((l) => (
+      <li><a href={l.href} class="text-orange-700 underline hover:text-orange-800">{l.name}</a></li>
+    ))}
+  </ul>
+</section>

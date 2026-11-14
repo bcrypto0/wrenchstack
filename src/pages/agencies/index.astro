@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import VendorLogo from '../../components/VendorLogo.astro';
 import { marketingAgencies, agencyTier, type MarketingAgency } from '../../lib/data';
 import MissingFromList from '../../components/MissingFromList.astro';
+import TradeGuideLinks from '../../components/TradeGuideLinks.astro';
 
 const pageTitle = `Best Marketing Agencies for Trades Contractors (2026)`;
 const pageDescription = `Independent reviews of ${marketingAgencies.length} digital marketing agencies serving HVAC, plumbing, electrical, roofing, and other trades. Trade specialists, home-services agencies, published prices where they exist, and reputation warnings where contract terms or complaints call for one.`;
@@ -178,6 +179,8 @@ const itemListSchema = {
         </section>
       );
     })}
+
+    <TradeGuideLinks section="agencies" />
 
     <section class="mt-12 rounded-lg bg-slate-900 p-8 text-white">
       <h2 class="text-2xl font-bold">Where to start</h2>
