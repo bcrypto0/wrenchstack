@@ -8,6 +8,7 @@ import { asSentence,
   verticals,
   verticalToUrl,
 } from '../../../lib/data';
+import { featureChip } from '../../../lib/labels';
 
 export async function getStaticPaths() {
   return insuranceProviders.map((p) => ({
@@ -176,7 +177,7 @@ const faqSchema = {
             <dt class="text-xs uppercase tracking-wider text-slate-500">Insurance lines</dt>
             <dd class="mt-1 flex flex-wrap gap-1">
               {provider.insurance_lines.map((line) => (
-                <span class="rounded-md bg-slate-100 px-2 py-0.5 text-xs">{line.replace(/_/g, ' ')}</span>
+                <span class="rounded-md bg-slate-100 px-2 py-0.5 text-xs">{featureChip(line)}</span>
               ))}
             </dd>
           </div>

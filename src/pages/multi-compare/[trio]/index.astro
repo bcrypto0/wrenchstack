@@ -20,6 +20,7 @@ import { asSentence,
   entryTerms,
   type Tool,
 } from '../../../lib/data';
+import { featureChip, integrationLabel } from '../../../lib/labels';
 import WrenchScore from '../../../components/WrenchScore.astro';
 import ToolLogo from '../../../components/ToolLogo.astro';
 import FreshnessBadge from '../../../components/FreshnessBadge.astro';
@@ -130,7 +131,7 @@ const QB_NAMES: Record<string, string> = {
   quickbooks_time: 'QuickBooks Time',
   quickbooks: 'QuickBooks (product not specified)',
 };
-const qbList = (t: Tool) => t.integrations.filter((i) => i.includes('quickbooks')).map((i) => QB_NAMES[i] ?? label(i));
+const qbList = (t: Tool) => t.integrations.filter((i) => i.includes('quickbooks')).map((i) => QB_NAMES[i] ?? integrationLabel(i));
 const hasGLS = (t: Tool) => t.integrations.some((i) => i.includes('google_local_services'));
 const hasTrial = (t: Tool) => (t.pricing.free_trial_days ?? 0) > 0;
 
@@ -433,7 +434,7 @@ const breadcrumbs = [
         <div class="flex flex-wrap gap-2">
           {sharedFeatures.map(f => (
             <span class="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-900">
-              ✓ {label(f)}
+              ✓ {featureChip(f)}
             </span>
           ))}
         </div>
@@ -455,7 +456,7 @@ const breadcrumbs = [
               <h3 class="mb-2 font-semibold text-slate-900">Listed for {t.name} only</h3>
               {unique.length > 0 ? (
                 <ul class="space-y-1 text-sm text-slate-700">
-                  {unique.map(f => <li>+ {label(f)}</li>)}
+                  {unique.map(f => <li>+ {featureChip(f)}</li>)}
                 </ul>
               ) : (
                 <p class="text-sm text-slate-500">None</p>
@@ -475,7 +476,7 @@ const breadcrumbs = [
           </h3>
           {sharedIntegrations.length > 0 ? (
             <ul class="space-y-1 text-sm text-green-900">
-              {sharedIntegrations.map(i => <li>✓ {label(i)}</li>)}
+              {sharedIntegrations.map(i => <li>✓ {integrationLabel(i)}</li>)}
             </ul>
           ) : (
             <p class="text-sm text-green-700">None in common in our data</p>

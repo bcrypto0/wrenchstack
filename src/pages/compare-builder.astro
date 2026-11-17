@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import triosData from '../data/trios.json';
 import { tools, verticals, formatPrice, entryPriceLabel, toolType, getTool } from '../lib/data';
+import { featureChip, integrationLabel } from '../lib/labels';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -51,6 +52,8 @@ const builderTools = tools.map((t) => ({
   isCmms: isCmms(t),
   keyFeatures: t.key_features,
   integrations: t.integrations,
+  featureLabels: t.key_features.map(featureChip),
+  integrationLabels: t.integrations.map(integrationLabel),
   hasQuickBooks: t.integrations.some((i) => i.includes('quickbooks')),
   hasStripe: t.integrations.some((i) => i.includes('stripe')),
   hasZapier: t.integrations.some((i) => i.includes('zapier')),
@@ -347,11 +350,11 @@ const builderTools = tools.map((t) => ({
             // No count: feature lists use an uncontrolled vocabulary, so their length says how
             // finely an entry was written, not how much the product does (methodology v1.2).
             label: 'Key features (as listed)',
-            cells: cols.map((t) => `<div class="text-xs text-slate-700">${escHtml(t.keyFeatures.map((f) => f.replace(/_/g, ' ')).join(', '))}</div>`),
+            cells: cols.map((t) => `<div class="text-xs text-slate-700">${escHtml(t.featureLabels.join(', '))}</div>`),
           },
           {
             label: 'Integrations listed',
-            cells: cols.map((t) => `<strong>${t.integrations.length}</strong><div class="mt-1 text-xs text-slate-500">${escHtml(t.integrations.map((i) => i.replace(/_/g, ' ')).join(', '))}</div>`),
+            cells: cols.map((t) => `<strong>${t.integrations.length}</strong><div class="mt-1 text-xs text-slate-500">${escHtml(t.integrationLabels.join(', '))}</div>`),
           },
           {
             label: 'Fit by trade (1-10)',

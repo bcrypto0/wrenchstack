@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import { asSentence, financingProviders, FINANCING_MODEL_META, type FinancingProvider } from '../../../lib/data';
+import { featureChip, integrationLabel } from '../../../lib/labels';
 
 export async function getStaticPaths() {
   return financingProviders.map((p) => ({
@@ -172,7 +173,7 @@ const faqSchema = {
           <p class="mb-1 text-xs font-bold uppercase tracking-wider text-slate-500">Key features</p>
           <div class="flex flex-wrap gap-1">
             {provider.key_features.map((f) => (
-              <span class="rounded-md bg-amber-50 px-2 py-0.5 text-xs text-amber-800">{f.replace(/_/g, ' ')}</span>
+              <span class="rounded-md bg-amber-50 px-2 py-0.5 text-xs text-amber-800">{featureChip(f)}</span>
             ))}
           </div>
         </div>
@@ -180,7 +181,7 @@ const faqSchema = {
           <p class="mb-1 text-xs font-bold uppercase tracking-wider text-slate-500">Integrations</p>
           <div class="flex flex-wrap gap-1">
             {provider.integrations.map((i) => (
-              <span class="rounded-md bg-slate-100 px-2 py-0.5 text-xs">{i.replace(/_/g, ' ')}</span>
+              <span class="rounded-md bg-slate-100 px-2 py-0.5 text-xs">{integrationLabel(i)}</span>
             ))}
           </div>
         </div>

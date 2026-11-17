@@ -11,6 +11,7 @@ import { asSentence,
   seatPriceSuffix,
   type Tool,
 } from '../../../lib/data';
+import { featureChip, integrationLabel } from '../../../lib/labels';
 import WrenchScore from '../../../components/WrenchScore.astro';
 import ToolLogo from '../../../components/ToolLogo.astro';
 
@@ -250,7 +251,7 @@ const faqSchema = {
       <p>Our feature lists are not exhaustive and name features differently between tools, so check each one on the vendor's site.</p>
       {onlyInToFeatures.length > 0 ? (
         <ul>
-          {onlyInToFeatures.map(f => <li><strong>{human(f)}</strong></li>)}
+          {onlyInToFeatures.map(f => <li><strong>{featureChip(f)}</strong></li>)}
         </ul>
       ) : (
         <p>Every feature our data lists for {toTool.name} is also listed for {fromTool.name}.</p>
@@ -259,7 +260,7 @@ const faqSchema = {
       <h2>Features listed for {fromTool.name} but not for {toTool.name}</h2>
       {onlyInFromFeatures.length > 0 ? (
         <ul>
-          {onlyInFromFeatures.map(f => <li>{human(f)}</li>)}
+          {onlyInFromFeatures.map(f => <li>{featureChip(f)}</li>)}
         </ul>
       ) : (
         <p>Every feature our data lists for {fromTool.name} is also listed for {toTool.name}. Check the features you use daily on {toTool.name}'s site anyway.</p>
@@ -312,7 +313,7 @@ const faqSchema = {
         <>
           <p><strong>Listed for both tools</strong> (you will still need to connect each one to {toTool.name} and check how it syncs):</p>
           <ul>
-            {sharedIntegrations.map(i => <li>{human(i)}</li>)}
+            {sharedIntegrations.map(i => <li>{integrationLabel(i)}</li>)}
           </ul>
         </>
       )}
@@ -320,7 +321,7 @@ const faqSchema = {
         <>
           <p><strong>Listed for {fromTool.name} but not for {toTool.name}:</strong></p>
           <ul>
-            {lostIntegrations.map(i => <li><strong>{human(i)}</strong>: ask {toTool.name} whether it connects{toHasZapier ? ', directly or through Zapier' : ''}, or plan the workflow without it.</li>)}
+            {lostIntegrations.map(i => <li><strong>{integrationLabel(i)}</strong>: ask {toTool.name} whether it connects{toHasZapier ? ', directly or through Zapier' : ''}, or plan the workflow without it.</li>)}
           </ul>
         </>
       )}
@@ -328,7 +329,7 @@ const faqSchema = {
         <>
           <p><strong>Listed for {toTool.name} but not for {fromTool.name}</strong> (worth evaluating during migration):</p>
           <ul>
-            {newIntegrations.map(i => <li>{human(i)}</li>)}
+            {newIntegrations.map(i => <li>{integrationLabel(i)}</li>)}
           </ul>
         </>
       )}

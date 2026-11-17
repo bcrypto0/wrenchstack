@@ -23,6 +23,7 @@ import {
   featuresListedOnlyBy,
   type Tool,
 } from '../../../lib/data';
+import { featureChip, integrationLabel } from '../../../lib/labels';
 
 export async function getStaticPaths() {
   // Every section here ranks by shared trades. Tools with no trades (the CMMS
@@ -176,10 +177,12 @@ const fitScore = tool.vertical_fit?.[primaryVertical] ?? 5;
 // Alternatives with a higher fit for the primary trade than this tool. Until 2026-10-01
 // this section took every alternative at 8/10 or more and headed it "Stronger fit",
 // which listed 8/10 tools as stronger than a 10/10 one.
-const verticalFitAlternatives = allAlternatives
+// The section shows four; its copy says so when more score higher, since the FAQ's fit
+// line counts them all (2026-11-18: Projul's page showed four, the FAQ said five).
+const allHigherFit = allAlternatives
   .filter((t) => (primaryFit(t) ?? 0) > fitScore)
-  .sort((a, b) => (primaryFit(b) as number) - (primaryFit(a) as number))
-  .slice(0, 4);
+  .sort((a, b) => (primaryFit(b) as number) - (primaryFit(a) as number));
+const verticalFitAlternatives = allHigherFit.slice(0, 4);
 
 // QuickBooks: alternatives that list a QuickBooks integration. When this tool lists one
 // already, only those that list QuickBooks Desktop are shown, and the copy says so.
@@ -432,13 +435,13 @@ const breadcrumbs = [
               {altOnlyFeatures.length > 0 && (
                 <div>
                   <dt class="font-semibold text-slate-900">In {alt.name}'s key features, not {tool.name}'s</dt>
-                  <dd class="text-slate-700">{altOnlyFeatures.slice(0, 4).map((f) => f.replace(/_/g, ' ')).join(' · ')}</dd>
+                  <dd class="text-slate-700">{altOnlyFeatures.slice(0, 4).map(featureChip).join(' · ')}</dd>
                 </div>
               )}
               {toolOnlyFeatures.length > 0 && (
                 <div>
                   <dt class="font-semibold text-slate-900">In {tool.name}'s key features, not {alt.name}'s</dt>
-                  <dd class="text-slate-700">{toolOnlyFeatures.slice(0, 4).map((f) => f.replace(/_/g, ' ')).join(' · ')}</dd>
+                  <dd class="text-slate-700">{toolOnlyFeatures.slice(0, 4).map(featureChip).join(' · ')}</dd>
                 </div>
               )}
               <div class="md:col-span-2">
@@ -514,7 +517,9 @@ const breadcrumbs = [
             <div class="rounded-lg border border-slate-200 bg-white p-5">
               <h3 class="mb-3 font-bold text-slate-900">Higher {primaryVerticalLabel} fit score</h3>
               <p class="mb-3 text-sm text-slate-600">
-                These alternatives score higher than {tool.name} ({fitScore}/10) on our {primaryVerticalLabel} fit assessment.
+                {allHigherFit.length > verticalFitAlternatives.length
+                  ? `${allHigherFit.length} alternatives score higher than ${tool.name} (${fitScore}/10) on our ${primaryVerticalLabel} fit assessment; these are the ${verticalFitAlternatives.length} highest.`
+                  : `These alternatives score higher than ${tool.name} (${fitScore}/10) on our ${primaryVerticalLabel} fit assessment.`}
               </p>
               <div class="flex flex-wrap gap-2">
                 {verticalFitAlternatives.map((a) => (

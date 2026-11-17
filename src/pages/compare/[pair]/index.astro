@@ -9,9 +9,11 @@ import { asSentence,
   nonMonthlyPricingOnly,
   entryPriceLabel,
   type Tool, toolType} from '../../../lib/data';
+import { featureChip, integrationLabel } from '../../../lib/labels';
 import FreshnessBadge from '../../../components/FreshnessBadge.astro';
 import { isComparisonIndexable } from '../../../lib/compare-index.mjs';
 import MissingFromList from '../../../components/MissingFromList.astro';
+import migrationData from '../../../data/migrations.json';
 import { priceScaling, seatUnit, formatUsd, entrySeatMinimum, entryMinimumBill, seatMinimumPhrase, pricePublicationPhrase, tierPriceUnit, accountUnitSuffix, entryUsersPhrase, isPlaceholderTierName, seatUnitSuffix, entryTerms, entryBillsOnSameTerm, lowerEntryTool, entryPriceBasis, featuresListedOnlyBy, featuresListedByBoth, formatUsdAmount } from '../../../lib/data';
 
 export async function getStaticPaths() {
@@ -86,6 +88,10 @@ const bStart = b.pricing.starting_at_usd;
 // annual-billed $60 against MoversDesk's month-to-month $99 (billed monthly: $75 and $99).
 const sameTerm = entryBillsOnSameTerm(a, b);
 const otherOf = (t: Tool) => (t === a ? b : a);
+// Switching guides between these two tools, either way (/migrate/ pages).
+const switchGuides = (migrationData.migrations as { from: string; to: string }[])
+  .filter((m) => (m.from === a.slug && m.to === b.slug) || (m.from === b.slug && m.to === a.slug))
+  .map((m) => ({ ...m, fromName: m.from === a.slug ? a.name : b.name, toName: m.to === a.slug ? a.name : b.name }));
 // The lower bill by billing term (lowerEntryTool) is called "lower" only when the two
 // prices are charged on a basis that keeps it lower as a crew grows, the rule the
 // alternatives pages use: a free tier, the same basis, or a company price below a
@@ -116,6 +122,12 @@ function shortPrice(t: Tool): string {
   if (nonMonthlyPricingOnly(t)) return 'module or per-project prices, not a monthly plan';
   return withMin(formatPrice(t), t);
 }
+
+// The cheaper tool's price in a short verdict. When the two entry plans record different
+// users, the full entry label names them (2026-11-18: "Contractor Foreman has the lower
+// starting price (From $49/mo)" set 1 user against Projul's 3).
+const verdictPrice = (t: Tool) =>
+  t.pricing.starting_at_usd !== 0 && entryUsersPhrase(t) !== entryUsersPhrase(otherOf(t)) ? entryLabel(t) : shortPrice(t);
 
 // "starts at $29 per user a month" / "has a free tier" ("starts at a free tier" read badly).
 const startsAt = (t: Tool) => (t.pricing.starting_at_usd === 0 ? 'has a free tier' : `starts at ${entryLabel(t)}`);
@@ -168,7 +180,7 @@ const QB_NAMES: Record<string, string> = {
   quickbooks_time: 'QuickBooks Time',
   quickbooks: 'QuickBooks (product not specified)',
 };
-const qbList = (t: Tool) => t.integrations.filter((i) => i.includes('quickbooks')).map((i) => QB_NAMES[i] ?? label(i));
+const qbList = (t: Tool) => t.integrations.filter((i) => i.includes('quickbooks')).map((i) => QB_NAMES[i] ?? integrationLabel(i));
 
 const aHasQB = qbList(a).length > 0;
 const bHasQB = qbList(b).length > 0;
@@ -242,7 +254,7 @@ if (aHasTrial !== bHasTrial) {
 }
 
 if (onlyAIntegrations.length || onlyBIntegrations.length) {
-  const fmt = (list: string[]) => list.slice(0, 4).map(label).join(', ');
+  const fmt = (list: string[]) => list.slice(0, 4).map(integrationLabel).join(', ');
   const parts: string[] = [];
   if (onlyAIntegrations.length) parts.push(`${a.name}: ${fmt(onlyAIntegrations)}`);
   if (onlyBIntegrations.length) parts.push(`${b.name}: ${fmt(onlyBIntegrations)}`);
@@ -496,7 +508,7 @@ function getPros(t: Tool, isCheaper: boolean, fitWins: typeof verticalWinners): 
   const hasGLS = t.integrations.some((i) => i.includes('google_local_services'));
   const hasFreeTrial = (t.pricing.free_trial_days ?? 0) > 0;
 
-  if (isCheaper) pros.push(`Lower entry price: ${shortPrice(t)}`);
+  if (isCheaper) pros.push(`Lower entry price: ${verdictPrice(t)}`);
   if (!isQuoteOnly(t) && isQuoteOnly(other)) {
     const pub = pricePublicationPhrase(t);
     pros.push(`${pub.charAt(0).toUpperCase()}${pub.slice(1)}; ${other.name} quotes only`);
@@ -627,7 +639,13 @@ const faqs = [
   },
   {
     q: `Can I move from ${a.name} to ${b.name} (or the other way)?`,
-    a: `Our data does not record migration support for either tool. Ask both vendors which records they import and export (customers, jobs, invoices, recurring agreements, price books), in which file format, and whether they help with the import.`,
+    // The pair's switching guide is linked where one exists (2026-11-18): the answer was
+    // the same sentence on every compare page. Our data still records no migration
+    // support, so that part stays.
+    a: `Our data does not record migration support for either tool. Ask both vendors which records they import and export (customers, jobs, invoices, recurring agreements, price books), in which file format, and whether they help with the import.${
+      switchGuides.length ? ` ${switchGuides.length === 1 ? 'Our switching guide lists' : 'Our switching guides list'} what to check:` : ''
+    }`,
+    links: switchGuides.map((m) => ({ href: `/migrate/from-${m.from}-to-${m.to}/`, text: `${m.fromName} to ${m.toName} switching guide` })),
   },
   {
     q: `${a.name} vs ${b.name}: which has better customer support?`,
@@ -789,7 +807,7 @@ const breadcrumbs = [
         )}
         {cheaperTool && (
           <p class="mt-1 text-sm text-slate-600">
-            <strong>{cheaperTool.name}</strong> has the lower starting price ({shortPrice(cheaperTool)}).
+            <strong>{cheaperTool.name}</strong> has the lower starting price: {verdictPrice(cheaperTool)}.
           </p>
         )}
         {aQuote !== bQuote && (
@@ -913,7 +931,7 @@ const breadcrumbs = [
           </h3>
           {onlyA.length > 0 ? (
             <ul class="space-y-1 text-sm text-slate-700">
-              {onlyA.map((f) => <li>+ {label(f)}</li>)}
+              {onlyA.map((f) => <li>+ {featureChip(f)}</li>)}
             </ul>
           ) : (
             <p class="text-sm text-slate-500">None</p>
@@ -925,7 +943,7 @@ const breadcrumbs = [
           </h3>
           {sharedFeatures.length > 0 ? (
             <ul class="space-y-1 text-sm text-green-900">
-              {sharedFeatures.map((f) => <li>✓ {label(f)}</li>)}
+              {sharedFeatures.map((f) => <li>✓ {featureChip(f)}</li>)}
             </ul>
           ) : (
             <p class="text-sm text-green-700">None</p>
@@ -937,7 +955,7 @@ const breadcrumbs = [
           </h3>
           {onlyB.length > 0 ? (
             <ul class="space-y-1 text-sm text-slate-700">
-              {onlyB.map((f) => <li>+ {label(f)}</li>)}
+              {onlyB.map((f) => <li>+ {featureChip(f)}</li>)}
             </ul>
           ) : (
             <p class="text-sm text-slate-500">None</p>
@@ -955,7 +973,7 @@ const breadcrumbs = [
           </h3>
           {onlyAIntegrations.length > 0 ? (
             <ul class="space-y-1 text-sm text-slate-700">
-              {onlyAIntegrations.map((f) => <li>+ {label(f)}</li>)}
+              {onlyAIntegrations.map((f) => <li>+ {integrationLabel(f)}</li>)}
             </ul>
           ) : (
             <p class="text-sm text-slate-500">None</p>
@@ -967,7 +985,7 @@ const breadcrumbs = [
           </h3>
           {sharedIntegrations.length > 0 ? (
             <ul class="space-y-1 text-sm text-green-900">
-              {sharedIntegrations.map((f) => <li>✓ {label(f)}</li>)}
+              {sharedIntegrations.map((f) => <li>✓ {integrationLabel(f)}</li>)}
             </ul>
           ) : (
             <p class="text-sm text-green-700">None in common in our data</p>
@@ -979,7 +997,7 @@ const breadcrumbs = [
           </h3>
           {onlyBIntegrations.length > 0 ? (
             <ul class="space-y-1 text-sm text-slate-700">
-              {onlyBIntegrations.map((f) => <li>+ {label(f)}</li>)}
+              {onlyBIntegrations.map((f) => <li>+ {integrationLabel(f)}</li>)}
             </ul>
           ) : (
             <p class="text-sm text-slate-500">None</p>
@@ -1033,7 +1051,7 @@ const breadcrumbs = [
         {faqs.map((f) => (
           <details class="rounded-lg border border-slate-200 bg-white p-4">
             <summary class="cursor-pointer font-semibold text-slate-900">{f.q}</summary>
-            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}</p>
+            <p class="mt-3 text-slate-700 leading-relaxed">{f.a}{(f as { links?: { href: string; text: string }[] }).links?.map((l) => <> <a href={l.href} class="text-orange-600 underline">{l.text}</a></>)}</p>
           </details>
         ))}
       </div>

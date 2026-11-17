@@ -15,6 +15,7 @@ import { asSentence,
   type Vertical,
   type Tool,
 } from '../../lib/data';
+import { featureChip } from '../../lib/labels';
 import Byline from '../../components/Byline.astro';
 import hvacPrices from '../../data/research/hvac-published-prices.json';
 import WrenchScore from '../../components/WrenchScore.astro';
@@ -584,7 +585,7 @@ const breadcrumbs = [
                 </div>
                 <div>
                   <dt class="font-semibold text-slate-900">Key features</dt>
-                  <dd class="text-slate-700">{t.key_features.slice(0, 6).map((f) => f.replace(/_/g, ' ')).join(' · ')}</dd>
+                  <dd class="text-slate-700">{t.key_features.slice(0, 6).map(featureChip).join(' · ')}</dd>
                 </div>
                 {t.integrations.length > 0 && (
                 <div>

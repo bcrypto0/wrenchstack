@@ -2,6 +2,7 @@
 import Layout from '../../../layouts/Layout.astro';
 import SourceReviews from '../../../components/SourceReviews.astro';
 import { asSentence, marketingAgencies, agencyTier, type MarketingAgency, verticals, verticalToUrl } from '../../../lib/data';
+import { featureChip } from '../../../lib/labels';
 
 export async function getStaticPaths() {
   return marketingAgencies.map((a) => ({
@@ -177,7 +178,7 @@ const faqSchema = {
             <dt class="text-xs uppercase tracking-wider text-slate-500">Services offered</dt>
             <dd class="mt-1 flex flex-wrap gap-1">
               {agency.services_offered.map((s) => (
-                <span class="rounded-md bg-slate-100 px-2 py-0.5 text-xs">{s.replace(/_/g, ' ')}</span>
+                <span class="rounded-md bg-slate-100 px-2 py-0.5 text-xs">{featureChip(s)}</span>
               ))}
             </dd>
           </div>
