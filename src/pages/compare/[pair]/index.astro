@@ -124,7 +124,7 @@ function shortPrice(t: Tool): string {
 }
 
 // The cheaper tool's price in a short verdict. When the two entry plans record different
-// users, the full entry label names them (2026-11-18: "Contractor Foreman has the lower
+// users, the full entry label names them (2026-11-17: "Contractor Foreman has the lower
 // starting price (From $49/mo)" set 1 user against Projul's 3).
 const verdictPrice = (t: Tool) =>
   t.pricing.starting_at_usd !== 0 && entryUsersPhrase(t) !== entryUsersPhrase(otherOf(t)) ? entryLabel(t) : shortPrice(t);
@@ -639,7 +639,7 @@ const faqs = [
   },
   {
     q: `Can I move from ${a.name} to ${b.name} (or the other way)?`,
-    // The pair's switching guide is linked where one exists (2026-11-18): the answer was
+    // The pair's switching guide is linked where one exists (2026-11-17): the answer was
     // the same sentence on every compare page. Our data still records no migration
     // support, so that part stays.
     a: `Our data does not record migration support for either tool. Ask both vendors which records they import and export (customers, jobs, invoices, recurring agreements, price books), in which file format, and whether they help with the import.${

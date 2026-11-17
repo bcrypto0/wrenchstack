@@ -1,4 +1,4 @@
-/** Display labels for feature and integration slugs (2026-11-18). Chips and lists printed
+/** Display labels for feature and integration slugs (2026-11-17). Chips and lists printed
  *  slugs with only the underscores replaced, so readers saw "quickbooks online", "gaf",
  *  "justifi", "crm" and "aia billing". Display only: never feed a label back into data. */
 

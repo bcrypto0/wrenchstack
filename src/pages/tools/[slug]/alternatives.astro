@@ -178,7 +178,7 @@ const fitScore = tool.vertical_fit?.[primaryVertical] ?? 5;
 // this section took every alternative at 8/10 or more and headed it "Stronger fit",
 // which listed 8/10 tools as stronger than a 10/10 one.
 // The section shows four; its copy says so when more score higher, since the FAQ's fit
-// line counts them all (2026-11-18: Projul's page showed four, the FAQ said five).
+// line counts them all (2026-11-17: Projul's page showed four, the FAQ said five).
 const allHigherFit = allAlternatives
   .filter((t) => (primaryFit(t) ?? 0) > fitScore)
   .sort((a, b) => (primaryFit(b) as number) - (primaryFit(a) as number));
