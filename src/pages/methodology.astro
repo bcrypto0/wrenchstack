@@ -49,11 +49,11 @@ interface ToolStatus {
 const STATUS_FROM_DATA = {
   approved_unused: {
     status: 'Approved',
-    note: 'Our affiliate account was approved, but we do not use its tracked link anywhere on the site. We earn nothing from this tool.',
+    note: 'Our affiliate account was approved, but we do not use its tracked link anywhere on the site.',
   },
   applied: {
     status: 'Pending',
-    note: 'Application submitted; no decision received. We earn nothing from this tool today.',
+    note: 'Application submitted; no decision received. No tracked link is in use for this tool today.',
   },
   declined: {
     status: 'None',
@@ -301,7 +301,7 @@ const awardsArchivedLabel = fmtDate(awards.archived_date ?? awards.published_dat
 
     <div class="not-prose mb-6 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-5">
       <p class="text-sm text-emerald-900 leading-relaxed m-0">
-        <strong class="text-emerald-900">WrenchStack rankings are not for sale.</strong> Vendors cannot pay to be included in the directory, pay to receive a higher WrenchStack Fit Score™, pay for a badge, pay to soften reputation flags, or pay to remove cons from a review. Affiliate relationships are disclosed in the per-vendor ledger below and have no effect on rankings. Pricing benchmark reports sold to vendors are listed in the report ledger below. Whether a vendor bought a report is not an input to any listing, Fit Score, ranking, award or reputation flag, or to whether a product is listed. The methodology applies identically whether or not we earn a commission or a referral reward on a vendor, and whether or not it bought a report.
+        <strong class="text-emerald-900">How scores and flags are set.</strong> Vendors cannot pay to receive a higher WrenchStack Fit Score™, pay to soften reputation flags, or pay to remove cons from a review. Affiliate relationships are disclosed in the per-vendor ledger below and have no effect on rankings. Pricing benchmark reports sold to vendors are listed in the report ledger below. Whether a vendor bought a report is not an input to any listing, Fit Score, ranking, award or reputation flag, or to whether a product is listed. The methodology applies identically whether or not we earn a commission or a referral reward on a vendor, and whether or not it bought a report.
       </p>
     </div>
 
@@ -373,14 +373,13 @@ const awardsArchivedLabel = fmtDate(awards.archived_date ?? awards.published_dat
     <h2 id="how-we-make-money">How we make money</h2>
 
     <p>
-      WrenchStack earns money in two ways: commissions and referral rewards from vendor programs,
-      described here, and pricing benchmark reports sold to software vendors, described below the
+      WrenchStack earns money from commissions and referral rewards from vendor programs,
+      described here, and from pricing benchmark reports sold to software vendors, described below the
       affiliate ledger. When you click a "Visit [Tool]" button and sign up for that tool,
       <strong>we may earn a commission or a referral reward</strong>, but only when the link
       belongs to a program we have joined. Some of those programs are affiliate programs and some
       are referral programs. The reward is not an input to any listing, Fit Score, rank or award.
-      No vendor has paid for placement, ranking or inclusion in the directory, and payment is not
-      an input to the Fit Score, a spot in a "best of" list or the tone of a review.
+      Payment is not an input to the Fit Score, a spot in a "best of" list or the tone of a review.
     </p>
 
     <p class="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm not-prose">
@@ -476,19 +475,18 @@ const awardsArchivedLabel = fmtDate(awards.archived_date ?? awards.published_dat
       <li>
         <strong>Approved</strong>: the vendor accepted us into its affiliate program, but we do
         not use the tracked link anywhere on the site. The "Visit" button points to the vendor's
-        public page and we earn nothing from it. We list it because an approved account is a
+        public page and no tracked link is in use. We list it because an approved account is a
         relationship you should know about.
       </li>
       <li>
         <strong>Pending</strong>: we have applied to the vendor's affiliate program and have not
-        had a decision. The "Visit" button points to the vendor's public page directly, so we
-        don't earn anything from clicks on this tool today.
+        had a decision. The "Visit" button points to the vendor's public page directly, so no
+        tracked link is in use for this tool today.
       </li>
       <li>
         <strong>None</strong>: we have no affiliate relationship with this vendor. Where we have
         a reason on record, the note gives it: the vendor has no program open to publishers, or
         we applied and were not accepted. The "Visit" button points to the vendor's public page.
-        We earn no commission or referral reward from this tool.
       </li>
     </ul>
 

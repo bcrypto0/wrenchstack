@@ -15,7 +15,7 @@ const intlVendorCount = Object.values(intlModules).reduce(
 );
 
 const pageTitle = 'Submit your product for review | WrenchStack vendor program';
-const pageDescription = 'WrenchStack accepts submissions from trades-contractor vendors across software, lead-gen, insurance, payroll, and marketing agencies. Published methodology. No pay-to-play.';
+const pageDescription = 'WrenchStack accepts submissions from trades-contractor vendors across software, lead-gen, insurance, payroll, and marketing agencies. Published methodology.';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -114,7 +114,7 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
         <li><strong>✓ Affiliate relationships disclosed.</strong> If you run a program we join, it's flagged in our per-vendor ledger. Recommendation isn't conditional on it.</li>
         <li><strong>✗ Inclusion does not guarantee a positive review.</strong> If our research finds a regulator order, court record, BBB complaint record or contract term that puts contractors at risk, the review documents it with citations.</li>
         <li><strong>✗ Inclusion does not guarantee absence of a reputation flag.</strong> Reputation flags get attached based on documented patterns regardless of vendor relationship.</li>
-        <li><strong>✗ Inclusion is not for sale.</strong> We don't accept payment to be included, to influence ranking, to remove cons, or to soften reputation flags. See <a href="/methodology/" class="underline">methodology</a> for the full list.</li>
+        <li><strong>✗ Payment does not change a review.</strong> We don't accept payment to influence ranking, to remove cons, or to soften reputation flags. See <a href="/methodology/" class="underline">methodology</a> for the full list.</li>
       </ul>
     </section>
 
@@ -284,7 +284,7 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
       <div class="space-y-3">
         <details class="rounded-lg border border-slate-200 bg-white p-4">
           <summary class="cursor-pointer font-semibold text-slate-900">Do I have to pay to be listed?</summary>
-          <p class="mt-3 text-sm text-slate-700">No. Inclusion is editorial and free. We do not accept payment for inclusion, ranking, a score or a badge, or content modifications. Where we have an affiliate relationship with a listed vendor, it's disclosed transparently in our per-vendor ledger.</p>
+          <p class="mt-3 text-sm text-slate-700">No. Inclusion is editorial and free. We do not accept payment for ranking, a score or a badge, or content modifications. Where we have an affiliate relationship with a listed vendor, it's disclosed transparently in our per-vendor ledger.</p>
         </details>
         <details class="rounded-lg border border-slate-200 bg-white p-4">
           <summary class="cursor-pointer font-semibold text-slate-900">How long does editorial review take?</summary>
@@ -371,7 +371,7 @@ const WEB3FORMS_ACCESS_KEY = (import.meta.env.PUBLIC_WEB3FORMS_KEY as string | u
       <div class="mt-4 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-6">
         <h3 class="mb-3 text-lg font-bold text-emerald-900">How reports are kept apart from rankings</h3>
         <ul class="space-y-2 text-sm text-emerald-900 leading-relaxed">
-          <li><strong>✓ Not an input.</strong> Whether a vendor bought a report is not an input to any listing, Fit Score, ranking, award or reputation flag, or to whether a product is listed. No vendor pays for placement or scores.</li>
+          <li><strong>✓ Not an input.</strong> Whether a vendor bought a report is not an input to any listing, Fit Score, ranking, award or reputation flag, or to whether a product is listed. Vendors cannot pay for a Fit Score.</li>
           <li><strong>✓ Every sale is public.</strong> Each sale is listed in the <a href="/methodology/#report-ledger" class="underline">report ledger</a>: company and product, trade, month, price, order status, and the product's Fit Score, rank, award and reputation flag when it ordered and today, with the cause of any difference. Refunded orders stay listed. The buyer's tool page notes the order, and each trade page that lists the buyer counts it.</li>
           <li><strong>✓ Same data for everyone.</strong> Prices we re-read while writing a report go through the same second check of the vendor's page as routine re-checks and are updated on the site for every platform in that trade, buyer or not, no later than the day the report is delivered. What we find on a vendor's own pages is corrected on that vendor's WrenchStack listing, with the date, whether or not it buys.</li>
           <li><strong>✗ No inside track.</strong> A buyer gets no preview of anything we publish, no advance notice of ranking changes and no say over what we publish.</li>
