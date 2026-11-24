@@ -1,10 +1,8 @@
-// Indexability gate for /compare/ pages. See SEO audit 2026-05-28.
+// Indexability gate for /compare/ pages.
 //
-// The site generates ~3,925 head-to-head comparison pages (both word orders
-// for every tool pair that shares a vertical). On a young domain that volume
-// of templated ~1,200-word pages is an index-bloat / scaled-content risk, so
-// we keep only the high-intent comparisons indexable and noindex + drop the
-// rest from the sitemap until the domain has the authority to rank more.
+// Head-to-head comparison pages exist in both word orders for every tool pair
+// that shares a vertical. Only the high-intent comparisons are indexable; the
+// rest are noindex and out of the sitemap.
 //
 // This module is the single source of truth, imported by BOTH the comparison
 // page template (to set the noindex prop) and astro.config.mjs (to filter the
@@ -12,7 +10,7 @@
 
 // High-demand FSM / contractor brands: the ones with real "X vs Y" search
 // volume. A comparison is only worth indexing when BOTH tools are on this
-// list. Expand as the domain gains authority and we want to release more.
+// list. Expand to release more.
 export const POPULAR_TOOL_SLUGS = new Set([
   'servicetitan', 'jobber', 'housecall-pro', 'workiz', 'fieldedge',
   'fieldpulse', 'servicem8', 'gorilladesk', 'servicefusion', 'mhelpdesk',
@@ -33,7 +31,7 @@ export function isComparisonIndexable(slugA, slugB) {
 // Gulf markets (added 2026-06): their head-to-head pages are numerous (~266
 // templated pages) on a domain still fighting for crawl budget. Same
 // young-domain logic as /compare/, so keep them out of the sitemap and
-// noindexed (via IntlComparison.astro) until the domain has authority.
+// noindexed (via IntlComparison.astro).
 // The per-market landings, vendor pages and compare hubs stay indexable.
 // The 5 legacy markets (uk/au/ca/nz/ie, 93 pages) stay indexable as decided
 // in the 2026-05-28 audit. To release a Gulf market later, remove it here.
@@ -72,26 +70,11 @@ export function isStatePageIndexable(stateSlug, verticalUrl) {
 }
 
 
-// --- International section (added 2026-09-07, thin-page audit) --------------
-// Measured 2026-09-07 across all 1,821 indexable pages: the 17 international
-// markets account for 1,089 of them (60% of the site), generated from vendor
-// records averaging 1,191 bytes against 8,843 for the US records. Same pages
-// per vendor as the US (2.4 vs 2.6), one seventh the substance behind each.
-//
-// Sibling overlap confirms it: international compare pairs 64%, international
-// vendor pages 69%. Search Console's crawled-and-declined list is full of
-// exactly these URLs (/uk/powered-now/, /uk/joblogic/, /au/aroflo/,
-// /ca/compare/...). The press kit had already recorded the same weakness from
-// the other direction, declining to pitch UK trade press on 22 UK vendors
-// against 280 US ones.
-//
-// So the whole international section is noindexed and dropped from the
-// sitemap: not deleted, not unlinked, still served to anyone who lands on it.
-// This supersedes the narrower GATED_INTL_COMPARE_MARKETS gate above, which
-// covered 8 markets' head-to-heads only and is kept for reference.
-//
-// This is ONE flag to reverse. If the keep rate does not improve, or if a
-// market earns real coverage depth, undo it here rather than per template.
+// --- International section ---------------------------------------------------
+// Country pages are noindex,follow for every engine and out of the sitemap,
+// except the paths listed in INTL_OPEN_PATHS below. They are still served and
+// still linked. The narrower GATED_INTL_COMPARE_MARKETS gate above is kept for
+// reference.
 export const INTL_MARKET_CODES = new Set([
   'ae', 'au', 'ba', 'ca', 'eg', 'fr', 'ie', 'jo', 'kw',
   'ma', 'my', 'nz', 'om', 'qa', 'sa', 'uk', 'za',
@@ -103,25 +86,11 @@ export function isInternationalPath(pathname) {
   return seg !== undefined && INTL_MARKET_CODES.has(seg);
 }
 
-// --- Core index (added 2026-10-14, indexing diagnosis) -----------------------
-// Search Console on 2026-10-14: 1 page indexed (the home page) of 742 in the
-// sitemap; 620 never crawled, 121 crawled and declined (mostly /compare/
-// pairs); about 5 crawl requests a day; 2 external links. Indexed sitemap pages
-// fell 11 -> 7 -> 1 between late August and early October.
-// See docs/indexing-diagnosis-2026-10-14.md and docs/core-index-list-2026-10-14.md
-// (owner approved the list 2026-10-14).
-//
-// So the index is cut to the core: home, trade hubs, section hubs, tool
-// reviews and the editorial/trust pages (182 URLs). Everything below is
-// noindex,follow and out of the sitemap: still served, still linked, links on
-// it still followed. Templated sections (compare pairs, multi-compare,
-// pricing, migrate, features, best-software-for) measured 31-70% shared text
-// between sibling pages; /tools/<slug>/alternatives/ pages have about a third
-// of the unique text of the reviews; the non-software vendor entries are off
-// the core topic (their section hubs stay indexable).
-//
-// ONE switch to reverse: release a section by removing it here once the core
-// is indexed and the domain has links.
+// --- Core index --------------------------------------------------------------
+// The core is: home, trade hubs, section hubs, tool reviews and the editorial
+// and trust pages. The sections below are noindex,follow and out of the
+// sitemap: still served, still linked, links on them still followed.
+// To release a section, remove it here.
 export const CORE_GATED_SECTIONS = new Set([
   'compare', 'multi-compare', 'compare-builder', 'pricing', 'migrate', 'features',
   'best-software-for', 'state', 'software-by-country',
@@ -155,33 +124,18 @@ export function isArchivedPath(pathname) {
   return ARCHIVED_PATHS.has(p);
 }
 
-// --- Vendor entries are hidden from Google only since 2026-11-14 -------------
-// (owner approved 2026-11-14.) The 14 Oct gate above was a robots noindex, so it
-// also removed these pages from Bing and from the assistants that use Bing's
-// index. Bing Webmaster Tools, read 14 Nov 2026
-// (docs/site-and-money-review-2026-11-14.md): 278 pages indexed, 3.1K search
-// impressions and about 90.8K AI citations in 3 months across 173 cited pages.
-// By section, from the full cited-pages list: tool reviews 36.7K, trade and
-// section hubs 28.7K, the non-software vendor entries 20.4K on 55 pages (for
-// example /insurance/next-insurance/ 3.2K, /financing/sunbit/ 1.9K,
-// /ai-tools/podium/ 1.9K, /insurance/trade/plumbing/ 1.6K), and the templated
-// sections almost nothing (/compare/ 381, alternatives 78, /migrate/ 75,
-// /pricing/ 1, none for /features/, /multi-compare/, /best-software-for/).
-// Google meanwhile still lists 1 page, so the robots noindex bought nothing there.
-//
-// So the vendor entries (insurance, lead-gen, payroll, agencies, ai-tools,
-// accounting, financing, payments, banking, including their /trade/ pages) no
-// longer carry robots noindex. They are not on GOOGLE_VISIBLE_PATHS, so
+// --- Vendor entries ----------------------------------------------------------
+// The vendor entries (insurance, lead-gen, payroll, agencies, ai-tools,
+// accounting, financing, payments, banking, including their /trade/ pages)
+// carry no robots noindex. They are not on GOOGLE_VISIBLE_PATHS, so
 // Layout.astro gives them the googlebot-only noindex like every other page
-// outside that list, and other engines may index them again. They stay out of
-// the sitemap (isCoreGatedPath is still the sitemap rule), so Google's small
-// crawl is not spent on them. Bing already knows these URLs; the /trade/ pages
-// are linked from their section hubs (TradeGuideLinks.astro).
+// outside that list. They stay out of the sitemap (isCoreGatedPath is still
+// the sitemap rule); the /trade/ pages are linked from their section hubs
+// (TradeGuideLinks.astro).
 //
-// Everything else in the 14 Oct gate keeps the robots noindex for every engine:
-// the templated sections listed here (measured in October at 7 to 33 percent
-// text unique to the page, and barely cited), /tools/<slug>/alternatives/,
-// /state/, /software-by-country/ and /compare-builder/.
+// The templated sections listed here keep the robots noindex for every engine,
+// as do /tools/<slug>/alternatives/, /state/, /software-by-country/ and
+// /compare-builder/.
 // Undo: add the nine vendor section names to this set.
 export const CORE_GATED_ALL_ENGINES = new Set([
   'compare', 'multi-compare', 'compare-builder', 'pricing', 'migrate', 'features',
@@ -196,9 +150,26 @@ export function isCoreGatedForAllEngines(pathname) {
   return CORE_GATED_ALL_ENGINES.has(segs[0]);
 }
 
+// Country pages open to non Google engines.
+// Exact paths only, lowercase with a leading and a trailing slash. A listed path
+// has no robots noindex and is in the sitemap; Layout.astro still gives it the
+// googlebot only noindex because it is not on GOOGLE_VISIBLE_PATHS. Every other
+// country path keeps the robots noindex. Add a path here only after its record
+// has been checked against the vendor's own pages.
+export const INTL_OPEN_PATHS = new Set([
+  '/uk/',
+  '/uk/bigchange/', '/uk/joblogic/', '/uk/tradify-uk/',
+]);
+
+/** True for a country path that is open to non Google engines. */
+export function isInternationalOpenPath(pathname) {
+  return INTL_OPEN_PATHS.has(toListedPath(pathname));
+}
+
 /** True when the page carries robots noindex, i.e. no engine may index it. */
 export function isNoindexedForAllEngines(pathname) {
-  return isInternationalPath(pathname) || isCoreGatedForAllEngines(pathname) || isArchivedPath(pathname);
+  return (isInternationalPath(pathname) && !isInternationalOpenPath(pathname))
+    || isCoreGatedForAllEngines(pathname) || isArchivedPath(pathname);
 }
 
 // Sitemap filter: keep every non-comparison URL; keep a /compare/<a>-vs-<b>/
@@ -207,7 +178,8 @@ export function shouldKeepInSitemap(urlStr) {
   let path;
   try { path = new URL(urlStr).pathname; } catch { path = urlStr; }
   // Whole international section is out of the sitemap (2026-09-07 thin-page audit).
-  if (isInternationalPath(path)) return false;
+  // Except the country pages listed in INTL_OPEN_PATHS (2026-11-24).
+  if (isInternationalPath(path) && !isInternationalOpenPath(path)) return false;
   // Core index only (2026-10-14 indexing diagnosis).
   if (isCoreGatedPath(path)) return false;
   // Archived pages (2026-11-14 trust batch).
@@ -221,34 +193,22 @@ export function shouldKeepInSitemap(urlStr) {
   return isComparisonIndexable(m[1], m[2]);
 }
 
-// --- Google-visible set (added 2026-11-14, site and search review) -----------
-// Search Console on 10 Nov 2026: 1 page indexed (the home page); the US core has
-// been "Crawled, currently not indexed" since late May. The 14 Nov review
-// (docs/site-and-money-review-2026-11-14.md, docs/site-audit-2026-11-14.json,
-// "search" findings 1, 3 and 6) reads this as a site-level judgement of mass
-// produced content, not a domain-age delay. Owner approved 2026-11-14.
+// --- Google-visible set ------------------------------------------------------
+// Google is shown only the pages below: trust and utility pages, the editorial
+// and data pages no template repeats, and a set of tool reviews.
 //
-// So Google is shown only the pages below: trust and utility pages, the
-// editorial and data pages no template repeats, and 12 tool reviews with a high
-// share of text unique to the page (8 word shingles, 10 Nov build, measured in
-// verification/2026-11-14/site-batch/spec_index.md; below rank 9 the cut is
-// within measurement noise, and /tools/responsibid/ (rank 13) takes the place
-// of /tools/contractor-plus/ (rank 3), whose main links are affiliate links).
-//
-// Every other page that is indexable today STAYS indexable for every other
-// engine and for AI crawlers: Layout.astro adds
+// Every other page that is indexable STAYS indexable for every other engine
+// and for AI crawlers: Layout.astro adds
 //   <meta name="googlebot" content="noindex,follow">
 // only when the page has no robots noindex of its own and is not on this list.
 // The general robots meta, the sitemap, llms.txt and the search index do NOT
-// read this list. Vendors and AI assistants find the trade pages through other
-// engines, and that flow must not be cut.
+// read this list.
 //
 // Single source of truth: Layout.astro and scripts/index-states.mjs read it.
 // Entries are lowercase paths with a leading and a trailing slash ('/' is home).
 //
 // To release one page to Google: add its path here and rebuild.
-// To undo the whole gate: set GOOGLE_ONLY_GATE to false (every page that is not
-// robots-noindexed becomes visible to Google again), rebuild, push.
+// To undo the whole gate: set GOOGLE_ONLY_GATE to false, rebuild.
 export const GOOGLE_ONLY_GATE = true;
 
 export const GOOGLE_VISIBLE_PATHS = new Set([
@@ -268,6 +228,13 @@ export const GOOGLE_VISIBLE_PATHS = new Set([
 for (const p of GOOGLE_VISIBLE_PATHS) {
   if (!/^\/(?:[a-z0-9-]+\/)*$/.test(p)) {
     throw new Error(`GOOGLE_VISIBLE_PATHS: bad entry "${p}" (lowercase, leading and trailing slash)`);
+  }
+}
+
+// Fail the build on a malformed or non country entry.
+for (const p of INTL_OPEN_PATHS) {
+  if (!/^\/(?:[a-z0-9-]+\/)*$/.test(p) || !isInternationalPath(p)) {
+    throw new Error(`INTL_OPEN_PATHS: bad entry "${p}" (lowercase, leading and trailing slash, inside a country)`);
   }
 }
 

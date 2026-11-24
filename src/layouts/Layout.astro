@@ -26,13 +26,9 @@ interface Props {
 }
 
 const { title, description, canonical, ogImage, noindex = false, breadcrumbs, lang = 'en', dir = 'ltr', alternateUrls = [], affiliate = false } = Astro.props;
-// The whole international section is noindexed (2026-09-07 thin-page audit:
-// 1,089 pages, 60% of the site, on vendor records a seventh the depth of the
-// US ones). Applied here rather than in each of the four intl templates and 17
-// market landings, so no international page can be added later that misses it.
-// `follow` rather than `nofollow`: stop indexing these, but still let Google
-// traverse the links out of them to the US pages that can rank.
-// International, core-gated and archived pages are noindex,follow (see compare-index.mjs).
+// International, core-gated and archived pages are noindex,follow (see
+// compare-index.mjs), except the country pages listed in INTL_OPEN_PATHS.
+// Applied here rather than in each template, so no page can miss it.
 const allEnginesGated = isNoindexedForAllEngines(Astro.url.pathname);
 const robotsContent = noindex ? 'noindex,nofollow' : allEnginesGated ? 'noindex,follow' : null;
 // Google-only gate (2026-11-14): a page that no rule above noindexes, and that
