@@ -12,6 +12,7 @@ export async function getStaticPaths() {
   const TARGET_VERTICALS = [
     'hvac', 'plumbing', 'electrical', 'roofing',
     'general_contractor', 'landscaping', 'cleaning', 'pest_control',
+    'handyman', 'painting',
   ];
   return TARGET_VERTICALS.map((slug) => {
     const v = getVertical(slug);
@@ -30,7 +31,16 @@ interface Props {
 const { verticalSlug } = Astro.props;
 const vertical = getVertical(verticalSlug)!;
 
-const providersForVertical = insuranceProviders.filter((p) => p.verticals.includes(verticalSlug));
+// For these two trades the page lists only providers whose own site named the trade
+// when read on 2026-11-26 (handyman or painter insurance page, or a list of trades
+// served). Add a slug here only after reading the provider's own page.
+const NAMED_ON_OWN_SITE: Record<string, string[]> = {
+  handyman: ['thimble', 'progressive-commercial', 'hiscox', 'simply-business'],
+  painting: ['thimble', 'progressive-commercial', 'hiscox', 'simply-business', 'huckleberry', 'markel', 'pie-insurance'],
+};
+const providersForVertical = NAMED_ON_OWN_SITE[verticalSlug]
+  ? insuranceProviders.filter((p) => NAMED_ON_OWN_SITE[verticalSlug].includes(p.slug))
+  : insuranceProviders.filter((p) => p.verticals.includes(verticalSlug));
 // Two tiers only (2026-09-30): F = reputation warning, A = no warning.
 const byTier: Record<'A' | 'F', InsuranceProvider[]> = { A: [], F: [] };
 for (const p of providersForVertical) {
@@ -60,11 +70,13 @@ const thimbleHere = providersForVertical.some((p) => p.slug === 'thimble');
 // decision); the "Which insurance provider is best for ..." question keeps its wording
 // but uses tradePros, since it rendered "general contractors contractors".
 const tradeLower = vertical.name === vertical.name.toUpperCase() ? vertical.name : vertical.name.toLowerCase();
-const tradePros = /contractors$/i.test(vertical.name) ? tradeLower : `${tradeLower} contractors`;
-const tradeWork = verticalSlug === 'general_contractor' ? 'general contracting' : tradeLower;
+const tradePros = verticalSlug === 'handyman' ? 'handyman businesses' : /contractors$/i.test(vertical.name) ? tradeLower : `${tradeLower} contractors`;
+const tradeWork = verticalSlug === 'general_contractor' ? 'general contracting' : verticalSlug === 'handyman' ? 'handyman' : tradeLower;
 
 // Trade names like "General Contractors" already end in the noun; do not double it.
-const tradeTitle = /contractors$/i.test(vertical.name) ? vertical.name : `${vertical.name} Contractors`;
+const tradeTitle = verticalSlug === 'handyman' ? 'Handyman Businesses' : /contractors$/i.test(vertical.name) ? vertical.name : `${vertical.name} Contractors`;
+// The lead-gen section has by-trade pages for these trades only.
+const LEAD_GEN_TRADES = ['hvac', 'plumbing', 'electrical', 'roofing', 'general_contractor', 'landscaping', 'cleaning', 'pest_control'];
 const pageTitle = `Best Insurance for ${tradeTitle} (2026)`;
 const pageDescription = `Independent reviews of ${providersForVertical.length} business-insurance providers for ${tradePros}: online insurers and marketplaces, carriers sold through independent agents, and reputation warnings where a documented record calls for one.`;
 
@@ -97,6 +109,10 @@ function tradeIntro(slug: string): string {
       return 'Cleaning crews work inside customers\' homes and businesses and use cleaning chemicals, so check how each general liability quote covers damage to the property you are working on.';
     case 'pest_control':
       return 'Pest control involves applying pesticides at customers\' properties, so ask whether each general liability quote covers pesticide and chemical-related claims, and whether professional liability is available for your work.';
+    case 'handyman':
+      return `Handyman work covers many kinds of small jobs in customers' homes. Tell each insurer exactly which jobs you take on, and ask which of them its handyman class covers. The core lines to price are general liability, workers' comp if you have employees, and commercial auto if you drive a work vehicle. The ${providersForVertical.length} providers below each name handyman businesses on their own site.`;
+    case 'painting':
+      return `Painting means working inside and outside customers' buildings, often from ladders. Ask how each general liability quote handles damage to the property you are working on, including paint spills and overspray. Price workers' comp if you have employees, and commercial auto if you drive a work vehicle. The ${providersForVertical.length} providers below each name painters or painting contractors on their own site.`;
     default:
       return `Business-insurance providers for ${tradePros}.`;
   }
@@ -211,7 +227,7 @@ const faqSchema = {
       <h2 class="text-2xl font-bold">More for {tradePros}</h2>
       <div class="mt-4 flex flex-wrap gap-3">
         <a href={`/${verticalToUrl(verticalSlug)}/`} class="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-600">{vertical.name} software directory →</a>
-        <a href={`/lead-gen/trade/${verticalToUrl(verticalSlug)}/`} class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Lead-gen for {tradeLower}</a>
+        {LEAD_GEN_TRADES.includes(verticalSlug) && <a href={`/lead-gen/trade/${verticalToUrl(verticalSlug)}/`} class="rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">Lead-gen for {tradeLower}</a>}
         <a href="/insurance/" class="rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/20">All insurance providers</a>
       </div>
     </section>
