@@ -60,19 +60,19 @@ const fullTitle = title.includes('WrenchStack')
   : title.length + TITLE_SUFFIX.length <= 60
     ? `${title}${TITLE_SUFFIX}`
     : title;
-// Meta descriptions over ~160 chars get hard-truncated by Google mid-word;
-// clamp to a clean word boundary so the snippet always reads well.
-// Since 2026-11-14 (diff review visitor S5) a long description is cut at the last full
-// sentence that fits, without an ellipsis; only a description with no sentence end
-// between 70 and 160 characters falls back to the word cut.
+// Meta descriptions are kept to 160 characters. A long description keeps every
+// full sentence that fits. If that leaves fewer than 120 characters, the next
+// sentence is added and cut at a word boundary with an ellipsis, so the
+// description stays close to the 150 to 160 characters search engines ask for.
 function clampDescription(d: string): string {
   if (d.length <= 160) return d;
   const re = /(?<!\b(?:vs|Inc|etc|e\.g|i\.e|St|Co|No|U\.S))[.!?](?=\s)/g;
   let cut = -1;
   for (const m of d.slice(0, 161).matchAll(re)) {
-    if (m.index !== undefined && m.index + 1 <= 160 && m.index + 1 >= 70) cut = m.index + 1;
+    if (m.index !== undefined && m.index + 1 <= 160) cut = m.index + 1;
   }
-  return cut > 0 ? d.slice(0, cut) : `${d.slice(0, 157).replace(/\s+\S*$/, '')}…`;
+  if (cut >= 120) return d.slice(0, cut);
+  return `${d.slice(0, 159).replace(/\s+\S*$/, '').replace(/[,;:(–-]+$/, '')}…`;
 }
 const metaDescription = clampDescription(description);
 const isHomepage = Astro.url.pathname === '/';
