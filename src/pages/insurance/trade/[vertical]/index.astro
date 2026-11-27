@@ -36,7 +36,7 @@ const vertical = getVertical(verticalSlug)!;
 // served). Add a slug here only after reading the provider's own page.
 const NAMED_ON_OWN_SITE: Record<string, string[]> = {
   handyman: ['thimble', 'progressive-commercial', 'hiscox', 'simply-business'],
-  painting: ['thimble', 'progressive-commercial', 'hiscox', 'simply-business', 'huckleberry', 'markel', 'pie-insurance'],
+  painting: ['thimble', 'progressive-commercial', 'hiscox', 'simply-business', 'huckleberry', 'markel', 'pie-insurance', 'liberty-mutual'],
 };
 const providersForVertical = NAMED_ON_OWN_SITE[verticalSlug]
   ? insuranceProviders.filter((p) => NAMED_ON_OWN_SITE[verticalSlug].includes(p.slug))
