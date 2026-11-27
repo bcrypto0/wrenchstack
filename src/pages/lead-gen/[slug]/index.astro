@@ -36,7 +36,11 @@ const siblings = leadGenPlatforms
 
 // "Lead Quality" left the title on 2026-10-01: the review states the lead model and billing
 // rules, and the tiers say they are not a ranking of lead quality.
-const pageTitle = `${platform.name} Review (2026): Pricing, Lead Model, Pros & Cons`;
+// A name with a bracketed note drops the note when the full title runs past 70 characters.
+const titleFor = (name: string) => `${name} Review (2026): Pricing, Lead Model, Pros & Cons`;
+const pageTitle = titleFor(platform.name).length > 70
+  ? titleFor(platform.name.replace(/\s*\(.*\)$/, ''))
+  : titleFor(platform.name);
 const pageDescription = `${platform.name} review for trades contractors. ${asSentence(platform.tagline)} ${platform.reputation_flag ? 'Includes a reputation warning with its sources. ' : ''}Verified ${platform.verified_date}.`;
 
 const breadcrumbs = [
