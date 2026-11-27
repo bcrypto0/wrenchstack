@@ -338,7 +338,9 @@ const faqSchema = {
   })),
 };
 
-const pageTitle = `${vertical.name} Software Pricing 2026: ${verticalTools.length} Tools Compared`;
+// Singular trade name in the title and H1: "General Contractor Software Pricing".
+const verticalTitle = vertical.name.replace(/^General Contractors$/, 'General Contractor');
+const pageTitle = `${verticalTitle} Software Pricing 2026: ${verticalTools.length} Tools Compared`;
 const pageDescription = `Starting prices for ${verticalTools.length} ${verticalLower} software ${verticalTools.length === 1 ? 'platform' : 'platforms'}, from each vendor's own site and dated: ${verticalTools.length - quoteOnlyTools.length} publish prices, ${quoteOnlyTools.length} quote only. Sorted by starting price, with team-size scenarios and costs to ask about.`;
 
 const breadcrumbs = [
@@ -362,7 +364,7 @@ const breadcrumbs = [
 
     <header class="mb-10">
       <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
-        {vertical.name} Software Pricing in 2026
+        {verticalTitle} Software Pricing in 2026
       </h1>
       <p class="mt-4 text-lg text-slate-600">
         Starting prices for {verticalTools.length} {verticalLower} software platforms, each checked against the vendor's own site on the date shown{verifiedRange ? ` (${verifiedRange})` : ''}. Sorted by starting price, lowest first. A starting price is the lowest plan price the vendor publishes (a free plan where there is one), so check what that plan includes, whether it assumes annual billing, and how it changes with your team size.

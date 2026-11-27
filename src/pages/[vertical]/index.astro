@@ -62,6 +62,8 @@ const verticalLower = vertical.name
   .map((w) => (/^[A-Z]{2,}$/.test(w) ? w : w.toLowerCase()))
   .join(' ')
   .replace(/^general contractors$/, 'general contractor');
+// Same singular rule for the title and H1: "General Contractor Software".
+const verticalTitle = vertical.name.replace(/^General Contractors$/, 'General Contractor');
 // Singular forms, so a one-tool trade never reads "1 platforms" or "1 tools".
 const plat = ranked.length === 1 ? 'platform' : 'platforms';
 const toolsWord = ranked.length === 1 ? 'tool' : 'tools';
@@ -245,7 +247,7 @@ const faqSchema = {
   })),
 };
 
-const pageTitle = `Best ${vertical.name} Software 2026: Compared and Ranked`;
+const pageTitle = `Best ${verticalTitle} Software 2026: Compared and Ranked`;
 const pageDescription = `Compare ${ranked.length} ${verticalLower} software ${ranked.length === 1 ? 'option' : 'options'} for 2026, ranked by fit for the trade. Pricing verified ${verifiedLabel}.`;
 
 const itemListSchema = {
@@ -283,7 +285,7 @@ const breadcrumbs = [
 
     <header class="mb-10">
       <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
-        Best {vertical.name} Software in 2026
+        Best {verticalTitle} Software in 2026
       </h1>
       <p class="mt-4 text-lg text-slate-600">
         A comparison of {ranked.length} {plat} for {verticalLower} businesses, ranked by fit for the trade, then by Fit Score, then by name.
